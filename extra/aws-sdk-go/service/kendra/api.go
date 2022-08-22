@@ -13,6 +13,189 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
+const opAssociateEntitiesToExperience = "AssociateEntitiesToExperience"
+
+// AssociateEntitiesToExperienceRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateEntitiesToExperience operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateEntitiesToExperience for more information on using the AssociateEntitiesToExperience
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateEntitiesToExperienceRequest method.
+//    req, resp := client.AssociateEntitiesToExperienceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/AssociateEntitiesToExperience
+func (c *Kendra) AssociateEntitiesToExperienceRequest(input *AssociateEntitiesToExperienceInput) (req *request.Request, output *AssociateEntitiesToExperienceOutput) {
+	op := &request.Operation{
+		Name:       opAssociateEntitiesToExperience,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociateEntitiesToExperienceInput{}
+	}
+
+	output = &AssociateEntitiesToExperienceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AssociateEntitiesToExperience API operation for AWSKendraFrontendService.
+//
+// Grants users or groups in your Amazon Web Services SSO identity source access
+// to your Amazon Kendra experience. You can create an Amazon Kendra experience
+// such as a search application. For more information on creating a search application
+// experience, see Building a search experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation AssociateEntitiesToExperience for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ResourceAlreadyExistException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/AssociateEntitiesToExperience
+func (c *Kendra) AssociateEntitiesToExperience(input *AssociateEntitiesToExperienceInput) (*AssociateEntitiesToExperienceOutput, error) {
+	req, out := c.AssociateEntitiesToExperienceRequest(input)
+	return out, req.Send()
+}
+
+// AssociateEntitiesToExperienceWithContext is the same as AssociateEntitiesToExperience with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateEntitiesToExperience for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) AssociateEntitiesToExperienceWithContext(ctx aws.Context, input *AssociateEntitiesToExperienceInput, opts ...request.Option) (*AssociateEntitiesToExperienceOutput, error) {
+	req, out := c.AssociateEntitiesToExperienceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opAssociatePersonasToEntities = "AssociatePersonasToEntities"
+
+// AssociatePersonasToEntitiesRequest generates a "aws/request.Request" representing the
+// client's request for the AssociatePersonasToEntities operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociatePersonasToEntities for more information on using the AssociatePersonasToEntities
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociatePersonasToEntitiesRequest method.
+//    req, resp := client.AssociatePersonasToEntitiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/AssociatePersonasToEntities
+func (c *Kendra) AssociatePersonasToEntitiesRequest(input *AssociatePersonasToEntitiesInput) (req *request.Request, output *AssociatePersonasToEntitiesOutput) {
+	op := &request.Operation{
+		Name:       opAssociatePersonasToEntities,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociatePersonasToEntitiesInput{}
+	}
+
+	output = &AssociatePersonasToEntitiesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AssociatePersonasToEntities API operation for AWSKendraFrontendService.
+//
+// Defines the specific permissions of users or groups in your Amazon Web Services
+// SSO identity source with access to your Amazon Kendra experience. You can
+// create an Amazon Kendra experience such as a search application. For more
+// information on creating a search application experience, see Building a search
+// experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation AssociatePersonasToEntities for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ResourceAlreadyExistException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/AssociatePersonasToEntities
+func (c *Kendra) AssociatePersonasToEntities(input *AssociatePersonasToEntitiesInput) (*AssociatePersonasToEntitiesOutput, error) {
+	req, out := c.AssociatePersonasToEntitiesRequest(input)
+	return out, req.Send()
+}
+
+// AssociatePersonasToEntitiesWithContext is the same as AssociatePersonasToEntities with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociatePersonasToEntities for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) AssociatePersonasToEntitiesWithContext(ctx aws.Context, input *AssociatePersonasToEntitiesInput, opts ...request.Option) (*AssociatePersonasToEntitiesOutput, error) {
+	req, out := c.AssociatePersonasToEntitiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchDeleteDocument = "BatchDeleteDocument"
 
 // BatchDeleteDocumentRequest generates a "aws/request.Request" representing the
@@ -58,7 +241,7 @@ func (c *Kendra) BatchDeleteDocumentRequest(input *BatchDeleteDocumentInput) (re
 // BatchDeleteDocument API operation for AWSKendraFrontendService.
 //
 // Removes one or more documents from an index. The documents must have been
-// added with the BatchPutDocument operation.
+// added with the BatchPutDocument API.
 //
 // The documents are deleted asynchronously. You can see the progress of the
 // deletion by using Amazon Web Services CloudWatch. Any error messages related
@@ -152,17 +335,17 @@ func (c *Kendra) BatchGetDocumentStatusRequest(input *BatchGetDocumentStatusInpu
 //
 // Returns the indexing status for one or more documents submitted with the
 // BatchPutDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchPutDocument.html)
-// operation.
+// API.
 //
-// When you use the BatchPutDocument operation, documents are indexed asynchronously.
-// You can use the BatchGetDocumentStatus operation to get the current status
-// of a list of documents so that you can determine if they have been successfully
+// When you use the BatchPutDocument API, documents are indexed asynchronously.
+// You can use the BatchGetDocumentStatus API to get the current status of a
+// list of documents so that you can determine if they have been successfully
 // indexed.
 //
-// You can also use the BatchGetDocumentStatus operation to check the status
-// of the BatchDeleteDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchDeleteDocument.html)
-// operation. When a document is deleted from the index, Amazon Kendra returns
-// NOT_FOUND as the status.
+// You can also use the BatchGetDocumentStatus API to check the status of the
+// BatchDeleteDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchDeleteDocument.html)
+// API. When a document is deleted from the index, Amazon Kendra returns NOT_FOUND
+// as the status.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -252,15 +435,17 @@ func (c *Kendra) BatchPutDocumentRequest(input *BatchPutDocumentInput) (req *req
 //
 // Adds one or more documents to an index.
 //
-// The BatchPutDocument operation enables you to ingest inline documents or
-// a set of documents stored in an Amazon S3 bucket. Use this operation to ingest
-// your text and unstructured text into an index, add custom attributes to the
-// documents, and to attach an access control list to the documents added to
-// the index.
+// The BatchPutDocument API enables you to ingest inline documents or a set
+// of documents stored in an Amazon S3 bucket. Use this API to ingest your text
+// and unstructured text into an index, add custom attributes to the documents,
+// and to attach an access control list to the documents added to the index.
 //
 // The documents are indexed asynchronously. You can see the progress of the
 // batch using Amazon Web Services CloudWatch. Any error messages related to
 // processing the batch are sent to your Amazon Web Services CloudWatch log.
+//
+// For an example of ingesting inline documents using Python and Java SDKs,
+// see Adding files directly to an index (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-binary-doc.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -359,6 +544,9 @@ func (c *Kendra) ClearQuerySuggestionsRequest(input *ClearQuerySuggestionsInput)
 // If you do not see any new suggestions, then please allow Amazon Kendra to
 // collect enough queries to learn new suggestions.
 //
+// ClearQuerySuggestions is currently not supported in the Amazon Web Services
+// GovCloud (US-West) region.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -396,6 +584,119 @@ func (c *Kendra) ClearQuerySuggestions(input *ClearQuerySuggestionsInput) (*Clea
 // for more information on using Contexts.
 func (c *Kendra) ClearQuerySuggestionsWithContext(ctx aws.Context, input *ClearQuerySuggestionsInput, opts ...request.Option) (*ClearQuerySuggestionsOutput, error) {
 	req, out := c.ClearQuerySuggestionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateAccessControlConfiguration = "CreateAccessControlConfiguration"
+
+// CreateAccessControlConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAccessControlConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateAccessControlConfiguration for more information on using the CreateAccessControlConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateAccessControlConfigurationRequest method.
+//    req, resp := client.CreateAccessControlConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateAccessControlConfiguration
+func (c *Kendra) CreateAccessControlConfigurationRequest(input *CreateAccessControlConfigurationInput) (req *request.Request, output *CreateAccessControlConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opCreateAccessControlConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateAccessControlConfigurationInput{}
+	}
+
+	output = &CreateAccessControlConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateAccessControlConfiguration API operation for AWSKendraFrontendService.
+//
+// Creates an access configuration for your documents. This includes user and
+// group access information for your documents. This is useful for user context
+// filtering, where search results are filtered based on the user or their group
+// access to documents.
+//
+// You can use this to re-configure your existing document level access control
+// without indexing all of your documents again. For example, your index contains
+// top-secret company documents that only certain employees or users should
+// access. One of these users leaves the company or switches to a team that
+// should be blocked from accessing top-secret documents. The user still has
+// access to top-secret documents because the user had access when your documents
+// were previously indexed. You can create a specific access control configuration
+// for the user with deny access. You can later update the access control configuration
+// to allow access if the user returns to the company and re-joins the 'top-secret'
+// team. You can re-configure access control for your documents as circumstances
+// change.
+//
+// To apply your access control configuration to certain documents, you call
+// the BatchPutDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchPutDocument.html)
+// API with the AccessControlConfigurationId included in the Document (https://docs.aws.amazon.com/kendra/latest/dg/API_Document.html)
+// object. If you use an S3 bucket as a data source, you update the .metadata.json
+// with the AccessControlConfigurationId and synchronize your data source. Amazon
+// Kendra currently only supports access control configuration for S3 data sources
+// and documents indexed using the BatchPutDocument API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation CreateAccessControlConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceQuotaExceededException
+//
+//   * ValidationException
+//
+//   * ThrottlingException
+//
+//   * ConflictException
+//
+//   * AccessDeniedException
+//
+//   * ResourceNotFoundException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateAccessControlConfiguration
+func (c *Kendra) CreateAccessControlConfiguration(input *CreateAccessControlConfigurationInput) (*CreateAccessControlConfigurationOutput, error) {
+	req, out := c.CreateAccessControlConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// CreateAccessControlConfigurationWithContext is the same as CreateAccessControlConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateAccessControlConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) CreateAccessControlConfigurationWithContext(ctx aws.Context, input *CreateAccessControlConfigurationInput, opts ...request.Option) (*CreateAccessControlConfigurationOutput, error) {
+	req, out := c.CreateAccessControlConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -453,6 +754,15 @@ func (c *Kendra) CreateDataSourceRequest(input *CreateDataSourceInput) (req *req
 // CreateDataSource is a synchronous operation. The operation returns 200 if
 // the data source was successfully created. Otherwise, an exception is raised.
 //
+// Amazon S3 and custom (https://docs.aws.amazon.com/kendra/latest/dg/data-source-custom.html)
+// data sources are the only supported data sources in the Amazon Web Services
+// GovCloud (US-West) region.
+//
+// For an example of creating an index and data source using the Python SDK,
+// see Getting started with Python SDK (https://docs.aws.amazon.com/kendra/latest/dg/gs-python.html).
+// For an example of creating an index and data source using the Java SDK, see
+// Getting started with Java SDK (https://docs.aws.amazon.com/kendra/latest/dg/gs-java.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -494,6 +804,98 @@ func (c *Kendra) CreateDataSource(input *CreateDataSourceInput) (*CreateDataSour
 // for more information on using Contexts.
 func (c *Kendra) CreateDataSourceWithContext(ctx aws.Context, input *CreateDataSourceInput, opts ...request.Option) (*CreateDataSourceOutput, error) {
 	req, out := c.CreateDataSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateExperience = "CreateExperience"
+
+// CreateExperienceRequest generates a "aws/request.Request" representing the
+// client's request for the CreateExperience operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateExperience for more information on using the CreateExperience
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateExperienceRequest method.
+//    req, resp := client.CreateExperienceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateExperience
+func (c *Kendra) CreateExperienceRequest(input *CreateExperienceInput) (req *request.Request, output *CreateExperienceOutput) {
+	op := &request.Operation{
+		Name:       opCreateExperience,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateExperienceInput{}
+	}
+
+	output = &CreateExperienceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateExperience API operation for AWSKendraFrontendService.
+//
+// Creates an Amazon Kendra experience such as a search application. For more
+// information on creating a search application experience, including using
+// the Python and Java SDKs, see Building a search experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation CreateExperience for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ServiceQuotaExceededException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateExperience
+func (c *Kendra) CreateExperience(input *CreateExperienceInput) (*CreateExperienceOutput, error) {
+	req, out := c.CreateExperienceRequest(input)
+	return out, req.Send()
+}
+
+// CreateExperienceWithContext is the same as CreateExperience with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateExperience for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) CreateExperienceWithContext(ctx aws.Context, input *CreateExperienceInput, opts ...request.Option) (*CreateExperienceOutput, error) {
+	req, out := c.CreateExperienceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -544,6 +946,11 @@ func (c *Kendra) CreateFaqRequest(input *CreateFaqInput) (req *request.Request, 
 // CreateFaq API operation for AWSKendraFrontendService.
 //
 // Creates an new set of frequently asked question (FAQ) questions and answers.
+//
+// Adding FAQs to an index is an asynchronous operation.
+//
+// For an example of adding an FAQ to an index using Python and Java SDKs, see
+// Using your FAQ file (https://docs.aws.amazon.com/kendra/latest/dg/in-creating-faq.html#using-faq-file).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -633,13 +1040,18 @@ func (c *Kendra) CreateIndexRequest(input *CreateIndexInput) (req *request.Reque
 
 // CreateIndex API operation for AWSKendraFrontendService.
 //
-// Creates a new Amazon Kendra index. Index creation is an asynchronous operation.
-// To determine if index creation has completed, check the Status field returned
+// Creates an Amazon Kendra index. Index creation is an asynchronous API. To
+// determine if index creation has completed, check the Status field returned
 // from a call to DescribeIndex. The Status field is set to ACTIVE when the
 // index is ready to use.
 //
 // Once the index is active you can index your documents using the BatchPutDocument
-// operation or using one of the supported data sources.
+// API or using one of the supported data sources.
+//
+// For an example of creating an index and data source using the Python SDK,
+// see Getting started with Python SDK (https://docs.aws.amazon.com/kendra/latest/dg/gs-python.html).
+// For an example of creating an index and data source using the Java SDK, see
+// Getting started with Java SDK (https://docs.aws.amazon.com/kendra/latest/dg/gs-java.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -741,6 +1153,12 @@ func (c *Kendra) CreateQuerySuggestionsBlockListRequest(input *CreateQuerySugges
 // For information on the current quota limits for block lists, see Quotas for
 // Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
 //
+// CreateQuerySuggestionsBlockList is currently not supported in the Amazon
+// Web Services GovCloud (US-West) region.
+//
+// For an example of creating a block list for query suggestions using the Python
+// SDK, see Query suggestions block list (https://docs.aws.amazon.com/kendra/latest/dg/query-suggestions.html#suggestions-block-list).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -832,6 +1250,9 @@ func (c *Kendra) CreateThesaurusRequest(input *CreateThesaurusInput) (req *reque
 // Creates a thesaurus for an index. The thesaurus contains a list of synonyms
 // in Solr format.
 //
+// For an example of adding a thesaurus file to an index, see Adding custom
+// synonyms to an index (https://docs.aws.amazon.com/kendra/latest/dg/index-synonyms-adding-thesaurus-file.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -871,6 +1292,98 @@ func (c *Kendra) CreateThesaurus(input *CreateThesaurusInput) (*CreateThesaurusO
 // for more information on using Contexts.
 func (c *Kendra) CreateThesaurusWithContext(ctx aws.Context, input *CreateThesaurusInput, opts ...request.Option) (*CreateThesaurusOutput, error) {
 	req, out := c.CreateThesaurusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteAccessControlConfiguration = "DeleteAccessControlConfiguration"
+
+// DeleteAccessControlConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAccessControlConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteAccessControlConfiguration for more information on using the DeleteAccessControlConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteAccessControlConfigurationRequest method.
+//    req, resp := client.DeleteAccessControlConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteAccessControlConfiguration
+func (c *Kendra) DeleteAccessControlConfigurationRequest(input *DeleteAccessControlConfigurationInput) (req *request.Request, output *DeleteAccessControlConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAccessControlConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteAccessControlConfigurationInput{}
+	}
+
+	output = &DeleteAccessControlConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteAccessControlConfiguration API operation for AWSKendraFrontendService.
+//
+// Deletes an access control configuration that you created for your documents
+// in an index. This includes user and group access information for your documents.
+// This is useful for user context filtering, where search results are filtered
+// based on the user or their group access to documents.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DeleteAccessControlConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ThrottlingException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteAccessControlConfiguration
+func (c *Kendra) DeleteAccessControlConfiguration(input *DeleteAccessControlConfigurationInput) (*DeleteAccessControlConfigurationOutput, error) {
+	req, out := c.DeleteAccessControlConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAccessControlConfigurationWithContext is the same as DeleteAccessControlConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteAccessControlConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DeleteAccessControlConfigurationWithContext(ctx aws.Context, input *DeleteAccessControlConfigurationInput, opts ...request.Option) (*DeleteAccessControlConfigurationOutput, error) {
+	req, out := c.DeleteAccessControlConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -923,8 +1436,8 @@ func (c *Kendra) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *req
 //
 // Deletes an Amazon Kendra data source. An exception is not thrown if the data
 // source is already being deleted. While the data source is being deleted,
-// the Status field returned by a call to the DescribeDataSource operation is
-// set to DELETING. For more information, see Deleting Data Sources (https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html).
+// the Status field returned by a call to the DescribeDataSource API is set
+// to DELETING. For more information, see Deleting Data Sources (https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -963,6 +1476,97 @@ func (c *Kendra) DeleteDataSource(input *DeleteDataSourceInput) (*DeleteDataSour
 // for more information on using Contexts.
 func (c *Kendra) DeleteDataSourceWithContext(ctx aws.Context, input *DeleteDataSourceInput, opts ...request.Option) (*DeleteDataSourceOutput, error) {
 	req, out := c.DeleteDataSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteExperience = "DeleteExperience"
+
+// DeleteExperienceRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteExperience operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteExperience for more information on using the DeleteExperience
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteExperienceRequest method.
+//    req, resp := client.DeleteExperienceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteExperience
+func (c *Kendra) DeleteExperienceRequest(input *DeleteExperienceInput) (req *request.Request, output *DeleteExperienceOutput) {
+	op := &request.Operation{
+		Name:       opDeleteExperience,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteExperienceInput{}
+	}
+
+	output = &DeleteExperienceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteExperience API operation for AWSKendraFrontendService.
+//
+// Deletes your Amazon Kendra experience such as a search application. For more
+// information on creating a search application experience, see Building a search
+// experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DeleteExperience for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteExperience
+func (c *Kendra) DeleteExperience(input *DeleteExperienceInput) (*DeleteExperienceOutput, error) {
+	req, out := c.DeleteExperienceRequest(input)
+	return out, req.Send()
+}
+
+// DeleteExperienceWithContext is the same as DeleteExperience with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteExperience for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DeleteExperienceWithContext(ctx aws.Context, input *DeleteExperienceInput, opts ...request.Option) (*DeleteExperienceOutput, error) {
+	req, out := c.DeleteExperienceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1104,7 +1708,7 @@ func (c *Kendra) DeleteIndexRequest(input *DeleteIndexInput) (req *request.Reque
 //
 // Deletes an existing Amazon Kendra index. An exception is not thrown if the
 // index is already being deleted. While the index is being deleted, the Status
-// field returned by a call to the DescribeIndex operation is set to DELETING.
+// field returned by a call to the DescribeIndex API is set to DELETING.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1206,6 +1810,9 @@ func (c *Kendra) DeletePrincipalMappingRequest(input *DeletePrincipalMappingInpu
 // group when calling PutPrincipalMapping. You can update your internal list
 // of users or sub groups and input this list when calling PutPrincipalMapping.
 //
+// DeletePrincipalMapping is currently not supported in the Amazon Web Services
+// GovCloud (US-West) region.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1298,6 +1905,9 @@ func (c *Kendra) DeleteQuerySuggestionsBlockListRequest(input *DeleteQuerySugges
 // A deleted block list might not take effect right away. Amazon Kendra needs
 // to refresh the entire suggestions list to add back the queries that were
 // previously blocked.
+//
+// DeleteQuerySuggestionsBlockList is currently not supported in the Amazon
+// Web Services GovCloud (US-West) region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1430,6 +2040,95 @@ func (c *Kendra) DeleteThesaurusWithContext(ctx aws.Context, input *DeleteThesau
 	return out, req.Send()
 }
 
+const opDescribeAccessControlConfiguration = "DescribeAccessControlConfiguration"
+
+// DescribeAccessControlConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAccessControlConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeAccessControlConfiguration for more information on using the DescribeAccessControlConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeAccessControlConfigurationRequest method.
+//    req, resp := client.DescribeAccessControlConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeAccessControlConfiguration
+func (c *Kendra) DescribeAccessControlConfigurationRequest(input *DescribeAccessControlConfigurationInput) (req *request.Request, output *DescribeAccessControlConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAccessControlConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAccessControlConfigurationInput{}
+	}
+
+	output = &DescribeAccessControlConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeAccessControlConfiguration API operation for AWSKendraFrontendService.
+//
+// Gets information about an access control configuration that you created for
+// your documents in an index. This includes user and group access information
+// for your documents. This is useful for user context filtering, where search
+// results are filtered based on the user or their group access to documents.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribeAccessControlConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ThrottlingException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeAccessControlConfiguration
+func (c *Kendra) DescribeAccessControlConfiguration(input *DescribeAccessControlConfigurationInput) (*DescribeAccessControlConfigurationOutput, error) {
+	req, out := c.DescribeAccessControlConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeAccessControlConfigurationWithContext is the same as DescribeAccessControlConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeAccessControlConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribeAccessControlConfigurationWithContext(ctx aws.Context, input *DescribeAccessControlConfigurationInput, opts ...request.Option) (*DescribeAccessControlConfigurationOutput, error) {
+	req, out := c.DescribeAccessControlConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeDataSource = "DescribeDataSource"
 
 // DescribeDataSourceRequest generates a "aws/request.Request" representing the
@@ -1474,7 +2173,7 @@ func (c *Kendra) DescribeDataSourceRequest(input *DescribeDataSourceInput) (req 
 
 // DescribeDataSource API operation for AWSKendraFrontendService.
 //
-// Gets information about a Amazon Kendra data source.
+// Gets information about an Amazon Kendra data source.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1511,6 +2210,94 @@ func (c *Kendra) DescribeDataSource(input *DescribeDataSourceInput) (*DescribeDa
 // for more information on using Contexts.
 func (c *Kendra) DescribeDataSourceWithContext(ctx aws.Context, input *DescribeDataSourceInput, opts ...request.Option) (*DescribeDataSourceOutput, error) {
 	req, out := c.DescribeDataSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeExperience = "DescribeExperience"
+
+// DescribeExperienceRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeExperience operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeExperience for more information on using the DescribeExperience
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeExperienceRequest method.
+//    req, resp := client.DescribeExperienceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeExperience
+func (c *Kendra) DescribeExperienceRequest(input *DescribeExperienceInput) (req *request.Request, output *DescribeExperienceOutput) {
+	op := &request.Operation{
+		Name:       opDescribeExperience,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeExperienceInput{}
+	}
+
+	output = &DescribeExperienceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeExperience API operation for AWSKendraFrontendService.
+//
+// Gets information about your Amazon Kendra experience such as a search application.
+// For more information on creating a search application experience, see Building
+// a search experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribeExperience for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeExperience
+func (c *Kendra) DescribeExperience(input *DescribeExperienceInput) (*DescribeExperienceOutput, error) {
+	req, out := c.DescribeExperienceRequest(input)
+	return out, req.Send()
+}
+
+// DescribeExperienceWithContext is the same as DescribeExperience with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeExperience for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribeExperienceWithContext(ctx aws.Context, input *DescribeExperienceInput, opts ...request.Option) (*DescribeExperienceOutput, error) {
+	req, out := c.DescribeExperienceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1646,7 +2433,7 @@ func (c *Kendra) DescribeIndexRequest(input *DescribeIndexInput) (req *request.R
 
 // DescribeIndex API operation for AWSKendraFrontendService.
 //
-// Describes an existing Amazon Kendra index
+// Gets information about an existing Amazon Kendra index.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1739,6 +2526,9 @@ func (c *Kendra) DescribePrincipalMappingRequest(input *DescribePrincipalMapping
 // after other actions, and useful error messages if an action could not be
 // processed.
 //
+// DescribePrincipalMapping is currently not supported in the Amazon Web Services
+// GovCloud (US-West) region.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1823,9 +2613,12 @@ func (c *Kendra) DescribeQuerySuggestionsBlockListRequest(input *DescribeQuerySu
 
 // DescribeQuerySuggestionsBlockList API operation for AWSKendraFrontendService.
 //
-// Describes a block list used for query suggestions for an index.
+// Gets information about a block list used for query suggestions for an index.
 //
 // This is used to check the current settings that are applied to a block list.
+//
+// DescribeQuerySuggestionsBlockList is currently not supported in the Amazon
+// Web Services GovCloud (US-West) region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1911,9 +2704,12 @@ func (c *Kendra) DescribeQuerySuggestionsConfigRequest(input *DescribeQuerySugge
 
 // DescribeQuerySuggestionsConfig API operation for AWSKendraFrontendService.
 //
-// Describes the settings of query suggestions for an index.
+// Gets information on the settings of query suggestions for an index.
 //
 // This is used to check the current settings applied to query suggestions.
+//
+// DescribeQuerySuggestionsConfig is currently not supported in the Amazon Web
+// Services GovCloud (US-West) region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1999,7 +2795,7 @@ func (c *Kendra) DescribeThesaurusRequest(input *DescribeThesaurusInput) (req *r
 
 // DescribeThesaurus API operation for AWSKendraFrontendService.
 //
-// Describes an existing Amazon Kendra thesaurus.
+// Gets information about an existing Amazon Kendra thesaurus.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2036,6 +2832,186 @@ func (c *Kendra) DescribeThesaurus(input *DescribeThesaurusInput) (*DescribeThes
 // for more information on using Contexts.
 func (c *Kendra) DescribeThesaurusWithContext(ctx aws.Context, input *DescribeThesaurusInput, opts ...request.Option) (*DescribeThesaurusOutput, error) {
 	req, out := c.DescribeThesaurusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDisassociateEntitiesFromExperience = "DisassociateEntitiesFromExperience"
+
+// DisassociateEntitiesFromExperienceRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateEntitiesFromExperience operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateEntitiesFromExperience for more information on using the DisassociateEntitiesFromExperience
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateEntitiesFromExperienceRequest method.
+//    req, resp := client.DisassociateEntitiesFromExperienceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DisassociateEntitiesFromExperience
+func (c *Kendra) DisassociateEntitiesFromExperienceRequest(input *DisassociateEntitiesFromExperienceInput) (req *request.Request, output *DisassociateEntitiesFromExperienceOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateEntitiesFromExperience,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociateEntitiesFromExperienceInput{}
+	}
+
+	output = &DisassociateEntitiesFromExperienceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisassociateEntitiesFromExperience API operation for AWSKendraFrontendService.
+//
+// Prevents users or groups in your Amazon Web Services SSO identity source
+// from accessing your Amazon Kendra experience. You can create an Amazon Kendra
+// experience such as a search application. For more information on creating
+// a search application experience, see Building a search experience with no
+// code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DisassociateEntitiesFromExperience for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DisassociateEntitiesFromExperience
+func (c *Kendra) DisassociateEntitiesFromExperience(input *DisassociateEntitiesFromExperienceInput) (*DisassociateEntitiesFromExperienceOutput, error) {
+	req, out := c.DisassociateEntitiesFromExperienceRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateEntitiesFromExperienceWithContext is the same as DisassociateEntitiesFromExperience with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateEntitiesFromExperience for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DisassociateEntitiesFromExperienceWithContext(ctx aws.Context, input *DisassociateEntitiesFromExperienceInput, opts ...request.Option) (*DisassociateEntitiesFromExperienceOutput, error) {
+	req, out := c.DisassociateEntitiesFromExperienceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDisassociatePersonasFromEntities = "DisassociatePersonasFromEntities"
+
+// DisassociatePersonasFromEntitiesRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociatePersonasFromEntities operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociatePersonasFromEntities for more information on using the DisassociatePersonasFromEntities
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociatePersonasFromEntitiesRequest method.
+//    req, resp := client.DisassociatePersonasFromEntitiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DisassociatePersonasFromEntities
+func (c *Kendra) DisassociatePersonasFromEntitiesRequest(input *DisassociatePersonasFromEntitiesInput) (req *request.Request, output *DisassociatePersonasFromEntitiesOutput) {
+	op := &request.Operation{
+		Name:       opDisassociatePersonasFromEntities,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociatePersonasFromEntitiesInput{}
+	}
+
+	output = &DisassociatePersonasFromEntitiesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisassociatePersonasFromEntities API operation for AWSKendraFrontendService.
+//
+// Removes the specific permissions of users or groups in your Amazon Web Services
+// SSO identity source with access to your Amazon Kendra experience. You can
+// create an Amazon Kendra experience such as a search application. For more
+// information on creating a search application experience, see Building a search
+// experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DisassociatePersonasFromEntities for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DisassociatePersonasFromEntities
+func (c *Kendra) DisassociatePersonasFromEntities(input *DisassociatePersonasFromEntitiesInput) (*DisassociatePersonasFromEntitiesOutput, error) {
+	req, out := c.DisassociatePersonasFromEntitiesRequest(input)
+	return out, req.Send()
+}
+
+// DisassociatePersonasFromEntitiesWithContext is the same as DisassociatePersonasFromEntities with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociatePersonasFromEntities for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DisassociatePersonasFromEntitiesWithContext(ctx aws.Context, input *DisassociatePersonasFromEntitiesInput, opts ...request.Option) (*DisassociatePersonasFromEntitiesOutput, error) {
+	req, out := c.DisassociatePersonasFromEntitiesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2087,6 +3063,9 @@ func (c *Kendra) GetQuerySuggestionsRequest(input *GetQuerySuggestionsInput) (re
 //
 // Fetches the queries that are suggested to your users.
 //
+// GetQuerySuggestions is currently not supported in the Amazon Web Services
+// GovCloud (US-West) region.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2129,6 +3108,297 @@ func (c *Kendra) GetQuerySuggestionsWithContext(ctx aws.Context, input *GetQuery
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opGetSnapshots = "GetSnapshots"
+
+// GetSnapshotsRequest generates a "aws/request.Request" representing the
+// client's request for the GetSnapshots operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSnapshots for more information on using the GetSnapshots
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSnapshotsRequest method.
+//    req, resp := client.GetSnapshotsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/GetSnapshots
+func (c *Kendra) GetSnapshotsRequest(input *GetSnapshotsInput) (req *request.Request, output *GetSnapshotsOutput) {
+	op := &request.Operation{
+		Name:       opGetSnapshots,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetSnapshotsInput{}
+	}
+
+	output = &GetSnapshotsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSnapshots API operation for AWSKendraFrontendService.
+//
+// Retrieves search metrics data. The data provides a snapshot of how your users
+// interact with your search application and how effective the application is.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation GetSnapshots for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The input to the request is not valid.
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/GetSnapshots
+func (c *Kendra) GetSnapshots(input *GetSnapshotsInput) (*GetSnapshotsOutput, error) {
+	req, out := c.GetSnapshotsRequest(input)
+	return out, req.Send()
+}
+
+// GetSnapshotsWithContext is the same as GetSnapshots with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSnapshots for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) GetSnapshotsWithContext(ctx aws.Context, input *GetSnapshotsInput, opts ...request.Option) (*GetSnapshotsOutput, error) {
+	req, out := c.GetSnapshotsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetSnapshotsPages iterates over the pages of a GetSnapshots operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetSnapshots method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetSnapshots operation.
+//    pageNum := 0
+//    err := client.GetSnapshotsPages(params,
+//        func(page *kendra.GetSnapshotsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) GetSnapshotsPages(input *GetSnapshotsInput, fn func(*GetSnapshotsOutput, bool) bool) error {
+	return c.GetSnapshotsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetSnapshotsPagesWithContext same as GetSnapshotsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) GetSnapshotsPagesWithContext(ctx aws.Context, input *GetSnapshotsInput, fn func(*GetSnapshotsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetSnapshotsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetSnapshotsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetSnapshotsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListAccessControlConfigurations = "ListAccessControlConfigurations"
+
+// ListAccessControlConfigurationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAccessControlConfigurations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAccessControlConfigurations for more information on using the ListAccessControlConfigurations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAccessControlConfigurationsRequest method.
+//    req, resp := client.ListAccessControlConfigurationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListAccessControlConfigurations
+func (c *Kendra) ListAccessControlConfigurationsRequest(input *ListAccessControlConfigurationsInput) (req *request.Request, output *ListAccessControlConfigurationsOutput) {
+	op := &request.Operation{
+		Name:       opListAccessControlConfigurations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAccessControlConfigurationsInput{}
+	}
+
+	output = &ListAccessControlConfigurationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAccessControlConfigurations API operation for AWSKendraFrontendService.
+//
+// Lists one or more access control configurations for an index. This includes
+// user and group access information for your documents. This is useful for
+// user context filtering, where search results are filtered based on the user
+// or their group access to documents.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListAccessControlConfigurations for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ThrottlingException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListAccessControlConfigurations
+func (c *Kendra) ListAccessControlConfigurations(input *ListAccessControlConfigurationsInput) (*ListAccessControlConfigurationsOutput, error) {
+	req, out := c.ListAccessControlConfigurationsRequest(input)
+	return out, req.Send()
+}
+
+// ListAccessControlConfigurationsWithContext is the same as ListAccessControlConfigurations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAccessControlConfigurations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListAccessControlConfigurationsWithContext(ctx aws.Context, input *ListAccessControlConfigurationsInput, opts ...request.Option) (*ListAccessControlConfigurationsOutput, error) {
+	req, out := c.ListAccessControlConfigurationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAccessControlConfigurationsPages iterates over the pages of a ListAccessControlConfigurations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAccessControlConfigurations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAccessControlConfigurations operation.
+//    pageNum := 0
+//    err := client.ListAccessControlConfigurationsPages(params,
+//        func(page *kendra.ListAccessControlConfigurationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListAccessControlConfigurationsPages(input *ListAccessControlConfigurationsInput, fn func(*ListAccessControlConfigurationsOutput, bool) bool) error {
+	return c.ListAccessControlConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAccessControlConfigurationsPagesWithContext same as ListAccessControlConfigurationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListAccessControlConfigurationsPagesWithContext(ctx aws.Context, input *ListAccessControlConfigurationsInput, fn func(*ListAccessControlConfigurationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAccessControlConfigurationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAccessControlConfigurationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAccessControlConfigurationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListDataSourceSyncJobs = "ListDataSourceSyncJobs"
@@ -2421,6 +3691,446 @@ func (c *Kendra) ListDataSourcesPagesWithContext(ctx aws.Context, input *ListDat
 	return p.Err()
 }
 
+const opListEntityPersonas = "ListEntityPersonas"
+
+// ListEntityPersonasRequest generates a "aws/request.Request" representing the
+// client's request for the ListEntityPersonas operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEntityPersonas for more information on using the ListEntityPersonas
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListEntityPersonasRequest method.
+//    req, resp := client.ListEntityPersonasRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListEntityPersonas
+func (c *Kendra) ListEntityPersonasRequest(input *ListEntityPersonasInput) (req *request.Request, output *ListEntityPersonasOutput) {
+	op := &request.Operation{
+		Name:       opListEntityPersonas,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEntityPersonasInput{}
+	}
+
+	output = &ListEntityPersonasOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEntityPersonas API operation for AWSKendraFrontendService.
+//
+// Lists specific permissions of users and groups with access to your Amazon
+// Kendra experience.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListEntityPersonas for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * ThrottlingException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListEntityPersonas
+func (c *Kendra) ListEntityPersonas(input *ListEntityPersonasInput) (*ListEntityPersonasOutput, error) {
+	req, out := c.ListEntityPersonasRequest(input)
+	return out, req.Send()
+}
+
+// ListEntityPersonasWithContext is the same as ListEntityPersonas with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEntityPersonas for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListEntityPersonasWithContext(ctx aws.Context, input *ListEntityPersonasInput, opts ...request.Option) (*ListEntityPersonasOutput, error) {
+	req, out := c.ListEntityPersonasRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListEntityPersonasPages iterates over the pages of a ListEntityPersonas operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListEntityPersonas method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListEntityPersonas operation.
+//    pageNum := 0
+//    err := client.ListEntityPersonasPages(params,
+//        func(page *kendra.ListEntityPersonasOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListEntityPersonasPages(input *ListEntityPersonasInput, fn func(*ListEntityPersonasOutput, bool) bool) error {
+	return c.ListEntityPersonasPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListEntityPersonasPagesWithContext same as ListEntityPersonasPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListEntityPersonasPagesWithContext(ctx aws.Context, input *ListEntityPersonasInput, fn func(*ListEntityPersonasOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListEntityPersonasInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListEntityPersonasRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListEntityPersonasOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListExperienceEntities = "ListExperienceEntities"
+
+// ListExperienceEntitiesRequest generates a "aws/request.Request" representing the
+// client's request for the ListExperienceEntities operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListExperienceEntities for more information on using the ListExperienceEntities
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListExperienceEntitiesRequest method.
+//    req, resp := client.ListExperienceEntitiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListExperienceEntities
+func (c *Kendra) ListExperienceEntitiesRequest(input *ListExperienceEntitiesInput) (req *request.Request, output *ListExperienceEntitiesOutput) {
+	op := &request.Operation{
+		Name:       opListExperienceEntities,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListExperienceEntitiesInput{}
+	}
+
+	output = &ListExperienceEntitiesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListExperienceEntities API operation for AWSKendraFrontendService.
+//
+// Lists users or groups in your Amazon Web Services SSO identity source that
+// are granted access to your Amazon Kendra experience. You can create an Amazon
+// Kendra experience such as a search application. For more information on creating
+// a search application experience, see Building a search experience with no
+// code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListExperienceEntities for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * ThrottlingException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListExperienceEntities
+func (c *Kendra) ListExperienceEntities(input *ListExperienceEntitiesInput) (*ListExperienceEntitiesOutput, error) {
+	req, out := c.ListExperienceEntitiesRequest(input)
+	return out, req.Send()
+}
+
+// ListExperienceEntitiesWithContext is the same as ListExperienceEntities with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListExperienceEntities for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListExperienceEntitiesWithContext(ctx aws.Context, input *ListExperienceEntitiesInput, opts ...request.Option) (*ListExperienceEntitiesOutput, error) {
+	req, out := c.ListExperienceEntitiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListExperienceEntitiesPages iterates over the pages of a ListExperienceEntities operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListExperienceEntities method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListExperienceEntities operation.
+//    pageNum := 0
+//    err := client.ListExperienceEntitiesPages(params,
+//        func(page *kendra.ListExperienceEntitiesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListExperienceEntitiesPages(input *ListExperienceEntitiesInput, fn func(*ListExperienceEntitiesOutput, bool) bool) error {
+	return c.ListExperienceEntitiesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListExperienceEntitiesPagesWithContext same as ListExperienceEntitiesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListExperienceEntitiesPagesWithContext(ctx aws.Context, input *ListExperienceEntitiesInput, fn func(*ListExperienceEntitiesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListExperienceEntitiesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListExperienceEntitiesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListExperienceEntitiesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListExperiences = "ListExperiences"
+
+// ListExperiencesRequest generates a "aws/request.Request" representing the
+// client's request for the ListExperiences operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListExperiences for more information on using the ListExperiences
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListExperiencesRequest method.
+//    req, resp := client.ListExperiencesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListExperiences
+func (c *Kendra) ListExperiencesRequest(input *ListExperiencesInput) (req *request.Request, output *ListExperiencesOutput) {
+	op := &request.Operation{
+		Name:       opListExperiences,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListExperiencesInput{}
+	}
+
+	output = &ListExperiencesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListExperiences API operation for AWSKendraFrontendService.
+//
+// Lists one or more Amazon Kendra experiences. You can create an Amazon Kendra
+// experience such as a search application. For more information on creating
+// a search application experience, see Building a search experience with no
+// code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListExperiences for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * ThrottlingException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListExperiences
+func (c *Kendra) ListExperiences(input *ListExperiencesInput) (*ListExperiencesOutput, error) {
+	req, out := c.ListExperiencesRequest(input)
+	return out, req.Send()
+}
+
+// ListExperiencesWithContext is the same as ListExperiences with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListExperiences for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListExperiencesWithContext(ctx aws.Context, input *ListExperiencesInput, opts ...request.Option) (*ListExperiencesOutput, error) {
+	req, out := c.ListExperiencesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListExperiencesPages iterates over the pages of a ListExperiences operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListExperiences method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListExperiences operation.
+//    pageNum := 0
+//    err := client.ListExperiencesPages(params,
+//        func(page *kendra.ListExperiencesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListExperiencesPages(input *ListExperiencesInput, fn func(*ListExperiencesOutput, bool) bool) error {
+	return c.ListExperiencesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListExperiencesPagesWithContext same as ListExperiencesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListExperiencesPagesWithContext(ctx aws.Context, input *ListExperiencesInput, fn func(*ListExperiencesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListExperiencesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListExperiencesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListExperiencesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListFaqs = "ListFaqs"
 
 // ListFaqsRequest generates a "aws/request.Request" representing the
@@ -2452,6 +4162,12 @@ func (c *Kendra) ListFaqsRequest(input *ListFaqsInput) (req *request.Request, ou
 		Name:       opListFaqs,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2507,6 +4223,58 @@ func (c *Kendra) ListFaqsWithContext(ctx aws.Context, input *ListFaqsInput, opts
 	return out, req.Send()
 }
 
+// ListFaqsPages iterates over the pages of a ListFaqs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListFaqs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListFaqs operation.
+//    pageNum := 0
+//    err := client.ListFaqsPages(params,
+//        func(page *kendra.ListFaqsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListFaqsPages(input *ListFaqsInput, fn func(*ListFaqsOutput, bool) bool) error {
+	return c.ListFaqsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListFaqsPagesWithContext same as ListFaqsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListFaqsPagesWithContext(ctx aws.Context, input *ListFaqsInput, fn func(*ListFaqsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListFaqsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListFaqsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListFaqsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListGroupsOlderThanOrderingId = "ListGroupsOlderThanOrderingId"
 
 // ListGroupsOlderThanOrderingIdRequest generates a "aws/request.Request" representing the
@@ -2538,6 +4306,12 @@ func (c *Kendra) ListGroupsOlderThanOrderingIdRequest(input *ListGroupsOlderThan
 		Name:       opListGroupsOlderThanOrderingId,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2553,6 +4327,9 @@ func (c *Kendra) ListGroupsOlderThanOrderingIdRequest(input *ListGroupsOlderThan
 //
 // Provides a list of groups that are mapped to users before a given ordering
 // or timestamp identifier.
+//
+// ListGroupsOlderThanOrderingId is currently not supported in the Amazon Web
+// Services GovCloud (US-West) region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2594,6 +4371,58 @@ func (c *Kendra) ListGroupsOlderThanOrderingIdWithContext(ctx aws.Context, input
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListGroupsOlderThanOrderingIdPages iterates over the pages of a ListGroupsOlderThanOrderingId operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListGroupsOlderThanOrderingId method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListGroupsOlderThanOrderingId operation.
+//    pageNum := 0
+//    err := client.ListGroupsOlderThanOrderingIdPages(params,
+//        func(page *kendra.ListGroupsOlderThanOrderingIdOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListGroupsOlderThanOrderingIdPages(input *ListGroupsOlderThanOrderingIdInput, fn func(*ListGroupsOlderThanOrderingIdOutput, bool) bool) error {
+	return c.ListGroupsOlderThanOrderingIdPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListGroupsOlderThanOrderingIdPagesWithContext same as ListGroupsOlderThanOrderingIdPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListGroupsOlderThanOrderingIdPagesWithContext(ctx aws.Context, input *ListGroupsOlderThanOrderingIdInput, fn func(*ListGroupsOlderThanOrderingIdOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListGroupsOlderThanOrderingIdInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListGroupsOlderThanOrderingIdRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListGroupsOlderThanOrderingIdOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListIndices = "ListIndices"
@@ -2646,7 +4475,7 @@ func (c *Kendra) ListIndicesRequest(input *ListIndicesInput) (req *request.Reque
 
 // ListIndices API operation for AWSKendraFrontendService.
 //
-// Lists the Amazon Kendra indexes that you have created.
+// Lists the Amazon Kendra indexes that you created.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2769,6 +4598,12 @@ func (c *Kendra) ListQuerySuggestionsBlockListsRequest(input *ListQuerySuggestio
 		Name:       opListQuerySuggestionsBlockLists,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2786,6 +4621,9 @@ func (c *Kendra) ListQuerySuggestionsBlockListsRequest(input *ListQuerySuggestio
 //
 // For information on the current quota limits for block lists, see Quotas for
 // Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+//
+// ListQuerySuggestionsBlockLists is currently not supported in the Amazon Web
+// Services GovCloud (US-West) region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2825,6 +4663,58 @@ func (c *Kendra) ListQuerySuggestionsBlockListsWithContext(ctx aws.Context, inpu
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListQuerySuggestionsBlockListsPages iterates over the pages of a ListQuerySuggestionsBlockLists operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListQuerySuggestionsBlockLists method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListQuerySuggestionsBlockLists operation.
+//    pageNum := 0
+//    err := client.ListQuerySuggestionsBlockListsPages(params,
+//        func(page *kendra.ListQuerySuggestionsBlockListsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListQuerySuggestionsBlockListsPages(input *ListQuerySuggestionsBlockListsInput, fn func(*ListQuerySuggestionsBlockListsOutput, bool) bool) error {
+	return c.ListQuerySuggestionsBlockListsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListQuerySuggestionsBlockListsPagesWithContext same as ListQuerySuggestionsBlockListsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListQuerySuggestionsBlockListsPagesWithContext(ctx aws.Context, input *ListQuerySuggestionsBlockListsInput, fn func(*ListQuerySuggestionsBlockListsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListQuerySuggestionsBlockListsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListQuerySuggestionsBlockListsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListQuerySuggestionsBlockListsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListTagsForResource = "ListTagsForResource"
@@ -2945,6 +4835,12 @@ func (c *Kendra) ListThesauriRequest(input *ListThesauriInput) (req *request.Req
 		Name:       opListThesauri,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2958,7 +4854,7 @@ func (c *Kendra) ListThesauriRequest(input *ListThesauriInput) (req *request.Req
 
 // ListThesauri API operation for AWSKendraFrontendService.
 //
-// Lists the Amazon Kendra thesauri associated with an index.
+// Lists the thesauri for an index.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2998,6 +4894,58 @@ func (c *Kendra) ListThesauriWithContext(ctx aws.Context, input *ListThesauriInp
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListThesauriPages iterates over the pages of a ListThesauri operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListThesauri method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListThesauri operation.
+//    pageNum := 0
+//    err := client.ListThesauriPages(params,
+//        func(page *kendra.ListThesauriOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Kendra) ListThesauriPages(input *ListThesauriInput, fn func(*ListThesauriOutput, bool) bool) error {
+	return c.ListThesauriPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListThesauriPagesWithContext same as ListThesauriPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListThesauriPagesWithContext(ctx aws.Context, input *ListThesauriInput, fn func(*ListThesauriOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListThesauriInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListThesauriRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListThesauriOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opPutPrincipalMapping = "PutPrincipalMapping"
@@ -3055,13 +5003,15 @@ func (c *Kendra) PutPrincipalMappingRequest(input *PutPrincipalMappingInput) (re
 // the intellectual property group, can see top-secret company documents in
 // their search results.
 //
-// You map users to their groups when you want to filter search results for
-// different users based on their group’s access to documents. For more information
-// on filtering search results for different users, see Filtering on user context
-// (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html).
+// This is useful for user context filtering, where search results are filtered
+// based on the user or their group access to documents. For more information,
+// see Filtering on user context (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html).
 //
 // If more than five PUT actions for a group are currently processing, a validation
 // exception is thrown.
+//
+// PutPrincipalMapping is currently not supported in the Amazon Web Services
+// GovCloud (US-West) region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3152,8 +5102,8 @@ func (c *Kendra) QueryRequest(input *QueryInput) (req *request.Request, output *
 // Query API operation for AWSKendraFrontendService.
 //
 // Searches an active index. Use this API to search your documents using query.
-// The Query operation enables to do faceted search and to filter results based
-// on document attributes.
+// The Query API enables to do faceted search and to filter results based on
+// document attributes.
 //
 // It also enables you to provide user context that Amazon Kendra uses to enforce
 // document access control in the search results.
@@ -3352,8 +5302,8 @@ func (c *Kendra) StopDataSourceSyncJobRequest(input *StopDataSourceSyncJobInput)
 
 // StopDataSourceSyncJob API operation for AWSKendraFrontendService.
 //
-// Stops a running synchronization job. You can't stop a scheduled synchronization
-// job.
+// Stops a synchronization job that is currently running. You can't stop a scheduled
+// synchronization job.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3442,6 +5392,9 @@ func (c *Kendra) SubmitFeedbackRequest(input *SubmitFeedbackInput) (req *request
 //
 // Enables you to provide feedback to Amazon Kendra to improve the performance
 // of your index.
+//
+// SubmitFeedback is currently not supported in the Amazon Web Services GovCloud
+// (US-West) region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3660,6 +5613,118 @@ func (c *Kendra) UntagResourceWithContext(ctx aws.Context, input *UntagResourceI
 	return out, req.Send()
 }
 
+const opUpdateAccessControlConfiguration = "UpdateAccessControlConfiguration"
+
+// UpdateAccessControlConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAccessControlConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateAccessControlConfiguration for more information on using the UpdateAccessControlConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateAccessControlConfigurationRequest method.
+//    req, resp := client.UpdateAccessControlConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateAccessControlConfiguration
+func (c *Kendra) UpdateAccessControlConfigurationRequest(input *UpdateAccessControlConfigurationInput) (req *request.Request, output *UpdateAccessControlConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAccessControlConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateAccessControlConfigurationInput{}
+	}
+
+	output = &UpdateAccessControlConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateAccessControlConfiguration API operation for AWSKendraFrontendService.
+//
+// Updates an access control configuration for your documents in an index. This
+// includes user and group access information for your documents. This is useful
+// for user context filtering, where search results are filtered based on the
+// user or their group access to documents.
+//
+// You can update an access control configuration you created without indexing
+// all of your documents again. For example, your index contains top-secret
+// company documents that only certain employees or users should access. You
+// created an 'allow' access control configuration for one user who recently
+// joined the 'top-secret' team, switching from a team with 'deny' access to
+// top-secret documents. However, the user suddenly returns to their previous
+// team and should no longer have access to top secret documents. You can update
+// the access control configuration to re-configure access control for your
+// documents as circumstances change.
+//
+// You call the BatchPutDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchPutDocument.html)
+// API to apply the updated access control configuration, with the AccessControlConfigurationId
+// included in the Document (https://docs.aws.amazon.com/kendra/latest/dg/API_Document.html)
+// object. If you use an S3 bucket as a data source, you synchronize your data
+// source to apply the AccessControlConfigurationId in the .metadata.json file.
+// Amazon Kendra currently only supports access control configuration for S3
+// data sources and documents indexed using the BatchPutDocument API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation UpdateAccessControlConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ThrottlingException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * ServiceQuotaExceededException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateAccessControlConfiguration
+func (c *Kendra) UpdateAccessControlConfiguration(input *UpdateAccessControlConfigurationInput) (*UpdateAccessControlConfigurationOutput, error) {
+	req, out := c.UpdateAccessControlConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateAccessControlConfigurationWithContext is the same as UpdateAccessControlConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateAccessControlConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) UpdateAccessControlConfigurationWithContext(ctx aws.Context, input *UpdateAccessControlConfigurationInput, opts ...request.Option) (*UpdateAccessControlConfigurationOutput, error) {
+	req, out := c.UpdateAccessControlConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateDataSource = "UpdateDataSource"
 
 // UpdateDataSourceRequest generates a "aws/request.Request" representing the
@@ -3744,6 +5809,97 @@ func (c *Kendra) UpdateDataSource(input *UpdateDataSourceInput) (*UpdateDataSour
 // for more information on using Contexts.
 func (c *Kendra) UpdateDataSourceWithContext(ctx aws.Context, input *UpdateDataSourceInput, opts ...request.Option) (*UpdateDataSourceOutput, error) {
 	req, out := c.UpdateDataSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateExperience = "UpdateExperience"
+
+// UpdateExperienceRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateExperience operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateExperience for more information on using the UpdateExperience
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateExperienceRequest method.
+//    req, resp := client.UpdateExperienceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateExperience
+func (c *Kendra) UpdateExperienceRequest(input *UpdateExperienceInput) (req *request.Request, output *UpdateExperienceOutput) {
+	op := &request.Operation{
+		Name:       opUpdateExperience,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateExperienceInput{}
+	}
+
+	output = &UpdateExperienceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateExperience API operation for AWSKendraFrontendService.
+//
+// Updates your Amazon Kendra experience such as a search application. For more
+// information on creating a search application experience, see Building a search
+// experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation UpdateExperience for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateExperience
+func (c *Kendra) UpdateExperience(input *UpdateExperienceInput) (*UpdateExperienceOutput, error) {
+	req, out := c.UpdateExperienceRequest(input)
+	return out, req.Send()
+}
+
+// UpdateExperienceWithContext is the same as UpdateExperience with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateExperience for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) UpdateExperienceWithContext(ctx aws.Context, input *UpdateExperienceInput, opts ...request.Option) (*UpdateExperienceOutput, error) {
+	req, out := c.UpdateExperienceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3897,6 +6053,9 @@ func (c *Kendra) UpdateQuerySuggestionsBlockListRequest(input *UpdateQuerySugges
 // Amazon Kendra supports partial updates, so you only need to provide the fields
 // you want to update.
 //
+// UpdateQuerySuggestionsBlockList is currently not supported in the Amazon
+// Web Services GovCloud (US-West) region.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3998,6 +6157,9 @@ func (c *Kendra) UpdateQuerySuggestionsConfigRequest(input *UpdateQuerySuggestio
 //
 // You can still enable/disable query suggestions at any time.
 //
+// UpdateQuerySuggestionsConfig is currently not supported in the Amazon Web
+// Services GovCloud (US-West) region.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -4085,7 +6247,7 @@ func (c *Kendra) UpdateThesaurusRequest(input *UpdateThesaurusInput) (req *reque
 
 // UpdateThesaurus API operation for AWSKendraFrontendService.
 //
-// Updates a thesaurus file associated with an index.
+// Updates a thesaurus for an index.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4127,6 +6289,41 @@ func (c *Kendra) UpdateThesaurusWithContext(ctx aws.Context, input *UpdateThesau
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// Summary information on an access control configuration that you created for
+// your documents in an index.
+type AccessControlConfigurationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the access control configuration.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessControlConfigurationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessControlConfigurationSummary) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *AccessControlConfigurationSummary) SetId(v string) *AccessControlConfigurationSummary {
+	s.Id = &v
+	return s
 }
 
 // Access Control List files for the documents in a data source. For the format
@@ -4245,7 +6442,7 @@ type AclConfiguration struct {
 
 	// A list of groups, separated by semi-colons, that filters a query response
 	// based on user context. The document is only returned to users that are in
-	// one of the groups specified in the UserContext field of the Query operation.
+	// one of the groups specified in the UserContext field of the Query API.
 	//
 	// AllowedGroupsColumnName is a required field
 	AllowedGroupsColumnName *string `min:"1" type:"string" required:"true"`
@@ -4380,6 +6577,524 @@ func (s *AdditionalResultAttributeValue) SetTextWithHighlightsValue(v *TextWithH
 	return s
 }
 
+// Provides the configuration information to connect to Alfresco as your data
+// source.
+//
+// Alfresco data source connector is currently in preview mode. Basic authentication
+// is currently supported. If you would like to use Alfresco connector in production,
+// contact Support (http://aws.amazon.com/contact-us/).
+type AlfrescoConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Alfresco blogs to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Alfresco fields. For more
+	// information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Alfresco data source field names must exist in your Alfresco custom metadata.
+	BlogFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// TRUE to index comments of blogs and other content.
+	CrawlComments *bool `type:"boolean"`
+
+	// TRUE to index shared files.
+	CrawlSystemFolders *bool `type:"boolean"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Alfresco document libraries to Amazon Kendra index field names.
+	// To create custom fields, use the UpdateIndex API before you map to Alfresco
+	// fields. For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Alfresco data source field names must exist in your Alfresco custom metadata.
+	DocumentLibraryFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// Specify whether to index document libraries, wikis, or blogs. You can specify
+	// one or more of these options.
+	EntityFilter []*string `min:"1" type:"list" enum:"AlfrescoEntity"`
+
+	// A list of regular expression patterns to exclude certain files in your Alfresco
+	// data source. Files that match the patterns are excluded from the index. Files
+	// that don't match the patterns are included in the index. If a file matches
+	// both an inclusion pattern and an exclusion pattern, the exclusion pattern
+	// takes precedence and the file isn't included in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// A list of regular expression patterns to include certain files in your Alfresco
+	// data source. Files that match the patterns are included in the index. Files
+	// that don't match the patterns are excluded from the index. If a file matches
+	// both an inclusion pattern and an exclusion pattern, the exclusion pattern
+	// takes precedence and the file isn't included in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the key-value pairs required to connect to your Alfresco data source. The
+	// secret must contain a JSON structure with the following keys:
+	//
+	//    * username—The user name of the Alfresco account.
+	//
+	//    * password—The password of the Alfresco account.
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Alfresco site. For example, my-site.
+	//
+	// SiteId is a required field
+	SiteId *string `min:"1" type:"string" required:"true"`
+
+	// The URL of the Alfresco site. For example, https://hostname:8080.
+	//
+	// SiteUrl is a required field
+	SiteUrl *string `min:"1" type:"string" required:"true"`
+
+	// The path to the SSL certificate stored in an Amazon S3 bucket. You use this
+	// to connect to Alfresco.
+	//
+	// SslCertificateS3Path is a required field
+	SslCertificateS3Path *S3Path `type:"structure" required:"true"`
+
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your Alfresco. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Alfresco wikis to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Alfresco fields. For more
+	// information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Alfresco data source field names must exist in your Alfresco custom metadata.
+	WikiFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AlfrescoConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AlfrescoConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AlfrescoConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AlfrescoConfiguration"}
+	if s.BlogFieldMappings != nil && len(s.BlogFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BlogFieldMappings", 1))
+	}
+	if s.DocumentLibraryFieldMappings != nil && len(s.DocumentLibraryFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DocumentLibraryFieldMappings", 1))
+	}
+	if s.EntityFilter != nil && len(s.EntityFilter) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityFilter", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.SiteId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SiteId"))
+	}
+	if s.SiteId != nil && len(*s.SiteId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SiteId", 1))
+	}
+	if s.SiteUrl == nil {
+		invalidParams.Add(request.NewErrParamRequired("SiteUrl"))
+	}
+	if s.SiteUrl != nil && len(*s.SiteUrl) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SiteUrl", 1))
+	}
+	if s.SslCertificateS3Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("SslCertificateS3Path"))
+	}
+	if s.WikiFieldMappings != nil && len(s.WikiFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WikiFieldMappings", 1))
+	}
+	if s.BlogFieldMappings != nil {
+		for i, v := range s.BlogFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BlogFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.DocumentLibraryFieldMappings != nil {
+		for i, v := range s.DocumentLibraryFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DocumentLibraryFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.SslCertificateS3Path != nil {
+		if err := s.SslCertificateS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SslCertificateS3Path", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.WikiFieldMappings != nil {
+		for i, v := range s.WikiFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "WikiFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBlogFieldMappings sets the BlogFieldMappings field's value.
+func (s *AlfrescoConfiguration) SetBlogFieldMappings(v []*DataSourceToIndexFieldMapping) *AlfrescoConfiguration {
+	s.BlogFieldMappings = v
+	return s
+}
+
+// SetCrawlComments sets the CrawlComments field's value.
+func (s *AlfrescoConfiguration) SetCrawlComments(v bool) *AlfrescoConfiguration {
+	s.CrawlComments = &v
+	return s
+}
+
+// SetCrawlSystemFolders sets the CrawlSystemFolders field's value.
+func (s *AlfrescoConfiguration) SetCrawlSystemFolders(v bool) *AlfrescoConfiguration {
+	s.CrawlSystemFolders = &v
+	return s
+}
+
+// SetDocumentLibraryFieldMappings sets the DocumentLibraryFieldMappings field's value.
+func (s *AlfrescoConfiguration) SetDocumentLibraryFieldMappings(v []*DataSourceToIndexFieldMapping) *AlfrescoConfiguration {
+	s.DocumentLibraryFieldMappings = v
+	return s
+}
+
+// SetEntityFilter sets the EntityFilter field's value.
+func (s *AlfrescoConfiguration) SetEntityFilter(v []*string) *AlfrescoConfiguration {
+	s.EntityFilter = v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *AlfrescoConfiguration) SetExclusionPatterns(v []*string) *AlfrescoConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *AlfrescoConfiguration) SetInclusionPatterns(v []*string) *AlfrescoConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *AlfrescoConfiguration) SetSecretArn(v string) *AlfrescoConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetSiteId sets the SiteId field's value.
+func (s *AlfrescoConfiguration) SetSiteId(v string) *AlfrescoConfiguration {
+	s.SiteId = &v
+	return s
+}
+
+// SetSiteUrl sets the SiteUrl field's value.
+func (s *AlfrescoConfiguration) SetSiteUrl(v string) *AlfrescoConfiguration {
+	s.SiteUrl = &v
+	return s
+}
+
+// SetSslCertificateS3Path sets the SslCertificateS3Path field's value.
+func (s *AlfrescoConfiguration) SetSslCertificateS3Path(v *S3Path) *AlfrescoConfiguration {
+	s.SslCertificateS3Path = v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *AlfrescoConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *AlfrescoConfiguration {
+	s.VpcConfiguration = v
+	return s
+}
+
+// SetWikiFieldMappings sets the WikiFieldMappings field's value.
+func (s *AlfrescoConfiguration) SetWikiFieldMappings(v []*DataSourceToIndexFieldMapping) *AlfrescoConfiguration {
+	s.WikiFieldMappings = v
+	return s
+}
+
+type AssociateEntitiesToExperienceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists users or groups in your Amazon Web Services SSO identity source.
+	//
+	// EntityList is a required field
+	EntityList []*EntityConfiguration `min:"1" type:"list" required:"true"`
+
+	// The identifier of your Amazon Kendra experience.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateEntitiesToExperienceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateEntitiesToExperienceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateEntitiesToExperienceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateEntitiesToExperienceInput"}
+	if s.EntityList == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityList"))
+	}
+	if s.EntityList != nil && len(s.EntityList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityList", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.EntityList != nil {
+		for i, v := range s.EntityList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "EntityList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityList sets the EntityList field's value.
+func (s *AssociateEntitiesToExperienceInput) SetEntityList(v []*EntityConfiguration) *AssociateEntitiesToExperienceInput {
+	s.EntityList = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AssociateEntitiesToExperienceInput) SetId(v string) *AssociateEntitiesToExperienceInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *AssociateEntitiesToExperienceInput) SetIndexId(v string) *AssociateEntitiesToExperienceInput {
+	s.IndexId = &v
+	return s
+}
+
+type AssociateEntitiesToExperienceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists the users or groups in your Amazon Web Services SSO identity source
+	// that failed to properly configure with your Amazon Kendra experience.
+	FailedEntityList []*FailedEntity `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateEntitiesToExperienceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateEntitiesToExperienceOutput) GoString() string {
+	return s.String()
+}
+
+// SetFailedEntityList sets the FailedEntityList field's value.
+func (s *AssociateEntitiesToExperienceOutput) SetFailedEntityList(v []*FailedEntity) *AssociateEntitiesToExperienceOutput {
+	s.FailedEntityList = v
+	return s
+}
+
+type AssociatePersonasToEntitiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of your Amazon Kendra experience.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The personas that define the specific permissions of users or groups in your
+	// Amazon Web Services SSO identity source. The available personas or access
+	// roles are Owner and Viewer. For more information on these personas, see Providing
+	// access to your search page (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html#access-search-experience).
+	//
+	// Personas is a required field
+	Personas []*EntityPersonaConfiguration `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePersonasToEntitiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePersonasToEntitiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociatePersonasToEntitiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociatePersonasToEntitiesInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Personas == nil {
+		invalidParams.Add(request.NewErrParamRequired("Personas"))
+	}
+	if s.Personas != nil && len(s.Personas) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Personas", 1))
+	}
+	if s.Personas != nil {
+		for i, v := range s.Personas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Personas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *AssociatePersonasToEntitiesInput) SetId(v string) *AssociatePersonasToEntitiesInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *AssociatePersonasToEntitiesInput) SetIndexId(v string) *AssociatePersonasToEntitiesInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetPersonas sets the Personas field's value.
+func (s *AssociatePersonasToEntitiesInput) SetPersonas(v []*EntityPersonaConfiguration) *AssociatePersonasToEntitiesInput {
+	s.Personas = v
+	return s
+}
+
+type AssociatePersonasToEntitiesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists the users or groups in your Amazon Web Services SSO identity source
+	// that failed to properly configure with your Amazon Kendra experience.
+	FailedEntityList []*FailedEntity `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePersonasToEntitiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePersonasToEntitiesOutput) GoString() string {
+	return s.String()
+}
+
+// SetFailedEntityList sets the FailedEntityList field's value.
+func (s *AssociatePersonasToEntitiesOutput) SetFailedEntityList(v []*FailedEntity) *AssociatePersonasToEntitiesOutput {
+	s.FailedEntityList = v
+	return s
+}
+
 // Provides filtering the query results based on document attributes.
 //
 // When you use the AndAllFilters or OrAllFilters, filters you can use 2 layers
@@ -4389,7 +7104,7 @@ func (s *AdditionalResultAttributeValue) SetTextWithHighlightsValue(v *TextWithH
 //
 // <OrAllFilters>
 //
-// <EqualTo>
+// <EqualsTo>
 //
 // If you use more than 2 layers, you receive a ValidationException exception
 // with the message "AttributeFilter cannot have a depth of more than 2."
@@ -4636,7 +7351,7 @@ func (s *AuthenticationConfiguration) SetBasicAuthentication(v []*BasicAuthentic
 type BasicAuthenticationConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Your secret ARN, which you can create in AWS Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	// Your secret ARN, which you can create in Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
 	//
 	// You use a secret if basic authentication credentials are required to connect
 	// to a website. The secret stores your credentials of user name and password.
@@ -4840,7 +7555,7 @@ func (s *BatchDeleteDocumentOutput) SetFailedDocuments(v []*BatchDeleteDocumentR
 }
 
 // Provides information about documents that could not be removed from an index
-// by the BatchDeleteDocument operation.
+// by the BatchDeleteDocument API.
 type BatchDeleteDocumentResponseFailedDocument struct {
 	_ struct{} `type:"structure"`
 
@@ -4902,7 +7617,7 @@ type BatchGetDocumentStatusInput struct {
 
 	// The identifier of the index to add documents to. The index ID is returned
 	// by the CreateIndex (https://docs.aws.amazon.com/kendra/latest/dg/API_CreateIndex.html)
-	// operation.
+	// API.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -5069,13 +7784,15 @@ func (s *BatchGetDocumentStatusResponseError) SetErrorMessage(v string) *BatchGe
 type BatchPutDocumentInput struct {
 	_ struct{} `type:"structure"`
 
-	// One or more documents to add to the index.
+	// Configuration information for altering your document metadata and content
+	// during the document ingestion process when you use the BatchPutDocument API.
 	//
-	// Documents can include custom attributes. For example, 'DataSourceId' and
-	// 'DataSourceSyncJobId' are custom attributes that provide information on the
-	// synchronization of documents running on a data source. Note, 'DataSourceSyncJobId'
-	// could be an optional custom attribute as Amazon Kendra will use the ID of
-	// a running sync job.
+	// For more information on how to create, modify and delete document metadata,
+	// or make other content alterations when you ingest documents into Amazon Kendra,
+	// see Customizing document metadata during the ingestion process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
+	CustomDocumentEnrichmentConfiguration *CustomDocumentEnrichmentConfiguration `type:"structure"`
+
+	// One or more documents to add to the index.
 	//
 	// Documents have the following file size limits.
 	//
@@ -5092,14 +7809,14 @@ type BatchPutDocumentInput struct {
 	Documents []*Document `min:"1" type:"list" required:"true"`
 
 	// The identifier of the index to add the documents to. You need to create the
-	// index first using the CreateIndex operation.
+	// index first using the CreateIndex API.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
 	// The Amazon Resource Name (ARN) of a role that is allowed to run the BatchPutDocument
-	// operation. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
-	RoleArn *string `min:"1" type:"string"`
+	// API. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	RoleArn *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -5135,8 +7852,10 @@ func (s *BatchPutDocumentInput) Validate() error {
 	if s.IndexId != nil && len(*s.IndexId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
 	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	if s.CustomDocumentEnrichmentConfiguration != nil {
+		if err := s.CustomDocumentEnrichmentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("CustomDocumentEnrichmentConfiguration", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Documents != nil {
 		for i, v := range s.Documents {
@@ -5153,6 +7872,12 @@ func (s *BatchPutDocumentInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCustomDocumentEnrichmentConfiguration sets the CustomDocumentEnrichmentConfiguration field's value.
+func (s *BatchPutDocumentInput) SetCustomDocumentEnrichmentConfiguration(v *CustomDocumentEnrichmentConfiguration) *BatchPutDocumentInput {
+	s.CustomDocumentEnrichmentConfiguration = v
+	return s
 }
 
 // SetDocuments sets the Documents field's value.
@@ -5260,8 +7985,281 @@ func (s *BatchPutDocumentResponseFailedDocument) SetId(v string) *BatchPutDocume
 	return s
 }
 
-// Specifies capacity units configured for your enterprise edition index. You
-// can add and remove capacity units to tune an index to your requirements.
+// Provides the configuration information to connect to Box as your data source.
+type BoxConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Box comments to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Box fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Box field names must exist in your Box custom metadata.
+	CommentFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// TRUE to index comments.
+	CrawlComments *bool `type:"boolean"`
+
+	// TRUE to index the contents of tasks.
+	CrawlTasks *bool `type:"boolean"`
+
+	// TRUE to index web links.
+	CrawlWebLinks *bool `type:"boolean"`
+
+	// The identifier of the Box Enterprise platform. You can find the enterprise
+	// ID in the Box Developer Console settings or when you create an app in Box
+	// and download your authentication credentials. For example, 801234567.
+	//
+	// EnterpriseId is a required field
+	EnterpriseId *string `min:"1" type:"string" required:"true"`
+
+	// A list of regular expression patterns to exclude certain files and folders
+	// from your Box platform. Files and folders that match the patterns are excluded
+	// from the index.Files and folders that don't match the patterns are included
+	// in the index. If a file or folder matches both an inclusion and exclusion
+	// pattern, the exclusion pattern takes precedence and the file or folder isn't
+	// included in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Box files to Amazon Kendra index field names. To create custom fields,
+	// use the UpdateIndex API before you map to Box fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Box field names must exist in your Box custom metadata.
+	FileFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of regular expression patterns to include certain files and folders
+	// in your Box platform. Files and folders that match the patterns are included
+	// in the index. Files and folders that don't match the patterns are excluded
+	// from the index. If a file or folder matches both an inclusion and exclusion
+	// pattern, the exclusion pattern takes precedence and the file or folder isn't
+	// included in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the key-value pairs required to connect to your Box platform. The secret
+	// must contain a JSON structure with the following keys:
+	//
+	//    * clientID—The identifier of the client OAuth 2.0 authentication application
+	//    created in Box.
+	//
+	//    * clientSecret—A set of characters known only to the OAuth 2.0 authentication
+	//    application created in Box.
+	//
+	//    * publicKeyId—The identifier of the public key contained within an identity
+	//    certificate.
+	//
+	//    * privateKey—A set of characters that make up an encryption key.
+	//
+	//    * passphrase—A set of characters that act like a password.
+	//
+	// You create an application in Box to generate the keys or credentials required
+	// for the secret. For more information, see Authentication for a Box data source
+	// (https://docs.aws.amazon.com/kendra/latest/dg/data-source-box.html#box-authentication).
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Box tasks to Amazon Kendra index field names. To create custom fields,
+	// use the UpdateIndex API before you map to Box fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Box field names must exist in your Box custom metadata.
+	TaskFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// TRUE to use the Slack change log to determine which documents require updating
+	// in the index. Depending on the data source change log's size, it may take
+	// longer for Amazon Kendra to use the change log than to scan all of your documents.
+	UseChangeLog *bool `type:"boolean"`
+
+	// Configuration information for an Amazon VPC to connect to your Box. For more
+	// information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Box web links to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Box fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Box field names must exist in your Box custom metadata.
+	WebLinkFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BoxConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BoxConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BoxConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BoxConfiguration"}
+	if s.CommentFieldMappings != nil && len(s.CommentFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CommentFieldMappings", 1))
+	}
+	if s.EnterpriseId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EnterpriseId"))
+	}
+	if s.EnterpriseId != nil && len(*s.EnterpriseId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EnterpriseId", 1))
+	}
+	if s.FileFieldMappings != nil && len(s.FileFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileFieldMappings", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.TaskFieldMappings != nil && len(s.TaskFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskFieldMappings", 1))
+	}
+	if s.WebLinkFieldMappings != nil && len(s.WebLinkFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WebLinkFieldMappings", 1))
+	}
+	if s.CommentFieldMappings != nil {
+		for i, v := range s.CommentFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CommentFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.FileFieldMappings != nil {
+		for i, v := range s.FileFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FileFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.TaskFieldMappings != nil {
+		for i, v := range s.TaskFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "TaskFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.WebLinkFieldMappings != nil {
+		for i, v := range s.WebLinkFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "WebLinkFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCommentFieldMappings sets the CommentFieldMappings field's value.
+func (s *BoxConfiguration) SetCommentFieldMappings(v []*DataSourceToIndexFieldMapping) *BoxConfiguration {
+	s.CommentFieldMappings = v
+	return s
+}
+
+// SetCrawlComments sets the CrawlComments field's value.
+func (s *BoxConfiguration) SetCrawlComments(v bool) *BoxConfiguration {
+	s.CrawlComments = &v
+	return s
+}
+
+// SetCrawlTasks sets the CrawlTasks field's value.
+func (s *BoxConfiguration) SetCrawlTasks(v bool) *BoxConfiguration {
+	s.CrawlTasks = &v
+	return s
+}
+
+// SetCrawlWebLinks sets the CrawlWebLinks field's value.
+func (s *BoxConfiguration) SetCrawlWebLinks(v bool) *BoxConfiguration {
+	s.CrawlWebLinks = &v
+	return s
+}
+
+// SetEnterpriseId sets the EnterpriseId field's value.
+func (s *BoxConfiguration) SetEnterpriseId(v string) *BoxConfiguration {
+	s.EnterpriseId = &v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *BoxConfiguration) SetExclusionPatterns(v []*string) *BoxConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetFileFieldMappings sets the FileFieldMappings field's value.
+func (s *BoxConfiguration) SetFileFieldMappings(v []*DataSourceToIndexFieldMapping) *BoxConfiguration {
+	s.FileFieldMappings = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *BoxConfiguration) SetInclusionPatterns(v []*string) *BoxConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *BoxConfiguration) SetSecretArn(v string) *BoxConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetTaskFieldMappings sets the TaskFieldMappings field's value.
+func (s *BoxConfiguration) SetTaskFieldMappings(v []*DataSourceToIndexFieldMapping) *BoxConfiguration {
+	s.TaskFieldMappings = v
+	return s
+}
+
+// SetUseChangeLog sets the UseChangeLog field's value.
+func (s *BoxConfiguration) SetUseChangeLog(v bool) *BoxConfiguration {
+	s.UseChangeLog = &v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *BoxConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *BoxConfiguration {
+	s.VpcConfiguration = v
+	return s
+}
+
+// SetWebLinkFieldMappings sets the WebLinkFieldMappings field's value.
+func (s *BoxConfiguration) SetWebLinkFieldMappings(v []*DataSourceToIndexFieldMapping) *BoxConfiguration {
+	s.WebLinkFieldMappings = v
+	return s
+}
+
+// Specifies additional capacity units configured for your Enterprise Edition
+// index. You can add and remove capacity units to fit your usage requirements.
 type CapacityUnitsConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -5269,7 +8267,8 @@ type CapacityUnitsConfiguration struct {
 	// capacity.
 	//
 	// A single extra capacity unit for an index provides 0.1 queries per second
-	// or approximately 8,000 queries per day.
+	// or approximately 8,000 queries per day. You can add up to 100 extra capacity
+	// units.
 	//
 	// GetQuerySuggestions capacity is five times the provisioned query capacity
 	// for an index, or the base capacity of 2.5 calls per second, whichever is
@@ -5284,7 +8283,7 @@ type CapacityUnitsConfiguration struct {
 
 	// The amount of extra storage capacity for an index. A single capacity unit
 	// provides 30 GB of storage space or 100,000 documents, whichever is reached
-	// first.
+	// first. You can add up to 100 extra capacity units.
 	//
 	// StorageCapacityUnits is a required field
 	StorageCapacityUnits *int64 `type:"integer" required:"true"`
@@ -5408,7 +8407,7 @@ func (s ClearQuerySuggestionsOutput) GoString() string {
 }
 
 // Gathers information about when a particular result was clicked by a user.
-// Your application uses the SubmitFeedback operation to provide click information.
+// Your application uses the SubmitFeedback API to provide click information.
 type ClickFeedback struct {
 	_ struct{} `type:"structure"`
 
@@ -5497,7 +8496,7 @@ type ColumnConfiguration struct {
 
 	// An array of objects that map database column names to the corresponding fields
 	// in an index. You must first create the fields in the index using the UpdateIndex
-	// operation.
+	// API.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 }
 
@@ -5656,22 +8655,24 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Specifies the attachment settings for the Confluence data source. Attachment
+// Configuration of attachment settings for the Confluence data source. Attachment
 // settings are optional, if you don't specify settings attachments, Amazon
 // Kendra won't index them.
 type ConfluenceAttachmentConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Defines how attachment metadata fields should be mapped to index fields.
-	// Before you can map a field, you must first create an index field with a matching
-	// type using the console or the UpdateIndex operation.
+	// Maps attributes or field names of Confluence attachments to Amazon Kendra
+	// index field names. To create custom fields, use the UpdateIndex API before
+	// you map to Confluence fields. For more information, see Mapping data source
+	// fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Confluence data source field names must exist in your Confluence custom
+	// metadata.
 	//
 	// If you specify the AttachentFieldMappings parameter, you must specify at
 	// least one field mapping.
 	AttachmentFieldMappings []*ConfluenceAttachmentToIndexFieldMapping `min:"1" type:"list"`
 
-	// Indicates whether Amazon Kendra indexes attachments to the pages and blogs
-	// in the Confluence data source.
+	// TRUE to index attachments of pages and blogs in Confluence.
 	CrawlAttachments *bool `type:"boolean"`
 }
 
@@ -5728,16 +8729,18 @@ func (s *ConfluenceAttachmentConfiguration) SetCrawlAttachments(v bool) *Conflue
 	return s
 }
 
-// Defines the mapping between a field in the Confluence data source to a Amazon
-// Kendra index field.
-//
-// You must first create the index field using the UpdateIndex operation.
+// Maps attributes or field names of Confluence attachments to Amazon Kendra
+// index field names. To create custom fields, use the UpdateIndex API before
+// you map to Confluence fields. For more information, see Mapping data source
+// fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+// The Confuence data source field names must exist in your Confluence custom
+// metadata.
 type ConfluenceAttachmentToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the field in the data source.
 	//
-	// You must first create the index field using the UpdateIndex operation.
+	// You must first create the index field using the UpdateIndex API.
 	DataSourceFieldName *string `type:"string" enum:"ConfluenceAttachmentFieldName"`
 
 	// The format for date fields in the data source. If the field specified in
@@ -5802,15 +8805,17 @@ func (s *ConfluenceAttachmentToIndexFieldMapping) SetIndexFieldName(v string) *C
 	return s
 }
 
-// Specifies the blog settings for the Confluence data source. Blogs are always
-// indexed unless filtered from the index by the ExclusionPatterns or InclusionPatterns
-// fields in the ConfluenceConfiguration type.
+// Configuration of blog settings for the Confluence data source. Blogs are
+// always indexed unless filtered from the index by the ExclusionPatterns or
+// InclusionPatterns fields in the ConfluenceConfiguration object.
 type ConfluenceBlogConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Defines how blog metadata fields should be mapped to index fields. Before
-	// you can map a field, you must first create an index field with a matching
-	// type using the console or the UpdateIndex operation.
+	// Maps attributes or field names of Confluence blogs to Amazon Kendra index
+	// field names. To create custom fields, use the UpdateIndex API before you
+	// map to Confluence fields. For more information, see Mapping data source fields
+	// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
+	// data source field names must exist in your Confluence custom metadata.
 	//
 	// If you specify the BlogFieldMappings parameter, you must specify at least
 	// one field mapping.
@@ -5864,10 +8869,11 @@ func (s *ConfluenceBlogConfiguration) SetBlogFieldMappings(v []*ConfluenceBlogTo
 	return s
 }
 
-// Defines the mapping between a blog field in the Confluence data source to
-// a Amazon Kendra index field.
-//
-// You must first create the index field using the UpdateIndex operation.
+// Maps attributes or field names of Confluence blog to Amazon Kendra index
+// field names. To create custom fields, use the UpdateIndex API before you
+// map to Confluence fields. For more information, see Mapping data source fields
+// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
+// data source field names must exist in your Confluence custom metadata.
 type ConfluenceBlogToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
@@ -5936,45 +8942,41 @@ func (s *ConfluenceBlogToIndexFieldMapping) SetIndexFieldName(v string) *Conflue
 	return s
 }
 
-// Provides configuration information for data sources that connect to Confluence.
+// Provides the configuration information to connect to Confluence as your data
+// source.
 type ConfluenceConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies configuration information for indexing attachments to Confluence
-	// blogs and pages.
+	// Configuration information for indexing attachments to Confluence blogs and
+	// pages.
 	AttachmentConfiguration *ConfluenceAttachmentConfiguration `type:"structure"`
 
-	// Specifies configuration information for indexing Confluence blogs.
+	// Configuration information for indexing Confluence blogs.
 	BlogConfiguration *ConfluenceBlogConfiguration `type:"structure"`
 
-	// A list of regular expression patterns that apply to a URL on the Confluence
-	// server. An exclusion pattern can apply to a blog post, a page, a space, or
-	// an attachment. Items that match the pattern are excluded from the index.
-	// Items that don't match the pattern are included in the index. If a item matches
-	// both an exclusion pattern and an inclusion pattern, the item isn't included
-	// in the index.
+	// A list of regular expression patterns to exclude certain blog posts, pages,
+	// spaces, or attachments in your Confluence. Content that matches the patterns
+	// are excluded from the index. Content that doesn't match the patterns is included
+	// in the index. If content matches both an inclusion and exclusion pattern,
+	// the exclusion pattern takes precedence and the content isn't included in
+	// the index.
 	ExclusionPatterns []*string `type:"list"`
 
-	// A list of regular expression patterns that apply to a URL on the Confluence
-	// server. An inclusion pattern can apply to a blog post, a page, a space, or
-	// an attachment. Items that match the patterns are included in the index. Items
-	// that don't match the pattern are excluded from the index. If an item matches
-	// both an inclusion pattern and an exclusion pattern, the item isn't included
-	// in the index.
+	// A list of regular expression patterns to include certain blog posts, pages,
+	// spaces, or attachments in your Confluence. Content that matches the patterns
+	// are included in the index. Content that doesn't match the patterns is excluded
+	// from the index. If content matches both an inclusion and exclusion pattern,
+	// the exclusion pattern takes precedence and the content isn't included in
+	// the index.
 	InclusionPatterns []*string `type:"list"`
 
-	// Specifies configuration information for indexing Confluence pages.
+	// Configuration information for indexing Confluence pages.
 	PageConfiguration *ConfluencePageConfiguration `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of an Secrets Managersecret that contains
-	// the key/value pairs required to connect to your Confluence server. The secret
-	// must contain a JSON structure with the following keys:
-	//
-	//    * username - The user name or email address of a user with administrative
-	//    privileges for the Confluence server.
-	//
-	//    * password - The password associated with the user logging in to the Confluence
-	//    server.
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the user name and password required to connect to the Confluence instance.
+	// If you use Confluence cloud, you use a generated API token as the password.
+	// For more information, see Using a Confluence data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-confluence.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -5986,16 +8988,16 @@ type ConfluenceConfiguration struct {
 	// ServerUrl is a required field
 	ServerUrl *string `min:"1" type:"string" required:"true"`
 
-	// Specifies configuration information for indexing Confluence spaces.
+	// Configuration information for indexing Confluence spaces.
 	SpaceConfiguration *ConfluenceSpaceConfiguration `type:"structure"`
 
-	// Specifies the version of the Confluence installation that you are connecting
-	// to.
+	// The version or the type of Confluence installation to connect to.
 	//
 	// Version is a required field
 	Version *string `type:"string" required:"true" enum:"ConfluenceVersion"`
 
-	// Specifies the information for connecting to an Amazon VPC.
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your Confluence. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
 	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
@@ -6127,13 +9129,15 @@ func (s *ConfluenceConfiguration) SetVpcConfiguration(v *DataSourceVpcConfigurat
 	return s
 }
 
-// Specifies the page settings for the Confluence data source.
+// Configuration of the page settings for the Confluence data source.
 type ConfluencePageConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Defines how page metadata fields should be mapped to index fields. Before
-	// you can map a field, you must first create an index field with a matching
-	// type using the console or the UpdateIndex operation.
+	// Maps attributes or field names of Confluence pages to Amazon Kendra index
+	// field names. To create custom fields, use the UpdateIndex API before you
+	// map to Confluence fields. For more information, see Mapping data source fields
+	// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
+	// data source field names must exist in your Confluence custom metadata.
 	//
 	// If you specify the PageFieldMappings parameter, you must specify at least
 	// one field mapping.
@@ -6187,10 +9191,11 @@ func (s *ConfluencePageConfiguration) SetPageFieldMappings(v []*ConfluencePageTo
 	return s
 }
 
-// Defines the mapping between a field in the Confluence data source to a Amazon
-// Kendra index field.
-//
-// You must first create the index field using the UpdateIndex operation.
+// >Maps attributes or field names of Confluence pages to Amazon Kendra index
+// field names. To create custom fields, use the UpdateIndex API before you
+// map to Confluence fields. For more information, see Mapping data source fields
+// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
+// data source field names must exist in your Confluence custom metadata.
 type ConfluencePageToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
@@ -6259,18 +9264,17 @@ func (s *ConfluencePageToIndexFieldMapping) SetIndexFieldName(v string) *Conflue
 	return s
 }
 
-// Specifies the configuration for indexing Confluence spaces.
+// Configuration information for indexing Confluence spaces.
 type ConfluenceSpaceConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies whether Amazon Kendra should index archived spaces.
+	// TRUE to index archived spaces.
 	CrawlArchivedSpaces *bool `type:"boolean"`
 
-	// Specifies whether Amazon Kendra should index personal spaces. Users can add
-	// restrictions to items in personal spaces. If personal spaces are indexed,
-	// queries without user context information may return restricted items from
-	// a personal space in their results. For more information, see Filtering on
-	// user context (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html).
+	// TRUE to index personal spaces. You can add restrictions to items in personal
+	// spaces. If personal spaces are indexed, queries without user context information
+	// may return restricted items from a personal space in their results. For more
+	// information, see Filtering on user context (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html).
 	CrawlPersonalSpaces *bool `type:"boolean"`
 
 	// A list of space keys of Confluence spaces. If you include a key, the blogs,
@@ -6285,9 +9289,11 @@ type ConfluenceSpaceConfiguration struct {
 	// in both the IncludeSpaces and the ExcludeSpaces list, the space is excluded.
 	IncludeSpaces []*string `min:"1" type:"list"`
 
-	// Defines how space metadata fields should be mapped to index fields. Before
-	// you can map a field, you must first create an index field with a matching
-	// type using the console or the UpdateIndex operation.
+	// Maps attributes or field names of Confluence spaces to Amazon Kendra index
+	// field names. To create custom fields, use the UpdateIndex API before you
+	// map to Confluence fields. For more information, see Mapping data source fields
+	// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
+	// data source field names must exist in your Confluence custom metadata.
 	//
 	// If you specify the SpaceFieldMappings parameter, you must specify at least
 	// one field mapping.
@@ -6371,10 +9377,11 @@ func (s *ConfluenceSpaceConfiguration) SetSpaceFieldMappings(v []*ConfluenceSpac
 	return s
 }
 
-// Defines the mapping between a field in the Confluence data source to a Amazon
-// Kendra index field.
-//
-// You must first create the index field using the UpdateIndex operation.
+// >Maps attributes or field names of Confluence spaces to Amazon Kendra index
+// field names. To create custom fields, use the UpdateIndex API before you
+// map to Confluence fields. For more information, see Mapping data source fields
+// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
+// data source field names must exist in your Confluence custom metadata.
 type ConfluenceSpaceToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
@@ -6443,7 +9450,7 @@ func (s *ConfluenceSpaceToIndexFieldMapping) SetIndexFieldName(v string) *Conflu
 	return s
 }
 
-// Provides the information necessary to connect to a database.
+// Provides the configuration information that's required to connect to a database.
 type ConnectionConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -6566,15 +9573,313 @@ func (s *ConnectionConfiguration) SetTableName(v string) *ConnectionConfiguratio
 	return s
 }
 
+// Provides the configuration information for your content sources, such as
+// data sources, FAQs, and content indexed directly via BatchPutDocument (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchPutDocument.html).
+type ContentSourceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data sources you want to use for your Amazon Kendra
+	// experience.
+	DataSourceIds []*string `min:"1" type:"list"`
+
+	// TRUE to use documents you indexed directly using the BatchPutDocument API.
+	DirectPutContent *bool `type:"boolean"`
+
+	// The identifier of the FAQs that you want to use for your Amazon Kendra experience.
+	FaqIds []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContentSourceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContentSourceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ContentSourceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ContentSourceConfiguration"}
+	if s.DataSourceIds != nil && len(s.DataSourceIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSourceIds", 1))
+	}
+	if s.FaqIds != nil && len(s.FaqIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FaqIds", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceIds sets the DataSourceIds field's value.
+func (s *ContentSourceConfiguration) SetDataSourceIds(v []*string) *ContentSourceConfiguration {
+	s.DataSourceIds = v
+	return s
+}
+
+// SetDirectPutContent sets the DirectPutContent field's value.
+func (s *ContentSourceConfiguration) SetDirectPutContent(v bool) *ContentSourceConfiguration {
+	s.DirectPutContent = &v
+	return s
+}
+
+// SetFaqIds sets the FaqIds field's value.
+func (s *ContentSourceConfiguration) SetFaqIds(v []*string) *ContentSourceConfiguration {
+	s.FaqIds = v
+	return s
+}
+
+// A corrected misspelled word in a query.
+type Correction struct {
+	_ struct{} `type:"structure"`
+
+	// The zero-based location in the response string or text where the corrected
+	// word starts.
+	BeginOffset *int64 `type:"integer"`
+
+	// The string or text of a corrected misspelled word in a query.
+	CorrectedTerm *string `min:"1" type:"string"`
+
+	// The zero-based location in the response string or text where the corrected
+	// word ends.
+	EndOffset *int64 `type:"integer"`
+
+	// The string or text of a misspelled word in a query.
+	Term *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Correction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Correction) GoString() string {
+	return s.String()
+}
+
+// SetBeginOffset sets the BeginOffset field's value.
+func (s *Correction) SetBeginOffset(v int64) *Correction {
+	s.BeginOffset = &v
+	return s
+}
+
+// SetCorrectedTerm sets the CorrectedTerm field's value.
+func (s *Correction) SetCorrectedTerm(v string) *Correction {
+	s.CorrectedTerm = &v
+	return s
+}
+
+// SetEndOffset sets the EndOffset field's value.
+func (s *Correction) SetEndOffset(v int64) *Correction {
+	s.EndOffset = &v
+	return s
+}
+
+// SetTerm sets the Term field's value.
+func (s *Correction) SetTerm(v string) *Correction {
+	s.Term = &v
+	return s
+}
+
+type CreateAccessControlConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Information on principals (users and/or groups) and which documents they
+	// should have access to. This is useful for user context filtering, where search
+	// results are filtered based on the user or their group access to documents.
+	AccessControlList []*Principal `type:"list"`
+
+	// A token that you provide to identify the request to create an access control
+	// configuration. Multiple calls to the CreateAccessControlConfiguration API
+	// with the same client token will create only one access control configuration.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// A description for the access control configuration.
+	Description *string `type:"string"`
+
+	// The list of principal (https://docs.aws.amazon.com/kendra/latest/dg/API_Principal.html)
+	// lists that define the hierarchy for which documents users should have access
+	// to.
+	HierarchicalAccessControlList []*HierarchicalPrincipal `min:"1" type:"list"`
+
+	// The identifier of the index to create an access control configuration for
+	// your documents.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// A name for the access control configuration.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessControlConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessControlConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateAccessControlConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateAccessControlConfigurationInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.HierarchicalAccessControlList != nil && len(s.HierarchicalAccessControlList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HierarchicalAccessControlList", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.AccessControlList != nil {
+		for i, v := range s.AccessControlList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AccessControlList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.HierarchicalAccessControlList != nil {
+		for i, v := range s.HierarchicalAccessControlList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "HierarchicalAccessControlList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessControlList sets the AccessControlList field's value.
+func (s *CreateAccessControlConfigurationInput) SetAccessControlList(v []*Principal) *CreateAccessControlConfigurationInput {
+	s.AccessControlList = v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateAccessControlConfigurationInput) SetClientToken(v string) *CreateAccessControlConfigurationInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateAccessControlConfigurationInput) SetDescription(v string) *CreateAccessControlConfigurationInput {
+	s.Description = &v
+	return s
+}
+
+// SetHierarchicalAccessControlList sets the HierarchicalAccessControlList field's value.
+func (s *CreateAccessControlConfigurationInput) SetHierarchicalAccessControlList(v []*HierarchicalPrincipal) *CreateAccessControlConfigurationInput {
+	s.HierarchicalAccessControlList = v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *CreateAccessControlConfigurationInput) SetIndexId(v string) *CreateAccessControlConfigurationInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateAccessControlConfigurationInput) SetName(v string) *CreateAccessControlConfigurationInput {
+	s.Name = &v
+	return s
+}
+
+type CreateAccessControlConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the access control configuration for your documents in
+	// an index.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessControlConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAccessControlConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *CreateAccessControlConfigurationOutput) SetId(v string) *CreateAccessControlConfigurationOutput {
+	s.Id = &v
+	return s
+}
+
 type CreateDataSourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token that you provide to identify the request to create a data source.
-	// Multiple calls to the CreateDataSource operation with the same client token
-	// will create only one data source.
+	// A token that you provide to identify the request to create a data source
+	// connector. Multiple calls to the CreateDataSource API with the same client
+	// token will create only one data source connector.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
-	// The connector configuration information that is required to access the repository.
+	// Configuration information to connect to your data source repository.
 	//
 	// You can't specify the Configuration parameter when the Type parameter is
 	// set to CUSTOM. If you do, you receive a ValidationException exception.
@@ -6582,49 +9887,58 @@ type CreateDataSourceInput struct {
 	// The Configuration parameter is required for all other data sources.
 	Configuration *DataSourceConfiguration `type:"structure"`
 
-	// A description for the data source.
+	// Configuration information for altering document metadata and content during
+	// the document ingestion process.
+	//
+	// For more information on how to create, modify and delete document metadata,
+	// or make other content alterations when you ingest documents into Amazon Kendra,
+	// see Customizing document metadata during the ingestion process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
+	CustomDocumentEnrichmentConfiguration *CustomDocumentEnrichmentConfiguration `type:"structure"`
+
+	// A description for the data source connector.
 	Description *string `type:"string"`
 
-	// The identifier of the index that should be associated with this data source.
+	// The identifier of the index you want to use with the data source connector.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
 	// The code for a language. This allows you to support a language for all documents
-	// when creating the data source. English is supported by default. For more
-	// information on supported languages, including their codes, see Adding documents
-	// in languages other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	// when creating the data source connector. English is supported by default.
+	// For more information on supported languages, including their codes, see Adding
+	// documents in languages other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
 	LanguageCode *string `min:"2" type:"string"`
 
-	// A unique name for the data source. A data source name can't be changed without
-	// deleting and recreating the data source.
+	// A unique name for the data source connector. A data source name can't be
+	// changed without deleting and recreating the data source connector.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
 	// The Amazon Resource Name (ARN) of a role with permission to access the data
-	// source. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	// source connector. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
 	// You can't specify the RoleArn parameter when the Type parameter is set to
 	// CUSTOM. If you do, you receive a ValidationException exception.
 	//
 	// The RoleArn parameter is required for all other data sources.
-	RoleArn *string `min:"1" type:"string"`
+	RoleArn *string `type:"string"`
 
-	// Sets the frequency that Amazon Kendra will check the documents in your repository
-	// and update the index. If you don't set a schedule Amazon Kendra will not
-	// periodically update the index. You can call the StartDataSourceSyncJob operation
-	// to update the index.
+	// Sets the frequency for Amazon Kendra to check the documents in your data
+	// source repository and update the index. If you don't set a schedule Amazon
+	// Kendra will not periodically update the index. You can call the StartDataSourceSyncJob
+	// API to update the index.
 	//
 	// You can't specify the Schedule parameter when the Type parameter is set to
 	// CUSTOM. If you do, you receive a ValidationException exception.
 	Schedule *string `type:"string"`
 
-	// A list of key-value pairs that identify the data source. You can use the
-	// tags to identify and organize your resources and to control access to resources.
+	// A list of key-value pairs that identify the data source connector. You can
+	// use the tags to identify and organize your resources and to control access
+	// to resources.
 	Tags []*Tag `type:"list"`
 
-	// The type of repository that contains the data source.
+	// The type of data source repository. For example, SHAREPOINT.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"DataSourceType"`
@@ -6669,15 +9983,17 @@ func (s *CreateDataSourceInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
-	}
 	if s.Type == nil {
 		invalidParams.Add(request.NewErrParamRequired("Type"))
 	}
 	if s.Configuration != nil {
 		if err := s.Configuration.Validate(); err != nil {
 			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CustomDocumentEnrichmentConfiguration != nil {
+		if err := s.CustomDocumentEnrichmentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("CustomDocumentEnrichmentConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Tags != nil {
@@ -6706,6 +10022,12 @@ func (s *CreateDataSourceInput) SetClientToken(v string) *CreateDataSourceInput 
 // SetConfiguration sets the Configuration field's value.
 func (s *CreateDataSourceInput) SetConfiguration(v *DataSourceConfiguration) *CreateDataSourceInput {
 	s.Configuration = v
+	return s
+}
+
+// SetCustomDocumentEnrichmentConfiguration sets the CustomDocumentEnrichmentConfiguration field's value.
+func (s *CreateDataSourceInput) SetCustomDocumentEnrichmentConfiguration(v *CustomDocumentEnrichmentConfiguration) *CreateDataSourceInput {
+	s.CustomDocumentEnrichmentConfiguration = v
 	return s
 }
 
@@ -6760,7 +10082,7 @@ func (s *CreateDataSourceInput) SetType(v string) *CreateDataSourceInput {
 type CreateDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A unique identifier for the data source.
+	// The identifier of the data source connector.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
@@ -6790,18 +10112,169 @@ func (s *CreateDataSourceOutput) SetId(v string) *CreateDataSourceOutput {
 	return s
 }
 
+type CreateExperienceInput struct {
+	_ struct{} `type:"structure"`
+
+	// A token that you provide to identify the request to create your Amazon Kendra
+	// experience. Multiple calls to the CreateExperience API with the same client
+	// token creates only one Amazon Kendra experience.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// Configuration information for your Amazon Kendra experience. This includes
+	// ContentSourceConfiguration, which specifies the data source IDs and/or FAQ
+	// IDs, and UserIdentityConfiguration, which specifies the user or group information
+	// to grant access to your Amazon Kendra experience.
+	Configuration *ExperienceConfiguration `type:"structure"`
+
+	// A description for your Amazon Kendra experience.
+	Description *string `type:"string"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// A name for your Amazon Kendra experience.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of a role with permission to access Query
+	// API, QuerySuggestions API, SubmitFeedback API, and Amazon Web Services SSO
+	// that stores your user and group information. For more information, see IAM
+	// roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	RoleArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateExperienceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateExperienceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateExperienceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateExperienceInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Configuration != nil {
+		if err := s.Configuration.Validate(); err != nil {
+			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateExperienceInput) SetClientToken(v string) *CreateExperienceInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *CreateExperienceInput) SetConfiguration(v *ExperienceConfiguration) *CreateExperienceInput {
+	s.Configuration = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateExperienceInput) SetDescription(v string) *CreateExperienceInput {
+	s.Description = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *CreateExperienceInput) SetIndexId(v string) *CreateExperienceInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateExperienceInput) SetName(v string) *CreateExperienceInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CreateExperienceInput) SetRoleArn(v string) *CreateExperienceInput {
+	s.RoleArn = &v
+	return s
+}
+
+type CreateExperienceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier for your created Amazon Kendra experience.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateExperienceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateExperienceOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *CreateExperienceOutput) SetId(v string) *CreateExperienceOutput {
+	s.Id = &v
+	return s
+}
+
 type CreateFaqInput struct {
 	_ struct{} `type:"structure"`
 
 	// A token that you provide to identify the request to create a FAQ. Multiple
-	// calls to the CreateFaqRequest operation with the same client token will create
+	// calls to the CreateFaqRequest API with the same client token will create
 	// only one FAQ.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
-	// A description of the FAQ.
+	// A description for the FAQ.
 	Description *string `type:"string"`
 
-	// The format of the input file. You can choose between a basic CSV format,
+	// The format of the FAQ input file. You can choose between a basic CSV format,
 	// a CSV format that includes customs attributes in a header, and a JSON format
 	// that includes custom attributes.
 	//
@@ -6811,7 +10284,7 @@ type CreateFaqInput struct {
 	// For more information, see Adding questions and answers (https://docs.aws.amazon.com/kendra/latest/dg/in-creating-faq.html).
 	FileFormat *string `type:"string" enum:"FaqFileFormat"`
 
-	// The identifier of the index that contains the FAQ.
+	// The identifier of the index for the FAQ.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -6822,7 +10295,7 @@ type CreateFaqInput struct {
 	// than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
 	LanguageCode *string `min:"2" type:"string"`
 
-	// The name that should be associated with the FAQ.
+	// A name for the FAQ.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -6832,9 +10305,9 @@ type CreateFaqInput struct {
 	// Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
 	// RoleArn is a required field
-	RoleArn *string `min:"1" type:"string" required:"true"`
+	RoleArn *string `type:"string" required:"true"`
 
-	// The S3 location of the FAQ input data.
+	// The path to the FAQ file in S3.
 	//
 	// S3Path is a required field
 	S3Path *S3Path `type:"structure" required:"true"`
@@ -6885,9 +10358,6 @@ func (s *CreateFaqInput) Validate() error {
 	}
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.S3Path == nil {
 		invalidParams.Add(request.NewErrParamRequired("S3Path"))
@@ -7003,8 +10473,8 @@ type CreateIndexInput struct {
 	_ struct{} `type:"structure"`
 
 	// A token that you provide to identify the request to create an index. Multiple
-	// calls to the CreateIndex operation with the same client token will create
-	// only one index.
+	// calls to the CreateIndex API with the same client token will create only
+	// one index.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// A description for the index.
@@ -7022,21 +10492,21 @@ type CreateIndexInput struct {
 	// see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
 	Edition *string `type:"string" enum:"IndexEdition"`
 
-	// The name for the new index.
+	// A name for the index.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// An Identity and Access Management(IAM) role that gives Amazon Kendra permissions
+	// An Identity and Access Management (IAM) role that gives Amazon Kendra permissions
 	// to access your Amazon CloudWatch logs and metrics. This is also the role
-	// used when you use the BatchPutDocument operation to index documents from
-	// an Amazon S3 bucket.
+	// you use when you call the BatchPutDocument API to index documents from an
+	// Amazon S3 bucket.
 	//
 	// RoleArn is a required field
-	RoleArn *string `min:"1" type:"string" required:"true"`
+	RoleArn *string `type:"string" required:"true"`
 
-	// The identifier of the KMScustomer managed key (CMK) to use to encrypt data
-	// indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.
+	// The identifier of the KMS customer managed key (CMK) that's used to encrypt
+	// data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.
 	ServerSideEncryptionConfiguration *ServerSideEncryptionConfiguration `type:"structure"`
 
 	// A list of key-value pairs that identify the index. You can use the tags to
@@ -7059,8 +10529,8 @@ type CreateIndexInput struct {
 	// to the user will be searchable and displayable.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
 
-	// Enables fetching access levels of groups and users from an AWS Single Sign-On
-	// identity source. To configure this, see UserGroupResolutionConfiguration
+	// Enables fetching access levels of groups and users from an Amazon Web Services
+	// Single Sign On identity source. To configure this, see UserGroupResolutionConfiguration
 	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UserGroupResolutionConfiguration.html).
 	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
@@ -7100,9 +10570,6 @@ func (s *CreateIndexInput) Validate() error {
 	}
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.ServerSideEncryptionConfiguration != nil {
 		if err := s.ServerSideEncryptionConfiguration.Validate(); err != nil {
@@ -7263,12 +10730,12 @@ type CreateQuerySuggestionsBlockListInput struct {
 	// The IAM (Identity and Access Management) role used by Amazon Kendra to access
 	// the block list text file in your S3 bucket.
 	//
-	// You need permissions to the role ARN (Amazon Resource Name). The role needs
-	// S3 read permissions to your file in S3 and needs to give STS (Security Token
-	// Service) assume role permissions to Amazon Kendra.
+	// You need permissions to the role ARN (Amazon Web Services Resource Name).
+	// The role needs S3 read permissions to your file in S3 and needs to give STS
+	// (Security Token Service) assume role permissions to Amazon Kendra.
 	//
 	// RoleArn is a required field
-	RoleArn *string `min:"1" type:"string" required:"true"`
+	RoleArn *string `type:"string" required:"true"`
 
 	// The S3 path to your block list text file in your S3 bucket.
 	//
@@ -7322,9 +10789,6 @@ func (s *CreateQuerySuggestionsBlockListInput) Validate() error {
 	}
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.SourceS3Path == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceS3Path"))
@@ -7428,30 +10892,30 @@ type CreateThesaurusInput struct {
 	_ struct{} `type:"structure"`
 
 	// A token that you provide to identify the request to create a thesaurus. Multiple
-	// calls to the CreateThesaurus operation with the same client token will create
-	// only one thesaurus.
+	// calls to the CreateThesaurus API with the same client token will create only
+	// one thesaurus.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
-	// The description for the new thesaurus.
+	// A description for the thesaurus.
 	Description *string `type:"string"`
 
-	// The unique identifier of the index for the new thesaurus.
+	// The identifier of the index for the thesaurus.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
-	// The name for the new thesaurus.
+	// A name for the thesaurus.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
-	// permissions to access thesaurus file specified in SourceS3Path.
+	// An IAM role that gives Amazon Kendra permissions to access thesaurus file
+	// specified in SourceS3Path.
 	//
 	// RoleArn is a required field
-	RoleArn *string `min:"1" type:"string" required:"true"`
+	RoleArn *string `type:"string" required:"true"`
 
-	// The thesaurus file Amazon S3 source path.
+	// The path to the thesaurus file in S3.
 	//
 	// SourceS3Path is a required field
 	SourceS3Path *S3Path `type:"structure" required:"true"`
@@ -7499,9 +10963,6 @@ func (s *CreateThesaurusInput) Validate() error {
 	}
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.SourceS3Path == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceS3Path"))
@@ -7601,42 +11062,176 @@ func (s *CreateThesaurusOutput) SetId(v string) *CreateThesaurusOutput {
 	return s
 }
 
-// Configuration information for a Amazon Kendra data source.
+// Provides the configuration information for altering document metadata and
+// content during the document ingestion process.
+//
+// For more information, see Customizing document metadata during the ingestion
+// process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
+type CustomDocumentEnrichmentConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration information to alter document attributes or metadata fields
+	// and content when ingesting documents into Amazon Kendra.
+	InlineConfigurations []*InlineCustomDocumentEnrichmentConfiguration `type:"list"`
+
+	// Configuration information for invoking a Lambda function in Lambda on the
+	// structured documents with their metadata and text extracted. You can use
+	// a Lambda function to apply advanced logic for creating, modifying, or deleting
+	// document metadata and content. For more information, see Advanced data manipulation
+	// (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html#advanced-data-manipulation).
+	PostExtractionHookConfiguration *HookConfiguration `type:"structure"`
+
+	// Configuration information for invoking a Lambda function in Lambda on the
+	// original or raw documents before extracting their metadata and text. You
+	// can use a Lambda function to apply advanced logic for creating, modifying,
+	// or deleting document metadata and content. For more information, see Advanced
+	// data manipulation (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html#advanced-data-manipulation).
+	PreExtractionHookConfiguration *HookConfiguration `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of a role with permission to run PreExtractionHookConfiguration
+	// and PostExtractionHookConfiguration for altering document metadata and content
+	// during the document ingestion process. For more information, see IAM roles
+	// for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	RoleArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomDocumentEnrichmentConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomDocumentEnrichmentConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomDocumentEnrichmentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomDocumentEnrichmentConfiguration"}
+	if s.InlineConfigurations != nil {
+		for i, v := range s.InlineConfigurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InlineConfigurations", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.PostExtractionHookConfiguration != nil {
+		if err := s.PostExtractionHookConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("PostExtractionHookConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PreExtractionHookConfiguration != nil {
+		if err := s.PreExtractionHookConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("PreExtractionHookConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInlineConfigurations sets the InlineConfigurations field's value.
+func (s *CustomDocumentEnrichmentConfiguration) SetInlineConfigurations(v []*InlineCustomDocumentEnrichmentConfiguration) *CustomDocumentEnrichmentConfiguration {
+	s.InlineConfigurations = v
+	return s
+}
+
+// SetPostExtractionHookConfiguration sets the PostExtractionHookConfiguration field's value.
+func (s *CustomDocumentEnrichmentConfiguration) SetPostExtractionHookConfiguration(v *HookConfiguration) *CustomDocumentEnrichmentConfiguration {
+	s.PostExtractionHookConfiguration = v
+	return s
+}
+
+// SetPreExtractionHookConfiguration sets the PreExtractionHookConfiguration field's value.
+func (s *CustomDocumentEnrichmentConfiguration) SetPreExtractionHookConfiguration(v *HookConfiguration) *CustomDocumentEnrichmentConfiguration {
+	s.PreExtractionHookConfiguration = v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CustomDocumentEnrichmentConfiguration) SetRoleArn(v string) *CustomDocumentEnrichmentConfiguration {
+	s.RoleArn = &v
+	return s
+}
+
+// Provides the configuration information for an Amazon Kendra data source.
 type DataSourceConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Provides configuration information for connecting to a Confluence data source.
+	// Provides the configuration information to connect to Alfresco as your data
+	// source.
+	AlfrescoConfiguration *AlfrescoConfiguration `type:"structure"`
+
+	// Provides the configuration information to connect to Box as your data source.
+	BoxConfiguration *BoxConfiguration `type:"structure"`
+
+	// Provides the configuration information to connect to Confluence as your data
+	// source.
 	ConfluenceConfiguration *ConfluenceConfiguration `type:"structure"`
 
-	// Provides information necessary to create a data source connector for a database.
+	// Provides the configuration information to connect to a database as your data
+	// source.
 	DatabaseConfiguration *DatabaseConfiguration `type:"structure"`
 
-	// Provides configuration for data sources that connect to Google Drive.
+	// Provides the configuration information to connect to Amazon FSx as your data
+	// source.
+	FsxConfiguration *FsxConfiguration `type:"structure"`
+
+	// Provides the configuration information to connect to GitHub as your data
+	// source.
+	GitHubConfiguration *GitHubConfiguration `type:"structure"`
+
+	// Provides the configuration information to connect to Google Drive as your
+	// data source.
 	GoogleDriveConfiguration *GoogleDriveConfiguration `type:"structure"`
 
-	// Provides configuration for data sources that connect to Microsoft OneDrive.
+	// Provides the configuration information to connect to Jira as your data source.
+	JiraConfiguration *JiraConfiguration `type:"structure"`
+
+	// Provides the configuration information to connect to Microsoft OneDrive as
+	// your data source.
 	OneDriveConfiguration *OneDriveConfiguration `type:"structure"`
 
-	// Provides information to create a data source connector for a document repository
-	// in an Amazon S3 bucket.
+	// Provides the configuration information to connect to Quip as your data source.
+	QuipConfiguration *QuipConfiguration `type:"structure"`
+
+	// Provides the configuration information to connect to an Amazon S3 bucket
+	// as your data source.
 	S3Configuration *S3DataSourceConfiguration `type:"structure"`
 
-	// Provides configuration information for data sources that connect to a Salesforce
-	// site.
+	// Provides the configuration information to connect to Salesforce as your data
+	// source.
 	SalesforceConfiguration *SalesforceConfiguration `type:"structure"`
 
-	// Provides configuration for data sources that connect to ServiceNow instances.
+	// Provides the configuration information to connect to ServiceNow as your data
+	// source.
 	ServiceNowConfiguration *ServiceNowConfiguration `type:"structure"`
 
-	// Provides information necessary to create a data source connector for a Microsoft
-	// SharePoint site.
+	// Provides the configuration information to connect to Microsoft SharePoint
+	// as your data source.
 	SharePointConfiguration *SharePointConfiguration `type:"structure"`
 
-	// Provides the configuration information required for Amazon Kendra web crawler.
+	// Provides the configuration information to connect to Slack as your data source.
+	SlackConfiguration *SlackConfiguration `type:"structure"`
+
+	// Provides the configuration information required for Amazon Kendra Web Crawler.
 	WebCrawlerConfiguration *WebCrawlerConfiguration `type:"structure"`
 
-	// Provides the configuration information to connect to WorkDocs as your data
-	// source.
+	// Provides the configuration information to connect to Amazon WorkDocs as your
+	// data source.
 	WorkDocsConfiguration *WorkDocsConfiguration `type:"structure"`
 }
 
@@ -7661,6 +11256,16 @@ func (s DataSourceConfiguration) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DataSourceConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DataSourceConfiguration"}
+	if s.AlfrescoConfiguration != nil {
+		if err := s.AlfrescoConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("AlfrescoConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.BoxConfiguration != nil {
+		if err := s.BoxConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("BoxConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ConfluenceConfiguration != nil {
 		if err := s.ConfluenceConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("ConfluenceConfiguration", err.(request.ErrInvalidParams))
@@ -7671,14 +11276,34 @@ func (s *DataSourceConfiguration) Validate() error {
 			invalidParams.AddNested("DatabaseConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.FsxConfiguration != nil {
+		if err := s.FsxConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("FsxConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GitHubConfiguration != nil {
+		if err := s.GitHubConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("GitHubConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.GoogleDriveConfiguration != nil {
 		if err := s.GoogleDriveConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("GoogleDriveConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.JiraConfiguration != nil {
+		if err := s.JiraConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("JiraConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.OneDriveConfiguration != nil {
 		if err := s.OneDriveConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("OneDriveConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.QuipConfiguration != nil {
+		if err := s.QuipConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("QuipConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.S3Configuration != nil {
@@ -7701,6 +11326,11 @@ func (s *DataSourceConfiguration) Validate() error {
 			invalidParams.AddNested("SharePointConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.SlackConfiguration != nil {
+		if err := s.SlackConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("SlackConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.WebCrawlerConfiguration != nil {
 		if err := s.WebCrawlerConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("WebCrawlerConfiguration", err.(request.ErrInvalidParams))
@@ -7718,6 +11348,18 @@ func (s *DataSourceConfiguration) Validate() error {
 	return nil
 }
 
+// SetAlfrescoConfiguration sets the AlfrescoConfiguration field's value.
+func (s *DataSourceConfiguration) SetAlfrescoConfiguration(v *AlfrescoConfiguration) *DataSourceConfiguration {
+	s.AlfrescoConfiguration = v
+	return s
+}
+
+// SetBoxConfiguration sets the BoxConfiguration field's value.
+func (s *DataSourceConfiguration) SetBoxConfiguration(v *BoxConfiguration) *DataSourceConfiguration {
+	s.BoxConfiguration = v
+	return s
+}
+
 // SetConfluenceConfiguration sets the ConfluenceConfiguration field's value.
 func (s *DataSourceConfiguration) SetConfluenceConfiguration(v *ConfluenceConfiguration) *DataSourceConfiguration {
 	s.ConfluenceConfiguration = v
@@ -7730,15 +11372,39 @@ func (s *DataSourceConfiguration) SetDatabaseConfiguration(v *DatabaseConfigurat
 	return s
 }
 
+// SetFsxConfiguration sets the FsxConfiguration field's value.
+func (s *DataSourceConfiguration) SetFsxConfiguration(v *FsxConfiguration) *DataSourceConfiguration {
+	s.FsxConfiguration = v
+	return s
+}
+
+// SetGitHubConfiguration sets the GitHubConfiguration field's value.
+func (s *DataSourceConfiguration) SetGitHubConfiguration(v *GitHubConfiguration) *DataSourceConfiguration {
+	s.GitHubConfiguration = v
+	return s
+}
+
 // SetGoogleDriveConfiguration sets the GoogleDriveConfiguration field's value.
 func (s *DataSourceConfiguration) SetGoogleDriveConfiguration(v *GoogleDriveConfiguration) *DataSourceConfiguration {
 	s.GoogleDriveConfiguration = v
 	return s
 }
 
+// SetJiraConfiguration sets the JiraConfiguration field's value.
+func (s *DataSourceConfiguration) SetJiraConfiguration(v *JiraConfiguration) *DataSourceConfiguration {
+	s.JiraConfiguration = v
+	return s
+}
+
 // SetOneDriveConfiguration sets the OneDriveConfiguration field's value.
 func (s *DataSourceConfiguration) SetOneDriveConfiguration(v *OneDriveConfiguration) *DataSourceConfiguration {
 	s.OneDriveConfiguration = v
+	return s
+}
+
+// SetQuipConfiguration sets the QuipConfiguration field's value.
+func (s *DataSourceConfiguration) SetQuipConfiguration(v *QuipConfiguration) *DataSourceConfiguration {
+	s.QuipConfiguration = v
 	return s
 }
 
@@ -7763,6 +11429,12 @@ func (s *DataSourceConfiguration) SetServiceNowConfiguration(v *ServiceNowConfig
 // SetSharePointConfiguration sets the SharePointConfiguration field's value.
 func (s *DataSourceConfiguration) SetSharePointConfiguration(v *SharePointConfiguration) *DataSourceConfiguration {
 	s.SharePointConfiguration = v
+	return s
+}
+
+// SetSlackConfiguration sets the SlackConfiguration field's value.
+func (s *DataSourceConfiguration) SetSlackConfiguration(v *SlackConfiguration) *DataSourceConfiguration {
+	s.SlackConfiguration = v
 	return s
 }
 
@@ -7848,8 +11520,8 @@ func (s *DataSourceGroup) SetGroupId(v string) *DataSourceGroup {
 	return s
 }
 
-// Summary information for a Amazon Kendra data source. Returned in a call to
-// the DescribeDataSource operation.
+// Summary information for an Amazon Kendra data source. Returned in a call
+// to the DescribeDataSource API.
 type DataSourceSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -7939,7 +11611,7 @@ func (s *DataSourceSummary) SetUpdatedAt(v time.Time) *DataSourceSummary {
 	return s
 }
 
-// Provides information about a synchronization job.
+// Provides information about a data source synchronization job.
 type DataSourceSyncJob struct {
 	_ struct{} `type:"structure"`
 
@@ -7947,11 +11619,11 @@ type DataSourceSyncJob struct {
 	// underlying data source, this field contains a code that identifies the error.
 	DataSourceErrorCode *string `min:"1" type:"string"`
 
-	// The UNIX datetime that the synchronization job was completed.
+	// The UNIX datetime that the synchronization job completed.
 	EndTime *time.Time `type:"timestamp"`
 
-	// If the Status field is set to FAILED, the ErrorCode field contains a the
-	// reason that the synchronization failed.
+	// If the Status field is set to FAILED, the ErrorCode field indicates the reason
+	// the synchronization failed.
 	ErrorCode *string `type:"string" enum:"ErrorCode"`
 
 	// If the Status field is set to ERROR, the ErrorMessage field contains a description
@@ -7966,7 +11638,7 @@ type DataSourceSyncJob struct {
 	// a data source connector.
 	Metrics *DataSourceSyncJobMetrics `type:"structure"`
 
-	// The UNIX datetime that the synchronization job was started.
+	// The UNIX datetime that the synchronization job started.
 	StartTime *time.Time `type:"timestamp"`
 
 	// The execution status of the synchronization job. When the Status field is
@@ -8188,7 +11860,7 @@ func (s *DataSourceSyncJobMetrics) SetDocumentsScanned(v string) *DataSourceSync
 }
 
 // Maps a column or attribute in the data source to an index field. You must
-// first create the fields in the index using the UpdateIndex operation.
+// first create the fields in the index using the UpdateIndex API.
 type DataSourceToIndexFieldMapping struct {
 	_ struct{} `type:"structure"`
 
@@ -8267,7 +11939,7 @@ func (s *DataSourceToIndexFieldMapping) SetIndexFieldName(v string) *DataSourceT
 	return s
 }
 
-// Provides information for connecting to an Amazon VPC.
+// Provides the configuration information to connect to an Amazon VPC.
 type DataSourceVpcConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -8337,7 +12009,7 @@ func (s *DataSourceVpcConfiguration) SetSubnetIds(v []*string) *DataSourceVpcCon
 	return s
 }
 
-// Provides the information necessary to connect a database to an index.
+// Provides the configuration information to connect to a index.
 type DatabaseConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -8351,7 +12023,7 @@ type DatabaseConfiguration struct {
 	// ColumnConfiguration is a required field
 	ColumnConfiguration *ColumnConfiguration `type:"structure" required:"true"`
 
-	// The information necessary to connect to a database.
+	// Configuration information that's required to connect to a database.
 	//
 	// ConnectionConfiguration is a required field
 	ConnectionConfiguration *ConnectionConfiguration `type:"structure" required:"true"`
@@ -8365,7 +12037,7 @@ type DatabaseConfiguration struct {
 	// identifiers when querying a database data source.
 	SqlConfiguration *SqlConfiguration `type:"structure"`
 
-	// Provides information for connecting to an Amazon VPC.
+	// Provides the configuration information to connect to an Amazon VPC.
 	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
@@ -8462,15 +12134,103 @@ func (s *DatabaseConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguratio
 	return s
 }
 
-type DeleteDataSourceInput struct {
+type DeleteAccessControlConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the data source to delete.
+	// The identifier of the access control configuration you want to delete.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The unique identifier of the index associated with the data source.
+	// The identifier of the index for an access control configuration.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAccessControlConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAccessControlConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteAccessControlConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteAccessControlConfigurationInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteAccessControlConfigurationInput) SetId(v string) *DeleteAccessControlConfigurationInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DeleteAccessControlConfigurationInput) SetIndexId(v string) *DeleteAccessControlConfigurationInput {
+	s.IndexId = &v
+	return s
+}
+
+type DeleteAccessControlConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAccessControlConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAccessControlConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteDataSourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source you want to delete.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index used with the data source.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -8550,15 +12310,103 @@ func (s DeleteDataSourceOutput) GoString() string {
 	return s.String()
 }
 
-type DeleteFaqInput struct {
+type DeleteExperienceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the FAQ to remove.
+	// The identifier of your Amazon Kendra experience you want to delete.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The index to remove the FAQ from.
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteExperienceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteExperienceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteExperienceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteExperienceInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteExperienceInput) SetId(v string) *DeleteExperienceInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DeleteExperienceInput) SetIndexId(v string) *DeleteExperienceInput {
+	s.IndexId = &v
+	return s
+}
+
+type DeleteExperienceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteExperienceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteExperienceOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteFaqInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the FAQ you want to remove.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for the FAQ.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -8641,7 +12489,7 @@ func (s DeleteFaqOutput) GoString() string {
 type DeleteIndexInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the index to delete.
+	// The identifier of the index you want to delete.
 	//
 	// Id is a required field
 	Id *string `min:"36" type:"string" required:"true"`
@@ -8714,14 +12562,13 @@ type DeletePrincipalMappingInput struct {
 
 	// The identifier of the data source you want to delete a group from.
 	//
-	// This is useful if a group is tied to multiple data sources and you want to
-	// delete a group from accessing documents in a certain data source. For example,
-	// the groups "Research", "Engineering", and "Sales and Marketing" are all tied
-	// to the company's documents stored in the data sources Confluence and Salesforce.
-	// You want to delete "Research" and "Engineering" groups from Salesforce, so
-	// that these groups cannot access customer-related documents stored in Salesforce.
-	// Only "Sales and Marketing" should access documents in the Salesforce data
-	// source.
+	// A group can be tied to multiple data sources. You can delete a group from
+	// accessing documents in a certain data source. For example, the groups "Research",
+	// "Engineering", and "Sales and Marketing" are all tied to the company's documents
+	// stored in the data sources Confluence and Salesforce. You want to delete
+	// "Research" and "Engineering" groups from Salesforce, so that these groups
+	// cannot access customer-related documents stored in Salesforce. Only "Sales
+	// and Marketing" should access documents in the Salesforce data source.
 	DataSourceId *string `min:"1" type:"string"`
 
 	// The identifier of the group you want to delete.
@@ -8843,12 +12690,12 @@ func (s DeletePrincipalMappingOutput) GoString() string {
 type DeleteQuerySuggestionsBlockListInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the block list that needs to be deleted.
+	// The identifier of the block list you want to delete.
 	//
 	// Id is a required field
 	Id *string `min:"36" type:"string" required:"true"`
 
-	// The identifier of the you want to delete a block list from.
+	// The identifier of the index for the block list.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -8931,12 +12778,12 @@ func (s DeleteQuerySuggestionsBlockListOutput) GoString() string {
 type DeleteThesaurusInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the thesaurus to delete.
+	// The identifier of the thesaurus you want to delete.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index associated with the thesaurus to delete.
+	// The identifier of the index for the thesaurus.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -9016,15 +12863,156 @@ func (s DeleteThesaurusOutput) GoString() string {
 	return s.String()
 }
 
-type DescribeDataSourceInput struct {
+type DescribeAccessControlConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the data source to describe.
+	// The identifier of the access control configuration you want to get information
+	// on.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index that contains the data source.
+	// The identifier of the index for an access control configuration.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccessControlConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccessControlConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAccessControlConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAccessControlConfigurationInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeAccessControlConfigurationInput) SetId(v string) *DescribeAccessControlConfigurationInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeAccessControlConfigurationInput) SetIndexId(v string) *DescribeAccessControlConfigurationInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeAccessControlConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information on principals (users and/or groups) and which documents they
+	// should have access to. This is useful for user context filtering, where search
+	// results are filtered based on the user or their group access to documents.
+	AccessControlList []*Principal `type:"list"`
+
+	// The description for the access control configuration.
+	Description *string `type:"string"`
+
+	// The error message containing details if there are issues processing the access
+	// control configuration.
+	ErrorMessage *string `min:"1" type:"string"`
+
+	// The list of principal (https://docs.aws.amazon.com/kendra/latest/dg/API_Principal.html)
+	// lists that define the hierarchy for which documents users should have access
+	// to.
+	HierarchicalAccessControlList []*HierarchicalPrincipal `min:"1" type:"list"`
+
+	// The name for the access control configuration.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccessControlConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccessControlConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccessControlList sets the AccessControlList field's value.
+func (s *DescribeAccessControlConfigurationOutput) SetAccessControlList(v []*Principal) *DescribeAccessControlConfigurationOutput {
+	s.AccessControlList = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeAccessControlConfigurationOutput) SetDescription(v string) *DescribeAccessControlConfigurationOutput {
+	s.Description = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *DescribeAccessControlConfigurationOutput) SetErrorMessage(v string) *DescribeAccessControlConfigurationOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetHierarchicalAccessControlList sets the HierarchicalAccessControlList field's value.
+func (s *DescribeAccessControlConfigurationOutput) SetHierarchicalAccessControlList(v []*HierarchicalPrincipal) *DescribeAccessControlConfigurationOutput {
+	s.HierarchicalAccessControlList = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeAccessControlConfigurationOutput) SetName(v string) *DescribeAccessControlConfigurationOutput {
+	s.Name = &v
+	return s
+}
+
+type DescribeDataSourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the data source.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index used with the data source.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -9085,15 +13073,23 @@ func (s *DescribeDataSourceInput) SetIndexId(v string) *DescribeDataSourceInput 
 type DescribeDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Information that describes where the data source is located and how the data
-	// source is configured. The specific information in the description depends
-	// on the data source provider.
+	// Configuration details for the data source. This shows how the data source
+	// is configured. The configuration options for a data source depend on the
+	// data source provider.
 	Configuration *DataSourceConfiguration `type:"structure"`
 
 	// The Unix timestamp of when the data source was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
-	// The description of the data source.
+	// Configuration information for altering document metadata and content during
+	// the document ingestion process when you describe a data source.
+	//
+	// For more information on how to create, modify and delete document metadata,
+	// or make other content alterations when you ingest documents into Amazon Kendra,
+	// see Customizing document metadata during the ingestion process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
+	CustomDocumentEnrichmentConfiguration *CustomDocumentEnrichmentConfiguration `type:"structure"`
+
+	// The description for the data source.
 	Description *string `type:"string"`
 
 	// When the Status field value is FAILED, the ErrorMessage field contains a
@@ -9117,9 +13113,9 @@ type DescribeDataSourceOutput struct {
 
 	// The Amazon Resource Name (ARN) of the role that enables the data source to
 	// access its resources.
-	RoleArn *string `min:"1" type:"string"`
+	RoleArn *string `type:"string"`
 
-	// The schedule that Amazon Kendra will update the data source.
+	// The schedule for Amazon Kendra to update the index.
 	Schedule *string `type:"string"`
 
 	// The current status of the data source. When the status is ACTIVE the data
@@ -9161,6 +13157,12 @@ func (s *DescribeDataSourceOutput) SetConfiguration(v *DataSourceConfiguration) 
 // SetCreatedAt sets the CreatedAt field's value.
 func (s *DescribeDataSourceOutput) SetCreatedAt(v time.Time) *DescribeDataSourceOutput {
 	s.CreatedAt = &v
+	return s
+}
+
+// SetCustomDocumentEnrichmentConfiguration sets the CustomDocumentEnrichmentConfiguration field's value.
+func (s *DescribeDataSourceOutput) SetCustomDocumentEnrichmentConfiguration(v *CustomDocumentEnrichmentConfiguration) *DescribeDataSourceOutput {
+	s.CustomDocumentEnrichmentConfiguration = v
 	return s
 }
 
@@ -9230,15 +13232,211 @@ func (s *DescribeDataSourceOutput) SetUpdatedAt(v time.Time) *DescribeDataSource
 	return s
 }
 
-type DescribeFaqInput struct {
+type DescribeExperienceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the FAQ.
+	// The identifier of your Amazon Kendra experience you want to get information
+	// on.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index that contains the FAQ.
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeExperienceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeExperienceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeExperienceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeExperienceInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeExperienceInput) SetId(v string) *DescribeExperienceInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeExperienceInput) SetIndexId(v string) *DescribeExperienceInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeExperienceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Shows the configuration information for your Amazon Kendra experience. This
+	// includes ContentSourceConfiguration, which specifies the data source IDs
+	// and/or FAQ IDs, and UserIdentityConfiguration, which specifies the user or
+	// group information to grant access to your Amazon Kendra experience.
+	Configuration *ExperienceConfiguration `type:"structure"`
+
+	// Shows the date-time your Amazon Kendra experience was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// Shows the description for your Amazon Kendra experience.
+	Description *string `type:"string"`
+
+	// Shows the endpoint URLs for your Amazon Kendra experiences. The URLs are
+	// unique and fully hosted by Amazon Web Services.
+	Endpoints []*ExperienceEndpoint `min:"1" type:"list"`
+
+	// The reason your Amazon Kendra experience could not properly process.
+	ErrorMessage *string `min:"1" type:"string"`
+
+	// Shows the identifier of your Amazon Kendra experience.
+	Id *string `min:"1" type:"string"`
+
+	// Shows the identifier of the index for your Amazon Kendra experience.
+	IndexId *string `min:"36" type:"string"`
+
+	// Shows the name of your Amazon Kendra experience.
+	Name *string `min:"1" type:"string"`
+
+	// Shows the Amazon Resource Name (ARN) of a role with permission to access
+	// Query API, QuerySuggestions API, SubmitFeedback API, and Amazon Web Services
+	// SSO that stores your user and group information.
+	RoleArn *string `type:"string"`
+
+	// The current processing status of your Amazon Kendra experience. When the
+	// status is ACTIVE, your Amazon Kendra experience is ready to use. When the
+	// status is FAILED, the ErrorMessage field contains the reason that this failed.
+	Status *string `type:"string" enum:"ExperienceStatus"`
+
+	// Shows the date-time your Amazon Kendra experience was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeExperienceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeExperienceOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *DescribeExperienceOutput) SetConfiguration(v *ExperienceConfiguration) *DescribeExperienceOutput {
+	s.Configuration = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeExperienceOutput) SetCreatedAt(v time.Time) *DescribeExperienceOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeExperienceOutput) SetDescription(v string) *DescribeExperienceOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEndpoints sets the Endpoints field's value.
+func (s *DescribeExperienceOutput) SetEndpoints(v []*ExperienceEndpoint) *DescribeExperienceOutput {
+	s.Endpoints = v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *DescribeExperienceOutput) SetErrorMessage(v string) *DescribeExperienceOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeExperienceOutput) SetId(v string) *DescribeExperienceOutput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeExperienceOutput) SetIndexId(v string) *DescribeExperienceOutput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeExperienceOutput) SetName(v string) *DescribeExperienceOutput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *DescribeExperienceOutput) SetRoleArn(v string) *DescribeExperienceOutput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeExperienceOutput) SetStatus(v string) *DescribeExperienceOutput {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *DescribeExperienceOutput) SetUpdatedAt(v time.Time) *DescribeExperienceOutput {
+	s.UpdatedAt = &v
+	return s
+}
+
+type DescribeFaqInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the FAQ you want to get information on.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for the FAQ.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -9315,7 +13513,7 @@ type DescribeFaqOutput struct {
 	// The identifier of the FAQ.
 	Id *string `min:"1" type:"string"`
 
-	// The identifier of the index that contains the FAQ.
+	// The identifier of the index for the FAQ.
 	IndexId *string `min:"36" type:"string"`
 
 	// The code for a language. This shows a supported language for the FAQ document.
@@ -9329,7 +13527,7 @@ type DescribeFaqOutput struct {
 
 	// The Amazon Resource Name (ARN) of the role that provides access to the S3
 	// bucket containing the input files for the FAQ.
-	RoleArn *string `min:"1" type:"string"`
+	RoleArn *string `type:"string"`
 
 	// Information required to find a specific file in an Amazon S3 bucket.
 	S3Path *S3Path `type:"structure"`
@@ -9434,7 +13632,7 @@ func (s *DescribeFaqOutput) SetUpdatedAt(v time.Time) *DescribeFaqOutput {
 type DescribeIndexInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the index to describe.
+	// The identifier of the index you want to get information on.
 	//
 	// Id is a required field
 	Id *string `min:"36" type:"string" required:"true"`
@@ -9483,30 +13681,33 @@ func (s *DescribeIndexInput) SetId(v string) *DescribeIndexInput {
 type DescribeIndexOutput struct {
 	_ struct{} `type:"structure"`
 
-	// For Enterprise edition indexes, you can choose to use additional capacity
+	// For Enterprise Edition indexes, you can choose to use additional capacity
 	// to meet the needs of your application. This contains the capacity units used
-	// for the index. A 0 for the query capacity or the storage capacity indicates
-	// that the index is using the default capacity for the index.
+	// for the index. A query or document storage capacity of zero indicates that
+	// the index is using the default capacity. For more information on the default
+	// capacity for an index and adjusting this, see Adjusting capacity (https://docs.aws.amazon.com/kendra/latest/dg/adjusting-capacity.html).
 	CapacityUnits *CapacityUnitsConfiguration `type:"structure"`
 
 	// The Unix datetime that the index was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
-	// The description of the index.
+	// The description for the index.
 	Description *string `type:"string"`
 
-	// Configuration settings for any metadata applied to the documents in the index.
+	// Configuration information for document metadata or fields. Document metadata
+	// are fields or attributes associated with your documents. For example, the
+	// company department name associated with each document.
 	DocumentMetadataConfigurations []*DocumentMetadataConfiguration `type:"list"`
 
 	// The Amazon Kendra edition used for the index. You decide the edition when
 	// you create the index.
 	Edition *string `type:"string" enum:"IndexEdition"`
 
-	// When th eStatus field value is FAILED, the ErrorMessage field contains a
+	// When the Status field value is FAILED, the ErrorMessage field contains a
 	// message that explains why.
 	ErrorMessage *string `min:"1" type:"string"`
 
-	// The name of the index.
+	// The identifier of the index.
 	Id *string `min:"36" type:"string"`
 
 	// Provides information about the number of FAQ questions and answers and the
@@ -9518,10 +13719,10 @@ type DescribeIndexOutput struct {
 
 	// The Amazon Resource Name (ARN) of the IAM role that gives Amazon Kendra permission
 	// to write to your Amazon Cloudwatch logs.
-	RoleArn *string `min:"1" type:"string"`
+	RoleArn *string `type:"string"`
 
-	// The identifier of the KMScustomer master key (CMK) used to encrypt your data.
-	// Amazon Kendra doesn't support asymmetric CMKs.
+	// The identifier of the KMScustomer master key (CMK) that is used to encrypt
+	// your data. Amazon Kendra doesn't support asymmetric CMKs.
 	ServerSideEncryptionConfiguration *ServerSideEncryptionConfiguration `type:"structure"`
 
 	// The current status of the index. When the value is ACTIVE, the index is ready
@@ -9535,8 +13736,8 @@ type DescribeIndexOutput struct {
 	// The user context policy for the Amazon Kendra index.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
 
-	// Shows whether you have enabled the configuration for fetching access levels
-	// of groups and users from an AWS Single Sign-On identity source.
+	// Whether you have enabled the configuration for fetching access levels of
+	// groups and users from an Amazon Web Services Single Sign On identity source.
 	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
 	// The user token configuration for the Amazon Kendra index.
@@ -9815,7 +14016,7 @@ func (s *DescribePrincipalMappingOutput) SetIndexId(v string) *DescribePrincipal
 type DescribeQuerySuggestionsBlockListInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the block list.
+	// The identifier of the block list you want to get information on.
 	//
 	// Id is a required field
 	Id *string `min:"36" type:"string" required:"true"`
@@ -9881,38 +14082,38 @@ func (s *DescribeQuerySuggestionsBlockListInput) SetIndexId(v string) *DescribeQ
 type DescribeQuerySuggestionsBlockListOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Shows the date-time a block list for query suggestions was created.
+	// The date-time a block list for query suggestions was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
-	// Shows the description for the block list.
+	// The description for the block list.
 	Description *string `type:"string"`
 
-	// Shows the error message with details when there are issues in processing
-	// the block list.
+	// The error message containing details if there are issues processing the block
+	// list.
 	ErrorMessage *string `min:"1" type:"string"`
 
-	// Shows the current size of the block list text file in S3.
+	// The current size of the block list text file in S3.
 	FileSizeBytes *int64 `type:"long"`
 
-	// Shows the unique identifier of the block list.
+	// The identifier of the block list.
 	Id *string `min:"36" type:"string"`
 
-	// Shows the identifier of the index for the block list.
+	// The identifier of the index for the block list.
 	IndexId *string `min:"36" type:"string"`
 
-	// Shows the current number of valid, non-empty words or phrases in the block
-	// list text file.
+	// The current number of valid, non-empty words or phrases in the block list
+	// text file.
 	ItemCount *int64 `type:"integer"`
 
-	// Shows the name of the block list.
+	// The name of the block list.
 	Name *string `min:"1" type:"string"`
 
-	// Shows the current IAM (Identity and Access Management) role used by Amazon
-	// Kendra to access the block list text file in S3.
+	// The IAM (Identity and Access Management) role used by Amazon Kendra to access
+	// the block list text file in S3.
 	//
 	// The role needs S3 read permissions to your file in S3 and needs to give STS
 	// (Security Token Service) assume role permissions to Amazon Kendra.
-	RoleArn *string `min:"1" type:"string"`
+	RoleArn *string `type:"string"`
 
 	// Shows the current S3 path to your block list text file in your S3 bucket.
 	//
@@ -9922,10 +14123,11 @@ type DescribeQuerySuggestionsBlockListOutput struct {
 	// Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
 	SourceS3Path *S3Path `type:"structure"`
 
-	// Shows whether the current status of the block list is ACTIVE or INACTIVE.
+	// The current status of the block list. When the value is ACTIVE, the block
+	// list is ready for use.
 	Status *string `type:"string" enum:"QuerySuggestionsBlockListStatus"`
 
-	// Shows the date-time a block list for query suggestions was last updated.
+	// The date-time a block list for query suggestions was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -10022,8 +14224,8 @@ func (s *DescribeQuerySuggestionsBlockListOutput) SetUpdatedAt(v time.Time) *Des
 type DescribeQuerySuggestionsConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the index you want to describe query suggestions settings
-	// for.
+	// The identifier of the index with query suggestions that you want to get information
+	// on.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -10072,11 +14274,11 @@ func (s *DescribeQuerySuggestionsConfigInput) SetIndexId(v string) *DescribeQuer
 type DescribeQuerySuggestionsConfigOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Shows whether Amazon Kendra uses all queries or only uses queries that include
-	// user information to generate query suggestions.
+	// TRUE to use all queries, otherwise use only queries that include user information
+	// to generate the query suggestions.
 	IncludeQueriesWithoutUserInformation *bool `type:"boolean"`
 
-	// Shows the date-time query suggestions for an index was last cleared.
+	// The date-time query suggestions for an index was last cleared.
 	//
 	// After you clear suggestions, Amazon Kendra learns new suggestions based on
 	// new queries added to the query log from the time you cleared suggestions.
@@ -10084,37 +14286,35 @@ type DescribeQuerySuggestionsConfigOutput struct {
 	// suggestions.
 	LastClearTime *time.Time `type:"timestamp"`
 
-	// Shows the date-time query suggestions for an index was last updated.
+	// The date-time query suggestions for an index was last updated.
 	LastSuggestionsBuildTime *time.Time `type:"timestamp"`
 
-	// Shows the minimum number of unique users who must search a query in order
-	// for the query to be eligible to suggest to your users.
+	// The minimum number of unique users who must search a query in order for the
+	// query to be eligible to suggest to your users.
 	MinimumNumberOfQueryingUsers *int64 `min:"1" type:"integer"`
 
-	// Shows the minimum number of times a query must be searched in order for the
-	// query to be eligible to suggest to your users.
+	// The minimum number of times a query must be searched in order for the query
+	// to be eligible to suggest to your users.
 	MinimumQueryCount *int64 `min:"1" type:"integer"`
 
-	// Shows whether query suggestions are currently in ENABLED mode or LEARN_ONLY
-	// mode.
+	// Whether query suggestions are currently in ENABLED mode or LEARN_ONLY mode.
 	//
 	// By default, Amazon Kendra enables query suggestions.LEARN_ONLY turns off
 	// query suggestions for your users. You can change the mode using the UpdateQuerySuggestionsConfig
 	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateQuerySuggestionsConfig.html)
-	// operation.
+	// API.
 	Mode *string `type:"string" enum:"Mode"`
 
-	// Shows how recent your queries are in your query log time window (in days).
+	// How recent your queries are in your query log time window (in days).
 	QueryLogLookBackWindowInDays *int64 `type:"integer"`
 
-	// Shows whether the status of query suggestions settings is currently Active
-	// or Updating.
+	// Whether the status of query suggestions settings is currently ACTIVE or UPDATING.
 	//
 	// Active means the current settings apply and Updating means your changed settings
 	// are in the process of applying.
 	Status *string `type:"string" enum:"QuerySuggestionsStatus"`
 
-	// Shows the current total count of query suggestions for an index.
+	// The current total count of query suggestions for an index.
 	//
 	// This count can change when you update your query suggestions settings, if
 	// you filter out certain queries from suggestions using a block list, and as
@@ -10197,12 +14397,12 @@ func (s *DescribeQuerySuggestionsConfigOutput) SetTotalSuggestionsCount(v int64)
 type DescribeThesaurusInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the thesaurus to describe.
+	// The identifier of the thesaurus you want to get information on.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index associated with the thesaurus to describe.
+	// The identifier of the index for the thesaurus.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -10279,15 +14479,15 @@ type DescribeThesaurusOutput struct {
 	// The identifier of the thesaurus.
 	Id *string `min:"1" type:"string"`
 
-	// The identifier of the index associated with the thesaurus to describe.
+	// The identifier of the index for the thesaurus.
 	IndexId *string `min:"36" type:"string"`
 
 	// The thesaurus name.
 	Name *string `min:"1" type:"string"`
 
-	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
-	// permissions to access thesaurus file specified in SourceS3Path.
-	RoleArn *string `min:"1" type:"string"`
+	// An IAM role that gives Amazon Kendra permissions to access thesaurus file
+	// specified in SourceS3Path.
+	RoleArn *string `type:"string"`
 
 	// Information required to find a specific file in an Amazon S3 bucket.
 	SourceS3Path *S3Path `type:"structure"`
@@ -10407,25 +14607,276 @@ func (s *DescribeThesaurusOutput) SetUpdatedAt(v time.Time) *DescribeThesaurusOu
 	return s
 }
 
+type DisassociateEntitiesFromExperienceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists users or groups in your Amazon Web Services SSO identity source.
+	//
+	// EntityList is a required field
+	EntityList []*EntityConfiguration `min:"1" type:"list" required:"true"`
+
+	// The identifier of your Amazon Kendra experience.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateEntitiesFromExperienceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateEntitiesFromExperienceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateEntitiesFromExperienceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateEntitiesFromExperienceInput"}
+	if s.EntityList == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityList"))
+	}
+	if s.EntityList != nil && len(s.EntityList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityList", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.EntityList != nil {
+		for i, v := range s.EntityList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "EntityList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityList sets the EntityList field's value.
+func (s *DisassociateEntitiesFromExperienceInput) SetEntityList(v []*EntityConfiguration) *DisassociateEntitiesFromExperienceInput {
+	s.EntityList = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DisassociateEntitiesFromExperienceInput) SetId(v string) *DisassociateEntitiesFromExperienceInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DisassociateEntitiesFromExperienceInput) SetIndexId(v string) *DisassociateEntitiesFromExperienceInput {
+	s.IndexId = &v
+	return s
+}
+
+type DisassociateEntitiesFromExperienceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists the users or groups in your Amazon Web Services SSO identity source
+	// that failed to properly remove access to your Amazon Kendra experience.
+	FailedEntityList []*FailedEntity `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateEntitiesFromExperienceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateEntitiesFromExperienceOutput) GoString() string {
+	return s.String()
+}
+
+// SetFailedEntityList sets the FailedEntityList field's value.
+func (s *DisassociateEntitiesFromExperienceOutput) SetFailedEntityList(v []*FailedEntity) *DisassociateEntitiesFromExperienceOutput {
+	s.FailedEntityList = v
+	return s
+}
+
+type DisassociatePersonasFromEntitiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifiers of users or groups in your Amazon Web Services SSO identity
+	// source. For example, user IDs could be user emails.
+	//
+	// EntityIds is a required field
+	EntityIds []*string `min:"1" type:"list" required:"true"`
+
+	// The identifier of your Amazon Kendra experience.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePersonasFromEntitiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePersonasFromEntitiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociatePersonasFromEntitiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociatePersonasFromEntitiesInput"}
+	if s.EntityIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityIds"))
+	}
+	if s.EntityIds != nil && len(s.EntityIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityIds", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityIds sets the EntityIds field's value.
+func (s *DisassociatePersonasFromEntitiesInput) SetEntityIds(v []*string) *DisassociatePersonasFromEntitiesInput {
+	s.EntityIds = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DisassociatePersonasFromEntitiesInput) SetId(v string) *DisassociatePersonasFromEntitiesInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DisassociatePersonasFromEntitiesInput) SetIndexId(v string) *DisassociatePersonasFromEntitiesInput {
+	s.IndexId = &v
+	return s
+}
+
+type DisassociatePersonasFromEntitiesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists the users or groups in your Amazon Web Services SSO identity source
+	// that failed to properly remove access to your Amazon Kendra experience.
+	FailedEntityList []*FailedEntity `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePersonasFromEntitiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePersonasFromEntitiesOutput) GoString() string {
+	return s.String()
+}
+
+// SetFailedEntityList sets the FailedEntityList field's value.
+func (s *DisassociatePersonasFromEntitiesOutput) SetFailedEntityList(v []*FailedEntity) *DisassociatePersonasFromEntitiesOutput {
+	s.FailedEntityList = v
+	return s
+}
+
 // A document in an index.
 type Document struct {
 	_ struct{} `type:"structure"`
 
-	// Information on user and group access rights, which is used for user context
-	// filtering.
+	// The identifier of the access control configuration that you want to apply
+	// to the document.
+	AccessControlConfigurationId *string `min:"1" type:"string"`
+
+	// Information on principals (users and/or groups) and which documents they
+	// should have access to. This is useful for user context filtering, where search
+	// results are filtered based on the user or their group access to documents.
 	AccessControlList []*Principal `type:"list"`
 
 	// Custom attributes to apply to the document. Use the custom attributes to
 	// provide additional information for searching, to provide facets for refining
 	// searches, and to provide additional information in the query response.
+	//
+	// For example, 'DataSourceId' and 'DataSourceSyncJobId' are custom attributes
+	// that provide information on the synchronization of documents running on a
+	// data source. Note, 'DataSourceSyncJobId' could be an optional custom attribute
+	// as Amazon Kendra will use the ID of a running sync job.
 	Attributes []*DocumentAttribute `type:"list"`
 
 	// The contents of the document.
 	//
 	// Documents passed to the Blob parameter must be base64 encoded. Your code
 	// might not need to encode the document file bytes if you're using an Amazon
-	// Web Services SDK to call Amazon Kendra operations. If you are calling the
-	// Amazon Kendra endpoint directly using REST, you must base64 encode the contents
+	// Web Services SDK to call Amazon Kendra APIs. If you are calling the Amazon
+	// Kendra endpoint directly using REST, you must base64 encode the contents
 	// before sending.
 	// Blob is automatically base64 encoded/decoded by the SDK.
 	Blob []byte `type:"blob"`
@@ -10439,6 +14890,12 @@ type Document struct {
 	HierarchicalAccessControlList []*HierarchicalPrincipal `min:"1" type:"list"`
 
 	// A unique identifier of the document in the index.
+	//
+	// Note, each document ID must be unique per index. You cannot create a data
+	// source to index your documents with their unique IDs and then use the BatchPutDocument
+	// API to index the same documents, or vice versa. You can delete a data source
+	// and then use the BatchPutDocument API to index the same documents, or vice
+	// versa.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
@@ -10471,6 +14928,9 @@ func (s Document) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Document) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Document"}
+	if s.AccessControlConfigurationId != nil && len(*s.AccessControlConfigurationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccessControlConfigurationId", 1))
+	}
 	if s.HierarchicalAccessControlList != nil && len(s.HierarchicalAccessControlList) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("HierarchicalAccessControlList", 1))
 	}
@@ -10522,6 +14982,12 @@ func (s *Document) Validate() error {
 	return nil
 }
 
+// SetAccessControlConfigurationId sets the AccessControlConfigurationId field's value.
+func (s *Document) SetAccessControlConfigurationId(v string) *Document {
+	s.AccessControlConfigurationId = &v
+	return s
+}
+
 // SetAccessControlList sets the AccessControlList field's value.
 func (s *Document) SetAccessControlList(v []*Principal) *Document {
 	s.AccessControlList = v
@@ -10570,7 +15036,8 @@ func (s *Document) SetTitle(v string) *Document {
 	return s
 }
 
-// A custom attribute value assigned to a document.
+// A document attribute or metadata field. To create custom document attributes,
+// see Custom attributes (https://docs.aws.amazon.com/kendra/latest/dg/custom-attributes.html).
 type DocumentAttribute struct {
 	_ struct{} `type:"structure"`
 
@@ -10639,16 +15106,210 @@ func (s *DocumentAttribute) SetValue(v *DocumentAttributeValue) *DocumentAttribu
 	return s
 }
 
-// The value of a custom document attribute. You can only provide one value
-// for a custom attribute.
+// The condition used for the target document attribute or metadata field when
+// ingesting documents into Amazon Kendra. You use this with DocumentAttributeTarget
+// to apply the condition (https://docs.aws.amazon.com/kendra/latest/dg/API_DocumentAttributeTarget.html).
+//
+// For example, you can create the 'Department' target field and have it prefill
+// department names associated with the documents based on information in the
+// 'Source_URI' field. Set the condition that if the 'Source_URI' field contains
+// 'financial' in its URI value, then prefill the target field 'Department'
+// with the target value 'Finance' for the document.
+//
+// Amazon Kendra cannot create a target field if it has not already been created
+// as an index field. After you create your index field, you can create a document
+// metadata field using DocumentAttributeTarget. Amazon Kendra then will map
+// your newly created metadata field to your index field.
+type DocumentAttributeCondition struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the document attribute used for the condition.
+	//
+	// For example, 'Source_URI' could be an identifier for the attribute or metadata
+	// field that contains source URIs associated with the documents.
+	//
+	// Amazon Kendra currently does not support _document_body as an attribute key
+	// used for the condition.
+	//
+	// ConditionDocumentAttributeKey is a required field
+	ConditionDocumentAttributeKey *string `min:"1" type:"string" required:"true"`
+
+	// The value used by the operator.
+	//
+	// For example, you can specify the value 'financial' for strings in the 'Source_URI'
+	// field that partially match or contain this value.
+	ConditionOnValue *DocumentAttributeValue `type:"structure"`
+
+	// The condition operator.
+	//
+	// For example, you can use 'Contains' to partially match a string.
+	//
+	// Operator is a required field
+	Operator *string `type:"string" required:"true" enum:"ConditionOperator"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentAttributeCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentAttributeCondition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DocumentAttributeCondition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DocumentAttributeCondition"}
+	if s.ConditionDocumentAttributeKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConditionDocumentAttributeKey"))
+	}
+	if s.ConditionDocumentAttributeKey != nil && len(*s.ConditionDocumentAttributeKey) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConditionDocumentAttributeKey", 1))
+	}
+	if s.Operator == nil {
+		invalidParams.Add(request.NewErrParamRequired("Operator"))
+	}
+	if s.ConditionOnValue != nil {
+		if err := s.ConditionOnValue.Validate(); err != nil {
+			invalidParams.AddNested("ConditionOnValue", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConditionDocumentAttributeKey sets the ConditionDocumentAttributeKey field's value.
+func (s *DocumentAttributeCondition) SetConditionDocumentAttributeKey(v string) *DocumentAttributeCondition {
+	s.ConditionDocumentAttributeKey = &v
+	return s
+}
+
+// SetConditionOnValue sets the ConditionOnValue field's value.
+func (s *DocumentAttributeCondition) SetConditionOnValue(v *DocumentAttributeValue) *DocumentAttributeCondition {
+	s.ConditionOnValue = v
+	return s
+}
+
+// SetOperator sets the Operator field's value.
+func (s *DocumentAttributeCondition) SetOperator(v string) *DocumentAttributeCondition {
+	s.Operator = &v
+	return s
+}
+
+// The target document attribute or metadata field you want to alter when ingesting
+// documents into Amazon Kendra.
+//
+// For example, you can delete customer identification numbers associated with
+// the documents, stored in the document metadata field called 'Customer_ID'.
+// You set the target key as 'Customer_ID' and the deletion flag to TRUE. This
+// removes all customer ID values in the field 'Customer_ID'. This would scrub
+// personally identifiable information from each document's metadata.
+//
+// Amazon Kendra cannot create a target field if it has not already been created
+// as an index field. After you create your index field, you can create a document
+// metadata field using DocumentAttributeTarget. Amazon Kendra then will map
+// your newly created metadata field to your index field.
+//
+// You can also use this with DocumentAttributeCondition (https://docs.aws.amazon.com/kendra/latest/dg/API_DocumentAttributeCondition.html).
+type DocumentAttributeTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the target document attribute or metadata field.
+	//
+	// For example, 'Department' could be an identifier for the target attribute
+	// or metadata field that includes the department names associated with the
+	// documents.
+	TargetDocumentAttributeKey *string `min:"1" type:"string"`
+
+	// The target value you want to create for the target attribute.
+	//
+	// For example, 'Finance' could be the target value for the target attribute
+	// key 'Department'.
+	TargetDocumentAttributeValue *DocumentAttributeValue `type:"structure"`
+
+	// TRUE to delete the existing target value for your specified target attribute
+	// key. You cannot create a target value and set this to TRUE. To create a target
+	// value (TargetDocumentAttributeValue), set this to FALSE.
+	TargetDocumentAttributeValueDeletion *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentAttributeTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DocumentAttributeTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DocumentAttributeTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DocumentAttributeTarget"}
+	if s.TargetDocumentAttributeKey != nil && len(*s.TargetDocumentAttributeKey) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TargetDocumentAttributeKey", 1))
+	}
+	if s.TargetDocumentAttributeValue != nil {
+		if err := s.TargetDocumentAttributeValue.Validate(); err != nil {
+			invalidParams.AddNested("TargetDocumentAttributeValue", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTargetDocumentAttributeKey sets the TargetDocumentAttributeKey field's value.
+func (s *DocumentAttributeTarget) SetTargetDocumentAttributeKey(v string) *DocumentAttributeTarget {
+	s.TargetDocumentAttributeKey = &v
+	return s
+}
+
+// SetTargetDocumentAttributeValue sets the TargetDocumentAttributeValue field's value.
+func (s *DocumentAttributeTarget) SetTargetDocumentAttributeValue(v *DocumentAttributeValue) *DocumentAttributeTarget {
+	s.TargetDocumentAttributeValue = v
+	return s
+}
+
+// SetTargetDocumentAttributeValueDeletion sets the TargetDocumentAttributeValueDeletion field's value.
+func (s *DocumentAttributeTarget) SetTargetDocumentAttributeValueDeletion(v bool) *DocumentAttributeTarget {
+	s.TargetDocumentAttributeValueDeletion = &v
+	return s
+}
+
+// The value of a document attribute. You can only provide one value for a document
+// attribute.
 type DocumentAttributeValue struct {
 	_ struct{} `type:"structure"`
 
 	// A date expressed as an ISO 8601 string.
 	//
 	// It is important for the time zone to be included in the ISO 8601 date-time
-	// format. For example, 20120325T123010+01:00 is the ISO 8601 date-time format
-	// for March 25th 2012 at 12:30PM (plus 10 seconds) in Central European Time.
+	// format. For example, 2012-03-25T12:30:10+01:00 is the ISO 8601 date-time
+	// format for March 25th 2012 at 12:30PM (plus 10 seconds) in Central European
+	// Time.
 	DateValue *time.Time `type:"timestamp"`
 
 	// A long integer value.
@@ -10725,8 +15386,20 @@ type DocumentAttributeValueCountPair struct {
 	// the key.
 	Count *int64 `type:"integer"`
 
-	// The value of the attribute. For example, "HR."
+	// The value of the attribute. For example, "HR".
 	DocumentAttributeValue *DocumentAttributeValue `type:"structure"`
+
+	// Contains the results of a document attribute that is a nested facet. A FacetResult
+	// contains the counts for each facet nested within a facet.
+	//
+	// For example, the document attribute or facet "Department" includes a value
+	// called "Engineering". In addition, the document attribute or facet "SubDepartment"
+	// includes the values "Frontend" and "Backend" for documents assigned to "Engineering".
+	// You can display nested facets in the search results so that documents can
+	// be searched not only by department but also by a sub department within a
+	// department. The counts for documents that belong to "Frontend" and "Backend"
+	// within "Engineering" are returned for a query.
+	FacetResults []*FacetResult `type:"list"`
 }
 
 // String returns the string representation.
@@ -10756,6 +15429,12 @@ func (s *DocumentAttributeValueCountPair) SetCount(v int64) *DocumentAttributeVa
 // SetDocumentAttributeValue sets the DocumentAttributeValue field's value.
 func (s *DocumentAttributeValueCountPair) SetDocumentAttributeValue(v *DocumentAttributeValue) *DocumentAttributeValueCountPair {
 	s.DocumentAttributeValue = v
+	return s
+}
+
+// SetFacetResults sets the FacetResults field's value.
+func (s *DocumentAttributeValueCountPair) SetFacetResults(v []*FacetResult) *DocumentAttributeValueCountPair {
+	s.FacetResults = v
 	return s
 }
 
@@ -10845,7 +15524,8 @@ func (s *DocumentInfo) SetDocumentId(v string) *DocumentInfo {
 	return s
 }
 
-// Specifies the properties of a custom index field.
+// Specifies the properties, such as relevance tuning and searchability, of
+// an index field.
 type DocumentMetadataConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -10854,8 +15534,8 @@ type DocumentMetadataConfiguration struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// Provides manual tuning parameters to determine how the field affects the
-	// search results.
+	// Provides tuning parameters to determine how the field affects the search
+	// results.
 	Relevance *Relevance `type:"structure"`
 
 	// Provides information about how the field is used during a search.
@@ -10937,15 +15617,14 @@ func (s *DocumentMetadataConfiguration) SetType(v string) *DocumentMetadataConfi
 type DocumentRelevanceConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the tuning configuration to override document relevance at the
-	// index level.
+	// The name of the index field.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// Provides information for manually tuning the relevance of a field in a search.
-	// When a query includes terms that match the field, the results are given a
-	// boost in the response based on these tuning parameters.
+	// Provides information for tuning the relevance of a field in a search. When
+	// a query includes terms that match the field, the results are given a boost
+	// in the response based on these tuning parameters.
 	//
 	// Relevance is a required field
 	Relevance *Relevance `type:"structure" required:"true"`
@@ -11054,12 +15733,500 @@ func (s *DocumentsMetadataConfiguration) SetS3Prefix(v string) *DocumentsMetadat
 	return s
 }
 
-// Information about a document attribute
+// Provides the configuration information for users or groups in your Amazon
+// Web Services SSO identity source to grant access your Amazon Kendra experience.
+type EntityConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of a user or group in your Amazon Web Services SSO identity
+	// source. For example, a user ID could be an email.
+	//
+	// EntityId is a required field
+	EntityId *string `min:"1" type:"string" required:"true"`
+
+	// Specifies whether you are configuring a User or a Group.
+	//
+	// EntityType is a required field
+	EntityType *string `type:"string" required:"true" enum:"EntityType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntityConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EntityConfiguration"}
+	if s.EntityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityId"))
+	}
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
+	}
+	if s.EntityType == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *EntityConfiguration) SetEntityId(v string) *EntityConfiguration {
+	s.EntityId = &v
+	return s
+}
+
+// SetEntityType sets the EntityType field's value.
+func (s *EntityConfiguration) SetEntityType(v string) *EntityConfiguration {
+	s.EntityType = &v
+	return s
+}
+
+// Information about the user entity.
+type EntityDisplayData struct {
+	_ struct{} `type:"structure"`
+
+	// The first name of the user.
+	//
+	// FirstName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EntityDisplayData's
+	// String and GoString methods.
+	FirstName *string `min:"1" type:"string" sensitive:"true"`
+
+	// The name of the group.
+	//
+	// GroupName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EntityDisplayData's
+	// String and GoString methods.
+	GroupName *string `min:"1" type:"string" sensitive:"true"`
+
+	// The user name of the user.
+	//
+	// IdentifiedUserName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EntityDisplayData's
+	// String and GoString methods.
+	IdentifiedUserName *string `min:"1" type:"string" sensitive:"true"`
+
+	// The last name of the user.
+	//
+	// LastName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EntityDisplayData's
+	// String and GoString methods.
+	LastName *string `min:"1" type:"string" sensitive:"true"`
+
+	// The name of the user.
+	//
+	// UserName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EntityDisplayData's
+	// String and GoString methods.
+	UserName *string `min:"1" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityDisplayData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityDisplayData) GoString() string {
+	return s.String()
+}
+
+// SetFirstName sets the FirstName field's value.
+func (s *EntityDisplayData) SetFirstName(v string) *EntityDisplayData {
+	s.FirstName = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *EntityDisplayData) SetGroupName(v string) *EntityDisplayData {
+	s.GroupName = &v
+	return s
+}
+
+// SetIdentifiedUserName sets the IdentifiedUserName field's value.
+func (s *EntityDisplayData) SetIdentifiedUserName(v string) *EntityDisplayData {
+	s.IdentifiedUserName = &v
+	return s
+}
+
+// SetLastName sets the LastName field's value.
+func (s *EntityDisplayData) SetLastName(v string) *EntityDisplayData {
+	s.LastName = &v
+	return s
+}
+
+// SetUserName sets the UserName field's value.
+func (s *EntityDisplayData) SetUserName(v string) *EntityDisplayData {
+	s.UserName = &v
+	return s
+}
+
+// Provides the configuration information for users or groups in your Amazon
+// Web Services SSO identity source for access to your Amazon Kendra experience.
+// Specific permissions are defined for each user or group once they are granted
+// access to your Amazon Kendra experience.
+type EntityPersonaConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of a user or group in your Amazon Web Services SSO identity
+	// source. For example, a user ID could be an email.
+	//
+	// EntityId is a required field
+	EntityId *string `min:"1" type:"string" required:"true"`
+
+	// The persona that defines the specific permissions of the user or group in
+	// your Amazon Web Services SSO identity source. The available personas or access
+	// roles are Owner and Viewer. For more information on these personas, see Providing
+	// access to your search page (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html#access-search-experience).
+	//
+	// Persona is a required field
+	Persona *string `type:"string" required:"true" enum:"Persona"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityPersonaConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EntityPersonaConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntityPersonaConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EntityPersonaConfiguration"}
+	if s.EntityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityId"))
+	}
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
+	}
+	if s.Persona == nil {
+		invalidParams.Add(request.NewErrParamRequired("Persona"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *EntityPersonaConfiguration) SetEntityId(v string) *EntityPersonaConfiguration {
+	s.EntityId = &v
+	return s
+}
+
+// SetPersona sets the Persona field's value.
+func (s *EntityPersonaConfiguration) SetPersona(v string) *EntityPersonaConfiguration {
+	s.Persona = &v
+	return s
+}
+
+// Provides the configuration information for your Amazon Kendra experience.
+// This includes the data source IDs and/or FAQ IDs, and user or group information
+// to grant access to your Amazon Kendra experience.
+type ExperienceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The identifiers of your data sources and FAQs. Or, you can specify that you
+	// want to use documents indexed via the BatchPutDocument API. This is the content
+	// you want to use for your Amazon Kendra experience.
+	ContentSourceConfiguration *ContentSourceConfiguration `type:"structure"`
+
+	// The Amazon Web Services SSO field name that contains the identifiers of your
+	// users, such as their emails.
+	UserIdentityConfiguration *UserIdentityConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperienceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperienceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExperienceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExperienceConfiguration"}
+	if s.ContentSourceConfiguration != nil {
+		if err := s.ContentSourceConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ContentSourceConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.UserIdentityConfiguration != nil {
+		if err := s.UserIdentityConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("UserIdentityConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContentSourceConfiguration sets the ContentSourceConfiguration field's value.
+func (s *ExperienceConfiguration) SetContentSourceConfiguration(v *ContentSourceConfiguration) *ExperienceConfiguration {
+	s.ContentSourceConfiguration = v
+	return s
+}
+
+// SetUserIdentityConfiguration sets the UserIdentityConfiguration field's value.
+func (s *ExperienceConfiguration) SetUserIdentityConfiguration(v *UserIdentityConfiguration) *ExperienceConfiguration {
+	s.UserIdentityConfiguration = v
+	return s
+}
+
+// Provides the configuration information for the endpoint for your Amazon Kendra
+// experience.
+type ExperienceEndpoint struct {
+	_ struct{} `type:"structure"`
+
+	// The endpoint of your Amazon Kendra experience.
+	Endpoint *string `min:"1" type:"string"`
+
+	// The type of endpoint for your Amazon Kendra experience. The type currently
+	// available is HOME, which is a unique and fully hosted URL to the home page
+	// of your Amazon Kendra experience.
+	EndpointType *string `type:"string" enum:"EndpointType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperienceEndpoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperienceEndpoint) GoString() string {
+	return s.String()
+}
+
+// SetEndpoint sets the Endpoint field's value.
+func (s *ExperienceEndpoint) SetEndpoint(v string) *ExperienceEndpoint {
+	s.Endpoint = &v
+	return s
+}
+
+// SetEndpointType sets the EndpointType field's value.
+func (s *ExperienceEndpoint) SetEndpointType(v string) *ExperienceEndpoint {
+	s.EndpointType = &v
+	return s
+}
+
+// Summary information for users or groups in your Amazon Web Services SSO identity
+// source with granted access to your Amazon Kendra experience. You can create
+// an Amazon Kendra experience such as a search application. For more information
+// on creating a search application experience, see Building a search experience
+// with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+type ExperienceEntitiesSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the user entity.
+	DisplayData *EntityDisplayData `type:"structure"`
+
+	// The identifier of a user or group in your Amazon Web Services SSO identity
+	// source. For example, a user ID could be an email.
+	EntityId *string `min:"1" type:"string"`
+
+	// Shows the type as User or Group.
+	EntityType *string `type:"string" enum:"EntityType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperienceEntitiesSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperienceEntitiesSummary) GoString() string {
+	return s.String()
+}
+
+// SetDisplayData sets the DisplayData field's value.
+func (s *ExperienceEntitiesSummary) SetDisplayData(v *EntityDisplayData) *ExperienceEntitiesSummary {
+	s.DisplayData = v
+	return s
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *ExperienceEntitiesSummary) SetEntityId(v string) *ExperienceEntitiesSummary {
+	s.EntityId = &v
+	return s
+}
+
+// SetEntityType sets the EntityType field's value.
+func (s *ExperienceEntitiesSummary) SetEntityType(v string) *ExperienceEntitiesSummary {
+	s.EntityType = &v
+	return s
+}
+
+// Summary information for your Amazon Kendra experience. You can create an
+// Amazon Kendra experience such as a search application. For more information
+// on creating a search application experience, see Building a search experience
+// with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+type ExperiencesSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date-time your Amazon Kendra experience was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The endpoint URLs for your Amazon Kendra experiences. The URLs are unique
+	// and fully hosted by Amazon Web Services.
+	Endpoints []*ExperienceEndpoint `min:"1" type:"list"`
+
+	// The identifier of your Amazon Kendra experience.
+	Id *string `min:"1" type:"string"`
+
+	// The name of your Amazon Kendra experience.
+	Name *string `min:"1" type:"string"`
+
+	// The processing status of your Amazon Kendra experience.
+	Status *string `type:"string" enum:"ExperienceStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperiencesSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExperiencesSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ExperiencesSummary) SetCreatedAt(v time.Time) *ExperiencesSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetEndpoints sets the Endpoints field's value.
+func (s *ExperiencesSummary) SetEndpoints(v []*ExperienceEndpoint) *ExperiencesSummary {
+	s.Endpoints = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ExperiencesSummary) SetId(v string) *ExperiencesSummary {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ExperiencesSummary) SetName(v string) *ExperiencesSummary {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ExperiencesSummary) SetStatus(v string) *ExperiencesSummary {
+	s.Status = &v
+	return s
+}
+
+// Information about a document attribute. You can use document attributes as
+// facets.
+//
+// For example, the document attribute or facet "Department" includes the values
+// "HR", "Engineering", and "Accounting". You can display these values in the
+// search results so that documents can be searched by department.
+//
+// You can display up to 10 facet values per facet for a query. If you want
+// to increase this limit, contact Support (http://aws.amazon.com/contact-us/).
 type Facet struct {
 	_ struct{} `type:"structure"`
 
 	// The unique key for the document attribute.
 	DocumentAttributeKey *string `min:"1" type:"string"`
+
+	// An array of document attributes that are nested facets within a facet.
+	//
+	// For example, the document attribute or facet "Department" includes a value
+	// called "Engineering". In addition, the document attribute or facet "SubDepartment"
+	// includes the values "Frontend" and "Backend" for documents assigned to "Engineering".
+	// You can display nested facets in the search results so that documents can
+	// be searched not only by department but also by a sub department within a
+	// department. This helps your users further narrow their search.
+	//
+	// You can only have one nested facet within a facet. If you want to increase
+	// this limit, contact Support (http://aws.amazon.com/contact-us/).
+	Facets []*Facet `type:"list"`
+
+	// Maximum number of facet values per facet. The default is 10. You can use
+	// this to limit the number of facet values to less than 10. If you want to
+	// increase the default, contact Support (http://aws.amazon.com/contact-us/).
+	MaxResults *int64 `type:"integer"`
 }
 
 // String returns the string representation.
@@ -11086,6 +16253,16 @@ func (s *Facet) Validate() error {
 	if s.DocumentAttributeKey != nil && len(*s.DocumentAttributeKey) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DocumentAttributeKey", 1))
 	}
+	if s.Facets != nil {
+		for i, v := range s.Facets {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Facets", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11096,6 +16273,18 @@ func (s *Facet) Validate() error {
 // SetDocumentAttributeKey sets the DocumentAttributeKey field's value.
 func (s *Facet) SetDocumentAttributeKey(v string) *Facet {
 	s.DocumentAttributeKey = &v
+	return s
+}
+
+// SetFacets sets the Facets field's value.
+func (s *Facet) SetFacets(v []*Facet) *Facet {
+	s.Facets = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *Facet) SetMaxResults(v int64) *Facet {
+	s.MaxResults = &v
 	return s
 }
 
@@ -11152,6 +16341,50 @@ func (s *FacetResult) SetDocumentAttributeValueType(v string) *FacetResult {
 	return s
 }
 
+// Information on the users or groups in your Amazon Web Services SSO identity
+// source that failed to properly configure with your Amazon Kendra experience.
+type FailedEntity struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the user or group in your Amazon Web Services SSO identity
+	// source. For example, a user ID could be an email.
+	EntityId *string `min:"1" type:"string"`
+
+	// The reason the user or group in your Amazon Web Services SSO identity source
+	// failed to properly configure with your Amazon Kendra experience.
+	ErrorMessage *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FailedEntity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FailedEntity) GoString() string {
+	return s.String()
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *FailedEntity) SetEntityId(v string) *FailedEntity {
+	s.EntityId = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *FailedEntity) SetErrorMessage(v string) *FailedEntity {
+	s.ErrorMessage = &v
+	return s
+}
+
 // Provides statistical information about the FAQ questions and answers contained
 // in an index.
 type FaqStatistics struct {
@@ -11187,8 +16420,8 @@ func (s *FaqStatistics) SetIndexedQuestionAnswersCount(v int64) *FaqStatistics {
 	return s
 }
 
-// Provides information about a frequently asked questions and answer contained
-// in an index.
+// Summary information for frequently asked questions and answers included in
+// an index.
 type FaqSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -11275,6 +16508,173 @@ func (s *FaqSummary) SetStatus(v string) *FaqSummary {
 // SetUpdatedAt sets the UpdatedAt field's value.
 func (s *FaqSummary) SetUpdatedAt(v time.Time) *FaqSummary {
 	s.UpdatedAt = &v
+	return s
+}
+
+// Provides the configuration information to connect to Amazon FSx as your data
+// source.
+type FsxConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of regular expression patterns to exclude certain files in your Amazon
+	// FSx file system. Files that match the patterns are excluded from the index.
+	// Files that don't match the patterns are included in the index. If a file
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the file isn't included in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map Amazon FSx data
+	// source attributes or field names to Amazon Kendra index field names. To create
+	// custom fields, use the UpdateIndex API before you map to Amazon FSx fields.
+	// For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Amazon FSx data source field names must exist in your Amazon FSx custom
+	// metadata.
+	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// The identifier of the Amazon FSx file system.
+	//
+	// You can find your file system ID on the file system dashboard in the Amazon
+	// FSx console. For information on how to create a file system in Amazon FSx
+	// console, using Windows File Server as an example, see Amazon FSx Getting
+	// started guide (https://docs.aws.amazon.com/fsx/latest/WindowsGuide/getting-started-step1.html).
+	//
+	// FileSystemId is a required field
+	FileSystemId *string `min:"11" type:"string" required:"true"`
+
+	// The Amazon FSx file system type. Windows is currently the only supported
+	// type.
+	//
+	// FileSystemType is a required field
+	FileSystemType *string `type:"string" required:"true" enum:"FsxFileSystemType"`
+
+	// A list of regular expression patterns to include certain files in your Amazon
+	// FSx file system. Files that match the patterns are included in the index.
+	// Files that don't match the patterns are excluded from the index. If a file
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the file isn't included in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the key-value pairs required to connect to your Amazon FSx file system. Windows
+	// is currently the only supported type. The secret must contain a JSON structure
+	// with the following keys:
+	//
+	//    * username—The Active Directory user name, along with the Domain Name
+	//    System (DNS) domain name. For example, user@corp.example.com. The Active
+	//    Directory user account must have read and mounting access to the Amazon
+	//    FSx file system for Windows.
+	//
+	//    * password—The password of the Active Directory user account with read
+	//    and mounting access to the Amazon FSx Windows file system.
+	SecretArn *string `min:"1" type:"string"`
+
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your Amazon FSx. Your Amazon FSx instance must reside inside your VPC.
+	//
+	// VpcConfiguration is a required field
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FsxConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FsxConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FsxConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FsxConfiguration"}
+	if s.FieldMappings != nil && len(s.FieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldMappings", 1))
+	}
+	if s.FileSystemId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileSystemId"))
+	}
+	if s.FileSystemId != nil && len(*s.FileSystemId) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("FileSystemId", 11))
+	}
+	if s.FileSystemType == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileSystemType"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.VpcConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcConfiguration"))
+	}
+	if s.FieldMappings != nil {
+		for i, v := range s.FieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *FsxConfiguration) SetExclusionPatterns(v []*string) *FsxConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetFieldMappings sets the FieldMappings field's value.
+func (s *FsxConfiguration) SetFieldMappings(v []*DataSourceToIndexFieldMapping) *FsxConfiguration {
+	s.FieldMappings = v
+	return s
+}
+
+// SetFileSystemId sets the FileSystemId field's value.
+func (s *FsxConfiguration) SetFileSystemId(v string) *FsxConfiguration {
+	s.FileSystemId = &v
+	return s
+}
+
+// SetFileSystemType sets the FileSystemType field's value.
+func (s *FsxConfiguration) SetFileSystemType(v string) *FsxConfiguration {
+	s.FileSystemType = &v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *FsxConfiguration) SetInclusionPatterns(v []*string) *FsxConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *FsxConfiguration) SetSecretArn(v string) *FsxConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *FsxConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *FsxConfiguration {
+	s.VpcConfiguration = v
 	return s
 }
 
@@ -11397,8 +16797,714 @@ func (s *GetQuerySuggestionsOutput) SetSuggestions(v []*Suggestion) *GetQuerySug
 	return s
 }
 
-// Provides configuration information for data sources that connect to Google
-// Drive.
+type GetSnapshotsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index to get search metrics data.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The time interval or time window to get search metrics data. The time interval
+	// uses the time zone of your index. You can view data in the following time
+	// windows:
+	//
+	//    * THIS_WEEK: The current week, starting on the Sunday and ending on the
+	//    day before the current date.
+	//
+	//    * ONE_WEEK_AGO: The previous week, starting on the Sunday and ending on
+	//    the following Saturday.
+	//
+	//    * TWO_WEEKS_AGO: The week before the previous week, starting on the Sunday
+	//    and ending on the following Saturday.
+	//
+	//    * THIS_MONTH: The current month, starting on the first day of the month
+	//    and ending on the day before the current date.
+	//
+	//    * ONE_MONTH_AGO: The previous month, starting on the first day of the
+	//    month and ending on the last day of the month.
+	//
+	//    * TWO_MONTHS_AGO: The month before the previous month, starting on the
+	//    first day of the month and ending on last day of the month.
+	//
+	// Interval is a required field
+	Interval *string `type:"string" required:"true" enum:"Interval"`
+
+	// The maximum number of returned data for the metric.
+	MaxResults *int64 `type:"integer"`
+
+	// The metric you want to retrieve. You can specify only one metric per call.
+	//
+	// For more information about the metrics you can view, see Gaining insights
+	// with search analytics (https://docs.aws.amazon.com/kendra/latest/dg/search-analytics.html).
+	//
+	// MetricType is a required field
+	MetricType *string `type:"string" required:"true" enum:"MetricType"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of search metrics data.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSnapshotsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSnapshotsInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Interval == nil {
+		invalidParams.Add(request.NewErrParamRequired("Interval"))
+	}
+	if s.MetricType == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricType"))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *GetSnapshotsInput) SetIndexId(v string) *GetSnapshotsInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetInterval sets the Interval field's value.
+func (s *GetSnapshotsInput) SetInterval(v string) *GetSnapshotsInput {
+	s.Interval = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetSnapshotsInput) SetMaxResults(v int64) *GetSnapshotsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMetricType sets the MetricType field's value.
+func (s *GetSnapshotsInput) SetMetricType(v string) *GetSnapshotsInput {
+	s.MetricType = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSnapshotsInput) SetNextToken(v string) *GetSnapshotsInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetSnapshotsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the response is truncated, Amazon Kendra returns this token, which you
+	// can use in a later request to retrieve the next set of search metrics data.
+	NextToken *string `min:"1" type:"string"`
+
+	// The date-time for the beginning and end of the time window for the search
+	// metrics data.
+	SnapShotTimeFilter *TimeRange `type:"structure"`
+
+	// The search metrics data. The data returned depends on the metric type you
+	// requested.
+	SnapshotsData [][]*string `type:"list"`
+
+	// The column headers for the search metrics data.
+	SnapshotsDataHeader []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSnapshotsOutput) SetNextToken(v string) *GetSnapshotsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSnapShotTimeFilter sets the SnapShotTimeFilter field's value.
+func (s *GetSnapshotsOutput) SetSnapShotTimeFilter(v *TimeRange) *GetSnapshotsOutput {
+	s.SnapShotTimeFilter = v
+	return s
+}
+
+// SetSnapshotsData sets the SnapshotsData field's value.
+func (s *GetSnapshotsOutput) SetSnapshotsData(v [][]*string) *GetSnapshotsOutput {
+	s.SnapshotsData = v
+	return s
+}
+
+// SetSnapshotsDataHeader sets the SnapshotsDataHeader field's value.
+func (s *GetSnapshotsOutput) SetSnapshotsDataHeader(v []*string) *GetSnapshotsOutput {
+	s.SnapshotsDataHeader = v
+	return s
+}
+
+// Provides the configuration information to connect to GitHub as your data
+// source.
+type GitHubConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of regular expression patterns to exclude certain file names in your
+	// GitHub repository or repositories. File names that match the patterns are
+	// excluded from the index. File names that don't match the patterns are included
+	// in the index. If a file matches both an exclusion and inclusion pattern,
+	// the exclusion pattern takes precedence and the file isn't included in the
+	// index.
+	ExclusionFileNamePatterns []*string `type:"list"`
+
+	// A list of regular expression patterns to exclude certain file types in your
+	// GitHub repository or repositories. File types that match the patterns are
+	// excluded from the index. File types that don't match the patterns are included
+	// in the index. If a file matches both an exclusion and inclusion pattern,
+	// the exclusion pattern takes precedence and the file isn't included in the
+	// index.
+	ExclusionFileTypePatterns []*string `type:"list"`
+
+	// A list of regular expression patterns to exclude certain folder names in
+	// your GitHub repository or repositories. Folder names that match the patterns
+	// are excluded from the index. Folder names that don't match the patterns are
+	// included in the index. If a folder matches both an exclusion and inclusion
+	// pattern, the exclusion pattern takes precedence and the folder isn't included
+	// in the index.
+	ExclusionFolderNamePatterns []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of GitHub commits to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to GitHub fields. For more
+	// information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubCommitConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// Configuration information to include certain types of GitHub content. You
+	// can configure to index repository files only, or also include issues and
+	// pull requests, comments, and comment attachments.
+	GitHubDocumentCrawlProperties *GitHubDocumentCrawlProperties `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of GitHub issue attachments to Amazon Kendra index field names. To
+	// create custom fields, use the UpdateIndex API before you map to GitHub fields.
+	// For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubIssueAttachmentConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of GitHub issue comments to Amazon Kendra index field names. To create
+	// custom fields, use the UpdateIndex API before you map to GitHub fields. For
+	// more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubIssueCommentConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of GitHub issues to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to GitHub fields. For more
+	// information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubIssueDocumentConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of GitHub pull request comments to Amazon Kendra index field names.
+	// To create custom fields, use the UpdateIndex API before you map to GitHub
+	// fields. For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubPullRequestCommentConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of GitHub pull request attachments to Amazon Kendra index field names.
+	// To create custom fields, use the UpdateIndex API before you map to GitHub
+	// fields. For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubPullRequestDocumentAttachmentConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of GitHub pull requests to Amazon Kendra index field names. To create
+	// custom fields, use the UpdateIndex API before you map to GitHub fields. For
+	// more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubPullRequestDocumentConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map GitHub repository
+	// attributes or field names to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to GitHub fields. For more
+	// information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The GitHub data source field names must exist in your GitHub custom metadata.
+	GitHubRepositoryConfigurationFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of regular expression patterns to include certain file names in your
+	// GitHub repository or repositories. File names that match the patterns are
+	// included in the index. File names that don't match the patterns are excluded
+	// from the index. If a file matches both an inclusion and exclusion pattern,
+	// the exclusion pattern takes precedence and the file isn't included in the
+	// index.
+	InclusionFileNamePatterns []*string `type:"list"`
+
+	// A list of regular expression patterns to include certain file types in your
+	// GitHub repository or repositories. File types that match the patterns are
+	// included in the index. File types that don't match the patterns are excluded
+	// from the index. If a file matches both an inclusion and exclusion pattern,
+	// the exclusion pattern takes precedence and the file isn't included in the
+	// index.
+	InclusionFileTypePatterns []*string `type:"list"`
+
+	// A list of regular expression patterns to include certain folder names in
+	// your GitHub repository or repositories. Folder names that match the patterns
+	// are included in the index. Folder names that don't match the patterns are
+	// excluded from the index. If a folder matches both an inclusion and exclusion
+	// pattern, the exclusion pattern takes precedence and the folder isn't included
+	// in the index.
+	InclusionFolderNamePatterns []*string `type:"list"`
+
+	// Configuration information to connect to GitHub Enterprise Server (on premises).
+	OnPremiseConfiguration *OnPremiseConfiguration `type:"structure"`
+
+	// A list of names of the specific repositories you want to index.
+	RepositoryFilter []*string `type:"list"`
+
+	// Configuration information to connect to GitHub Enterprise Cloud (SaaS).
+	SaaSConfiguration *SaaSConfiguration `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the key-value pairs required to connect to your GitHub. The secret must contain
+	// a JSON structure with the following keys:
+	//
+	//    * githubToken—The access token created in GitHub. For more information
+	//    on creating a token in GitHub, see Authentication for a GitHub data source
+	//    (https://docs.aws.amazon.com/kendra/latest/dg/data-source-github.html#github-authentication).
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+
+	// The type of GitHub service you want to connect to—GitHub Enterprise Cloud
+	// (SaaS) or GitHub Enterprise Server (on premises).
+	Type *string `type:"string" enum:"Type"`
+
+	// TRUE to use the GitHub change log to determine which documents require updating
+	// in the index. Depending on the GitHub change log's size, it may take longer
+	// for Amazon Kendra to use the change log than to scan all of your documents
+	// in GitHub.
+	UseChangeLog *bool `type:"boolean"`
+
+	// Configuration information of an Amazon Virtual Private Cloud to connect to
+	// your GitHub. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GitHubConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GitHubConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GitHubConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GitHubConfiguration"}
+	if s.GitHubCommitConfigurationFieldMappings != nil && len(s.GitHubCommitConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubCommitConfigurationFieldMappings", 1))
+	}
+	if s.GitHubIssueAttachmentConfigurationFieldMappings != nil && len(s.GitHubIssueAttachmentConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubIssueAttachmentConfigurationFieldMappings", 1))
+	}
+	if s.GitHubIssueCommentConfigurationFieldMappings != nil && len(s.GitHubIssueCommentConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubIssueCommentConfigurationFieldMappings", 1))
+	}
+	if s.GitHubIssueDocumentConfigurationFieldMappings != nil && len(s.GitHubIssueDocumentConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubIssueDocumentConfigurationFieldMappings", 1))
+	}
+	if s.GitHubPullRequestCommentConfigurationFieldMappings != nil && len(s.GitHubPullRequestCommentConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubPullRequestCommentConfigurationFieldMappings", 1))
+	}
+	if s.GitHubPullRequestDocumentAttachmentConfigurationFieldMappings != nil && len(s.GitHubPullRequestDocumentAttachmentConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubPullRequestDocumentAttachmentConfigurationFieldMappings", 1))
+	}
+	if s.GitHubPullRequestDocumentConfigurationFieldMappings != nil && len(s.GitHubPullRequestDocumentConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubPullRequestDocumentConfigurationFieldMappings", 1))
+	}
+	if s.GitHubRepositoryConfigurationFieldMappings != nil && len(s.GitHubRepositoryConfigurationFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GitHubRepositoryConfigurationFieldMappings", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.GitHubCommitConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubCommitConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubCommitConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GitHubIssueAttachmentConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubIssueAttachmentConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubIssueAttachmentConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GitHubIssueCommentConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubIssueCommentConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubIssueCommentConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GitHubIssueDocumentConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubIssueDocumentConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubIssueDocumentConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GitHubPullRequestCommentConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubPullRequestCommentConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubPullRequestCommentConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GitHubPullRequestDocumentAttachmentConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubPullRequestDocumentAttachmentConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubPullRequestDocumentAttachmentConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GitHubPullRequestDocumentConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubPullRequestDocumentConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubPullRequestDocumentConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GitHubRepositoryConfigurationFieldMappings != nil {
+		for i, v := range s.GitHubRepositoryConfigurationFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GitHubRepositoryConfigurationFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.OnPremiseConfiguration != nil {
+		if err := s.OnPremiseConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("OnPremiseConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SaaSConfiguration != nil {
+		if err := s.SaaSConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("SaaSConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExclusionFileNamePatterns sets the ExclusionFileNamePatterns field's value.
+func (s *GitHubConfiguration) SetExclusionFileNamePatterns(v []*string) *GitHubConfiguration {
+	s.ExclusionFileNamePatterns = v
+	return s
+}
+
+// SetExclusionFileTypePatterns sets the ExclusionFileTypePatterns field's value.
+func (s *GitHubConfiguration) SetExclusionFileTypePatterns(v []*string) *GitHubConfiguration {
+	s.ExclusionFileTypePatterns = v
+	return s
+}
+
+// SetExclusionFolderNamePatterns sets the ExclusionFolderNamePatterns field's value.
+func (s *GitHubConfiguration) SetExclusionFolderNamePatterns(v []*string) *GitHubConfiguration {
+	s.ExclusionFolderNamePatterns = v
+	return s
+}
+
+// SetGitHubCommitConfigurationFieldMappings sets the GitHubCommitConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubCommitConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubCommitConfigurationFieldMappings = v
+	return s
+}
+
+// SetGitHubDocumentCrawlProperties sets the GitHubDocumentCrawlProperties field's value.
+func (s *GitHubConfiguration) SetGitHubDocumentCrawlProperties(v *GitHubDocumentCrawlProperties) *GitHubConfiguration {
+	s.GitHubDocumentCrawlProperties = v
+	return s
+}
+
+// SetGitHubIssueAttachmentConfigurationFieldMappings sets the GitHubIssueAttachmentConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubIssueAttachmentConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubIssueAttachmentConfigurationFieldMappings = v
+	return s
+}
+
+// SetGitHubIssueCommentConfigurationFieldMappings sets the GitHubIssueCommentConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubIssueCommentConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubIssueCommentConfigurationFieldMappings = v
+	return s
+}
+
+// SetGitHubIssueDocumentConfigurationFieldMappings sets the GitHubIssueDocumentConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubIssueDocumentConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubIssueDocumentConfigurationFieldMappings = v
+	return s
+}
+
+// SetGitHubPullRequestCommentConfigurationFieldMappings sets the GitHubPullRequestCommentConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubPullRequestCommentConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubPullRequestCommentConfigurationFieldMappings = v
+	return s
+}
+
+// SetGitHubPullRequestDocumentAttachmentConfigurationFieldMappings sets the GitHubPullRequestDocumentAttachmentConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubPullRequestDocumentAttachmentConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubPullRequestDocumentAttachmentConfigurationFieldMappings = v
+	return s
+}
+
+// SetGitHubPullRequestDocumentConfigurationFieldMappings sets the GitHubPullRequestDocumentConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubPullRequestDocumentConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubPullRequestDocumentConfigurationFieldMappings = v
+	return s
+}
+
+// SetGitHubRepositoryConfigurationFieldMappings sets the GitHubRepositoryConfigurationFieldMappings field's value.
+func (s *GitHubConfiguration) SetGitHubRepositoryConfigurationFieldMappings(v []*DataSourceToIndexFieldMapping) *GitHubConfiguration {
+	s.GitHubRepositoryConfigurationFieldMappings = v
+	return s
+}
+
+// SetInclusionFileNamePatterns sets the InclusionFileNamePatterns field's value.
+func (s *GitHubConfiguration) SetInclusionFileNamePatterns(v []*string) *GitHubConfiguration {
+	s.InclusionFileNamePatterns = v
+	return s
+}
+
+// SetInclusionFileTypePatterns sets the InclusionFileTypePatterns field's value.
+func (s *GitHubConfiguration) SetInclusionFileTypePatterns(v []*string) *GitHubConfiguration {
+	s.InclusionFileTypePatterns = v
+	return s
+}
+
+// SetInclusionFolderNamePatterns sets the InclusionFolderNamePatterns field's value.
+func (s *GitHubConfiguration) SetInclusionFolderNamePatterns(v []*string) *GitHubConfiguration {
+	s.InclusionFolderNamePatterns = v
+	return s
+}
+
+// SetOnPremiseConfiguration sets the OnPremiseConfiguration field's value.
+func (s *GitHubConfiguration) SetOnPremiseConfiguration(v *OnPremiseConfiguration) *GitHubConfiguration {
+	s.OnPremiseConfiguration = v
+	return s
+}
+
+// SetRepositoryFilter sets the RepositoryFilter field's value.
+func (s *GitHubConfiguration) SetRepositoryFilter(v []*string) *GitHubConfiguration {
+	s.RepositoryFilter = v
+	return s
+}
+
+// SetSaaSConfiguration sets the SaaSConfiguration field's value.
+func (s *GitHubConfiguration) SetSaaSConfiguration(v *SaaSConfiguration) *GitHubConfiguration {
+	s.SaaSConfiguration = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *GitHubConfiguration) SetSecretArn(v string) *GitHubConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *GitHubConfiguration) SetType(v string) *GitHubConfiguration {
+	s.Type = &v
+	return s
+}
+
+// SetUseChangeLog sets the UseChangeLog field's value.
+func (s *GitHubConfiguration) SetUseChangeLog(v bool) *GitHubConfiguration {
+	s.UseChangeLog = &v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *GitHubConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *GitHubConfiguration {
+	s.VpcConfiguration = v
+	return s
+}
+
+// Provides the configuration information to include certain types of GitHub
+// content. You can configure to index repository files only, or also include
+// issues and pull requests, comments, and comment attachments.
+type GitHubDocumentCrawlProperties struct {
+	_ struct{} `type:"structure"`
+
+	// TRUE to index all issues within a repository.
+	CrawlIssue *bool `type:"boolean"`
+
+	// TRUE to index all comments on issues.
+	CrawlIssueComment *bool `type:"boolean"`
+
+	// TRUE to include all comment attachments for issues.
+	CrawlIssueCommentAttachment *bool `type:"boolean"`
+
+	// TRUE to index all pull requests within a repository.
+	CrawlPullRequest *bool `type:"boolean"`
+
+	// TRUE to index all comments on pull requests.
+	CrawlPullRequestComment *bool `type:"boolean"`
+
+	// TRUE to include all comment attachments for pull requests.
+	CrawlPullRequestCommentAttachment *bool `type:"boolean"`
+
+	// TRUE to index all files with a repository.
+	CrawlRepositoryDocuments *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GitHubDocumentCrawlProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GitHubDocumentCrawlProperties) GoString() string {
+	return s.String()
+}
+
+// SetCrawlIssue sets the CrawlIssue field's value.
+func (s *GitHubDocumentCrawlProperties) SetCrawlIssue(v bool) *GitHubDocumentCrawlProperties {
+	s.CrawlIssue = &v
+	return s
+}
+
+// SetCrawlIssueComment sets the CrawlIssueComment field's value.
+func (s *GitHubDocumentCrawlProperties) SetCrawlIssueComment(v bool) *GitHubDocumentCrawlProperties {
+	s.CrawlIssueComment = &v
+	return s
+}
+
+// SetCrawlIssueCommentAttachment sets the CrawlIssueCommentAttachment field's value.
+func (s *GitHubDocumentCrawlProperties) SetCrawlIssueCommentAttachment(v bool) *GitHubDocumentCrawlProperties {
+	s.CrawlIssueCommentAttachment = &v
+	return s
+}
+
+// SetCrawlPullRequest sets the CrawlPullRequest field's value.
+func (s *GitHubDocumentCrawlProperties) SetCrawlPullRequest(v bool) *GitHubDocumentCrawlProperties {
+	s.CrawlPullRequest = &v
+	return s
+}
+
+// SetCrawlPullRequestComment sets the CrawlPullRequestComment field's value.
+func (s *GitHubDocumentCrawlProperties) SetCrawlPullRequestComment(v bool) *GitHubDocumentCrawlProperties {
+	s.CrawlPullRequestComment = &v
+	return s
+}
+
+// SetCrawlPullRequestCommentAttachment sets the CrawlPullRequestCommentAttachment field's value.
+func (s *GitHubDocumentCrawlProperties) SetCrawlPullRequestCommentAttachment(v bool) *GitHubDocumentCrawlProperties {
+	s.CrawlPullRequestCommentAttachment = &v
+	return s
+}
+
+// SetCrawlRepositoryDocuments sets the CrawlRepositoryDocuments field's value.
+func (s *GitHubDocumentCrawlProperties) SetCrawlRepositoryDocuments(v bool) *GitHubDocumentCrawlProperties {
+	s.CrawlRepositoryDocuments = &v
+	return s
+}
+
+// Provides the configuration information to connect to Google Drive as your
+// data source.
 type GoogleDriveConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -11418,26 +17524,28 @@ type GoogleDriveConfiguration struct {
 	// unless they are excluded in another way.
 	ExcludeUserAccounts []*string `type:"list"`
 
-	// A list of regular expression patterns that apply to the path on Google Drive.
-	// Items that match the pattern are excluded from the index from both shared
-	// drives and users' My Drives. Items that don't match the pattern are included
-	// in the index. If an item matches both an exclusion pattern and an inclusion
-	// pattern, it is excluded from the index.
+	// A list of regular expression patterns to exclude certain items in your Google
+	// Drive, including shared drives and users' My Drives. Items that match the
+	// patterns are excluded from the index. Items that don't match the patterns
+	// are included in the index. If an item matches both an inclusion and exclusion
+	// pattern, the exclusion pattern takes precedence and the item isn't included
+	// in the index.
 	ExclusionPatterns []*string `type:"list"`
 
-	// Defines mapping between a field in the Google Drive and a Amazon Kendra index
-	// field.
-	//
-	// If you are using the console, you can define index fields when creating the
-	// mapping. If you are using the API, you must first create the field using
-	// the UpdateIndex operation.
+	// Maps Google Drive data source attributes or field names to Amazon Kendra
+	// index field names. To create custom fields, use the UpdateIndex API before
+	// you map to Google Drive fields. For more information, see Mapping data source
+	// fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Google Drive data source field names must exist in your Google Drive
+	// custom metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
-	// A list of regular expression patterns that apply to path on Google Drive.
-	// Items that match the pattern are included in the index from both shared drives
-	// and users' My Drives. Items that don't match the pattern are excluded from
-	// the index. If an item matches both an inclusion pattern and an exclusion
-	// pattern, it is excluded from the index.
+	// A list of regular expression patterns to include certain items in your Google
+	// Drive, including shared drives and users' My Drives. Items that match the
+	// patterns are included in the index. Items that don't match the patterns are
+	// excluded from the index. If an item matches both an inclusion and exclusion
+	// pattern, the exclusion pattern takes precedence and the item isn't included
+	// in the index.
 	InclusionPatterns []*string `type:"list"`
 
 	// The Amazon Resource Name (ARN) of a Secrets Managersecret that contains the
@@ -11537,9 +17645,9 @@ func (s *GoogleDriveConfiguration) SetSecretArn(v string) *GoogleDriveConfigurat
 	return s
 }
 
-// A list of users or sub groups that belong to a group. Users and groups are
-// useful for filtering search results to different users based on their group's
-// access to documents.
+// A list of users or sub groups that belong to a group. This is useful for
+// user context filtering, where search results are filtered based on the user
+// or their group access to documents.
 type GroupMembers struct {
 	_ struct{} `type:"structure"`
 
@@ -11642,8 +17750,8 @@ func (s *GroupMembers) SetS3PathforGroupMembers(v *S3Path) *GroupMembers {
 	return s
 }
 
-// Information on the processing of PUT and DELETE actions for mapping users
-// to their groups.
+// Summary information on the processing of PUT and DELETE actions for mapping
+// users to their groups.
 type GroupOrderingIdSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -11716,7 +17824,7 @@ func (s *GroupOrderingIdSummary) SetStatus(v string) *GroupOrderingIdSummary {
 	return s
 }
 
-// Group summary information.
+// Summary information for groups.
 type GroupSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -11883,7 +17991,108 @@ func (s *Highlight) SetType(v string) *Highlight {
 	return s
 }
 
-// A summary of information about an index.
+// Provides the configuration information for invoking a Lambda function in
+// Lambda to alter document metadata and content when ingesting documents into
+// Amazon Kendra. You can configure your Lambda function using PreExtractionHookConfiguration
+// (https://docs.aws.amazon.com/kendra/latest/dg/API_CustomDocumentEnrichmentConfiguration.html)
+// if you want to apply advanced alterations on the original or raw documents.
+// If you want to apply advanced alterations on the Amazon Kendra structured
+// documents, you must configure your Lambda function using PostExtractionHookConfiguration
+// (https://docs.aws.amazon.com/kendra/latest/dg/API_CustomDocumentEnrichmentConfiguration.html).
+// You can only invoke one Lambda function. However, this function can invoke
+// other functions it requires.
+//
+// For more information, see Customizing document metadata during the ingestion
+// process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
+type HookConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The condition used for when a Lambda function should be invoked.
+	//
+	// For example, you can specify a condition that if there are empty date-time
+	// values, then Amazon Kendra should invoke a function that inserts the current
+	// date-time.
+	InvocationCondition *DocumentAttributeCondition `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of a role with permission to run a Lambda
+	// function during ingestion. For more information, see IAM roles for Amazon
+	// Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	//
+	// LambdaArn is a required field
+	LambdaArn *string `min:"1" type:"string" required:"true"`
+
+	// Stores the original, raw documents or the structured, parsed documents before
+	// and after altering them. For more information, see Data contracts for Lambda
+	// functions (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html#cde-data-contracts-lambda).
+	//
+	// S3Bucket is a required field
+	S3Bucket *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HookConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HookConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *HookConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "HookConfiguration"}
+	if s.LambdaArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaArn"))
+	}
+	if s.LambdaArn != nil && len(*s.LambdaArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LambdaArn", 1))
+	}
+	if s.S3Bucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Bucket"))
+	}
+	if s.S3Bucket != nil && len(*s.S3Bucket) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Bucket", 3))
+	}
+	if s.InvocationCondition != nil {
+		if err := s.InvocationCondition.Validate(); err != nil {
+			invalidParams.AddNested("InvocationCondition", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInvocationCondition sets the InvocationCondition field's value.
+func (s *HookConfiguration) SetInvocationCondition(v *DocumentAttributeCondition) *HookConfiguration {
+	s.InvocationCondition = v
+	return s
+}
+
+// SetLambdaArn sets the LambdaArn field's value.
+func (s *HookConfiguration) SetLambdaArn(v string) *HookConfiguration {
+	s.LambdaArn = &v
+	return s
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *HookConfiguration) SetS3Bucket(v string) *HookConfiguration {
+	s.S3Bucket = &v
+	return s
+}
+
+// Summary information on the configuration of an index.
 type IndexConfigurationSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -11897,10 +18106,10 @@ type IndexConfigurationSummary struct {
 	Edition *string `type:"string" enum:"IndexEdition"`
 
 	// A unique identifier for the index. Use this to identify the index when you
-	// are using operations such as Query, DescribeIndex, UpdateIndex, and DeleteIndex.
+	// are using APIs such as Query, DescribeIndex, UpdateIndex, and DeleteIndex.
 	Id *string `min:"36" type:"string"`
 
-	// The name of the index.
+	// The identifier of the index.
 	Name *string `min:"1" type:"string"`
 
 	// The current status of the index. When the status is ACTIVE, the index is
@@ -11909,7 +18118,7 @@ type IndexConfigurationSummary struct {
 	// Status is a required field
 	Status *string `type:"string" required:"true" enum:"IndexStatus"`
 
-	// The Unix timestamp when the index was last updated by the UpdateIndex operation.
+	// The Unix timestamp when the index was last updated by the UpdateIndex API.
 	//
 	// UpdatedAt is a required field
 	UpdatedAt *time.Time `type:"timestamp" required:"true"`
@@ -12015,6 +18224,85 @@ func (s *IndexStatistics) SetTextDocumentStatistics(v *TextDocumentStatistics) *
 	return s
 }
 
+// Provides the configuration information for applying basic logic to alter
+// document metadata and content when ingesting documents into Amazon Kendra.
+// To apply advanced logic, to go beyond what you can do with basic logic, see
+// HookConfiguration (https://docs.aws.amazon.com/kendra/latest/dg/API_HookConfiguration.html).
+//
+// For more information, see Customizing document metadata during the ingestion
+// process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
+type InlineCustomDocumentEnrichmentConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration of the condition used for the target document attribute or
+	// metadata field when ingesting documents into Amazon Kendra.
+	Condition *DocumentAttributeCondition `type:"structure"`
+
+	// TRUE to delete content if the condition used for the target attribute is
+	// met.
+	DocumentContentDeletion *bool `type:"boolean"`
+
+	// Configuration of the target document attribute or metadata field when ingesting
+	// documents into Amazon Kendra. You can also include a value.
+	Target *DocumentAttributeTarget `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InlineCustomDocumentEnrichmentConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InlineCustomDocumentEnrichmentConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InlineCustomDocumentEnrichmentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InlineCustomDocumentEnrichmentConfiguration"}
+	if s.Condition != nil {
+		if err := s.Condition.Validate(); err != nil {
+			invalidParams.AddNested("Condition", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Target != nil {
+		if err := s.Target.Validate(); err != nil {
+			invalidParams.AddNested("Target", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCondition sets the Condition field's value.
+func (s *InlineCustomDocumentEnrichmentConfiguration) SetCondition(v *DocumentAttributeCondition) *InlineCustomDocumentEnrichmentConfiguration {
+	s.Condition = v
+	return s
+}
+
+// SetDocumentContentDeletion sets the DocumentContentDeletion field's value.
+func (s *InlineCustomDocumentEnrichmentConfiguration) SetDocumentContentDeletion(v bool) *InlineCustomDocumentEnrichmentConfiguration {
+	s.DocumentContentDeletion = &v
+	return s
+}
+
+// SetTarget sets the Target field's value.
+func (s *InlineCustomDocumentEnrichmentConfiguration) SetTarget(v *DocumentAttributeTarget) *InlineCustomDocumentEnrichmentConfiguration {
+	s.Target = v
+	return s
+}
+
 type InternalServerException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12078,7 +18366,372 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Configuration information for the JSON token type.
+// The input to the request is not valid.
+type InvalidRequestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidRequestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidRequestException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidRequestException(v protocol.ResponseMetadata) error {
+	return &InvalidRequestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidRequestException) Code() string {
+	return "InvalidRequestException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidRequestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidRequestException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidRequestException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidRequestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidRequestException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Provides the configuration information to connect to Jira as your data source.
+type JiraConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Jira attachments to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Jira fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Jira data source field names must exist in your Jira custom metadata.
+	AttachmentFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Jira comments to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Jira fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Jira data source field names must exist in your Jira custom metadata.
+	CommentFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of regular expression patterns to exclude certain file paths, file
+	// names, and file types in your Jira data source. Files that match the patterns
+	// are excluded from the index. Files that don’t match the patterns are included
+	// in the index. If a file matches both an inclusion pattern and an exclusion
+	// pattern, the exclusion pattern takes precedence and the file isn't included
+	// in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// A list of regular expression patterns to include certain file paths, file
+	// names, and file types in your Jira data source. Files that match the patterns
+	// are included in the index. Files that don't match the patterns are excluded
+	// from the index. If a file matches both an inclusion pattern and an exclusion
+	// pattern, the exclusion pattern takes precedence and the file isn't included
+	// in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Jira issues to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Jira fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Jira data source field names must exist in your Jira custom metadata.
+	IssueFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// Specify whether to crawl comments, attachments, and work logs. You can specify
+	// one or more of these options.
+	IssueSubEntityFilter []*string `type:"list" enum:"IssueSubEntity"`
+
+	// Specify which issue types to crawl in your Jira data source. You can specify
+	// one or more of these options to crawl.
+	IssueType []*string `type:"list"`
+
+	// The URL of the Jira account. For example, company.atlassian.net or https://jira.company.com.
+	// You can find your Jira account URL in the URL of your profile page for Jira
+	// desktop.
+	//
+	// JiraAccountUrl is a required field
+	JiraAccountUrl *string `min:"1" type:"string" required:"true"`
+
+	// Specify which projects to crawl in your Jira data source. You can specify
+	// one or more Jira project IDs.
+	Project []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Jira projects to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Jira fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Jira data source field names must exist in your Jira custom metadata.
+	ProjectFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// The Amazon Resource Name (ARN) of a secret in Secrets Manager contains the
+	// key-value pairs required to connect to your Jira data source. The secret
+	// must contain a JSON structure with the following keys:
+	//
+	//    * jiraId—The Jira username.
+	//
+	//    * jiraCredentials—The Jira API token. For more information on creating
+	//    an API token in Jira, see Authentication for a Jira data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-jira.html#jira-authentication).
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+
+	// Specify which statuses to crawl in your Jira data source. You can specify
+	// one or more of these options to crawl.
+	Status []*string `type:"list"`
+
+	// TRUE to use the Jira change log to determine which documents require updating
+	// in the index. Depending on the change log's size, it may take longer for
+	// Amazon Kendra to use the change log than to scan all of your documents in
+	// Jira.
+	UseChangeLog *bool `type:"boolean"`
+
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your Jira. Your Jira account must reside inside your VPC.
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Jira work logs to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Jira fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Jira data source field names must exist in your Jira custom metadata.
+	WorkLogFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JiraConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JiraConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JiraConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JiraConfiguration"}
+	if s.AttachmentFieldMappings != nil && len(s.AttachmentFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AttachmentFieldMappings", 1))
+	}
+	if s.CommentFieldMappings != nil && len(s.CommentFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CommentFieldMappings", 1))
+	}
+	if s.IssueFieldMappings != nil && len(s.IssueFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IssueFieldMappings", 1))
+	}
+	if s.JiraAccountUrl == nil {
+		invalidParams.Add(request.NewErrParamRequired("JiraAccountUrl"))
+	}
+	if s.JiraAccountUrl != nil && len(*s.JiraAccountUrl) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JiraAccountUrl", 1))
+	}
+	if s.ProjectFieldMappings != nil && len(s.ProjectFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProjectFieldMappings", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.WorkLogFieldMappings != nil && len(s.WorkLogFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkLogFieldMappings", 1))
+	}
+	if s.AttachmentFieldMappings != nil {
+		for i, v := range s.AttachmentFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AttachmentFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.CommentFieldMappings != nil {
+		for i, v := range s.CommentFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CommentFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.IssueFieldMappings != nil {
+		for i, v := range s.IssueFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "IssueFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ProjectFieldMappings != nil {
+		for i, v := range s.ProjectFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ProjectFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.WorkLogFieldMappings != nil {
+		for i, v := range s.WorkLogFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "WorkLogFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttachmentFieldMappings sets the AttachmentFieldMappings field's value.
+func (s *JiraConfiguration) SetAttachmentFieldMappings(v []*DataSourceToIndexFieldMapping) *JiraConfiguration {
+	s.AttachmentFieldMappings = v
+	return s
+}
+
+// SetCommentFieldMappings sets the CommentFieldMappings field's value.
+func (s *JiraConfiguration) SetCommentFieldMappings(v []*DataSourceToIndexFieldMapping) *JiraConfiguration {
+	s.CommentFieldMappings = v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *JiraConfiguration) SetExclusionPatterns(v []*string) *JiraConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *JiraConfiguration) SetInclusionPatterns(v []*string) *JiraConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetIssueFieldMappings sets the IssueFieldMappings field's value.
+func (s *JiraConfiguration) SetIssueFieldMappings(v []*DataSourceToIndexFieldMapping) *JiraConfiguration {
+	s.IssueFieldMappings = v
+	return s
+}
+
+// SetIssueSubEntityFilter sets the IssueSubEntityFilter field's value.
+func (s *JiraConfiguration) SetIssueSubEntityFilter(v []*string) *JiraConfiguration {
+	s.IssueSubEntityFilter = v
+	return s
+}
+
+// SetIssueType sets the IssueType field's value.
+func (s *JiraConfiguration) SetIssueType(v []*string) *JiraConfiguration {
+	s.IssueType = v
+	return s
+}
+
+// SetJiraAccountUrl sets the JiraAccountUrl field's value.
+func (s *JiraConfiguration) SetJiraAccountUrl(v string) *JiraConfiguration {
+	s.JiraAccountUrl = &v
+	return s
+}
+
+// SetProject sets the Project field's value.
+func (s *JiraConfiguration) SetProject(v []*string) *JiraConfiguration {
+	s.Project = v
+	return s
+}
+
+// SetProjectFieldMappings sets the ProjectFieldMappings field's value.
+func (s *JiraConfiguration) SetProjectFieldMappings(v []*DataSourceToIndexFieldMapping) *JiraConfiguration {
+	s.ProjectFieldMappings = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *JiraConfiguration) SetSecretArn(v string) *JiraConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *JiraConfiguration) SetStatus(v []*string) *JiraConfiguration {
+	s.Status = v
+	return s
+}
+
+// SetUseChangeLog sets the UseChangeLog field's value.
+func (s *JiraConfiguration) SetUseChangeLog(v bool) *JiraConfiguration {
+	s.UseChangeLog = &v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *JiraConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *JiraConfiguration {
+	s.VpcConfiguration = v
+	return s
+}
+
+// SetWorkLogFieldMappings sets the WorkLogFieldMappings field's value.
+func (s *JiraConfiguration) SetWorkLogFieldMappings(v []*DataSourceToIndexFieldMapping) *JiraConfiguration {
+	s.WorkLogFieldMappings = v
+	return s
+}
+
+// Provides the configuration information for the JSON token type.
 type JsonTokenTypeConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -12145,7 +18798,7 @@ func (s *JsonTokenTypeConfiguration) SetUserNameAttributeField(v string) *JsonTo
 	return s
 }
 
-// Configuration information for the JWT token type.
+// Provides the configuration information for the JWT token type.
 type JwtTokenTypeConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -12164,7 +18817,7 @@ type JwtTokenTypeConfiguration struct {
 	KeyLocation *string `type:"string" required:"true" enum:"KeyLocation"`
 
 	// The Amazon Resource Name (arn) of the secret.
-	SecretManagerArn *string `min:"1" type:"string"`
+	SecretManagerArn *string `type:"string"`
 
 	// The signing key URL.
 	URL *string `min:"1" type:"string"`
@@ -12205,9 +18858,6 @@ func (s *JwtTokenTypeConfiguration) Validate() error {
 	}
 	if s.KeyLocation == nil {
 		invalidParams.Add(request.NewErrParamRequired("KeyLocation"))
-	}
-	if s.SecretManagerArn != nil && len(*s.SecretManagerArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("SecretManagerArn", 1))
 	}
 	if s.URL != nil && len(*s.URL) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("URL", 1))
@@ -12264,6 +18914,125 @@ func (s *JwtTokenTypeConfiguration) SetUserNameAttributeField(v string) *JwtToke
 	return s
 }
 
+type ListAccessControlConfigurationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index for the access control configuration.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of access control configurations to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the previous response was incomplete (because there's more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of access control configurations.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessControlConfigurationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessControlConfigurationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAccessControlConfigurationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAccessControlConfigurationsInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListAccessControlConfigurationsInput) SetIndexId(v string) *ListAccessControlConfigurationsInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAccessControlConfigurationsInput) SetMaxResults(v int64) *ListAccessControlConfigurationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAccessControlConfigurationsInput) SetNextToken(v string) *ListAccessControlConfigurationsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAccessControlConfigurationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The details of your access control configurations.
+	//
+	// AccessControlConfigurations is a required field
+	AccessControlConfigurations []*AccessControlConfigurationSummary `type:"list" required:"true"`
+
+	// If the response is truncated, Amazon Kendra returns this token, which you
+	// can use in the subsequent request to retrieve the next set of access control
+	// configurations.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessControlConfigurationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAccessControlConfigurationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccessControlConfigurations sets the AccessControlConfigurations field's value.
+func (s *ListAccessControlConfigurationsOutput) SetAccessControlConfigurations(v []*AccessControlConfigurationSummary) *ListAccessControlConfigurationsOutput {
+	s.AccessControlConfigurations = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAccessControlConfigurationsOutput) SetNextToken(v string) *ListAccessControlConfigurationsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListDataSourceSyncJobsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12272,7 +19041,7 @@ type ListDataSourceSyncJobsInput struct {
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index that contains the data source.
+	// The identifier of the index used with the data source.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -12422,7 +19191,7 @@ func (s *ListDataSourceSyncJobsOutput) SetNextToken(v string) *ListDataSourceSyn
 type ListDataSourcesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the index that contains the data source.
+	// The identifier of the index used with one or more data sources.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -12531,6 +19300,376 @@ func (s *ListDataSourcesOutput) SetNextToken(v string) *ListDataSourcesOutput {
 
 // SetSummaryItems sets the SummaryItems field's value.
 func (s *ListDataSourcesOutput) SetSummaryItems(v []*DataSourceSummary) *ListDataSourcesOutput {
+	s.SummaryItems = v
+	return s
+}
+
+type ListEntityPersonasInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of your Amazon Kendra experience.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of returned users or groups.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of users or groups.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityPersonasInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityPersonasInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEntityPersonasInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListEntityPersonasInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *ListEntityPersonasInput) SetId(v string) *ListEntityPersonasInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListEntityPersonasInput) SetIndexId(v string) *ListEntityPersonasInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListEntityPersonasInput) SetMaxResults(v int64) *ListEntityPersonasInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEntityPersonasInput) SetNextToken(v string) *ListEntityPersonasInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEntityPersonasOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the response is truncated, Amazon Kendra returns this token, which you
+	// can use in a later request to retrieve the next set of users or groups.
+	NextToken *string `min:"1" type:"string"`
+
+	// An array of summary information for one or more users or groups.
+	SummaryItems []*PersonasSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityPersonasOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEntityPersonasOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEntityPersonasOutput) SetNextToken(v string) *ListEntityPersonasOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSummaryItems sets the SummaryItems field's value.
+func (s *ListEntityPersonasOutput) SetSummaryItems(v []*PersonasSummary) *ListEntityPersonasOutput {
+	s.SummaryItems = v
+	return s
+}
+
+type ListExperienceEntitiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of your Amazon Kendra experience.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of users or groups.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperienceEntitiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperienceEntitiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListExperienceEntitiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListExperienceEntitiesInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *ListExperienceEntitiesInput) SetId(v string) *ListExperienceEntitiesInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListExperienceEntitiesInput) SetIndexId(v string) *ListExperienceEntitiesInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListExperienceEntitiesInput) SetNextToken(v string) *ListExperienceEntitiesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListExperienceEntitiesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the response is truncated, Amazon Kendra returns this token, which you
+	// can use in a later request to retrieve the next set of users or groups.
+	NextToken *string `min:"1" type:"string"`
+
+	// An array of summary information for one or more users or groups.
+	SummaryItems []*ExperienceEntitiesSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperienceEntitiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperienceEntitiesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListExperienceEntitiesOutput) SetNextToken(v string) *ListExperienceEntitiesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSummaryItems sets the SummaryItems field's value.
+func (s *ListExperienceEntitiesOutput) SetSummaryItems(v []*ExperienceEntitiesSummary) *ListExperienceEntitiesOutput {
+	s.SummaryItems = v
+	return s
+}
+
+type ListExperiencesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of returned Amazon Kendra experiences.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of Amazon Kendra experiences.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperiencesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperiencesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListExperiencesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListExperiencesInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListExperiencesInput) SetIndexId(v string) *ListExperiencesInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListExperiencesInput) SetMaxResults(v int64) *ListExperiencesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListExperiencesInput) SetNextToken(v string) *ListExperiencesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListExperiencesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the response is truncated, Amazon Kendra returns this token, which you
+	// can use in a later request to retrieve the next set of Amazon Kendra experiences.
+	NextToken *string `min:"1" type:"string"`
+
+	// An array of summary information for one or more Amazon Kendra experiences.
+	SummaryItems []*ExperiencesSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperiencesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListExperiencesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListExperiencesOutput) SetNextToken(v string) *ListExperiencesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSummaryItems sets the SummaryItems field's value.
+func (s *ListExperiencesOutput) SetSummaryItems(v []*ExperiencesSummary) *ListExperiencesOutput {
 	s.SummaryItems = v
 	return s
 }
@@ -12862,7 +20001,7 @@ func (s *ListIndicesInput) SetNextToken(v string) *ListIndicesInput {
 type ListIndicesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An array of summary information for one or more indexes.
+	// An array of summary information on the configuration of one or more indexes.
 	IndexConfigurationSummaryItems []*IndexConfigurationSummary `type:"list"`
 
 	// If the response is truncated, Amazon Kendra returns this token that you can
@@ -13111,7 +20250,7 @@ func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput
 type ListThesauriInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the index associated with the thesaurus to list.
+	// The identifier of the index with one or more thesauri.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -13337,32 +20476,128 @@ func (s *MemberUser) SetUserId(v string) *MemberUser {
 	return s
 }
 
-// Provides configuration information for data sources that connect to OneDrive.
+// Provides the configuration information to connect to GitHub Enterprise Server
+// (on premises).
+type OnPremiseConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The GitHub host URL or API endpoint URL. For example, https://on-prem-host-url/api/v3/
+	//
+	// HostUrl is a required field
+	HostUrl *string `min:"1" type:"string" required:"true"`
+
+	// The name of the organization of the GitHub Enterprise Server (in-premise)
+	// account you want to connect to. You can find your organization name by logging
+	// into GitHub desktop and selecting Your organizations under your profile picture
+	// dropdown.
+	//
+	// OrganizationName is a required field
+	OrganizationName *string `min:"1" type:"string" required:"true"`
+
+	// The path to the SSL certificate stored in an Amazon S3 bucket. You use this
+	// to connect to GitHub.
+	//
+	// SslCertificateS3Path is a required field
+	SslCertificateS3Path *S3Path `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OnPremiseConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OnPremiseConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OnPremiseConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OnPremiseConfiguration"}
+	if s.HostUrl == nil {
+		invalidParams.Add(request.NewErrParamRequired("HostUrl"))
+	}
+	if s.HostUrl != nil && len(*s.HostUrl) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HostUrl", 1))
+	}
+	if s.OrganizationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationName"))
+	}
+	if s.OrganizationName != nil && len(*s.OrganizationName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationName", 1))
+	}
+	if s.SslCertificateS3Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("SslCertificateS3Path"))
+	}
+	if s.SslCertificateS3Path != nil {
+		if err := s.SslCertificateS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SslCertificateS3Path", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHostUrl sets the HostUrl field's value.
+func (s *OnPremiseConfiguration) SetHostUrl(v string) *OnPremiseConfiguration {
+	s.HostUrl = &v
+	return s
+}
+
+// SetOrganizationName sets the OrganizationName field's value.
+func (s *OnPremiseConfiguration) SetOrganizationName(v string) *OnPremiseConfiguration {
+	s.OrganizationName = &v
+	return s
+}
+
+// SetSslCertificateS3Path sets the SslCertificateS3Path field's value.
+func (s *OnPremiseConfiguration) SetSslCertificateS3Path(v *S3Path) *OnPremiseConfiguration {
+	s.SslCertificateS3Path = v
+	return s
+}
+
+// Provides the configuration information to connect to OneDrive as your data
+// source.
 type OneDriveConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// A Boolean value that specifies whether local groups are disabled (True) or
-	// enabled (False).
+	// TRUE to disable local groups information.
 	DisableLocalGroups *bool `type:"boolean"`
 
-	// List of regular expressions applied to documents. Items that match the exclusion
-	// pattern are not indexed. If you provide both an inclusion pattern and an
-	// exclusion pattern, any item that matches the exclusion pattern isn't indexed.
+	// A list of regular expression patterns to exclude certain documents in your
+	// OneDrive. Documents that match the patterns are excluded from the index.
+	// Documents that don't match the patterns are included in the index. If a document
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the document isn't included in the index.
 	//
-	// The exclusion pattern is applied to the file name.
+	// The pattern is applied to the file name.
 	ExclusionPatterns []*string `type:"list"`
 
-	// A list of DataSourceToIndexFieldMapping objects that map Microsoft OneDrive
-	// fields to custom fields in the Amazon Kendra index. You must first create
-	// the index fields before you map OneDrive fields.
+	// A list of DataSourceToIndexFieldMapping objects that map OneDrive data source
+	// attributes or field names to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to OneDrive fields. For more
+	// information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The OneDrive data source field names must exist in your OneDrive custom metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
-	// A list of regular expression patterns. Documents that match the pattern are
-	// included in the index. Documents that don't match the pattern are excluded
-	// from the index. If a document matches both an inclusion pattern and an exclusion
-	// pattern, the document is not included in the index.
+	// A list of regular expression patterns to include certain documents in your
+	// OneDrive. Documents that match the patterns are included in the index. Documents
+	// that don't match the patterns are excluded from the index. If a document
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the document isn't included in the index.
 	//
-	// The exclusion pattern is applied to the file name.
+	// The pattern is applied to the file name.
 	InclusionPatterns []*string `type:"list"`
 
 	// A list of user accounts whose documents should be indexed.
@@ -13550,11 +20785,79 @@ func (s *OneDriveUsers) SetOneDriveUserS3Path(v *S3Path) *OneDriveUsers {
 	return s
 }
 
-// Provides user and group information for document access filtering.
+// Summary information for users or groups in your Amazon Web Services SSO identity
+// source. This applies to users and groups with specific permissions that define
+// their level of access to your Amazon Kendra experience. You can create an
+// Amazon Kendra experience such as a search application. For more information
+// on creating a search application experience, see Building a search experience
+// with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+type PersonasSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date-time the summary information was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The identifier of a user or group in your Amazon Web Services SSO identity
+	// source. For example, a user ID could be an email.
+	EntityId *string `min:"1" type:"string"`
+
+	// The persona that defines the specific permissions of the user or group in
+	// your Amazon Web Services SSO identity source. The available personas or access
+	// roles are Owner and Viewer. For more information on these personas, see Providing
+	// access to your search page (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html#access-search-experience).
+	Persona *string `type:"string" enum:"Persona"`
+
+	// The date-time the summary information was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PersonasSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PersonasSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *PersonasSummary) SetCreatedAt(v time.Time) *PersonasSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *PersonasSummary) SetEntityId(v string) *PersonasSummary {
+	s.EntityId = &v
+	return s
+}
+
+// SetPersona sets the Persona field's value.
+func (s *PersonasSummary) SetPersona(v string) *PersonasSummary {
+	s.Persona = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *PersonasSummary) SetUpdatedAt(v time.Time) *PersonasSummary {
+	s.UpdatedAt = &v
+	return s
+}
+
+// Provides user and group information for user context filtering (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html).
 type Principal struct {
 	_ struct{} `type:"structure"`
 
-	// Whether to allow or deny access to the principal.
+	// Whether to allow or deny document access to the principal.
 	//
 	// Access is a required field
 	Access *string `type:"string" required:"true" enum:"ReadAccessType"`
@@ -13645,7 +20948,7 @@ func (s *Principal) SetType(v string) *Principal {
 type ProxyConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Your secret ARN, which you can create in AWS Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	// Your secret ARN, which you can create in Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
 	//
 	// The credentials are optional. You use a secret if web proxy credentials are
 	// required to connect to a website host. Amazon Kendra currently support basic
@@ -13787,7 +21090,7 @@ type PutPrincipalMappingInput struct {
 	// contains your list of users or sub groups that belong to a group.
 	//
 	// For more information, see IAM roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html#iam-roles-ds).
-	RoleArn *string `min:"1" type:"string"`
+	RoleArn *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -13828,9 +21131,6 @@ func (s *PutPrincipalMappingInput) Validate() error {
 	}
 	if s.IndexId != nil && len(*s.IndexId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.GroupMembers != nil {
 		if err := s.GroupMembers.Validate(); err != nil {
@@ -13930,12 +21230,11 @@ type QueryInput struct {
 	DocumentRelevanceOverrideConfigurations []*DocumentRelevanceConfiguration `type:"list"`
 
 	// An array of documents attributes. Amazon Kendra returns a count for each
-	// attribute key specified. You can use this information to help narrow the
-	// search for your user.
+	// attribute key specified. This helps your users narrow their search.
 	Facets []*Facet `type:"list"`
 
 	// The unique identifier of the index to search. The identifier is returned
-	// in the response from the CreateIndex operation.
+	// in the response from the CreateIndex API.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -13954,13 +21253,11 @@ type QueryInput struct {
 	QueryResultTypeFilter *string `type:"string" enum:"QueryResultType"`
 
 	// The text to search for.
-	//
-	// QueryText is a required field
-	QueryText *string `min:"1" type:"string" required:"true"`
+	QueryText *string `min:"1" type:"string"`
 
-	// An array of document attributes to include in the response. No other document
-	// attributes are included in the response. By default all document attributes
-	// are included in the response.
+	// An array of document attributes to include in the response. You can limit
+	// the response to include certain document attributes. By default all document
+	// attributes are included in the response.
 	RequestedDocumentAttributes []*string `min:"1" type:"list"`
 
 	// Provides information that determines how the results of the query are sorted.
@@ -13971,6 +21268,9 @@ type QueryInput struct {
 	// If you don't provide sorting configuration, the results are sorted by the
 	// relevance that Amazon Kendra determines for the result.
 	SortingConfiguration *SortingConfiguration `type:"structure"`
+
+	// Enables suggested spell corrections for queries.
+	SpellCorrectionConfiguration *SpellCorrectionConfiguration `type:"structure"`
 
 	// The user context token or user and group information.
 	UserContext *UserContext `type:"structure"`
@@ -14007,9 +21307,6 @@ func (s *QueryInput) Validate() error {
 	}
 	if s.IndexId != nil && len(*s.IndexId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
-	}
-	if s.QueryText == nil {
-		invalidParams.Add(request.NewErrParamRequired("QueryText"))
 	}
 	if s.QueryText != nil && len(*s.QueryText) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("QueryText", 1))
@@ -14048,6 +21345,11 @@ func (s *QueryInput) Validate() error {
 	if s.SortingConfiguration != nil {
 		if err := s.SortingConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("SortingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SpellCorrectionConfiguration != nil {
+		if err := s.SpellCorrectionConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("SpellCorrectionConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.UserContext != nil {
@@ -14122,6 +21424,12 @@ func (s *QueryInput) SetSortingConfiguration(v *SortingConfiguration) *QueryInpu
 	return s
 }
 
+// SetSpellCorrectionConfiguration sets the SpellCorrectionConfiguration field's value.
+func (s *QueryInput) SetSpellCorrectionConfiguration(v *SpellCorrectionConfiguration) *QueryInput {
+	s.SpellCorrectionConfiguration = v
+	return s
+}
+
 // SetUserContext sets the UserContext field's value.
 func (s *QueryInput) SetUserContext(v *UserContext) *QueryInput {
 	s.UserContext = v
@@ -14148,10 +21456,20 @@ type QueryOutput struct {
 	// The results of the search.
 	ResultItems []*QueryResultItem `type:"list"`
 
+	// A list of information related to suggested spell corrections for a query.
+	SpellCorrectedQueries []*SpellCorrectedQuery `type:"list"`
+
 	// The total number of items found by the search; however, you can only retrieve
 	// up to 100 items. For example, if the search found 192 items, you can only
 	// retrieve the first 100 of the items.
 	TotalNumberOfResults *int64 `type:"integer"`
+
+	// A list of warning codes and their messages on problems with your query.
+	//
+	// Amazon Kendra currently only supports one type of warning, which is a warning
+	// on invalid syntax used in the query. For examples of invalid query syntax,
+	// see Searching with advanced query syntax (https://docs.aws.amazon.com/kendra/latest/dg/searching-example.html#searching-index-query-syntax).
+	Warnings []*Warning `min:"1" type:"list"`
 }
 
 // String returns the string representation.
@@ -14190,9 +21508,21 @@ func (s *QueryOutput) SetResultItems(v []*QueryResultItem) *QueryOutput {
 	return s
 }
 
+// SetSpellCorrectedQueries sets the SpellCorrectedQueries field's value.
+func (s *QueryOutput) SetSpellCorrectedQueries(v []*SpellCorrectedQuery) *QueryOutput {
+	s.SpellCorrectedQueries = v
+	return s
+}
+
 // SetTotalNumberOfResults sets the TotalNumberOfResults field's value.
 func (s *QueryOutput) SetTotalNumberOfResults(v int64) *QueryOutput {
 	s.TotalNumberOfResults = &v
+	return s
+}
+
+// SetWarnings sets the Warnings field's value.
+func (s *QueryOutput) SetWarnings(v []*Warning) *QueryOutput {
+	s.Warnings = v
 	return s
 }
 
@@ -14208,8 +21538,8 @@ type QueryResultItem struct {
 	// One or more additional attributes associated with the query result.
 	AdditionalAttributes []*AdditionalResultAttribute `type:"list"`
 
-	// An array of document attributes for the document that the query result maps
-	// to. For example, the document author (Author) or the source URI (SourceUri)
+	// An array of document attributes assigned to a document in the search results.
+	// For example, the document author (_author) or the source URI (_source_uri)
 	// of the document.
 	DocumentAttributes []*DocumentAttribute `type:"list"`
 
@@ -14411,9 +21741,236 @@ func (s *QuerySuggestionsBlockListSummary) SetUpdatedAt(v time.Time) *QuerySugge
 	return s
 }
 
-// Provides information for manually tuning the relevance of a field in a search.
-// When a query includes terms that match the field, the results are given a
-// boost in the response based on these tuning parameters.
+// Provides the configuration information to connect to Quip as your data source.
+type QuipConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Quip attachments to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Quip fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Quip field names must exist in your Quip custom metadata.
+	AttachmentFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// TRUE to index attachments.
+	CrawlAttachments *bool `type:"boolean"`
+
+	// TRUE to index the contents of chat rooms.
+	CrawlChatRooms *bool `type:"boolean"`
+
+	// TRUE to index file comments.
+	CrawlFileComments *bool `type:"boolean"`
+
+	// The Quip site domain.
+	//
+	// Domain is a required field
+	Domain *string `min:"1" type:"string" required:"true"`
+
+	// A list of regular expression patterns to exclude certain files in your Quip
+	// file system. Files that match the patterns are excluded from the index. Files
+	// that don’t match the patterns are included in the index. If a file matches
+	// both an inclusion pattern and an exclusion pattern, the exclusion pattern
+	// takes precedence, and the file isn't included in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// The identifiers of the Quip folders you want to index.
+	FolderIds []*string `type:"list"`
+
+	// A list of regular expression patterns to include certain files in your Quip
+	// file system. Files that match the patterns are included in the index. Files
+	// that don't match the patterns are excluded from the index. If a file matches
+	// both an inclusion pattern and an exclusion pattern, the exclusion pattern
+	// takes precedence, and the file isn't included in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Quip messages to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Quip fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Quip field names must exist in your Quip custom metadata.
+	MessageFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the key-value pairs that are required to connect to your Quip. The secret
+	// must contain a JSON structure with the following keys:
+	//
+	//    * accessToken—The token created in Quip. For more information, see Authentication
+	//    for a Quip data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-slack.html#quip-authentication).
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
+	// names of Quip threads to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Quip fields. For more information,
+	// see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Quip field names must exist in your Quip custom metadata.
+	ThreadFieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// Configuration information for an Amazon Virtual Private Cloud (VPC) to connect
+	// to your Quip. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuipConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuipConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *QuipConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "QuipConfiguration"}
+	if s.AttachmentFieldMappings != nil && len(s.AttachmentFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AttachmentFieldMappings", 1))
+	}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 1))
+	}
+	if s.MessageFieldMappings != nil && len(s.MessageFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MessageFieldMappings", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.ThreadFieldMappings != nil && len(s.ThreadFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThreadFieldMappings", 1))
+	}
+	if s.AttachmentFieldMappings != nil {
+		for i, v := range s.AttachmentFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AttachmentFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.MessageFieldMappings != nil {
+		for i, v := range s.MessageFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "MessageFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ThreadFieldMappings != nil {
+		for i, v := range s.ThreadFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ThreadFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttachmentFieldMappings sets the AttachmentFieldMappings field's value.
+func (s *QuipConfiguration) SetAttachmentFieldMappings(v []*DataSourceToIndexFieldMapping) *QuipConfiguration {
+	s.AttachmentFieldMappings = v
+	return s
+}
+
+// SetCrawlAttachments sets the CrawlAttachments field's value.
+func (s *QuipConfiguration) SetCrawlAttachments(v bool) *QuipConfiguration {
+	s.CrawlAttachments = &v
+	return s
+}
+
+// SetCrawlChatRooms sets the CrawlChatRooms field's value.
+func (s *QuipConfiguration) SetCrawlChatRooms(v bool) *QuipConfiguration {
+	s.CrawlChatRooms = &v
+	return s
+}
+
+// SetCrawlFileComments sets the CrawlFileComments field's value.
+func (s *QuipConfiguration) SetCrawlFileComments(v bool) *QuipConfiguration {
+	s.CrawlFileComments = &v
+	return s
+}
+
+// SetDomain sets the Domain field's value.
+func (s *QuipConfiguration) SetDomain(v string) *QuipConfiguration {
+	s.Domain = &v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *QuipConfiguration) SetExclusionPatterns(v []*string) *QuipConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetFolderIds sets the FolderIds field's value.
+func (s *QuipConfiguration) SetFolderIds(v []*string) *QuipConfiguration {
+	s.FolderIds = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *QuipConfiguration) SetInclusionPatterns(v []*string) *QuipConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetMessageFieldMappings sets the MessageFieldMappings field's value.
+func (s *QuipConfiguration) SetMessageFieldMappings(v []*DataSourceToIndexFieldMapping) *QuipConfiguration {
+	s.MessageFieldMappings = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *QuipConfiguration) SetSecretArn(v string) *QuipConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetThreadFieldMappings sets the ThreadFieldMappings field's value.
+func (s *QuipConfiguration) SetThreadFieldMappings(v []*DataSourceToIndexFieldMapping) *QuipConfiguration {
+	s.ThreadFieldMappings = v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *QuipConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *QuipConfiguration {
+	s.VpcConfiguration = v
+	return s
+}
+
+// Provides information for tuning the relevance of a field in a search. When
+// a query includes terms that match the field, the results are given a boost
+// in the response based on these tuning parameters.
 type Relevance struct {
 	_ struct{} `type:"structure"`
 
@@ -14530,7 +22087,7 @@ func (s *Relevance) SetValueImportanceMap(v map[string]*int64) *Relevance {
 }
 
 // Provides feedback on how relevant a document is to a search. Your application
-// uses the SubmitFeedback operation to provide relevance information.
+// uses the SubmitFeedback API to provide relevance information.
 type RelevanceFeedback struct {
 	_ struct{} `type:"structure"`
 
@@ -14847,8 +22404,7 @@ func (s *ResourceUnavailableException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Provides configuration information for a data source to index documents in
-// an Amazon S3 bucket.
+// Provides the configuration information to connect to an Amazon S3 bucket.
 type S3DataSourceConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -15051,8 +22607,79 @@ func (s *S3Path) SetKey(v string) *S3Path {
 	return s
 }
 
-// Defines configuration for syncing a Salesforce chatter feed. The contents
-// of the object comes from the Salesforce FeedItem table.
+// Provides the configuration information to connect to GitHub Enterprise Cloud
+// (SaaS).
+type SaaSConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The GitHub host URL or API endpoint URL. For example, https://api.github.com.
+	//
+	// HostUrl is a required field
+	HostUrl *string `min:"1" type:"string" required:"true"`
+
+	// The name of the organization of the GitHub Enterprise Cloud (SaaS) account
+	// you want to connect to. You can find your organization name by logging into
+	// GitHub desktop and selecting Your organizations under your profile picture
+	// dropdown.
+	//
+	// OrganizationName is a required field
+	OrganizationName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SaaSConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SaaSConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SaaSConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SaaSConfiguration"}
+	if s.HostUrl == nil {
+		invalidParams.Add(request.NewErrParamRequired("HostUrl"))
+	}
+	if s.HostUrl != nil && len(*s.HostUrl) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HostUrl", 1))
+	}
+	if s.OrganizationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationName"))
+	}
+	if s.OrganizationName != nil && len(*s.OrganizationName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHostUrl sets the HostUrl field's value.
+func (s *SaaSConfiguration) SetHostUrl(v string) *SaaSConfiguration {
+	s.HostUrl = &v
+	return s
+}
+
+// SetOrganizationName sets the OrganizationName field's value.
+func (s *SaaSConfiguration) SetOrganizationName(v string) *SaaSConfiguration {
+	s.OrganizationName = &v
+	return s
+}
+
+// The configuration information for syncing a Salesforce chatter feed. The
+// contents of the object comes from the Salesforce FeedItem table.
 type SalesforceChatterFeedConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -15073,7 +22700,7 @@ type SalesforceChatterFeedConfiguration struct {
 	// ACTIVE_USERS only documents from users who have an active account are indexed.
 	// When you specify STANDARD_USER only documents for Salesforce standard users
 	// are documented. You can specify both.
-	IncludeFilterTypes []*string `min:"1" type:"list"`
+	IncludeFilterTypes []*string `min:"1" type:"list" enum:"SalesforceChatterFeedIncludeFilterType"`
 }
 
 // String returns the string representation.
@@ -15153,36 +22780,39 @@ func (s *SalesforceChatterFeedConfiguration) SetIncludeFilterTypes(v []*string) 
 	return s
 }
 
-// Provides configuration information for connecting to a Salesforce data source.
+// Provides the configuration information to connect to Salesforce as your data
+// source.
 type SalesforceConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies configuration information for Salesforce chatter feeds.
+	// Configuration information for Salesforce chatter feeds.
 	ChatterFeedConfiguration *SalesforceChatterFeedConfiguration `type:"structure"`
 
 	// Indicates whether Amazon Kendra should index attachments to Salesforce objects.
 	CrawlAttachments *bool `type:"boolean"`
 
-	// A list of regular expression patterns. Documents that match the patterns
-	// are excluded from the index. Documents that don't match the patterns are
-	// included in the index. If a document matches both an exclusion pattern and
-	// an inclusion pattern, the document is not included in the index.
+	// A list of regular expression patterns to exclude certain documents in your
+	// Salesforce. Documents that match the patterns are excluded from the index.
+	// Documents that don't match the patterns are included in the index. If a document
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the document isn't included in the index.
 	//
-	// The regex is applied to the name of the attached file.
+	// The pattern is applied to the name of the attached file.
 	ExcludeAttachmentFilePatterns []*string `type:"list"`
 
-	// A list of regular expression patterns. Documents that match the patterns
-	// are included in the index. Documents that don't match the patterns are excluded
-	// from the index. If a document matches both an inclusion pattern and an exclusion
-	// pattern, the document is not included in the index.
+	// A list of regular expression patterns to include certain documents in your
+	// Salesforce. Documents that match the patterns are included in the index.
+	// Documents that don't match the patterns are excluded from the index. If a
+	// document matches both an inclusion and exclusion pattern, the exclusion pattern
+	// takes precedence and the document isn't included in the index.
 	//
-	// The regex is applied to the name of the attached file.
+	// The pattern is applied to the name of the attached file.
 	IncludeAttachmentFilePatterns []*string `type:"list"`
 
-	// Specifies configuration information for the knowledge article types that
-	// Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles
-	// and the standard fields of knowledge articles, or the custom fields of custom
-	// knowledge articles, but not both.
+	// Configuration information for the knowledge article types that Amazon Kendra
+	// indexes. Amazon Kendra indexes standard knowledge articles and the standard
+	// fields of knowledge articles, or the custom fields of custom knowledge articles,
+	// but not both.
 	KnowledgeArticleConfiguration *SalesforceKnowledgeArticleConfiguration `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of an Secrets Managersecret that contains
@@ -15214,11 +22844,11 @@ type SalesforceConfiguration struct {
 	// ServerUrl is a required field
 	ServerUrl *string `min:"1" type:"string" required:"true"`
 
-	// Provides configuration information for processing attachments to Salesforce
-	// standard objects.
+	// Configuration information for processing attachments to Salesforce standard
+	// objects.
 	StandardObjectAttachmentConfiguration *SalesforceStandardObjectAttachmentConfiguration `type:"structure"`
 
-	// Specifies the Salesforce standard objects that Amazon Kendra indexes.
+	// Configuration of the Salesforce standard objects that Amazon Kendra indexes.
 	StandardObjectConfigurations []*SalesforceStandardObjectConfiguration `min:"1" type:"list"`
 }
 
@@ -15344,7 +22974,7 @@ func (s *SalesforceConfiguration) SetStandardObjectConfigurations(v []*Salesforc
 	return s
 }
 
-// Provides configuration information for indexing Salesforce custom articles.
+// Provides the configuration information for indexing Salesforce custom articles.
 type SalesforceCustomKnowledgeArticleTypeConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -15358,8 +22988,12 @@ type SalesforceCustomKnowledgeArticleTypeConfiguration struct {
 	// title.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
-	// One or more objects that map fields in the custom knowledge article to fields
-	// in the Amazon Kendra index.
+	// Maps attributes or field names of the custom knowledge article to Amazon
+	// Kendra index field names. To create custom fields, use the UpdateIndex API
+	// before you map to Salesforce fields. For more information, see Mapping data
+	// source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Salesforce data source field names must exist in your Salesforce custom
+	// metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
 	// The name of the configuration.
@@ -15448,23 +23082,23 @@ func (s *SalesforceCustomKnowledgeArticleTypeConfiguration) SetName(v string) *S
 	return s
 }
 
-// Specifies configuration information for the knowledge article types that
+// Provides the configuration information for the knowledge article types that
 // Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles
 // and the standard fields of knowledge articles, or the custom fields of custom
 // knowledge articles, but not both
 type SalesforceKnowledgeArticleConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Provides configuration information for custom Salesforce knowledge articles.
+	// Configuration information for custom Salesforce knowledge articles.
 	CustomKnowledgeArticleTypeConfigurations []*SalesforceCustomKnowledgeArticleTypeConfiguration `min:"1" type:"list"`
 
 	// Specifies the document states that should be included when Amazon Kendra
 	// indexes knowledge articles. You must specify at least one state.
 	//
 	// IncludedStates is a required field
-	IncludedStates []*string `min:"1" type:"list" required:"true"`
+	IncludedStates []*string `min:"1" type:"list" required:"true" enum:"SalesforceKnowledgeArticleState"`
 
-	// Provides configuration information for standard Salesforce knowledge articles.
+	// Configuration information for standard Salesforce knowledge articles.
 	StandardKnowledgeArticleTypeConfiguration *SalesforceStandardKnowledgeArticleTypeConfiguration `type:"structure"`
 }
 
@@ -15538,7 +23172,8 @@ func (s *SalesforceKnowledgeArticleConfiguration) SetStandardKnowledgeArticleTyp
 	return s
 }
 
-// Provides configuration information for standard Salesforce knowledge articles.
+// Provides the configuration information for standard Salesforce knowledge
+// articles.
 type SalesforceStandardKnowledgeArticleTypeConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -15550,9 +23185,12 @@ type SalesforceStandardKnowledgeArticleTypeConfiguration struct {
 	// The name of the field that contains the document title.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
-	// One or more objects that map fields in the knowledge article to Amazon Kendra
-	// index fields. The index field must exist before you can map a Salesforce
-	// field to it.
+	// Maps attributes or field names of the knowledge article to Amazon Kendra
+	// index field names. To create custom fields, use the UpdateIndex API before
+	// you map to Salesforce fields. For more information, see Mapping data source
+	// fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Salesforce data source field names must exist in your Salesforce custom
+	// metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 }
 
@@ -15624,7 +23262,7 @@ func (s *SalesforceStandardKnowledgeArticleTypeConfiguration) SetFieldMappings(v
 	return s
 }
 
-// Provides configuration information for processing attachments to Salesforce
+// Provides the configuration information for processing attachments to Salesforce
 // standard objects.
 type SalesforceStandardObjectAttachmentConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -15693,7 +23331,7 @@ func (s *SalesforceStandardObjectAttachmentConfiguration) SetFieldMappings(v []*
 	return s
 }
 
-// Specifies configuration information for indexing a single standard object.
+// Provides the configuration information for indexing a single standard object.
 type SalesforceStandardObjectConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -15707,9 +23345,11 @@ type SalesforceStandardObjectConfiguration struct {
 	// title.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
-	// One or more objects that map fields in the standard object to Amazon Kendra
-	// index fields. The index field must exist before you can map a Salesforce
-	// field to it.
+	// Maps attributes or field names of the standard object to Amazon Kendra index
+	// field names. To create custom fields, use the UpdateIndex API before you
+	// map to Salesforce fields. For more information, see Mapping data source fields
+	// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Salesforce
+	// data source field names must exist in your Salesforce custom metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
 	// The name of the standard object.
@@ -15894,12 +23534,12 @@ func (s *Search) SetSortable(v bool) *Search {
 	return s
 }
 
-// Provides the configuration information of the seed or starting point URLs
+// Provides the configuration information for the seed or starting point URLs
 // to crawl.
 //
 // When selecting websites to index, you must adhere to the Amazon Acceptable
 // Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-// that you must only use the Amazon Kendra web crawler to index your own webpages,
+// that you must only use Amazon Kendra Web Crawler to index your own webpages,
 // or webpages that you have authorization to index.
 type SeedUrlConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -15971,13 +23611,12 @@ func (s *SeedUrlConfiguration) SetWebCrawlerMode(v string) *SeedUrlConfiguration
 	return s
 }
 
-// Provides the identifier of the KMScustomer master key (CMK) used to encrypt
-// data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.
+// Provides the identifier of the KMS key used to encrypt data indexed by Amazon
+// Kendra. Amazon Kendra doesn't support asymmetric keys.
 type ServerSideEncryptionConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the KMScustomer master key (CMK). Amazon Kendra doesn't
-	// support asymmetric CMKs.
+	// The identifier of the KMS key. Amazon Kendra doesn't support asymmetric keys.
 	//
 	// KmsKeyId is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by ServerSideEncryptionConfiguration's
@@ -16022,18 +23661,16 @@ func (s *ServerSideEncryptionConfiguration) SetKmsKeyId(v string) *ServerSideEnc
 	return s
 }
 
-// Provides configuration information required to connect to a ServiceNow data
+// Provides the configuration information to connect to ServiceNow as your data
 // source.
 type ServiceNowConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Determines the type of authentication used to connect to the ServiceNow instance.
-	// If you choose HTTP_BASIC, Amazon Kendra is authenticated using the user name
-	// and password provided in the AWS Secrets Manager secret in the SecretArn
-	// field. When you choose OAUTH2, Amazon Kendra is authenticated using the OAuth
-	// token and secret provided in the Secrets Manager secret, and the user name
-	// and password are used to determine which information Amazon Kendra has access
-	// to.
+	// The type of authentication used to connect to the ServiceNow instance. If
+	// you choose HTTP_BASIC, Amazon Kendra is authenticated using the user name
+	// and password provided in the Secrets Manager secret in the SecretArn field.
+	// If you choose OAUTH2, Amazon Kendra is authenticated using the credentials
+	// of client ID, client secret, user name and password.
 	//
 	// When you use OAUTH2 authentication, you must generate a token and a client
 	// secret using the ServiceNow console. For more information, see Using a ServiceNow
@@ -16046,17 +23683,20 @@ type ServiceNowConfiguration struct {
 	// HostUrl is a required field
 	HostUrl *string `min:"1" type:"string" required:"true"`
 
-	// Provides configuration information for crawling knowledge articles in the
-	// ServiceNow site.
+	// Configuration information for crawling knowledge articles in the ServiceNow
+	// site.
 	KnowledgeArticleConfiguration *ServiceNowKnowledgeArticleConfiguration `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the Secrets Manager secret that contains
 	// the user name and password required to connect to the ServiceNow instance.
+	// You can also provide OAuth authentication credentials of user name, password,
+	// client ID, and client secret. For more information, see Authentication for
+	// a ServiceNow data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-servicenow.html#servicenow-authentication).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
 
-	// Provides configuration information for crawling service catalogs in the ServiceNow
+	// Configuration information for crawling service catalogs in the ServiceNow
 	// site.
 	ServiceCatalogConfiguration *ServiceNowServiceCatalogConfiguration `type:"structure"`
 
@@ -16156,12 +23796,12 @@ func (s *ServiceNowConfiguration) SetServiceNowBuildVersion(v string) *ServiceNo
 	return s
 }
 
-// Provides configuration information for crawling knowledge articles in the
-// ServiceNow site.
+// Provides the configuration information for crawling knowledge articles in
+// the ServiceNow site.
 type ServiceNowKnowledgeArticleConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether Amazon Kendra should index attachments to knowledge articles.
+	// TRUE to index attachments to knowledge articles.
 	CrawlAttachments *bool `type:"boolean"`
 
 	// The name of the ServiceNow field that is mapped to the index document contents
@@ -16174,13 +23814,20 @@ type ServiceNowKnowledgeArticleConfiguration struct {
 	// field.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
-	// List of regular expressions applied to knowledge articles. Items that don't
-	// match the inclusion pattern are not indexed. The regex is applied to the
-	// field specified in the PatternTargetField
+	// A list of regular expression patterns to exclude certain attachments of knowledge
+	// articles in your ServiceNow. Item that match the patterns are excluded from
+	// the index. Items that don't match the patterns are included in the index.
+	// If an item matches both an inclusion and exclusion pattern, the exclusion
+	// pattern takes precedence and the item isn't included in the index.
+	//
+	// The regex is applied to the field specified in the PatternTargetField.
 	ExcludeAttachmentFilePatterns []*string `type:"list"`
 
-	// Mapping between ServiceNow fields and Amazon Kendra index fields. You must
-	// create the index field before you map the field.
+	// Maps attributes or field names of knoweldge articles to Amazon Kendra index
+	// field names. To create custom fields, use the UpdateIndex API before you
+	// map to ServiceNow fields. For more information, see Mapping data source fields
+	// (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The ServiceNow
+	// data source field names must exist in your ServiceNow custom metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
 	// A query that selects the knowledge articles to index. The query can return
@@ -16191,9 +23838,13 @@ type ServiceNowKnowledgeArticleConfiguration struct {
 	// information, see Specifying documents to index with a query (https://docs.aws.amazon.com/kendra/latest/dg/servicenow-query.html).
 	FilterQuery *string `min:"1" type:"string"`
 
-	// List of regular expressions applied to knowledge articles. Items that don't
-	// match the inclusion pattern are not indexed. The regex is applied to the
-	// field specified in the PatternTargetField.
+	// A list of regular expression patterns to include certain attachments of knowledge
+	// articles in your ServiceNow. Item that match the patterns are included in
+	// the index. Items that don't match the patterns are excluded from the index.
+	// If an item matches both an inclusion and exclusion pattern, the exclusion
+	// pattern takes precedence and the item isn't included in the index.
+	//
+	// The regex is applied to the field specified in the PatternTargetField.
 	IncludeAttachmentFilePatterns []*string `type:"list"`
 }
 
@@ -16292,13 +23943,12 @@ func (s *ServiceNowKnowledgeArticleConfiguration) SetIncludeAttachmentFilePatter
 	return s
 }
 
-// Provides configuration information for crawling service catalog items in
-// the ServiceNow site
+// Provides the configuration information for crawling service catalog items
+// in the ServiceNow site
 type ServiceNowServiceCatalogConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether Amazon Kendra should crawl attachments to the service catalog
-	// items.
+	// TRUE to index attachments to service catalog items.
 	CrawlAttachments *bool `type:"boolean"`
 
 	// The name of the ServiceNow field that is mapped to the index document contents
@@ -16311,22 +23961,27 @@ type ServiceNowServiceCatalogConfiguration struct {
 	// field.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
-	// A list of regular expression patterns. Documents that match the patterns
-	// are excluded from the index. Documents that don't match the patterns are
-	// included in the index. If a document matches both an exclusion pattern and
-	// an inclusion pattern, the document is not included in the index.
+	// A list of regular expression patterns to exclude certain attachments of catalogs
+	// in your ServiceNow. Item that match the patterns are excluded from the index.
+	// Items that don't match the patterns are included in the index. If an item
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the item isn't included in the index.
 	//
 	// The regex is applied to the file name of the attachment.
 	ExcludeAttachmentFilePatterns []*string `type:"list"`
 
-	// Mapping between ServiceNow fields and Amazon Kendra index fields. You must
-	// create the index field before you map the field.
+	// Maps attributes or field names of catalogs to Amazon Kendra index field names.
+	// To create custom fields, use the UpdateIndex API before you map to ServiceNow
+	// fields. For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The ServiceNow data source field names must exist in your ServiceNow custom
+	// metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
-	// A list of regular expression patterns. Documents that match the patterns
-	// are included in the index. Documents that don't match the patterns are excluded
-	// from the index. If a document matches both an exclusion pattern and an inclusion
-	// pattern, the document is not included in the index.
+	// A list of regular expression patterns to include certain attachments of catalogs
+	// in your ServiceNow. Item that match the patterns are included in the index.
+	// Items that don't match the patterns are excluded from the index. If an item
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the item isn't included in the index.
 	//
 	// The regex is applied to the file name of the attachment.
 	IncludeAttachmentFilePatterns []*string `type:"list"`
@@ -16481,76 +24136,87 @@ func (s *ServiceQuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Provides configuration information for connecting to a Microsoft SharePoint
-// data source.
+// Provides the configuration information to connect to Microsoft SharePoint
+// as your data source.
 type SharePointConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// TRUE to include attachments to documents stored in your Microsoft SharePoint
-	// site in the index; otherwise, FALSE.
+	// Whether you want to connect to SharePoint using basic authentication of user
+	// name and password, or OAuth authentication of user name, password, client
+	// ID, and client secret. You can use OAuth authentication for SharePoint Online.
+	AuthenticationType *string `type:"string" enum:"SharePointOnlineAuthenticationType"`
+
+	// TRUE to index document attachments.
 	CrawlAttachments *bool `type:"boolean"`
 
-	// A Boolean value that specifies whether local groups are disabled (True) or
-	// enabled (False).
+	// TRUE to disable local groups information.
 	DisableLocalGroups *bool `type:"boolean"`
 
 	// The Microsoft SharePoint attribute field that contains the title of the document.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
-	// A list of regular expression patterns. Documents that match the patterns
-	// are excluded from the index. Documents that don't match the patterns are
-	// included in the index. If a document matches both an exclusion pattern and
-	// an inclusion pattern, the document is not included in the index.
+	// A list of regular expression patterns to exclude certain documents in your
+	// SharePoint. Documents that match the patterns are excluded from the index.
+	// Documents that don't match the patterns are included in the index. If a document
+	// matches both an inclusion and exclusion pattern, the exclusion pattern takes
+	// precedence and the document isn't included in the index.
 	//
-	// The regex is applied to the display URL of the SharePoint document.
+	// The regex applies to the display URL of the SharePoint document.
 	ExclusionPatterns []*string `type:"list"`
 
-	// A list of DataSourceToIndexFieldMapping objects that map Microsoft SharePoint
-	// attributes to custom fields in the Amazon Kendra index. You must first create
-	// the index fields using the UpdateIndex operation before you map SharePoint
-	// attributes. For more information, see Mapping Data Source Fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// A list of DataSourceToIndexFieldMapping objects that map SharePoint data
+	// source attributes or field names to Amazon Kendra index field names. To create
+	// custom fields, use the UpdateIndex API before you map to SharePoint fields.
+	// For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The SharePoint data source field names must exist in your SharePoint custom
+	// metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
-	// A list of regular expression patterns. Documents that match the patterns
-	// are included in the index. Documents that don't match the patterns are excluded
-	// from the index. If a document matches both an inclusion pattern and an exclusion
-	// pattern, the document is not included in the index.
+	// A list of regular expression patterns to include certain documents in your
+	// SharePoint. Documents that match the patterns are included in the index.
+	// Documents that don't match the patterns are excluded from the index. If a
+	// document matches both an inclusion and exclusion pattern, the exclusion pattern
+	// takes precedence and the document isn't included in the index.
 	//
-	// The regex is applied to the display URL of the SharePoint document.
+	// The regex applies to the display URL of the SharePoint document.
 	InclusionPatterns []*string `type:"list"`
 
-	// The Amazon Resource Name (ARN) of credentials stored in Secrets Manager.
-	// The credentials should be a user/password pair. If you use SharePoint Server,
-	// you also need to provide the sever domain name as part of the credentials.
-	// For more information, see Using a Microsoft SharePoint Data Source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html).
-	// For more information about Secrets Manager, see What Is Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
-	// in the Secrets Manager user guide.
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the user name and password required to connect to the SharePoint instance.
+	// If you use SharePoint Server, you also need to provide the sever domain name
+	// as part of the credentials. For more information, see Using a Microsoft SharePoint
+	// Data Source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html).
+	//
+	// You can also provide OAuth authentication credentials of user name, password,
+	// client ID, and client secret. For more information, see Authentication for
+	// a SharePoint data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html#sharepoint-authentication).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
 
-	// The version of Microsoft SharePoint that you are using as a data source.
+	// The version of Microsoft SharePoint that you use.
 	//
 	// SharePointVersion is a required field
 	SharePointVersion *string `type:"string" required:"true" enum:"SharePointVersion"`
 
-	// Information required to find a specific file in an Amazon S3 bucket.
+	// The path to the SSL certificate stored in an Amazon S3 bucket. You use this
+	// to connect to SharePoint.
 	SslCertificateS3Path *S3Path `type:"structure"`
 
-	// The URLs of the Microsoft SharePoint site that contains the documents that
-	// should be indexed.
+	// The Microsoft SharePoint site URLs for the documents you want to indext.
 	//
 	// Urls is a required field
 	Urls []*string `min:"1" type:"list" required:"true"`
 
-	// Set to TRUE to use the Microsoft SharePoint change log to determine the documents
-	// that need to be updated in the index. Depending on the size of the SharePoint
-	// change log, it may take longer for Amazon Kendra to use the change log than
-	// it takes it to determine the changed documents using the Amazon Kendra document
-	// crawler.
+	// TRUE to use the SharePoint change log to determine which documents require
+	// updating in the index. Depending on the change log's size, it may take longer
+	// for Amazon Kendra to use the change log than to scan all of your documents
+	// in SharePoint.
 	UseChangeLog *bool `type:"boolean"`
 
-	// Provides information for connecting to an Amazon VPC.
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your Microsoft SharePoint. For more information, see Configuring a VPC
+	// (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
 	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
@@ -16621,6 +24287,12 @@ func (s *SharePointConfiguration) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAuthenticationType sets the AuthenticationType field's value.
+func (s *SharePointConfiguration) SetAuthenticationType(v string) *SharePointConfiguration {
+	s.AuthenticationType = &v
+	return s
 }
 
 // SetCrawlAttachments sets the CrawlAttachments field's value.
@@ -16695,11 +24367,11 @@ func (s *SharePointConfiguration) SetVpcConfiguration(v *DataSourceVpcConfigurat
 	return s
 }
 
-// Provides the configuration information of the sitemap URLs to crawl.
+// Provides the configuration information for the sitemap URLs to crawl.
 //
 // When selecting websites to index, you must adhere to the Amazon Acceptable
 // Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-// that you must only use the Amazon Kendra web crawler to index your own webpages,
+// that you must only use Amazon Kendra Web Crawler to index your own webpages,
 // or webpages that you have authorization to index.
 type SiteMapsConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -16746,6 +24418,254 @@ func (s *SiteMapsConfiguration) Validate() error {
 // SetSiteMaps sets the SiteMaps field's value.
 func (s *SiteMapsConfiguration) SetSiteMaps(v []*string) *SiteMapsConfiguration {
 	s.SiteMaps = v
+	return s
+}
+
+// Provides the configuration information to connect to Slack as your data source.
+type SlackConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// TRUE to index bot messages from your Slack workspace team.
+	CrawlBotMessage *bool `type:"boolean"`
+
+	// TRUE to exclude archived messages to index from your Slack workspace team.
+	ExcludeArchived *bool `type:"boolean"`
+
+	// A list of regular expression patterns to exclude certain attached files in
+	// your Slack workspace team. Files that match the patterns are excluded from
+	// the index. Files that don’t match the patterns are included in the index.
+	// If a file matches both an inclusion and exclusion pattern, the exclusion
+	// pattern takes precedence and the file isn't included in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// A list of DataSourceToIndexFieldMapping objects that map Slack data source
+	// attributes or field names to Amazon Kendra index field names. To create custom
+	// fields, use the UpdateIndex API before you map to Slack fields. For more
+	// information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Slack data source field names must exist in your Slack custom metadata.
+	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of regular expression patterns to include certain attached files in
+	// your Slack workspace team. Files that match the patterns are included in
+	// the index. Files that don't match the patterns are excluded from the index.
+	// If a file matches both an inclusion and exclusion pattern, the exclusion
+	// pattern takes precedence and the file isn't included in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// The number of hours for change log to look back from when you last synchronized
+	// your data. You can look back up to 7 days or 168 hours.
+	//
+	// Change log updates your index only if new content was added since you last
+	// synced your data. Updated or deleted content from before you last synced
+	// does not get updated in your index. To capture updated or deleted content
+	// before you last synced, set the LookBackPeriod to the number of hours you
+	// want change log to look back.
+	LookBackPeriod *int64 `type:"integer"`
+
+	// The list of private channel names from your Slack workspace team. You use
+	// this if you want to index specific private channels, not all private channels.
+	// You can also use regular expression patterns to filter private channels.
+	PrivateChannelFilter []*string `type:"list"`
+
+	// The list of public channel names to index from your Slack workspace team.
+	// You use this if you want to index specific public channels, not all public
+	// channels. You can also use regular expression patterns to filter public channels.
+	PublicChannelFilter []*string `type:"list"`
+
+	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
+	// the key-value pairs required to connect to your Slack workspace team. The
+	// secret must contain a JSON structure with the following keys:
+	//
+	//    * slackToken—The user or bot token created in Slack. For more information
+	//    on creating a token in Slack, see Authentication for a Slack data source
+	//    (https://docs.aws.amazon.com/kendra/latest/dg/data-source-slack.html#slack-authentication).
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+
+	// The date to start crawling your data from your Slack workspace team. The
+	// date must follow this format: yyyy-mm-dd.
+	//
+	// SinceCrawlDate is a required field
+	SinceCrawlDate *string `min:"10" type:"string" required:"true"`
+
+	// Specify whether to index public channels, private channels, group messages,
+	// and direct messages. You can specify one or more of these options.
+	//
+	// SlackEntityList is a required field
+	SlackEntityList []*string `min:"1" type:"list" required:"true" enum:"SlackEntity"`
+
+	// The identifier of the team in the Slack workspace. For example, T0123456789.
+	//
+	// You can find your team ID in the URL of the main page of your Slack workspace.
+	// When you log in to Slack via a browser, you are directed to the URL of the
+	// main page. For example, https://app.slack.com/client/T0123456789/....
+	//
+	// TeamId is a required field
+	TeamId *string `min:"1" type:"string" required:"true"`
+
+	// TRUE to use the Slack change log to determine which documents require updating
+	// in the index. Depending on the Slack change log's size, it may take longer
+	// for Amazon Kendra to use the change log than to scan all of your documents
+	// in Slack.
+	UseChangeLog *bool `type:"boolean"`
+
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your Slack. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlackConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlackConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SlackConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SlackConfiguration"}
+	if s.FieldMappings != nil && len(s.FieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldMappings", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.SinceCrawlDate == nil {
+		invalidParams.Add(request.NewErrParamRequired("SinceCrawlDate"))
+	}
+	if s.SinceCrawlDate != nil && len(*s.SinceCrawlDate) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("SinceCrawlDate", 10))
+	}
+	if s.SlackEntityList == nil {
+		invalidParams.Add(request.NewErrParamRequired("SlackEntityList"))
+	}
+	if s.SlackEntityList != nil && len(s.SlackEntityList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SlackEntityList", 1))
+	}
+	if s.TeamId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TeamId"))
+	}
+	if s.TeamId != nil && len(*s.TeamId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TeamId", 1))
+	}
+	if s.FieldMappings != nil {
+		for i, v := range s.FieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCrawlBotMessage sets the CrawlBotMessage field's value.
+func (s *SlackConfiguration) SetCrawlBotMessage(v bool) *SlackConfiguration {
+	s.CrawlBotMessage = &v
+	return s
+}
+
+// SetExcludeArchived sets the ExcludeArchived field's value.
+func (s *SlackConfiguration) SetExcludeArchived(v bool) *SlackConfiguration {
+	s.ExcludeArchived = &v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *SlackConfiguration) SetExclusionPatterns(v []*string) *SlackConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetFieldMappings sets the FieldMappings field's value.
+func (s *SlackConfiguration) SetFieldMappings(v []*DataSourceToIndexFieldMapping) *SlackConfiguration {
+	s.FieldMappings = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *SlackConfiguration) SetInclusionPatterns(v []*string) *SlackConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetLookBackPeriod sets the LookBackPeriod field's value.
+func (s *SlackConfiguration) SetLookBackPeriod(v int64) *SlackConfiguration {
+	s.LookBackPeriod = &v
+	return s
+}
+
+// SetPrivateChannelFilter sets the PrivateChannelFilter field's value.
+func (s *SlackConfiguration) SetPrivateChannelFilter(v []*string) *SlackConfiguration {
+	s.PrivateChannelFilter = v
+	return s
+}
+
+// SetPublicChannelFilter sets the PublicChannelFilter field's value.
+func (s *SlackConfiguration) SetPublicChannelFilter(v []*string) *SlackConfiguration {
+	s.PublicChannelFilter = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *SlackConfiguration) SetSecretArn(v string) *SlackConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetSinceCrawlDate sets the SinceCrawlDate field's value.
+func (s *SlackConfiguration) SetSinceCrawlDate(v string) *SlackConfiguration {
+	s.SinceCrawlDate = &v
+	return s
+}
+
+// SetSlackEntityList sets the SlackEntityList field's value.
+func (s *SlackConfiguration) SetSlackEntityList(v []*string) *SlackConfiguration {
+	s.SlackEntityList = v
+	return s
+}
+
+// SetTeamId sets the TeamId field's value.
+func (s *SlackConfiguration) SetTeamId(v string) *SlackConfiguration {
+	s.TeamId = &v
+	return s
+}
+
+// SetUseChangeLog sets the UseChangeLog field's value.
+func (s *SlackConfiguration) SetUseChangeLog(v bool) *SlackConfiguration {
+	s.UseChangeLog = &v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *SlackConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *SlackConfiguration {
+	s.VpcConfiguration = v
 	return s
 }
 
@@ -16842,7 +24762,102 @@ func (s *SortingConfiguration) SetSortOrder(v string) *SortingConfiguration {
 	return s
 }
 
-// Provides information that configures Amazon Kendra to use a SQL database.
+// A query with suggested spell corrections.
+type SpellCorrectedQuery struct {
+	_ struct{} `type:"structure"`
+
+	// The corrected misspelled word or words in a query.
+	Corrections []*Correction `type:"list"`
+
+	// The query with the suggested spell corrections.
+	SuggestedQueryText *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SpellCorrectedQuery) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SpellCorrectedQuery) GoString() string {
+	return s.String()
+}
+
+// SetCorrections sets the Corrections field's value.
+func (s *SpellCorrectedQuery) SetCorrections(v []*Correction) *SpellCorrectedQuery {
+	s.Corrections = v
+	return s
+}
+
+// SetSuggestedQueryText sets the SuggestedQueryText field's value.
+func (s *SpellCorrectedQuery) SetSuggestedQueryText(v string) *SpellCorrectedQuery {
+	s.SuggestedQueryText = &v
+	return s
+}
+
+// Provides the configuration information for suggested query spell corrections.
+//
+// Suggested spell corrections are based on words that appear in your indexed
+// documents and how closely a corrected word matches a misspelled word.
+//
+// This feature is designed with certain defaults or limits. For information
+// on the current limits and how to request more support for some limits, see
+// the Spell Checker documentation (https://docs.aws.amazon.com/kendra/latest/dg/query-spell-check.html).
+type SpellCorrectionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// TRUE to suggest spell corrections for queries.
+	//
+	// IncludeQuerySpellCheckSuggestions is a required field
+	IncludeQuerySpellCheckSuggestions *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SpellCorrectionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SpellCorrectionConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SpellCorrectionConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SpellCorrectionConfiguration"}
+	if s.IncludeQuerySpellCheckSuggestions == nil {
+		invalidParams.Add(request.NewErrParamRequired("IncludeQuerySpellCheckSuggestions"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeQuerySpellCheckSuggestions sets the IncludeQuerySpellCheckSuggestions field's value.
+func (s *SpellCorrectionConfiguration) SetIncludeQuerySpellCheckSuggestions(v bool) *SpellCorrectionConfiguration {
+	s.IncludeQuerySpellCheckSuggestions = &v
+	return s
+}
+
+// Provides the configuration information to use a SQL database.
 type SqlConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -17148,7 +25163,7 @@ type SubmitFeedbackInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 
 	// The identifier of the specific query for which you are submitting feedback.
-	// The query ID is returned in the response to the Query operation.
+	// The query ID is returned in the response to the Query API.
 	//
 	// QueryId is a required field
 	QueryId *string `min:"1" type:"string" required:"true"`
@@ -17933,41 +25948,204 @@ func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
 
-type UpdateDataSourceInput struct {
+type UpdateAccessControlConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Configuration information for a Amazon Kendra data source.
-	Configuration *DataSourceConfiguration `type:"structure"`
+	// Information you want to update on principals (users and/or groups) and which
+	// documents they should have access to. This is useful for user context filtering,
+	// where search results are filtered based on the user or their group access
+	// to documents.
+	AccessControlList []*Principal `type:"list"`
 
-	// The new description for the data source.
+	// A new description for the access control configuration.
 	Description *string `type:"string"`
 
-	// The unique identifier of the data source to update.
+	// The updated list of principal (https://docs.aws.amazon.com/kendra/latest/dg/API_Principal.html)
+	// lists that define the hierarchy for which documents users should have access
+	// to.
+	HierarchicalAccessControlList []*HierarchicalPrincipal `min:"1" type:"list"`
+
+	// The identifier of the access control configuration you want to update.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index that contains the data source to update.
+	// The identifier of the index for an access control configuration.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
-	// The code for a language. This allows you to support a language for all documents
-	// when updating the data source. English is supported by default. For more
-	// information on supported languages, including their codes, see Adding documents
-	// in languages other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
+	// A new name for the access control configuration.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccessControlConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccessControlConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateAccessControlConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateAccessControlConfigurationInput"}
+	if s.HierarchicalAccessControlList != nil && len(s.HierarchicalAccessControlList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HierarchicalAccessControlList", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.AccessControlList != nil {
+		for i, v := range s.AccessControlList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AccessControlList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.HierarchicalAccessControlList != nil {
+		for i, v := range s.HierarchicalAccessControlList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "HierarchicalAccessControlList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccessControlList sets the AccessControlList field's value.
+func (s *UpdateAccessControlConfigurationInput) SetAccessControlList(v []*Principal) *UpdateAccessControlConfigurationInput {
+	s.AccessControlList = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateAccessControlConfigurationInput) SetDescription(v string) *UpdateAccessControlConfigurationInput {
+	s.Description = &v
+	return s
+}
+
+// SetHierarchicalAccessControlList sets the HierarchicalAccessControlList field's value.
+func (s *UpdateAccessControlConfigurationInput) SetHierarchicalAccessControlList(v []*HierarchicalPrincipal) *UpdateAccessControlConfigurationInput {
+	s.HierarchicalAccessControlList = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateAccessControlConfigurationInput) SetId(v string) *UpdateAccessControlConfigurationInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *UpdateAccessControlConfigurationInput) SetIndexId(v string) *UpdateAccessControlConfigurationInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateAccessControlConfigurationInput) SetName(v string) *UpdateAccessControlConfigurationInput {
+	s.Name = &v
+	return s
+}
+
+type UpdateAccessControlConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccessControlConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccessControlConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateDataSourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration information you want to update for the data source connector.
+	Configuration *DataSourceConfiguration `type:"structure"`
+
+	// Configuration information you want to update for altering document metadata
+	// and content during the document ingestion process.
+	//
+	// For more information on how to create, modify and delete document metadata,
+	// or make other content alterations when you ingest documents into Amazon Kendra,
+	// see Customizing document metadata during the ingestion process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
+	CustomDocumentEnrichmentConfiguration *CustomDocumentEnrichmentConfiguration `type:"structure"`
+
+	// A new description for the data source connector.
+	Description *string `type:"string"`
+
+	// The identifier of the data source you want to update.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index used with the data source connector.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The code for a language you want to update for the data source connector.
+	// This allows you to support a language for all documents when updating the
+	// data source. English is supported by default. For more information on supported
+	// languages, including their codes, see Adding documents in languages other
+	// than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
 	LanguageCode *string `min:"2" type:"string"`
 
-	// The name of the data source to update. The name of the data source can't
-	// be updated. To rename a data source you must delete the data source and re-create
-	// it.
+	// A new name for the data source connector. You must first delete the data
+	// source and re-create it to change the name of the data source.
 	Name *string `min:"1" type:"string"`
 
-	// The Amazon Resource Name (ARN) of the new role to use when the data source
-	// is accessing resources on your behalf.
-	RoleArn *string `min:"1" type:"string"`
+	// The Amazon Resource Name (ARN) of a role with permission to access the data
+	// source. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	RoleArn *string `type:"string"`
 
-	// The new update schedule for the data source.
+	// The sync schedule you want to update for the data source connector.
 	Schedule *string `type:"string"`
 }
 
@@ -18010,12 +26188,14 @@ func (s *UpdateDataSourceInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
-	}
 	if s.Configuration != nil {
 		if err := s.Configuration.Validate(); err != nil {
 			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CustomDocumentEnrichmentConfiguration != nil {
+		if err := s.CustomDocumentEnrichmentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("CustomDocumentEnrichmentConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -18028,6 +26208,12 @@ func (s *UpdateDataSourceInput) Validate() error {
 // SetConfiguration sets the Configuration field's value.
 func (s *UpdateDataSourceInput) SetConfiguration(v *DataSourceConfiguration) *UpdateDataSourceInput {
 	s.Configuration = v
+	return s
+}
+
+// SetCustomDocumentEnrichmentConfiguration sets the CustomDocumentEnrichmentConfiguration field's value.
+func (s *UpdateDataSourceInput) SetCustomDocumentEnrichmentConfiguration(v *CustomDocumentEnrichmentConfiguration) *UpdateDataSourceInput {
+	s.CustomDocumentEnrichmentConfiguration = v
 	return s
 }
 
@@ -18095,40 +26281,177 @@ func (s UpdateDataSourceOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateExperienceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration information you want to update for your Amazon Kendra experience.
+	Configuration *ExperienceConfiguration `type:"structure"`
+
+	// A new description for your Amazon Kendra experience.
+	Description *string `type:"string"`
+
+	// The identifier of your Amazon Kendra experience you want to update.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index for your Amazon Kendra experience.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// A new name for your Amazon Kendra experience.
+	Name *string `min:"1" type:"string"`
+
+	// The Amazon Resource Name (ARN) of a role with permission to access Query
+	// API, QuerySuggestions API, SubmitFeedback API, and Amazon Web Services SSO
+	// that stores your user and group information. For more information, see IAM
+	// roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	RoleArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateExperienceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateExperienceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateExperienceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateExperienceInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Configuration != nil {
+		if err := s.Configuration.Validate(); err != nil {
+			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *UpdateExperienceInput) SetConfiguration(v *ExperienceConfiguration) *UpdateExperienceInput {
+	s.Configuration = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateExperienceInput) SetDescription(v string) *UpdateExperienceInput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateExperienceInput) SetId(v string) *UpdateExperienceInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *UpdateExperienceInput) SetIndexId(v string) *UpdateExperienceInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateExperienceInput) SetName(v string) *UpdateExperienceInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *UpdateExperienceInput) SetRoleArn(v string) *UpdateExperienceInput {
+	s.RoleArn = &v
+	return s
+}
+
+type UpdateExperienceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateExperienceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateExperienceOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateIndexInput struct {
 	_ struct{} `type:"structure"`
 
-	// Sets the number of additional storage and query capacity units that should
-	// be used by the index. You can change the capacity of the index up to 5 times
-	// per day.
+	// Sets the number of additional document storage and query capacity units that
+	// should be used by the index. You can change the capacity of the index up
+	// to 5 times per day, or make 5 API calls.
 	//
 	// If you are using extra storage units, you can't reduce the storage capacity
-	// below that required to meet the storage needs for your index.
+	// below what is required to meet the storage needs for your index.
 	CapacityUnits *CapacityUnitsConfiguration `type:"structure"`
 
 	// A new description for the index.
 	Description *string `type:"string"`
 
-	// The document metadata to update.
+	// The document metadata configuration you want to update for the index. Document
+	// metadata are fields or attributes associated with your documents. For example,
+	// the company department name associated with each document.
 	DocumentMetadataConfigurationUpdates []*DocumentMetadataConfiguration `type:"list"`
 
-	// The identifier of the index to update.
+	// The identifier of the index you want to update.
 	//
 	// Id is a required field
 	Id *string `min:"36" type:"string" required:"true"`
 
-	// The name of the index to update.
+	// The name of the index you want to update.
 	Name *string `min:"1" type:"string"`
 
-	// A new IAM role that gives Amazon Kendra permission to access your Amazon
-	// CloudWatch logs.
-	RoleArn *string `min:"1" type:"string"`
+	// An Identity and Access Management (IAM) role that gives Amazon Kendra permission
+	// to access Amazon CloudWatch logs and metrics.
+	RoleArn *string `type:"string"`
 
 	// The user context policy.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
 
-	// Enables fetching access levels of groups and users from an AWS Single Sign-On
-	// identity source. To configure this, see UserGroupResolutionConfiguration
+	// Enables fetching access levels of groups and users from an Amazon Web Services
+	// Single Sign On identity source. To configure this, see UserGroupResolutionConfiguration
 	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UserGroupResolutionConfiguration.html).
 	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
@@ -18165,9 +26488,6 @@ func (s *UpdateIndexInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.CapacityUnits != nil {
 		if err := s.CapacityUnits.Validate(); err != nil {
@@ -18285,25 +26605,25 @@ func (s UpdateIndexOutput) GoString() string {
 type UpdateQuerySuggestionsBlockListInput struct {
 	_ struct{} `type:"structure"`
 
-	// The description for a block list.
+	// A new description for the block list.
 	Description *string `type:"string"`
 
-	// The unique identifier of a block list.
+	// The identifier of the block list you want to update.
 	//
 	// Id is a required field
 	Id *string `min:"36" type:"string" required:"true"`
 
-	// The identifier of the index for a block list.
+	// The identifier of the index for the block list.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
-	// The name of a block list.
+	// A new name for the block list.
 	Name *string `min:"1" type:"string"`
 
 	// The IAM (Identity and Access Management) role used to access the block list
 	// text file in S3.
-	RoleArn *string `min:"1" type:"string"`
+	RoleArn *string `type:"string"`
 
 	// The S3 path where your block list text file sits in S3.
 	//
@@ -18353,9 +26673,6 @@ func (s *UpdateQuerySuggestionsBlockListInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.SourceS3Path != nil {
 		if err := s.SourceS3Path.Validate(); err != nil {
@@ -18445,8 +26762,7 @@ type UpdateQuerySuggestionsConfigInput struct {
 	// from all queries.
 	IncludeQueriesWithoutUserInformation *bool `type:"boolean"`
 
-	// The identifier of the index you want to update query suggestions settings
-	// for.
+	// The identifier of the index with query suggestions you want to update.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -18590,24 +26906,25 @@ func (s UpdateQuerySuggestionsConfigOutput) GoString() string {
 type UpdateThesaurusInput struct {
 	_ struct{} `type:"structure"`
 
-	// The updated description of the thesaurus.
+	// A new description for the thesaurus.
 	Description *string `type:"string"`
 
-	// The identifier of the thesaurus to update.
+	// The identifier of the thesaurus you want to update.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index associated with the thesaurus to update.
+	// The identifier of the index for the thesaurus.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
-	// The updated name of the thesaurus.
+	// A new name for the thesaurus.
 	Name *string `min:"1" type:"string"`
 
-	// The updated role ARN of the thesaurus.
-	RoleArn *string `min:"1" type:"string"`
+	// An IAM role that gives Amazon Kendra permissions to access thesaurus file
+	// specified in SourceS3Path.
+	RoleArn *string `type:"string"`
 
 	// Information required to find a specific file in an Amazon S3 bucket.
 	SourceS3Path *S3Path `type:"structure"`
@@ -18648,9 +26965,6 @@ func (s *UpdateThesaurusInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
 	}
 	if s.SourceS3Path != nil {
 		if err := s.SourceS3Path.Validate(); err != nil {
@@ -18730,13 +27044,13 @@ func (s UpdateThesaurusOutput) GoString() string {
 //
 // When selecting websites to index, you must adhere to the Amazon Acceptable
 // Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-// that you must only use the Amazon Kendra web crawler to index your own webpages,
+// that you must only use Amazon Kendra Web Crawler to index your own webpages,
 // or webpages that you have authorization to index.
 type Urls struct {
 	_ struct{} `type:"structure"`
 
-	// Provides the configuration of the seed or starting point URLs of the websites
-	// you want to crawl.
+	// Configuration of the seed or starting point URLs of the websites you want
+	// to crawl.
 	//
 	// You can choose to crawl only the website host names, or the website host
 	// names with subdomains, or the website host names with subdomains and other
@@ -18745,8 +27059,7 @@ type Urls struct {
 	// You can list up to 100 seed URLs.
 	SeedUrlConfiguration *SeedUrlConfiguration `type:"structure"`
 
-	// Provides the configuration of the sitemap URLs of the websites you want to
-	// crawl.
+	// Configuration of the sitemap URLs of the websites you want to crawl.
 	//
 	// Only URLs belonging to the same website host names are crawled. You can list
 	// up to three sitemap URLs.
@@ -18805,8 +27118,12 @@ func (s *Urls) SetSiteMapsConfiguration(v *SiteMapsConfiguration) *Urls {
 
 // Provides information about the user context for an Amazon Kendra index.
 //
-// This is used for filtering search results for different users based on their
-// access to documents.
+// User context filtering is a kind of personalized search with the benefit
+// of controlling access to documents. For example, not all teams that search
+// the company portal for information should access top-secret company documents,
+// nor are these documents relevant to all users. Only specific users or groups
+// of teams given access to top-secret documents should see these documents
+// in their search results.
 //
 // You provide one of the following:
 //
@@ -18911,23 +27228,31 @@ func (s *UserContext) SetUserId(v string) *UserContext {
 }
 
 // Provides the configuration information to fetch access levels of groups and
-// users from an AWS Single Sign-On identity source. This is useful for setting
-// up user context filtering, where Amazon Kendra filters search results for
-// different users based on their group's access to documents. You can also
-// map your users to their groups for user context filtering using the PutPrincipalMapping
-// operation (https://docs.aws.amazon.com/latest/dg/API_PutPrincipalMapping.html).
+// users from an Amazon Web Services Single Sign On identity source. This is
+// useful for user context filtering, where search results are filtered based
+// on the user or their group access to documents. You can also use the PutPrincipalMapping
+// (https://docs.aws.amazon.com/kendra/latest/dg/API_PutPrincipalMapping.html)
+// API to map users to their groups so that you only need to provide the user
+// ID when you issue the query.
 //
-// To set up an AWS SSO identity source in the console to use with Amazon Kendra,
-// see Getting started with an AWS SSO identity source (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
-// You must also grant the required permissions to use AWS SSO with Amazon Kendra.
-// For more information, see IAM roles for AWS Single Sign-On (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html#iam-roles-aws-sso).
+// To set up an Amazon Web Services SSO identity source in the console to use
+// with Amazon Kendra, see Getting started with an Amazon Web Services SSO identity
+// source (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
+// You must also grant the required permissions to use Amazon Web Services SSO
+// with Amazon Kendra. For more information, see IAM roles for Amazon Web Services
+// SSO (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html#iam-roles-aws-sso).
+//
+// Amazon Kendra currently does not support using UserGroupResolutionConfiguration
+// with an Amazon Web Services organization member account for your Amazon Web
+// Services SSO identify source. You must create your index in the management
+// account for the organization in order to use UserGroupResolutionConfiguration.
 type UserGroupResolutionConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// The identity store provider (mode) you want to use to fetch access levels
-	// of groups and users. AWS Single Sign-On is currently the only available mode.
-	// Your users and groups must exist in an AWS SSO identity source in order to
-	// use this mode.
+	// of groups and users. Amazon Web Services Single Sign On is currently the
+	// only available mode. Your users and groups must exist in an Amazon Web Services
+	// SSO identity source in order to use this mode.
 	//
 	// UserGroupResolutionMode is a required field
 	UserGroupResolutionMode *string `type:"string" required:"true" enum:"UserGroupResolutionMode"`
@@ -18970,7 +27295,58 @@ func (s *UserGroupResolutionConfiguration) SetUserGroupResolutionMode(v string) 
 	return s
 }
 
-// Provides configuration information for a token configuration.
+// Provides the configuration information for the identifiers of your users.
+type UserIdentityConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Web Services SSO field name that contains the identifiers of your
+	// users, such as their emails. This is used for user context filtering (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html)
+	// and for granting access to your Amazon Kendra experience. You must set up
+	// Amazon Web Services SSO with Amazon Kendra. You must include your users and
+	// groups in your Access Control List when you ingest documents into your index.
+	// For more information, see Getting started with an Amazon Web Services SSO
+	// identity source (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
+	IdentityAttributeName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserIdentityConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserIdentityConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserIdentityConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserIdentityConfiguration"}
+	if s.IdentityAttributeName != nil && len(*s.IdentityAttributeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdentityAttributeName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentityAttributeName sets the IdentityAttributeName field's value.
+func (s *UserIdentityConfiguration) SetIdentityAttributeName(v string) *UserIdentityConfiguration {
+	s.IdentityAttributeName = &v
+	return s
+}
+
+// Provides the configuration information for a token.
 type UserTokenConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -19094,20 +27470,60 @@ func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Provides the configuration information required for Amazon Kendra web crawler.
+// The warning code and message that explains a problem with a query.
+type Warning struct {
+	_ struct{} `type:"structure"`
+
+	// The code used to show the type of warning for the query.
+	Code *string `type:"string" enum:"WarningCode"`
+
+	// The message that explains the problem with the query.
+	Message *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Warning) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Warning) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *Warning) SetCode(v string) *Warning {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *Warning) SetMessage(v string) *Warning {
+	s.Message = &v
+	return s
+}
+
+// Provides the configuration information required for Amazon Kendra Web Crawler.
 type WebCrawlerConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Provides configuration information required to connect to websites using
-	// authentication.
+	// Configuration information required to connect to websites using authentication.
 	//
 	// You can connect to websites using basic authentication of user name and password.
+	// You use a secret in Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+	// to store your authentication credentials.
 	//
 	// You must provide the website host name and port number. For example, the
 	// host name of https://a.example.com/page1.html is "a.example.com" and the
-	// port is 443, the standard port for HTTPS. You use a secret in AWS Secrets
-	// Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
-	// to store your authentication credentials.
+	// port is 443, the standard port for HTTPS.
 	AuthenticationConfiguration *AuthenticationConfiguration `type:"structure"`
 
 	// Specifies the number of levels in a website that you want to crawl.
@@ -19145,8 +27561,8 @@ type WebCrawlerConfiguration struct {
 	// 300.
 	MaxUrlsPerMinuteCrawlRate *int64 `min:"1" type:"integer"`
 
-	// Provides configuration information required to connect to your internal websites
-	// via a web proxy.
+	// Configuration information required to connect to your internal websites via
+	// a web proxy.
 	//
 	// You must provide the website host name and port number. For example, the
 	// host name of https://a.example.com/page1.html is "a.example.com" and the
@@ -19154,19 +27570,21 @@ type WebCrawlerConfiguration struct {
 	//
 	// Web proxy credentials are optional and you can use them to connect to a web
 	// proxy server that requires basic authentication. To store web proxy credentials,
-	// you use a secret in AWS Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html).
+	// you use a secret in Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html).
 	ProxyConfiguration *ProxyConfiguration `type:"structure"`
 
-	// The regular expression pattern to exclude certain URLs to crawl.
-	//
-	// If there is a regular expression pattern to include certain URLs that conflicts
-	// with the exclude pattern, the exclude pattern takes precedence.
+	// A list of regular expression patterns to exclude certain URLs to crawl. URLs
+	// that match the patterns are excluded from the index. URLs that don't match
+	// the patterns are included in the index. If a URL matches both an inclusion
+	// and exclusion pattern, the exclusion pattern takes precedence and the URL
+	// file isn't included in the index.
 	UrlExclusionPatterns []*string `type:"list"`
 
-	// The regular expression pattern to include certain URLs to crawl.
-	//
-	// If there is a regular expression pattern to exclude certain URLs that conflicts
-	// with the include pattern, the exclude pattern takes precedence.
+	// A list of regular expression patterns to include certain URLs to crawl. URLs
+	// that match the patterns are included in the index. URLs that don't match
+	// the patterns are excluded from the index. If a URL matches both an inclusion
+	// and exclusion pattern, the exclusion pattern takes precedence and the URL
+	// file isn't included in the index.
 	UrlInclusionPatterns []*string `type:"list"`
 
 	// Specifies the seed or starting point URLs of the websites or the sitemap
@@ -19181,7 +27599,7 @@ type WebCrawlerConfiguration struct {
 	//
 	// When selecting websites to index, you must adhere to the Amazon Acceptable
 	// Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-	// that you must only use the Amazon Kendra web crawler to index your own webpages,
+	// that you must only use Amazon Kendra Web Crawler to index your own webpages,
 	// or webpages that you have authorization to index.
 	//
 	// Urls is a required field
@@ -19314,46 +27732,41 @@ type WorkDocsConfiguration struct {
 	// A list of regular expression patterns to exclude certain files in your Amazon
 	// WorkDocs site repository. Files that match the patterns are excluded from
 	// the index. Files that don’t match the patterns are included in the index.
-	// If a file matches both an inclusion pattern and an exclusion pattern, the
-	// exclusion pattern takes precedence and the file isn’t included in the index.
+	// If a file matches both an inclusion and exclusion pattern, the exclusion
+	// pattern takes precedence and the file isn't included in the index.
 	ExclusionPatterns []*string `type:"list"`
 
 	// A list of DataSourceToIndexFieldMapping objects that map Amazon WorkDocs
-	// field names to custom index field names in Amazon Kendra. You must first
-	// create the custom index fields using the UpdateIndex operation before you
-	// map to Amazon WorkDocs fields. For more information, see Mapping Data Source
-	// Fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
-	// The Amazon WorkDocs data source field names need to exist in your Amazon
-	// WorkDocs custom metadata.
+	// data source attributes or field names to Amazon Kendra index field names.
+	// To create custom fields, use the UpdateIndex API before you map to Amazon
+	// WorkDocs fields. For more information, see Mapping data source fields (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html).
+	// The Amazon WorkDocs data source field names must exist in your Amazon WorkDocs
+	// custom metadata.
 	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
 
 	// A list of regular expression patterns to include certain files in your Amazon
 	// WorkDocs site repository. Files that match the patterns are included in the
 	// index. Files that don't match the patterns are excluded from the index. If
-	// a file matches both an inclusion pattern and an exclusion pattern, the exclusion
-	// pattern takes precedence and the file isn’t included in the index.
+	// a file matches both an inclusion and exclusion pattern, the exclusion pattern
+	// takes precedence and the file isn't included in the index.
 	InclusionPatterns []*string `type:"list"`
 
 	// The identifier of the directory corresponding to your Amazon WorkDocs site
 	// repository.
 	//
-	// You can find the organization ID in the AWS Directory Service (https://console.aws.amazon.com/directoryservicev2/)
+	// You can find the organization ID in the Directory Service (https://console.aws.amazon.com/directoryservicev2/)
 	// by going to Active Directory, then Directories. Your Amazon WorkDocs site
 	// directory has an ID, which is the organization ID. You can also set up a
-	// new Amazon WorkDocs directory in the AWS Directory Service console and enable
+	// new Amazon WorkDocs directory in the Directory Service console and enable
 	// a Amazon WorkDocs site for the directory in the Amazon WorkDocs console.
 	//
 	// OrganizationId is a required field
 	OrganizationId *string `min:"12" type:"string" required:"true"`
 
-	// TRUE to use the change logs to update documents in your index instead of
-	// scanning all documents.
-	//
-	// If you are syncing your Amazon WorkDocs data source with your index for the
-	// first time, all documents are scanned. After your first sync, you can use
-	// the change logs to update your documents in your index for future syncs.
-	//
-	// The default is set to FALSE.
+	// TRUE to use the Amazon WorkDocs change log to determine which documents require
+	// updating in the index. Depending on the change log's size, it may take longer
+	// for Amazon Kendra to use the change log than to scan all of your documents
+	// in Amazon WorkDocs.
 	UseChangeLog *bool `type:"boolean"`
 }
 
@@ -19449,6 +27862,78 @@ const (
 func AdditionalResultAttributeValueType_Values() []string {
 	return []string{
 		AdditionalResultAttributeValueTypeTextWithHighlightsValue,
+	}
+}
+
+const (
+	// AlfrescoEntityWiki is a AlfrescoEntity enum value
+	AlfrescoEntityWiki = "wiki"
+
+	// AlfrescoEntityBlog is a AlfrescoEntity enum value
+	AlfrescoEntityBlog = "blog"
+
+	// AlfrescoEntityDocumentLibrary is a AlfrescoEntity enum value
+	AlfrescoEntityDocumentLibrary = "documentLibrary"
+)
+
+// AlfrescoEntity_Values returns all elements of the AlfrescoEntity enum
+func AlfrescoEntity_Values() []string {
+	return []string{
+		AlfrescoEntityWiki,
+		AlfrescoEntityBlog,
+		AlfrescoEntityDocumentLibrary,
+	}
+}
+
+const (
+	// ConditionOperatorGreaterThan is a ConditionOperator enum value
+	ConditionOperatorGreaterThan = "GreaterThan"
+
+	// ConditionOperatorGreaterThanOrEquals is a ConditionOperator enum value
+	ConditionOperatorGreaterThanOrEquals = "GreaterThanOrEquals"
+
+	// ConditionOperatorLessThan is a ConditionOperator enum value
+	ConditionOperatorLessThan = "LessThan"
+
+	// ConditionOperatorLessThanOrEquals is a ConditionOperator enum value
+	ConditionOperatorLessThanOrEquals = "LessThanOrEquals"
+
+	// ConditionOperatorEquals is a ConditionOperator enum value
+	ConditionOperatorEquals = "Equals"
+
+	// ConditionOperatorNotEquals is a ConditionOperator enum value
+	ConditionOperatorNotEquals = "NotEquals"
+
+	// ConditionOperatorContains is a ConditionOperator enum value
+	ConditionOperatorContains = "Contains"
+
+	// ConditionOperatorNotContains is a ConditionOperator enum value
+	ConditionOperatorNotContains = "NotContains"
+
+	// ConditionOperatorExists is a ConditionOperator enum value
+	ConditionOperatorExists = "Exists"
+
+	// ConditionOperatorNotExists is a ConditionOperator enum value
+	ConditionOperatorNotExists = "NotExists"
+
+	// ConditionOperatorBeginsWith is a ConditionOperator enum value
+	ConditionOperatorBeginsWith = "BeginsWith"
+)
+
+// ConditionOperator_Values returns all elements of the ConditionOperator enum
+func ConditionOperator_Values() []string {
+	return []string{
+		ConditionOperatorGreaterThan,
+		ConditionOperatorGreaterThanOrEquals,
+		ConditionOperatorLessThan,
+		ConditionOperatorLessThanOrEquals,
+		ConditionOperatorEquals,
+		ConditionOperatorNotEquals,
+		ConditionOperatorContains,
+		ConditionOperatorNotContains,
+		ConditionOperatorExists,
+		ConditionOperatorNotExists,
+		ConditionOperatorBeginsWith,
 	}
 }
 
@@ -19769,6 +28254,27 @@ const (
 
 	// DataSourceTypeWorkdocs is a DataSourceType enum value
 	DataSourceTypeWorkdocs = "WORKDOCS"
+
+	// DataSourceTypeFsx is a DataSourceType enum value
+	DataSourceTypeFsx = "FSX"
+
+	// DataSourceTypeSlack is a DataSourceType enum value
+	DataSourceTypeSlack = "SLACK"
+
+	// DataSourceTypeBox is a DataSourceType enum value
+	DataSourceTypeBox = "BOX"
+
+	// DataSourceTypeQuip is a DataSourceType enum value
+	DataSourceTypeQuip = "QUIP"
+
+	// DataSourceTypeJira is a DataSourceType enum value
+	DataSourceTypeJira = "JIRA"
+
+	// DataSourceTypeGithub is a DataSourceType enum value
+	DataSourceTypeGithub = "GITHUB"
+
+	// DataSourceTypeAlfresco is a DataSourceType enum value
+	DataSourceTypeAlfresco = "ALFRESCO"
 )
 
 // DataSourceType_Values returns all elements of the DataSourceType enum
@@ -19785,6 +28291,13 @@ func DataSourceType_Values() []string {
 		DataSourceTypeGoogledrive,
 		DataSourceTypeWebcrawler,
 		DataSourceTypeWorkdocs,
+		DataSourceTypeFsx,
+		DataSourceTypeSlack,
+		DataSourceTypeBox,
+		DataSourceTypeQuip,
+		DataSourceTypeJira,
+		DataSourceTypeGithub,
+		DataSourceTypeAlfresco,
 	}
 }
 
@@ -19869,6 +28382,34 @@ func DocumentStatus_Values() []string {
 }
 
 const (
+	// EndpointTypeHome is a EndpointType enum value
+	EndpointTypeHome = "HOME"
+)
+
+// EndpointType_Values returns all elements of the EndpointType enum
+func EndpointType_Values() []string {
+	return []string{
+		EndpointTypeHome,
+	}
+}
+
+const (
+	// EntityTypeUser is a EntityType enum value
+	EntityTypeUser = "USER"
+
+	// EntityTypeGroup is a EntityType enum value
+	EntityTypeGroup = "GROUP"
+)
+
+// EntityType_Values returns all elements of the EntityType enum
+func EntityType_Values() []string {
+	return []string{
+		EntityTypeUser,
+		EntityTypeGroup,
+	}
+}
+
+const (
 	// ErrorCodeInternalError is a ErrorCode enum value
 	ErrorCodeInternalError = "InternalError"
 
@@ -19881,6 +28422,30 @@ func ErrorCode_Values() []string {
 	return []string{
 		ErrorCodeInternalError,
 		ErrorCodeInvalidRequest,
+	}
+}
+
+const (
+	// ExperienceStatusCreating is a ExperienceStatus enum value
+	ExperienceStatusCreating = "CREATING"
+
+	// ExperienceStatusActive is a ExperienceStatus enum value
+	ExperienceStatusActive = "ACTIVE"
+
+	// ExperienceStatusDeleting is a ExperienceStatus enum value
+	ExperienceStatusDeleting = "DELETING"
+
+	// ExperienceStatusFailed is a ExperienceStatus enum value
+	ExperienceStatusFailed = "FAILED"
+)
+
+// ExperienceStatus_Values returns all elements of the ExperienceStatus enum
+func ExperienceStatus_Values() []string {
+	return []string{
+		ExperienceStatusCreating,
+		ExperienceStatusActive,
+		ExperienceStatusDeleting,
+		ExperienceStatusFailed,
 	}
 }
 
@@ -19929,6 +28494,18 @@ func FaqStatus_Values() []string {
 		FaqStatusActive,
 		FaqStatusDeleting,
 		FaqStatusFailed,
+	}
+}
+
+const (
+	// FsxFileSystemTypeWindows is a FsxFileSystemType enum value
+	FsxFileSystemTypeWindows = "WINDOWS"
+)
+
+// FsxFileSystemType_Values returns all elements of the FsxFileSystemType enum
+func FsxFileSystemType_Values() []string {
+	return []string{
+		FsxFileSystemTypeWindows,
 	}
 }
 
@@ -19997,6 +28574,58 @@ func IndexStatus_Values() []string {
 }
 
 const (
+	// IntervalThisMonth is a Interval enum value
+	IntervalThisMonth = "THIS_MONTH"
+
+	// IntervalThisWeek is a Interval enum value
+	IntervalThisWeek = "THIS_WEEK"
+
+	// IntervalOneWeekAgo is a Interval enum value
+	IntervalOneWeekAgo = "ONE_WEEK_AGO"
+
+	// IntervalTwoWeeksAgo is a Interval enum value
+	IntervalTwoWeeksAgo = "TWO_WEEKS_AGO"
+
+	// IntervalOneMonthAgo is a Interval enum value
+	IntervalOneMonthAgo = "ONE_MONTH_AGO"
+
+	// IntervalTwoMonthsAgo is a Interval enum value
+	IntervalTwoMonthsAgo = "TWO_MONTHS_AGO"
+)
+
+// Interval_Values returns all elements of the Interval enum
+func Interval_Values() []string {
+	return []string{
+		IntervalThisMonth,
+		IntervalThisWeek,
+		IntervalOneWeekAgo,
+		IntervalTwoWeeksAgo,
+		IntervalOneMonthAgo,
+		IntervalTwoMonthsAgo,
+	}
+}
+
+const (
+	// IssueSubEntityComments is a IssueSubEntity enum value
+	IssueSubEntityComments = "COMMENTS"
+
+	// IssueSubEntityAttachments is a IssueSubEntity enum value
+	IssueSubEntityAttachments = "ATTACHMENTS"
+
+	// IssueSubEntityWorklogs is a IssueSubEntity enum value
+	IssueSubEntityWorklogs = "WORKLOGS"
+)
+
+// IssueSubEntity_Values returns all elements of the IssueSubEntity enum
+func IssueSubEntity_Values() []string {
+	return []string{
+		IssueSubEntityComments,
+		IssueSubEntityAttachments,
+		IssueSubEntityWorklogs,
+	}
+}
+
+const (
 	// KeyLocationUrl is a KeyLocation enum value
 	KeyLocationUrl = "URL"
 
@@ -20009,6 +28638,38 @@ func KeyLocation_Values() []string {
 	return []string{
 		KeyLocationUrl,
 		KeyLocationSecretManager,
+	}
+}
+
+const (
+	// MetricTypeQueriesByCount is a MetricType enum value
+	MetricTypeQueriesByCount = "QUERIES_BY_COUNT"
+
+	// MetricTypeQueriesByZeroClickRate is a MetricType enum value
+	MetricTypeQueriesByZeroClickRate = "QUERIES_BY_ZERO_CLICK_RATE"
+
+	// MetricTypeQueriesByZeroResultRate is a MetricType enum value
+	MetricTypeQueriesByZeroResultRate = "QUERIES_BY_ZERO_RESULT_RATE"
+
+	// MetricTypeDocsByClickCount is a MetricType enum value
+	MetricTypeDocsByClickCount = "DOCS_BY_CLICK_COUNT"
+
+	// MetricTypeAggQueryDocMetrics is a MetricType enum value
+	MetricTypeAggQueryDocMetrics = "AGG_QUERY_DOC_METRICS"
+
+	// MetricTypeTrendQueryDocMetrics is a MetricType enum value
+	MetricTypeTrendQueryDocMetrics = "TREND_QUERY_DOC_METRICS"
+)
+
+// MetricType_Values returns all elements of the MetricType enum
+func MetricType_Values() []string {
+	return []string{
+		MetricTypeQueriesByCount,
+		MetricTypeQueriesByZeroClickRate,
+		MetricTypeQueriesByZeroResultRate,
+		MetricTypeDocsByClickCount,
+		MetricTypeAggQueryDocMetrics,
+		MetricTypeTrendQueryDocMetrics,
 	}
 }
 
@@ -20041,6 +28702,22 @@ func Order_Values() []string {
 	return []string{
 		OrderAscending,
 		OrderDescending,
+	}
+}
+
+const (
+	// PersonaOwner is a Persona enum value
+	PersonaOwner = "OWNER"
+
+	// PersonaViewer is a Persona enum value
+	PersonaViewer = "VIEWER"
+)
+
+// Persona_Values returns all elements of the Persona enum
+func Persona_Values() []string {
+	return []string{
+		PersonaOwner,
+		PersonaViewer,
 	}
 }
 
@@ -20378,6 +29055,22 @@ func ServiceNowBuildVersionType_Values() []string {
 }
 
 const (
+	// SharePointOnlineAuthenticationTypeHttpBasic is a SharePointOnlineAuthenticationType enum value
+	SharePointOnlineAuthenticationTypeHttpBasic = "HTTP_BASIC"
+
+	// SharePointOnlineAuthenticationTypeOauth2 is a SharePointOnlineAuthenticationType enum value
+	SharePointOnlineAuthenticationTypeOauth2 = "OAUTH2"
+)
+
+// SharePointOnlineAuthenticationType_Values returns all elements of the SharePointOnlineAuthenticationType enum
+func SharePointOnlineAuthenticationType_Values() []string {
+	return []string{
+		SharePointOnlineAuthenticationTypeHttpBasic,
+		SharePointOnlineAuthenticationTypeOauth2,
+	}
+}
+
+const (
 	// SharePointVersionSharepoint2013 is a SharePointVersion enum value
 	SharePointVersionSharepoint2013 = "SHAREPOINT_2013"
 
@@ -20394,6 +29087,30 @@ func SharePointVersion_Values() []string {
 		SharePointVersionSharepoint2013,
 		SharePointVersionSharepoint2016,
 		SharePointVersionSharepointOnline,
+	}
+}
+
+const (
+	// SlackEntityPublicChannel is a SlackEntity enum value
+	SlackEntityPublicChannel = "PUBLIC_CHANNEL"
+
+	// SlackEntityPrivateChannel is a SlackEntity enum value
+	SlackEntityPrivateChannel = "PRIVATE_CHANNEL"
+
+	// SlackEntityGroupMessage is a SlackEntity enum value
+	SlackEntityGroupMessage = "GROUP_MESSAGE"
+
+	// SlackEntityDirectMessage is a SlackEntity enum value
+	SlackEntityDirectMessage = "DIRECT_MESSAGE"
+)
+
+// SlackEntity_Values returns all elements of the SlackEntity enum
+func SlackEntity_Values() []string {
+	return []string{
+		SlackEntityPublicChannel,
+		SlackEntityPrivateChannel,
+		SlackEntityGroupMessage,
+		SlackEntityDirectMessage,
 	}
 }
 
@@ -20446,6 +29163,22 @@ func ThesaurusStatus_Values() []string {
 }
 
 const (
+	// TypeSaas is a Type enum value
+	TypeSaas = "SAAS"
+
+	// TypeOnPremise is a Type enum value
+	TypeOnPremise = "ON_PREMISE"
+)
+
+// Type_Values returns all elements of the Type enum
+func Type_Values() []string {
+	return []string{
+		TypeSaas,
+		TypeOnPremise,
+	}
+}
+
+const (
 	// UserContextPolicyAttributeFilter is a UserContextPolicy enum value
 	UserContextPolicyAttributeFilter = "ATTRIBUTE_FILTER"
 
@@ -20474,6 +29207,18 @@ func UserGroupResolutionMode_Values() []string {
 	return []string{
 		UserGroupResolutionModeAwsSso,
 		UserGroupResolutionModeNone,
+	}
+}
+
+const (
+	// WarningCodeQueryLanguageInvalidSyntax is a WarningCode enum value
+	WarningCodeQueryLanguageInvalidSyntax = "QUERY_LANGUAGE_INVALID_SYNTAX"
+)
+
+// WarningCode_Values returns all elements of the WarningCode enum
+func WarningCode_Values() []string {
+	return []string{
+		WarningCodeQueryLanguageInvalidSyntax,
 	}
 }
 

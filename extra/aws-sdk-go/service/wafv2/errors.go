@@ -15,6 +15,23 @@ const (
 	// by another resource or it’s associated with another resource.
 	ErrCodeWAFAssociatedItemException = "WAFAssociatedItemException"
 
+	// ErrCodeWAFConfigurationWarningException for service response error code
+	// "WAFConfigurationWarningException".
+	//
+	// The operation failed because you are inspecting the web request body, headers,
+	// or cookies without specifying how to handle oversize components. Rules that
+	// inspect the body must either provide an OversizeHandling configuration or
+	// they must be preceded by a SizeConstraintStatement that blocks the body content
+	// from being too large. Rules that inspect the headers or cookies must provide
+	// an OversizeHandling configuration.
+	//
+	// Provide the handling configuration and retry your operation.
+	//
+	// Alternately, you can suppress this warning by adding the following tag to
+	// the resource that you provide to this operation: Tag (key:WAF:OversizeFieldsHandlingConstraintOptOut,
+	// value:true).
+	ErrCodeWAFConfigurationWarningException = "WAFConfigurationWarningException"
+
 	// ErrCodeWAFDuplicateItemException for service response error code
 	// "WAFDuplicateItemException".
 	//
@@ -75,8 +92,9 @@ const (
 	//
 	//    * Effect must specify Allow.
 	//
-	//    * Action must specify wafv2:CreateWebACL, wafv2:UpdateWebACL, and wafv2:PutFirewallManagerRuleGroups.
-	//    WAF rejects any extra actions or wildcard actions in the policy.
+	//    * Action must specify wafv2:CreateWebACL, wafv2:UpdateWebACL, and wafv2:PutFirewallManagerRuleGroups
+	//    and may optionally specify wafv2:GetRuleGroup. WAF rejects any extra actions
+	//    or wildcard actions in the policy.
 	//
 	//    * The policy must not include a Resource parameter.
 	//
@@ -98,6 +116,15 @@ const (
 	// an Amazon Web Services account. For more information, see WAF quotas (https://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
 	// in the WAF Developer Guide.
 	ErrCodeWAFLimitsExceededException = "WAFLimitsExceededException"
+
+	// ErrCodeWAFLogDestinationPermissionIssueException for service response error code
+	// "WAFLogDestinationPermissionIssueException".
+	//
+	// The operation failed because you don't have the permissions that your logging
+	// configuration requires. For information, see Logging web ACL traffic information
+	// (https://docs.aws.amazon.com/waf/latest/developerguide/logging.html) in the
+	// WAF Developer Guide.
+	ErrCodeWAFLogDestinationPermissionIssueException = "WAFLogDestinationPermissionIssueException"
 
 	// ErrCodeWAFNonexistentItemException for service response error code
 	// "WAFNonexistentItemException".
@@ -149,12 +176,15 @@ const (
 	// ErrCodeWAFUnavailableEntityException for service response error code
 	// "WAFUnavailableEntityException".
 	//
-	// WAF couldn’t retrieve the resource that you requested. Retry your request.
+	// WAF couldn’t retrieve a resource that you specified for this operation.
+	// Verify the resources that you are specifying in your request parameters and
+	// then retry the operation.
 	ErrCodeWAFUnavailableEntityException = "WAFUnavailableEntityException"
 )
 
 var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"WAFAssociatedItemException":                 newErrorWAFAssociatedItemException,
+	"WAFConfigurationWarningException":           newErrorWAFConfigurationWarningException,
 	"WAFDuplicateItemException":                  newErrorWAFDuplicateItemException,
 	"WAFExpiredManagedRuleGroupVersionException": newErrorWAFExpiredManagedRuleGroupVersionException,
 	"WAFInternalErrorException":                  newErrorWAFInternalErrorException,
@@ -163,6 +193,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"WAFInvalidPermissionPolicyException":        newErrorWAFInvalidPermissionPolicyException,
 	"WAFInvalidResourceException":                newErrorWAFInvalidResourceException,
 	"WAFLimitsExceededException":                 newErrorWAFLimitsExceededException,
+	"WAFLogDestinationPermissionIssueException":  newErrorWAFLogDestinationPermissionIssueException,
 	"WAFNonexistentItemException":                newErrorWAFNonexistentItemException,
 	"WAFOptimisticLockException":                 newErrorWAFOptimisticLockException,
 	"WAFServiceLinkedRoleErrorException":         newErrorWAFServiceLinkedRoleErrorException,

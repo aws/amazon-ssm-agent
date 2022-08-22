@@ -131,7 +131,7 @@ type EmptyStreamEventStream struct {
 //
 // The Reader member must be set before reading events from the stream.
 //
-//   es := NewEmptyStreamEventStream(func(o *EmptyStreamEventStream{
+//   es := NewEmptyStreamEventStream(func(o *EmptyStreamEventStream){
 //       es.Reader = myMockStreamReader
 //   })
 func NewEmptyStreamEventStream(opts ...func(*EmptyStreamEventStream)) *EmptyStreamEventStream {
@@ -358,7 +358,7 @@ type GetEventStreamEventStream struct {
 //
 // The Reader member must be set before reading events from the stream.
 //
-//   es := NewGetEventStreamEventStream(func(o *GetEventStreamEventStream{
+//   es := NewGetEventStreamEventStream(func(o *GetEventStreamEventStream){
 //       es.Reader = myMockStreamReader
 //   })
 func NewGetEventStreamEventStream(opts ...func(*GetEventStreamEventStream)) *GetEventStreamEventStream {
@@ -560,7 +560,7 @@ func (c *RESTJSONService) OtherOperationWithContext(ctx aws.Context, input *Othe
 }
 
 type EmptyEvent struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -933,15 +933,15 @@ func (u unmarshalerForEventStreamEvent) UnmarshalerForEventName(eventType string
 		return &ExplicitPayloadEvent{}, nil
 	case "Headers":
 		return &HeaderOnlyEvent{}, nil
-	case "ImplicitPayload":
+	case "implicitPayload":
 		return &ImplicitPayloadEvent{}, nil
-	case "PayloadOnly":
+	case "payloadOnly":
 		return &PayloadOnlyEvent{}, nil
 	case "PayloadOnlyBlob":
 		return &PayloadOnlyBlobEvent{}, nil
-	case "PayloadOnlyString":
+	case "payloadOnlyString":
 		return &PayloadOnlyStringEvent{}, nil
-	case "Exception":
+	case "exception":
 		return newErrorExceptionEvent(u.metadata).(eventstreamapi.Unmarshaler), nil
 	case "Exception2":
 		return newErrorExceptionEvent2(u.metadata).(eventstreamapi.Unmarshaler), nil
@@ -1616,7 +1616,7 @@ func (s OtherOperationInput) GoString() string {
 }
 
 type OtherOperationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.

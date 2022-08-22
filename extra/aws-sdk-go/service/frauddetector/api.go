@@ -1071,7 +1071,8 @@ func (c *FraudDetector) DeleteBatchImportJobRequest(input *DeleteBatchImportJobI
 
 // DeleteBatchImportJob API operation for Amazon Fraud Detector.
 //
-// Deletes data that was batch imported to Amazon Fraud Detector.
+// Deletes the specified batch import job ID record. This action does not delete
+// the data that was batch imported.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3743,6 +3744,101 @@ func (c *FraudDetector) GetEventPredictionWithContext(ctx aws.Context, input *Ge
 	return out, req.Send()
 }
 
+const opGetEventPredictionMetadata = "GetEventPredictionMetadata"
+
+// GetEventPredictionMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the GetEventPredictionMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEventPredictionMetadata for more information on using the GetEventPredictionMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetEventPredictionMetadataRequest method.
+//    req, resp := client.GetEventPredictionMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetEventPredictionMetadata
+func (c *FraudDetector) GetEventPredictionMetadataRequest(input *GetEventPredictionMetadataInput) (req *request.Request, output *GetEventPredictionMetadataOutput) {
+	op := &request.Operation{
+		Name:       opGetEventPredictionMetadata,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetEventPredictionMetadataInput{}
+	}
+
+	output = &GetEventPredictionMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEventPredictionMetadata API operation for Amazon Fraud Detector.
+//
+// Gets details of the past fraud predictions for the specified event ID, event
+// type, detector ID, and detector version ID that was generated in the specified
+// time period.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation GetEventPredictionMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * ResourceNotFoundException
+//   An exception indicating the specified resource was not found.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/GetEventPredictionMetadata
+func (c *FraudDetector) GetEventPredictionMetadata(input *GetEventPredictionMetadataInput) (*GetEventPredictionMetadataOutput, error) {
+	req, out := c.GetEventPredictionMetadataRequest(input)
+	return out, req.Send()
+}
+
+// GetEventPredictionMetadataWithContext is the same as GetEventPredictionMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEventPredictionMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) GetEventPredictionMetadataWithContext(ctx aws.Context, input *GetEventPredictionMetadataInput, opts ...request.Option) (*GetEventPredictionMetadataOutput, error) {
+	req, out := c.GetEventPredictionMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetEventTypes = "GetEventTypes"
 
 // GetEventTypesRequest generates a "aws/request.Request" representing the
@@ -5020,6 +5116,165 @@ func (c *FraudDetector) GetVariablesPagesWithContext(ctx aws.Context, input *Get
 
 	for p.Next() {
 		if !fn(p.Page().(*GetVariablesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListEventPredictions = "ListEventPredictions"
+
+// ListEventPredictionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListEventPredictions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEventPredictions for more information on using the ListEventPredictions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListEventPredictionsRequest method.
+//    req, resp := client.ListEventPredictionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/ListEventPredictions
+func (c *FraudDetector) ListEventPredictionsRequest(input *ListEventPredictionsInput) (req *request.Request, output *ListEventPredictionsOutput) {
+	op := &request.Operation{
+		Name:       opListEventPredictions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEventPredictionsInput{}
+	}
+
+	output = &ListEventPredictionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEventPredictions API operation for Amazon Fraud Detector.
+//
+// Gets a list of past predictions. The list can be filtered by detector ID,
+// detector version ID, event ID, event type, or by specifying a time period.
+// If filter is not specified, the most recent prediction is returned.
+//
+// For example, the following filter lists all past predictions for xyz event
+// type - { "eventType":{ "value": "xyz" }” }
+//
+// This is a paginated API. If you provide a null maxResults, this action will
+// retrieve a maximum of 10 records per page. If you provide a maxResults, the
+// value must be between 50 and 100. To get the next page results, provide the
+// nextToken from the response as part of your request. A null nextToken fetches
+// the records from the beginning.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Fraud Detector's
+// API operation ListEventPredictions for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   An exception indicating a specified value is not allowed.
+//
+//   * AccessDeniedException
+//   An exception indicating Amazon Fraud Detector does not have the needed permissions.
+//   This can occur if you submit a request, such as PutExternalModel, that specifies
+//   a role that is not in your account.
+//
+//   * ThrottlingException
+//   An exception indicating a throttling error.
+//
+//   * InternalServerException
+//   An exception indicating an internal server error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/frauddetector-2019-11-15/ListEventPredictions
+func (c *FraudDetector) ListEventPredictions(input *ListEventPredictionsInput) (*ListEventPredictionsOutput, error) {
+	req, out := c.ListEventPredictionsRequest(input)
+	return out, req.Send()
+}
+
+// ListEventPredictionsWithContext is the same as ListEventPredictions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEventPredictions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) ListEventPredictionsWithContext(ctx aws.Context, input *ListEventPredictionsInput, opts ...request.Option) (*ListEventPredictionsOutput, error) {
+	req, out := c.ListEventPredictionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListEventPredictionsPages iterates over the pages of a ListEventPredictions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListEventPredictions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListEventPredictions operation.
+//    pageNum := 0
+//    err := client.ListEventPredictionsPages(params,
+//        func(page *frauddetector.ListEventPredictionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *FraudDetector) ListEventPredictionsPages(input *ListEventPredictionsInput, fn func(*ListEventPredictionsOutput, bool) bool) error {
+	return c.ListEventPredictionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListEventPredictionsPagesWithContext same as ListEventPredictionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FraudDetector) ListEventPredictionsPagesWithContext(ctx aws.Context, input *ListEventPredictionsInput, fn func(*ListEventPredictionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListEventPredictionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListEventPredictionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListEventPredictionsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -6769,6 +7024,8 @@ func (c *FraudDetector) UpdateModelVersionStatusRequest(input *UpdateModelVersio
 //
 // You can perform the following status updates:
 //
+// Change the TRAINING_IN_PROGRESS status to TRAINING_CANCELLED.
+//
 // Change the TRAINING_COMPLETE status to ACTIVE.
 //
 // Change ACTIVE to INACTIVE.
@@ -7114,6 +7371,155 @@ func (c *FraudDetector) UpdateVariableWithContext(ctx aws.Context, input *Update
 	return out, req.Send()
 }
 
+// The Account Takeover Insights (ATI) model performance metrics data points.
+type ATIMetricDataPoint struct {
+	_ struct{} `type:"structure"`
+
+	// The anomaly discovery rate. This metric quantifies the percentage of anomalies
+	// that can be detected by the model at the selected score threshold. A lower
+	// score threshold increases the percentage of anomalies captured by the model,
+	// but would also require challenging a larger percentage of login events, leading
+	// to a higher customer friction.
+	Adr *float64 `locationName:"adr" type:"float"`
+
+	// The account takeover discovery rate. This metric quantifies the percentage
+	// of account compromise events that can be detected by the model at the selected
+	// score threshold. This metric is only available if 50 or more entities with
+	// at-least one labeled account takeover event is present in the ingested dataset.
+	Atodr *float64 `locationName:"atodr" type:"float"`
+
+	// The challenge rate. This indicates the percentage of login events that the
+	// model recommends to challenge such as one-time password, multi-factor authentication,
+	// and investigations.
+	Cr *float64 `locationName:"cr" type:"float"`
+
+	// The model's threshold that specifies an acceptable fraud capture rate. For
+	// example, a threshold of 500 means any model score 500 or above is labeled
+	// as fraud.
+	Threshold *float64 `locationName:"threshold" type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ATIMetricDataPoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ATIMetricDataPoint) GoString() string {
+	return s.String()
+}
+
+// SetAdr sets the Adr field's value.
+func (s *ATIMetricDataPoint) SetAdr(v float64) *ATIMetricDataPoint {
+	s.Adr = &v
+	return s
+}
+
+// SetAtodr sets the Atodr field's value.
+func (s *ATIMetricDataPoint) SetAtodr(v float64) *ATIMetricDataPoint {
+	s.Atodr = &v
+	return s
+}
+
+// SetCr sets the Cr field's value.
+func (s *ATIMetricDataPoint) SetCr(v float64) *ATIMetricDataPoint {
+	s.Cr = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *ATIMetricDataPoint) SetThreshold(v float64) *ATIMetricDataPoint {
+	s.Threshold = &v
+	return s
+}
+
+// The Account Takeover Insights (ATI) model performance score.
+type ATIModelPerformance struct {
+	_ struct{} `type:"structure"`
+
+	// The anomaly separation index (ASI) score. This metric summarizes the overall
+	// ability of the model to separate anomalous activities from the normal behavior.
+	// Depending on the business, a large fraction of these anomalous activities
+	// can be malicious and correspond to the account takeover attacks. A model
+	// with no separability power will have the lowest possible ASI score of 0.5,
+	// whereas the a model with a high separability power will have the highest
+	// possible ASI score of 1.0
+	Asi *float64 `locationName:"asi" type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ATIModelPerformance) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ATIModelPerformance) GoString() string {
+	return s.String()
+}
+
+// SetAsi sets the Asi field's value.
+func (s *ATIModelPerformance) SetAsi(v float64) *ATIModelPerformance {
+	s.Asi = &v
+	return s
+}
+
+// The Account Takeover Insights (ATI) model training metric details.
+type ATITrainingMetricsValue struct {
+	_ struct{} `type:"structure"`
+
+	// The model's performance metrics data points.
+	MetricDataPoints []*ATIMetricDataPoint `locationName:"metricDataPoints" type:"list"`
+
+	// The model's overall performance scores.
+	ModelPerformance *ATIModelPerformance `locationName:"modelPerformance" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ATITrainingMetricsValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ATITrainingMetricsValue) GoString() string {
+	return s.String()
+}
+
+// SetMetricDataPoints sets the MetricDataPoints field's value.
+func (s *ATITrainingMetricsValue) SetMetricDataPoints(v []*ATIMetricDataPoint) *ATITrainingMetricsValue {
+	s.MetricDataPoints = v
+	return s
+}
+
+// SetModelPerformance sets the ModelPerformance field's value.
+func (s *ATITrainingMetricsValue) SetModelPerformance(v *ATIModelPerformance) *ATITrainingMetricsValue {
+	s.ModelPerformance = v
+	return s
+}
+
 // An exception indicating Amazon Fraud Detector does not have the needed permissions.
 // This can occur if you submit a request, such as PutExternalModel, that specifies
 // a role that is not in your account.
@@ -7178,6 +7584,160 @@ func (s *AccessDeniedException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The log odds metric details.
+//
+// Account Takeover Insights (ATI) model uses event variables from the login
+// data you provide to continuously calculate a set of variables (aggregated
+// variables) based on historical events. For example, your ATI model might
+// calculate the number of times an user has logged in using the same IP address.
+// In this case, event variables used to derive the aggregated variables are
+// IP address and user.
+type AggregatedLogOddsMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The relative importance of the variables in the list to the other event variable.
+	//
+	// AggregatedVariablesImportance is a required field
+	AggregatedVariablesImportance *float64 `locationName:"aggregatedVariablesImportance" type:"float" required:"true"`
+
+	// The names of all the variables.
+	//
+	// VariableNames is a required field
+	VariableNames []*string `locationName:"variableNames" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregatedLogOddsMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregatedLogOddsMetric) GoString() string {
+	return s.String()
+}
+
+// SetAggregatedVariablesImportance sets the AggregatedVariablesImportance field's value.
+func (s *AggregatedLogOddsMetric) SetAggregatedVariablesImportance(v float64) *AggregatedLogOddsMetric {
+	s.AggregatedVariablesImportance = &v
+	return s
+}
+
+// SetVariableNames sets the VariableNames field's value.
+func (s *AggregatedLogOddsMetric) SetVariableNames(v []*string) *AggregatedLogOddsMetric {
+	s.VariableNames = v
+	return s
+}
+
+// The details of the impact of aggregated variables on the prediction score.
+//
+// Account Takeover Insights (ATI) model uses the login data you provide to
+// continuously calculate a set of variables (aggregated variables) based on
+// historical events. For example, the model might calculate the number of times
+// an user has logged in using the same IP address. In this case, event variables
+// used to derive the aggregated variables are IP address and user.
+type AggregatedVariablesImpactExplanation struct {
+	_ struct{} `type:"structure"`
+
+	// The names of all the event variables that were used to derive the aggregated
+	// variables.
+	EventVariableNames []*string `locationName:"eventVariableNames" type:"list"`
+
+	// The raw, uninterpreted value represented as log-odds of the fraud. These
+	// values are usually between -10 to +10, but range from -infinity to +infinity.
+	//
+	//    * A positive value indicates that the variables drove the risk score up.
+	//
+	//    * A negative value indicates that the variables drove the risk score down.
+	LogOddsImpact *float64 `locationName:"logOddsImpact" type:"float"`
+
+	// The relative impact of the aggregated variables in terms of magnitude on
+	// the prediction scores.
+	RelativeImpact *string `locationName:"relativeImpact" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregatedVariablesImpactExplanation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregatedVariablesImpactExplanation) GoString() string {
+	return s.String()
+}
+
+// SetEventVariableNames sets the EventVariableNames field's value.
+func (s *AggregatedVariablesImpactExplanation) SetEventVariableNames(v []*string) *AggregatedVariablesImpactExplanation {
+	s.EventVariableNames = v
+	return s
+}
+
+// SetLogOddsImpact sets the LogOddsImpact field's value.
+func (s *AggregatedVariablesImpactExplanation) SetLogOddsImpact(v float64) *AggregatedVariablesImpactExplanation {
+	s.LogOddsImpact = &v
+	return s
+}
+
+// SetRelativeImpact sets the RelativeImpact field's value.
+func (s *AggregatedVariablesImpactExplanation) SetRelativeImpact(v string) *AggregatedVariablesImpactExplanation {
+	s.RelativeImpact = &v
+	return s
+}
+
+// The details of the relative importance of the aggregated variables.
+//
+// Account Takeover Insights (ATI) model uses event variables from the login
+// data you provide to continuously calculate a set of variables (aggregated
+// variables) based on historical events. For example, your ATI model might
+// calculate the number of times an user has logged in using the same IP address.
+// In this case, event variables used to derive the aggregated variables are
+// IP address and user.
+type AggregatedVariablesImportanceMetrics struct {
+	_ struct{} `type:"structure"`
+
+	// List of variables' metrics.
+	LogOddsMetrics []*AggregatedLogOddsMetric `locationName:"logOddsMetrics" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregatedVariablesImportanceMetrics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregatedVariablesImportanceMetrics) GoString() string {
+	return s.String()
+}
+
+// SetLogOddsMetrics sets the LogOddsMetrics field's value.
+func (s *AggregatedVariablesImportanceMetrics) SetLogOddsMetrics(v []*AggregatedLogOddsMetric) *AggregatedVariablesImportanceMetrics {
+	s.LogOddsMetrics = v
+	return s
 }
 
 // Provides the error of the batch create variable API.
@@ -9194,14 +9754,14 @@ func (s CreateVariableOutput) GoString() string {
 	return s.String()
 }
 
-// The model training validation messages.
+// The model training data validation metrics.
 type DataValidationMetrics struct {
 	_ struct{} `type:"structure"`
 
 	// The field-specific model training validation messages.
 	FieldLevelMessages []*FieldValidationMessage `locationName:"fieldLevelMessages" type:"list"`
 
-	// The file-specific model training validation messages.
+	// The file-specific model training data validation messages.
 	FileLevelMessages []*FileValidationMessage `locationName:"fileLevelMessages" type:"list"`
 }
 
@@ -10928,6 +11488,229 @@ func (s *EntityType) SetName(v string) *EntityType {
 	return s
 }
 
+// The details of the external (Amazon Sagemaker) model evaluated for generating
+// predictions.
+type EvaluatedExternalModel struct {
+	_ struct{} `type:"structure"`
+
+	// Input variables use for generating predictions.
+	//
+	// InputVariables is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EvaluatedExternalModel's
+	// String and GoString methods.
+	InputVariables map[string]*string `locationName:"inputVariables" type:"map" sensitive:"true"`
+
+	// The endpoint of the external (Amazon Sagemaker) model.
+	ModelEndpoint *string `locationName:"modelEndpoint" type:"string"`
+
+	// Output variables.
+	//
+	// OutputVariables is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EvaluatedExternalModel's
+	// String and GoString methods.
+	OutputVariables map[string]*string `locationName:"outputVariables" type:"map" sensitive:"true"`
+
+	// Indicates whether event variables were used to generate predictions.
+	UseEventVariables *bool `locationName:"useEventVariables" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EvaluatedExternalModel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EvaluatedExternalModel) GoString() string {
+	return s.String()
+}
+
+// SetInputVariables sets the InputVariables field's value.
+func (s *EvaluatedExternalModel) SetInputVariables(v map[string]*string) *EvaluatedExternalModel {
+	s.InputVariables = v
+	return s
+}
+
+// SetModelEndpoint sets the ModelEndpoint field's value.
+func (s *EvaluatedExternalModel) SetModelEndpoint(v string) *EvaluatedExternalModel {
+	s.ModelEndpoint = &v
+	return s
+}
+
+// SetOutputVariables sets the OutputVariables field's value.
+func (s *EvaluatedExternalModel) SetOutputVariables(v map[string]*string) *EvaluatedExternalModel {
+	s.OutputVariables = v
+	return s
+}
+
+// SetUseEventVariables sets the UseEventVariables field's value.
+func (s *EvaluatedExternalModel) SetUseEventVariables(v bool) *EvaluatedExternalModel {
+	s.UseEventVariables = &v
+	return s
+}
+
+// The model version evaluated for generating prediction.
+type EvaluatedModelVersion struct {
+	_ struct{} `type:"structure"`
+
+	// Evaluations generated for the model version.
+	Evaluations []*ModelVersionEvaluation `locationName:"evaluations" type:"list"`
+
+	// The model ID.
+	ModelId *string `locationName:"modelId" type:"string"`
+
+	// The model type.
+	//
+	// Valid values: ONLINE_FRAUD_INSIGHTS | TRANSACTION_FRAUD_INSIGHTS
+	ModelType *string `locationName:"modelType" type:"string"`
+
+	// The model version.
+	ModelVersion *string `locationName:"modelVersion" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EvaluatedModelVersion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EvaluatedModelVersion) GoString() string {
+	return s.String()
+}
+
+// SetEvaluations sets the Evaluations field's value.
+func (s *EvaluatedModelVersion) SetEvaluations(v []*ModelVersionEvaluation) *EvaluatedModelVersion {
+	s.Evaluations = v
+	return s
+}
+
+// SetModelId sets the ModelId field's value.
+func (s *EvaluatedModelVersion) SetModelId(v string) *EvaluatedModelVersion {
+	s.ModelId = &v
+	return s
+}
+
+// SetModelType sets the ModelType field's value.
+func (s *EvaluatedModelVersion) SetModelType(v string) *EvaluatedModelVersion {
+	s.ModelType = &v
+	return s
+}
+
+// SetModelVersion sets the ModelVersion field's value.
+func (s *EvaluatedModelVersion) SetModelVersion(v string) *EvaluatedModelVersion {
+	s.ModelVersion = &v
+	return s
+}
+
+// The details of the rule used for evaluating variable values.
+type EvaluatedRule struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the rule was evaluated.
+	Evaluated *bool `locationName:"evaluated" type:"boolean"`
+
+	// The rule expression.
+	//
+	// Expression is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EvaluatedRule's
+	// String and GoString methods.
+	Expression *string `locationName:"expression" type:"string" sensitive:"true"`
+
+	// The rule expression value.
+	//
+	// ExpressionWithValues is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EvaluatedRule's
+	// String and GoString methods.
+	ExpressionWithValues *string `locationName:"expressionWithValues" type:"string" sensitive:"true"`
+
+	// Indicates whether the rule matched.
+	Matched *bool `locationName:"matched" type:"boolean"`
+
+	// The rule outcome.
+	Outcomes []*string `locationName:"outcomes" type:"list"`
+
+	// The rule ID.
+	RuleId *string `locationName:"ruleId" min:"1" type:"string"`
+
+	// The rule version.
+	RuleVersion *string `locationName:"ruleVersion" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EvaluatedRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EvaluatedRule) GoString() string {
+	return s.String()
+}
+
+// SetEvaluated sets the Evaluated field's value.
+func (s *EvaluatedRule) SetEvaluated(v bool) *EvaluatedRule {
+	s.Evaluated = &v
+	return s
+}
+
+// SetExpression sets the Expression field's value.
+func (s *EvaluatedRule) SetExpression(v string) *EvaluatedRule {
+	s.Expression = &v
+	return s
+}
+
+// SetExpressionWithValues sets the ExpressionWithValues field's value.
+func (s *EvaluatedRule) SetExpressionWithValues(v string) *EvaluatedRule {
+	s.ExpressionWithValues = &v
+	return s
+}
+
+// SetMatched sets the Matched field's value.
+func (s *EvaluatedRule) SetMatched(v bool) *EvaluatedRule {
+	s.Matched = &v
+	return s
+}
+
+// SetOutcomes sets the Outcomes field's value.
+func (s *EvaluatedRule) SetOutcomes(v []*string) *EvaluatedRule {
+	s.Outcomes = v
+	return s
+}
+
+// SetRuleId sets the RuleId field's value.
+func (s *EvaluatedRule) SetRuleId(v string) *EvaluatedRule {
+	s.RuleId = &v
+	return s
+}
+
+// SetRuleVersion sets the RuleVersion field's value.
+func (s *EvaluatedRule) SetRuleVersion(v string) *EvaluatedRule {
+	s.RuleVersion = &v
+	return s
+}
+
 // The event details.
 type Event struct {
 	_ struct{} `type:"structure"`
@@ -11015,6 +11798,83 @@ func (s *Event) SetEventVariables(v map[string]*string) *Event {
 // SetLabelTimestamp sets the LabelTimestamp field's value.
 func (s *Event) SetLabelTimestamp(v string) *Event {
 	s.LabelTimestamp = &v
+	return s
+}
+
+// Information about the summary of an event prediction.
+type EventPredictionSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The detector ID.
+	DetectorId *string `locationName:"detectorId" min:"1" type:"string"`
+
+	// The detector version ID.
+	DetectorVersionId *string `locationName:"detectorVersionId" min:"1" type:"string"`
+
+	// The event ID.
+	EventId *string `locationName:"eventId" min:"1" type:"string"`
+
+	// The timestamp of the event.
+	EventTimestamp *string `locationName:"eventTimestamp" min:"11" type:"string"`
+
+	// The event type.
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
+
+	// The timestamp when the prediction was generated.
+	PredictionTimestamp *string `locationName:"predictionTimestamp" min:"11" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventPredictionSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventPredictionSummary) GoString() string {
+	return s.String()
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *EventPredictionSummary) SetDetectorId(v string) *EventPredictionSummary {
+	s.DetectorId = &v
+	return s
+}
+
+// SetDetectorVersionId sets the DetectorVersionId field's value.
+func (s *EventPredictionSummary) SetDetectorVersionId(v string) *EventPredictionSummary {
+	s.DetectorVersionId = &v
+	return s
+}
+
+// SetEventId sets the EventId field's value.
+func (s *EventPredictionSummary) SetEventId(v string) *EventPredictionSummary {
+	s.EventId = &v
+	return s
+}
+
+// SetEventTimestamp sets the EventTimestamp field's value.
+func (s *EventPredictionSummary) SetEventTimestamp(v string) *EventPredictionSummary {
+	s.EventTimestamp = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *EventPredictionSummary) SetEventTypeName(v string) *EventPredictionSummary {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetPredictionTimestamp sets the PredictionTimestamp field's value.
+func (s *EventPredictionSummary) SetPredictionTimestamp(v string) *EventPredictionSummary {
+	s.PredictionTimestamp = &v
 	return s
 }
 
@@ -11131,6 +11991,69 @@ func (s *EventType) SetLastUpdatedTime(v string) *EventType {
 // SetName sets the Name field's value.
 func (s *EventType) SetName(v string) *EventType {
 	s.Name = &v
+	return s
+}
+
+// Information about the summary of an event variable that was evaluated for
+// generating prediction.
+type EventVariableSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The event variable name.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EventVariableSummary's
+	// String and GoString methods.
+	Name *string `locationName:"name" type:"string" sensitive:"true"`
+
+	// The event variable source.
+	//
+	// Source is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EventVariableSummary's
+	// String and GoString methods.
+	Source *string `locationName:"source" type:"string" sensitive:"true"`
+
+	// The value of the event variable.
+	//
+	// Value is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EventVariableSummary's
+	// String and GoString methods.
+	Value *string `locationName:"value" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventVariableSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventVariableSummary) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *EventVariableSummary) SetName(v string) *EventVariableSummary {
+	s.Name = &v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *EventVariableSummary) SetSource(v string) *EventVariableSummary {
+	s.Source = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *EventVariableSummary) SetValue(v string) *EventVariableSummary {
+	s.Value = &v
 	return s
 }
 
@@ -11503,6 +12426,52 @@ func (s *FileValidationMessage) SetTitle(v string) *FileValidationMessage {
 // SetType sets the Type field's value.
 func (s *FileValidationMessage) SetType(v string) *FileValidationMessage {
 	s.Type = &v
+	return s
+}
+
+// A conditional statement for filtering a list of past predictions.
+type FilterCondition struct {
+	_ struct{} `type:"structure"`
+
+	// A statement containing a resource property and a value to specify filter
+	// condition.
+	Value *string `locationName:"value" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCondition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterCondition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterCondition"}
+	if s.Value != nil && len(*s.Value) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetValue sets the Value field's value.
+func (s *FilterCondition) SetValue(v string) *FilterCondition {
+	s.Value = &v
 	return s
 }
 
@@ -12489,6 +13458,287 @@ func (s *GetEventPredictionInput) SetEventVariables(v map[string]*string) *GetEv
 // SetExternalModelEndpointDataBlobs sets the ExternalModelEndpointDataBlobs field's value.
 func (s *GetEventPredictionInput) SetExternalModelEndpointDataBlobs(v map[string]*ModelEndpointDataBlob) *GetEventPredictionInput {
 	s.ExternalModelEndpointDataBlobs = v
+	return s
+}
+
+type GetEventPredictionMetadataInput struct {
+	_ struct{} `type:"structure"`
+
+	// The detector ID.
+	//
+	// DetectorId is a required field
+	DetectorId *string `locationName:"detectorId" min:"1" type:"string" required:"true"`
+
+	// The detector version ID.
+	//
+	// DetectorVersionId is a required field
+	DetectorVersionId *string `locationName:"detectorVersionId" min:"1" type:"string" required:"true"`
+
+	// The event ID.
+	//
+	// EventId is a required field
+	EventId *string `locationName:"eventId" min:"1" type:"string" required:"true"`
+
+	// The event type associated with the detector specified for the prediction.
+	//
+	// EventTypeName is a required field
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string" required:"true"`
+
+	// The timestamp that defines when the prediction was generated. The timestamp
+	// must be specified using ISO 8601 standard in UTC.
+	//
+	// We recommend calling ListEventPredictions (https://docs.aws.amazon.com/frauddetector/latest/api/API_ListEventPredictions.html)
+	// first, and using the predictionTimestamp value in the response to provide
+	// an accurate prediction timestamp value.
+	//
+	// PredictionTimestamp is a required field
+	PredictionTimestamp *string `locationName:"predictionTimestamp" min:"11" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventPredictionMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventPredictionMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetEventPredictionMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetEventPredictionMetadataInput"}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+	if s.DetectorVersionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorVersionId"))
+	}
+	if s.DetectorVersionId != nil && len(*s.DetectorVersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorVersionId", 1))
+	}
+	if s.EventId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventId"))
+	}
+	if s.EventId != nil && len(*s.EventId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventId", 1))
+	}
+	if s.EventTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypeName"))
+	}
+	if s.EventTypeName != nil && len(*s.EventTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventTypeName", 1))
+	}
+	if s.PredictionTimestamp == nil {
+		invalidParams.Add(request.NewErrParamRequired("PredictionTimestamp"))
+	}
+	if s.PredictionTimestamp != nil && len(*s.PredictionTimestamp) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("PredictionTimestamp", 11))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *GetEventPredictionMetadataInput) SetDetectorId(v string) *GetEventPredictionMetadataInput {
+	s.DetectorId = &v
+	return s
+}
+
+// SetDetectorVersionId sets the DetectorVersionId field's value.
+func (s *GetEventPredictionMetadataInput) SetDetectorVersionId(v string) *GetEventPredictionMetadataInput {
+	s.DetectorVersionId = &v
+	return s
+}
+
+// SetEventId sets the EventId field's value.
+func (s *GetEventPredictionMetadataInput) SetEventId(v string) *GetEventPredictionMetadataInput {
+	s.EventId = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *GetEventPredictionMetadataInput) SetEventTypeName(v string) *GetEventPredictionMetadataInput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetPredictionTimestamp sets the PredictionTimestamp field's value.
+func (s *GetEventPredictionMetadataInput) SetPredictionTimestamp(v string) *GetEventPredictionMetadataInput {
+	s.PredictionTimestamp = &v
+	return s
+}
+
+type GetEventPredictionMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The detector ID.
+	DetectorId *string `locationName:"detectorId" min:"1" type:"string"`
+
+	// The detector version ID.
+	DetectorVersionId *string `locationName:"detectorVersionId" min:"1" type:"string"`
+
+	// The status of the detector version.
+	DetectorVersionStatus *string `locationName:"detectorVersionStatus" type:"string"`
+
+	// The entity ID.
+	EntityId *string `locationName:"entityId" type:"string"`
+
+	// The entity type.
+	EntityType *string `locationName:"entityType" type:"string"`
+
+	// External (Amazon SageMaker) models that were evaluated for generating predictions.
+	EvaluatedExternalModels []*EvaluatedExternalModel `locationName:"evaluatedExternalModels" type:"list"`
+
+	// Model versions that were evaluated for generating predictions.
+	EvaluatedModelVersions []*EvaluatedModelVersion `locationName:"evaluatedModelVersions" type:"list"`
+
+	// The event ID.
+	EventId *string `locationName:"eventId" min:"1" type:"string"`
+
+	// The timestamp for when the prediction was generated for the associated event
+	// ID.
+	EventTimestamp *string `locationName:"eventTimestamp" min:"11" type:"string"`
+
+	// The event type associated with the detector specified for this prediction.
+	EventTypeName *string `locationName:"eventTypeName" min:"1" type:"string"`
+
+	// A list of event variables that influenced the prediction scores.
+	EventVariables []*EventVariableSummary `locationName:"eventVariables" type:"list"`
+
+	// The outcomes of the matched rule, based on the rule execution mode.
+	Outcomes []*string `locationName:"outcomes" type:"list"`
+
+	// The timestamp that defines when the prediction was generated.
+	PredictionTimestamp *string `locationName:"predictionTimestamp" min:"11" type:"string"`
+
+	// The execution mode of the rule used for evaluating variable values.
+	RuleExecutionMode *string `locationName:"ruleExecutionMode" type:"string" enum:"RuleExecutionMode"`
+
+	// List of rules associated with the detector version that were used for evaluating
+	// variable values.
+	Rules []*EvaluatedRule `locationName:"rules" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventPredictionMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventPredictionMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *GetEventPredictionMetadataOutput) SetDetectorId(v string) *GetEventPredictionMetadataOutput {
+	s.DetectorId = &v
+	return s
+}
+
+// SetDetectorVersionId sets the DetectorVersionId field's value.
+func (s *GetEventPredictionMetadataOutput) SetDetectorVersionId(v string) *GetEventPredictionMetadataOutput {
+	s.DetectorVersionId = &v
+	return s
+}
+
+// SetDetectorVersionStatus sets the DetectorVersionStatus field's value.
+func (s *GetEventPredictionMetadataOutput) SetDetectorVersionStatus(v string) *GetEventPredictionMetadataOutput {
+	s.DetectorVersionStatus = &v
+	return s
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *GetEventPredictionMetadataOutput) SetEntityId(v string) *GetEventPredictionMetadataOutput {
+	s.EntityId = &v
+	return s
+}
+
+// SetEntityType sets the EntityType field's value.
+func (s *GetEventPredictionMetadataOutput) SetEntityType(v string) *GetEventPredictionMetadataOutput {
+	s.EntityType = &v
+	return s
+}
+
+// SetEvaluatedExternalModels sets the EvaluatedExternalModels field's value.
+func (s *GetEventPredictionMetadataOutput) SetEvaluatedExternalModels(v []*EvaluatedExternalModel) *GetEventPredictionMetadataOutput {
+	s.EvaluatedExternalModels = v
+	return s
+}
+
+// SetEvaluatedModelVersions sets the EvaluatedModelVersions field's value.
+func (s *GetEventPredictionMetadataOutput) SetEvaluatedModelVersions(v []*EvaluatedModelVersion) *GetEventPredictionMetadataOutput {
+	s.EvaluatedModelVersions = v
+	return s
+}
+
+// SetEventId sets the EventId field's value.
+func (s *GetEventPredictionMetadataOutput) SetEventId(v string) *GetEventPredictionMetadataOutput {
+	s.EventId = &v
+	return s
+}
+
+// SetEventTimestamp sets the EventTimestamp field's value.
+func (s *GetEventPredictionMetadataOutput) SetEventTimestamp(v string) *GetEventPredictionMetadataOutput {
+	s.EventTimestamp = &v
+	return s
+}
+
+// SetEventTypeName sets the EventTypeName field's value.
+func (s *GetEventPredictionMetadataOutput) SetEventTypeName(v string) *GetEventPredictionMetadataOutput {
+	s.EventTypeName = &v
+	return s
+}
+
+// SetEventVariables sets the EventVariables field's value.
+func (s *GetEventPredictionMetadataOutput) SetEventVariables(v []*EventVariableSummary) *GetEventPredictionMetadataOutput {
+	s.EventVariables = v
+	return s
+}
+
+// SetOutcomes sets the Outcomes field's value.
+func (s *GetEventPredictionMetadataOutput) SetOutcomes(v []*string) *GetEventPredictionMetadataOutput {
+	s.Outcomes = v
+	return s
+}
+
+// SetPredictionTimestamp sets the PredictionTimestamp field's value.
+func (s *GetEventPredictionMetadataOutput) SetPredictionTimestamp(v string) *GetEventPredictionMetadataOutput {
+	s.PredictionTimestamp = &v
+	return s
+}
+
+// SetRuleExecutionMode sets the RuleExecutionMode field's value.
+func (s *GetEventPredictionMetadataOutput) SetRuleExecutionMode(v string) *GetEventPredictionMetadataOutput {
+	s.RuleExecutionMode = &v
+	return s
+}
+
+// SetRules sets the Rules field's value.
+func (s *GetEventPredictionMetadataOutput) SetRules(v []*EvaluatedRule) *GetEventPredictionMetadataOutput {
+	s.Rules = v
 	return s
 }
 
@@ -13932,9 +15182,7 @@ type LabelSchema struct {
 	// "LEGIT" => ["true"]} or {"FRAUD" => ["fraud", "abuse"], "LEGIT" => ["legit",
 	// "safe"]}. The value part of the mapper is a list, because you may have multiple
 	// label variants from your event type for a single Amazon Fraud Detector label.
-	//
-	// LabelMapper is a required field
-	LabelMapper map[string][]*string `locationName:"labelMapper" type:"map" required:"true"`
+	LabelMapper map[string][]*string `locationName:"labelMapper" type:"map"`
 
 	// The action to take for unlabeled events.
 	UnlabeledEventsTreatment *string `locationName:"unlabeledEventsTreatment" type:"string" enum:"UnlabeledEventsTreatment"`
@@ -13958,19 +15206,6 @@ func (s LabelSchema) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *LabelSchema) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "LabelSchema"}
-	if s.LabelMapper == nil {
-		invalidParams.Add(request.NewErrParamRequired("LabelMapper"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // SetLabelMapper sets the LabelMapper field's value.
 func (s *LabelSchema) SetLabelMapper(v map[string][]*string) *LabelSchema {
 	s.LabelMapper = v
@@ -13980,6 +15215,173 @@ func (s *LabelSchema) SetLabelMapper(v map[string][]*string) *LabelSchema {
 // SetUnlabeledEventsTreatment sets the UnlabeledEventsTreatment field's value.
 func (s *LabelSchema) SetUnlabeledEventsTreatment(v string) *LabelSchema {
 	s.UnlabeledEventsTreatment = &v
+	return s
+}
+
+type ListEventPredictionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The detector ID.
+	DetectorId *FilterCondition `locationName:"detectorId" type:"structure"`
+
+	// The detector version ID.
+	DetectorVersionId *FilterCondition `locationName:"detectorVersionId" type:"structure"`
+
+	// The event ID.
+	EventId *FilterCondition `locationName:"eventId" type:"structure"`
+
+	// The event type associated with the detector.
+	EventType *FilterCondition `locationName:"eventType" type:"structure"`
+
+	// The maximum number of predictions to return for the request.
+	MaxResults *int64 `locationName:"maxResults" min:"50" type:"integer"`
+
+	// Identifies the next page of results to return. Use the token to make the
+	// call again to retrieve the next page. Keep all other arguments unchanged.
+	// Each pagination token expires after 24 hours.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The time period for when the predictions were generated.
+	PredictionTimeRange *PredictionTimeRange `locationName:"predictionTimeRange" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventPredictionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventPredictionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEventPredictionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListEventPredictionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 50 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 50))
+	}
+	if s.DetectorId != nil {
+		if err := s.DetectorId.Validate(); err != nil {
+			invalidParams.AddNested("DetectorId", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DetectorVersionId != nil {
+		if err := s.DetectorVersionId.Validate(); err != nil {
+			invalidParams.AddNested("DetectorVersionId", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.EventId != nil {
+		if err := s.EventId.Validate(); err != nil {
+			invalidParams.AddNested("EventId", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.EventType != nil {
+		if err := s.EventType.Validate(); err != nil {
+			invalidParams.AddNested("EventType", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PredictionTimeRange != nil {
+		if err := s.PredictionTimeRange.Validate(); err != nil {
+			invalidParams.AddNested("PredictionTimeRange", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *ListEventPredictionsInput) SetDetectorId(v *FilterCondition) *ListEventPredictionsInput {
+	s.DetectorId = v
+	return s
+}
+
+// SetDetectorVersionId sets the DetectorVersionId field's value.
+func (s *ListEventPredictionsInput) SetDetectorVersionId(v *FilterCondition) *ListEventPredictionsInput {
+	s.DetectorVersionId = v
+	return s
+}
+
+// SetEventId sets the EventId field's value.
+func (s *ListEventPredictionsInput) SetEventId(v *FilterCondition) *ListEventPredictionsInput {
+	s.EventId = v
+	return s
+}
+
+// SetEventType sets the EventType field's value.
+func (s *ListEventPredictionsInput) SetEventType(v *FilterCondition) *ListEventPredictionsInput {
+	s.EventType = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListEventPredictionsInput) SetMaxResults(v int64) *ListEventPredictionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventPredictionsInput) SetNextToken(v string) *ListEventPredictionsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPredictionTimeRange sets the PredictionTimeRange field's value.
+func (s *ListEventPredictionsInput) SetPredictionTimeRange(v *PredictionTimeRange) *ListEventPredictionsInput {
+	s.PredictionTimeRange = v
+	return s
+}
+
+type ListEventPredictionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The summary of the past predictions.
+	EventPredictionSummaries []*EventPredictionSummary `locationName:"eventPredictionSummaries" type:"list"`
+
+	// Identifies the next page of results to return. Use the token to make the
+	// call again to retrieve the next page. Keep all other arguments unchanged.
+	// Each pagination token expires after 24 hours.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventPredictionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventPredictionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventPredictionSummaries sets the EventPredictionSummaries field's value.
+func (s *ListEventPredictionsOutput) SetEventPredictionSummaries(v []*EventPredictionSummary) *ListEventPredictionsOutput {
+	s.EventPredictionSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventPredictionsOutput) SetNextToken(v string) *ListEventPredictionsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -14696,6 +16098,10 @@ type ModelVersionDetail struct {
 
 	// The training results.
 	TrainingResult *TrainingResult `locationName:"trainingResult" type:"structure"`
+
+	// The training result details. The details include the relative importance
+	// of the variables.
+	TrainingResultV2 *TrainingResultV2 `locationName:"trainingResultV2" type:"structure"`
 }
 
 // String returns the string representation.
@@ -14788,6 +16194,200 @@ func (s *ModelVersionDetail) SetTrainingResult(v *TrainingResult) *ModelVersionD
 	return s
 }
 
+// SetTrainingResultV2 sets the TrainingResultV2 field's value.
+func (s *ModelVersionDetail) SetTrainingResultV2(v *TrainingResultV2) *ModelVersionDetail {
+	s.TrainingResultV2 = v
+	return s
+}
+
+// The model version evalutions.
+type ModelVersionEvaluation struct {
+	_ struct{} `type:"structure"`
+
+	// The evaluation score generated for the model version.
+	EvaluationScore *string `locationName:"evaluationScore" type:"string"`
+
+	// The output variable name.
+	OutputVariableName *string `locationName:"outputVariableName" type:"string"`
+
+	// The prediction explanations generated for the model version.
+	PredictionExplanations *PredictionExplanations `locationName:"predictionExplanations" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModelVersionEvaluation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModelVersionEvaluation) GoString() string {
+	return s.String()
+}
+
+// SetEvaluationScore sets the EvaluationScore field's value.
+func (s *ModelVersionEvaluation) SetEvaluationScore(v string) *ModelVersionEvaluation {
+	s.EvaluationScore = &v
+	return s
+}
+
+// SetOutputVariableName sets the OutputVariableName field's value.
+func (s *ModelVersionEvaluation) SetOutputVariableName(v string) *ModelVersionEvaluation {
+	s.OutputVariableName = &v
+	return s
+}
+
+// SetPredictionExplanations sets the PredictionExplanations field's value.
+func (s *ModelVersionEvaluation) SetPredictionExplanations(v *PredictionExplanations) *ModelVersionEvaluation {
+	s.PredictionExplanations = v
+	return s
+}
+
+// The Online Fraud Insights (OFI) model performance metrics data points.
+type OFIMetricDataPoint struct {
+	_ struct{} `type:"structure"`
+
+	// The false positive rate. This is the percentage of total legitimate events
+	// that are incorrectly predicted as fraud.
+	Fpr *float64 `locationName:"fpr" type:"float"`
+
+	// The percentage of fraud events correctly predicted as fraudulent as compared
+	// to all events predicted as fraudulent.
+	Precision *float64 `locationName:"precision" type:"float"`
+
+	// The model threshold that specifies an acceptable fraud capture rate. For
+	// example, a threshold of 500 means any model score 500 or above is labeled
+	// as fraud.
+	Threshold *float64 `locationName:"threshold" type:"float"`
+
+	// The true positive rate. This is the percentage of total fraud the model detects.
+	// Also known as capture rate.
+	Tpr *float64 `locationName:"tpr" type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OFIMetricDataPoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OFIMetricDataPoint) GoString() string {
+	return s.String()
+}
+
+// SetFpr sets the Fpr field's value.
+func (s *OFIMetricDataPoint) SetFpr(v float64) *OFIMetricDataPoint {
+	s.Fpr = &v
+	return s
+}
+
+// SetPrecision sets the Precision field's value.
+func (s *OFIMetricDataPoint) SetPrecision(v float64) *OFIMetricDataPoint {
+	s.Precision = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *OFIMetricDataPoint) SetThreshold(v float64) *OFIMetricDataPoint {
+	s.Threshold = &v
+	return s
+}
+
+// SetTpr sets the Tpr field's value.
+func (s *OFIMetricDataPoint) SetTpr(v float64) *OFIMetricDataPoint {
+	s.Tpr = &v
+	return s
+}
+
+// The Online Fraud Insights (OFI) model performance score.
+type OFIModelPerformance struct {
+	_ struct{} `type:"structure"`
+
+	// The area under the curve (auc). This summarizes the total positive rate (tpr)
+	// and false positive rate (FPR) across all possible model score thresholds.
+	Auc *float64 `locationName:"auc" type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OFIModelPerformance) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OFIModelPerformance) GoString() string {
+	return s.String()
+}
+
+// SetAuc sets the Auc field's value.
+func (s *OFIModelPerformance) SetAuc(v float64) *OFIModelPerformance {
+	s.Auc = &v
+	return s
+}
+
+// The Online Fraud Insights (OFI) model training metric details.
+type OFITrainingMetricsValue struct {
+	_ struct{} `type:"structure"`
+
+	// The model's performance metrics data points.
+	MetricDataPoints []*OFIMetricDataPoint `locationName:"metricDataPoints" type:"list"`
+
+	// The model's overall performance score.
+	ModelPerformance *OFIModelPerformance `locationName:"modelPerformance" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OFITrainingMetricsValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OFITrainingMetricsValue) GoString() string {
+	return s.String()
+}
+
+// SetMetricDataPoints sets the MetricDataPoints field's value.
+func (s *OFITrainingMetricsValue) SetMetricDataPoints(v []*OFIMetricDataPoint) *OFITrainingMetricsValue {
+	s.MetricDataPoints = v
+	return s
+}
+
+// SetModelPerformance sets the ModelPerformance field's value.
+func (s *OFITrainingMetricsValue) SetModelPerformance(v *OFIModelPerformance) *OFITrainingMetricsValue {
+	s.ModelPerformance = v
+	return s
+}
+
 // The outcome.
 type Outcome struct {
 	_ struct{} `type:"structure"`
@@ -14853,6 +16453,122 @@ func (s *Outcome) SetLastUpdatedTime(v string) *Outcome {
 // SetName sets the Name field's value.
 func (s *Outcome) SetName(v string) *Outcome {
 	s.Name = &v
+	return s
+}
+
+// The prediction explanations that provide insight into how each event variable
+// impacted the model version's fraud prediction score.
+type PredictionExplanations struct {
+	_ struct{} `type:"structure"`
+
+	// The details of the aggregated variables impact on the prediction score.
+	//
+	// Account Takeover Insights (ATI) model uses event variables from the login
+	// data you provide to continuously calculate a set of variables (aggregated
+	// variables) based on historical events. For example, your ATI model might
+	// calculate the number of times an user has logged in using the same IP address.
+	// In this case, event variables used to derive the aggregated variables are
+	// IP address and user.
+	AggregatedVariablesImpactExplanations []*AggregatedVariablesImpactExplanation `locationName:"aggregatedVariablesImpactExplanations" type:"list"`
+
+	// The details of the event variable's impact on the prediction score.
+	VariableImpactExplanations []*VariableImpactExplanation `locationName:"variableImpactExplanations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PredictionExplanations) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PredictionExplanations) GoString() string {
+	return s.String()
+}
+
+// SetAggregatedVariablesImpactExplanations sets the AggregatedVariablesImpactExplanations field's value.
+func (s *PredictionExplanations) SetAggregatedVariablesImpactExplanations(v []*AggregatedVariablesImpactExplanation) *PredictionExplanations {
+	s.AggregatedVariablesImpactExplanations = v
+	return s
+}
+
+// SetVariableImpactExplanations sets the VariableImpactExplanations field's value.
+func (s *PredictionExplanations) SetVariableImpactExplanations(v []*VariableImpactExplanation) *PredictionExplanations {
+	s.VariableImpactExplanations = v
+	return s
+}
+
+// The time period for when the predictions were generated.
+type PredictionTimeRange struct {
+	_ struct{} `type:"structure"`
+
+	// The end time of the time period for when the predictions were generated.
+	//
+	// EndTime is a required field
+	EndTime *string `locationName:"endTime" min:"11" type:"string" required:"true"`
+
+	// The start time of the time period for when the predictions were generated.
+	//
+	// StartTime is a required field
+	StartTime *string `locationName:"startTime" min:"11" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PredictionTimeRange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PredictionTimeRange) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PredictionTimeRange) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PredictionTimeRange"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.EndTime != nil && len(*s.EndTime) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("EndTime", 11))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+	if s.StartTime != nil && len(*s.StartTime) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("StartTime", 11))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *PredictionTimeRange) SetEndTime(v string) *PredictionTimeRange {
+	s.EndTime = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *PredictionTimeRange) SetStartTime(v string) *PredictionTimeRange {
+	s.StartTime = &v
 	return s
 }
 
@@ -16220,6 +17936,145 @@ func (s SendEventOutput) GoString() string {
 	return s.String()
 }
 
+// The performance metrics data points for Transaction Fraud Insights (TFI)
+// model.
+type TFIMetricDataPoint struct {
+	_ struct{} `type:"structure"`
+
+	// The false positive rate. This is the percentage of total legitimate events
+	// that are incorrectly predicted as fraud.
+	Fpr *float64 `locationName:"fpr" type:"float"`
+
+	// The percentage of fraud events correctly predicted as fraudulent as compared
+	// to all events predicted as fraudulent.
+	Precision *float64 `locationName:"precision" type:"float"`
+
+	// The model threshold that specifies an acceptable fraud capture rate. For
+	// example, a threshold of 500 means any model score 500 or above is labeled
+	// as fraud.
+	Threshold *float64 `locationName:"threshold" type:"float"`
+
+	// The true positive rate. This is the percentage of total fraud the model detects.
+	// Also known as capture rate.
+	Tpr *float64 `locationName:"tpr" type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TFIMetricDataPoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TFIMetricDataPoint) GoString() string {
+	return s.String()
+}
+
+// SetFpr sets the Fpr field's value.
+func (s *TFIMetricDataPoint) SetFpr(v float64) *TFIMetricDataPoint {
+	s.Fpr = &v
+	return s
+}
+
+// SetPrecision sets the Precision field's value.
+func (s *TFIMetricDataPoint) SetPrecision(v float64) *TFIMetricDataPoint {
+	s.Precision = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *TFIMetricDataPoint) SetThreshold(v float64) *TFIMetricDataPoint {
+	s.Threshold = &v
+	return s
+}
+
+// SetTpr sets the Tpr field's value.
+func (s *TFIMetricDataPoint) SetTpr(v float64) *TFIMetricDataPoint {
+	s.Tpr = &v
+	return s
+}
+
+// The Transaction Fraud Insights (TFI) model performance score.
+type TFIModelPerformance struct {
+	_ struct{} `type:"structure"`
+
+	// The area under the curve (auc). This summarizes the total positive rate (tpr)
+	// and false positive rate (FPR) across all possible model score thresholds.
+	Auc *float64 `locationName:"auc" type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TFIModelPerformance) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TFIModelPerformance) GoString() string {
+	return s.String()
+}
+
+// SetAuc sets the Auc field's value.
+func (s *TFIModelPerformance) SetAuc(v float64) *TFIModelPerformance {
+	s.Auc = &v
+	return s
+}
+
+// The Transaction Fraud Insights (TFI) model training metric details.
+type TFITrainingMetricsValue struct {
+	_ struct{} `type:"structure"`
+
+	// The model's performance metrics data points.
+	MetricDataPoints []*TFIMetricDataPoint `locationName:"metricDataPoints" type:"list"`
+
+	// The model performance score.
+	ModelPerformance *TFIModelPerformance `locationName:"modelPerformance" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TFITrainingMetricsValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TFITrainingMetricsValue) GoString() string {
+	return s.String()
+}
+
+// SetMetricDataPoints sets the MetricDataPoints field's value.
+func (s *TFITrainingMetricsValue) SetMetricDataPoints(v []*TFIMetricDataPoint) *TFITrainingMetricsValue {
+	s.MetricDataPoints = v
+	return s
+}
+
+// SetModelPerformance sets the ModelPerformance field's value.
+func (s *TFITrainingMetricsValue) SetModelPerformance(v *TFIModelPerformance) *TFITrainingMetricsValue {
+	s.ModelPerformance = v
+	return s
+}
+
 // A key and value pair.
 type Tag struct {
 	_ struct{} `type:"structure"`
@@ -16448,9 +18303,7 @@ type TrainingDataSchema struct {
 	_ struct{} `type:"structure"`
 
 	// The label schema.
-	//
-	// LabelSchema is a required field
-	LabelSchema *LabelSchema `locationName:"labelSchema" type:"structure" required:"true"`
+	LabelSchema *LabelSchema `locationName:"labelSchema" type:"structure"`
 
 	// The training data schema variables.
 	//
@@ -16479,16 +18332,8 @@ func (s TrainingDataSchema) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *TrainingDataSchema) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "TrainingDataSchema"}
-	if s.LabelSchema == nil {
-		invalidParams.Add(request.NewErrParamRequired("LabelSchema"))
-	}
 	if s.ModelVariables == nil {
 		invalidParams.Add(request.NewErrParamRequired("ModelVariables"))
-	}
-	if s.LabelSchema != nil {
-		if err := s.LabelSchema.Validate(); err != nil {
-			invalidParams.AddNested("LabelSchema", err.(request.ErrInvalidParams))
-		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -16553,6 +18398,56 @@ func (s *TrainingMetrics) SetMetricDataPoints(v []*MetricDataPoint) *TrainingMet
 	return s
 }
 
+// The training metrics details.
+type TrainingMetricsV2 struct {
+	_ struct{} `type:"structure"`
+
+	// The Account Takeover Insights (ATI) model training metric details.
+	Ati *ATITrainingMetricsValue `locationName:"ati" type:"structure"`
+
+	// The Online Fraud Insights (OFI) model training metric details.
+	Ofi *OFITrainingMetricsValue `locationName:"ofi" type:"structure"`
+
+	// The Transaction Fraud Insights (TFI) model training metric details.
+	Tfi *TFITrainingMetricsValue `locationName:"tfi" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TrainingMetricsV2) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TrainingMetricsV2) GoString() string {
+	return s.String()
+}
+
+// SetAti sets the Ati field's value.
+func (s *TrainingMetricsV2) SetAti(v *ATITrainingMetricsValue) *TrainingMetricsV2 {
+	s.Ati = v
+	return s
+}
+
+// SetOfi sets the Ofi field's value.
+func (s *TrainingMetricsV2) SetOfi(v *OFITrainingMetricsValue) *TrainingMetricsV2 {
+	s.Ofi = v
+	return s
+}
+
+// SetTfi sets the Tfi field's value.
+func (s *TrainingMetricsV2) SetTfi(v *TFITrainingMetricsValue) *TrainingMetricsV2 {
+	s.Tfi = v
+	return s
+}
+
 // The training result details.
 type TrainingResult struct {
 	_ struct{} `type:"structure"`
@@ -16599,6 +18494,72 @@ func (s *TrainingResult) SetTrainingMetrics(v *TrainingMetrics) *TrainingResult 
 
 // SetVariableImportanceMetrics sets the VariableImportanceMetrics field's value.
 func (s *TrainingResult) SetVariableImportanceMetrics(v *VariableImportanceMetrics) *TrainingResult {
+	s.VariableImportanceMetrics = v
+	return s
+}
+
+// The training result details.
+type TrainingResultV2 struct {
+	_ struct{} `type:"structure"`
+
+	// The variable importance metrics of the aggregated variables.
+	//
+	// Account Takeover Insights (ATI) model uses event variables from the login
+	// data you provide to continuously calculate a set of variables (aggregated
+	// variables) based on historical events. For example, your ATI model might
+	// calculate the number of times an user has logged in using the same IP address.
+	// In this case, event variables used to derive the aggregated variables are
+	// IP address and user.
+	AggregatedVariablesImportanceMetrics *AggregatedVariablesImportanceMetrics `locationName:"aggregatedVariablesImportanceMetrics" type:"structure"`
+
+	// The model training data validation metrics.
+	DataValidationMetrics *DataValidationMetrics `locationName:"dataValidationMetrics" type:"structure"`
+
+	// The training metric details.
+	TrainingMetricsV2 *TrainingMetricsV2 `locationName:"trainingMetricsV2" type:"structure"`
+
+	// The variable importance metrics details.
+	VariableImportanceMetrics *VariableImportanceMetrics `locationName:"variableImportanceMetrics" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TrainingResultV2) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TrainingResultV2) GoString() string {
+	return s.String()
+}
+
+// SetAggregatedVariablesImportanceMetrics sets the AggregatedVariablesImportanceMetrics field's value.
+func (s *TrainingResultV2) SetAggregatedVariablesImportanceMetrics(v *AggregatedVariablesImportanceMetrics) *TrainingResultV2 {
+	s.AggregatedVariablesImportanceMetrics = v
+	return s
+}
+
+// SetDataValidationMetrics sets the DataValidationMetrics field's value.
+func (s *TrainingResultV2) SetDataValidationMetrics(v *DataValidationMetrics) *TrainingResultV2 {
+	s.DataValidationMetrics = v
+	return s
+}
+
+// SetTrainingMetricsV2 sets the TrainingMetricsV2 field's value.
+func (s *TrainingResultV2) SetTrainingMetricsV2(v *TrainingMetricsV2) *TrainingResultV2 {
+	s.TrainingMetricsV2 = v
+	return s
+}
+
+// SetVariableImportanceMetrics sets the VariableImportanceMetrics field's value.
+func (s *TrainingResultV2) SetVariableImportanceMetrics(v *VariableImportanceMetrics) *TrainingResultV2 {
 	s.VariableImportanceMetrics = v
 	return s
 }
@@ -18205,6 +20166,64 @@ func (s *VariableEntry) SetVariableType(v string) *VariableEntry {
 	return s
 }
 
+// The details of the event variable's impact on the prediction score.
+type VariableImpactExplanation struct {
+	_ struct{} `type:"structure"`
+
+	// The event variable name.
+	EventVariableName *string `locationName:"eventVariableName" type:"string"`
+
+	// The raw, uninterpreted value represented as log-odds of the fraud. These
+	// values are usually between -10 to +10, but range from - infinity to + infinity.
+	//
+	//    * A positive value indicates that the variable drove the risk score up.
+	//
+	//    * A negative value indicates that the variable drove the risk score down.
+	LogOddsImpact *float64 `locationName:"logOddsImpact" type:"float"`
+
+	// The event variable's relative impact in terms of magnitude on the prediction
+	// scores. The relative impact values consist of a numerical rating (0-5, 5
+	// being the highest) and direction (increased/decreased) impact of the fraud
+	// risk.
+	RelativeImpact *string `locationName:"relativeImpact" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VariableImpactExplanation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VariableImpactExplanation) GoString() string {
+	return s.String()
+}
+
+// SetEventVariableName sets the EventVariableName field's value.
+func (s *VariableImpactExplanation) SetEventVariableName(v string) *VariableImpactExplanation {
+	s.EventVariableName = &v
+	return s
+}
+
+// SetLogOddsImpact sets the LogOddsImpact field's value.
+func (s *VariableImpactExplanation) SetLogOddsImpact(v float64) *VariableImpactExplanation {
+	s.LogOddsImpact = &v
+	return s
+}
+
+// SetRelativeImpact sets the RelativeImpact field's value.
+func (s *VariableImpactExplanation) SetRelativeImpact(v string) *VariableImpactExplanation {
+	s.RelativeImpact = &v
+	return s
+}
+
 // The variable importance metrics details.
 type VariableImportanceMetrics struct {
 	_ struct{} `type:"structure"`
@@ -18427,6 +20446,9 @@ const (
 
 	// ModelTypeEnumTransactionFraudInsights is a ModelTypeEnum enum value
 	ModelTypeEnumTransactionFraudInsights = "TRANSACTION_FRAUD_INSIGHTS"
+
+	// ModelTypeEnumAccountTakeoverInsights is a ModelTypeEnum enum value
+	ModelTypeEnumAccountTakeoverInsights = "ACCOUNT_TAKEOVER_INSIGHTS"
 )
 
 // ModelTypeEnum_Values returns all elements of the ModelTypeEnum enum
@@ -18434,6 +20456,7 @@ func ModelTypeEnum_Values() []string {
 	return []string{
 		ModelTypeEnumOnlineFraudInsights,
 		ModelTypeEnumTransactionFraudInsights,
+		ModelTypeEnumAccountTakeoverInsights,
 	}
 }
 

@@ -462,8 +462,9 @@ func mockStartConversationReadEvents() (
 					},
 				},
 				DialogAction: &DialogAction{
-					SlotToElicit: aws.String("string value goes here"),
-					Type:         aws.String("string value goes here"),
+					SlotElicitationStyle: aws.String("string value goes here"),
+					SlotToElicit:         aws.String("string value goes here"),
+					Type:                 aws.String("string value goes here"),
 				},
 				Intent: &Intent{
 					ConfirmationState: aws.String("string value goes here"),
@@ -512,6 +513,133 @@ func mockStartConversationReadEvents() (
 					State: aws.String("string value goes here"),
 				},
 				OriginatingRequestId: aws.String("string value goes here"),
+				RuntimeHints: &RuntimeHints{
+					SlotHints: map[string]map[string]*RuntimeHintDetails{
+						"a": {
+							"a": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"b": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"c": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+						},
+						"b": {
+							"a": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"b": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"c": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+						},
+						"c": {
+							"a": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"b": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"c": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+						},
+					},
+				},
 				SessionAttributes: map[string]*string{
 					"a": aws.String("string value goes here"),
 					"b": aws.String("string value goes here"),
@@ -988,8 +1116,9 @@ func mockStartConversationWriteEvents() (
 					},
 				},
 				DialogAction: &DialogAction{
-					SlotToElicit: aws.String("string value goes here"),
-					Type:         aws.String("string value goes here"),
+					SlotElicitationStyle: aws.String("string value goes here"),
+					SlotToElicit:         aws.String("string value goes here"),
+					Type:                 aws.String("string value goes here"),
 				},
 				Intent: &Intent{
 					ConfirmationState: aws.String("string value goes here"),
@@ -1038,6 +1167,133 @@ func mockStartConversationWriteEvents() (
 					State: aws.String("string value goes here"),
 				},
 				OriginatingRequestId: aws.String("string value goes here"),
+				RuntimeHints: &RuntimeHints{
+					SlotHints: map[string]map[string]*RuntimeHintDetails{
+						"a": {
+							"a": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"b": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"c": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+						},
+						"b": {
+							"a": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"b": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"c": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+						},
+						"c": {
+							"a": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"b": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+							"c": {
+								RuntimeHintValues: []*RuntimeHintValue{
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+									{
+										Phrase: aws.String("string value goes here"),
+									},
+								},
+							},
+						},
+					},
+				},
 				SessionAttributes: map[string]*string{
 					"a": aws.String("string value goes here"),
 					"b": aws.String("string value goes here"),

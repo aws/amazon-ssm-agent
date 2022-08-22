@@ -60,13 +60,18 @@ func (c *RedshiftDataAPIService) BatchExecuteStatementRequest(input *BatchExecut
 // (DML) or data definition language (DDL). Depending on the authorization method,
 // use one of the following combinations of request parameters:
 //
-//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
-//    the database name, and the cluster identifier that matches the cluster
-//    in the secret.
+//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
+//    Name (ARN) of the secret, the database name, and the cluster identifier
+//    that matches the cluster in the secret. When connecting to a serverless
+//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
+//    database name.
 //
-//    * Temporary credentials - specify the cluster identifier, the database
-//    name, and the database user name. Permission to call the redshift:GetClusterCredentials
-//    operation is required to use this method.
+//    * Temporary credentials - when connecting to a cluster, specify the cluster
+//    identifier, the database name, and the database user name. Also, permission
+//    to call the redshift:GetClusterCredentials operation is required. When
+//    connecting to a serverless workgroup, specify the workgroup name and database
+//    name. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -169,6 +174,9 @@ func (c *RedshiftDataAPIService) CancelStatementRequest(input *CancelStatementIn
 //
 //   * InternalServerException
 //   The Amazon Redshift Data API operation failed due to invalid input.
+//
+//   * DatabaseConnectionException
+//   Connection to a database failed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/CancelStatement
 func (c *RedshiftDataAPIService) CancelStatement(input *CancelStatementInput) (*CancelStatementOutput, error) {
@@ -335,13 +343,18 @@ func (c *RedshiftDataAPIService) DescribeTableRequest(input *DescribeTableInput)
 // the column list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
-//    the database name, and the cluster identifier that matches the cluster
-//    in the secret.
+//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
+//    Name (ARN) of the secret, the database name, and the cluster identifier
+//    that matches the cluster in the secret. When connecting to a serverless
+//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
+//    database name.
 //
-//    * Temporary credentials - specify the cluster identifier, the database
-//    name, and the database user name. Permission to call the redshift:GetClusterCredentials
-//    operation is required to use this method.
+//    * Temporary credentials - when connecting to a cluster, specify the cluster
+//    identifier, the database name, and the database user name. Also, permission
+//    to call the redshift:GetClusterCredentials operation is required. When
+//    connecting to a serverless workgroup, specify the workgroup name and database
+//    name. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -356,6 +369,9 @@ func (c *RedshiftDataAPIService) DescribeTableRequest(input *DescribeTableInput)
 //
 //   * InternalServerException
 //   The Amazon Redshift Data API operation failed due to invalid input.
+//
+//   * DatabaseConnectionException
+//   Connection to a database failed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/DescribeTable
 func (c *RedshiftDataAPIService) DescribeTable(input *DescribeTableInput) (*DescribeTableOutput, error) {
@@ -480,13 +496,18 @@ func (c *RedshiftDataAPIService) ExecuteStatementRequest(input *ExecuteStatement
 // Depending on the authorization method, use one of the following combinations
 // of request parameters:
 //
-//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
-//    the database name, and the cluster identifier that matches the cluster
-//    in the secret.
+//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
+//    Name (ARN) of the secret, the database name, and the cluster identifier
+//    that matches the cluster in the secret. When connecting to a serverless
+//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
+//    database name.
 //
-//    * Temporary credentials - specify the cluster identifier, the database
-//    name, and the database user name. Permission to call the redshift:GetClusterCredentials
-//    operation is required to use this method.
+//    * Temporary credentials - when connecting to a cluster, specify the cluster
+//    identifier, the database name, and the database user name. Also, permission
+//    to call the redshift:GetClusterCredentials operation is required. When
+//    connecting to a serverless workgroup, specify the workgroup name and database
+//    name. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -725,13 +746,18 @@ func (c *RedshiftDataAPIService) ListDatabasesRequest(input *ListDatabasesInput)
 // database list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
-//    the database name, and the cluster identifier that matches the cluster
-//    in the secret.
+//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
+//    Name (ARN) of the secret, the database name, and the cluster identifier
+//    that matches the cluster in the secret. When connecting to a serverless
+//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
+//    database name.
 //
-//    * Temporary credentials - specify the cluster identifier, the database
-//    name, and the database user name. Permission to call the redshift:GetClusterCredentials
-//    operation is required to use this method.
+//    * Temporary credentials - when connecting to a cluster, specify the cluster
+//    identifier, the database name, and the database user name. Also, permission
+//    to call the redshift:GetClusterCredentials operation is required. When
+//    connecting to a serverless workgroup, specify the workgroup name and database
+//    name. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -746,6 +772,9 @@ func (c *RedshiftDataAPIService) ListDatabasesRequest(input *ListDatabasesInput)
 //
 //   * InternalServerException
 //   The Amazon Redshift Data API operation failed due to invalid input.
+//
+//   * DatabaseConnectionException
+//   Connection to a database failed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/ListDatabases
 func (c *RedshiftDataAPIService) ListDatabases(input *ListDatabasesInput) (*ListDatabasesOutput, error) {
@@ -875,13 +904,18 @@ func (c *RedshiftDataAPIService) ListSchemasRequest(input *ListSchemasInput) (re
 // schema list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
-//    the database name, and the cluster identifier that matches the cluster
-//    in the secret.
+//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
+//    Name (ARN) of the secret, the database name, and the cluster identifier
+//    that matches the cluster in the secret. When connecting to a serverless
+//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
+//    database name.
 //
-//    * Temporary credentials - specify the cluster identifier, the database
-//    name, and the database user name. Permission to call the redshift:GetClusterCredentials
-//    operation is required to use this method.
+//    * Temporary credentials - when connecting to a cluster, specify the cluster
+//    identifier, the database name, and the database user name. Also, permission
+//    to call the redshift:GetClusterCredentials operation is required. When
+//    connecting to a serverless workgroup, specify the workgroup name and database
+//    name. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -896,6 +930,9 @@ func (c *RedshiftDataAPIService) ListSchemasRequest(input *ListSchemasInput) (re
 //
 //   * InternalServerException
 //   The Amazon Redshift Data API operation failed due to invalid input.
+//
+//   * DatabaseConnectionException
+//   Connection to a database failed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/ListSchemas
 func (c *RedshiftDataAPIService) ListSchemas(input *ListSchemasInput) (*ListSchemasOutput, error) {
@@ -1167,13 +1204,18 @@ func (c *RedshiftDataAPIService) ListTablesRequest(input *ListTablesInput) (req 
 // to page through the table list. Depending on the authorization method, use
 // one of the following combinations of request parameters:
 //
-//    * Secrets Manager - specify the Amazon Resource Name (ARN) of the secret,
-//    the database name, and the cluster identifier that matches the cluster
-//    in the secret.
+//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
+//    Name (ARN) of the secret, the database name, and the cluster identifier
+//    that matches the cluster in the secret. When connecting to a serverless
+//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
+//    database name.
 //
-//    * Temporary credentials - specify the cluster identifier, the database
-//    name, and the database user name. Permission to call the redshift:GetClusterCredentials
-//    operation is required to use this method.
+//    * Temporary credentials - when connecting to a cluster, specify the cluster
+//    identifier, the database name, and the database user name. Also, permission
+//    to call the redshift:GetClusterCredentials operation is required. When
+//    connecting to a serverless workgroup, specify the workgroup name and database
+//    name. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1188,6 +1230,9 @@ func (c *RedshiftDataAPIService) ListTablesRequest(input *ListTablesInput) (req 
 //
 //   * InternalServerException
 //   The Amazon Redshift Data API operation failed due to invalid input.
+//
+//   * DatabaseConnectionException
+//   Connection to a database failed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-data-2019-12-20/ListTables
 func (c *RedshiftDataAPIService) ListTables(input *ListTablesInput) (*ListTablesOutput, error) {
@@ -1399,11 +1444,9 @@ func (s *BatchExecuteStatementException) RequestID() string {
 type BatchExecuteStatementInput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier. This parameter is required when authenticating using
-	// either Secrets Manager or temporary credentials.
-	//
-	// ClusterIdentifier is a required field
-	ClusterIdentifier *string `type:"string" required:"true"`
+	// The cluster identifier. This parameter is required when connecting to a cluster
+	// and authenticating using either Secrets Manager or temporary credentials.
+	ClusterIdentifier *string `type:"string"`
 
 	// The name of the database. This parameter is required when authenticating
 	// using either Secrets Manager or temporary credentials.
@@ -1411,8 +1454,8 @@ type BatchExecuteStatementInput struct {
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
 
-	// The database user name. This parameter is required when authenticating using
-	// temporary credentials.
+	// The database user name. This parameter is required when connecting to a cluster
+	// and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The name or ARN of the secret that enables access to the database. This parameter
@@ -1431,6 +1474,11 @@ type BatchExecuteStatementInput struct {
 	// A value that indicates whether to send an event to the Amazon EventBridge
 	// event bus after the SQL statements run.
 	WithEvent *bool `type:"boolean"`
+
+	// The serverless workgroup name. This parameter is required when connecting
+	// to a serverless workgroup and authenticating using either Secrets Manager
+	// or temporary credentials.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -1454,9 +1502,6 @@ func (s BatchExecuteStatementInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *BatchExecuteStatementInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "BatchExecuteStatementInput"}
-	if s.ClusterIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
 	}
@@ -1465,6 +1510,9 @@ func (s *BatchExecuteStatementInput) Validate() error {
 	}
 	if s.Sqls != nil && len(s.Sqls) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Sqls", 1))
+	}
+	if s.WorkgroupName != nil && len(*s.WorkgroupName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkgroupName", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1515,10 +1563,17 @@ func (s *BatchExecuteStatementInput) SetWithEvent(v bool) *BatchExecuteStatement
 	return s
 }
 
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *BatchExecuteStatementInput) SetWorkgroupName(v string) *BatchExecuteStatementInput {
+	s.WorkgroupName = &v
+	return s
+}
+
 type BatchExecuteStatementOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier.
+	// The cluster identifier. This element is not returned when connecting to a
+	// serverless workgroup.
 	ClusterIdentifier *string `type:"string"`
 
 	// The date and time (UTC) the statement was created.
@@ -1537,6 +1592,10 @@ type BatchExecuteStatementOutput struct {
 
 	// The name or ARN of the secret that enables access to the database.
 	SecretArn *string `type:"string"`
+
+	// The serverless workgroup name. This element is not returned when connecting
+	// to a provisioned cluster.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -1590,6 +1649,12 @@ func (s *BatchExecuteStatementOutput) SetId(v string) *BatchExecuteStatementOutp
 // SetSecretArn sets the SecretArn field's value.
 func (s *BatchExecuteStatementOutput) SetSecretArn(v string) *BatchExecuteStatementOutput {
 	s.SecretArn = &v
+	return s
+}
+
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *BatchExecuteStatementOutput) SetWorkgroupName(v string) *BatchExecuteStatementOutput {
+	s.WorkgroupName = &v
 	return s
 }
 
@@ -1812,6 +1877,70 @@ func (s *ColumnMetadata) SetTypeName(v string) *ColumnMetadata {
 	return s
 }
 
+// Connection to a database failed.
+type DatabaseConnectionException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DatabaseConnectionException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DatabaseConnectionException) GoString() string {
+	return s.String()
+}
+
+func newErrorDatabaseConnectionException(v protocol.ResponseMetadata) error {
+	return &DatabaseConnectionException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *DatabaseConnectionException) Code() string {
+	return "DatabaseConnectionException"
+}
+
+// Message returns the exception's message.
+func (s *DatabaseConnectionException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *DatabaseConnectionException) OrigErr() error {
+	return nil
+}
+
+func (s *DatabaseConnectionException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *DatabaseConnectionException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *DatabaseConnectionException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type DescribeStatementInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1886,7 +2015,8 @@ type DescribeStatementOutput struct {
 	Error *string `type:"string"`
 
 	// A value that indicates whether the statement has a result set. The result
-	// set can be empty.
+	// set can be empty. The value is true for an empty result set. The value is
+	// true if any substatement returns a result set.
 	HasResultSet *bool `type:"boolean"`
 
 	// The identifier of the SQL statement described. This value is a universally
@@ -1946,6 +2076,9 @@ type DescribeStatementOutput struct {
 	// The date and time (UTC) that the metadata for the SQL statement was last
 	// updated. An example is the time the status last changed.
 	UpdatedAt *time.Time `type:"timestamp"`
+
+	// The serverless workgroup name.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -2074,14 +2207,18 @@ func (s *DescribeStatementOutput) SetUpdatedAt(v time.Time) *DescribeStatementOu
 	return s
 }
 
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *DescribeStatementOutput) SetWorkgroupName(v string) *DescribeStatementOutput {
+	s.WorkgroupName = &v
+	return s
+}
+
 type DescribeTableInput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier. This parameter is required when authenticating using
-	// either Secrets Manager or temporary credentials.
-	//
-	// ClusterIdentifier is a required field
-	ClusterIdentifier *string `type:"string" required:"true"`
+	// The cluster identifier. This parameter is required when connecting to a cluster
+	// and authenticating using either Secrets Manager or temporary credentials.
+	ClusterIdentifier *string `type:"string"`
 
 	// A database name. The connected database is specified when you connect with
 	// your authentication credentials.
@@ -2094,8 +2231,8 @@ type DescribeTableInput struct {
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
 
-	// The database user name. This parameter is required when authenticating using
-	// temporary credentials.
+	// The database user name. This parameter is required when connecting to a cluster
+	// and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of tables to return in the response. If more tables exist
@@ -2122,6 +2259,11 @@ type DescribeTableInput struct {
 	// schemas are returned. If no table and no schema is specified, then all tables
 	// for all schemas in the database are returned
 	Table *string `type:"string"`
+
+	// The serverless workgroup name. This parameter is required when connecting
+	// to a serverless workgroup and authenticating using either Secrets Manager
+	// or temporary credentials.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -2145,11 +2287,11 @@ func (s DescribeTableInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeTableInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeTableInput"}
-	if s.ClusterIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.WorkgroupName != nil && len(*s.WorkgroupName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkgroupName", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2209,6 +2351,12 @@ func (s *DescribeTableInput) SetSecretArn(v string) *DescribeTableInput {
 // SetTable sets the Table field's value.
 func (s *DescribeTableInput) SetTable(v string) *DescribeTableInput {
 	s.Table = &v
+	return s
+}
+
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *DescribeTableInput) SetWorkgroupName(v string) *DescribeTableInput {
+	s.WorkgroupName = &v
 	return s
 }
 
@@ -2338,11 +2486,9 @@ func (s *ExecuteStatementException) RequestID() string {
 type ExecuteStatementInput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier. This parameter is required when authenticating using
-	// either Secrets Manager or temporary credentials.
-	//
-	// ClusterIdentifier is a required field
-	ClusterIdentifier *string `type:"string" required:"true"`
+	// The cluster identifier. This parameter is required when connecting to a cluster
+	// and authenticating using either Secrets Manager or temporary credentials.
+	ClusterIdentifier *string `type:"string"`
 
 	// The name of the database. This parameter is required when authenticating
 	// using either Secrets Manager or temporary credentials.
@@ -2350,8 +2496,8 @@ type ExecuteStatementInput struct {
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
 
-	// The database user name. This parameter is required when authenticating using
-	// temporary credentials.
+	// The database user name. This parameter is required when connecting to a cluster
+	// and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The parameters for the SQL statement.
@@ -2373,6 +2519,11 @@ type ExecuteStatementInput struct {
 	// A value that indicates whether to send an event to the Amazon EventBridge
 	// event bus after the SQL statement runs.
 	WithEvent *bool `type:"boolean"`
+
+	// The serverless workgroup name. This parameter is required when connecting
+	// to a serverless workgroup and authenticating using either Secrets Manager
+	// or temporary credentials.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -2396,9 +2547,6 @@ func (s ExecuteStatementInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ExecuteStatementInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ExecuteStatementInput"}
-	if s.ClusterIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
 	}
@@ -2407,6 +2555,9 @@ func (s *ExecuteStatementInput) Validate() error {
 	}
 	if s.Sql == nil {
 		invalidParams.Add(request.NewErrParamRequired("Sql"))
+	}
+	if s.WorkgroupName != nil && len(*s.WorkgroupName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkgroupName", 3))
 	}
 	if s.Parameters != nil {
 		for i, v := range s.Parameters {
@@ -2473,10 +2624,17 @@ func (s *ExecuteStatementInput) SetWithEvent(v bool) *ExecuteStatementInput {
 	return s
 }
 
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *ExecuteStatementInput) SetWorkgroupName(v string) *ExecuteStatementInput {
+	s.WorkgroupName = &v
+	return s
+}
+
 type ExecuteStatementOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier.
+	// The cluster identifier. This element is not returned when connecting to a
+	// serverless workgroup.
 	ClusterIdentifier *string `type:"string"`
 
 	// The date and time (UTC) the statement was created.
@@ -2495,6 +2653,10 @@ type ExecuteStatementOutput struct {
 
 	// The name or ARN of the secret that enables access to the database.
 	SecretArn *string `type:"string"`
+
+	// The serverless workgroup name. This element is not returned when connecting
+	// to a provisioned cluster.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -2548,6 +2710,12 @@ func (s *ExecuteStatementOutput) SetId(v string) *ExecuteStatementOutput {
 // SetSecretArn sets the SecretArn field's value.
 func (s *ExecuteStatementOutput) SetSecretArn(v string) *ExecuteStatementOutput {
 	s.SecretArn = &v
+	return s
+}
+
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *ExecuteStatementOutput) SetWorkgroupName(v string) *ExecuteStatementOutput {
+	s.WorkgroupName = &v
 	return s
 }
 
@@ -2827,11 +2995,9 @@ func (s *InternalServerException) RequestID() string {
 type ListDatabasesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier. This parameter is required when authenticating using
-	// either Secrets Manager or temporary credentials.
-	//
-	// ClusterIdentifier is a required field
-	ClusterIdentifier *string `type:"string" required:"true"`
+	// The cluster identifier. This parameter is required when connecting to a cluster
+	// and authenticating using either Secrets Manager or temporary credentials.
+	ClusterIdentifier *string `type:"string"`
 
 	// The name of the database. This parameter is required when authenticating
 	// using either Secrets Manager or temporary credentials.
@@ -2839,8 +3005,8 @@ type ListDatabasesInput struct {
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
 
-	// The database user name. This parameter is required when authenticating using
-	// temporary credentials.
+	// The database user name. This parameter is required when connecting to a cluster
+	// and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of databases to return in the response. If more databases
@@ -2858,6 +3024,11 @@ type ListDatabasesInput struct {
 	// The name or ARN of the secret that enables access to the database. This parameter
 	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
+
+	// The serverless workgroup name. This parameter is required when connecting
+	// to a serverless workgroup and authenticating using either Secrets Manager
+	// or temporary credentials.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -2881,11 +3052,11 @@ func (s ListDatabasesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListDatabasesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListDatabasesInput"}
-	if s.ClusterIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.WorkgroupName != nil && len(*s.WorkgroupName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkgroupName", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2927,6 +3098,12 @@ func (s *ListDatabasesInput) SetNextToken(v string) *ListDatabasesInput {
 // SetSecretArn sets the SecretArn field's value.
 func (s *ListDatabasesInput) SetSecretArn(v string) *ListDatabasesInput {
 	s.SecretArn = &v
+	return s
+}
+
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *ListDatabasesInput) SetWorkgroupName(v string) *ListDatabasesInput {
+	s.WorkgroupName = &v
 	return s
 }
 
@@ -2977,11 +3154,9 @@ func (s *ListDatabasesOutput) SetNextToken(v string) *ListDatabasesOutput {
 type ListSchemasInput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier. This parameter is required when authenticating using
-	// either Secrets Manager or temporary credentials.
-	//
-	// ClusterIdentifier is a required field
-	ClusterIdentifier *string `type:"string" required:"true"`
+	// The cluster identifier. This parameter is required when connecting to a cluster
+	// and authenticating using either Secrets Manager or temporary credentials.
+	ClusterIdentifier *string `type:"string"`
 
 	// A database name. The connected database is specified when you connect with
 	// your authentication credentials.
@@ -2994,8 +3169,8 @@ type ListSchemasInput struct {
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
 
-	// The database user name. This parameter is required when authenticating using
-	// temporary credentials.
+	// The database user name. This parameter is required when connecting to a cluster
+	// and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of schemas to return in the response. If more schemas
@@ -3018,6 +3193,11 @@ type ListSchemasInput struct {
 	// The name or ARN of the secret that enables access to the database. This parameter
 	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
+
+	// The serverless workgroup name. This parameter is required when connecting
+	// to a serverless workgroup and authenticating using either Secrets Manager
+	// or temporary credentials.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -3041,11 +3221,11 @@ func (s ListSchemasInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListSchemasInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListSchemasInput"}
-	if s.ClusterIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.WorkgroupName != nil && len(*s.WorkgroupName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkgroupName", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3099,6 +3279,12 @@ func (s *ListSchemasInput) SetSchemaPattern(v string) *ListSchemasInput {
 // SetSecretArn sets the SecretArn field's value.
 func (s *ListSchemasInput) SetSecretArn(v string) *ListSchemasInput {
 	s.SecretArn = &v
+	return s
+}
+
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *ListSchemasInput) SetWorkgroupName(v string) *ListSchemasInput {
+	s.WorkgroupName = &v
 	return s
 }
 
@@ -3291,11 +3477,9 @@ func (s *ListStatementsOutput) SetStatements(v []*StatementData) *ListStatements
 type ListTablesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier. This parameter is required when authenticating using
-	// either Secrets Manager or temporary credentials.
-	//
-	// ClusterIdentifier is a required field
-	ClusterIdentifier *string `type:"string" required:"true"`
+	// The cluster identifier. This parameter is required when connecting to a cluster
+	// and authenticating using either Secrets Manager or temporary credentials.
+	ClusterIdentifier *string `type:"string"`
 
 	// A database name. The connected database is specified when you connect with
 	// your authentication credentials.
@@ -3308,8 +3492,8 @@ type ListTablesInput struct {
 	// Database is a required field
 	Database *string `type:"string" required:"true"`
 
-	// The database user name. This parameter is required when authenticating using
-	// temporary credentials.
+	// The database user name. This parameter is required when connecting to a cluster
+	// and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of tables to return in the response. If more tables exist
@@ -3343,6 +3527,11 @@ type ListTablesInput struct {
 	// neither SchemaPattern or TablePattern are specified, then all tables are
 	// returned.
 	TablePattern *string `type:"string"`
+
+	// The serverless workgroup name. This parameter is required when connecting
+	// to a serverless workgroup and authenticating using either Secrets Manager
+	// or temporary credentials.
+	WorkgroupName *string `min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -3366,11 +3555,11 @@ func (s ListTablesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListTablesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListTablesInput"}
-	if s.ClusterIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.WorkgroupName != nil && len(*s.WorkgroupName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkgroupName", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3430,6 +3619,12 @@ func (s *ListTablesInput) SetSecretArn(v string) *ListTablesInput {
 // SetTablePattern sets the TablePattern field's value.
 func (s *ListTablesInput) SetTablePattern(v string) *ListTablesInput {
 	s.TablePattern = &v
+	return s
+}
+
+// SetWorkgroupName sets the WorkgroupName field's value.
+func (s *ListTablesInput) SetWorkgroupName(v string) *ListTablesInput {
+	s.WorkgroupName = &v
 	return s
 }
 
@@ -3747,7 +3942,7 @@ type SubStatementData struct {
 	Error *string `type:"string"`
 
 	// A value that indicates whether the statement has a result set. The result
-	// set can be empty.
+	// set can be empty. The value is true for an empty result set.
 	HasResultSet *bool `type:"boolean"`
 
 	// The identifier of the SQL statement. This value is a universally unique identifier

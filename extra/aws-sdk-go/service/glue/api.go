@@ -355,6 +355,12 @@ func (c *Glue) BatchDeleteTableRequest(input *BatchDeleteTableInput) (req *reque
 //   * OperationTimeoutException
 //   The operation timed out.
 //
+//   * EncryptionException
+//   An encryption operation failed.
+//
+//   * ResourceNotReadyException
+//   A resource was not ready for a transaction.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/BatchDeleteTable
 func (c *Glue) BatchDeleteTable(input *BatchDeleteTableInput) (*BatchDeleteTableOutput, error) {
 	req, out := c.BatchDeleteTableRequest(input)
@@ -635,6 +641,91 @@ func (c *Glue) BatchGetCrawlersWithContext(ctx aws.Context, input *BatchGetCrawl
 	return out, req.Send()
 }
 
+const opBatchGetCustomEntityTypes = "BatchGetCustomEntityTypes"
+
+// BatchGetCustomEntityTypesRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetCustomEntityTypes operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetCustomEntityTypes for more information on using the BatchGetCustomEntityTypes
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchGetCustomEntityTypesRequest method.
+//    req, resp := client.BatchGetCustomEntityTypesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/BatchGetCustomEntityTypes
+func (c *Glue) BatchGetCustomEntityTypesRequest(input *BatchGetCustomEntityTypesInput) (req *request.Request, output *BatchGetCustomEntityTypesOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetCustomEntityTypes,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchGetCustomEntityTypesInput{}
+	}
+
+	output = &BatchGetCustomEntityTypesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetCustomEntityTypes API operation for AWS Glue.
+//
+// Retrieves the details for the custom patterns specified by a list of names.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation BatchGetCustomEntityTypes for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/BatchGetCustomEntityTypes
+func (c *Glue) BatchGetCustomEntityTypes(input *BatchGetCustomEntityTypesInput) (*BatchGetCustomEntityTypesOutput, error) {
+	req, out := c.BatchGetCustomEntityTypesRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetCustomEntityTypesWithContext is the same as BatchGetCustomEntityTypes with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetCustomEntityTypes for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) BatchGetCustomEntityTypesWithContext(ctx aws.Context, input *BatchGetCustomEntityTypesInput, opts ...request.Option) (*BatchGetCustomEntityTypesOutput, error) {
+	req, out := c.BatchGetCustomEntityTypesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchGetDevEndpoints = "BatchGetDevEndpoints"
 
 // BatchGetDevEndpointsRequest generates a "aws/request.Request" representing the
@@ -882,6 +973,9 @@ func (c *Glue) BatchGetPartitionRequest(input *BatchGetPartitionInput) (req *req
 //
 //   * EncryptionException
 //   An encryption operation failed.
+//
+//   * InvalidStateException
+//   An error that indicates your data is in an invalid state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/BatchGetPartition
 func (c *Glue) BatchGetPartition(input *BatchGetPartitionInput) (*BatchGetPartitionOutput, error) {
@@ -1348,6 +1442,101 @@ func (c *Glue) CancelMLTaskRunWithContext(ctx aws.Context, input *CancelMLTaskRu
 	return out, req.Send()
 }
 
+const opCancelStatement = "CancelStatement"
+
+// CancelStatementRequest generates a "aws/request.Request" representing the
+// client's request for the CancelStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelStatement for more information on using the CancelStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelStatementRequest method.
+//    req, resp := client.CancelStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CancelStatement
+func (c *Glue) CancelStatementRequest(input *CancelStatementInput) (req *request.Request, output *CancelStatementOutput) {
+	op := &request.Operation{
+		Name:       opCancelStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelStatementInput{}
+	}
+
+	output = &CancelStatementOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelStatement API operation for AWS Glue.
+//
+// Cancels the statement.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation CancelStatement for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * IllegalSessionStateException
+//   The session is in an invalid state to perform a requested operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CancelStatement
+func (c *Glue) CancelStatement(input *CancelStatementInput) (*CancelStatementOutput, error) {
+	req, out := c.CancelStatementRequest(input)
+	return out, req.Send()
+}
+
+// CancelStatementWithContext is the same as CancelStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) CancelStatementWithContext(ctx aws.Context, input *CancelStatementInput, opts ...request.Option) (*CancelStatementOutput, error) {
+	req, out := c.CancelStatementRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCheckSchemaVersionValidity = "CheckSchemaVersionValidity"
 
 // CheckSchemaVersionValidityRequest generates a "aws/request.Request" representing the
@@ -1792,6 +1981,108 @@ func (c *Glue) CreateCrawler(input *CreateCrawlerInput) (*CreateCrawlerOutput, e
 // for more information on using Contexts.
 func (c *Glue) CreateCrawlerWithContext(ctx aws.Context, input *CreateCrawlerInput, opts ...request.Option) (*CreateCrawlerOutput, error) {
 	req, out := c.CreateCrawlerRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateCustomEntityType = "CreateCustomEntityType"
+
+// CreateCustomEntityTypeRequest generates a "aws/request.Request" representing the
+// client's request for the CreateCustomEntityType operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateCustomEntityType for more information on using the CreateCustomEntityType
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateCustomEntityTypeRequest method.
+//    req, resp := client.CreateCustomEntityTypeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateCustomEntityType
+func (c *Glue) CreateCustomEntityTypeRequest(input *CreateCustomEntityTypeInput) (req *request.Request, output *CreateCustomEntityTypeOutput) {
+	op := &request.Operation{
+		Name:       opCreateCustomEntityType,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateCustomEntityTypeInput{}
+	}
+
+	output = &CreateCustomEntityTypeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateCustomEntityType API operation for AWS Glue.
+//
+// Creates a custom pattern that is used to detect sensitive data across the
+// columns and rows of your structured data.
+//
+// Each custom pattern you create specifies a regular expression and an optional
+// list of context words. If no context words are passed only a regular expression
+// is checked.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation CreateCustomEntityType for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * AlreadyExistsException
+//   A resource to be created or added already exists.
+//
+//   * IdempotentParameterMismatchException
+//   The same unique identifier was associated with two different records.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * ResourceNumberLimitExceededException
+//   A resource numerical limit was exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateCustomEntityType
+func (c *Glue) CreateCustomEntityType(input *CreateCustomEntityTypeInput) (*CreateCustomEntityTypeOutput, error) {
+	req, out := c.CreateCustomEntityTypeRequest(input)
+	return out, req.Send()
+}
+
+// CreateCustomEntityTypeWithContext is the same as CreateCustomEntityType with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateCustomEntityType for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) CreateCustomEntityTypeWithContext(ctx aws.Context, input *CreateCustomEntityTypeInput, opts ...request.Option) (*CreateCustomEntityTypeOutput, error) {
+	req, out := c.CreateCustomEntityTypeRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2463,6 +2754,9 @@ func (c *Glue) CreateRegistryRequest(input *CreateRegistryInput) (req *request.R
 //   * ResourceNumberLimitExceededException
 //   A resource numerical limit was exceeded.
 //
+//   * ConcurrentModificationException
+//   Two processes are trying to modify a resource simultaneously.
+//
 //   * InternalServiceException
 //   An internal service error occurred.
 //
@@ -2567,6 +2861,9 @@ func (c *Glue) CreateSchemaRequest(input *CreateSchemaInput) (req *request.Reque
 //
 //   * ResourceNumberLimitExceededException
 //   A resource numerical limit was exceeded.
+//
+//   * ConcurrentModificationException
+//   Two processes are trying to modify a resource simultaneously.
 //
 //   * InternalServiceException
 //   An internal service error occurred.
@@ -2773,6 +3070,106 @@ func (c *Glue) CreateSecurityConfigurationWithContext(ctx aws.Context, input *Cr
 	return out, req.Send()
 }
 
+const opCreateSession = "CreateSession"
+
+// CreateSessionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateSession operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateSession for more information on using the CreateSession
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateSessionRequest method.
+//    req, resp := client.CreateSessionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateSession
+func (c *Glue) CreateSessionRequest(input *CreateSessionInput) (req *request.Request, output *CreateSessionOutput) {
+	op := &request.Operation{
+		Name:       opCreateSession,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateSessionInput{}
+	}
+
+	output = &CreateSessionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateSession API operation for AWS Glue.
+//
+// Creates a new session.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation CreateSession for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * IdempotentParameterMismatchException
+//   The same unique identifier was associated with two different records.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * ValidationException
+//   A value could not be validated.
+//
+//   * AlreadyExistsException
+//   A resource to be created or added already exists.
+//
+//   * ResourceNumberLimitExceededException
+//   A resource numerical limit was exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateSession
+func (c *Glue) CreateSession(input *CreateSessionInput) (*CreateSessionOutput, error) {
+	req, out := c.CreateSessionRequest(input)
+	return out, req.Send()
+}
+
+// CreateSessionWithContext is the same as CreateSession with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateSession for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) CreateSessionWithContext(ctx aws.Context, input *CreateSessionInput, opts ...request.Option) (*CreateSessionOutput, error) {
+	req, out := c.CreateSessionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateTable = "CreateTable"
 
 // CreateTableRequest generates a "aws/request.Request" representing the
@@ -2851,6 +3248,9 @@ func (c *Glue) CreateTableRequest(input *CreateTableInput) (req *request.Request
 //
 //   * ConcurrentModificationException
 //   Two processes are trying to modify a resource simultaneously.
+//
+//   * ResourceNotReadyException
+//   A resource was not ready for a transaction.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateTable
 func (c *Glue) CreateTable(input *CreateTableInput) (*CreateTableOutput, error) {
@@ -3692,6 +4092,97 @@ func (c *Glue) DeleteCrawler(input *DeleteCrawlerInput) (*DeleteCrawlerOutput, e
 // for more information on using Contexts.
 func (c *Glue) DeleteCrawlerWithContext(ctx aws.Context, input *DeleteCrawlerInput, opts ...request.Option) (*DeleteCrawlerOutput, error) {
 	req, out := c.DeleteCrawlerRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteCustomEntityType = "DeleteCustomEntityType"
+
+// DeleteCustomEntityTypeRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteCustomEntityType operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteCustomEntityType for more information on using the DeleteCustomEntityType
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteCustomEntityTypeRequest method.
+//    req, resp := client.DeleteCustomEntityTypeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteCustomEntityType
+func (c *Glue) DeleteCustomEntityTypeRequest(input *DeleteCustomEntityTypeInput) (req *request.Request, output *DeleteCustomEntityTypeOutput) {
+	op := &request.Operation{
+		Name:       opDeleteCustomEntityType,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteCustomEntityTypeInput{}
+	}
+
+	output = &DeleteCustomEntityTypeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteCustomEntityType API operation for AWS Glue.
+//
+// Deletes a custom pattern by specifying its name.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation DeleteCustomEntityType for usage and error information.
+//
+// Returned Error Types:
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteCustomEntityType
+func (c *Glue) DeleteCustomEntityType(input *DeleteCustomEntityTypeInput) (*DeleteCustomEntityTypeOutput, error) {
+	req, out := c.DeleteCustomEntityTypeRequest(input)
+	return out, req.Send()
+}
+
+// DeleteCustomEntityTypeWithContext is the same as DeleteCustomEntityType with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteCustomEntityType for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) DeleteCustomEntityTypeWithContext(ctx aws.Context, input *DeleteCustomEntityTypeInput, opts ...request.Option) (*DeleteCustomEntityTypeOutput, error) {
+	req, out := c.DeleteCustomEntityTypeRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4720,6 +5211,100 @@ func (c *Glue) DeleteSecurityConfigurationWithContext(ctx aws.Context, input *De
 	return out, req.Send()
 }
 
+const opDeleteSession = "DeleteSession"
+
+// DeleteSessionRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteSession operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteSession for more information on using the DeleteSession
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteSessionRequest method.
+//    req, resp := client.DeleteSessionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteSession
+func (c *Glue) DeleteSessionRequest(input *DeleteSessionInput) (req *request.Request, output *DeleteSessionOutput) {
+	op := &request.Operation{
+		Name:       opDeleteSession,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteSessionInput{}
+	}
+
+	output = &DeleteSessionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteSession API operation for AWS Glue.
+//
+// Deletes the session.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation DeleteSession for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * IllegalSessionStateException
+//   The session is in an invalid state to perform a requested operation.
+//
+//   * ConcurrentModificationException
+//   Two processes are trying to modify a resource simultaneously.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteSession
+func (c *Glue) DeleteSession(input *DeleteSessionInput) (*DeleteSessionOutput, error) {
+	req, out := c.DeleteSessionRequest(input)
+	return out, req.Send()
+}
+
+// DeleteSessionWithContext is the same as DeleteSession with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteSession for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) DeleteSessionWithContext(ctx aws.Context, input *DeleteSessionInput, opts ...request.Option) (*DeleteSessionOutput, error) {
+	req, out := c.DeleteSessionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteTable = "DeleteTable"
 
 // DeleteTableRequest generates a "aws/request.Request" representing the
@@ -4797,6 +5382,9 @@ func (c *Glue) DeleteTableRequest(input *DeleteTableInput) (req *request.Request
 //
 //   * ConcurrentModificationException
 //   Two processes are trying to modify a resource simultaneously.
+//
+//   * ResourceNotReadyException
+//   A resource was not ready for a transaction.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteTable
 func (c *Glue) DeleteTable(input *DeleteTableInput) (*DeleteTableOutput, error) {
@@ -6571,6 +7159,97 @@ func (c *Glue) GetCrawlersPagesWithContext(ctx aws.Context, input *GetCrawlersIn
 	}
 
 	return p.Err()
+}
+
+const opGetCustomEntityType = "GetCustomEntityType"
+
+// GetCustomEntityTypeRequest generates a "aws/request.Request" representing the
+// client's request for the GetCustomEntityType operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCustomEntityType for more information on using the GetCustomEntityType
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetCustomEntityTypeRequest method.
+//    req, resp := client.GetCustomEntityTypeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetCustomEntityType
+func (c *Glue) GetCustomEntityTypeRequest(input *GetCustomEntityTypeInput) (req *request.Request, output *GetCustomEntityTypeOutput) {
+	op := &request.Operation{
+		Name:       opGetCustomEntityType,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetCustomEntityTypeInput{}
+	}
+
+	output = &GetCustomEntityTypeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCustomEntityType API operation for AWS Glue.
+//
+// Retrieves the details of a custom pattern by specifying its name.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetCustomEntityType for usage and error information.
+//
+// Returned Error Types:
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetCustomEntityType
+func (c *Glue) GetCustomEntityType(input *GetCustomEntityTypeInput) (*GetCustomEntityTypeOutput, error) {
+	req, out := c.GetCustomEntityTypeRequest(input)
+	return out, req.Send()
+}
+
+// GetCustomEntityTypeWithContext is the same as GetCustomEntityType with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCustomEntityType for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetCustomEntityTypeWithContext(ctx aws.Context, input *GetCustomEntityTypeInput, opts ...request.Option) (*GetCustomEntityTypeOutput, error) {
+	req, out := c.GetCustomEntityTypeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
 }
 
 const opGetDataCatalogEncryptionSettings = "GetDataCatalogEncryptionSettings"
@@ -8672,6 +9351,12 @@ func (c *Glue) GetPartitionsRequest(input *GetPartitionsInput) (req *request.Req
 //   * EncryptionException
 //   An encryption operation failed.
 //
+//   * InvalidStateException
+//   An error that indicates your data is in an invalid state.
+//
+//   * ResourceNotReadyException
+//   A resource was not ready for a transaction.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetPartitions
 func (c *Glue) GetPartitions(input *GetPartitionsInput) (*GetPartitionsOutput, error) {
 	req, out := c.GetPartitionsRequest(input)
@@ -9756,6 +10441,191 @@ func (c *Glue) GetSecurityConfigurationsPagesWithContext(ctx aws.Context, input 
 	return p.Err()
 }
 
+const opGetSession = "GetSession"
+
+// GetSessionRequest generates a "aws/request.Request" representing the
+// client's request for the GetSession operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSession for more information on using the GetSession
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSessionRequest method.
+//    req, resp := client.GetSessionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSession
+func (c *Glue) GetSessionRequest(input *GetSessionInput) (req *request.Request, output *GetSessionOutput) {
+	op := &request.Operation{
+		Name:       opGetSession,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetSessionInput{}
+	}
+
+	output = &GetSessionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSession API operation for AWS Glue.
+//
+// Retrieves the session.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetSession for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSession
+func (c *Glue) GetSession(input *GetSessionInput) (*GetSessionOutput, error) {
+	req, out := c.GetSessionRequest(input)
+	return out, req.Send()
+}
+
+// GetSessionWithContext is the same as GetSession with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSession for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetSessionWithContext(ctx aws.Context, input *GetSessionInput, opts ...request.Option) (*GetSessionOutput, error) {
+	req, out := c.GetSessionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetStatement = "GetStatement"
+
+// GetStatementRequest generates a "aws/request.Request" representing the
+// client's request for the GetStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetStatement for more information on using the GetStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetStatementRequest method.
+//    req, resp := client.GetStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetStatement
+func (c *Glue) GetStatementRequest(input *GetStatementInput) (req *request.Request, output *GetStatementOutput) {
+	op := &request.Operation{
+		Name:       opGetStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetStatementInput{}
+	}
+
+	output = &GetStatementOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetStatement API operation for AWS Glue.
+//
+// Retrieves the statement.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetStatement for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * IllegalSessionStateException
+//   The session is in an invalid state to perform a requested operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetStatement
+func (c *Glue) GetStatement(input *GetStatementInput) (*GetStatementOutput, error) {
+	req, out := c.GetStatementRequest(input)
+	return out, req.Send()
+}
+
+// GetStatementWithContext is the same as GetStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetStatementWithContext(ctx aws.Context, input *GetStatementInput, opts ...request.Option) (*GetStatementOutput, error) {
+	req, out := c.GetStatementRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetTable = "GetTable"
 
 // GetTableRequest generates a "aws/request.Request" representing the
@@ -9824,6 +10694,9 @@ func (c *Glue) GetTableRequest(input *GetTableInput) (req *request.Request, outp
 //
 //   * EncryptionException
 //   An encryption operation failed.
+//
+//   * ResourceNotReadyException
+//   A resource was not ready for a transaction.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetTable
 func (c *Glue) GetTable(input *GetTableInput) (*GetTableOutput, error) {
@@ -10557,6 +11430,337 @@ func (c *Glue) GetTriggersPagesWithContext(ctx aws.Context, input *GetTriggersIn
 	}
 
 	return p.Err()
+}
+
+const opGetUnfilteredPartitionMetadata = "GetUnfilteredPartitionMetadata"
+
+// GetUnfilteredPartitionMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the GetUnfilteredPartitionMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetUnfilteredPartitionMetadata for more information on using the GetUnfilteredPartitionMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetUnfilteredPartitionMetadataRequest method.
+//    req, resp := client.GetUnfilteredPartitionMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetUnfilteredPartitionMetadata
+func (c *Glue) GetUnfilteredPartitionMetadataRequest(input *GetUnfilteredPartitionMetadataInput) (req *request.Request, output *GetUnfilteredPartitionMetadataOutput) {
+	op := &request.Operation{
+		Name:       opGetUnfilteredPartitionMetadata,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetUnfilteredPartitionMetadataInput{}
+	}
+
+	output = &GetUnfilteredPartitionMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetUnfilteredPartitionMetadata API operation for AWS Glue.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetUnfilteredPartitionMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * EncryptionException
+//   An encryption operation failed.
+//
+//   * PermissionTypeMismatchException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetUnfilteredPartitionMetadata
+func (c *Glue) GetUnfilteredPartitionMetadata(input *GetUnfilteredPartitionMetadataInput) (*GetUnfilteredPartitionMetadataOutput, error) {
+	req, out := c.GetUnfilteredPartitionMetadataRequest(input)
+	return out, req.Send()
+}
+
+// GetUnfilteredPartitionMetadataWithContext is the same as GetUnfilteredPartitionMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetUnfilteredPartitionMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetUnfilteredPartitionMetadataWithContext(ctx aws.Context, input *GetUnfilteredPartitionMetadataInput, opts ...request.Option) (*GetUnfilteredPartitionMetadataOutput, error) {
+	req, out := c.GetUnfilteredPartitionMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetUnfilteredPartitionsMetadata = "GetUnfilteredPartitionsMetadata"
+
+// GetUnfilteredPartitionsMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the GetUnfilteredPartitionsMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetUnfilteredPartitionsMetadata for more information on using the GetUnfilteredPartitionsMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetUnfilteredPartitionsMetadataRequest method.
+//    req, resp := client.GetUnfilteredPartitionsMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetUnfilteredPartitionsMetadata
+func (c *Glue) GetUnfilteredPartitionsMetadataRequest(input *GetUnfilteredPartitionsMetadataInput) (req *request.Request, output *GetUnfilteredPartitionsMetadataOutput) {
+	op := &request.Operation{
+		Name:       opGetUnfilteredPartitionsMetadata,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetUnfilteredPartitionsMetadataInput{}
+	}
+
+	output = &GetUnfilteredPartitionsMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetUnfilteredPartitionsMetadata API operation for AWS Glue.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetUnfilteredPartitionsMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * EncryptionException
+//   An encryption operation failed.
+//
+//   * PermissionTypeMismatchException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetUnfilteredPartitionsMetadata
+func (c *Glue) GetUnfilteredPartitionsMetadata(input *GetUnfilteredPartitionsMetadataInput) (*GetUnfilteredPartitionsMetadataOutput, error) {
+	req, out := c.GetUnfilteredPartitionsMetadataRequest(input)
+	return out, req.Send()
+}
+
+// GetUnfilteredPartitionsMetadataWithContext is the same as GetUnfilteredPartitionsMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetUnfilteredPartitionsMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetUnfilteredPartitionsMetadataWithContext(ctx aws.Context, input *GetUnfilteredPartitionsMetadataInput, opts ...request.Option) (*GetUnfilteredPartitionsMetadataOutput, error) {
+	req, out := c.GetUnfilteredPartitionsMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetUnfilteredPartitionsMetadataPages iterates over the pages of a GetUnfilteredPartitionsMetadata operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetUnfilteredPartitionsMetadata method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetUnfilteredPartitionsMetadata operation.
+//    pageNum := 0
+//    err := client.GetUnfilteredPartitionsMetadataPages(params,
+//        func(page *glue.GetUnfilteredPartitionsMetadataOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Glue) GetUnfilteredPartitionsMetadataPages(input *GetUnfilteredPartitionsMetadataInput, fn func(*GetUnfilteredPartitionsMetadataOutput, bool) bool) error {
+	return c.GetUnfilteredPartitionsMetadataPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetUnfilteredPartitionsMetadataPagesWithContext same as GetUnfilteredPartitionsMetadataPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetUnfilteredPartitionsMetadataPagesWithContext(ctx aws.Context, input *GetUnfilteredPartitionsMetadataInput, fn func(*GetUnfilteredPartitionsMetadataOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetUnfilteredPartitionsMetadataInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetUnfilteredPartitionsMetadataRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetUnfilteredPartitionsMetadataOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opGetUnfilteredTableMetadata = "GetUnfilteredTableMetadata"
+
+// GetUnfilteredTableMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the GetUnfilteredTableMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetUnfilteredTableMetadata for more information on using the GetUnfilteredTableMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetUnfilteredTableMetadataRequest method.
+//    req, resp := client.GetUnfilteredTableMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetUnfilteredTableMetadata
+func (c *Glue) GetUnfilteredTableMetadataRequest(input *GetUnfilteredTableMetadataInput) (req *request.Request, output *GetUnfilteredTableMetadataOutput) {
+	op := &request.Operation{
+		Name:       opGetUnfilteredTableMetadata,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetUnfilteredTableMetadataInput{}
+	}
+
+	output = &GetUnfilteredTableMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetUnfilteredTableMetadata API operation for AWS Glue.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetUnfilteredTableMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * EncryptionException
+//   An encryption operation failed.
+//
+//   * PermissionTypeMismatchException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetUnfilteredTableMetadata
+func (c *Glue) GetUnfilteredTableMetadata(input *GetUnfilteredTableMetadataInput) (*GetUnfilteredTableMetadataOutput, error) {
+	req, out := c.GetUnfilteredTableMetadataRequest(input)
+	return out, req.Send()
+}
+
+// GetUnfilteredTableMetadataWithContext is the same as GetUnfilteredTableMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetUnfilteredTableMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetUnfilteredTableMetadataWithContext(ctx aws.Context, input *GetUnfilteredTableMetadataInput, opts ...request.Option) (*GetUnfilteredTableMetadataOutput, error) {
+	req, out := c.GetUnfilteredTableMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
 }
 
 const opGetUserDefinedFunction = "GetUserDefinedFunction"
@@ -11578,6 +12782,247 @@ func (c *Glue) ListCrawlersPagesWithContext(ctx aws.Context, input *ListCrawlers
 	return p.Err()
 }
 
+const opListCrawls = "ListCrawls"
+
+// ListCrawlsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCrawls operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCrawls for more information on using the ListCrawls
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListCrawlsRequest method.
+//    req, resp := client.ListCrawlsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListCrawls
+func (c *Glue) ListCrawlsRequest(input *ListCrawlsInput) (req *request.Request, output *ListCrawlsOutput) {
+	op := &request.Operation{
+		Name:       opListCrawls,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListCrawlsInput{}
+	}
+
+	output = &ListCrawlsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCrawls API operation for AWS Glue.
+//
+// Returns all the crawls of a specified crawler. Returns only the crawls that
+// have occurred since the launch date of the crawler history feature, and only
+// retains up to 12 months of crawls. Older crawls will not be returned.
+//
+// You may use this API to:
+//
+//    * Retrive all the crawls of a specified crawler.
+//
+//    * Retrieve all the crawls of a specified crawler within a limited count.
+//
+//    * Retrieve all the crawls of a specified crawler in a specific time range.
+//
+//    * Retrieve all the crawls of a specified crawler with a particular state,
+//    crawl ID, or DPU hour value.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation ListCrawls for usage and error information.
+//
+// Returned Error Types:
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListCrawls
+func (c *Glue) ListCrawls(input *ListCrawlsInput) (*ListCrawlsOutput, error) {
+	req, out := c.ListCrawlsRequest(input)
+	return out, req.Send()
+}
+
+// ListCrawlsWithContext is the same as ListCrawls with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCrawls for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListCrawlsWithContext(ctx aws.Context, input *ListCrawlsInput, opts ...request.Option) (*ListCrawlsOutput, error) {
+	req, out := c.ListCrawlsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListCustomEntityTypes = "ListCustomEntityTypes"
+
+// ListCustomEntityTypesRequest generates a "aws/request.Request" representing the
+// client's request for the ListCustomEntityTypes operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCustomEntityTypes for more information on using the ListCustomEntityTypes
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListCustomEntityTypesRequest method.
+//    req, resp := client.ListCustomEntityTypesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListCustomEntityTypes
+func (c *Glue) ListCustomEntityTypesRequest(input *ListCustomEntityTypesInput) (req *request.Request, output *ListCustomEntityTypesOutput) {
+	op := &request.Operation{
+		Name:       opListCustomEntityTypes,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCustomEntityTypesInput{}
+	}
+
+	output = &ListCustomEntityTypesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCustomEntityTypes API operation for AWS Glue.
+//
+// Lists all the custom patterns that have been created.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation ListCustomEntityTypes for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListCustomEntityTypes
+func (c *Glue) ListCustomEntityTypes(input *ListCustomEntityTypesInput) (*ListCustomEntityTypesOutput, error) {
+	req, out := c.ListCustomEntityTypesRequest(input)
+	return out, req.Send()
+}
+
+// ListCustomEntityTypesWithContext is the same as ListCustomEntityTypes with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCustomEntityTypes for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListCustomEntityTypesWithContext(ctx aws.Context, input *ListCustomEntityTypesInput, opts ...request.Option) (*ListCustomEntityTypesOutput, error) {
+	req, out := c.ListCustomEntityTypesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCustomEntityTypesPages iterates over the pages of a ListCustomEntityTypes operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCustomEntityTypes method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCustomEntityTypes operation.
+//    pageNum := 0
+//    err := client.ListCustomEntityTypesPages(params,
+//        func(page *glue.ListCustomEntityTypesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Glue) ListCustomEntityTypesPages(input *ListCustomEntityTypesInput, fn func(*ListCustomEntityTypesOutput, bool) bool) error {
+	return c.ListCustomEntityTypesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCustomEntityTypesPagesWithContext same as ListCustomEntityTypesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListCustomEntityTypesPagesWithContext(ctx aws.Context, input *ListCustomEntityTypesInput, fn func(*ListCustomEntityTypesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCustomEntityTypesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCustomEntityTypesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCustomEntityTypesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListDevEndpoints = "ListDevEndpoints"
 
 // ListDevEndpointsRequest generates a "aws/request.Request" representing the
@@ -12474,6 +13919,246 @@ func (c *Glue) ListSchemasPagesWithContext(ctx aws.Context, input *ListSchemasIn
 	}
 
 	return p.Err()
+}
+
+const opListSessions = "ListSessions"
+
+// ListSessionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSessions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSessions for more information on using the ListSessions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSessionsRequest method.
+//    req, resp := client.ListSessionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListSessions
+func (c *Glue) ListSessionsRequest(input *ListSessionsInput) (req *request.Request, output *ListSessionsOutput) {
+	op := &request.Operation{
+		Name:       opListSessions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSessionsInput{}
+	}
+
+	output = &ListSessionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSessions API operation for AWS Glue.
+//
+// Retrieve a list of sessions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation ListSessions for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListSessions
+func (c *Glue) ListSessions(input *ListSessionsInput) (*ListSessionsOutput, error) {
+	req, out := c.ListSessionsRequest(input)
+	return out, req.Send()
+}
+
+// ListSessionsWithContext is the same as ListSessions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSessions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListSessionsWithContext(ctx aws.Context, input *ListSessionsInput, opts ...request.Option) (*ListSessionsOutput, error) {
+	req, out := c.ListSessionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSessionsPages iterates over the pages of a ListSessions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSessions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSessions operation.
+//    pageNum := 0
+//    err := client.ListSessionsPages(params,
+//        func(page *glue.ListSessionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Glue) ListSessionsPages(input *ListSessionsInput, fn func(*ListSessionsOutput, bool) bool) error {
+	return c.ListSessionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSessionsPagesWithContext same as ListSessionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListSessionsPagesWithContext(ctx aws.Context, input *ListSessionsInput, fn func(*ListSessionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSessionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSessionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSessionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListStatements = "ListStatements"
+
+// ListStatementsRequest generates a "aws/request.Request" representing the
+// client's request for the ListStatements operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListStatements for more information on using the ListStatements
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListStatementsRequest method.
+//    req, resp := client.ListStatementsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListStatements
+func (c *Glue) ListStatementsRequest(input *ListStatementsInput) (req *request.Request, output *ListStatementsOutput) {
+	op := &request.Operation{
+		Name:       opListStatements,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListStatementsInput{}
+	}
+
+	output = &ListStatementsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListStatements API operation for AWS Glue.
+//
+// Lists statements for the session.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation ListStatements for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * IllegalSessionStateException
+//   The session is in an invalid state to perform a requested operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListStatements
+func (c *Glue) ListStatements(input *ListStatementsInput) (*ListStatementsOutput, error) {
+	req, out := c.ListStatementsRequest(input)
+	return out, req.Send()
+}
+
+// ListStatementsWithContext is the same as ListStatements with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListStatements for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListStatementsWithContext(ctx aws.Context, input *ListStatementsInput, opts ...request.Option) (*ListStatementsOutput, error) {
+	req, out := c.ListStatementsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
 }
 
 const opListTriggers = "ListTriggers"
@@ -13604,6 +15289,106 @@ func (c *Glue) ResumeWorkflowRunWithContext(ctx aws.Context, input *ResumeWorkfl
 	return out, req.Send()
 }
 
+const opRunStatement = "RunStatement"
+
+// RunStatementRequest generates a "aws/request.Request" representing the
+// client's request for the RunStatement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RunStatement for more information on using the RunStatement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RunStatementRequest method.
+//    req, resp := client.RunStatementRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/RunStatement
+func (c *Glue) RunStatementRequest(input *RunStatementInput) (req *request.Request, output *RunStatementOutput) {
+	op := &request.Operation{
+		Name:       opRunStatement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RunStatementInput{}
+	}
+
+	output = &RunStatementOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RunStatement API operation for AWS Glue.
+//
+// Executes the statement.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation RunStatement for usage and error information.
+//
+// Returned Error Types:
+//   * EntityNotFoundException
+//   A specified entity does not exist
+//
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * ValidationException
+//   A value could not be validated.
+//
+//   * ResourceNumberLimitExceededException
+//   A resource numerical limit was exceeded.
+//
+//   * IllegalSessionStateException
+//   The session is in an invalid state to perform a requested operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/RunStatement
+func (c *Glue) RunStatement(input *RunStatementInput) (*RunStatementOutput, error) {
+	req, out := c.RunStatementRequest(input)
+	return out, req.Send()
+}
+
+// RunStatementWithContext is the same as RunStatement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RunStatement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) RunStatementWithContext(ctx aws.Context, input *RunStatementInput, opts ...request.Option) (*RunStatementOutput, error) {
+	req, out := c.RunStatementRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opSearchTables = "SearchTables"
 
 // SearchTablesRequest generates a "aws/request.Request" representing the
@@ -13826,6 +15611,7 @@ func (c *Glue) StartBlueprintRunRequest(input *StartBlueprintRunInput) (req *req
 //   A specified entity does not exist
 //
 //   * IllegalBlueprintStateException
+//   The blueprint is in an invalid state to perform a requested operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/StartBlueprintRun
 func (c *Glue) StartBlueprintRun(input *StartBlueprintRunInput) (*StartBlueprintRunOutput, error) {
@@ -14908,6 +16694,100 @@ func (c *Glue) StopCrawlerScheduleWithContext(ctx aws.Context, input *StopCrawle
 	return out, req.Send()
 }
 
+const opStopSession = "StopSession"
+
+// StopSessionRequest generates a "aws/request.Request" representing the
+// client's request for the StopSession operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopSession for more information on using the StopSession
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopSessionRequest method.
+//    req, resp := client.StopSessionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/StopSession
+func (c *Glue) StopSessionRequest(input *StopSessionInput) (req *request.Request, output *StopSessionOutput) {
+	op := &request.Operation{
+		Name:       opStopSession,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopSessionInput{}
+	}
+
+	output = &StopSessionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopSession API operation for AWS Glue.
+//
+// Stops the session.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation StopSession for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   Access to a resource was denied.
+//
+//   * InternalServiceException
+//   An internal service error occurred.
+//
+//   * OperationTimeoutException
+//   The operation timed out.
+//
+//   * InvalidInputException
+//   The input provided was not valid.
+//
+//   * IllegalSessionStateException
+//   The session is in an invalid state to perform a requested operation.
+//
+//   * ConcurrentModificationException
+//   Two processes are trying to modify a resource simultaneously.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/StopSession
+func (c *Glue) StopSession(input *StopSessionInput) (*StopSessionOutput, error) {
+	req, out := c.StopSessionRequest(input)
+	return out, req.Send()
+}
+
+// StopSessionWithContext is the same as StopSession with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopSession for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) StopSessionWithContext(ctx aws.Context, input *StopSessionInput, opts ...request.Option) (*StopSessionOutput, error) {
+	req, out := c.StopSessionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStopTrigger = "StopTrigger"
 
 // StopTriggerRequest generates a "aws/request.Request" representing the
@@ -15341,6 +17221,7 @@ func (c *Glue) UpdateBlueprintRequest(input *UpdateBlueprintInput) (req *request
 //   An internal service error occurred.
 //
 //   * IllegalBlueprintStateException
+//   The blueprint is in an invalid state to perform a requested operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/UpdateBlueprint
 func (c *Glue) UpdateBlueprint(input *UpdateBlueprintInput) (*UpdateBlueprintOutput, error) {
@@ -16150,7 +18031,8 @@ func (c *Glue) UpdateJobRequest(input *UpdateJobInput) (req *request.Request, ou
 
 // UpdateJob API operation for AWS Glue.
 //
-// Updates an existing job definition.
+// Updates an existing job definition. The previous job definition is completely
+// overwritten by this information.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -16657,6 +18539,9 @@ func (c *Glue) UpdateTableRequest(input *UpdateTableInput) (req *request.Request
 //   * EncryptionException
 //   An encryption operation failed.
 //
+//   * ResourceNotReadyException
+//   A resource was not ready for a transaction.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/UpdateTable
 func (c *Glue) UpdateTable(input *UpdateTableInput) (*UpdateTableOutput, error) {
 	req, out := c.UpdateTableRequest(input)
@@ -17137,6 +19022,179 @@ func (s *Action) SetTimeout(v int64) *Action {
 	return s
 }
 
+// Specifies a transform that groups rows by chosen fields and computes the
+// aggregated value by specified function.
+type Aggregate struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the aggregate functions to be performed on specified fields.
+	//
+	// Aggs is a required field
+	Aggs []*AggregateOperation `min:"1" type:"list" required:"true"`
+
+	// Specifies the fields to group by.
+	//
+	// Groups is a required field
+	Groups [][]*string `type:"list" required:"true"`
+
+	// Specifies the fields and rows to use as inputs for the aggregate transform.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Aggregate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Aggregate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Aggregate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Aggregate"}
+	if s.Aggs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Aggs"))
+	}
+	if s.Aggs != nil && len(s.Aggs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Aggs", 1))
+	}
+	if s.Groups == nil {
+		invalidParams.Add(request.NewErrParamRequired("Groups"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Aggs != nil {
+		for i, v := range s.Aggs {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Aggs", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAggs sets the Aggs field's value.
+func (s *Aggregate) SetAggs(v []*AggregateOperation) *Aggregate {
+	s.Aggs = v
+	return s
+}
+
+// SetGroups sets the Groups field's value.
+func (s *Aggregate) SetGroups(v [][]*string) *Aggregate {
+	s.Groups = v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *Aggregate) SetInputs(v []*string) *Aggregate {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Aggregate) SetName(v string) *Aggregate {
+	s.Name = &v
+	return s
+}
+
+// Specifies the set of parameters needed to perform aggregation in the aggregate
+// transform.
+type AggregateOperation struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the aggregation function to apply.
+	//
+	// Possible aggregation functions include: avg countDistinct, count, first,
+	// last, kurtosis, max, min, skewness, stddev_samp, stddev_pop, sum, sumDistinct,
+	// var_samp, var_pop
+	//
+	// AggFunc is a required field
+	AggFunc *string `type:"string" required:"true" enum:"AggFunction"`
+
+	// Specifies the column on the data set on which the aggregation function will
+	// be applied.
+	//
+	// Column is a required field
+	Column []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregateOperation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AggregateOperation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AggregateOperation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AggregateOperation"}
+	if s.AggFunc == nil {
+		invalidParams.Add(request.NewErrParamRequired("AggFunc"))
+	}
+	if s.Column == nil {
+		invalidParams.Add(request.NewErrParamRequired("Column"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAggFunc sets the AggFunc field's value.
+func (s *AggregateOperation) SetAggFunc(v string) *AggregateOperation {
+	s.AggFunc = &v
+	return s
+}
+
+// SetColumn sets the Column field's value.
+func (s *AggregateOperation) SetColumn(v []*string) *AggregateOperation {
+	s.Column = v
+	return s
+}
+
 // A resource to be created or added already exists.
 type AlreadyExistsException struct {
 	_            struct{}                  `type:"structure"`
@@ -17202,6 +19260,270 @@ func (s *AlreadyExistsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Specifies a transform that maps data property keys in the data source to
+// data property keys in the data target. You can rename keys, modify the data
+// types for keys, and choose which keys to drop from the dataset.
+type ApplyMapping struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// Specifies the mapping of data property keys in the data source to data property
+	// keys in the data target.
+	//
+	// Mapping is a required field
+	Mapping []*Mapping `type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApplyMapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApplyMapping) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ApplyMapping) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ApplyMapping"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Mapping == nil {
+		invalidParams.Add(request.NewErrParamRequired("Mapping"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *ApplyMapping) SetInputs(v []*string) *ApplyMapping {
+	s.Inputs = v
+	return s
+}
+
+// SetMapping sets the Mapping field's value.
+func (s *ApplyMapping) SetMapping(v []*Mapping) *ApplyMapping {
+	s.Mapping = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ApplyMapping) SetName(v string) *ApplyMapping {
+	s.Name = &v
+	return s
+}
+
+// Specifies a connector to an Amazon Athena data source.
+type AthenaConnectorSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the connection that is associated with the connector.
+	//
+	// ConnectionName is a required field
+	ConnectionName *string `type:"string" required:"true"`
+
+	// The name of the table in the data source.
+	ConnectionTable *string `type:"string"`
+
+	// The type of connection, such as marketplace.athena or custom.athena, designating
+	// a connection to an Amazon Athena data store.
+	//
+	// ConnectionType is a required field
+	ConnectionType *string `type:"string" required:"true"`
+
+	// The name of a connector that assists with accessing the data store in Glue
+	// Studio.
+	//
+	// ConnectorName is a required field
+	ConnectorName *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the custom Athena source.
+	OutputSchemas []*GlueSchema `type:"list"`
+
+	// The name of the Cloudwatch log group to read from. For example, /aws-glue/jobs/output.
+	//
+	// SchemaName is a required field
+	SchemaName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AthenaConnectorSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AthenaConnectorSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AthenaConnectorSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AthenaConnectorSource"}
+	if s.ConnectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionName"))
+	}
+	if s.ConnectionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionType"))
+	}
+	if s.ConnectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorName"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.SchemaName == nil {
+		invalidParams.Add(request.NewErrParamRequired("SchemaName"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *AthenaConnectorSource) SetConnectionName(v string) *AthenaConnectorSource {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetConnectionTable sets the ConnectionTable field's value.
+func (s *AthenaConnectorSource) SetConnectionTable(v string) *AthenaConnectorSource {
+	s.ConnectionTable = &v
+	return s
+}
+
+// SetConnectionType sets the ConnectionType field's value.
+func (s *AthenaConnectorSource) SetConnectionType(v string) *AthenaConnectorSource {
+	s.ConnectionType = &v
+	return s
+}
+
+// SetConnectorName sets the ConnectorName field's value.
+func (s *AthenaConnectorSource) SetConnectorName(v string) *AthenaConnectorSource {
+	s.ConnectorName = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AthenaConnectorSource) SetName(v string) *AthenaConnectorSource {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *AthenaConnectorSource) SetOutputSchemas(v []*GlueSchema) *AthenaConnectorSource {
+	s.OutputSchemas = v
+	return s
+}
+
+// SetSchemaName sets the SchemaName field's value.
+func (s *AthenaConnectorSource) SetSchemaName(v string) *AthenaConnectorSource {
+	s.SchemaName = &v
+	return s
+}
+
+// A structure containing information for audit.
+type AuditContext struct {
+	_ struct{} `type:"structure"`
+
+	// The context for the audit..
+	AdditionalAuditContext *string `type:"string"`
+
+	// All columns request for audit.
+	AllColumnsRequested *bool `type:"boolean"`
+
+	// The requested columns for audit.
+	RequestedColumns []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditContext) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalAuditContext sets the AdditionalAuditContext field's value.
+func (s *AuditContext) SetAdditionalAuditContext(v string) *AuditContext {
+	s.AdditionalAuditContext = &v
+	return s
+}
+
+// SetAllColumnsRequested sets the AllColumnsRequested field's value.
+func (s *AuditContext) SetAllColumnsRequested(v bool) *AuditContext {
+	s.AllColumnsRequested = &v
+	return s
+}
+
+// SetRequestedColumns sets the RequestedColumns field's value.
+func (s *AuditContext) SetRequestedColumns(v []*string) *AuditContext {
+	s.RequestedColumns = v
+	return s
+}
+
 // A list of errors that can occur when registering partition indexes for an
 // existing table.
 //
@@ -17259,6 +19581,100 @@ func (s *BackfillError) SetCode(v string) *BackfillError {
 // SetPartitions sets the Partitions field's value.
 func (s *BackfillError) SetPartitions(v []*PartitionValueList) *BackfillError {
 	s.Partitions = v
+	return s
+}
+
+// Specifies a target that uses a Glue Data Catalog table.
+type BasicCatalogTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The database that contains the table you want to use as the target. This
+	// database must already exist in the Data Catalog.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of your data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The table that defines the schema of your output data. This table must already
+	// exist in the Data Catalog.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BasicCatalogTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BasicCatalogTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BasicCatalogTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BasicCatalogTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *BasicCatalogTarget) SetDatabase(v string) *BasicCatalogTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *BasicCatalogTarget) SetInputs(v []*string) *BasicCatalogTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *BasicCatalogTarget) SetName(v string) *BasicCatalogTarget {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *BasicCatalogTarget) SetTable(v string) *BasicCatalogTarget {
+	s.Table = &v
 	return s
 }
 
@@ -17647,6 +20063,9 @@ type BatchDeleteTableInput struct {
 	//
 	// TablesToDelete is a required field
 	TablesToDelete []*string `type:"list" required:"true"`
+
+	// The transaction ID at which to delete the table contents.
+	TransactionId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -17682,6 +20101,9 @@ func (s *BatchDeleteTableInput) Validate() error {
 	if s.TablesToDelete == nil {
 		invalidParams.Add(request.NewErrParamRequired("TablesToDelete"))
 	}
+	if s.TransactionId != nil && len(*s.TransactionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TransactionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -17704,6 +20126,12 @@ func (s *BatchDeleteTableInput) SetDatabaseName(v string) *BatchDeleteTableInput
 // SetTablesToDelete sets the TablesToDelete field's value.
 func (s *BatchDeleteTableInput) SetTablesToDelete(v []*string) *BatchDeleteTableInput {
 	s.TablesToDelete = v
+	return s
+}
+
+// SetTransactionId sets the TransactionId field's value.
+func (s *BatchDeleteTableInput) SetTransactionId(v string) *BatchDeleteTableInput {
+	s.TransactionId = &v
 	return s
 }
 
@@ -18056,6 +20484,96 @@ func (s *BatchGetCrawlersOutput) SetCrawlers(v []*Crawler) *BatchGetCrawlersOutp
 // SetCrawlersNotFound sets the CrawlersNotFound field's value.
 func (s *BatchGetCrawlersOutput) SetCrawlersNotFound(v []*string) *BatchGetCrawlersOutput {
 	s.CrawlersNotFound = v
+	return s
+}
+
+type BatchGetCustomEntityTypesInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of names of the custom patterns that you want to retrieve.
+	//
+	// Names is a required field
+	Names []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCustomEntityTypesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCustomEntityTypesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetCustomEntityTypesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetCustomEntityTypesInput"}
+	if s.Names == nil {
+		invalidParams.Add(request.NewErrParamRequired("Names"))
+	}
+	if s.Names != nil && len(s.Names) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Names", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNames sets the Names field's value.
+func (s *BatchGetCustomEntityTypesInput) SetNames(v []*string) *BatchGetCustomEntityTypesInput {
+	s.Names = v
+	return s
+}
+
+type BatchGetCustomEntityTypesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of CustomEntityType objects representing the custom patterns that
+	// have been created.
+	CustomEntityTypes []*CustomEntityType `type:"list"`
+
+	// A list of the names of custom patterns that were not found.
+	CustomEntityTypesNotFound []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCustomEntityTypesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCustomEntityTypesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCustomEntityTypes sets the CustomEntityTypes field's value.
+func (s *BatchGetCustomEntityTypesOutput) SetCustomEntityTypes(v []*CustomEntityType) *BatchGetCustomEntityTypesOutput {
+	s.CustomEntityTypes = v
+	return s
+}
+
+// SetCustomEntityTypesNotFound sets the CustomEntityTypesNotFound field's value.
+func (s *BatchGetCustomEntityTypesOutput) SetCustomEntityTypesNotFound(v []*string) *BatchGetCustomEntityTypesOutput {
+	s.CustomEntityTypesNotFound = v
 	return s
 }
 
@@ -19569,6 +22087,103 @@ func (s *CancelMLTaskRunOutput) SetTransformId(v string) *CancelMLTaskRunOutput 
 	return s
 }
 
+type CancelStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the statement to be cancelled.
+	//
+	// Id is a required field
+	Id *int64 `type:"integer" required:"true"`
+
+	// The origin of the request to cancel the statement.
+	RequestOrigin *string `min:"1" type:"string"`
+
+	// The Session ID of the statement to be cancelled.
+	//
+	// SessionId is a required field
+	SessionId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelStatementInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+	if s.SessionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SessionId"))
+	}
+	if s.SessionId != nil && len(*s.SessionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SessionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *CancelStatementInput) SetId(v int64) *CancelStatementInput {
+	s.Id = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *CancelStatementInput) SetRequestOrigin(v string) *CancelStatementInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *CancelStatementInput) SetSessionId(v string) *CancelStatementInput {
+	s.SessionId = &v
+	return s
+}
+
+type CancelStatementOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelStatementOutput) GoString() string {
+	return s.String()
+}
+
 // Specifies a table definition in the Glue Data Catalog.
 type CatalogEntry struct {
 	_ struct{} `type:"structure"`
@@ -19686,9 +22301,363 @@ func (s *CatalogImportStatus) SetImportedBy(v string) *CatalogImportStatus {
 	return s
 }
 
+// Specifies an Apache Kafka data store in the Data Catalog.
+type CatalogKafkaSource struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies options related to data preview for viewing a sample of your data.
+	DataPreviewOptions *StreamingDataPreviewOptions `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// Whether to automatically determine the schema from the incoming data.
+	DetectSchema *bool `type:"boolean"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the streaming options.
+	StreamingOptions *KafkaStreamingSourceOptions `type:"structure"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+
+	// The amount of time to spend processing each micro batch.
+	WindowSize *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogKafkaSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogKafkaSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CatalogKafkaSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CatalogKafkaSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+	if s.DataPreviewOptions != nil {
+		if err := s.DataPreviewOptions.Validate(); err != nil {
+			invalidParams.AddNested("DataPreviewOptions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataPreviewOptions sets the DataPreviewOptions field's value.
+func (s *CatalogKafkaSource) SetDataPreviewOptions(v *StreamingDataPreviewOptions) *CatalogKafkaSource {
+	s.DataPreviewOptions = v
+	return s
+}
+
+// SetDatabase sets the Database field's value.
+func (s *CatalogKafkaSource) SetDatabase(v string) *CatalogKafkaSource {
+	s.Database = &v
+	return s
+}
+
+// SetDetectSchema sets the DetectSchema field's value.
+func (s *CatalogKafkaSource) SetDetectSchema(v bool) *CatalogKafkaSource {
+	s.DetectSchema = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CatalogKafkaSource) SetName(v string) *CatalogKafkaSource {
+	s.Name = &v
+	return s
+}
+
+// SetStreamingOptions sets the StreamingOptions field's value.
+func (s *CatalogKafkaSource) SetStreamingOptions(v *KafkaStreamingSourceOptions) *CatalogKafkaSource {
+	s.StreamingOptions = v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *CatalogKafkaSource) SetTable(v string) *CatalogKafkaSource {
+	s.Table = &v
+	return s
+}
+
+// SetWindowSize sets the WindowSize field's value.
+func (s *CatalogKafkaSource) SetWindowSize(v int64) *CatalogKafkaSource {
+	s.WindowSize = &v
+	return s
+}
+
+// Specifies a Kinesis data source in the Glue Data Catalog.
+type CatalogKinesisSource struct {
+	_ struct{} `type:"structure"`
+
+	// Additional options for data preview.
+	DataPreviewOptions *StreamingDataPreviewOptions `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// Whether to automatically determine the schema from the incoming data.
+	DetectSchema *bool `type:"boolean"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Additional options for the Kinesis streaming data source.
+	StreamingOptions *KinesisStreamingSourceOptions `type:"structure"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+
+	// The amount of time to spend processing each micro batch.
+	WindowSize *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogKinesisSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogKinesisSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CatalogKinesisSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CatalogKinesisSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+	if s.DataPreviewOptions != nil {
+		if err := s.DataPreviewOptions.Validate(); err != nil {
+			invalidParams.AddNested("DataPreviewOptions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataPreviewOptions sets the DataPreviewOptions field's value.
+func (s *CatalogKinesisSource) SetDataPreviewOptions(v *StreamingDataPreviewOptions) *CatalogKinesisSource {
+	s.DataPreviewOptions = v
+	return s
+}
+
+// SetDatabase sets the Database field's value.
+func (s *CatalogKinesisSource) SetDatabase(v string) *CatalogKinesisSource {
+	s.Database = &v
+	return s
+}
+
+// SetDetectSchema sets the DetectSchema field's value.
+func (s *CatalogKinesisSource) SetDetectSchema(v bool) *CatalogKinesisSource {
+	s.DetectSchema = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CatalogKinesisSource) SetName(v string) *CatalogKinesisSource {
+	s.Name = &v
+	return s
+}
+
+// SetStreamingOptions sets the StreamingOptions field's value.
+func (s *CatalogKinesisSource) SetStreamingOptions(v *KinesisStreamingSourceOptions) *CatalogKinesisSource {
+	s.StreamingOptions = v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *CatalogKinesisSource) SetTable(v string) *CatalogKinesisSource {
+	s.Table = &v
+	return s
+}
+
+// SetWindowSize sets the WindowSize field's value.
+func (s *CatalogKinesisSource) SetWindowSize(v int64) *CatalogKinesisSource {
+	s.WindowSize = &v
+	return s
+}
+
+// A policy that specifies update behavior for the crawler.
+type CatalogSchemaChangePolicy struct {
+	_ struct{} `type:"structure"`
+
+	// Whether to use the specified update behavior when the crawler finds a changed
+	// schema.
+	EnableUpdateCatalog *bool `type:"boolean"`
+
+	// The update behavior when the crawler finds a changed schema.
+	UpdateBehavior *string `type:"string" enum:"UpdateCatalogBehavior"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogSchemaChangePolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogSchemaChangePolicy) GoString() string {
+	return s.String()
+}
+
+// SetEnableUpdateCatalog sets the EnableUpdateCatalog field's value.
+func (s *CatalogSchemaChangePolicy) SetEnableUpdateCatalog(v bool) *CatalogSchemaChangePolicy {
+	s.EnableUpdateCatalog = &v
+	return s
+}
+
+// SetUpdateBehavior sets the UpdateBehavior field's value.
+func (s *CatalogSchemaChangePolicy) SetUpdateBehavior(v string) *CatalogSchemaChangePolicy {
+	s.UpdateBehavior = &v
+	return s
+}
+
+// Specifies a data store in the Glue Data Catalog.
+type CatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *CatalogSource) SetDatabase(v string) *CatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CatalogSource) SetName(v string) *CatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *CatalogSource) SetTable(v string) *CatalogSource {
+	s.Table = &v
+	return s
+}
+
 // Specifies an Glue Data Catalog target.
 type CatalogTarget struct {
 	_ struct{} `type:"structure"`
+
+	// The name of the connection for an Amazon S3-backed Data Catalog table to
+	// be a target of the crawl when using a Catalog connection type paired with
+	// a NETWORK Connection type.
+	ConnectionName *string `type:"string"`
 
 	// The name of the database to be synchronized.
 	//
@@ -19741,6 +22710,12 @@ func (s *CatalogTarget) Validate() error {
 	return nil
 }
 
+// SetConnectionName sets the ConnectionName field's value.
+func (s *CatalogTarget) SetConnectionName(v string) *CatalogTarget {
+	s.ConnectionName = &v
+	return s
+}
+
 // SetDatabaseName sets the DatabaseName field's value.
 func (s *CatalogTarget) SetDatabaseName(v string) *CatalogTarget {
 	s.DatabaseName = &v
@@ -19756,7 +22731,8 @@ func (s *CatalogTarget) SetTables(v []*string) *CatalogTarget {
 type CheckSchemaVersionValidityInput struct {
 	_ struct{} `type:"structure"`
 
-	// The data format of the schema definition. Currently AVRO and JSON are supported.
+	// The data format of the schema definition. Currently AVRO, JSON and PROTOBUF
+	// are supported.
 	//
 	// DataFormat is a required field
 	DataFormat *string `type:"string" required:"true" enum:"DataFormat"`
@@ -19961,6 +22937,764 @@ func (s *CloudWatchEncryption) SetCloudWatchEncryptionMode(v string) *CloudWatch
 // SetKmsKeyArn sets the KmsKeyArn field's value.
 func (s *CloudWatchEncryption) SetKmsKeyArn(v string) *CloudWatchEncryption {
 	s.KmsKeyArn = &v
+	return s
+}
+
+// CodeGenConfigurationNode enumerates all valid Node types. One and only one
+// of its member variables can be populated.
+type CodeGenConfigurationNode struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies a transform that groups rows by chosen fields and computes the
+	// aggregated value by specified function.
+	Aggregate *Aggregate `type:"structure"`
+
+	// Specifies a transform that maps data property keys in the data source to
+	// data property keys in the data target. You can rename keys, modify the data
+	// types for keys, and choose which keys to drop from the dataset.
+	ApplyMapping *ApplyMapping `type:"structure"`
+
+	// Specifies a connector to an Amazon Athena data source.
+	AthenaConnectorSource *AthenaConnectorSource `type:"structure"`
+
+	// Specifies an Apache Kafka data store in the Data Catalog.
+	CatalogKafkaSource *CatalogKafkaSource `type:"structure"`
+
+	// Specifies a Kinesis data source in the Glue Data Catalog.
+	CatalogKinesisSource *CatalogKinesisSource `type:"structure"`
+
+	// Specifies a data store in the Glue Data Catalog.
+	CatalogSource *CatalogSource `type:"structure"`
+
+	// Specifies a target that uses a Glue Data Catalog table.
+	CatalogTarget *BasicCatalogTarget `type:"structure"`
+
+	// Specifies a transform that uses custom code you provide to perform the data
+	// transformation. The output is a collection of DynamicFrames.
+	CustomCode *CustomCode `type:"structure"`
+
+	// Specifies an Apache Kafka data store.
+	DirectKafkaSource *DirectKafkaSource `type:"structure"`
+
+	// Specifies a direct Amazon Kinesis data source.
+	DirectKinesisSource *DirectKinesisSource `type:"structure"`
+
+	// Specifies a transform that removes rows of repeating data from a data set.
+	DropDuplicates *DropDuplicates `type:"structure"`
+
+	// Specifies a transform that chooses the data property keys that you want to
+	// drop.
+	DropFields *DropFields `type:"structure"`
+
+	// Specifies a transform that removes columns from the dataset if all values
+	// in the column are 'null'. By default, Glue Studio will recognize null objects,
+	// but some values such as empty strings, strings that are "null", -1 integers
+	// or other placeholders such as zeros, are not automatically recognized as
+	// nulls.
+	DropNullFields *DropNullFields `type:"structure"`
+
+	// Specifies a DynamoDB data source in the Glue Data Catalog.
+	DynamoDBCatalogSource *DynamoDBCatalogSource `type:"structure"`
+
+	// Specifies a transform that locates records in the dataset that have missing
+	// values and adds a new field with a value determined by imputation. The input
+	// data set is used to train the machine learning model that determines what
+	// the missing value should be.
+	FillMissingValues *FillMissingValues `type:"structure"`
+
+	// Specifies a transform that splits a dataset into two, based on a filter condition.
+	Filter *Filter `type:"structure"`
+
+	// Specifies a data source in a goverened Data Catalog.
+	GovernedCatalogSource *GovernedCatalogSource `type:"structure"`
+
+	// Specifies a data target that writes to a goverened catalog.
+	GovernedCatalogTarget *GovernedCatalogTarget `type:"structure"`
+
+	// Specifies a connector to a JDBC data source.
+	JDBCConnectorSource *JDBCConnectorSource `type:"structure"`
+
+	// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+	// storage.
+	JDBCConnectorTarget *JDBCConnectorTarget `type:"structure"`
+
+	// Specifies a transform that joins two datasets into one dataset using a comparison
+	// phrase on the specified data property keys. You can use inner, outer, left,
+	// right, left semi, and left anti joins.
+	Join *Join `type:"structure"`
+
+	// Specifies a transform that merges a DynamicFrame with a staging DynamicFrame
+	// based on the specified primary keys to identify records. Duplicate records
+	// (records with the same primary keys) are not de-duplicated.
+	Merge *Merge `type:"structure"`
+
+	// Specifies a Microsoft SQL server data source in the Glue Data Catalog.
+	MicrosoftSQLServerCatalogSource *MicrosoftSQLServerCatalogSource `type:"structure"`
+
+	// Specifies a target that uses Microsoft SQL.
+	MicrosoftSQLServerCatalogTarget *MicrosoftSQLServerCatalogTarget `type:"structure"`
+
+	// Specifies a MySQL data source in the Glue Data Catalog.
+	MySQLCatalogSource *MySQLCatalogSource `type:"structure"`
+
+	// Specifies a target that uses MySQL.
+	MySQLCatalogTarget *MySQLCatalogTarget `type:"structure"`
+
+	// Specifies an Oracle data source in the Glue Data Catalog.
+	OracleSQLCatalogSource *OracleSQLCatalogSource `type:"structure"`
+
+	// Specifies a target that uses Oracle SQL.
+	OracleSQLCatalogTarget *OracleSQLCatalogTarget `type:"structure"`
+
+	// Specifies a transform that identifies, removes or masks PII data.
+	PIIDetection *PIIDetection `type:"structure"`
+
+	// Specifies a PostgresSQL data source in the Glue Data Catalog.
+	PostgreSQLCatalogSource *PostgreSQLCatalogSource `type:"structure"`
+
+	// Specifies a target that uses Postgres SQL.
+	PostgreSQLCatalogTarget *PostgreSQLCatalogTarget `type:"structure"`
+
+	// Specifies an Amazon Redshift data store.
+	RedshiftSource *RedshiftSource `type:"structure"`
+
+	// Specifies a target that uses Amazon Redshift.
+	RedshiftTarget *RedshiftTarget `type:"structure"`
+
+	// Specifies a Relational database data source in the Glue Data Catalog.
+	RelationalCatalogSource *RelationalCatalogSource `type:"structure"`
+
+	// Specifies a transform that renames a single data property key.
+	RenameField *RenameField `type:"structure"`
+
+	// Specifies an Amazon S3 data store in the Glue Data Catalog.
+	S3CatalogSource *S3CatalogSource `type:"structure"`
+
+	// Specifies a data target that writes to Amazon S3 using the Glue Data Catalog.
+	S3CatalogTarget *S3CatalogTarget `type:"structure"`
+
+	// Specifies a command-separated value (CSV) data store stored in Amazon S3.
+	S3CsvSource *S3CsvSource `type:"structure"`
+
+	// Specifies a data target that writes to Amazon S3.
+	S3DirectTarget *S3DirectTarget `type:"structure"`
+
+	// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+	// storage.
+	S3GlueParquetTarget *S3GlueParquetTarget `type:"structure"`
+
+	// Specifies a JSON data store stored in Amazon S3.
+	S3JsonSource *S3JsonSource `type:"structure"`
+
+	// Specifies an Apache Parquet data store stored in Amazon S3.
+	S3ParquetSource *S3ParquetSource `type:"structure"`
+
+	// Specifies a transform that chooses the data property keys that you want to
+	// keep.
+	SelectFields *SelectFields `type:"structure"`
+
+	// Specifies a transform that chooses one DynamicFrame from a collection of
+	// DynamicFrames. The output is the selected DynamicFrame
+	SelectFromCollection *SelectFromCollection `type:"structure"`
+
+	// Specifies a connector to an Apache Spark data source.
+	SparkConnectorSource *SparkConnectorSource `type:"structure"`
+
+	// Specifies a target that uses an Apache Spark connector.
+	SparkConnectorTarget *SparkConnectorTarget `type:"structure"`
+
+	// Specifies a transform where you enter a SQL query using Spark SQL syntax
+	// to transform the data. The output is a single DynamicFrame.
+	SparkSQL *SparkSQL `type:"structure"`
+
+	// Specifies a transform that writes samples of the data to an Amazon S3 bucket.
+	Spigot *Spigot `type:"structure"`
+
+	// Specifies a transform that splits data property keys into two DynamicFrames.
+	// The output is a collection of DynamicFrames: one with selected data property
+	// keys, and one with the remaining data property keys.
+	SplitFields *SplitFields `type:"structure"`
+
+	// Specifies a transform that combines the rows from two or more datasets into
+	// a single result.
+	Union *Union `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CodeGenConfigurationNode) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CodeGenConfigurationNode) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeGenConfigurationNode) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeGenConfigurationNode"}
+	if s.Aggregate != nil {
+		if err := s.Aggregate.Validate(); err != nil {
+			invalidParams.AddNested("Aggregate", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ApplyMapping != nil {
+		if err := s.ApplyMapping.Validate(); err != nil {
+			invalidParams.AddNested("ApplyMapping", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.AthenaConnectorSource != nil {
+		if err := s.AthenaConnectorSource.Validate(); err != nil {
+			invalidParams.AddNested("AthenaConnectorSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CatalogKafkaSource != nil {
+		if err := s.CatalogKafkaSource.Validate(); err != nil {
+			invalidParams.AddNested("CatalogKafkaSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CatalogKinesisSource != nil {
+		if err := s.CatalogKinesisSource.Validate(); err != nil {
+			invalidParams.AddNested("CatalogKinesisSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CatalogSource != nil {
+		if err := s.CatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("CatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CatalogTarget != nil {
+		if err := s.CatalogTarget.Validate(); err != nil {
+			invalidParams.AddNested("CatalogTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CustomCode != nil {
+		if err := s.CustomCode.Validate(); err != nil {
+			invalidParams.AddNested("CustomCode", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DirectKafkaSource != nil {
+		if err := s.DirectKafkaSource.Validate(); err != nil {
+			invalidParams.AddNested("DirectKafkaSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DirectKinesisSource != nil {
+		if err := s.DirectKinesisSource.Validate(); err != nil {
+			invalidParams.AddNested("DirectKinesisSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DropDuplicates != nil {
+		if err := s.DropDuplicates.Validate(); err != nil {
+			invalidParams.AddNested("DropDuplicates", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DropFields != nil {
+		if err := s.DropFields.Validate(); err != nil {
+			invalidParams.AddNested("DropFields", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DropNullFields != nil {
+		if err := s.DropNullFields.Validate(); err != nil {
+			invalidParams.AddNested("DropNullFields", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DynamoDBCatalogSource != nil {
+		if err := s.DynamoDBCatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("DynamoDBCatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FillMissingValues != nil {
+		if err := s.FillMissingValues.Validate(); err != nil {
+			invalidParams.AddNested("FillMissingValues", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GovernedCatalogSource != nil {
+		if err := s.GovernedCatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("GovernedCatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GovernedCatalogTarget != nil {
+		if err := s.GovernedCatalogTarget.Validate(); err != nil {
+			invalidParams.AddNested("GovernedCatalogTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.JDBCConnectorSource != nil {
+		if err := s.JDBCConnectorSource.Validate(); err != nil {
+			invalidParams.AddNested("JDBCConnectorSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.JDBCConnectorTarget != nil {
+		if err := s.JDBCConnectorTarget.Validate(); err != nil {
+			invalidParams.AddNested("JDBCConnectorTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Join != nil {
+		if err := s.Join.Validate(); err != nil {
+			invalidParams.AddNested("Join", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Merge != nil {
+		if err := s.Merge.Validate(); err != nil {
+			invalidParams.AddNested("Merge", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MicrosoftSQLServerCatalogSource != nil {
+		if err := s.MicrosoftSQLServerCatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("MicrosoftSQLServerCatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MicrosoftSQLServerCatalogTarget != nil {
+		if err := s.MicrosoftSQLServerCatalogTarget.Validate(); err != nil {
+			invalidParams.AddNested("MicrosoftSQLServerCatalogTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MySQLCatalogSource != nil {
+		if err := s.MySQLCatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("MySQLCatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MySQLCatalogTarget != nil {
+		if err := s.MySQLCatalogTarget.Validate(); err != nil {
+			invalidParams.AddNested("MySQLCatalogTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OracleSQLCatalogSource != nil {
+		if err := s.OracleSQLCatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("OracleSQLCatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OracleSQLCatalogTarget != nil {
+		if err := s.OracleSQLCatalogTarget.Validate(); err != nil {
+			invalidParams.AddNested("OracleSQLCatalogTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PIIDetection != nil {
+		if err := s.PIIDetection.Validate(); err != nil {
+			invalidParams.AddNested("PIIDetection", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PostgreSQLCatalogSource != nil {
+		if err := s.PostgreSQLCatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("PostgreSQLCatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PostgreSQLCatalogTarget != nil {
+		if err := s.PostgreSQLCatalogTarget.Validate(); err != nil {
+			invalidParams.AddNested("PostgreSQLCatalogTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RedshiftSource != nil {
+		if err := s.RedshiftSource.Validate(); err != nil {
+			invalidParams.AddNested("RedshiftSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RedshiftTarget != nil {
+		if err := s.RedshiftTarget.Validate(); err != nil {
+			invalidParams.AddNested("RedshiftTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RelationalCatalogSource != nil {
+		if err := s.RelationalCatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("RelationalCatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RenameField != nil {
+		if err := s.RenameField.Validate(); err != nil {
+			invalidParams.AddNested("RenameField", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3CatalogSource != nil {
+		if err := s.S3CatalogSource.Validate(); err != nil {
+			invalidParams.AddNested("S3CatalogSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3CatalogTarget != nil {
+		if err := s.S3CatalogTarget.Validate(); err != nil {
+			invalidParams.AddNested("S3CatalogTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3CsvSource != nil {
+		if err := s.S3CsvSource.Validate(); err != nil {
+			invalidParams.AddNested("S3CsvSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3DirectTarget != nil {
+		if err := s.S3DirectTarget.Validate(); err != nil {
+			invalidParams.AddNested("S3DirectTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3GlueParquetTarget != nil {
+		if err := s.S3GlueParquetTarget.Validate(); err != nil {
+			invalidParams.AddNested("S3GlueParquetTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3JsonSource != nil {
+		if err := s.S3JsonSource.Validate(); err != nil {
+			invalidParams.AddNested("S3JsonSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3ParquetSource != nil {
+		if err := s.S3ParquetSource.Validate(); err != nil {
+			invalidParams.AddNested("S3ParquetSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SelectFields != nil {
+		if err := s.SelectFields.Validate(); err != nil {
+			invalidParams.AddNested("SelectFields", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SelectFromCollection != nil {
+		if err := s.SelectFromCollection.Validate(); err != nil {
+			invalidParams.AddNested("SelectFromCollection", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SparkConnectorSource != nil {
+		if err := s.SparkConnectorSource.Validate(); err != nil {
+			invalidParams.AddNested("SparkConnectorSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SparkConnectorTarget != nil {
+		if err := s.SparkConnectorTarget.Validate(); err != nil {
+			invalidParams.AddNested("SparkConnectorTarget", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SparkSQL != nil {
+		if err := s.SparkSQL.Validate(); err != nil {
+			invalidParams.AddNested("SparkSQL", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Spigot != nil {
+		if err := s.Spigot.Validate(); err != nil {
+			invalidParams.AddNested("Spigot", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SplitFields != nil {
+		if err := s.SplitFields.Validate(); err != nil {
+			invalidParams.AddNested("SplitFields", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Union != nil {
+		if err := s.Union.Validate(); err != nil {
+			invalidParams.AddNested("Union", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAggregate sets the Aggregate field's value.
+func (s *CodeGenConfigurationNode) SetAggregate(v *Aggregate) *CodeGenConfigurationNode {
+	s.Aggregate = v
+	return s
+}
+
+// SetApplyMapping sets the ApplyMapping field's value.
+func (s *CodeGenConfigurationNode) SetApplyMapping(v *ApplyMapping) *CodeGenConfigurationNode {
+	s.ApplyMapping = v
+	return s
+}
+
+// SetAthenaConnectorSource sets the AthenaConnectorSource field's value.
+func (s *CodeGenConfigurationNode) SetAthenaConnectorSource(v *AthenaConnectorSource) *CodeGenConfigurationNode {
+	s.AthenaConnectorSource = v
+	return s
+}
+
+// SetCatalogKafkaSource sets the CatalogKafkaSource field's value.
+func (s *CodeGenConfigurationNode) SetCatalogKafkaSource(v *CatalogKafkaSource) *CodeGenConfigurationNode {
+	s.CatalogKafkaSource = v
+	return s
+}
+
+// SetCatalogKinesisSource sets the CatalogKinesisSource field's value.
+func (s *CodeGenConfigurationNode) SetCatalogKinesisSource(v *CatalogKinesisSource) *CodeGenConfigurationNode {
+	s.CatalogKinesisSource = v
+	return s
+}
+
+// SetCatalogSource sets the CatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetCatalogSource(v *CatalogSource) *CodeGenConfigurationNode {
+	s.CatalogSource = v
+	return s
+}
+
+// SetCatalogTarget sets the CatalogTarget field's value.
+func (s *CodeGenConfigurationNode) SetCatalogTarget(v *BasicCatalogTarget) *CodeGenConfigurationNode {
+	s.CatalogTarget = v
+	return s
+}
+
+// SetCustomCode sets the CustomCode field's value.
+func (s *CodeGenConfigurationNode) SetCustomCode(v *CustomCode) *CodeGenConfigurationNode {
+	s.CustomCode = v
+	return s
+}
+
+// SetDirectKafkaSource sets the DirectKafkaSource field's value.
+func (s *CodeGenConfigurationNode) SetDirectKafkaSource(v *DirectKafkaSource) *CodeGenConfigurationNode {
+	s.DirectKafkaSource = v
+	return s
+}
+
+// SetDirectKinesisSource sets the DirectKinesisSource field's value.
+func (s *CodeGenConfigurationNode) SetDirectKinesisSource(v *DirectKinesisSource) *CodeGenConfigurationNode {
+	s.DirectKinesisSource = v
+	return s
+}
+
+// SetDropDuplicates sets the DropDuplicates field's value.
+func (s *CodeGenConfigurationNode) SetDropDuplicates(v *DropDuplicates) *CodeGenConfigurationNode {
+	s.DropDuplicates = v
+	return s
+}
+
+// SetDropFields sets the DropFields field's value.
+func (s *CodeGenConfigurationNode) SetDropFields(v *DropFields) *CodeGenConfigurationNode {
+	s.DropFields = v
+	return s
+}
+
+// SetDropNullFields sets the DropNullFields field's value.
+func (s *CodeGenConfigurationNode) SetDropNullFields(v *DropNullFields) *CodeGenConfigurationNode {
+	s.DropNullFields = v
+	return s
+}
+
+// SetDynamoDBCatalogSource sets the DynamoDBCatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetDynamoDBCatalogSource(v *DynamoDBCatalogSource) *CodeGenConfigurationNode {
+	s.DynamoDBCatalogSource = v
+	return s
+}
+
+// SetFillMissingValues sets the FillMissingValues field's value.
+func (s *CodeGenConfigurationNode) SetFillMissingValues(v *FillMissingValues) *CodeGenConfigurationNode {
+	s.FillMissingValues = v
+	return s
+}
+
+// SetFilter sets the Filter field's value.
+func (s *CodeGenConfigurationNode) SetFilter(v *Filter) *CodeGenConfigurationNode {
+	s.Filter = v
+	return s
+}
+
+// SetGovernedCatalogSource sets the GovernedCatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetGovernedCatalogSource(v *GovernedCatalogSource) *CodeGenConfigurationNode {
+	s.GovernedCatalogSource = v
+	return s
+}
+
+// SetGovernedCatalogTarget sets the GovernedCatalogTarget field's value.
+func (s *CodeGenConfigurationNode) SetGovernedCatalogTarget(v *GovernedCatalogTarget) *CodeGenConfigurationNode {
+	s.GovernedCatalogTarget = v
+	return s
+}
+
+// SetJDBCConnectorSource sets the JDBCConnectorSource field's value.
+func (s *CodeGenConfigurationNode) SetJDBCConnectorSource(v *JDBCConnectorSource) *CodeGenConfigurationNode {
+	s.JDBCConnectorSource = v
+	return s
+}
+
+// SetJDBCConnectorTarget sets the JDBCConnectorTarget field's value.
+func (s *CodeGenConfigurationNode) SetJDBCConnectorTarget(v *JDBCConnectorTarget) *CodeGenConfigurationNode {
+	s.JDBCConnectorTarget = v
+	return s
+}
+
+// SetJoin sets the Join field's value.
+func (s *CodeGenConfigurationNode) SetJoin(v *Join) *CodeGenConfigurationNode {
+	s.Join = v
+	return s
+}
+
+// SetMerge sets the Merge field's value.
+func (s *CodeGenConfigurationNode) SetMerge(v *Merge) *CodeGenConfigurationNode {
+	s.Merge = v
+	return s
+}
+
+// SetMicrosoftSQLServerCatalogSource sets the MicrosoftSQLServerCatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetMicrosoftSQLServerCatalogSource(v *MicrosoftSQLServerCatalogSource) *CodeGenConfigurationNode {
+	s.MicrosoftSQLServerCatalogSource = v
+	return s
+}
+
+// SetMicrosoftSQLServerCatalogTarget sets the MicrosoftSQLServerCatalogTarget field's value.
+func (s *CodeGenConfigurationNode) SetMicrosoftSQLServerCatalogTarget(v *MicrosoftSQLServerCatalogTarget) *CodeGenConfigurationNode {
+	s.MicrosoftSQLServerCatalogTarget = v
+	return s
+}
+
+// SetMySQLCatalogSource sets the MySQLCatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetMySQLCatalogSource(v *MySQLCatalogSource) *CodeGenConfigurationNode {
+	s.MySQLCatalogSource = v
+	return s
+}
+
+// SetMySQLCatalogTarget sets the MySQLCatalogTarget field's value.
+func (s *CodeGenConfigurationNode) SetMySQLCatalogTarget(v *MySQLCatalogTarget) *CodeGenConfigurationNode {
+	s.MySQLCatalogTarget = v
+	return s
+}
+
+// SetOracleSQLCatalogSource sets the OracleSQLCatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetOracleSQLCatalogSource(v *OracleSQLCatalogSource) *CodeGenConfigurationNode {
+	s.OracleSQLCatalogSource = v
+	return s
+}
+
+// SetOracleSQLCatalogTarget sets the OracleSQLCatalogTarget field's value.
+func (s *CodeGenConfigurationNode) SetOracleSQLCatalogTarget(v *OracleSQLCatalogTarget) *CodeGenConfigurationNode {
+	s.OracleSQLCatalogTarget = v
+	return s
+}
+
+// SetPIIDetection sets the PIIDetection field's value.
+func (s *CodeGenConfigurationNode) SetPIIDetection(v *PIIDetection) *CodeGenConfigurationNode {
+	s.PIIDetection = v
+	return s
+}
+
+// SetPostgreSQLCatalogSource sets the PostgreSQLCatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetPostgreSQLCatalogSource(v *PostgreSQLCatalogSource) *CodeGenConfigurationNode {
+	s.PostgreSQLCatalogSource = v
+	return s
+}
+
+// SetPostgreSQLCatalogTarget sets the PostgreSQLCatalogTarget field's value.
+func (s *CodeGenConfigurationNode) SetPostgreSQLCatalogTarget(v *PostgreSQLCatalogTarget) *CodeGenConfigurationNode {
+	s.PostgreSQLCatalogTarget = v
+	return s
+}
+
+// SetRedshiftSource sets the RedshiftSource field's value.
+func (s *CodeGenConfigurationNode) SetRedshiftSource(v *RedshiftSource) *CodeGenConfigurationNode {
+	s.RedshiftSource = v
+	return s
+}
+
+// SetRedshiftTarget sets the RedshiftTarget field's value.
+func (s *CodeGenConfigurationNode) SetRedshiftTarget(v *RedshiftTarget) *CodeGenConfigurationNode {
+	s.RedshiftTarget = v
+	return s
+}
+
+// SetRelationalCatalogSource sets the RelationalCatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetRelationalCatalogSource(v *RelationalCatalogSource) *CodeGenConfigurationNode {
+	s.RelationalCatalogSource = v
+	return s
+}
+
+// SetRenameField sets the RenameField field's value.
+func (s *CodeGenConfigurationNode) SetRenameField(v *RenameField) *CodeGenConfigurationNode {
+	s.RenameField = v
+	return s
+}
+
+// SetS3CatalogSource sets the S3CatalogSource field's value.
+func (s *CodeGenConfigurationNode) SetS3CatalogSource(v *S3CatalogSource) *CodeGenConfigurationNode {
+	s.S3CatalogSource = v
+	return s
+}
+
+// SetS3CatalogTarget sets the S3CatalogTarget field's value.
+func (s *CodeGenConfigurationNode) SetS3CatalogTarget(v *S3CatalogTarget) *CodeGenConfigurationNode {
+	s.S3CatalogTarget = v
+	return s
+}
+
+// SetS3CsvSource sets the S3CsvSource field's value.
+func (s *CodeGenConfigurationNode) SetS3CsvSource(v *S3CsvSource) *CodeGenConfigurationNode {
+	s.S3CsvSource = v
+	return s
+}
+
+// SetS3DirectTarget sets the S3DirectTarget field's value.
+func (s *CodeGenConfigurationNode) SetS3DirectTarget(v *S3DirectTarget) *CodeGenConfigurationNode {
+	s.S3DirectTarget = v
+	return s
+}
+
+// SetS3GlueParquetTarget sets the S3GlueParquetTarget field's value.
+func (s *CodeGenConfigurationNode) SetS3GlueParquetTarget(v *S3GlueParquetTarget) *CodeGenConfigurationNode {
+	s.S3GlueParquetTarget = v
+	return s
+}
+
+// SetS3JsonSource sets the S3JsonSource field's value.
+func (s *CodeGenConfigurationNode) SetS3JsonSource(v *S3JsonSource) *CodeGenConfigurationNode {
+	s.S3JsonSource = v
+	return s
+}
+
+// SetS3ParquetSource sets the S3ParquetSource field's value.
+func (s *CodeGenConfigurationNode) SetS3ParquetSource(v *S3ParquetSource) *CodeGenConfigurationNode {
+	s.S3ParquetSource = v
+	return s
+}
+
+// SetSelectFields sets the SelectFields field's value.
+func (s *CodeGenConfigurationNode) SetSelectFields(v *SelectFields) *CodeGenConfigurationNode {
+	s.SelectFields = v
+	return s
+}
+
+// SetSelectFromCollection sets the SelectFromCollection field's value.
+func (s *CodeGenConfigurationNode) SetSelectFromCollection(v *SelectFromCollection) *CodeGenConfigurationNode {
+	s.SelectFromCollection = v
+	return s
+}
+
+// SetSparkConnectorSource sets the SparkConnectorSource field's value.
+func (s *CodeGenConfigurationNode) SetSparkConnectorSource(v *SparkConnectorSource) *CodeGenConfigurationNode {
+	s.SparkConnectorSource = v
+	return s
+}
+
+// SetSparkConnectorTarget sets the SparkConnectorTarget field's value.
+func (s *CodeGenConfigurationNode) SetSparkConnectorTarget(v *SparkConnectorTarget) *CodeGenConfigurationNode {
+	s.SparkConnectorTarget = v
+	return s
+}
+
+// SetSparkSQL sets the SparkSQL field's value.
+func (s *CodeGenConfigurationNode) SetSparkSQL(v *SparkSQL) *CodeGenConfigurationNode {
+	s.SparkSQL = v
+	return s
+}
+
+// SetSpigot sets the Spigot field's value.
+func (s *CodeGenConfigurationNode) SetSpigot(v *Spigot) *CodeGenConfigurationNode {
+	s.Spigot = v
+	return s
+}
+
+// SetSplitFields sets the SplitFields field's value.
+func (s *CodeGenConfigurationNode) SetSplitFields(v *SplitFields) *CodeGenConfigurationNode {
+	s.SplitFields = v
+	return s
+}
+
+// SetUnion sets the Union field's value.
+func (s *CodeGenConfigurationNode) SetUnion(v *Union) *CodeGenConfigurationNode {
+	s.Union = v
 	return s
 }
 
@@ -20367,6 +24101,44 @@ func (s *ColumnImportance) SetColumnName(v string) *ColumnImportance {
 // SetImportance sets the Importance field's value.
 func (s *ColumnImportance) SetImportance(v float64) *ColumnImportance {
 	s.Importance = &v
+	return s
+}
+
+type ColumnRowFilter struct {
+	_ struct{} `type:"structure"`
+
+	ColumnName *string `min:"1" type:"string"`
+
+	RowFilterExpression *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ColumnRowFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ColumnRowFilter) GoString() string {
+	return s.String()
+}
+
+// SetColumnName sets the ColumnName field's value.
+func (s *ColumnRowFilter) SetColumnName(v string) *ColumnRowFilter {
+	s.ColumnName = &v
+	return s
+}
+
+// SetRowFilterExpression sets the RowFilterExpression field's value.
+func (s *ColumnRowFilter) SetRowFilterExpression(v string) *ColumnRowFilter {
+	s.RowFilterExpression = &v
 	return s
 }
 
@@ -21129,6 +24901,15 @@ type Connection struct {
 	//    * CONNECTION_URL - The URL for connecting to a general (non-JDBC) data
 	//    source.
 	//
+	//    * SECRET_ID - The secret ID used for the secret manager of credentials.
+	//
+	//    * CONNECTOR_URL - The connector URL for a MARKETPLACE or CUSTOM connection.
+	//
+	//    * CONNECTOR_TYPE - The connector type for a MARKETPLACE or CUSTOM connection.
+	//
+	//    * CONNECTOR_CLASS_NAME - The connector class name for a MARKETPLACE or
+	//    CUSTOM connection.
+	//
 	//    * KAFKA_BOOTSTRAP_SERVERS - A comma-separated list of host and port pairs
 	//    that are the addresses of the Apache Kafka brokers in a Kafka cluster
 	//    to which a Kafka client will connect to and bootstrap itself.
@@ -21142,15 +24923,6 @@ type Connection struct {
 	//    * KAFKA_SKIP_CUSTOM_CERT_VALIDATION - Whether to skip the validation of
 	//    the CA cert file or not. Glue validates for three algorithms: SHA256withRSA,
 	//    SHA384withRSA and SHA512withRSA. Default value is "false".
-	//
-	//    * SECRET_ID - The secret ID used for the secret manager of credentials.
-	//
-	//    * CONNECTOR_URL - The connector URL for a MARKETPLACE or CUSTOM connection.
-	//
-	//    * CONNECTOR_TYPE - The connector type for a MARKETPLACE or CUSTOM connection.
-	//
-	//    * CONNECTOR_CLASS_NAME - The connector class name for a MARKETPLACE or
-	//    CUSTOM connection.
 	//
 	//    * KAFKA_CLIENT_KEYSTORE - The Amazon S3 location of the client keystore
 	//    file for Kafka client side authentication (Optional).
@@ -21169,6 +24941,35 @@ type Connection struct {
 	//    * ENCRYPTED_KAFKA_CLIENT_KEY_PASSWORD - The encrypted version of the Kafka
 	//    client key password (if the user has the Glue encrypt passwords setting
 	//    selected).
+	//
+	//    * KAFKA_SASL_MECHANISM - "SCRAM-SHA-512" or "GSSAPI". These are the two
+	//    supported SASL Mechanisms (https://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml).
+	//
+	//    * KAFKA_SASL_SCRAM_USERNAME - A plaintext username used to authenticate
+	//    with the "SCRAM-SHA-512" mechanism.
+	//
+	//    * KAFKA_SASL_SCRAM_PASSWORD - A plaintext password used to authenticate
+	//    with the "SCRAM-SHA-512" mechanism.
+	//
+	//    * ENCRYPTED_KAFKA_SASL_SCRAM_PASSWORD - The encrypted version of the Kafka
+	//    SASL SCRAM password (if the user has the Glue encrypt passwords setting
+	//    selected).
+	//
+	//    * KAFKA_SASL_GSSAPI_KEYTAB - The S3 location of a Kerberos keytab file.
+	//    A keytab stores long-term keys for one or more principals. For more information,
+	//    see MIT Kerberos Documentation: Keytab (https://web.mit.edu/kerberos/krb5-latest/doc/basic/keytab_def.html).
+	//
+	//    * KAFKA_SASL_GSSAPI_KRB5_CONF - The S3 location of a Kerberos krb5.conf
+	//    file. A krb5.conf stores Kerberos configuration information, such as the
+	//    location of the KDC server. For more information, see MIT Kerberos Documentation:
+	//    krb5.conf (https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_conf.html).
+	//
+	//    * KAFKA_SASL_GSSAPI_SERVICE - The Kerberos service name, as set with sasl.kerberos.service.name
+	//    in your Kafka Configuration (https://kafka.apache.org/documentation/#brokerconfigs_sasl.kerberos.service.name).
+	//
+	//    * KAFKA_SASL_GSSAPI_PRINCIPAL - The name of the Kerberos princial used
+	//    by Glue. For more information, see Kafka Documentation: Configuring Kafka
+	//    Brokers (https://kafka.apache.org/documentation/#security_sasl_kerberos_clientconfig).
 	ConnectionProperties map[string]*string `type:"map"`
 
 	// The type of the connection. Currently, SFTP is not supported.
@@ -21620,6 +25421,10 @@ type Crawler struct {
 	// A description of the crawler.
 	Description *string `type:"string"`
 
+	// Specifies whether the crawler should use Lake Formation credentials for the
+	// crawler instead of the IAM role credentials.
+	LakeFormationConfiguration *LakeFormationConfiguration `type:"structure"`
+
 	// The status of the last crawl, and potentially error information if an error
 	// occurred.
 	LastCrawl *LastCrawlInfo `type:"structure"`
@@ -21720,6 +25525,12 @@ func (s *Crawler) SetDescription(v string) *Crawler {
 	return s
 }
 
+// SetLakeFormationConfiguration sets the LakeFormationConfiguration field's value.
+func (s *Crawler) SetLakeFormationConfiguration(v *LakeFormationConfiguration) *Crawler {
+	s.LakeFormationConfiguration = v
+	return s
+}
+
 // SetLastCrawl sets the LastCrawl field's value.
 func (s *Crawler) SetLastCrawl(v *LastCrawlInfo) *Crawler {
 	s.LastCrawl = v
@@ -21789,6 +25600,120 @@ func (s *Crawler) SetTargets(v *CrawlerTargets) *Crawler {
 // SetVersion sets the Version field's value.
 func (s *Crawler) SetVersion(v int64) *Crawler {
 	s.Version = &v
+	return s
+}
+
+// Contains the information for a run of a crawler.
+type CrawlerHistory struct {
+	_ struct{} `type:"structure"`
+
+	// A UUID identifier for each crawl.
+	CrawlId *string `type:"string"`
+
+	// The number of data processing units (DPU) used in hours for the crawl.
+	DPUHour *float64 `type:"double"`
+
+	// The date and time on which the crawl ended.
+	EndTime *time.Time `type:"timestamp"`
+
+	// If an error occurred, the error message associated with the crawl.
+	ErrorMessage *string `type:"string"`
+
+	// The log group associated with the crawl.
+	LogGroup *string `min:"1" type:"string"`
+
+	// The log stream associated with the crawl.
+	LogStream *string `min:"1" type:"string"`
+
+	// The prefix for a CloudWatch message about this crawl.
+	MessagePrefix *string `min:"1" type:"string"`
+
+	// The date and time on which the crawl started.
+	StartTime *time.Time `type:"timestamp"`
+
+	// The state of the crawl.
+	State *string `type:"string" enum:"CrawlerHistoryState"`
+
+	// A run summary for the specific crawl in JSON. Contains the catalog tables
+	// and partitions that were added, updated, or deleted.
+	Summary *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CrawlerHistory) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CrawlerHistory) GoString() string {
+	return s.String()
+}
+
+// SetCrawlId sets the CrawlId field's value.
+func (s *CrawlerHistory) SetCrawlId(v string) *CrawlerHistory {
+	s.CrawlId = &v
+	return s
+}
+
+// SetDPUHour sets the DPUHour field's value.
+func (s *CrawlerHistory) SetDPUHour(v float64) *CrawlerHistory {
+	s.DPUHour = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *CrawlerHistory) SetEndTime(v time.Time) *CrawlerHistory {
+	s.EndTime = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *CrawlerHistory) SetErrorMessage(v string) *CrawlerHistory {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetLogGroup sets the LogGroup field's value.
+func (s *CrawlerHistory) SetLogGroup(v string) *CrawlerHistory {
+	s.LogGroup = &v
+	return s
+}
+
+// SetLogStream sets the LogStream field's value.
+func (s *CrawlerHistory) SetLogStream(v string) *CrawlerHistory {
+	s.LogStream = &v
+	return s
+}
+
+// SetMessagePrefix sets the MessagePrefix field's value.
+func (s *CrawlerHistory) SetMessagePrefix(v string) *CrawlerHistory {
+	s.MessagePrefix = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *CrawlerHistory) SetStartTime(v time.Time) *CrawlerHistory {
+	s.StartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CrawlerHistory) SetState(v string) *CrawlerHistory {
+	s.State = &v
+	return s
+}
+
+// SetSummary sets the Summary field's value.
+func (s *CrawlerHistory) SetSummary(v string) *CrawlerHistory {
+	s.Summary = &v
 	return s
 }
 
@@ -22122,6 +26047,9 @@ type CrawlerTargets struct {
 	// Specifies Glue Data Catalog targets.
 	CatalogTargets []*CatalogTarget `type:"list"`
 
+	// Specifies Delta data store targets.
+	DeltaTargets []*DeltaTarget `type:"list"`
+
 	// Specifies Amazon DynamoDB targets.
 	DynamoDBTargets []*DynamoDBTarget `type:"list"`
 
@@ -22179,6 +26107,12 @@ func (s *CrawlerTargets) SetCatalogTargets(v []*CatalogTarget) *CrawlerTargets {
 	return s
 }
 
+// SetDeltaTargets sets the DeltaTargets field's value.
+func (s *CrawlerTargets) SetDeltaTargets(v []*DeltaTarget) *CrawlerTargets {
+	s.DeltaTargets = v
+	return s
+}
+
 // SetDynamoDBTargets sets the DynamoDBTargets field's value.
 func (s *CrawlerTargets) SetDynamoDBTargets(v []*DynamoDBTarget) *CrawlerTargets {
 	s.DynamoDBTargets = v
@@ -22200,6 +26134,80 @@ func (s *CrawlerTargets) SetMongoDBTargets(v []*MongoDBTarget) *CrawlerTargets {
 // SetS3Targets sets the S3Targets field's value.
 func (s *CrawlerTargets) SetS3Targets(v []*S3Target) *CrawlerTargets {
 	s.S3Targets = v
+	return s
+}
+
+// A list of fields, comparators and value that you can use to filter the crawler
+// runs for a specified crawler.
+type CrawlsFilter struct {
+	_ struct{} `type:"structure"`
+
+	// A key used to filter the crawler runs for a specified crawler. Valid values
+	// for each of the field names are:
+	//
+	//    * CRAWL_ID: A string representing the UUID identifier for a crawl.
+	//
+	//    * STATE: A string representing the state of the crawl.
+	//
+	//    * START_TIME and END_TIME: The epoch timestamp in milliseconds.
+	//
+	//    * DPU_HOUR: The number of data processing unit (DPU) hours used for the
+	//    crawl.
+	FieldName *string `type:"string" enum:"FieldName"`
+
+	// The value provided for comparison on the crawl field.
+	FieldValue *string `type:"string"`
+
+	// A defined comparator that operates on the value. The available operators
+	// are:
+	//
+	//    * GT: Greater than.
+	//
+	//    * GE: Greater than or equal to.
+	//
+	//    * LT: Less than.
+	//
+	//    * LE: Less than or equal to.
+	//
+	//    * EQ: Equal to.
+	//
+	//    * NE: Not equal to.
+	FilterOperator *string `type:"string" enum:"FilterOperator"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CrawlsFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CrawlsFilter) GoString() string {
+	return s.String()
+}
+
+// SetFieldName sets the FieldName field's value.
+func (s *CrawlsFilter) SetFieldName(v string) *CrawlsFilter {
+	s.FieldName = &v
+	return s
+}
+
+// SetFieldValue sets the FieldValue field's value.
+func (s *CrawlsFilter) SetFieldValue(v string) *CrawlsFilter {
+	s.FieldValue = &v
+	return s
+}
+
+// SetFilterOperator sets the FilterOperator field's value.
+func (s *CrawlsFilter) SetFilterOperator(v string) *CrawlsFilter {
+	s.FilterOperator = &v
 	return s
 }
 
@@ -22548,6 +26556,9 @@ type CreateCrawlerInput struct {
 	// A description of the new crawler.
 	Description *string `type:"string"`
 
+	// Specifies Lake Formation configuration settings for the crawler.
+	LakeFormationConfiguration *LakeFormationConfiguration `type:"structure"`
+
 	// Specifies data lineage configuration settings for the crawler.
 	LineageConfiguration *LineageConfiguration `type:"structure"`
 
@@ -22662,6 +26673,12 @@ func (s *CreateCrawlerInput) SetDatabaseName(v string) *CreateCrawlerInput {
 // SetDescription sets the Description field's value.
 func (s *CreateCrawlerInput) SetDescription(v string) *CreateCrawlerInput {
 	s.Description = &v
+	return s
+}
+
+// SetLakeFormationConfiguration sets the LakeFormationConfiguration field's value.
+func (s *CreateCrawlerInput) SetLakeFormationConfiguration(v *LakeFormationConfiguration) *CreateCrawlerInput {
+	s.LakeFormationConfiguration = v
 	return s
 }
 
@@ -22853,6 +26870,121 @@ func (s *CreateCsvClassifierRequest) SetQuoteSymbol(v string) *CreateCsvClassifi
 	return s
 }
 
+type CreateCustomEntityTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of context words. If none of these context words are found within
+	// the vicinity of the regular expression the data will not be detected as sensitive
+	// data.
+	//
+	// If no context words are passed only a regular expression is checked.
+	ContextWords []*string `min:"1" type:"list"`
+
+	// A name for the custom pattern that allows it to be retrieved or deleted later.
+	// This name must be unique per Amazon Web Services account.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// A regular expression string that is used for detecting sensitive data in
+	// a custom pattern.
+	//
+	// RegexString is a required field
+	RegexString *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCustomEntityTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCustomEntityTypeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCustomEntityTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCustomEntityTypeInput"}
+	if s.ContextWords != nil && len(s.ContextWords) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContextWords", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RegexString == nil {
+		invalidParams.Add(request.NewErrParamRequired("RegexString"))
+	}
+	if s.RegexString != nil && len(*s.RegexString) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RegexString", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContextWords sets the ContextWords field's value.
+func (s *CreateCustomEntityTypeInput) SetContextWords(v []*string) *CreateCustomEntityTypeInput {
+	s.ContextWords = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateCustomEntityTypeInput) SetName(v string) *CreateCustomEntityTypeInput {
+	s.Name = &v
+	return s
+}
+
+// SetRegexString sets the RegexString field's value.
+func (s *CreateCustomEntityTypeInput) SetRegexString(v string) *CreateCustomEntityTypeInput {
+	s.RegexString = &v
+	return s
+}
+
+type CreateCustomEntityTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the custom pattern you created.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCustomEntityTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCustomEntityTypeOutput) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *CreateCustomEntityTypeOutput) SetName(v string) *CreateCustomEntityTypeOutput {
+	s.Name = &v
+	return s
+}
+
 type CreateDatabaseInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22864,6 +26996,9 @@ type CreateDatabaseInput struct {
 	//
 	// DatabaseInput is a required field
 	DatabaseInput *DatabaseInput `type:"structure" required:"true"`
+
+	// The tags you assign to the database.
+	Tags map[string]*string `type:"map"`
 }
 
 // String returns the string representation.
@@ -22914,6 +27049,12 @@ func (s *CreateDatabaseInput) SetCatalogId(v string) *CreateDatabaseInput {
 // SetDatabaseInput sets the DatabaseInput field's value.
 func (s *CreateDatabaseInput) SetDatabaseInput(v *DatabaseInput) *CreateDatabaseInput {
 	s.DatabaseInput = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateDatabaseInput) SetTags(v map[string]*string) *CreateDatabaseInput {
+	s.Tags = v
 	return s
 }
 
@@ -23482,12 +27623,20 @@ type CreateJobInput struct {
 	// This parameter is deprecated. Use MaxCapacity instead.
 	//
 	// The number of Glue data processing units (DPUs) to allocate to this Job.
-	// You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative
+	// You can allocate a minimum of 2 DPUs; the default is 10. A DPU is a relative
 	// measure of processing power that consists of 4 vCPUs of compute capacity
 	// and 16 GB of memory. For more information, see the Glue pricing page (https://aws.amazon.com/glue/pricing/).
 	//
 	// Deprecated: This property is deprecated, use MaxCapacity instead.
 	AllocatedCapacity *int64 `deprecated:"true" type:"integer"`
+
+	// The representation of a directed acyclic graph on which both the Glue Studio
+	// visual component and Glue Studio code generation is based.
+	//
+	// CodeGenConfigurationNodes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateJobInput's
+	// String and GoString methods.
+	CodeGenConfigurationNodes map[string]*CodeGenConfigurationNode `type:"map" sensitive:"true"`
 
 	// The JobCommand that runs this job.
 	//
@@ -23502,6 +27651,10 @@ type CreateJobInput struct {
 	// You can specify arguments here that your own job-execution script consumes,
 	// as well as arguments that Glue itself consumes.
 	//
+	// Job arguments may be logged. Do not pass plaintext secrets as arguments.
+	// Retrieve secrets from a Glue Connection, Secrets Manager or other secret
+	// management mechanism if you intend to keep them within the Job.
+	//
 	// For information about how to specify and consume your own Job arguments,
 	// see the Calling Glue APIs in Python (https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html)
 	// topic in the developer guide.
@@ -23513,6 +27666,18 @@ type CreateJobInput struct {
 
 	// Description of the job being defined.
 	Description *string `type:"string"`
+
+	// Indicates whether the job is run with a standard or flexible execution class.
+	// The standard execution-class is ideal for time-sensitive workloads that require
+	// fast job startup and dedicated resources.
+	//
+	// The flexible execution class is appropriate for time-insensitive jobs whose
+	// start and completion times may vary.
+	//
+	// Only jobs with Glue version 3.0 and above and command type glueetl will be
+	// allowed to set ExecutionClass to FLEX. The flexible execution class is available
+	// for Spark jobs.
+	ExecutionClass *string `type:"string" enum:"ExecutionClass"`
 
 	// An ExecutionProperty specifying the maximum number of concurrent runs allowed
 	// for this job.
@@ -23548,7 +27713,7 @@ type CreateJobInput struct {
 	//
 	//    * When you specify an Apache Spark ETL job (JobCommand.Name="glueetl")
 	//    or Apache Spark streaming ETL job (JobCommand.Name="gluestreaming"), you
-	//    can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type
+	//    can allocate a minimum of 2 DPUs. The default is 10 DPUs. This job type
 	//    cannot have a fractional DPU allocation.
 	//
 	// For Glue version 2.0 jobs, you cannot instead specify a Maximum capacity.
@@ -23571,9 +27736,6 @@ type CreateJobInput struct {
 
 	// The number of workers of a defined workerType that are allocated when a job
 	// runs.
-	//
-	// The maximum number of workers you can define are 299 for G.1X, and 149 for
-	// G.2X.
 	NumberOfWorkers *int64 `type:"integer"`
 
 	// The name or Amazon Resource Name (ARN) of the IAM role associated with this
@@ -23597,7 +27759,7 @@ type CreateJobInput struct {
 	Timeout *int64 `min:"1" type:"integer"`
 
 	// The type of predefined worker that is allocated when a job runs. Accepts
-	// a value of Standard, G.1X, or G.2X.
+	// a value of Standard, G.1X, G.2X, or G.025X.
 	//
 	//    * For the Standard worker type, each worker provides 4 vCPU, 16 GB of
 	//    memory and a 50GB disk, and 2 executors per worker.
@@ -23609,6 +27771,11 @@ type CreateJobInput struct {
 	//    * For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of
 	//    memory, 128 GB disk), and provides 1 executor per worker. We recommend
 	//    this worker type for memory-intensive jobs.
+	//
+	//    * For the G.025X worker type, each worker maps to 0.25 DPU (2 vCPU, 4
+	//    GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for low volume streaming jobs. This worker type is only
+	//    available for Glue version 3.0 streaming jobs.
 	WorkerType *string `type:"string" enum:"WorkerType"`
 }
 
@@ -23654,6 +27821,16 @@ func (s *CreateJobInput) Validate() error {
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Timeout", 1))
 	}
+	if s.CodeGenConfigurationNodes != nil {
+		for i, v := range s.CodeGenConfigurationNodes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CodeGenConfigurationNodes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.NotificationProperty != nil {
 		if err := s.NotificationProperty.Validate(); err != nil {
 			invalidParams.AddNested("NotificationProperty", err.(request.ErrInvalidParams))
@@ -23669,6 +27846,12 @@ func (s *CreateJobInput) Validate() error {
 // SetAllocatedCapacity sets the AllocatedCapacity field's value.
 func (s *CreateJobInput) SetAllocatedCapacity(v int64) *CreateJobInput {
 	s.AllocatedCapacity = &v
+	return s
+}
+
+// SetCodeGenConfigurationNodes sets the CodeGenConfigurationNodes field's value.
+func (s *CreateJobInput) SetCodeGenConfigurationNodes(v map[string]*CodeGenConfigurationNode) *CreateJobInput {
+	s.CodeGenConfigurationNodes = v
 	return s
 }
 
@@ -23693,6 +27876,12 @@ func (s *CreateJobInput) SetDefaultArguments(v map[string]*string) *CreateJobInp
 // SetDescription sets the Description field's value.
 func (s *CreateJobInput) SetDescription(v string) *CreateJobInput {
 	s.Description = &v
+	return s
+}
+
+// SetExecutionClass sets the ExecutionClass field's value.
+func (s *CreateJobInput) SetExecutionClass(v string) *CreateJobInput {
+	s.ExecutionClass = &v
 	return s
 }
 
@@ -24591,7 +28780,8 @@ type CreateSchemaInput struct {
 	//    against all previous schema versions.
 	Compatibility *string `type:"string" enum:"Compatibility"`
 
-	// The data format of the schema definition. Currently AVRO and JSON are supported.
+	// The data format of the schema definition. Currently AVRO, JSON and PROTOBUF
+	// are supported.
 	//
 	// DataFormat is a required field
 	DataFormat *string `type:"string" required:"true" enum:"DataFormat"`
@@ -24713,7 +28903,8 @@ type CreateSchemaOutput struct {
 	// The schema compatibility mode.
 	Compatibility *string `type:"string" enum:"Compatibility"`
 
-	// The data format of the schema definition. Currently AVRO and JSON are supported.
+	// The data format of the schema definition. Currently AVRO, JSON and PROTOBUF
+	// are supported.
 	DataFormat *string `type:"string" enum:"DataFormat"`
 
 	// A description of the schema if specified when created.
@@ -25078,6 +29269,266 @@ func (s *CreateSecurityConfigurationOutput) SetName(v string) *CreateSecurityCon
 	return s
 }
 
+// Request to create a new session.
+type CreateSessionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The SessionCommand that runs the job.
+	//
+	// Command is a required field
+	Command *SessionCommand `type:"structure" required:"true"`
+
+	// The number of connections to use for the session.
+	Connections *ConnectionsList `type:"structure"`
+
+	// A map array of key-value pairs. Max is 75 pairs.
+	DefaultArguments map[string]*string `type:"map"`
+
+	// The description of the session.
+	Description *string `type:"string"`
+
+	// The Glue version determines the versions of Apache Spark and Python that
+	// Glue supports. The GlueVersion must be greater than 2.0.
+	GlueVersion *string `min:"1" type:"string"`
+
+	// The ID of the session request.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The number of seconds when idle before request times out.
+	IdleTimeout *int64 `min:"1" type:"integer"`
+
+	// The number of Glue data processing units (DPUs) that can be allocated when
+	// the job runs. A DPU is a relative measure of processing power that consists
+	// of 4 vCPUs of compute capacity and 16 GB memory.
+	MaxCapacity *float64 `type:"double"`
+
+	// The number of workers of a defined WorkerType to use for the session.
+	NumberOfWorkers *int64 `type:"integer"`
+
+	// The origin of the request.
+	RequestOrigin *string `min:"1" type:"string"`
+
+	// The IAM Role ARN
+	//
+	// Role is a required field
+	Role *string `min:"20" type:"string" required:"true"`
+
+	// The name of the SecurityConfiguration structure to be used with the session
+	SecurityConfiguration *string `min:"1" type:"string"`
+
+	// The map of key value pairs (tags) belonging to the session.
+	Tags map[string]*string `type:"map"`
+
+	// The number of seconds before request times out.
+	Timeout *int64 `min:"1" type:"integer"`
+
+	// The type of predefined worker that is allocated to use for the session. Accepts
+	// a value of Standard, G.1X, G.2X, or G.025X.
+	//
+	//    * For the Standard worker type, each worker provides 4 vCPU, 16 GB of
+	//    memory and a 50GB disk, and 2 executors per worker.
+	//
+	//    * For the G.1X worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of
+	//    memory, 64 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for memory-intensive jobs.
+	//
+	//    * For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of
+	//    memory, 128 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for memory-intensive jobs.
+	//
+	//    * For the G.025X worker type, each worker maps to 0.25 DPU (2 vCPU, 4
+	//    GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for low volume streaming jobs. This worker type is only
+	//    available for Glue version 3.0 streaming jobs.
+	WorkerType *string `type:"string" enum:"WorkerType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSessionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSessionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateSessionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateSessionInput"}
+	if s.Command == nil {
+		invalidParams.Add(request.NewErrParamRequired("Command"))
+	}
+	if s.GlueVersion != nil && len(*s.GlueVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GlueVersion", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IdleTimeout != nil && *s.IdleTimeout < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("IdleTimeout", 1))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+	if s.Role == nil {
+		invalidParams.Add(request.NewErrParamRequired("Role"))
+	}
+	if s.Role != nil && len(*s.Role) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("Role", 20))
+	}
+	if s.SecurityConfiguration != nil && len(*s.SecurityConfiguration) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecurityConfiguration", 1))
+	}
+	if s.Timeout != nil && *s.Timeout < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Timeout", 1))
+	}
+	if s.Command != nil {
+		if err := s.Command.Validate(); err != nil {
+			invalidParams.AddNested("Command", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCommand sets the Command field's value.
+func (s *CreateSessionInput) SetCommand(v *SessionCommand) *CreateSessionInput {
+	s.Command = v
+	return s
+}
+
+// SetConnections sets the Connections field's value.
+func (s *CreateSessionInput) SetConnections(v *ConnectionsList) *CreateSessionInput {
+	s.Connections = v
+	return s
+}
+
+// SetDefaultArguments sets the DefaultArguments field's value.
+func (s *CreateSessionInput) SetDefaultArguments(v map[string]*string) *CreateSessionInput {
+	s.DefaultArguments = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateSessionInput) SetDescription(v string) *CreateSessionInput {
+	s.Description = &v
+	return s
+}
+
+// SetGlueVersion sets the GlueVersion field's value.
+func (s *CreateSessionInput) SetGlueVersion(v string) *CreateSessionInput {
+	s.GlueVersion = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateSessionInput) SetId(v string) *CreateSessionInput {
+	s.Id = &v
+	return s
+}
+
+// SetIdleTimeout sets the IdleTimeout field's value.
+func (s *CreateSessionInput) SetIdleTimeout(v int64) *CreateSessionInput {
+	s.IdleTimeout = &v
+	return s
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *CreateSessionInput) SetMaxCapacity(v float64) *CreateSessionInput {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetNumberOfWorkers sets the NumberOfWorkers field's value.
+func (s *CreateSessionInput) SetNumberOfWorkers(v int64) *CreateSessionInput {
+	s.NumberOfWorkers = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *CreateSessionInput) SetRequestOrigin(v string) *CreateSessionInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+// SetRole sets the Role field's value.
+func (s *CreateSessionInput) SetRole(v string) *CreateSessionInput {
+	s.Role = &v
+	return s
+}
+
+// SetSecurityConfiguration sets the SecurityConfiguration field's value.
+func (s *CreateSessionInput) SetSecurityConfiguration(v string) *CreateSessionInput {
+	s.SecurityConfiguration = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateSessionInput) SetTags(v map[string]*string) *CreateSessionInput {
+	s.Tags = v
+	return s
+}
+
+// SetTimeout sets the Timeout field's value.
+func (s *CreateSessionInput) SetTimeout(v int64) *CreateSessionInput {
+	s.Timeout = &v
+	return s
+}
+
+// SetWorkerType sets the WorkerType field's value.
+func (s *CreateSessionInput) SetWorkerType(v string) *CreateSessionInput {
+	s.WorkerType = &v
+	return s
+}
+
+type CreateSessionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the session object in the response.
+	Session *Session `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSessionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSessionOutput) GoString() string {
+	return s.String()
+}
+
+// SetSession sets the Session field's value.
+func (s *CreateSessionOutput) SetSession(v *Session) *CreateSessionOutput {
+	s.Session = v
+	return s
+}
+
 type CreateTableInput struct {
 	_ struct{} `type:"structure"`
 
@@ -25099,6 +29550,9 @@ type CreateTableInput struct {
 	//
 	// TableInput is a required field
 	TableInput *TableInput `type:"structure" required:"true"`
+
+	// The ID of the transaction.
+	TransactionId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -25133,6 +29587,9 @@ func (s *CreateTableInput) Validate() error {
 	}
 	if s.TableInput == nil {
 		invalidParams.Add(request.NewErrParamRequired("TableInput"))
+	}
+	if s.TransactionId != nil && len(*s.TransactionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TransactionId", 1))
 	}
 	if s.PartitionIndexes != nil {
 		for i, v := range s.PartitionIndexes {
@@ -25177,6 +29634,12 @@ func (s *CreateTableInput) SetPartitionIndexes(v []*PartitionIndex) *CreateTable
 // SetTableInput sets the TableInput field's value.
 func (s *CreateTableInput) SetTableInput(v *TableInput) *CreateTableInput {
 	s.TableInput = v
+	return s
+}
+
+// SetTransactionId sets the TransactionId field's value.
+func (s *CreateTableInput) SetTransactionId(v string) *CreateTableInput {
+	s.TransactionId = &v
 	return s
 }
 
@@ -25825,6 +30288,179 @@ func (s *CsvClassifier) SetVersion(v int64) *CsvClassifier {
 	return s
 }
 
+// Specifies a transform that uses custom code you provide to perform the data
+// transformation. The output is a collection of DynamicFrames.
+type CustomCode struct {
+	_ struct{} `type:"structure"`
+
+	// The name defined for the custom code node class.
+	//
+	// ClassName is a required field
+	ClassName *string `type:"string" required:"true"`
+
+	// The custom code that is used to perform the data transformation.
+	//
+	// Code is a required field
+	Code *string `type:"string" required:"true"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the custom code transform.
+	OutputSchemas []*GlueSchema `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomCode) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomCode) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomCode) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomCode"}
+	if s.ClassName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClassName"))
+	}
+	if s.Code == nil {
+		invalidParams.Add(request.NewErrParamRequired("Code"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClassName sets the ClassName field's value.
+func (s *CustomCode) SetClassName(v string) *CustomCode {
+	s.ClassName = &v
+	return s
+}
+
+// SetCode sets the Code field's value.
+func (s *CustomCode) SetCode(v string) *CustomCode {
+	s.Code = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *CustomCode) SetInputs(v []*string) *CustomCode {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CustomCode) SetName(v string) *CustomCode {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *CustomCode) SetOutputSchemas(v []*GlueSchema) *CustomCode {
+	s.OutputSchemas = v
+	return s
+}
+
+// An object representing a custom pattern for detecting sensitive data across
+// the columns and rows of your structured data.
+type CustomEntityType struct {
+	_ struct{} `type:"structure"`
+
+	// A list of context words. If none of these context words are found within
+	// the vicinity of the regular expression the data will not be detected as sensitive
+	// data.
+	//
+	// If no context words are passed only a regular expression is checked.
+	ContextWords []*string `min:"1" type:"list"`
+
+	// A name for the custom pattern that allows it to be retrieved or deleted later.
+	// This name must be unique per Amazon Web Services account.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// A regular expression string that is used for detecting sensitive data in
+	// a custom pattern.
+	//
+	// RegexString is a required field
+	RegexString *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomEntityType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomEntityType) GoString() string {
+	return s.String()
+}
+
+// SetContextWords sets the ContextWords field's value.
+func (s *CustomEntityType) SetContextWords(v []*string) *CustomEntityType {
+	s.ContextWords = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CustomEntityType) SetName(v string) *CustomEntityType {
+	s.Name = &v
+	return s
+}
+
+// SetRegexString sets the RegexString field's value.
+func (s *CustomEntityType) SetRegexString(v string) *CustomEntityType {
+	s.RegexString = &v
+	return s
+}
+
 // Contains configuration information for maintaining Data Catalog security.
 type DataCatalogEncryptionSettings struct {
 	_ struct{} `type:"structure"`
@@ -26205,6 +30841,67 @@ func (s *DatabaseInput) SetParameters(v map[string]*string) *DatabaseInput {
 // SetTargetDatabase sets the TargetDatabase field's value.
 func (s *DatabaseInput) SetTargetDatabase(v *DatabaseIdentifier) *DatabaseInput {
 	s.TargetDatabase = v
+	return s
+}
+
+// A structure representing the datatype of the value.
+type Datatype struct {
+	_ struct{} `type:"structure"`
+
+	// The datatype of the value.
+	//
+	// Id is a required field
+	Id *string `type:"string" required:"true"`
+
+	// A label assigned to the datatype.
+	//
+	// Label is a required field
+	Label *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Datatype) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Datatype) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Datatype) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Datatype"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Label == nil {
+		invalidParams.Add(request.NewErrParamRequired("Label"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *Datatype) SetId(v string) *Datatype {
+	s.Id = &v
+	return s
+}
+
+// SetLabel sets the Label field's value.
+func (s *Datatype) SetLabel(v string) *Datatype {
+	s.Label = &v
 	return s
 }
 
@@ -26992,6 +31689,86 @@ func (s DeleteCrawlerOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DeleteCrawlerOutput) GoString() string {
 	return s.String()
+}
+
+type DeleteCustomEntityTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the custom pattern that you want to delete.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomEntityTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomEntityTypeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCustomEntityTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCustomEntityTypeInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteCustomEntityTypeInput) SetName(v string) *DeleteCustomEntityTypeInput {
+	s.Name = &v
+	return s
+}
+
+type DeleteCustomEntityTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the custom pattern you deleted.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomEntityTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomEntityTypeOutput) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteCustomEntityTypeOutput) SetName(v string) *DeleteCustomEntityTypeOutput {
+	s.Name = &v
+	return s
 }
 
 type DeleteDatabaseInput struct {
@@ -27997,6 +32774,98 @@ func (s DeleteSecurityConfigurationOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteSessionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the session to be deleted.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The name of the origin of the delete session request.
+	RequestOrigin *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSessionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSessionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSessionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteSessionInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteSessionInput) SetId(v string) *DeleteSessionInput {
+	s.Id = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *DeleteSessionInput) SetRequestOrigin(v string) *DeleteSessionInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+type DeleteSessionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the ID of the deleted session.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSessionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSessionOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteSessionOutput) SetId(v string) *DeleteSessionOutput {
+	s.Id = &v
+	return s
+}
+
 type DeleteTableInput struct {
 	_ struct{} `type:"structure"`
 
@@ -28015,6 +32884,9 @@ type DeleteTableInput struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	// The transaction ID at which to delete the table contents.
+	TransactionId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -28053,6 +32925,9 @@ func (s *DeleteTableInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.TransactionId != nil && len(*s.TransactionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TransactionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -28075,6 +32950,12 @@ func (s *DeleteTableInput) SetDatabaseName(v string) *DeleteTableInput {
 // SetName sets the Name field's value.
 func (s *DeleteTableInput) SetName(v string) *DeleteTableInput {
 	s.Name = &v
+	return s
+}
+
+// SetTransactionId sets the TransactionId field's value.
+func (s *DeleteTableInput) SetTransactionId(v string) *DeleteTableInput {
+	s.TransactionId = &v
 	return s
 }
 
@@ -28481,6 +33362,56 @@ func (s *DeleteWorkflowOutput) SetName(v string) *DeleteWorkflowOutput {
 	return s
 }
 
+// Specifies a Delta data store to crawl one or more Delta tables.
+type DeltaTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the connection to use to connect to the Delta table target.
+	ConnectionName *string `type:"string"`
+
+	// A list of the Amazon S3 paths to the Delta tables.
+	DeltaTables []*string `type:"list"`
+
+	// Specifies whether to write the manifest files to the Delta table path.
+	WriteManifest *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeltaTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeltaTarget) GoString() string {
+	return s.String()
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *DeltaTarget) SetConnectionName(v string) *DeltaTarget {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetDeltaTables sets the DeltaTables field's value.
+func (s *DeltaTarget) SetDeltaTables(v []*string) *DeltaTarget {
+	s.DeltaTables = v
+	return s
+}
+
+// SetWriteManifest sets the WriteManifest field's value.
+func (s *DeltaTarget) SetWriteManifest(v bool) *DeltaTarget {
+	s.WriteManifest = &v
+	return s
+}
+
 // A development endpoint where a developer can remotely debug extract, transform,
 // and load (ETL) scripts.
 type DevEndpoint struct {
@@ -28842,6 +33773,243 @@ func (s *DevEndpointCustomLibraries) SetExtraPythonLibsS3Path(v string) *DevEndp
 	return s
 }
 
+// Specifies an Apache Kafka data store.
+type DirectKafkaSource struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies options related to data preview for viewing a sample of your data.
+	DataPreviewOptions *StreamingDataPreviewOptions `type:"structure"`
+
+	// Whether to automatically determine the schema from the incoming data.
+	DetectSchema *bool `type:"boolean"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the streaming options.
+	StreamingOptions *KafkaStreamingSourceOptions `type:"structure"`
+
+	// The amount of time to spend processing each micro batch.
+	WindowSize *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DirectKafkaSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DirectKafkaSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DirectKafkaSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DirectKafkaSource"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.DataPreviewOptions != nil {
+		if err := s.DataPreviewOptions.Validate(); err != nil {
+			invalidParams.AddNested("DataPreviewOptions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataPreviewOptions sets the DataPreviewOptions field's value.
+func (s *DirectKafkaSource) SetDataPreviewOptions(v *StreamingDataPreviewOptions) *DirectKafkaSource {
+	s.DataPreviewOptions = v
+	return s
+}
+
+// SetDetectSchema sets the DetectSchema field's value.
+func (s *DirectKafkaSource) SetDetectSchema(v bool) *DirectKafkaSource {
+	s.DetectSchema = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DirectKafkaSource) SetName(v string) *DirectKafkaSource {
+	s.Name = &v
+	return s
+}
+
+// SetStreamingOptions sets the StreamingOptions field's value.
+func (s *DirectKafkaSource) SetStreamingOptions(v *KafkaStreamingSourceOptions) *DirectKafkaSource {
+	s.StreamingOptions = v
+	return s
+}
+
+// SetWindowSize sets the WindowSize field's value.
+func (s *DirectKafkaSource) SetWindowSize(v int64) *DirectKafkaSource {
+	s.WindowSize = &v
+	return s
+}
+
+// Specifies a direct Amazon Kinesis data source.
+type DirectKinesisSource struct {
+	_ struct{} `type:"structure"`
+
+	// Additional options for data preview.
+	DataPreviewOptions *StreamingDataPreviewOptions `type:"structure"`
+
+	// Whether to automatically determine the schema from the incoming data.
+	DetectSchema *bool `type:"boolean"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Additional options for the Kinesis streaming data source.
+	StreamingOptions *KinesisStreamingSourceOptions `type:"structure"`
+
+	// The amount of time to spend processing each micro batch.
+	WindowSize *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DirectKinesisSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DirectKinesisSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DirectKinesisSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DirectKinesisSource"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.DataPreviewOptions != nil {
+		if err := s.DataPreviewOptions.Validate(); err != nil {
+			invalidParams.AddNested("DataPreviewOptions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataPreviewOptions sets the DataPreviewOptions field's value.
+func (s *DirectKinesisSource) SetDataPreviewOptions(v *StreamingDataPreviewOptions) *DirectKinesisSource {
+	s.DataPreviewOptions = v
+	return s
+}
+
+// SetDetectSchema sets the DetectSchema field's value.
+func (s *DirectKinesisSource) SetDetectSchema(v bool) *DirectKinesisSource {
+	s.DetectSchema = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DirectKinesisSource) SetName(v string) *DirectKinesisSource {
+	s.Name = &v
+	return s
+}
+
+// SetStreamingOptions sets the StreamingOptions field's value.
+func (s *DirectKinesisSource) SetStreamingOptions(v *KinesisStreamingSourceOptions) *DirectKinesisSource {
+	s.StreamingOptions = v
+	return s
+}
+
+// SetWindowSize sets the WindowSize field's value.
+func (s *DirectKinesisSource) SetWindowSize(v int64) *DirectKinesisSource {
+	s.WindowSize = &v
+	return s
+}
+
+// A policy that specifies update behavior for the crawler.
+type DirectSchemaChangePolicy struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the database that the schema change policy applies to.
+	Database *string `type:"string"`
+
+	// Whether to use the specified update behavior when the crawler finds a changed
+	// schema.
+	EnableUpdateCatalog *bool `type:"boolean"`
+
+	// Specifies the table in the database that the schema change policy applies
+	// to.
+	Table *string `type:"string"`
+
+	// The update behavior when the crawler finds a changed schema.
+	UpdateBehavior *string `type:"string" enum:"UpdateCatalogBehavior"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DirectSchemaChangePolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DirectSchemaChangePolicy) GoString() string {
+	return s.String()
+}
+
+// SetDatabase sets the Database field's value.
+func (s *DirectSchemaChangePolicy) SetDatabase(v string) *DirectSchemaChangePolicy {
+	s.Database = &v
+	return s
+}
+
+// SetEnableUpdateCatalog sets the EnableUpdateCatalog field's value.
+func (s *DirectSchemaChangePolicy) SetEnableUpdateCatalog(v bool) *DirectSchemaChangePolicy {
+	s.EnableUpdateCatalog = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *DirectSchemaChangePolicy) SetTable(v string) *DirectSchemaChangePolicy {
+	s.Table = &v
+	return s
+}
+
+// SetUpdateBehavior sets the UpdateBehavior field's value.
+func (s *DirectSchemaChangePolicy) SetUpdateBehavior(v string) *DirectSchemaChangePolicy {
+	s.UpdateBehavior = &v
+	return s
+}
+
 // Defines column statistics supported for floating-point number data columns.
 type DoubleColumnStatisticsData struct {
 	_ struct{} `type:"structure"`
@@ -28921,6 +34089,335 @@ func (s *DoubleColumnStatisticsData) SetNumberOfNulls(v int64) *DoubleColumnStat
 	return s
 }
 
+// Specifies a transform that removes rows of repeating data from a data set.
+type DropDuplicates struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the columns to be merged or removed if repeating.
+	Columns [][]*string `type:"list"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DropDuplicates) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DropDuplicates) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DropDuplicates) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DropDuplicates"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetColumns sets the Columns field's value.
+func (s *DropDuplicates) SetColumns(v [][]*string) *DropDuplicates {
+	s.Columns = v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *DropDuplicates) SetInputs(v []*string) *DropDuplicates {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DropDuplicates) SetName(v string) *DropDuplicates {
+	s.Name = &v
+	return s
+}
+
+// Specifies a transform that chooses the data property keys that you want to
+// drop.
+type DropFields struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// A JSON path to a variable in the data structure.
+	//
+	// Paths is a required field
+	Paths [][]*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DropFields) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DropFields) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DropFields) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DropFields"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Paths == nil {
+		invalidParams.Add(request.NewErrParamRequired("Paths"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *DropFields) SetInputs(v []*string) *DropFields {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DropFields) SetName(v string) *DropFields {
+	s.Name = &v
+	return s
+}
+
+// SetPaths sets the Paths field's value.
+func (s *DropFields) SetPaths(v [][]*string) *DropFields {
+	s.Paths = v
+	return s
+}
+
+// Specifies a transform that removes columns from the dataset if all values
+// in the column are 'null'. By default, Glue Studio will recognize null objects,
+// but some values such as empty strings, strings that are "null", -1 integers
+// or other placeholders such as zeros, are not automatically recognized as
+// nulls.
+type DropNullFields struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// A structure that represents whether certain values are recognized as null
+	// values for removal.
+	NullCheckBoxList *NullCheckBoxList `type:"structure"`
+
+	// A structure that specifies a list of NullValueField structures that represent
+	// a custom null value such as zero or other value being used as a null placeholder
+	// unique to the dataset.
+	//
+	// The DropNullFields transform removes custom null values only if both the
+	// value of the null placeholder and the datatype match the data.
+	NullTextList []*NullValueField `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DropNullFields) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DropNullFields) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DropNullFields) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DropNullFields"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.NullTextList != nil {
+		for i, v := range s.NullTextList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "NullTextList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *DropNullFields) SetInputs(v []*string) *DropNullFields {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DropNullFields) SetName(v string) *DropNullFields {
+	s.Name = &v
+	return s
+}
+
+// SetNullCheckBoxList sets the NullCheckBoxList field's value.
+func (s *DropNullFields) SetNullCheckBoxList(v *NullCheckBoxList) *DropNullFields {
+	s.NullCheckBoxList = v
+	return s
+}
+
+// SetNullTextList sets the NullTextList field's value.
+func (s *DropNullFields) SetNullTextList(v []*NullValueField) *DropNullFields {
+	s.NullTextList = v
+	return s
+}
+
+// Specifies a DynamoDB data source in the Glue Data Catalog.
+type DynamoDBCatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DynamoDBCatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DynamoDBCatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DynamoDBCatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DynamoDBCatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *DynamoDBCatalogSource) SetDatabase(v string) *DynamoDBCatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DynamoDBCatalogSource) SetName(v string) *DynamoDBCatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *DynamoDBCatalogSource) SetTable(v string) *DynamoDBCatalogSource {
+	s.Table = &v
+	return s
+}
+
 // Specifies an Amazon DynamoDB table to crawl.
 type DynamoDBTarget struct {
 	_ struct{} `type:"structure"`
@@ -28984,8 +34481,8 @@ func (s *DynamoDBTarget) SetScanRate(v float64) *DynamoDBTarget {
 	return s
 }
 
-// An edge represents a directed connection between two components on a workflow
-// graph.
+// An edge represents a directed connection between two Glue components that
+// are part of the workflow the edge belongs to.
 type Edge struct {
 	_ struct{} `type:"structure"`
 
@@ -29141,7 +34638,7 @@ type EncryptionException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
-	// A message describing the problem.
+	// The message describing the problem.
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
@@ -29521,6 +35018,340 @@ func (s ExportLabelsTaskRunProperties) GoString() string {
 // SetOutputS3Path sets the OutputS3Path field's value.
 func (s *ExportLabelsTaskRunProperties) SetOutputS3Path(v string) *ExportLabelsTaskRunProperties {
 	s.OutputS3Path = &v
+	return s
+}
+
+// Specifies a transform that locates records in the dataset that have missing
+// values and adds a new field with a value determined by imputation. The input
+// data set is used to train the machine learning model that determines what
+// the missing value should be.
+type FillMissingValues struct {
+	_ struct{} `type:"structure"`
+
+	// A JSON path to a variable in the data structure for the dataset that is filled.
+	FilledPath *string `type:"string"`
+
+	// A JSON path to a variable in the data structure for the dataset that is imputed.
+	//
+	// ImputedPath is a required field
+	ImputedPath *string `type:"string" required:"true"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FillMissingValues) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FillMissingValues) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FillMissingValues) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FillMissingValues"}
+	if s.ImputedPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImputedPath"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilledPath sets the FilledPath field's value.
+func (s *FillMissingValues) SetFilledPath(v string) *FillMissingValues {
+	s.FilledPath = &v
+	return s
+}
+
+// SetImputedPath sets the ImputedPath field's value.
+func (s *FillMissingValues) SetImputedPath(v string) *FillMissingValues {
+	s.ImputedPath = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *FillMissingValues) SetInputs(v []*string) *FillMissingValues {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *FillMissingValues) SetName(v string) *FillMissingValues {
+	s.Name = &v
+	return s
+}
+
+// Specifies a transform that splits a dataset into two, based on a filter condition.
+type Filter struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies a filter expression.
+	//
+	// Filters is a required field
+	Filters []*FilterExpression `type:"list" required:"true"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The operator used to filter rows by comparing the key value to a specified
+	// value.
+	//
+	// LogicalOperator is a required field
+	LogicalOperator *string `type:"string" required:"true" enum:"FilterLogicalOperator"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Filter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Filter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Filter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Filter"}
+	if s.Filters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Filters"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.LogicalOperator == nil {
+		invalidParams.Add(request.NewErrParamRequired("LogicalOperator"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *Filter) SetFilters(v []*FilterExpression) *Filter {
+	s.Filters = v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *Filter) SetInputs(v []*string) *Filter {
+	s.Inputs = v
+	return s
+}
+
+// SetLogicalOperator sets the LogicalOperator field's value.
+func (s *Filter) SetLogicalOperator(v string) *Filter {
+	s.LogicalOperator = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Filter) SetName(v string) *Filter {
+	s.Name = &v
+	return s
+}
+
+// Specifies a filter expression.
+type FilterExpression struct {
+	_ struct{} `type:"structure"`
+
+	// Whether the expression is to be negated.
+	Negated *bool `type:"boolean"`
+
+	// The type of operation to perform in the expression.
+	//
+	// Operation is a required field
+	Operation *string `type:"string" required:"true" enum:"FilterOperation"`
+
+	// A list of filter values.
+	//
+	// Values is a required field
+	Values []*FilterValue `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterExpression) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterExpression) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterExpression) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterExpression"}
+	if s.Operation == nil {
+		invalidParams.Add(request.NewErrParamRequired("Operation"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil {
+		for i, v := range s.Values {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Values", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNegated sets the Negated field's value.
+func (s *FilterExpression) SetNegated(v bool) *FilterExpression {
+	s.Negated = &v
+	return s
+}
+
+// SetOperation sets the Operation field's value.
+func (s *FilterExpression) SetOperation(v string) *FilterExpression {
+	s.Operation = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *FilterExpression) SetValues(v []*FilterValue) *FilterExpression {
+	s.Values = v
+	return s
+}
+
+// Represents a single entry in the list of values for a FilterExpression.
+type FilterValue struct {
+	_ struct{} `type:"structure"`
+
+	// The type of filter value.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"FilterValueType"`
+
+	// The value to be associated.
+	//
+	// Value is a required field
+	Value []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterValue) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterValue) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterValue"}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetType sets the Type field's value.
+func (s *FilterValue) SetType(v string) *FilterValue {
+	s.Type = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *FilterValue) SetValue(v []*string) *FilterValue {
+	s.Value = v
 	return s
 }
 
@@ -30624,7 +36455,7 @@ type GetConnectionInput struct {
 	CatalogId *string `min:"1" type:"string"`
 
 	// Allows you to retrieve the connection metadata without returning the password.
-	// For instance, the AWS Glue console uses this flag to retrieve the connection,
+	// For instance, the Glue console uses this flag to retrieve the connection,
 	// and does not display the password. Set this parameter when the caller might
 	// not have permission to use the KMS key to decrypt the password, but it does
 	// have permission to access the rest of the connection properties.
@@ -30776,7 +36607,7 @@ type GetConnectionsInput struct {
 	Filter *GetConnectionsFilter `type:"structure"`
 
 	// Allows you to retrieve the connection metadata without returning the password.
-	// For instance, the AWS Glue console uses this flag to retrieve the connection,
+	// For instance, the Glue console uses this flag to retrieve the connection,
 	// and does not display the password. Set this parameter when the caller might
 	// not have permission to use the KMS key to decrypt the password, but it does
 	// have permission to access the rest of the connection properties.
@@ -31168,6 +36999,107 @@ func (s *GetCrawlersOutput) SetCrawlers(v []*Crawler) *GetCrawlersOutput {
 // SetNextToken sets the NextToken field's value.
 func (s *GetCrawlersOutput) SetNextToken(v string) *GetCrawlersOutput {
 	s.NextToken = &v
+	return s
+}
+
+type GetCustomEntityTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the custom pattern that you want to retrieve.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomEntityTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomEntityTypeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCustomEntityTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCustomEntityTypeInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *GetCustomEntityTypeInput) SetName(v string) *GetCustomEntityTypeInput {
+	s.Name = &v
+	return s
+}
+
+type GetCustomEntityTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of context words if specified when you created the custom pattern.
+	// If none of these context words are found within the vicinity of the regular
+	// expression the data will not be detected as sensitive data.
+	ContextWords []*string `min:"1" type:"list"`
+
+	// The name of the custom pattern that you retrieved.
+	Name *string `min:"1" type:"string"`
+
+	// A regular expression string that is used for detecting sensitive data in
+	// a custom pattern.
+	RegexString *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomEntityTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomEntityTypeOutput) GoString() string {
+	return s.String()
+}
+
+// SetContextWords sets the ContextWords field's value.
+func (s *GetCustomEntityTypeOutput) SetContextWords(v []*string) *GetCustomEntityTypeOutput {
+	s.ContextWords = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetCustomEntityTypeOutput) SetName(v string) *GetCustomEntityTypeOutput {
+	s.Name = &v
+	return s
+}
+
+// SetRegexString sets the RegexString field's value.
+func (s *GetCustomEntityTypeOutput) SetRegexString(v string) *GetCustomEntityTypeOutput {
+	s.RegexString = &v
 	return s
 }
 
@@ -33372,6 +39304,11 @@ type GetPartitionsInput struct {
 	// A continuation token, if this is not the first call to retrieve these partitions.
 	NextToken *string `type:"string"`
 
+	// The time as of when to read the partition contents. If not set, the most
+	// recent transaction commit time will be used. Cannot be specified along with
+	// TransactionId.
+	QueryAsOfTime *time.Time `type:"timestamp"`
+
 	// The segment of the table's partitions to scan in this request.
 	Segment *Segment `type:"structure"`
 
@@ -33379,6 +39316,9 @@ type GetPartitionsInput struct {
 	//
 	// TableName is a required field
 	TableName *string `min:"1" type:"string" required:"true"`
+
+	// The transaction ID at which to read the partition contents.
+	TransactionId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -33419,6 +39359,9 @@ func (s *GetPartitionsInput) Validate() error {
 	}
 	if s.TableName != nil && len(*s.TableName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TableName", 1))
+	}
+	if s.TransactionId != nil && len(*s.TransactionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TransactionId", 1))
 	}
 	if s.Segment != nil {
 		if err := s.Segment.Validate(); err != nil {
@@ -33468,6 +39411,12 @@ func (s *GetPartitionsInput) SetNextToken(v string) *GetPartitionsInput {
 	return s
 }
 
+// SetQueryAsOfTime sets the QueryAsOfTime field's value.
+func (s *GetPartitionsInput) SetQueryAsOfTime(v time.Time) *GetPartitionsInput {
+	s.QueryAsOfTime = &v
+	return s
+}
+
 // SetSegment sets the Segment field's value.
 func (s *GetPartitionsInput) SetSegment(v *Segment) *GetPartitionsInput {
 	s.Segment = v
@@ -33477,6 +39426,12 @@ func (s *GetPartitionsInput) SetSegment(v *Segment) *GetPartitionsInput {
 // SetTableName sets the TableName field's value.
 func (s *GetPartitionsInput) SetTableName(v string) *GetPartitionsInput {
 	s.TableName = &v
+	return s
+}
+
+// SetTransactionId sets the TransactionId field's value.
+func (s *GetPartitionsInput) SetTransactionId(v string) *GetPartitionsInput {
+	s.TransactionId = &v
 	return s
 }
 
@@ -34093,8 +40048,8 @@ type GetSchemaByDefinitionOutput struct {
 	// The date and time the schema was created.
 	CreatedTime *string `type:"string"`
 
-	// The data format of the schema definition. Currently only AVRO and JSON are
-	// supported.
+	// The data format of the schema definition. Currently AVRO, JSON and PROTOBUF
+	// are supported.
 	DataFormat *string `type:"string" enum:"DataFormat"`
 
 	// The Amazon Resource Name (ARN) of the schema.
@@ -34222,7 +40177,8 @@ type GetSchemaOutput struct {
 	// The date and time the schema was created.
 	CreatedTime *string `type:"string"`
 
-	// The data format of the schema definition. Currently AVRO and JSON are supported.
+	// The data format of the schema definition. Currently AVRO, JSON and PROTOBUF
+	// are supported.
 	DataFormat *string `type:"string" enum:"DataFormat"`
 
 	// A description of schema if specified when created
@@ -34439,7 +40395,8 @@ type GetSchemaVersionOutput struct {
 	// The date and time the schema version was created.
 	CreatedTime *string `type:"string"`
 
-	// The data format of the schema definition. Currently AVRO and JSON are supported.
+	// The data format of the schema definition. Currently AVRO, JSON and PROTOBUF
+	// are supported.
 	DataFormat *string `type:"string" enum:"DataFormat"`
 
 	// The Amazon Resource Name (ARN) of the schema.
@@ -34832,6 +40789,204 @@ func (s *GetSecurityConfigurationsOutput) SetSecurityConfigurations(v []*Securit
 	return s
 }
 
+type GetSessionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the session.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The origin of the request.
+	RequestOrigin *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSessionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSessionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSessionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSessionInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *GetSessionInput) SetId(v string) *GetSessionInput {
+	s.Id = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *GetSessionInput) SetRequestOrigin(v string) *GetSessionInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+type GetSessionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The session object is returned in the response.
+	Session *Session `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSessionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSessionOutput) GoString() string {
+	return s.String()
+}
+
+// SetSession sets the Session field's value.
+func (s *GetSessionOutput) SetSession(v *Session) *GetSessionOutput {
+	s.Session = v
+	return s
+}
+
+type GetStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Id of the statement.
+	//
+	// Id is a required field
+	Id *int64 `type:"integer" required:"true"`
+
+	// The origin of the request.
+	RequestOrigin *string `min:"1" type:"string"`
+
+	// The Session ID of the statement.
+	//
+	// SessionId is a required field
+	SessionId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetStatementInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+	if s.SessionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SessionId"))
+	}
+	if s.SessionId != nil && len(*s.SessionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SessionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *GetStatementInput) SetId(v int64) *GetStatementInput {
+	s.Id = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *GetStatementInput) SetRequestOrigin(v string) *GetStatementInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *GetStatementInput) SetSessionId(v string) *GetStatementInput {
+	s.SessionId = &v
+	return s
+}
+
+type GetStatementOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the statement.
+	Statement *Statement `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStatementOutput) GoString() string {
+	return s.String()
+}
+
+// SetStatement sets the Statement field's value.
+func (s *GetStatementOutput) SetStatement(v *Statement) *GetStatementOutput {
+	s.Statement = v
+	return s
+}
+
 type GetTableInput struct {
 	_ struct{} `type:"structure"`
 
@@ -34850,6 +41005,13 @@ type GetTableInput struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	// The time as of when to read the table contents. If not set, the most recent
+	// transaction commit time will be used. Cannot be specified along with TransactionId.
+	QueryAsOfTime *time.Time `type:"timestamp"`
+
+	// The transaction ID at which to read the table contents.
+	TransactionId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -34888,6 +41050,9 @@ func (s *GetTableInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.TransactionId != nil && len(*s.TransactionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TransactionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -34910,6 +41075,18 @@ func (s *GetTableInput) SetDatabaseName(v string) *GetTableInput {
 // SetName sets the Name field's value.
 func (s *GetTableInput) SetName(v string) *GetTableInput {
 	s.Name = &v
+	return s
+}
+
+// SetQueryAsOfTime sets the QueryAsOfTime field's value.
+func (s *GetTableInput) SetQueryAsOfTime(v time.Time) *GetTableInput {
+	s.QueryAsOfTime = &v
+	return s
+}
+
+// SetTransactionId sets the TransactionId field's value.
+func (s *GetTableInput) SetTransactionId(v string) *GetTableInput {
+	s.TransactionId = &v
 	return s
 }
 
@@ -35232,6 +41409,13 @@ type GetTablesInput struct {
 
 	// A continuation token, included if this is a continuation call.
 	NextToken *string `type:"string"`
+
+	// The time as of when to read the table contents. If not set, the most recent
+	// transaction commit time will be used. Cannot be specified along with TransactionId.
+	QueryAsOfTime *time.Time `type:"timestamp"`
+
+	// The transaction ID at which to read the table contents.
+	TransactionId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -35267,6 +41451,9 @@ func (s *GetTablesInput) Validate() error {
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
+	if s.TransactionId != nil && len(*s.TransactionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TransactionId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -35301,6 +41488,18 @@ func (s *GetTablesInput) SetMaxResults(v int64) *GetTablesInput {
 // SetNextToken sets the NextToken field's value.
 func (s *GetTablesInput) SetNextToken(v string) *GetTablesInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetQueryAsOfTime sets the QueryAsOfTime field's value.
+func (s *GetTablesInput) SetQueryAsOfTime(v time.Time) *GetTablesInput {
+	s.QueryAsOfTime = &v
+	return s
+}
+
+// SetTransactionId sets the TransactionId field's value.
+func (s *GetTablesInput) SetTransactionId(v string) *GetTablesInput {
+	s.TransactionId = &v
 	return s
 }
 
@@ -35607,6 +41806,503 @@ func (s *GetTriggersOutput) SetNextToken(v string) *GetTriggersOutput {
 // SetTriggers sets the Triggers field's value.
 func (s *GetTriggersOutput) SetTriggers(v []*Trigger) *GetTriggersOutput {
 	s.Triggers = v
+	return s
+}
+
+type GetUnfilteredPartitionMetadataInput struct {
+	_ struct{} `type:"structure"`
+
+	// A structure containing information for audit.
+	AuditContext *AuditContext `type:"structure"`
+
+	// CatalogId is a required field
+	CatalogId *string `min:"1" type:"string" required:"true"`
+
+	// DatabaseName is a required field
+	DatabaseName *string `min:"1" type:"string" required:"true"`
+
+	// PartitionValues is a required field
+	PartitionValues []*string `type:"list" required:"true"`
+
+	// SupportedPermissionTypes is a required field
+	SupportedPermissionTypes []*string `min:"1" type:"list" required:"true" enum:"PermissionType"`
+
+	// TableName is a required field
+	TableName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetUnfilteredPartitionMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetUnfilteredPartitionMetadataInput"}
+	if s.CatalogId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CatalogId"))
+	}
+	if s.CatalogId != nil && len(*s.CatalogId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CatalogId", 1))
+	}
+	if s.DatabaseName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DatabaseName"))
+	}
+	if s.DatabaseName != nil && len(*s.DatabaseName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DatabaseName", 1))
+	}
+	if s.PartitionValues == nil {
+		invalidParams.Add(request.NewErrParamRequired("PartitionValues"))
+	}
+	if s.SupportedPermissionTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("SupportedPermissionTypes"))
+	}
+	if s.SupportedPermissionTypes != nil && len(s.SupportedPermissionTypes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SupportedPermissionTypes", 1))
+	}
+	if s.TableName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TableName"))
+	}
+	if s.TableName != nil && len(*s.TableName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TableName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuditContext sets the AuditContext field's value.
+func (s *GetUnfilteredPartitionMetadataInput) SetAuditContext(v *AuditContext) *GetUnfilteredPartitionMetadataInput {
+	s.AuditContext = v
+	return s
+}
+
+// SetCatalogId sets the CatalogId field's value.
+func (s *GetUnfilteredPartitionMetadataInput) SetCatalogId(v string) *GetUnfilteredPartitionMetadataInput {
+	s.CatalogId = &v
+	return s
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *GetUnfilteredPartitionMetadataInput) SetDatabaseName(v string) *GetUnfilteredPartitionMetadataInput {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetPartitionValues sets the PartitionValues field's value.
+func (s *GetUnfilteredPartitionMetadataInput) SetPartitionValues(v []*string) *GetUnfilteredPartitionMetadataInput {
+	s.PartitionValues = v
+	return s
+}
+
+// SetSupportedPermissionTypes sets the SupportedPermissionTypes field's value.
+func (s *GetUnfilteredPartitionMetadataInput) SetSupportedPermissionTypes(v []*string) *GetUnfilteredPartitionMetadataInput {
+	s.SupportedPermissionTypes = v
+	return s
+}
+
+// SetTableName sets the TableName field's value.
+func (s *GetUnfilteredPartitionMetadataInput) SetTableName(v string) *GetUnfilteredPartitionMetadataInput {
+	s.TableName = &v
+	return s
+}
+
+type GetUnfilteredPartitionMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	AuthorizedColumns []*string `type:"list"`
+
+	IsRegisteredWithLakeFormation *bool `type:"boolean"`
+
+	// Represents a slice of table data.
+	Partition *Partition `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetAuthorizedColumns sets the AuthorizedColumns field's value.
+func (s *GetUnfilteredPartitionMetadataOutput) SetAuthorizedColumns(v []*string) *GetUnfilteredPartitionMetadataOutput {
+	s.AuthorizedColumns = v
+	return s
+}
+
+// SetIsRegisteredWithLakeFormation sets the IsRegisteredWithLakeFormation field's value.
+func (s *GetUnfilteredPartitionMetadataOutput) SetIsRegisteredWithLakeFormation(v bool) *GetUnfilteredPartitionMetadataOutput {
+	s.IsRegisteredWithLakeFormation = &v
+	return s
+}
+
+// SetPartition sets the Partition field's value.
+func (s *GetUnfilteredPartitionMetadataOutput) SetPartition(v *Partition) *GetUnfilteredPartitionMetadataOutput {
+	s.Partition = v
+	return s
+}
+
+type GetUnfilteredPartitionsMetadataInput struct {
+	_ struct{} `type:"structure"`
+
+	// A structure containing information for audit.
+	AuditContext *AuditContext `type:"structure"`
+
+	// CatalogId is a required field
+	CatalogId *string `min:"1" type:"string" required:"true"`
+
+	// DatabaseName is a required field
+	DatabaseName *string `min:"1" type:"string" required:"true"`
+
+	Expression *string `type:"string"`
+
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	// Defines a non-overlapping region of a table's partitions, allowing multiple
+	// requests to be run in parallel.
+	Segment *Segment `type:"structure"`
+
+	// SupportedPermissionTypes is a required field
+	SupportedPermissionTypes []*string `min:"1" type:"list" required:"true" enum:"PermissionType"`
+
+	// TableName is a required field
+	TableName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionsMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionsMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetUnfilteredPartitionsMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetUnfilteredPartitionsMetadataInput"}
+	if s.CatalogId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CatalogId"))
+	}
+	if s.CatalogId != nil && len(*s.CatalogId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CatalogId", 1))
+	}
+	if s.DatabaseName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DatabaseName"))
+	}
+	if s.DatabaseName != nil && len(*s.DatabaseName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DatabaseName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.SupportedPermissionTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("SupportedPermissionTypes"))
+	}
+	if s.SupportedPermissionTypes != nil && len(s.SupportedPermissionTypes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SupportedPermissionTypes", 1))
+	}
+	if s.TableName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TableName"))
+	}
+	if s.TableName != nil && len(*s.TableName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TableName", 1))
+	}
+	if s.Segment != nil {
+		if err := s.Segment.Validate(); err != nil {
+			invalidParams.AddNested("Segment", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuditContext sets the AuditContext field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetAuditContext(v *AuditContext) *GetUnfilteredPartitionsMetadataInput {
+	s.AuditContext = v
+	return s
+}
+
+// SetCatalogId sets the CatalogId field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetCatalogId(v string) *GetUnfilteredPartitionsMetadataInput {
+	s.CatalogId = &v
+	return s
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetDatabaseName(v string) *GetUnfilteredPartitionsMetadataInput {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetExpression sets the Expression field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetExpression(v string) *GetUnfilteredPartitionsMetadataInput {
+	s.Expression = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetMaxResults(v int64) *GetUnfilteredPartitionsMetadataInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetNextToken(v string) *GetUnfilteredPartitionsMetadataInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSegment sets the Segment field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetSegment(v *Segment) *GetUnfilteredPartitionsMetadataInput {
+	s.Segment = v
+	return s
+}
+
+// SetSupportedPermissionTypes sets the SupportedPermissionTypes field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetSupportedPermissionTypes(v []*string) *GetUnfilteredPartitionsMetadataInput {
+	s.SupportedPermissionTypes = v
+	return s
+}
+
+// SetTableName sets the TableName field's value.
+func (s *GetUnfilteredPartitionsMetadataInput) SetTableName(v string) *GetUnfilteredPartitionsMetadataInput {
+	s.TableName = &v
+	return s
+}
+
+type GetUnfilteredPartitionsMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	UnfilteredPartitions []*UnfilteredPartition `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionsMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredPartitionsMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetUnfilteredPartitionsMetadataOutput) SetNextToken(v string) *GetUnfilteredPartitionsMetadataOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetUnfilteredPartitions sets the UnfilteredPartitions field's value.
+func (s *GetUnfilteredPartitionsMetadataOutput) SetUnfilteredPartitions(v []*UnfilteredPartition) *GetUnfilteredPartitionsMetadataOutput {
+	s.UnfilteredPartitions = v
+	return s
+}
+
+type GetUnfilteredTableMetadataInput struct {
+	_ struct{} `type:"structure"`
+
+	// A structure containing information for audit.
+	AuditContext *AuditContext `type:"structure"`
+
+	// CatalogId is a required field
+	CatalogId *string `min:"1" type:"string" required:"true"`
+
+	// DatabaseName is a required field
+	DatabaseName *string `min:"1" type:"string" required:"true"`
+
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// SupportedPermissionTypes is a required field
+	SupportedPermissionTypes []*string `min:"1" type:"list" required:"true" enum:"PermissionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredTableMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredTableMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetUnfilteredTableMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetUnfilteredTableMetadataInput"}
+	if s.CatalogId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CatalogId"))
+	}
+	if s.CatalogId != nil && len(*s.CatalogId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CatalogId", 1))
+	}
+	if s.DatabaseName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DatabaseName"))
+	}
+	if s.DatabaseName != nil && len(*s.DatabaseName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DatabaseName", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.SupportedPermissionTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("SupportedPermissionTypes"))
+	}
+	if s.SupportedPermissionTypes != nil && len(s.SupportedPermissionTypes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SupportedPermissionTypes", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuditContext sets the AuditContext field's value.
+func (s *GetUnfilteredTableMetadataInput) SetAuditContext(v *AuditContext) *GetUnfilteredTableMetadataInput {
+	s.AuditContext = v
+	return s
+}
+
+// SetCatalogId sets the CatalogId field's value.
+func (s *GetUnfilteredTableMetadataInput) SetCatalogId(v string) *GetUnfilteredTableMetadataInput {
+	s.CatalogId = &v
+	return s
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *GetUnfilteredTableMetadataInput) SetDatabaseName(v string) *GetUnfilteredTableMetadataInput {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetUnfilteredTableMetadataInput) SetName(v string) *GetUnfilteredTableMetadataInput {
+	s.Name = &v
+	return s
+}
+
+// SetSupportedPermissionTypes sets the SupportedPermissionTypes field's value.
+func (s *GetUnfilteredTableMetadataInput) SetSupportedPermissionTypes(v []*string) *GetUnfilteredTableMetadataInput {
+	s.SupportedPermissionTypes = v
+	return s
+}
+
+type GetUnfilteredTableMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	AuthorizedColumns []*string `type:"list"`
+
+	CellFilters []*ColumnRowFilter `type:"list"`
+
+	IsRegisteredWithLakeFormation *bool `type:"boolean"`
+
+	// Represents a collection of related data organized in columns and rows.
+	Table *TableData `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredTableMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetUnfilteredTableMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetAuthorizedColumns sets the AuthorizedColumns field's value.
+func (s *GetUnfilteredTableMetadataOutput) SetAuthorizedColumns(v []*string) *GetUnfilteredTableMetadataOutput {
+	s.AuthorizedColumns = v
+	return s
+}
+
+// SetCellFilters sets the CellFilters field's value.
+func (s *GetUnfilteredTableMetadataOutput) SetCellFilters(v []*ColumnRowFilter) *GetUnfilteredTableMetadataOutput {
+	s.CellFilters = v
+	return s
+}
+
+// SetIsRegisteredWithLakeFormation sets the IsRegisteredWithLakeFormation field's value.
+func (s *GetUnfilteredTableMetadataOutput) SetIsRegisteredWithLakeFormation(v bool) *GetUnfilteredTableMetadataOutput {
+	s.IsRegisteredWithLakeFormation = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *GetUnfilteredTableMetadataOutput) SetTable(v *TableData) *GetUnfilteredTableMetadataOutput {
+	s.Table = v
 	return s
 }
 
@@ -36330,6 +43026,319 @@ func (s *GluePolicy) SetUpdateTime(v time.Time) *GluePolicy {
 	return s
 }
 
+// Specifies a user-defined schema when a schema cannot be determined by AWS
+// Glue.
+type GlueSchema struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the column definitions that make up a Glue schema.
+	Columns []*GlueStudioSchemaColumn `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GlueSchema) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GlueSchema) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GlueSchema) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GlueSchema"}
+	if s.Columns != nil {
+		for i, v := range s.Columns {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Columns", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetColumns sets the Columns field's value.
+func (s *GlueSchema) SetColumns(v []*GlueStudioSchemaColumn) *GlueSchema {
+	s.Columns = v
+	return s
+}
+
+// Specifies a single column in a Glue schema definition.
+type GlueStudioSchemaColumn struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the column in the Glue Studio schema.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The hive type for this column in the Glue Studio schema.
+	Type *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GlueStudioSchemaColumn) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GlueStudioSchemaColumn) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GlueStudioSchemaColumn) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GlueStudioSchemaColumn"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *GlueStudioSchemaColumn) SetName(v string) *GlueStudioSchemaColumn {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *GlueStudioSchemaColumn) SetType(v string) *GlueStudioSchemaColumn {
+	s.Type = &v
+	return s
+}
+
+// Specifies the data store in the governed Glue Data Catalog.
+type GovernedCatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies additional connection options.
+	AdditionalOptions *S3SourceAdditionalOptions `type:"structure"`
+
+	// The database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Partitions satisfying this predicate are deleted. Files within the retention
+	// period in these partitions are not deleted. Set to "" – empty by default.
+	PartitionPredicate *string `type:"string"`
+
+	// The database table to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GovernedCatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GovernedCatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GovernedCatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GovernedCatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *GovernedCatalogSource) SetAdditionalOptions(v *S3SourceAdditionalOptions) *GovernedCatalogSource {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetDatabase sets the Database field's value.
+func (s *GovernedCatalogSource) SetDatabase(v string) *GovernedCatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GovernedCatalogSource) SetName(v string) *GovernedCatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetPartitionPredicate sets the PartitionPredicate field's value.
+func (s *GovernedCatalogSource) SetPartitionPredicate(v string) *GovernedCatalogSource {
+	s.PartitionPredicate = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *GovernedCatalogSource) SetTable(v string) *GovernedCatalogSource {
+	s.Table = &v
+	return s
+}
+
+// Specifies a data target that writes to Amazon S3 using the Glue Data Catalog.
+type GovernedCatalogTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to write to.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies native partitioning using a sequence of keys.
+	PartitionKeys [][]*string `type:"list"`
+
+	// A policy that specifies update behavior for the governed catalog.
+	SchemaChangePolicy *CatalogSchemaChangePolicy `type:"structure"`
+
+	// The name of the table in the database to write to.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GovernedCatalogTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GovernedCatalogTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GovernedCatalogTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GovernedCatalogTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *GovernedCatalogTarget) SetDatabase(v string) *GovernedCatalogTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *GovernedCatalogTarget) SetInputs(v []*string) *GovernedCatalogTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GovernedCatalogTarget) SetName(v string) *GovernedCatalogTarget {
+	s.Name = &v
+	return s
+}
+
+// SetPartitionKeys sets the PartitionKeys field's value.
+func (s *GovernedCatalogTarget) SetPartitionKeys(v [][]*string) *GovernedCatalogTarget {
+	s.PartitionKeys = v
+	return s
+}
+
+// SetSchemaChangePolicy sets the SchemaChangePolicy field's value.
+func (s *GovernedCatalogTarget) SetSchemaChangePolicy(v *CatalogSchemaChangePolicy) *GovernedCatalogTarget {
+	s.SchemaChangePolicy = v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *GovernedCatalogTarget) SetTable(v string) *GovernedCatalogTarget {
+	s.Table = &v
+	return s
+}
+
 // A classifier that uses grok patterns.
 type GrokClassifier struct {
 	_ struct{} `type:"structure"`
@@ -36490,10 +43499,12 @@ func (s *IdempotentParameterMismatchException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The blueprint is in an invalid state to perform a requested operation.
 type IllegalBlueprintStateException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
+	// A message describing the problem.
 	Message_ *string `locationName:"Message" type:"string"`
 }
 
@@ -36550,6 +43561,71 @@ func (s *IllegalBlueprintStateException) StatusCode() int {
 
 // RequestID returns the service's response RequestID for request.
 func (s *IllegalBlueprintStateException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The session is in an invalid state to perform a requested operation.
+type IllegalSessionStateException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A message describing the problem.
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IllegalSessionStateException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IllegalSessionStateException) GoString() string {
+	return s.String()
+}
+
+func newErrorIllegalSessionStateException(v protocol.ResponseMetadata) error {
+	return &IllegalSessionStateException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *IllegalSessionStateException) Code() string {
+	return "IllegalSessionStateException"
+}
+
+// Message returns the exception's message.
+func (s *IllegalSessionStateException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *IllegalSessionStateException) OrigErr() error {
+	return nil
+}
+
+func (s *IllegalSessionStateException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *IllegalSessionStateException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *IllegalSessionStateException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
@@ -36857,6 +43933,469 @@ func (s *InvalidInputException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// An error that indicates your data is in an invalid state.
+type InvalidStateException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A message describing the problem.
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidStateException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidStateException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidStateException(v protocol.ResponseMetadata) error {
+	return &InvalidStateException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidStateException) Code() string {
+	return "InvalidStateException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidStateException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidStateException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidStateException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidStateException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidStateException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Additional connection options for the connector.
+type JDBCConnectorOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Custom data type mapping that builds a mapping from a JDBC data type to an
+	// Glue data type. For example, the option "dataTypeMapping":{"FLOAT":"STRING"}
+	// maps data fields of JDBC type FLOAT into the Java String type by calling
+	// the ResultSet.getString() method of the driver, and uses it to build the
+	// Glue record. The ResultSet object is implemented by each driver, so the behavior
+	// is specific to the driver you use. Refer to the documentation for your JDBC
+	// driver to understand how the driver performs the conversions.
+	DataTypeMapping map[string]*string `type:"map"`
+
+	// Extra condition clause to filter data from source. For example:
+	//
+	// BillingCity='Mountain View'
+	//
+	// When using a query instead of a table name, you should validate that the
+	// query works with the specified filterPredicate.
+	FilterPredicate *string `type:"string"`
+
+	// The name of the job bookmark keys on which to sort.
+	JobBookmarkKeys []*string `type:"list"`
+
+	// Specifies an ascending or descending sort order.
+	JobBookmarkKeysSortOrder *string `type:"string"`
+
+	// The minimum value of partitionColumn that is used to decide partition stride.
+	LowerBound *int64 `type:"long"`
+
+	// The number of partitions. This value, along with lowerBound (inclusive) and
+	// upperBound (exclusive), form partition strides for generated WHERE clause
+	// expressions that are used to split the partitionColumn.
+	NumPartitions *int64 `type:"long"`
+
+	// The name of an integer column that is used for partitioning. This option
+	// works only when it's included with lowerBound, upperBound, and numPartitions.
+	// This option works the same way as in the Spark SQL JDBC reader.
+	PartitionColumn *string `type:"string"`
+
+	// The maximum value of partitionColumn that is used to decide partition stride.
+	UpperBound *int64 `type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JDBCConnectorOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JDBCConnectorOptions) GoString() string {
+	return s.String()
+}
+
+// SetDataTypeMapping sets the DataTypeMapping field's value.
+func (s *JDBCConnectorOptions) SetDataTypeMapping(v map[string]*string) *JDBCConnectorOptions {
+	s.DataTypeMapping = v
+	return s
+}
+
+// SetFilterPredicate sets the FilterPredicate field's value.
+func (s *JDBCConnectorOptions) SetFilterPredicate(v string) *JDBCConnectorOptions {
+	s.FilterPredicate = &v
+	return s
+}
+
+// SetJobBookmarkKeys sets the JobBookmarkKeys field's value.
+func (s *JDBCConnectorOptions) SetJobBookmarkKeys(v []*string) *JDBCConnectorOptions {
+	s.JobBookmarkKeys = v
+	return s
+}
+
+// SetJobBookmarkKeysSortOrder sets the JobBookmarkKeysSortOrder field's value.
+func (s *JDBCConnectorOptions) SetJobBookmarkKeysSortOrder(v string) *JDBCConnectorOptions {
+	s.JobBookmarkKeysSortOrder = &v
+	return s
+}
+
+// SetLowerBound sets the LowerBound field's value.
+func (s *JDBCConnectorOptions) SetLowerBound(v int64) *JDBCConnectorOptions {
+	s.LowerBound = &v
+	return s
+}
+
+// SetNumPartitions sets the NumPartitions field's value.
+func (s *JDBCConnectorOptions) SetNumPartitions(v int64) *JDBCConnectorOptions {
+	s.NumPartitions = &v
+	return s
+}
+
+// SetPartitionColumn sets the PartitionColumn field's value.
+func (s *JDBCConnectorOptions) SetPartitionColumn(v string) *JDBCConnectorOptions {
+	s.PartitionColumn = &v
+	return s
+}
+
+// SetUpperBound sets the UpperBound field's value.
+func (s *JDBCConnectorOptions) SetUpperBound(v int64) *JDBCConnectorOptions {
+	s.UpperBound = &v
+	return s
+}
+
+// Specifies a connector to a JDBC data source.
+type JDBCConnectorSource struct {
+	_ struct{} `type:"structure"`
+
+	// Additional connection options for the connector.
+	AdditionalOptions *JDBCConnectorOptions `type:"structure"`
+
+	// The name of the connection that is associated with the connector.
+	//
+	// ConnectionName is a required field
+	ConnectionName *string `type:"string" required:"true"`
+
+	// The name of the table in the data source.
+	ConnectionTable *string `type:"string"`
+
+	// The type of connection, such as marketplace.jdbc or custom.jdbc, designating
+	// a connection to a JDBC data store.
+	//
+	// ConnectionType is a required field
+	ConnectionType *string `type:"string" required:"true"`
+
+	// The name of a connector that assists with accessing the data store in Glue
+	// Studio.
+	//
+	// ConnectorName is a required field
+	ConnectorName *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the custom JDBC source.
+	OutputSchemas []*GlueSchema `type:"list"`
+
+	// The table or SQL query to get the data from. You can specify either ConnectionTable
+	// or query, but not both.
+	Query *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JDBCConnectorSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JDBCConnectorSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JDBCConnectorSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JDBCConnectorSource"}
+	if s.ConnectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionName"))
+	}
+	if s.ConnectionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionType"))
+	}
+	if s.ConnectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorName"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *JDBCConnectorSource) SetAdditionalOptions(v *JDBCConnectorOptions) *JDBCConnectorSource {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *JDBCConnectorSource) SetConnectionName(v string) *JDBCConnectorSource {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetConnectionTable sets the ConnectionTable field's value.
+func (s *JDBCConnectorSource) SetConnectionTable(v string) *JDBCConnectorSource {
+	s.ConnectionTable = &v
+	return s
+}
+
+// SetConnectionType sets the ConnectionType field's value.
+func (s *JDBCConnectorSource) SetConnectionType(v string) *JDBCConnectorSource {
+	s.ConnectionType = &v
+	return s
+}
+
+// SetConnectorName sets the ConnectorName field's value.
+func (s *JDBCConnectorSource) SetConnectorName(v string) *JDBCConnectorSource {
+	s.ConnectorName = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *JDBCConnectorSource) SetName(v string) *JDBCConnectorSource {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *JDBCConnectorSource) SetOutputSchemas(v []*GlueSchema) *JDBCConnectorSource {
+	s.OutputSchemas = v
+	return s
+}
+
+// SetQuery sets the Query field's value.
+func (s *JDBCConnectorSource) SetQuery(v string) *JDBCConnectorSource {
+	s.Query = &v
+	return s
+}
+
+// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+// storage.
+type JDBCConnectorTarget struct {
+	_ struct{} `type:"structure"`
+
+	// Additional connection options for the connector.
+	AdditionalOptions map[string]*string `type:"map"`
+
+	// The name of the connection that is associated with the connector.
+	//
+	// ConnectionName is a required field
+	ConnectionName *string `type:"string" required:"true"`
+
+	// The name of the table in the data target.
+	//
+	// ConnectionTable is a required field
+	ConnectionTable *string `type:"string" required:"true"`
+
+	// The type of connection, such as marketplace.jdbc or custom.jdbc, designating
+	// a connection to a JDBC data target.
+	//
+	// ConnectionType is a required field
+	ConnectionType *string `type:"string" required:"true"`
+
+	// The name of a connector that will be used.
+	//
+	// ConnectorName is a required field
+	ConnectorName *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the JDBC target.
+	OutputSchemas []*GlueSchema `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JDBCConnectorTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JDBCConnectorTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JDBCConnectorTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JDBCConnectorTarget"}
+	if s.ConnectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionName"))
+	}
+	if s.ConnectionTable == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionTable"))
+	}
+	if s.ConnectionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionType"))
+	}
+	if s.ConnectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorName"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *JDBCConnectorTarget) SetAdditionalOptions(v map[string]*string) *JDBCConnectorTarget {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *JDBCConnectorTarget) SetConnectionName(v string) *JDBCConnectorTarget {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetConnectionTable sets the ConnectionTable field's value.
+func (s *JDBCConnectorTarget) SetConnectionTable(v string) *JDBCConnectorTarget {
+	s.ConnectionTable = &v
+	return s
+}
+
+// SetConnectionType sets the ConnectionType field's value.
+func (s *JDBCConnectorTarget) SetConnectionType(v string) *JDBCConnectorTarget {
+	s.ConnectionType = &v
+	return s
+}
+
+// SetConnectorName sets the ConnectorName field's value.
+func (s *JDBCConnectorTarget) SetConnectorName(v string) *JDBCConnectorTarget {
+	s.ConnectorName = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *JDBCConnectorTarget) SetInputs(v []*string) *JDBCConnectorTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *JDBCConnectorTarget) SetName(v string) *JDBCConnectorTarget {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *JDBCConnectorTarget) SetOutputSchemas(v []*GlueSchema) *JDBCConnectorTarget {
+	s.OutputSchemas = v
+	return s
+}
+
 // Specifies a JDBC data store to crawl.
 type JdbcTarget struct {
 	_ struct{} `type:"structure"`
@@ -36915,12 +44454,21 @@ type Job struct {
 	// This field is deprecated. Use MaxCapacity instead.
 	//
 	// The number of Glue data processing units (DPUs) allocated to runs of this
-	// job. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative
-	// measure of processing power that consists of 4 vCPUs of compute capacity
-	// and 16 GB of memory. For more information, see the Glue pricing page (https://aws.amazon.com/glue/pricing/).
+	// job. You can allocate a minimum of 2 DPUs; the default is 10. A DPU is a
+	// relative measure of processing power that consists of 4 vCPUs of compute
+	// capacity and 16 GB of memory. For more information, see the Glue pricing
+	// page (https://aws.amazon.com/glue/pricing/).
 	//
 	// Deprecated: This property is deprecated, use MaxCapacity instead.
 	AllocatedCapacity *int64 `deprecated:"true" type:"integer"`
+
+	// The representation of a directed acyclic graph on which both the Glue Studio
+	// visual component and Glue Studio code generation is based.
+	//
+	// CodeGenConfigurationNodes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Job's
+	// String and GoString methods.
+	CodeGenConfigurationNodes map[string]*CodeGenConfigurationNode `type:"map" sensitive:"true"`
 
 	// The JobCommand that runs this job.
 	Command *JobCommand `type:"structure"`
@@ -36947,6 +44495,18 @@ type Job struct {
 
 	// A description of the job.
 	Description *string `type:"string"`
+
+	// Indicates whether the job is run with a standard or flexible execution class.
+	// The standard execution class is ideal for time-sensitive workloads that require
+	// fast job startup and dedicated resources.
+	//
+	// The flexible execution class is appropriate for time-insensitive jobs whose
+	// start and completion times may vary.
+	//
+	// Only jobs with Glue version 3.0 and above and command type glueetl will be
+	// allowed to set ExecutionClass to FLEX. The flexible execution class is available
+	// for Spark jobs.
+	ExecutionClass *string `type:"string" enum:"ExecutionClass"`
 
 	// An ExecutionProperty specifying the maximum number of concurrent runs allowed
 	// for this job.
@@ -36986,7 +44546,7 @@ type Job struct {
 	//
 	//    * When you specify an Apache Spark ETL job (JobCommand.Name="glueetl")
 	//    or Apache Spark streaming ETL job (JobCommand.Name="gluestreaming"), you
-	//    can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type
+	//    can allocate a minimum of 2 DPUs. The default is 10 DPUs. This job type
 	//    cannot have a fractional DPU allocation.
 	//
 	// For Glue version 2.0 jobs, you cannot instead specify a Maximum capacity.
@@ -37007,9 +44567,6 @@ type Job struct {
 
 	// The number of workers of a defined workerType that are allocated when a job
 	// runs.
-	//
-	// The maximum number of workers you can define are 299 for G.1X, and 149 for
-	// G.2X.
 	NumberOfWorkers *int64 `type:"integer"`
 
 	// The name or Amazon Resource Name (ARN) of the IAM role associated with this
@@ -37025,7 +44582,7 @@ type Job struct {
 	Timeout *int64 `min:"1" type:"integer"`
 
 	// The type of predefined worker that is allocated when a job runs. Accepts
-	// a value of Standard, G.1X, or G.2X.
+	// a value of Standard, G.1X, G.2X, or G.025X.
 	//
 	//    * For the Standard worker type, each worker provides 4 vCPU, 16 GB of
 	//    memory and a 50GB disk, and 2 executors per worker.
@@ -37037,6 +44594,11 @@ type Job struct {
 	//    * For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of
 	//    memory, 128 GB disk), and provides 1 executor per worker. We recommend
 	//    this worker type for memory-intensive jobs.
+	//
+	//    * For the G.025X worker type, each worker maps to 0.25 DPU (2 vCPU, 4
+	//    GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for low volume streaming jobs. This worker type is only
+	//    available for Glue version 3.0 streaming jobs.
 	WorkerType *string `type:"string" enum:"WorkerType"`
 }
 
@@ -37061,6 +44623,12 @@ func (s Job) GoString() string {
 // SetAllocatedCapacity sets the AllocatedCapacity field's value.
 func (s *Job) SetAllocatedCapacity(v int64) *Job {
 	s.AllocatedCapacity = &v
+	return s
+}
+
+// SetCodeGenConfigurationNodes sets the CodeGenConfigurationNodes field's value.
+func (s *Job) SetCodeGenConfigurationNodes(v map[string]*CodeGenConfigurationNode) *Job {
+	s.CodeGenConfigurationNodes = v
 	return s
 }
 
@@ -37091,6 +44659,12 @@ func (s *Job) SetDefaultArguments(v map[string]*string) *Job {
 // SetDescription sets the Description field's value.
 func (s *Job) SetDescription(v string) *Job {
 	s.Description = &v
+	return s
+}
+
+// SetExecutionClass sets the ExecutionClass field's value.
+func (s *Job) SetExecutionClass(v string) *Job {
+	s.ExecutionClass = &v
 	return s
 }
 
@@ -37426,8 +45000,29 @@ type JobRun struct {
 	// The date and time that this job run completed.
 	CompletedOn *time.Time `type:"timestamp"`
 
+	// This field populates only for Auto Scaling job runs, and represents the total
+	// time each executor ran during the lifecycle of a job run in seconds, multiplied
+	// by a DPU factor (1 for G.1X, 2 for G.2X, or 0.25 for G.025X workers). This
+	// value may be different than the executionEngineRuntime * MaxCapacity as in
+	// the case of Auto Scaling jobs, as the number of executors running at a given
+	// time may be less than the MaxCapacity. Therefore, it is possible that the
+	// value of DPUSeconds is less than executionEngineRuntime * MaxCapacity.
+	DPUSeconds *float64 `type:"double"`
+
 	// An error message associated with this job run.
 	ErrorMessage *string `type:"string"`
+
+	// Indicates whether the job is run with a standard or flexible execution class.
+	// The standard execution-class is ideal for time-sensitive workloads that require
+	// fast job startup and dedicated resources.
+	//
+	// The flexible execution class is appropriate for time-insensitive jobs whose
+	// start and completion times may vary.
+	//
+	// Only jobs with Glue version 3.0 and above and command type glueetl will be
+	// allowed to set ExecutionClass to FLEX. The flexible execution class is available
+	// for Spark jobs.
+	ExecutionClass *string `type:"string" enum:"ExecutionClass"`
 
 	// The amount of time (in seconds) that the job run consumed resources.
 	ExecutionTime *int64 `type:"integer"`
@@ -37477,7 +45072,7 @@ type JobRun struct {
 	//    you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.
 	//
 	//    * When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"),
-	//    you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job
+	//    you can allocate a minimum of 2 DPUs. The default is 10 DPUs. This job
 	//    type cannot have a fractional DPU allocation.
 	MaxCapacity *float64 `type:"double"`
 
@@ -37486,9 +45081,6 @@ type JobRun struct {
 
 	// The number of workers of a defined workerType that are allocated when a job
 	// runs.
-	//
-	// The maximum number of workers you can define are 299 for G.1X, and 149 for
-	// G.2X.
 	NumberOfWorkers *int64 `type:"integer"`
 
 	// A list of predecessors to this job run.
@@ -37506,16 +45098,18 @@ type JobRun struct {
 	StartedOn *time.Time `type:"timestamp"`
 
 	// The JobRun timeout in minutes. This is the maximum time that a job run can
-	// consume resources before it is terminated and enters TIMEOUT status. The
-	// default is 2,880 minutes (48 hours). This overrides the timeout value set
-	// in the parent job.
+	// consume resources before it is terminated and enters TIMEOUT status. This
+	// value overrides the timeout value set in the parent job.
+	//
+	// Streaming jobs do not have a timeout. The default for non-streaming jobs
+	// is 2,880 minutes (48 hours).
 	Timeout *int64 `min:"1" type:"integer"`
 
 	// The name of the trigger that started this job run.
 	TriggerName *string `min:"1" type:"string"`
 
 	// The type of predefined worker that is allocated when a job runs. Accepts
-	// a value of Standard, G.1X, or G.2X.
+	// a value of Standard, G.1X, G.2X, or G.025X.
 	//
 	//    * For the Standard worker type, each worker provides 4 vCPU, 16 GB of
 	//    memory and a 50GB disk, and 2 executors per worker.
@@ -37525,6 +45119,11 @@ type JobRun struct {
 	//
 	//    * For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory
 	//    and a 128GB disk, and 1 executor per worker.
+	//
+	//    * For the G.025X worker type, each worker maps to 0.25 DPU (2 vCPU, 4
+	//    GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for low volume streaming jobs. This worker type is only
+	//    available for Glue version 3.0 streaming jobs.
 	WorkerType *string `type:"string" enum:"WorkerType"`
 }
 
@@ -37570,9 +45169,21 @@ func (s *JobRun) SetCompletedOn(v time.Time) *JobRun {
 	return s
 }
 
+// SetDPUSeconds sets the DPUSeconds field's value.
+func (s *JobRun) SetDPUSeconds(v float64) *JobRun {
+	s.DPUSeconds = &v
+	return s
+}
+
 // SetErrorMessage sets the ErrorMessage field's value.
 func (s *JobRun) SetErrorMessage(v string) *JobRun {
 	s.ErrorMessage = &v
+	return s
+}
+
+// SetExecutionClass sets the ExecutionClass field's value.
+func (s *JobRun) SetExecutionClass(v string) *JobRun {
+	s.ExecutionClass = &v
 	return s
 }
 
@@ -37686,12 +45297,20 @@ type JobUpdate struct {
 	// This field is deprecated. Use MaxCapacity instead.
 	//
 	// The number of Glue data processing units (DPUs) to allocate to this job.
-	// You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative
+	// You can allocate a minimum of 2 DPUs; the default is 10. A DPU is a relative
 	// measure of processing power that consists of 4 vCPUs of compute capacity
 	// and 16 GB of memory. For more information, see the Glue pricing page (https://aws.amazon.com/glue/pricing/).
 	//
 	// Deprecated: This property is deprecated, use MaxCapacity instead.
 	AllocatedCapacity *int64 `deprecated:"true" type:"integer"`
+
+	// The representation of a directed acyclic graph on which both the Glue Studio
+	// visual component and Glue Studio code generation is based.
+	//
+	// CodeGenConfigurationNodes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by JobUpdate's
+	// String and GoString methods.
+	CodeGenConfigurationNodes map[string]*CodeGenConfigurationNode `type:"map" sensitive:"true"`
 
 	// The JobCommand that runs this job (required).
 	Command *JobCommand `type:"structure"`
@@ -37715,6 +45334,18 @@ type JobUpdate struct {
 
 	// Description of the job being defined.
 	Description *string `type:"string"`
+
+	// Indicates whether the job is run with a standard or flexible execution class.
+	// The standard execution-class is ideal for time-sensitive workloads that require
+	// fast job startup and dedicated resources.
+	//
+	// The flexible execution class is appropriate for time-insensitive jobs whose
+	// start and completion times may vary.
+	//
+	// Only jobs with Glue version 3.0 and above and command type glueetl will be
+	// allowed to set ExecutionClass to FLEX. The flexible execution class is available
+	// for Spark jobs.
+	ExecutionClass *string `type:"string" enum:"ExecutionClass"`
 
 	// An ExecutionProperty specifying the maximum number of concurrent runs allowed
 	// for this job.
@@ -37748,7 +45379,7 @@ type JobUpdate struct {
 	//
 	//    * When you specify an Apache Spark ETL job (JobCommand.Name="glueetl")
 	//    or Apache Spark streaming ETL job (JobCommand.Name="gluestreaming"), you
-	//    can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type
+	//    can allocate a minimum of 2 DPUs. The default is 10 DPUs. This job type
 	//    cannot have a fractional DPU allocation.
 	//
 	// For Glue version 2.0 jobs, you cannot instead specify a Maximum capacity.
@@ -37766,9 +45397,6 @@ type JobUpdate struct {
 
 	// The number of workers of a defined workerType that are allocated when a job
 	// runs.
-	//
-	// The maximum number of workers you can define are 299 for G.1X, and 149 for
-	// G.2X.
 	NumberOfWorkers *int64 `type:"integer"`
 
 	// The name or Amazon Resource Name (ARN) of the IAM role associated with this
@@ -37784,7 +45412,7 @@ type JobUpdate struct {
 	Timeout *int64 `min:"1" type:"integer"`
 
 	// The type of predefined worker that is allocated when a job runs. Accepts
-	// a value of Standard, G.1X, or G.2X.
+	// a value of Standard, G.1X, G.2X, or G.025X.
 	//
 	//    * For the Standard worker type, each worker provides 4 vCPU, 16 GB of
 	//    memory and a 50GB disk, and 2 executors per worker.
@@ -37796,6 +45424,11 @@ type JobUpdate struct {
 	//    * For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of
 	//    memory, 128 GB disk), and provides 1 executor per worker. We recommend
 	//    this worker type for memory-intensive jobs.
+	//
+	//    * For the G.025X worker type, each worker maps to 0.25 DPU (2 vCPU, 4
+	//    GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for low volume streaming jobs. This worker type is only
+	//    available for Glue version 3.0 streaming jobs.
 	WorkerType *string `type:"string" enum:"WorkerType"`
 }
 
@@ -37829,6 +45462,16 @@ func (s *JobUpdate) Validate() error {
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Timeout", 1))
 	}
+	if s.CodeGenConfigurationNodes != nil {
+		for i, v := range s.CodeGenConfigurationNodes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CodeGenConfigurationNodes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.NotificationProperty != nil {
 		if err := s.NotificationProperty.Validate(); err != nil {
 			invalidParams.AddNested("NotificationProperty", err.(request.ErrInvalidParams))
@@ -37844,6 +45487,12 @@ func (s *JobUpdate) Validate() error {
 // SetAllocatedCapacity sets the AllocatedCapacity field's value.
 func (s *JobUpdate) SetAllocatedCapacity(v int64) *JobUpdate {
 	s.AllocatedCapacity = &v
+	return s
+}
+
+// SetCodeGenConfigurationNodes sets the CodeGenConfigurationNodes field's value.
+func (s *JobUpdate) SetCodeGenConfigurationNodes(v map[string]*CodeGenConfigurationNode) *JobUpdate {
+	s.CodeGenConfigurationNodes = v
 	return s
 }
 
@@ -37868,6 +45517,12 @@ func (s *JobUpdate) SetDefaultArguments(v map[string]*string) *JobUpdate {
 // SetDescription sets the Description field's value.
 func (s *JobUpdate) SetDescription(v string) *JobUpdate {
 	s.Description = &v
+	return s
+}
+
+// SetExecutionClass sets the ExecutionClass field's value.
+func (s *JobUpdate) SetExecutionClass(v string) *JobUpdate {
+	s.ExecutionClass = &v
 	return s
 }
 
@@ -37940,6 +45595,174 @@ func (s *JobUpdate) SetTimeout(v int64) *JobUpdate {
 // SetWorkerType sets the WorkerType field's value.
 func (s *JobUpdate) SetWorkerType(v string) *JobUpdate {
 	s.WorkerType = &v
+	return s
+}
+
+// Specifies a transform that joins two datasets into one dataset using a comparison
+// phrase on the specified data property keys. You can use inner, outer, left,
+// right, left semi, and left anti joins.
+type Join struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the two columns to be joined.
+	//
+	// Columns is a required field
+	Columns []*JoinColumn `min:"2" type:"list" required:"true"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"2" type:"list" required:"true"`
+
+	// Specifies the type of join to be performed on the datasets.
+	//
+	// JoinType is a required field
+	JoinType *string `type:"string" required:"true" enum:"JoinType"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Join) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Join) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Join) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Join"}
+	if s.Columns == nil {
+		invalidParams.Add(request.NewErrParamRequired("Columns"))
+	}
+	if s.Columns != nil && len(s.Columns) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Columns", 2))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 2))
+	}
+	if s.JoinType == nil {
+		invalidParams.Add(request.NewErrParamRequired("JoinType"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Columns != nil {
+		for i, v := range s.Columns {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Columns", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetColumns sets the Columns field's value.
+func (s *Join) SetColumns(v []*JoinColumn) *Join {
+	s.Columns = v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *Join) SetInputs(v []*string) *Join {
+	s.Inputs = v
+	return s
+}
+
+// SetJoinType sets the JoinType field's value.
+func (s *Join) SetJoinType(v string) *Join {
+	s.JoinType = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Join) SetName(v string) *Join {
+	s.Name = &v
+	return s
+}
+
+// Specifies a column to be joined.
+type JoinColumn struct {
+	_ struct{} `type:"structure"`
+
+	// The column to be joined.
+	//
+	// From is a required field
+	From *string `type:"string" required:"true"`
+
+	// The key of the column to be joined.
+	//
+	// Keys is a required field
+	Keys [][]*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JoinColumn) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JoinColumn) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JoinColumn) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JoinColumn"}
+	if s.From == nil {
+		invalidParams.Add(request.NewErrParamRequired("From"))
+	}
+	if s.Keys == nil {
+		invalidParams.Add(request.NewErrParamRequired("Keys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFrom sets the From field's value.
+func (s *JoinColumn) SetFrom(v string) *JoinColumn {
+	s.From = &v
+	return s
+}
+
+// SetKeys sets the Keys field's value.
+func (s *JoinColumn) SetKeys(v [][]*string) *JoinColumn {
+	s.Keys = v
 	return s
 }
 
@@ -38017,6 +45840,180 @@ func (s *JsonClassifier) SetVersion(v int64) *JsonClassifier {
 	return s
 }
 
+// Additional options for streaming.
+type KafkaStreamingSourceOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The specific TopicPartitions to consume. You must specify at least one of
+	// "topicName", "assign" or "subscribePattern".
+	Assign *string `type:"string"`
+
+	// A list of bootstrap server URLs, for example, as b-1.vpc-test-2.o4q88o.c6.kafka.us-east-1.amazonaws.com:9094.
+	// This option must be specified in the API call or defined in the table metadata
+	// in the Data Catalog.
+	BootstrapServers *string `type:"string"`
+
+	// An optional classification.
+	Classification *string `type:"string"`
+
+	// The name of the connection.
+	ConnectionName *string `type:"string"`
+
+	// Specifies the delimiter character.
+	Delimiter *string `type:"string"`
+
+	// The end point when a batch query is ended. Possible values are either "latest"
+	// or a JSON string that specifies an ending offset for each TopicPartition.
+	EndingOffsets *string `type:"string"`
+
+	// The rate limit on the maximum number of offsets that are processed per trigger
+	// interval. The specified total number of offsets is proportionally split across
+	// topicPartitions of different volumes. The default value is null, which means
+	// that the consumer reads all offsets until the known latest offset.
+	MaxOffsetsPerTrigger *int64 `type:"long"`
+
+	// The desired minimum number of partitions to read from Kafka. The default
+	// value is null, which means that the number of spark partitions is equal to
+	// the number of Kafka partitions.
+	MinPartitions *int64 `type:"integer"`
+
+	// The number of times to retry before failing to fetch Kafka offsets. The default
+	// value is 3.
+	NumRetries *int64 `type:"integer"`
+
+	// The timeout in milliseconds to poll data from Kafka in Spark job executors.
+	// The default value is 512.
+	PollTimeoutMs *int64 `type:"long"`
+
+	// The time in milliseconds to wait before retrying to fetch Kafka offsets.
+	// The default value is 10.
+	RetryIntervalMs *int64 `type:"long"`
+
+	// The protocol used to communicate with brokers. The possible values are "SSL"
+	// or "PLAINTEXT".
+	SecurityProtocol *string `type:"string"`
+
+	// The starting position in the Kafka topic to read data from. The possible
+	// values are "earliest" or "latest". The default value is "latest".
+	StartingOffsets *string `type:"string"`
+
+	// A Java regex string that identifies the topic list to subscribe to. You must
+	// specify at least one of "topicName", "assign" or "subscribePattern".
+	SubscribePattern *string `type:"string"`
+
+	// The topic name as specified in Apache Kafka. You must specify at least one
+	// of "topicName", "assign" or "subscribePattern".
+	TopicName *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KafkaStreamingSourceOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KafkaStreamingSourceOptions) GoString() string {
+	return s.String()
+}
+
+// SetAssign sets the Assign field's value.
+func (s *KafkaStreamingSourceOptions) SetAssign(v string) *KafkaStreamingSourceOptions {
+	s.Assign = &v
+	return s
+}
+
+// SetBootstrapServers sets the BootstrapServers field's value.
+func (s *KafkaStreamingSourceOptions) SetBootstrapServers(v string) *KafkaStreamingSourceOptions {
+	s.BootstrapServers = &v
+	return s
+}
+
+// SetClassification sets the Classification field's value.
+func (s *KafkaStreamingSourceOptions) SetClassification(v string) *KafkaStreamingSourceOptions {
+	s.Classification = &v
+	return s
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *KafkaStreamingSourceOptions) SetConnectionName(v string) *KafkaStreamingSourceOptions {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetDelimiter sets the Delimiter field's value.
+func (s *KafkaStreamingSourceOptions) SetDelimiter(v string) *KafkaStreamingSourceOptions {
+	s.Delimiter = &v
+	return s
+}
+
+// SetEndingOffsets sets the EndingOffsets field's value.
+func (s *KafkaStreamingSourceOptions) SetEndingOffsets(v string) *KafkaStreamingSourceOptions {
+	s.EndingOffsets = &v
+	return s
+}
+
+// SetMaxOffsetsPerTrigger sets the MaxOffsetsPerTrigger field's value.
+func (s *KafkaStreamingSourceOptions) SetMaxOffsetsPerTrigger(v int64) *KafkaStreamingSourceOptions {
+	s.MaxOffsetsPerTrigger = &v
+	return s
+}
+
+// SetMinPartitions sets the MinPartitions field's value.
+func (s *KafkaStreamingSourceOptions) SetMinPartitions(v int64) *KafkaStreamingSourceOptions {
+	s.MinPartitions = &v
+	return s
+}
+
+// SetNumRetries sets the NumRetries field's value.
+func (s *KafkaStreamingSourceOptions) SetNumRetries(v int64) *KafkaStreamingSourceOptions {
+	s.NumRetries = &v
+	return s
+}
+
+// SetPollTimeoutMs sets the PollTimeoutMs field's value.
+func (s *KafkaStreamingSourceOptions) SetPollTimeoutMs(v int64) *KafkaStreamingSourceOptions {
+	s.PollTimeoutMs = &v
+	return s
+}
+
+// SetRetryIntervalMs sets the RetryIntervalMs field's value.
+func (s *KafkaStreamingSourceOptions) SetRetryIntervalMs(v int64) *KafkaStreamingSourceOptions {
+	s.RetryIntervalMs = &v
+	return s
+}
+
+// SetSecurityProtocol sets the SecurityProtocol field's value.
+func (s *KafkaStreamingSourceOptions) SetSecurityProtocol(v string) *KafkaStreamingSourceOptions {
+	s.SecurityProtocol = &v
+	return s
+}
+
+// SetStartingOffsets sets the StartingOffsets field's value.
+func (s *KafkaStreamingSourceOptions) SetStartingOffsets(v string) *KafkaStreamingSourceOptions {
+	s.StartingOffsets = &v
+	return s
+}
+
+// SetSubscribePattern sets the SubscribePattern field's value.
+func (s *KafkaStreamingSourceOptions) SetSubscribePattern(v string) *KafkaStreamingSourceOptions {
+	s.SubscribePattern = &v
+	return s
+}
+
+// SetTopicName sets the TopicName field's value.
+func (s *KafkaStreamingSourceOptions) SetTopicName(v string) *KafkaStreamingSourceOptions {
+	s.TopicName = &v
+	return s
+}
+
 // A partition key pair consisting of a name and a type.
 type KeySchemaElement struct {
 	_ struct{} `type:"structure"`
@@ -38062,6 +46059,212 @@ func (s *KeySchemaElement) SetType(v string) *KeySchemaElement {
 	return s
 }
 
+// Additional options for the Amazon Kinesis streaming data source.
+type KinesisStreamingSourceOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Adds a time delay between two consecutive getRecords operations. The default
+	// value is "False". This option is only configurable for Glue version 2.0 and
+	// above.
+	AddIdleTimeBetweenReads *bool `type:"boolean"`
+
+	// Avoids creating an empty microbatch job by checking for unread data in the
+	// Kinesis data stream before the batch is started. The default value is "False".
+	AvoidEmptyBatches *bool `type:"boolean"`
+
+	// An optional classification.
+	Classification *string `type:"string"`
+
+	// Specifies the delimiter character.
+	Delimiter *string `type:"string"`
+
+	// The minimum time interval between two ListShards API calls for your script
+	// to consider resharding. The default value is 1s.
+	DescribeShardInterval *int64 `type:"long"`
+
+	// The URL of the Kinesis endpoint.
+	EndpointUrl *string `type:"string"`
+
+	// The minimum time delay between two consecutive getRecords operations, specified
+	// in ms. The default value is 1000. This option is only configurable for Glue
+	// version 2.0 and above.
+	IdleTimeBetweenReadsInMs *int64 `type:"long"`
+
+	// The maximum number of records to fetch per shard in the Kinesis data stream.
+	// The default value is 100000.
+	MaxFetchRecordsPerShard *int64 `type:"long"`
+
+	// The maximum time spent in the job executor to fetch a record from the Kinesis
+	// data stream per shard, specified in milliseconds (ms). The default value
+	// is 1000.
+	MaxFetchTimeInMs *int64 `type:"long"`
+
+	// The maximum number of records to fetch from the Kinesis data stream in each
+	// getRecords operation. The default value is 10000.
+	MaxRecordPerRead *int64 `type:"long"`
+
+	// The maximum cool-off time period (specified in ms) between two retries of
+	// a Kinesis Data Streams API call. The default value is 10000.
+	MaxRetryIntervalMs *int64 `type:"long"`
+
+	// The maximum number of retries for Kinesis Data Streams API requests. The
+	// default value is 3.
+	NumRetries *int64 `type:"integer"`
+
+	// The cool-off time period (specified in ms) before retrying the Kinesis Data
+	// Streams API call. The default value is 1000.
+	RetryIntervalMs *int64 `type:"long"`
+
+	// The Amazon Resource Name (ARN) of the role to assume using AWS Security Token
+	// Service (AWS STS). This role must have permissions for describe or read record
+	// operations for the Kinesis data stream. You must use this parameter when
+	// accessing a data stream in a different account. Used in conjunction with
+	// "awsSTSSessionName".
+	RoleArn *string `type:"string"`
+
+	// An identifier for the session assuming the role using AWS STS. You must use
+	// this parameter when accessing a data stream in a different account. Used
+	// in conjunction with "awsSTSRoleARN".
+	RoleSessionName *string `type:"string"`
+
+	// The starting position in the Kinesis data stream to read data from. The possible
+	// values are "latest", "trim_horizon", or "earliest". The default value is
+	// "latest".
+	StartingPosition *string `type:"string" enum:"StartingPosition"`
+
+	// The Amazon Resource Name (ARN) of the Kinesis data stream.
+	StreamArn *string `type:"string"`
+
+	// The name of the Kinesis data stream.
+	StreamName *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KinesisStreamingSourceOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KinesisStreamingSourceOptions) GoString() string {
+	return s.String()
+}
+
+// SetAddIdleTimeBetweenReads sets the AddIdleTimeBetweenReads field's value.
+func (s *KinesisStreamingSourceOptions) SetAddIdleTimeBetweenReads(v bool) *KinesisStreamingSourceOptions {
+	s.AddIdleTimeBetweenReads = &v
+	return s
+}
+
+// SetAvoidEmptyBatches sets the AvoidEmptyBatches field's value.
+func (s *KinesisStreamingSourceOptions) SetAvoidEmptyBatches(v bool) *KinesisStreamingSourceOptions {
+	s.AvoidEmptyBatches = &v
+	return s
+}
+
+// SetClassification sets the Classification field's value.
+func (s *KinesisStreamingSourceOptions) SetClassification(v string) *KinesisStreamingSourceOptions {
+	s.Classification = &v
+	return s
+}
+
+// SetDelimiter sets the Delimiter field's value.
+func (s *KinesisStreamingSourceOptions) SetDelimiter(v string) *KinesisStreamingSourceOptions {
+	s.Delimiter = &v
+	return s
+}
+
+// SetDescribeShardInterval sets the DescribeShardInterval field's value.
+func (s *KinesisStreamingSourceOptions) SetDescribeShardInterval(v int64) *KinesisStreamingSourceOptions {
+	s.DescribeShardInterval = &v
+	return s
+}
+
+// SetEndpointUrl sets the EndpointUrl field's value.
+func (s *KinesisStreamingSourceOptions) SetEndpointUrl(v string) *KinesisStreamingSourceOptions {
+	s.EndpointUrl = &v
+	return s
+}
+
+// SetIdleTimeBetweenReadsInMs sets the IdleTimeBetweenReadsInMs field's value.
+func (s *KinesisStreamingSourceOptions) SetIdleTimeBetweenReadsInMs(v int64) *KinesisStreamingSourceOptions {
+	s.IdleTimeBetweenReadsInMs = &v
+	return s
+}
+
+// SetMaxFetchRecordsPerShard sets the MaxFetchRecordsPerShard field's value.
+func (s *KinesisStreamingSourceOptions) SetMaxFetchRecordsPerShard(v int64) *KinesisStreamingSourceOptions {
+	s.MaxFetchRecordsPerShard = &v
+	return s
+}
+
+// SetMaxFetchTimeInMs sets the MaxFetchTimeInMs field's value.
+func (s *KinesisStreamingSourceOptions) SetMaxFetchTimeInMs(v int64) *KinesisStreamingSourceOptions {
+	s.MaxFetchTimeInMs = &v
+	return s
+}
+
+// SetMaxRecordPerRead sets the MaxRecordPerRead field's value.
+func (s *KinesisStreamingSourceOptions) SetMaxRecordPerRead(v int64) *KinesisStreamingSourceOptions {
+	s.MaxRecordPerRead = &v
+	return s
+}
+
+// SetMaxRetryIntervalMs sets the MaxRetryIntervalMs field's value.
+func (s *KinesisStreamingSourceOptions) SetMaxRetryIntervalMs(v int64) *KinesisStreamingSourceOptions {
+	s.MaxRetryIntervalMs = &v
+	return s
+}
+
+// SetNumRetries sets the NumRetries field's value.
+func (s *KinesisStreamingSourceOptions) SetNumRetries(v int64) *KinesisStreamingSourceOptions {
+	s.NumRetries = &v
+	return s
+}
+
+// SetRetryIntervalMs sets the RetryIntervalMs field's value.
+func (s *KinesisStreamingSourceOptions) SetRetryIntervalMs(v int64) *KinesisStreamingSourceOptions {
+	s.RetryIntervalMs = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *KinesisStreamingSourceOptions) SetRoleArn(v string) *KinesisStreamingSourceOptions {
+	s.RoleArn = &v
+	return s
+}
+
+// SetRoleSessionName sets the RoleSessionName field's value.
+func (s *KinesisStreamingSourceOptions) SetRoleSessionName(v string) *KinesisStreamingSourceOptions {
+	s.RoleSessionName = &v
+	return s
+}
+
+// SetStartingPosition sets the StartingPosition field's value.
+func (s *KinesisStreamingSourceOptions) SetStartingPosition(v string) *KinesisStreamingSourceOptions {
+	s.StartingPosition = &v
+	return s
+}
+
+// SetStreamArn sets the StreamArn field's value.
+func (s *KinesisStreamingSourceOptions) SetStreamArn(v string) *KinesisStreamingSourceOptions {
+	s.StreamArn = &v
+	return s
+}
+
+// SetStreamName sets the StreamName field's value.
+func (s *KinesisStreamingSourceOptions) SetStreamName(v string) *KinesisStreamingSourceOptions {
+	s.StreamName = &v
+	return s
+}
+
 // Specifies configuration properties for a labeling set generation task run.
 type LabelingSetGenerationTaskRunProperties struct {
 	_ struct{} `type:"structure"`
@@ -38092,6 +46295,49 @@ func (s LabelingSetGenerationTaskRunProperties) GoString() string {
 // SetOutputS3Path sets the OutputS3Path field's value.
 func (s *LabelingSetGenerationTaskRunProperties) SetOutputS3Path(v string) *LabelingSetGenerationTaskRunProperties {
 	s.OutputS3Path = &v
+	return s
+}
+
+// Specifies Lake Formation configuration settings for the crawler.
+type LakeFormationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Required for cross account crawls. For same account crawls as the target
+	// data, this can be left as null.
+	AccountId *string `type:"string"`
+
+	// Specifies whether to use Lake Formation credentials for the crawler instead
+	// of the IAM role credentials.
+	UseLakeFormationCredentials *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LakeFormationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LakeFormationConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *LakeFormationConfiguration) SetAccountId(v string) *LakeFormationConfiguration {
+	s.AccountId = &v
+	return s
+}
+
+// SetUseLakeFormationCredentials sets the UseLakeFormationCredentials field's value.
+func (s *LakeFormationConfiguration) SetUseLakeFormationCredentials(v bool) *LakeFormationConfiguration {
+	s.UseLakeFormationCredentials = &v
 	return s
 }
 
@@ -38482,6 +46728,222 @@ func (s *ListCrawlersOutput) SetCrawlerNames(v []*string) *ListCrawlersOutput {
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListCrawlersOutput) SetNextToken(v string) *ListCrawlersOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCrawlsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the crawler whose runs you want to retrieve.
+	//
+	// CrawlerName is a required field
+	CrawlerName *string `min:"1" type:"string" required:"true"`
+
+	// Filters the crawls by the criteria you specify in a list of CrawlsFilter
+	// objects.
+	Filters []*CrawlsFilter `type:"list"`
+
+	// The maximum number of results to return. The default is 20, and maximum is
+	// 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A continuation token, if this is a continuation call.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCrawlsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCrawlsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCrawlsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCrawlsInput"}
+	if s.CrawlerName == nil {
+		invalidParams.Add(request.NewErrParamRequired("CrawlerName"))
+	}
+	if s.CrawlerName != nil && len(*s.CrawlerName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CrawlerName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCrawlerName sets the CrawlerName field's value.
+func (s *ListCrawlsInput) SetCrawlerName(v string) *ListCrawlsInput {
+	s.CrawlerName = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListCrawlsInput) SetFilters(v []*CrawlsFilter) *ListCrawlsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCrawlsInput) SetMaxResults(v int64) *ListCrawlsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCrawlsInput) SetNextToken(v string) *ListCrawlsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCrawlsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of CrawlerHistory objects representing the crawl runs that meet your
+	// criteria.
+	Crawls []*CrawlerHistory `type:"list"`
+
+	// A continuation token for paginating the returned list of tokens, returned
+	// if the current segment of the list is not the last.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCrawlsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCrawlsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCrawls sets the Crawls field's value.
+func (s *ListCrawlsOutput) SetCrawls(v []*CrawlerHistory) *ListCrawlsOutput {
+	s.Crawls = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCrawlsOutput) SetNextToken(v string) *ListCrawlsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCustomEntityTypesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A paginated token to offset the results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomEntityTypesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomEntityTypesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCustomEntityTypesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCustomEntityTypesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCustomEntityTypesInput) SetMaxResults(v int64) *ListCustomEntityTypesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCustomEntityTypesInput) SetNextToken(v string) *ListCustomEntityTypesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCustomEntityTypesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of CustomEntityType objects representing custom patterns.
+	CustomEntityTypes []*CustomEntityType `type:"list"`
+
+	// A pagination token, if more results are available.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomEntityTypesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomEntityTypesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCustomEntityTypes sets the CustomEntityTypes field's value.
+func (s *ListCustomEntityTypesOutput) SetCustomEntityTypes(v []*CustomEntityType) *ListCustomEntityTypesOutput {
+	s.CustomEntityTypes = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCustomEntityTypesOutput) SetNextToken(v string) *ListCustomEntityTypesOutput {
 	s.NextToken = &v
 	return s
 }
@@ -39151,6 +47613,239 @@ func (s *ListSchemasOutput) SetNextToken(v string) *ListSchemasOutput {
 // SetSchemas sets the Schemas field's value.
 func (s *ListSchemasOutput) SetSchemas(v []*SchemaListItem) *ListSchemasOutput {
 	s.Schemas = v
+	return s
+}
+
+type ListSessionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results, or null if there are no more result.
+	NextToken *string `type:"string"`
+
+	// The origin of the request.
+	RequestOrigin *string `min:"1" type:"string"`
+
+	// Tags belonging to the session.
+	Tags map[string]*string `type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSessionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSessionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSessionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSessionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSessionsInput) SetMaxResults(v int64) *ListSessionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSessionsInput) SetNextToken(v string) *ListSessionsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *ListSessionsInput) SetRequestOrigin(v string) *ListSessionsInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListSessionsInput) SetTags(v map[string]*string) *ListSessionsInput {
+	s.Tags = v
+	return s
+}
+
+type ListSessionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the ID of the session.
+	Ids []*string `type:"list"`
+
+	// The token for the next set of results, or null if there are no more result.
+	NextToken *string `type:"string"`
+
+	// Returns the session object.
+	Sessions []*Session `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSessionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSessionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetIds sets the Ids field's value.
+func (s *ListSessionsOutput) SetIds(v []*string) *ListSessionsOutput {
+	s.Ids = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSessionsOutput) SetNextToken(v string) *ListSessionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSessions sets the Sessions field's value.
+func (s *ListSessionsOutput) SetSessions(v []*Session) *ListSessionsOutput {
+	s.Sessions = v
+	return s
+}
+
+type ListStatementsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A continuation token, if this is a continuation call.
+	NextToken *string `type:"string"`
+
+	// The origin of the request to list statements.
+	RequestOrigin *string `min:"1" type:"string"`
+
+	// The Session ID of the statements.
+	//
+	// SessionId is a required field
+	SessionId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStatementsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStatementsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListStatementsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListStatementsInput"}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+	if s.SessionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SessionId"))
+	}
+	if s.SessionId != nil && len(*s.SessionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SessionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStatementsInput) SetNextToken(v string) *ListStatementsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *ListStatementsInput) SetRequestOrigin(v string) *ListStatementsInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *ListStatementsInput) SetSessionId(v string) *ListStatementsInput {
+	s.SessionId = &v
+	return s
+}
+
+type ListStatementsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A continuation token, if not all statements have yet been returned.
+	NextToken *string `type:"string"`
+
+	// Returns the list of statements.
+	Statements []*Statement `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStatementsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStatementsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStatementsOutput) SetNextToken(v string) *ListStatementsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStatements sets the Statements field's value.
+func (s *ListStatementsOutput) SetStatements(v []*Statement) *ListStatementsOutput {
+	s.Statements = v
 	return s
 }
 
@@ -39929,6 +48624,99 @@ func (s *MLUserDataEncryption) SetMlUserDataEncryptionMode(v string) *MLUserData
 	return s
 }
 
+// Specifies the mapping of data property keys.
+type Mapping struct {
+	_ struct{} `type:"structure"`
+
+	// Only applicable to nested data structures. If you want to change the parent
+	// structure, but also one of its children, you can fill out this data strucutre.
+	// It is also Mapping, but its FromPath will be the parent's FromPath plus the
+	// FromPath from this structure.
+	//
+	// For the children part, suppose you have the structure:
+	//
+	// { "FromPath": "OuterStructure", "ToKey": "OuterStructure", "ToType": "Struct",
+	// "Dropped": false, "Chidlren": [{ "FromPath": "inner", "ToKey": "inner", "ToType":
+	// "Double", "Dropped": false, }] }
+	//
+	// You can specify a Mapping that looks like:
+	//
+	// { "FromPath": "OuterStructure", "ToKey": "OuterStructure", "ToType": "Struct",
+	// "Dropped": false, "Chidlren": [{ "FromPath": "inner", "ToKey": "inner", "ToType":
+	// "Double", "Dropped": false, }] }
+	Children []*Mapping `type:"list"`
+
+	// If true, then the column is removed.
+	Dropped *bool `type:"boolean"`
+
+	// The table or column to be modified.
+	FromPath []*string `type:"list"`
+
+	// The type of the data to be modified.
+	FromType *string `type:"string"`
+
+	// After the apply mapping, what the name of the column should be. Can be the
+	// same as FromPath.
+	ToKey *string `type:"string"`
+
+	// The data type that the data is to be modified to.
+	ToType *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Mapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Mapping) GoString() string {
+	return s.String()
+}
+
+// SetChildren sets the Children field's value.
+func (s *Mapping) SetChildren(v []*Mapping) *Mapping {
+	s.Children = v
+	return s
+}
+
+// SetDropped sets the Dropped field's value.
+func (s *Mapping) SetDropped(v bool) *Mapping {
+	s.Dropped = &v
+	return s
+}
+
+// SetFromPath sets the FromPath field's value.
+func (s *Mapping) SetFromPath(v []*string) *Mapping {
+	s.FromPath = v
+	return s
+}
+
+// SetFromType sets the FromType field's value.
+func (s *Mapping) SetFromType(v string) *Mapping {
+	s.FromType = &v
+	return s
+}
+
+// SetToKey sets the ToKey field's value.
+func (s *Mapping) SetToKey(v string) *Mapping {
+	s.ToKey = &v
+	return s
+}
+
+// SetToType sets the ToType field's value.
+func (s *Mapping) SetToType(v string) *Mapping {
+	s.ToType = &v
+	return s
+}
+
 // Defines a mapping.
 type MappingEntry struct {
 	_ struct{} `type:"structure"`
@@ -40003,6 +48791,101 @@ func (s *MappingEntry) SetTargetTable(v string) *MappingEntry {
 // SetTargetType sets the TargetType field's value.
 func (s *MappingEntry) SetTargetType(v string) *MappingEntry {
 	s.TargetType = &v
+	return s
+}
+
+// Specifies a transform that merges a DynamicFrame with a staging DynamicFrame
+// based on the specified primary keys to identify records. Duplicate records
+// (records with the same primary keys) are not de-duplicated.
+type Merge struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"2" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The list of primary key fields to match records from the source and staging
+	// dynamic frames.
+	//
+	// PrimaryKeys is a required field
+	PrimaryKeys [][]*string `type:"list" required:"true"`
+
+	// The source DynamicFrame that will be merged with a staging DynamicFrame.
+	//
+	// Source is a required field
+	Source *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Merge) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Merge) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Merge) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Merge"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 2))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.PrimaryKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrimaryKeys"))
+	}
+	if s.Source == nil {
+		invalidParams.Add(request.NewErrParamRequired("Source"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *Merge) SetInputs(v []*string) *Merge {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Merge) SetName(v string) *Merge {
+	s.Name = &v
+	return s
+}
+
+// SetPrimaryKeys sets the PrimaryKeys field's value.
+func (s *Merge) SetPrimaryKeys(v [][]*string) *Merge {
+	s.PrimaryKeys = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *Merge) SetSource(v string) *Merge {
+	s.Source = &v
 	return s
 }
 
@@ -40113,6 +48996,173 @@ func (s *MetadataKeyValuePair) SetMetadataValue(v string) *MetadataKeyValuePair 
 	return s
 }
 
+// Specifies a Microsoft SQL server data source in the Glue Data Catalog.
+type MicrosoftSQLServerCatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MicrosoftSQLServerCatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MicrosoftSQLServerCatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MicrosoftSQLServerCatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MicrosoftSQLServerCatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *MicrosoftSQLServerCatalogSource) SetDatabase(v string) *MicrosoftSQLServerCatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MicrosoftSQLServerCatalogSource) SetName(v string) *MicrosoftSQLServerCatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *MicrosoftSQLServerCatalogSource) SetTable(v string) *MicrosoftSQLServerCatalogSource {
+	s.Table = &v
+	return s
+}
+
+// Specifies a target that uses Microsoft SQL.
+type MicrosoftSQLServerCatalogTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to write to.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to write to.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MicrosoftSQLServerCatalogTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MicrosoftSQLServerCatalogTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MicrosoftSQLServerCatalogTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MicrosoftSQLServerCatalogTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *MicrosoftSQLServerCatalogTarget) SetDatabase(v string) *MicrosoftSQLServerCatalogTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *MicrosoftSQLServerCatalogTarget) SetInputs(v []*string) *MicrosoftSQLServerCatalogTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MicrosoftSQLServerCatalogTarget) SetName(v string) *MicrosoftSQLServerCatalogTarget {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *MicrosoftSQLServerCatalogTarget) SetTable(v string) *MicrosoftSQLServerCatalogTarget {
+	s.Table = &v
+	return s
+}
+
 // Specifies an Amazon DocumentDB or MongoDB data store to crawl.
 type MongoDBTarget struct {
 	_ struct{} `type:"structure"`
@@ -40166,6 +49216,173 @@ func (s *MongoDBTarget) SetPath(v string) *MongoDBTarget {
 // SetScanAll sets the ScanAll field's value.
 func (s *MongoDBTarget) SetScanAll(v bool) *MongoDBTarget {
 	s.ScanAll = &v
+	return s
+}
+
+// Specifies a MySQL data source in the Glue Data Catalog.
+type MySQLCatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MySQLCatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MySQLCatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MySQLCatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MySQLCatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *MySQLCatalogSource) SetDatabase(v string) *MySQLCatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MySQLCatalogSource) SetName(v string) *MySQLCatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *MySQLCatalogSource) SetTable(v string) *MySQLCatalogSource {
+	s.Table = &v
+	return s
+}
+
+// Specifies a target that uses MySQL.
+type MySQLCatalogTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to write to.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to write to.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MySQLCatalogTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MySQLCatalogTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MySQLCatalogTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MySQLCatalogTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *MySQLCatalogTarget) SetDatabase(v string) *MySQLCatalogTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *MySQLCatalogTarget) SetInputs(v []*string) *MySQLCatalogTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MySQLCatalogTarget) SetName(v string) *MySQLCatalogTarget {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *MySQLCatalogTarget) SetTable(v string) *MySQLCatalogTarget {
+	s.Table = &v
 	return s
 }
 
@@ -40358,6 +49575,124 @@ func (s *NotificationProperty) SetNotifyDelayAfter(v int64) *NotificationPropert
 	return s
 }
 
+// Represents whether certain values are recognized as null values for removal.
+type NullCheckBoxList struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies that an empty string is considered as a null value.
+	IsEmpty *bool `type:"boolean"`
+
+	// Specifies that an integer value of -1 is considered as a null value.
+	IsNegOne *bool `type:"boolean"`
+
+	// Specifies that a value spelling out the word 'null' is considered as a null
+	// value.
+	IsNullString *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NullCheckBoxList) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NullCheckBoxList) GoString() string {
+	return s.String()
+}
+
+// SetIsEmpty sets the IsEmpty field's value.
+func (s *NullCheckBoxList) SetIsEmpty(v bool) *NullCheckBoxList {
+	s.IsEmpty = &v
+	return s
+}
+
+// SetIsNegOne sets the IsNegOne field's value.
+func (s *NullCheckBoxList) SetIsNegOne(v bool) *NullCheckBoxList {
+	s.IsNegOne = &v
+	return s
+}
+
+// SetIsNullString sets the IsNullString field's value.
+func (s *NullCheckBoxList) SetIsNullString(v bool) *NullCheckBoxList {
+	s.IsNullString = &v
+	return s
+}
+
+// Represents a custom null value such as a zeros or other value being used
+// as a null placeholder unique to the dataset.
+type NullValueField struct {
+	_ struct{} `type:"structure"`
+
+	// The datatype of the value.
+	//
+	// Datatype is a required field
+	Datatype *Datatype `type:"structure" required:"true"`
+
+	// The value of the null placeholder.
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NullValueField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NullValueField) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NullValueField) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NullValueField"}
+	if s.Datatype == nil {
+		invalidParams.Add(request.NewErrParamRequired("Datatype"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+	if s.Datatype != nil {
+		if err := s.Datatype.Validate(); err != nil {
+			invalidParams.AddNested("Datatype", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatatype sets the Datatype field's value.
+func (s *NullValueField) SetDatatype(v *Datatype) *NullValueField {
+	s.Datatype = v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *NullValueField) SetValue(v string) *NullValueField {
+	s.Value = &v
+	return s
+}
+
 // The operation timed out.
 type OperationTimeoutException struct {
 	_            struct{}                  `type:"structure"`
@@ -40421,6 +49756,173 @@ func (s *OperationTimeoutException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *OperationTimeoutException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Specifies an Oracle data source in the Glue Data Catalog.
+type OracleSQLCatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OracleSQLCatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OracleSQLCatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OracleSQLCatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OracleSQLCatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *OracleSQLCatalogSource) SetDatabase(v string) *OracleSQLCatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *OracleSQLCatalogSource) SetName(v string) *OracleSQLCatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *OracleSQLCatalogSource) SetTable(v string) *OracleSQLCatalogSource {
+	s.Table = &v
+	return s
+}
+
+// Specifies a target that uses Oracle SQL.
+type OracleSQLCatalogTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to write to.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to write to.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OracleSQLCatalogTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OracleSQLCatalogTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OracleSQLCatalogTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OracleSQLCatalogTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *OracleSQLCatalogTarget) SetDatabase(v string) *OracleSQLCatalogTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *OracleSQLCatalogTarget) SetInputs(v []*string) *OracleSQLCatalogTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *OracleSQLCatalogTarget) SetName(v string) *OracleSQLCatalogTarget {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *OracleSQLCatalogTarget) SetTable(v string) *OracleSQLCatalogTarget {
+	s.Table = &v
+	return s
 }
 
 // Specifies the sort order of a sorted column.
@@ -40528,6 +50030,141 @@ func (s *OtherMetadataValueListItem) SetCreatedTime(v string) *OtherMetadataValu
 // SetMetadataValue sets the MetadataValue field's value.
 func (s *OtherMetadataValueListItem) SetMetadataValue(v string) *OtherMetadataValueListItem {
 	s.MetadataValue = &v
+	return s
+}
+
+// Specifies a transform that identifies, removes or masks PII data.
+type PIIDetection struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates the types of entities the PIIDetection transform will identify
+	// as PII data.
+	//
+	// PII type entities include: PERSON_NAME, DATE, USA_SNN, EMAIL, USA_ITIN, USA_PASSPORT_NUMBER,
+	// PHONE_NUMBER, BANK_ACCOUNT, IP_ADDRESS, MAC_ADDRESS, USA_CPT_CODE, USA_HCPCS_CODE,
+	// USA_NATIONAL_DRUG_CODE, USA_MEDICARE_BENEFICIARY_IDENTIFIER, USA_HEALTH_INSURANCE_CLAIM_NUMBER,CREDIT_CARD,USA_NATIONAL_PROVIDER_IDENTIFIER,USA_DEA_NUMBER,USA_DRIVING_LICENSE
+	//
+	// EntityTypesToDetect is a required field
+	EntityTypesToDetect []*string `type:"list" required:"true"`
+
+	// The node ID inputs to the transform.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// Indicates the value that will replace the detected entity.
+	MaskValue *string `type:"string"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Indicates the output column name that will contain any entity type detected
+	// in that row.
+	OutputColumnName *string `type:"string"`
+
+	// Indicates the type of PIIDetection transform.
+	//
+	// PiiType is a required field
+	PiiType *string `type:"string" required:"true" enum:"PiiType"`
+
+	// Indicates the fraction of the data to sample when scanning for PII entities.
+	SampleFraction *float64 `type:"double"`
+
+	// Indicates the fraction of the data that must be met in order for a column
+	// to be identified as PII data.
+	ThresholdFraction *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PIIDetection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PIIDetection) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PIIDetection) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PIIDetection"}
+	if s.EntityTypesToDetect == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityTypesToDetect"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.PiiType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PiiType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityTypesToDetect sets the EntityTypesToDetect field's value.
+func (s *PIIDetection) SetEntityTypesToDetect(v []*string) *PIIDetection {
+	s.EntityTypesToDetect = v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *PIIDetection) SetInputs(v []*string) *PIIDetection {
+	s.Inputs = v
+	return s
+}
+
+// SetMaskValue sets the MaskValue field's value.
+func (s *PIIDetection) SetMaskValue(v string) *PIIDetection {
+	s.MaskValue = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *PIIDetection) SetName(v string) *PIIDetection {
+	s.Name = &v
+	return s
+}
+
+// SetOutputColumnName sets the OutputColumnName field's value.
+func (s *PIIDetection) SetOutputColumnName(v string) *PIIDetection {
+	s.OutputColumnName = &v
+	return s
+}
+
+// SetPiiType sets the PiiType field's value.
+func (s *PIIDetection) SetPiiType(v string) *PIIDetection {
+	s.PiiType = &v
+	return s
+}
+
+// SetSampleFraction sets the SampleFraction field's value.
+func (s *PIIDetection) SetSampleFraction(v float64) *PIIDetection {
+	s.SampleFraction = &v
+	return s
+}
+
+// SetThresholdFraction sets the ThresholdFraction field's value.
+func (s *PIIDetection) SetThresholdFraction(v float64) *PIIDetection {
+	s.ThresholdFraction = &v
 	return s
 }
 
@@ -40957,6 +50594,69 @@ func (s *PartitionValueList) SetValues(v []*string) *PartitionValueList {
 	return s
 }
 
+type PermissionTypeMismatchException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PermissionTypeMismatchException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PermissionTypeMismatchException) GoString() string {
+	return s.String()
+}
+
+func newErrorPermissionTypeMismatchException(v protocol.ResponseMetadata) error {
+	return &PermissionTypeMismatchException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *PermissionTypeMismatchException) Code() string {
+	return "PermissionTypeMismatchException"
+}
+
+// Message returns the exception's message.
+func (s *PermissionTypeMismatchException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *PermissionTypeMismatchException) OrigErr() error {
+	return nil
+}
+
+func (s *PermissionTypeMismatchException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *PermissionTypeMismatchException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *PermissionTypeMismatchException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Specifies the physical requirements for a connection.
 type PhysicalConnectionRequirements struct {
 	_ struct{} `type:"structure"`
@@ -41022,6 +50722,173 @@ func (s *PhysicalConnectionRequirements) SetSecurityGroupIdList(v []*string) *Ph
 // SetSubnetId sets the SubnetId field's value.
 func (s *PhysicalConnectionRequirements) SetSubnetId(v string) *PhysicalConnectionRequirements {
 	s.SubnetId = &v
+	return s
+}
+
+// Specifies a PostgresSQL data source in the Glue Data Catalog.
+type PostgreSQLCatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostgreSQLCatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostgreSQLCatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PostgreSQLCatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PostgreSQLCatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *PostgreSQLCatalogSource) SetDatabase(v string) *PostgreSQLCatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *PostgreSQLCatalogSource) SetName(v string) *PostgreSQLCatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *PostgreSQLCatalogSource) SetTable(v string) *PostgreSQLCatalogSource {
+	s.Table = &v
+	return s
+}
+
+// Specifies a target that uses Postgres SQL.
+type PostgreSQLCatalogTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to write to.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to write to.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostgreSQLCatalogTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostgreSQLCatalogTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PostgreSQLCatalogTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PostgreSQLCatalogTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *PostgreSQLCatalogTarget) SetDatabase(v string) *PostgreSQLCatalogTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *PostgreSQLCatalogTarget) SetInputs(v []*string) *PostgreSQLCatalogTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *PostgreSQLCatalogTarget) SetName(v string) *PostgreSQLCatalogTarget {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *PostgreSQLCatalogTarget) SetTable(v string) *PostgreSQLCatalogTarget {
+	s.Table = &v
 	return s
 }
 
@@ -41134,7 +51001,7 @@ type PrincipalPermissions struct {
 	_ struct{} `type:"structure"`
 
 	// The permissions that are granted to the principal.
-	Permissions []*string `type:"list"`
+	Permissions []*string `type:"list" enum:"Permission"`
 
 	// The principal who is granted permissions.
 	Principal *DataLakePrincipal `type:"structure"`
@@ -41954,6 +51821,221 @@ func (s *RecrawlPolicy) SetRecrawlBehavior(v string) *RecrawlPolicy {
 	return s
 }
 
+// Specifies an Amazon Redshift data store.
+type RedshiftSource struct {
+	_ struct{} `type:"structure"`
+
+	// The database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the Amazon Redshift data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The Amazon S3 path where temporary data can be staged when copying out of
+	// the database.
+	RedshiftTmpDir *string `type:"string"`
+
+	// The database table to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+
+	// The IAM role with permissions.
+	TmpDirIAMRole *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedshiftSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedshiftSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RedshiftSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RedshiftSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *RedshiftSource) SetDatabase(v string) *RedshiftSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *RedshiftSource) SetName(v string) *RedshiftSource {
+	s.Name = &v
+	return s
+}
+
+// SetRedshiftTmpDir sets the RedshiftTmpDir field's value.
+func (s *RedshiftSource) SetRedshiftTmpDir(v string) *RedshiftSource {
+	s.RedshiftTmpDir = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *RedshiftSource) SetTable(v string) *RedshiftSource {
+	s.Table = &v
+	return s
+}
+
+// SetTmpDirIAMRole sets the TmpDirIAMRole field's value.
+func (s *RedshiftSource) SetTmpDirIAMRole(v string) *RedshiftSource {
+	s.TmpDirIAMRole = &v
+	return s
+}
+
+// Specifies a target that uses Amazon Redshift.
+type RedshiftTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to write to.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The Amazon S3 path where temporary data can be staged when copying out of
+	// the database.
+	RedshiftTmpDir *string `type:"string"`
+
+	// The name of the table in the database to write to.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+
+	// The IAM role with permissions.
+	TmpDirIAMRole *string `type:"string"`
+
+	// The set of options to configure an upsert operation when writing to a Redshift
+	// target.
+	UpsertRedshiftOptions *UpsertRedshiftTargetOptions `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedshiftTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedshiftTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RedshiftTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RedshiftTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *RedshiftTarget) SetDatabase(v string) *RedshiftTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *RedshiftTarget) SetInputs(v []*string) *RedshiftTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *RedshiftTarget) SetName(v string) *RedshiftTarget {
+	s.Name = &v
+	return s
+}
+
+// SetRedshiftTmpDir sets the RedshiftTmpDir field's value.
+func (s *RedshiftTarget) SetRedshiftTmpDir(v string) *RedshiftTarget {
+	s.RedshiftTmpDir = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *RedshiftTarget) SetTable(v string) *RedshiftTarget {
+	s.Table = &v
+	return s
+}
+
+// SetTmpDirIAMRole sets the TmpDirIAMRole field's value.
+func (s *RedshiftTarget) SetTmpDirIAMRole(v string) *RedshiftTarget {
+	s.TmpDirIAMRole = &v
+	return s
+}
+
+// SetUpsertRedshiftOptions sets the UpsertRedshiftOptions field's value.
+func (s *RedshiftTarget) SetUpsertRedshiftOptions(v *UpsertRedshiftTargetOptions) *RedshiftTarget {
+	s.UpsertRedshiftOptions = v
+	return s
+}
+
 type RegisterSchemaVersionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -42216,6 +52298,81 @@ func (s *RegistryListItem) SetUpdatedTime(v string) *RegistryListItem {
 	return s
 }
 
+// Specifies a Relational database data source in the Glue Data Catalog.
+type RelationalCatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The name of the table in the database to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RelationalCatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RelationalCatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RelationalCatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RelationalCatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *RelationalCatalogSource) SetDatabase(v string) *RelationalCatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *RelationalCatalogSource) SetName(v string) *RelationalCatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *RelationalCatalogSource) SetTable(v string) *RelationalCatalogSource {
+	s.Table = &v
+	return s
+}
+
 type RemoveSchemaVersionMetadataInput struct {
 	_ struct{} `type:"structure"`
 
@@ -42402,6 +52559,98 @@ func (s *RemoveSchemaVersionMetadataOutput) SetVersionNumber(v int64) *RemoveSch
 	return s
 }
 
+// Specifies a transform that renames a single data property key.
+type RenameField struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// A JSON path to a variable in the data structure for the source data.
+	//
+	// SourcePath is a required field
+	SourcePath []*string `type:"list" required:"true"`
+
+	// A JSON path to a variable in the data structure for the target data.
+	//
+	// TargetPath is a required field
+	TargetPath []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RenameField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RenameField) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RenameField) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RenameField"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.SourcePath == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourcePath"))
+	}
+	if s.TargetPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetPath"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *RenameField) SetInputs(v []*string) *RenameField {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *RenameField) SetName(v string) *RenameField {
+	s.Name = &v
+	return s
+}
+
+// SetSourcePath sets the SourcePath field's value.
+func (s *RenameField) SetSourcePath(v []*string) *RenameField {
+	s.SourcePath = v
+	return s
+}
+
+// SetTargetPath sets the TargetPath field's value.
+func (s *RenameField) SetTargetPath(v []*string) *RenameField {
+	s.TargetPath = v
+	return s
+}
+
 type ResetJobBookmarkInput struct {
 	_ struct{} `type:"structure"`
 
@@ -42486,6 +52735,71 @@ func (s ResetJobBookmarkOutput) GoString() string {
 func (s *ResetJobBookmarkOutput) SetJobBookmarkEntry(v *JobBookmarkEntry) *ResetJobBookmarkOutput {
 	s.JobBookmarkEntry = v
 	return s
+}
+
+// A resource was not ready for a transaction.
+type ResourceNotReadyException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A message describing the problem.
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceNotReadyException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceNotReadyException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceNotReadyException(v protocol.ResponseMetadata) error {
+	return &ResourceNotReadyException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceNotReadyException) Code() string {
+	return "ResourceNotReadyException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceNotReadyException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceNotReadyException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceNotReadyException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceNotReadyException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceNotReadyException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // A resource numerical limit was exceeded.
@@ -42729,6 +53043,758 @@ func (s *ResumeWorkflowRunOutput) SetRunId(v string) *ResumeWorkflowRunOutput {
 	return s
 }
 
+type RunStatementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The statement code to be run.
+	//
+	// Code is a required field
+	Code *string `type:"string" required:"true"`
+
+	// The origin of the request.
+	RequestOrigin *string `min:"1" type:"string"`
+
+	// The Session Id of the statement to be run.
+	//
+	// SessionId is a required field
+	SessionId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RunStatementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RunStatementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RunStatementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RunStatementInput"}
+	if s.Code == nil {
+		invalidParams.Add(request.NewErrParamRequired("Code"))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+	if s.SessionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SessionId"))
+	}
+	if s.SessionId != nil && len(*s.SessionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SessionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCode sets the Code field's value.
+func (s *RunStatementInput) SetCode(v string) *RunStatementInput {
+	s.Code = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *RunStatementInput) SetRequestOrigin(v string) *RunStatementInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *RunStatementInput) SetSessionId(v string) *RunStatementInput {
+	s.SessionId = &v
+	return s
+}
+
+type RunStatementOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the Id of the statement that was run.
+	Id *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RunStatementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RunStatementOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *RunStatementOutput) SetId(v int64) *RunStatementOutput {
+	s.Id = &v
+	return s
+}
+
+// Specifies an Amazon S3 data store in the Glue Data Catalog.
+type S3CatalogSource struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies additional connection options.
+	AdditionalOptions *S3SourceAdditionalOptions `type:"structure"`
+
+	// The database to read from.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Partitions satisfying this predicate are deleted. Files within the retention
+	// period in these partitions are not deleted. Set to "" – empty by default.
+	PartitionPredicate *string `type:"string"`
+
+	// The database table to read from.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3CatalogSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3CatalogSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3CatalogSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3CatalogSource"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *S3CatalogSource) SetAdditionalOptions(v *S3SourceAdditionalOptions) *S3CatalogSource {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetDatabase sets the Database field's value.
+func (s *S3CatalogSource) SetDatabase(v string) *S3CatalogSource {
+	s.Database = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *S3CatalogSource) SetName(v string) *S3CatalogSource {
+	s.Name = &v
+	return s
+}
+
+// SetPartitionPredicate sets the PartitionPredicate field's value.
+func (s *S3CatalogSource) SetPartitionPredicate(v string) *S3CatalogSource {
+	s.PartitionPredicate = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *S3CatalogSource) SetTable(v string) *S3CatalogSource {
+	s.Table = &v
+	return s
+}
+
+// Specifies a data target that writes to Amazon S3 using the Glue Data Catalog.
+type S3CatalogTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database to write to.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies native partitioning using a sequence of keys.
+	PartitionKeys [][]*string `type:"list"`
+
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *CatalogSchemaChangePolicy `type:"structure"`
+
+	// The name of the table in the database to write to.
+	//
+	// Table is a required field
+	Table *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3CatalogTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3CatalogTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3CatalogTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3CatalogTarget"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Table == nil {
+		invalidParams.Add(request.NewErrParamRequired("Table"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *S3CatalogTarget) SetDatabase(v string) *S3CatalogTarget {
+	s.Database = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *S3CatalogTarget) SetInputs(v []*string) *S3CatalogTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *S3CatalogTarget) SetName(v string) *S3CatalogTarget {
+	s.Name = &v
+	return s
+}
+
+// SetPartitionKeys sets the PartitionKeys field's value.
+func (s *S3CatalogTarget) SetPartitionKeys(v [][]*string) *S3CatalogTarget {
+	s.PartitionKeys = v
+	return s
+}
+
+// SetSchemaChangePolicy sets the SchemaChangePolicy field's value.
+func (s *S3CatalogTarget) SetSchemaChangePolicy(v *CatalogSchemaChangePolicy) *S3CatalogTarget {
+	s.SchemaChangePolicy = v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *S3CatalogTarget) SetTable(v string) *S3CatalogTarget {
+	s.Table = &v
+	return s
+}
+
+// Specifies a command-separated value (CSV) data store stored in Amazon S3.
+type S3CsvSource struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies additional connection options.
+	AdditionalOptions *S3DirectSourceAdditionalOptions `type:"structure"`
+
+	// Specifies how the data is compressed. This is generally not necessary if
+	// the data has a standard file extension. Possible values are "gzip" and "bzip").
+	CompressionType *string `type:"string" enum:"CompressionType"`
+
+	// Specifies a character to use for escaping. This option is used only when
+	// reading CSV files. The default value is none. If enabled, the character which
+	// immediately follows is used as-is, except for a small set of well-known escapes
+	// (\n, \r, \t, and \0).
+	Escaper *string `type:"string"`
+
+	// A string containing a JSON list of Unix-style glob patterns to exclude. For
+	// example, "[\"**.pdf\"]" excludes all PDF files.
+	Exclusions []*string `type:"list"`
+
+	// Grouping files is turned on by default when the input contains more than
+	// 50,000 files. To turn on grouping with fewer than 50,000 files, set this
+	// parameter to "inPartition". To disable grouping when there are more than
+	// 50,000 files, set this parameter to "none".
+	GroupFiles *string `type:"string"`
+
+	// The target group size in bytes. The default is computed based on the input
+	// data size and the size of your cluster. When there are fewer than 50,000
+	// input files, "groupFiles" must be set to "inPartition" for this to take effect.
+	GroupSize *string `type:"string"`
+
+	// This option controls the duration in milliseconds after which the s3 listing
+	// is likely to be consistent. Files with modification timestamps falling within
+	// the last maxBand milliseconds are tracked specially when using JobBookmarks
+	// to account for Amazon S3 eventual consistency. Most users don't need to set
+	// this option. The default is 900000 milliseconds, or 15 minutes.
+	MaxBand *int64 `type:"integer"`
+
+	// This option specifies the maximum number of files to save from the last maxBand
+	// seconds. If this number is exceeded, extra files are skipped and only processed
+	// in the next job run.
+	MaxFilesInBand *int64 `type:"integer"`
+
+	// A Boolean value that specifies whether a single record can span multiple
+	// lines. This can occur when a field contains a quoted new-line character.
+	// You must set this option to True if any record spans multiple lines. The
+	// default value is False, which allows for more aggressive file-splitting during
+	// parsing.
+	Multiline *bool `type:"boolean"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// A Boolean value that specifies whether to use the advanced SIMD CSV reader
+	// along with Apache Arrow based columnar memory formats. Only available in
+	// Glue version 3.0.
+	OptimizePerformance *bool `type:"boolean"`
+
+	// Specifies the data schema for the S3 CSV source.
+	OutputSchemas []*GlueSchema `type:"list"`
+
+	// A list of the Amazon S3 paths to read from.
+	//
+	// Paths is a required field
+	Paths []*string `type:"list" required:"true"`
+
+	// Specifies the character to use for quoting. The default is a double quote:
+	// '"'. Set this to -1 to turn off quoting entirely.
+	//
+	// QuoteChar is a required field
+	QuoteChar *string `type:"string" required:"true" enum:"QuoteChar"`
+
+	// If set to true, recursively reads files in all subdirectories under the specified
+	// paths.
+	Recurse *bool `type:"boolean"`
+
+	// Specifies the delimiter character. The default is a comma: ",", but any other
+	// character can be specified.
+	//
+	// Separator is a required field
+	Separator *string `type:"string" required:"true" enum:"Separator"`
+
+	// A Boolean value that specifies whether to skip the first data line. The default
+	// value is False.
+	SkipFirst *bool `type:"boolean"`
+
+	// A Boolean value that specifies whether to treat the first line as a header.
+	// The default value is False.
+	WithHeader *bool `type:"boolean"`
+
+	// A Boolean value that specifies whether to write the header to output. The
+	// default value is True.
+	WriteHeader *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3CsvSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3CsvSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3CsvSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3CsvSource"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Paths == nil {
+		invalidParams.Add(request.NewErrParamRequired("Paths"))
+	}
+	if s.QuoteChar == nil {
+		invalidParams.Add(request.NewErrParamRequired("QuoteChar"))
+	}
+	if s.Separator == nil {
+		invalidParams.Add(request.NewErrParamRequired("Separator"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *S3CsvSource) SetAdditionalOptions(v *S3DirectSourceAdditionalOptions) *S3CsvSource {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetCompressionType sets the CompressionType field's value.
+func (s *S3CsvSource) SetCompressionType(v string) *S3CsvSource {
+	s.CompressionType = &v
+	return s
+}
+
+// SetEscaper sets the Escaper field's value.
+func (s *S3CsvSource) SetEscaper(v string) *S3CsvSource {
+	s.Escaper = &v
+	return s
+}
+
+// SetExclusions sets the Exclusions field's value.
+func (s *S3CsvSource) SetExclusions(v []*string) *S3CsvSource {
+	s.Exclusions = v
+	return s
+}
+
+// SetGroupFiles sets the GroupFiles field's value.
+func (s *S3CsvSource) SetGroupFiles(v string) *S3CsvSource {
+	s.GroupFiles = &v
+	return s
+}
+
+// SetGroupSize sets the GroupSize field's value.
+func (s *S3CsvSource) SetGroupSize(v string) *S3CsvSource {
+	s.GroupSize = &v
+	return s
+}
+
+// SetMaxBand sets the MaxBand field's value.
+func (s *S3CsvSource) SetMaxBand(v int64) *S3CsvSource {
+	s.MaxBand = &v
+	return s
+}
+
+// SetMaxFilesInBand sets the MaxFilesInBand field's value.
+func (s *S3CsvSource) SetMaxFilesInBand(v int64) *S3CsvSource {
+	s.MaxFilesInBand = &v
+	return s
+}
+
+// SetMultiline sets the Multiline field's value.
+func (s *S3CsvSource) SetMultiline(v bool) *S3CsvSource {
+	s.Multiline = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *S3CsvSource) SetName(v string) *S3CsvSource {
+	s.Name = &v
+	return s
+}
+
+// SetOptimizePerformance sets the OptimizePerformance field's value.
+func (s *S3CsvSource) SetOptimizePerformance(v bool) *S3CsvSource {
+	s.OptimizePerformance = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *S3CsvSource) SetOutputSchemas(v []*GlueSchema) *S3CsvSource {
+	s.OutputSchemas = v
+	return s
+}
+
+// SetPaths sets the Paths field's value.
+func (s *S3CsvSource) SetPaths(v []*string) *S3CsvSource {
+	s.Paths = v
+	return s
+}
+
+// SetQuoteChar sets the QuoteChar field's value.
+func (s *S3CsvSource) SetQuoteChar(v string) *S3CsvSource {
+	s.QuoteChar = &v
+	return s
+}
+
+// SetRecurse sets the Recurse field's value.
+func (s *S3CsvSource) SetRecurse(v bool) *S3CsvSource {
+	s.Recurse = &v
+	return s
+}
+
+// SetSeparator sets the Separator field's value.
+func (s *S3CsvSource) SetSeparator(v string) *S3CsvSource {
+	s.Separator = &v
+	return s
+}
+
+// SetSkipFirst sets the SkipFirst field's value.
+func (s *S3CsvSource) SetSkipFirst(v bool) *S3CsvSource {
+	s.SkipFirst = &v
+	return s
+}
+
+// SetWithHeader sets the WithHeader field's value.
+func (s *S3CsvSource) SetWithHeader(v bool) *S3CsvSource {
+	s.WithHeader = &v
+	return s
+}
+
+// SetWriteHeader sets the WriteHeader field's value.
+func (s *S3CsvSource) SetWriteHeader(v bool) *S3CsvSource {
+	s.WriteHeader = &v
+	return s
+}
+
+// Specifies additional connection options for the Amazon S3 data store.
+type S3DirectSourceAdditionalOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Sets the upper limit for the target number of files that will be processed.
+	BoundedFiles *int64 `type:"long"`
+
+	// Sets the upper limit for the target size of the dataset in bytes that will
+	// be processed.
+	BoundedSize *int64 `type:"long"`
+
+	// Sets option to enable a sample path.
+	EnableSamplePath *bool `type:"boolean"`
+
+	// If enabled, specifies the sample path.
+	SamplePath *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DirectSourceAdditionalOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DirectSourceAdditionalOptions) GoString() string {
+	return s.String()
+}
+
+// SetBoundedFiles sets the BoundedFiles field's value.
+func (s *S3DirectSourceAdditionalOptions) SetBoundedFiles(v int64) *S3DirectSourceAdditionalOptions {
+	s.BoundedFiles = &v
+	return s
+}
+
+// SetBoundedSize sets the BoundedSize field's value.
+func (s *S3DirectSourceAdditionalOptions) SetBoundedSize(v int64) *S3DirectSourceAdditionalOptions {
+	s.BoundedSize = &v
+	return s
+}
+
+// SetEnableSamplePath sets the EnableSamplePath field's value.
+func (s *S3DirectSourceAdditionalOptions) SetEnableSamplePath(v bool) *S3DirectSourceAdditionalOptions {
+	s.EnableSamplePath = &v
+	return s
+}
+
+// SetSamplePath sets the SamplePath field's value.
+func (s *S3DirectSourceAdditionalOptions) SetSamplePath(v string) *S3DirectSourceAdditionalOptions {
+	s.SamplePath = &v
+	return s
+}
+
+// Specifies a data target that writes to Amazon S3.
+type S3DirectTarget struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies how the data is compressed. This is generally not necessary if
+	// the data has a standard file extension. Possible values are "gzip" and "bzip").
+	Compression *string `type:"string"`
+
+	// Specifies the data output format for the target.
+	//
+	// Format is a required field
+	Format *string `type:"string" required:"true" enum:"TargetFormat"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies native partitioning using a sequence of keys.
+	PartitionKeys [][]*string `type:"list"`
+
+	// A single Amazon S3 path to write to.
+	//
+	// Path is a required field
+	Path *string `type:"string" required:"true"`
+
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *DirectSchemaChangePolicy `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DirectTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DirectTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3DirectTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3DirectTarget"}
+	if s.Format == nil {
+		invalidParams.Add(request.NewErrParamRequired("Format"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("Path"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCompression sets the Compression field's value.
+func (s *S3DirectTarget) SetCompression(v string) *S3DirectTarget {
+	s.Compression = &v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *S3DirectTarget) SetFormat(v string) *S3DirectTarget {
+	s.Format = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *S3DirectTarget) SetInputs(v []*string) *S3DirectTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *S3DirectTarget) SetName(v string) *S3DirectTarget {
+	s.Name = &v
+	return s
+}
+
+// SetPartitionKeys sets the PartitionKeys field's value.
+func (s *S3DirectTarget) SetPartitionKeys(v [][]*string) *S3DirectTarget {
+	s.PartitionKeys = v
+	return s
+}
+
+// SetPath sets the Path field's value.
+func (s *S3DirectTarget) SetPath(v string) *S3DirectTarget {
+	s.Path = &v
+	return s
+}
+
+// SetSchemaChangePolicy sets the SchemaChangePolicy field's value.
+func (s *S3DirectTarget) SetSchemaChangePolicy(v *DirectSchemaChangePolicy) *S3DirectTarget {
+	s.SchemaChangePolicy = v
+	return s
+}
+
 // Specifies how Amazon Simple Storage Service (Amazon S3) data should be encrypted.
 type S3Encryption struct {
 	_ struct{} `type:"structure"`
@@ -42767,6 +53833,509 @@ func (s *S3Encryption) SetKmsKeyArn(v string) *S3Encryption {
 // SetS3EncryptionMode sets the S3EncryptionMode field's value.
 func (s *S3Encryption) SetS3EncryptionMode(v string) *S3Encryption {
 	s.S3EncryptionMode = &v
+	return s
+}
+
+// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+// storage.
+type S3GlueParquetTarget struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies how the data is compressed. This is generally not necessary if
+	// the data has a standard file extension. Possible values are "gzip" and "bzip").
+	Compression *string `type:"string" enum:"ParquetCompressionType"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies native partitioning using a sequence of keys.
+	PartitionKeys [][]*string `type:"list"`
+
+	// A single Amazon S3 path to write to.
+	//
+	// Path is a required field
+	Path *string `type:"string" required:"true"`
+
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *DirectSchemaChangePolicy `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3GlueParquetTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3GlueParquetTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3GlueParquetTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3GlueParquetTarget"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("Path"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCompression sets the Compression field's value.
+func (s *S3GlueParquetTarget) SetCompression(v string) *S3GlueParquetTarget {
+	s.Compression = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *S3GlueParquetTarget) SetInputs(v []*string) *S3GlueParquetTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *S3GlueParquetTarget) SetName(v string) *S3GlueParquetTarget {
+	s.Name = &v
+	return s
+}
+
+// SetPartitionKeys sets the PartitionKeys field's value.
+func (s *S3GlueParquetTarget) SetPartitionKeys(v [][]*string) *S3GlueParquetTarget {
+	s.PartitionKeys = v
+	return s
+}
+
+// SetPath sets the Path field's value.
+func (s *S3GlueParquetTarget) SetPath(v string) *S3GlueParquetTarget {
+	s.Path = &v
+	return s
+}
+
+// SetSchemaChangePolicy sets the SchemaChangePolicy field's value.
+func (s *S3GlueParquetTarget) SetSchemaChangePolicy(v *DirectSchemaChangePolicy) *S3GlueParquetTarget {
+	s.SchemaChangePolicy = v
+	return s
+}
+
+// Specifies a JSON data store stored in Amazon S3.
+type S3JsonSource struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies additional connection options.
+	AdditionalOptions *S3DirectSourceAdditionalOptions `type:"structure"`
+
+	// Specifies how the data is compressed. This is generally not necessary if
+	// the data has a standard file extension. Possible values are "gzip" and "bzip").
+	CompressionType *string `type:"string" enum:"CompressionType"`
+
+	// A string containing a JSON list of Unix-style glob patterns to exclude. For
+	// example, "[\"**.pdf\"]" excludes all PDF files.
+	Exclusions []*string `type:"list"`
+
+	// Grouping files is turned on by default when the input contains more than
+	// 50,000 files. To turn on grouping with fewer than 50,000 files, set this
+	// parameter to "inPartition". To disable grouping when there are more than
+	// 50,000 files, set this parameter to "none".
+	GroupFiles *string `type:"string"`
+
+	// The target group size in bytes. The default is computed based on the input
+	// data size and the size of your cluster. When there are fewer than 50,000
+	// input files, "groupFiles" must be set to "inPartition" for this to take effect.
+	GroupSize *string `type:"string"`
+
+	// A JsonPath string defining the JSON data.
+	JsonPath *string `type:"string"`
+
+	// This option controls the duration in milliseconds after which the s3 listing
+	// is likely to be consistent. Files with modification timestamps falling within
+	// the last maxBand milliseconds are tracked specially when using JobBookmarks
+	// to account for Amazon S3 eventual consistency. Most users don't need to set
+	// this option. The default is 900000 milliseconds, or 15 minutes.
+	MaxBand *int64 `type:"integer"`
+
+	// This option specifies the maximum number of files to save from the last maxBand
+	// seconds. If this number is exceeded, extra files are skipped and only processed
+	// in the next job run.
+	MaxFilesInBand *int64 `type:"integer"`
+
+	// A Boolean value that specifies whether a single record can span multiple
+	// lines. This can occur when a field contains a quoted new-line character.
+	// You must set this option to True if any record spans multiple lines. The
+	// default value is False, which allows for more aggressive file-splitting during
+	// parsing.
+	Multiline *bool `type:"boolean"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the S3 JSON source.
+	OutputSchemas []*GlueSchema `type:"list"`
+
+	// A list of the Amazon S3 paths to read from.
+	//
+	// Paths is a required field
+	Paths []*string `type:"list" required:"true"`
+
+	// If set to true, recursively reads files in all subdirectories under the specified
+	// paths.
+	Recurse *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3JsonSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3JsonSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3JsonSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3JsonSource"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Paths == nil {
+		invalidParams.Add(request.NewErrParamRequired("Paths"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *S3JsonSource) SetAdditionalOptions(v *S3DirectSourceAdditionalOptions) *S3JsonSource {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetCompressionType sets the CompressionType field's value.
+func (s *S3JsonSource) SetCompressionType(v string) *S3JsonSource {
+	s.CompressionType = &v
+	return s
+}
+
+// SetExclusions sets the Exclusions field's value.
+func (s *S3JsonSource) SetExclusions(v []*string) *S3JsonSource {
+	s.Exclusions = v
+	return s
+}
+
+// SetGroupFiles sets the GroupFiles field's value.
+func (s *S3JsonSource) SetGroupFiles(v string) *S3JsonSource {
+	s.GroupFiles = &v
+	return s
+}
+
+// SetGroupSize sets the GroupSize field's value.
+func (s *S3JsonSource) SetGroupSize(v string) *S3JsonSource {
+	s.GroupSize = &v
+	return s
+}
+
+// SetJsonPath sets the JsonPath field's value.
+func (s *S3JsonSource) SetJsonPath(v string) *S3JsonSource {
+	s.JsonPath = &v
+	return s
+}
+
+// SetMaxBand sets the MaxBand field's value.
+func (s *S3JsonSource) SetMaxBand(v int64) *S3JsonSource {
+	s.MaxBand = &v
+	return s
+}
+
+// SetMaxFilesInBand sets the MaxFilesInBand field's value.
+func (s *S3JsonSource) SetMaxFilesInBand(v int64) *S3JsonSource {
+	s.MaxFilesInBand = &v
+	return s
+}
+
+// SetMultiline sets the Multiline field's value.
+func (s *S3JsonSource) SetMultiline(v bool) *S3JsonSource {
+	s.Multiline = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *S3JsonSource) SetName(v string) *S3JsonSource {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *S3JsonSource) SetOutputSchemas(v []*GlueSchema) *S3JsonSource {
+	s.OutputSchemas = v
+	return s
+}
+
+// SetPaths sets the Paths field's value.
+func (s *S3JsonSource) SetPaths(v []*string) *S3JsonSource {
+	s.Paths = v
+	return s
+}
+
+// SetRecurse sets the Recurse field's value.
+func (s *S3JsonSource) SetRecurse(v bool) *S3JsonSource {
+	s.Recurse = &v
+	return s
+}
+
+// Specifies an Apache Parquet data store stored in Amazon S3.
+type S3ParquetSource struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies additional connection options.
+	AdditionalOptions *S3DirectSourceAdditionalOptions `type:"structure"`
+
+	// Specifies how the data is compressed. This is generally not necessary if
+	// the data has a standard file extension. Possible values are "gzip" and "bzip").
+	CompressionType *string `type:"string" enum:"ParquetCompressionType"`
+
+	// A string containing a JSON list of Unix-style glob patterns to exclude. For
+	// example, "[\"**.pdf\"]" excludes all PDF files.
+	Exclusions []*string `type:"list"`
+
+	// Grouping files is turned on by default when the input contains more than
+	// 50,000 files. To turn on grouping with fewer than 50,000 files, set this
+	// parameter to "inPartition". To disable grouping when there are more than
+	// 50,000 files, set this parameter to "none".
+	GroupFiles *string `type:"string"`
+
+	// The target group size in bytes. The default is computed based on the input
+	// data size and the size of your cluster. When there are fewer than 50,000
+	// input files, "groupFiles" must be set to "inPartition" for this to take effect.
+	GroupSize *string `type:"string"`
+
+	// This option controls the duration in milliseconds after which the s3 listing
+	// is likely to be consistent. Files with modification timestamps falling within
+	// the last maxBand milliseconds are tracked specially when using JobBookmarks
+	// to account for Amazon S3 eventual consistency. Most users don't need to set
+	// this option. The default is 900000 milliseconds, or 15 minutes.
+	MaxBand *int64 `type:"integer"`
+
+	// This option specifies the maximum number of files to save from the last maxBand
+	// seconds. If this number is exceeded, extra files are skipped and only processed
+	// in the next job run.
+	MaxFilesInBand *int64 `type:"integer"`
+
+	// The name of the data store.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the S3 Parquet source.
+	OutputSchemas []*GlueSchema `type:"list"`
+
+	// A list of the Amazon S3 paths to read from.
+	//
+	// Paths is a required field
+	Paths []*string `type:"list" required:"true"`
+
+	// If set to true, recursively reads files in all subdirectories under the specified
+	// paths.
+	Recurse *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3ParquetSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3ParquetSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3ParquetSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3ParquetSource"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Paths == nil {
+		invalidParams.Add(request.NewErrParamRequired("Paths"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *S3ParquetSource) SetAdditionalOptions(v *S3DirectSourceAdditionalOptions) *S3ParquetSource {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetCompressionType sets the CompressionType field's value.
+func (s *S3ParquetSource) SetCompressionType(v string) *S3ParquetSource {
+	s.CompressionType = &v
+	return s
+}
+
+// SetExclusions sets the Exclusions field's value.
+func (s *S3ParquetSource) SetExclusions(v []*string) *S3ParquetSource {
+	s.Exclusions = v
+	return s
+}
+
+// SetGroupFiles sets the GroupFiles field's value.
+func (s *S3ParquetSource) SetGroupFiles(v string) *S3ParquetSource {
+	s.GroupFiles = &v
+	return s
+}
+
+// SetGroupSize sets the GroupSize field's value.
+func (s *S3ParquetSource) SetGroupSize(v string) *S3ParquetSource {
+	s.GroupSize = &v
+	return s
+}
+
+// SetMaxBand sets the MaxBand field's value.
+func (s *S3ParquetSource) SetMaxBand(v int64) *S3ParquetSource {
+	s.MaxBand = &v
+	return s
+}
+
+// SetMaxFilesInBand sets the MaxFilesInBand field's value.
+func (s *S3ParquetSource) SetMaxFilesInBand(v int64) *S3ParquetSource {
+	s.MaxFilesInBand = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *S3ParquetSource) SetName(v string) *S3ParquetSource {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *S3ParquetSource) SetOutputSchemas(v []*GlueSchema) *S3ParquetSource {
+	s.OutputSchemas = v
+	return s
+}
+
+// SetPaths sets the Paths field's value.
+func (s *S3ParquetSource) SetPaths(v []*string) *S3ParquetSource {
+	s.Paths = v
+	return s
+}
+
+// SetRecurse sets the Recurse field's value.
+func (s *S3ParquetSource) SetRecurse(v bool) *S3ParquetSource {
+	s.Recurse = &v
+	return s
+}
+
+// Specifies additional connection options for the Amazon S3 data store.
+type S3SourceAdditionalOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Sets the upper limit for the target number of files that will be processed.
+	BoundedFiles *int64 `type:"long"`
+
+	// Sets the upper limit for the target size of the dataset in bytes that will
+	// be processed.
+	BoundedSize *int64 `type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3SourceAdditionalOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3SourceAdditionalOptions) GoString() string {
+	return s.String()
+}
+
+// SetBoundedFiles sets the BoundedFiles field's value.
+func (s *S3SourceAdditionalOptions) SetBoundedFiles(v int64) *S3SourceAdditionalOptions {
+	s.BoundedFiles = &v
+	return s
+}
+
+// SetBoundedSize sets the BoundedSize field's value.
+func (s *S3SourceAdditionalOptions) SetBoundedSize(v int64) *S3SourceAdditionalOptions {
+	s.BoundedSize = &v
 	return s
 }
 
@@ -43856,6 +55425,164 @@ func (s *Segment) SetTotalSegments(v int64) *Segment {
 	return s
 }
 
+// Specifies a transform that chooses the data property keys that you want to
+// keep.
+type SelectFields struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// A JSON path to a variable in the data structure.
+	//
+	// Paths is a required field
+	Paths [][]*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SelectFields) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SelectFields) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SelectFields) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SelectFields"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Paths == nil {
+		invalidParams.Add(request.NewErrParamRequired("Paths"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *SelectFields) SetInputs(v []*string) *SelectFields {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SelectFields) SetName(v string) *SelectFields {
+	s.Name = &v
+	return s
+}
+
+// SetPaths sets the Paths field's value.
+func (s *SelectFields) SetPaths(v [][]*string) *SelectFields {
+	s.Paths = v
+	return s
+}
+
+// Specifies a transform that chooses one DynamicFrame from a collection of
+// DynamicFrames. The output is the selected DynamicFrame
+type SelectFromCollection struct {
+	_ struct{} `type:"structure"`
+
+	// The index for the DynamicFrame to be selected.
+	//
+	// Index is a required field
+	Index *int64 `type:"integer" required:"true"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SelectFromCollection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SelectFromCollection) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SelectFromCollection) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SelectFromCollection"}
+	if s.Index == nil {
+		invalidParams.Add(request.NewErrParamRequired("Index"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndex sets the Index field's value.
+func (s *SelectFromCollection) SetIndex(v int64) *SelectFromCollection {
+	s.Index = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *SelectFromCollection) SetInputs(v []*string) *SelectFromCollection {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SelectFromCollection) SetName(v string) *SelectFromCollection {
+	s.Name = &v
+	return s
+}
+
 // Information about a serialization/deserialization program (SerDe) that serves
 // as an extractor and loader.
 type SerDeInfo struct {
@@ -43920,6 +55647,205 @@ func (s *SerDeInfo) SetParameters(v map[string]*string) *SerDeInfo {
 // SetSerializationLibrary sets the SerializationLibrary field's value.
 func (s *SerDeInfo) SetSerializationLibrary(v string) *SerDeInfo {
 	s.SerializationLibrary = &v
+	return s
+}
+
+// The period in which a remote Spark runtime environment is running.
+type Session struct {
+	_ struct{} `type:"structure"`
+
+	// The command object.See SessionCommand.
+	Command *SessionCommand `type:"structure"`
+
+	// The number of connections used for the session.
+	Connections *ConnectionsList `type:"structure"`
+
+	// The time and date when the session was created.
+	CreatedOn *time.Time `type:"timestamp"`
+
+	// A map array of key-value pairs. Max is 75 pairs.
+	DefaultArguments map[string]*string `type:"map"`
+
+	// The description of the session.
+	Description *string `type:"string"`
+
+	// The error message displayed during the session.
+	ErrorMessage *string `type:"string"`
+
+	// The Glue version determines the versions of Apache Spark and Python that
+	// Glue supports. The GlueVersion must be greater than 2.0.
+	GlueVersion *string `min:"1" type:"string"`
+
+	// The ID of the session.
+	Id *string `min:"1" type:"string"`
+
+	// The number of Glue data processing units (DPUs) that can be allocated when
+	// the job runs. A DPU is a relative measure of processing power that consists
+	// of 4 vCPUs of compute capacity and 16 GB memory.
+	MaxCapacity *float64 `type:"double"`
+
+	// The code execution progress of the session.
+	Progress *float64 `type:"double"`
+
+	// The name or Amazon Resource Name (ARN) of the IAM role associated with the
+	// Session.
+	Role *string `min:"20" type:"string"`
+
+	// The name of the SecurityConfiguration structure to be used with the session.
+	SecurityConfiguration *string `min:"1" type:"string"`
+
+	// The session status.
+	Status *string `type:"string" enum:"SessionStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Session) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Session) GoString() string {
+	return s.String()
+}
+
+// SetCommand sets the Command field's value.
+func (s *Session) SetCommand(v *SessionCommand) *Session {
+	s.Command = v
+	return s
+}
+
+// SetConnections sets the Connections field's value.
+func (s *Session) SetConnections(v *ConnectionsList) *Session {
+	s.Connections = v
+	return s
+}
+
+// SetCreatedOn sets the CreatedOn field's value.
+func (s *Session) SetCreatedOn(v time.Time) *Session {
+	s.CreatedOn = &v
+	return s
+}
+
+// SetDefaultArguments sets the DefaultArguments field's value.
+func (s *Session) SetDefaultArguments(v map[string]*string) *Session {
+	s.DefaultArguments = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *Session) SetDescription(v string) *Session {
+	s.Description = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *Session) SetErrorMessage(v string) *Session {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetGlueVersion sets the GlueVersion field's value.
+func (s *Session) SetGlueVersion(v string) *Session {
+	s.GlueVersion = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Session) SetId(v string) *Session {
+	s.Id = &v
+	return s
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *Session) SetMaxCapacity(v float64) *Session {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetProgress sets the Progress field's value.
+func (s *Session) SetProgress(v float64) *Session {
+	s.Progress = &v
+	return s
+}
+
+// SetRole sets the Role field's value.
+func (s *Session) SetRole(v string) *Session {
+	s.Role = &v
+	return s
+}
+
+// SetSecurityConfiguration sets the SecurityConfiguration field's value.
+func (s *Session) SetSecurityConfiguration(v string) *Session {
+	s.SecurityConfiguration = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *Session) SetStatus(v string) *Session {
+	s.Status = &v
+	return s
+}
+
+// The SessionCommand that runs the job.
+type SessionCommand struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the name of the SessionCommand. Can be 'glueetl' or 'gluestreaming'.
+	Name *string `min:"1" type:"string"`
+
+	// Specifies the Python version. The Python version indicates the version supported
+	// for jobs of type Spark.
+	PythonVersion *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SessionCommand) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SessionCommand) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SessionCommand) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SessionCommand"}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *SessionCommand) SetName(v string) *SessionCommand {
+	s.Name = &v
+	return s
+}
+
+// SetPythonVersion sets the PythonVersion field's value.
+func (s *SessionCommand) SetPythonVersion(v string) *SessionCommand {
+	s.PythonVersion = &v
 	return s
 }
 
@@ -44012,6 +55938,632 @@ func (s *SortCriterion) SetFieldName(v string) *SortCriterion {
 // SetSort sets the Sort field's value.
 func (s *SortCriterion) SetSort(v string) *SortCriterion {
 	s.Sort = &v
+	return s
+}
+
+// Specifies a connector to an Apache Spark data source.
+type SparkConnectorSource struct {
+	_ struct{} `type:"structure"`
+
+	// Additional connection options for the connector.
+	AdditionalOptions map[string]*string `type:"map"`
+
+	// The name of the connection that is associated with the connector.
+	//
+	// ConnectionName is a required field
+	ConnectionName *string `type:"string" required:"true"`
+
+	// The type of connection, such as marketplace.spark or custom.spark, designating
+	// a connection to an Apache Spark data store.
+	//
+	// ConnectionType is a required field
+	ConnectionType *string `type:"string" required:"true"`
+
+	// The name of a connector that assists with accessing the data store in Glue
+	// Studio.
+	//
+	// ConnectorName is a required field
+	ConnectorName *string `type:"string" required:"true"`
+
+	// The name of the data source.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies data schema for the custom spark source.
+	OutputSchemas []*GlueSchema `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SparkConnectorSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SparkConnectorSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SparkConnectorSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SparkConnectorSource"}
+	if s.ConnectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionName"))
+	}
+	if s.ConnectionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionType"))
+	}
+	if s.ConnectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorName"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *SparkConnectorSource) SetAdditionalOptions(v map[string]*string) *SparkConnectorSource {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *SparkConnectorSource) SetConnectionName(v string) *SparkConnectorSource {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetConnectionType sets the ConnectionType field's value.
+func (s *SparkConnectorSource) SetConnectionType(v string) *SparkConnectorSource {
+	s.ConnectionType = &v
+	return s
+}
+
+// SetConnectorName sets the ConnectorName field's value.
+func (s *SparkConnectorSource) SetConnectorName(v string) *SparkConnectorSource {
+	s.ConnectorName = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SparkConnectorSource) SetName(v string) *SparkConnectorSource {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *SparkConnectorSource) SetOutputSchemas(v []*GlueSchema) *SparkConnectorSource {
+	s.OutputSchemas = v
+	return s
+}
+
+// Specifies a target that uses an Apache Spark connector.
+type SparkConnectorTarget struct {
+	_ struct{} `type:"structure"`
+
+	// Additional connection options for the connector.
+	AdditionalOptions map[string]*string `type:"map"`
+
+	// The name of a connection for an Apache Spark connector.
+	//
+	// ConnectionName is a required field
+	ConnectionName *string `type:"string" required:"true"`
+
+	// The type of connection, such as marketplace.spark or custom.spark, designating
+	// a connection to an Apache Spark data store.
+	//
+	// ConnectionType is a required field
+	ConnectionType *string `type:"string" required:"true"`
+
+	// The name of an Apache Spark connector.
+	//
+	// ConnectorName is a required field
+	ConnectorName *string `type:"string" required:"true"`
+
+	// The nodes that are inputs to the data target.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the data target.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the custom spark target.
+	OutputSchemas []*GlueSchema `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SparkConnectorTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SparkConnectorTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SparkConnectorTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SparkConnectorTarget"}
+	if s.ConnectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionName"))
+	}
+	if s.ConnectionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionType"))
+	}
+	if s.ConnectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorName"))
+	}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalOptions sets the AdditionalOptions field's value.
+func (s *SparkConnectorTarget) SetAdditionalOptions(v map[string]*string) *SparkConnectorTarget {
+	s.AdditionalOptions = v
+	return s
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *SparkConnectorTarget) SetConnectionName(v string) *SparkConnectorTarget {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetConnectionType sets the ConnectionType field's value.
+func (s *SparkConnectorTarget) SetConnectionType(v string) *SparkConnectorTarget {
+	s.ConnectionType = &v
+	return s
+}
+
+// SetConnectorName sets the ConnectorName field's value.
+func (s *SparkConnectorTarget) SetConnectorName(v string) *SparkConnectorTarget {
+	s.ConnectorName = &v
+	return s
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *SparkConnectorTarget) SetInputs(v []*string) *SparkConnectorTarget {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SparkConnectorTarget) SetName(v string) *SparkConnectorTarget {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *SparkConnectorTarget) SetOutputSchemas(v []*GlueSchema) *SparkConnectorTarget {
+	s.OutputSchemas = v
+	return s
+}
+
+// Specifies a transform where you enter a SQL query using Spark SQL syntax
+// to transform the data. The output is a single DynamicFrame.
+type SparkSQL struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names. You can associate a table
+	// name with each input node to use in the SQL query. The name you choose must
+	// meet the Spark SQL naming restrictions.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Specifies the data schema for the SparkSQL transform.
+	OutputSchemas []*GlueSchema `type:"list"`
+
+	// A list of aliases. An alias allows you to specify what name to use in the
+	// SQL for a given input. For example, you have a datasource named "MyDataSource".
+	// If you specify From as MyDataSource, and Alias as SqlName, then in your SQL
+	// you can do:
+	//
+	// select * from SqlName
+	//
+	// and that gets data from MyDataSource.
+	//
+	// SqlAliases is a required field
+	SqlAliases []*SqlAlias `type:"list" required:"true"`
+
+	// A SQL query that must use Spark SQL syntax and return a single data set.
+	//
+	// SqlQuery is a required field
+	SqlQuery *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SparkSQL) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SparkSQL) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SparkSQL) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SparkSQL"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.SqlAliases == nil {
+		invalidParams.Add(request.NewErrParamRequired("SqlAliases"))
+	}
+	if s.SqlQuery == nil {
+		invalidParams.Add(request.NewErrParamRequired("SqlQuery"))
+	}
+	if s.OutputSchemas != nil {
+		for i, v := range s.OutputSchemas {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputSchemas", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.SqlAliases != nil {
+		for i, v := range s.SqlAliases {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SqlAliases", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *SparkSQL) SetInputs(v []*string) *SparkSQL {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SparkSQL) SetName(v string) *SparkSQL {
+	s.Name = &v
+	return s
+}
+
+// SetOutputSchemas sets the OutputSchemas field's value.
+func (s *SparkSQL) SetOutputSchemas(v []*GlueSchema) *SparkSQL {
+	s.OutputSchemas = v
+	return s
+}
+
+// SetSqlAliases sets the SqlAliases field's value.
+func (s *SparkSQL) SetSqlAliases(v []*SqlAlias) *SparkSQL {
+	s.SqlAliases = v
+	return s
+}
+
+// SetSqlQuery sets the SqlQuery field's value.
+func (s *SparkSQL) SetSqlQuery(v string) *SparkSQL {
+	s.SqlQuery = &v
+	return s
+}
+
+// Specifies a transform that writes samples of the data to an Amazon S3 bucket.
+type Spigot struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// A path in Amazon S3 where the transform will write a subset of records from
+	// the dataset to a JSON file in an Amazon S3 bucket.
+	//
+	// Path is a required field
+	Path *string `type:"string" required:"true"`
+
+	// The probability (a decimal value with a maximum value of 1) of picking any
+	// given record. A value of 1 indicates that each row read from the dataset
+	// should be included in the sample output.
+	Prob *float64 `type:"double"`
+
+	// Specifies a number of records to write starting from the beginning of the
+	// dataset.
+	Topk *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Spigot) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Spigot) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Spigot) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Spigot"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("Path"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *Spigot) SetInputs(v []*string) *Spigot {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Spigot) SetName(v string) *Spigot {
+	s.Name = &v
+	return s
+}
+
+// SetPath sets the Path field's value.
+func (s *Spigot) SetPath(v string) *Spigot {
+	s.Path = &v
+	return s
+}
+
+// SetProb sets the Prob field's value.
+func (s *Spigot) SetProb(v float64) *Spigot {
+	s.Prob = &v
+	return s
+}
+
+// SetTopk sets the Topk field's value.
+func (s *Spigot) SetTopk(v int64) *Spigot {
+	s.Topk = &v
+	return s
+}
+
+// Specifies a transform that splits data property keys into two DynamicFrames.
+// The output is a collection of DynamicFrames: one with selected data property
+// keys, and one with the remaining data property keys.
+type SplitFields struct {
+	_ struct{} `type:"structure"`
+
+	// The data inputs identified by their node names.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"1" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// A JSON path to a variable in the data structure.
+	//
+	// Paths is a required field
+	Paths [][]*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SplitFields) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SplitFields) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SplitFields) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SplitFields"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Paths == nil {
+		invalidParams.Add(request.NewErrParamRequired("Paths"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *SplitFields) SetInputs(v []*string) *SplitFields {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SplitFields) SetName(v string) *SplitFields {
+	s.Name = &v
+	return s
+}
+
+// SetPaths sets the Paths field's value.
+func (s *SplitFields) SetPaths(v [][]*string) *SplitFields {
+	s.Paths = v
+	return s
+}
+
+// Represents a single entry in the list of values for SqlAliases.
+type SqlAlias struct {
+	_ struct{} `type:"structure"`
+
+	// A temporary name given to a table, or a column in a table.
+	//
+	// Alias is a required field
+	Alias *string `type:"string" required:"true"`
+
+	// A table, or a column in a table.
+	//
+	// From is a required field
+	From *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SqlAlias) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SqlAlias) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SqlAlias) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SqlAlias"}
+	if s.Alias == nil {
+		invalidParams.Add(request.NewErrParamRequired("Alias"))
+	}
+	if s.From == nil {
+		invalidParams.Add(request.NewErrParamRequired("From"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAlias sets the Alias field's value.
+func (s *SqlAlias) SetAlias(v string) *SqlAlias {
+	s.Alias = &v
+	return s
+}
+
+// SetFrom sets the From field's value.
+func (s *SqlAlias) SetFrom(v string) *SqlAlias {
+	s.From = &v
 	return s
 }
 
@@ -44470,7 +57022,7 @@ type StartJobRunInput struct {
 	// This field is deprecated. Use MaxCapacity instead.
 	//
 	// The number of Glue data processing units (DPUs) to allocate to this JobRun.
-	// From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative
+	// You can allocate a minimum of 2 DPUs; the default is 10. A DPU is a relative
 	// measure of processing power that consists of 4 vCPUs of compute capacity
 	// and 16 GB of memory. For more information, see the Glue pricing page (https://aws.amazon.com/glue/pricing/).
 	//
@@ -44483,6 +57035,10 @@ type StartJobRunInput struct {
 	// You can specify arguments here that your own job-execution script consumes,
 	// as well as arguments that Glue itself consumes.
 	//
+	// Job arguments may be logged. Do not pass plaintext secrets as arguments.
+	// Retrieve secrets from a Glue Connection, Secrets Manager or other secret
+	// management mechanism if you intend to keep them within the Job.
+	//
 	// For information about how to specify and consume your own Job arguments,
 	// see the Calling Glue APIs in Python (https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html)
 	// topic in the developer guide.
@@ -44491,6 +57047,18 @@ type StartJobRunInput struct {
 	// job, see the Special Parameters Used by Glue (https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html)
 	// topic in the developer guide.
 	Arguments map[string]*string `type:"map"`
+
+	// Indicates whether the job is run with a standard or flexible execution class.
+	// The standard execution-class is ideal for time-sensitive workloads that require
+	// fast job startup and dedicated resources.
+	//
+	// The flexible execution class is appropriate for time-insensitive jobs whose
+	// start and completion times may vary.
+	//
+	// Only jobs with Glue version 3.0 and above and command type glueetl will be
+	// allowed to set ExecutionClass to FLEX. The flexible execution class is available
+	// for Spark jobs.
+	ExecutionClass *string `type:"string" enum:"ExecutionClass"`
 
 	// The name of the job definition to use.
 	//
@@ -44514,7 +57082,7 @@ type StartJobRunInput struct {
 	//    you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.
 	//
 	//    * When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"),
-	//    you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job
+	//    you can allocate a minimum of 2 DPUs. The default is 10 DPUs. This job
 	//    type cannot have a fractional DPU allocation.
 	MaxCapacity *float64 `type:"double"`
 
@@ -44523,9 +57091,6 @@ type StartJobRunInput struct {
 
 	// The number of workers of a defined workerType that are allocated when a job
 	// runs.
-	//
-	// The maximum number of workers you can define are 299 for G.1X, and 149 for
-	// G.2X.
 	NumberOfWorkers *int64 `type:"integer"`
 
 	// The name of the SecurityConfiguration structure to be used with this job
@@ -44533,13 +57098,15 @@ type StartJobRunInput struct {
 	SecurityConfiguration *string `min:"1" type:"string"`
 
 	// The JobRun timeout in minutes. This is the maximum time that a job run can
-	// consume resources before it is terminated and enters TIMEOUT status. The
-	// default is 2,880 minutes (48 hours). This overrides the timeout value set
-	// in the parent job.
+	// consume resources before it is terminated and enters TIMEOUT status. This
+	// value overrides the timeout value set in the parent job.
+	//
+	// Streaming jobs do not have a timeout. The default for non-streaming jobs
+	// is 2,880 minutes (48 hours).
 	Timeout *int64 `min:"1" type:"integer"`
 
 	// The type of predefined worker that is allocated when a job runs. Accepts
-	// a value of Standard, G.1X, or G.2X.
+	// a value of Standard, G.1X, G.2X, or G.025X.
 	//
 	//    * For the Standard worker type, each worker provides 4 vCPU, 16 GB of
 	//    memory and a 50GB disk, and 2 executors per worker.
@@ -44549,6 +57116,11 @@ type StartJobRunInput struct {
 	//
 	//    * For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory
 	//    and a 128GB disk, and 1 executor per worker.
+	//
+	//    * For the G.025X worker type, each worker maps to 0.25 DPU (2 vCPU, 4
+	//    GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend
+	//    this worker type for low volume streaming jobs. This worker type is only
+	//    available for Glue version 3.0 streaming jobs.
 	WorkerType *string `type:"string" enum:"WorkerType"`
 }
 
@@ -44609,6 +57181,12 @@ func (s *StartJobRunInput) SetAllocatedCapacity(v int64) *StartJobRunInput {
 // SetArguments sets the Arguments field's value.
 func (s *StartJobRunInput) SetArguments(v map[string]*string) *StartJobRunInput {
 	s.Arguments = v
+	return s
+}
+
+// SetExecutionClass sets the ExecutionClass field's value.
+func (s *StartJobRunInput) SetExecutionClass(v string) *StartJobRunInput {
+	s.ExecutionClass = &v
 	return s
 }
 
@@ -44953,6 +57531,9 @@ type StartWorkflowRunInput struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	// The workflow run properties for the new workflow run.
+	RunProperties map[string]*string `type:"map"`
 }
 
 // String returns the string representation.
@@ -44992,6 +57573,12 @@ func (s *StartWorkflowRunInput) Validate() error {
 // SetName sets the Name field's value.
 func (s *StartWorkflowRunInput) SetName(v string) *StartWorkflowRunInput {
 	s.Name = &v
+	return s
+}
+
+// SetRunProperties sets the RunProperties field's value.
+func (s *StartWorkflowRunInput) SetRunProperties(v map[string]*string) *StartWorkflowRunInput {
+	s.RunProperties = v
 	return s
 }
 
@@ -45066,6 +57653,201 @@ func (s *StartingEventBatchCondition) SetBatchSize(v int64) *StartingEventBatchC
 // SetBatchWindow sets the BatchWindow field's value.
 func (s *StartingEventBatchCondition) SetBatchWindow(v int64) *StartingEventBatchCondition {
 	s.BatchWindow = &v
+	return s
+}
+
+// The statement or request for a particular action to occur in a session.
+type Statement struct {
+	_ struct{} `type:"structure"`
+
+	// The execution code of the statement.
+	Code *string `type:"string"`
+
+	// The unix time and date that the job definition was completed.
+	CompletedOn *int64 `type:"long"`
+
+	// The ID of the statement.
+	Id *int64 `type:"integer"`
+
+	// The output in JSON.
+	Output *StatementOutput_ `type:"structure"`
+
+	// The code execution progress.
+	Progress *float64 `type:"double"`
+
+	// The unix time and date that the job definition was started.
+	StartedOn *int64 `type:"long"`
+
+	// The state while request is actioned.
+	State *string `type:"string" enum:"StatementState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Statement) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Statement) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *Statement) SetCode(v string) *Statement {
+	s.Code = &v
+	return s
+}
+
+// SetCompletedOn sets the CompletedOn field's value.
+func (s *Statement) SetCompletedOn(v int64) *Statement {
+	s.CompletedOn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Statement) SetId(v int64) *Statement {
+	s.Id = &v
+	return s
+}
+
+// SetOutput sets the Output field's value.
+func (s *Statement) SetOutput(v *StatementOutput_) *Statement {
+	s.Output = v
+	return s
+}
+
+// SetProgress sets the Progress field's value.
+func (s *Statement) SetProgress(v float64) *Statement {
+	s.Progress = &v
+	return s
+}
+
+// SetStartedOn sets the StartedOn field's value.
+func (s *Statement) SetStartedOn(v int64) *Statement {
+	s.StartedOn = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *Statement) SetState(v string) *Statement {
+	s.State = &v
+	return s
+}
+
+// The code execution output in JSON format.
+type StatementOutputData struct {
+	_ struct{} `type:"structure"`
+
+	// The code execution output in text format.
+	TextPlain *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StatementOutputData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StatementOutputData) GoString() string {
+	return s.String()
+}
+
+// SetTextPlain sets the TextPlain field's value.
+func (s *StatementOutputData) SetTextPlain(v string) *StatementOutputData {
+	s.TextPlain = &v
+	return s
+}
+
+// The code execution output in JSON format.
+type StatementOutput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The code execution output.
+	Data *StatementOutputData `type:"structure"`
+
+	// The name of the error in the output.
+	ErrorName *string `type:"string"`
+
+	// The error value of the output.
+	ErrorValue *string `type:"string"`
+
+	// The execution count of the output.
+	ExecutionCount *int64 `type:"integer"`
+
+	// The status of the code execution output.
+	Status *string `type:"string" enum:"StatementState"`
+
+	// The traceback of the output.
+	Traceback []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StatementOutput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StatementOutput_) GoString() string {
+	return s.String()
+}
+
+// SetData sets the Data field's value.
+func (s *StatementOutput_) SetData(v *StatementOutputData) *StatementOutput_ {
+	s.Data = v
+	return s
+}
+
+// SetErrorName sets the ErrorName field's value.
+func (s *StatementOutput_) SetErrorName(v string) *StatementOutput_ {
+	s.ErrorName = &v
+	return s
+}
+
+// SetErrorValue sets the ErrorValue field's value.
+func (s *StatementOutput_) SetErrorValue(v string) *StatementOutput_ {
+	s.ErrorValue = &v
+	return s
+}
+
+// SetExecutionCount sets the ExecutionCount field's value.
+func (s *StatementOutput_) SetExecutionCount(v int64) *StatementOutput_ {
+	s.ExecutionCount = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *StatementOutput_) SetStatus(v string) *StatementOutput_ {
+	s.Status = &v
+	return s
+}
+
+// SetTraceback sets the Traceback field's value.
+func (s *StatementOutput_) SetTraceback(v []*string) *StatementOutput_ {
+	s.Traceback = v
 	return s
 }
 
@@ -45209,6 +57991,98 @@ func (s StopCrawlerScheduleOutput) String() string {
 // value will be replaced with "sensitive".
 func (s StopCrawlerScheduleOutput) GoString() string {
 	return s.String()
+}
+
+type StopSessionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the session to be stopped.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The origin of the request.
+	RequestOrigin *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopSessionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopSessionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopSessionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopSessionInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.RequestOrigin != nil && len(*s.RequestOrigin) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestOrigin", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *StopSessionInput) SetId(v string) *StopSessionInput {
+	s.Id = &v
+	return s
+}
+
+// SetRequestOrigin sets the RequestOrigin field's value.
+func (s *StopSessionInput) SetRequestOrigin(v string) *StopSessionInput {
+	s.RequestOrigin = &v
+	return s
+}
+
+type StopSessionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the Id of the stopped session.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopSessionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopSessionOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *StopSessionOutput) SetId(v string) *StopSessionOutput {
+	s.Id = &v
+	return s
 }
 
 type StopTriggerInput struct {
@@ -45383,6 +58257,9 @@ func (s StopWorkflowRunOutput) GoString() string {
 type StorageDescriptor struct {
 	_ struct{} `type:"structure"`
 
+	// A list of locations that point to the path where a Delta table is located.
+	AdditionalLocations []*string `type:"list"`
+
 	// A list of reducer grouping columns, clustering columns, and bucketing columns
 	// in the table.
 	BucketColumns []*string `type:"list"`
@@ -45489,6 +58366,12 @@ func (s *StorageDescriptor) Validate() error {
 	return nil
 }
 
+// SetAdditionalLocations sets the AdditionalLocations field's value.
+func (s *StorageDescriptor) SetAdditionalLocations(v []*string) *StorageDescriptor {
+	s.AdditionalLocations = v
+	return s
+}
+
 // SetBucketColumns sets the BucketColumns field's value.
 func (s *StorageDescriptor) SetBucketColumns(v []*string) *StorageDescriptor {
 	s.BucketColumns = v
@@ -45564,6 +58447,63 @@ func (s *StorageDescriptor) SetSortColumns(v []*Order) *StorageDescriptor {
 // SetStoredAsSubDirectories sets the StoredAsSubDirectories field's value.
 func (s *StorageDescriptor) SetStoredAsSubDirectories(v bool) *StorageDescriptor {
 	s.StoredAsSubDirectories = &v
+	return s
+}
+
+// Specifies options related to data preview for viewing a sample of your data.
+type StreamingDataPreviewOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The polling time in milliseconds.
+	PollingTime *int64 `min:"10" type:"long"`
+
+	// The limit to the number of records polled.
+	RecordPollingLimit *int64 `min:"1" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamingDataPreviewOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamingDataPreviewOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StreamingDataPreviewOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StreamingDataPreviewOptions"}
+	if s.PollingTime != nil && *s.PollingTime < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("PollingTime", 10))
+	}
+	if s.RecordPollingLimit != nil && *s.RecordPollingLimit < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("RecordPollingLimit", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPollingTime sets the PollingTime field's value.
+func (s *StreamingDataPreviewOptions) SetPollingTime(v int64) *StreamingDataPreviewOptions {
+	s.PollingTime = &v
+	return s
+}
+
+// SetRecordPollingLimit sets the RecordPollingLimit field's value.
+func (s *StreamingDataPreviewOptions) SetRecordPollingLimit(v int64) *StreamingDataPreviewOptions {
+	s.RecordPollingLimit = &v
 	return s
 }
 
@@ -45815,6 +58755,9 @@ type TableData struct {
 	// The last time that the table was updated.
 	UpdateTime *time.Time `type:"timestamp"`
 
+	// The ID of the table version.
+	VersionId *string `min:"1" type:"string"`
+
 	// If the table is a view, the expanded text of the view; otherwise null.
 	ViewExpandedText *string `type:"string"`
 
@@ -45939,6 +58882,12 @@ func (s *TableData) SetTargetTable(v *TableIdentifier) *TableData {
 // SetUpdateTime sets the UpdateTime field's value.
 func (s *TableData) SetUpdateTime(v time.Time) *TableData {
 	s.UpdateTime = &v
+	return s
+}
+
+// SetVersionId sets the VersionId field's value.
+func (s *TableData) SetVersionId(v string) *TableData {
+	s.VersionId = &v
 	return s
 }
 
@@ -47336,6 +60285,137 @@ func (s *TriggerUpdate) SetSchedule(v string) *TriggerUpdate {
 	return s
 }
 
+type UnfilteredPartition struct {
+	_ struct{} `type:"structure"`
+
+	AuthorizedColumns []*string `type:"list"`
+
+	IsRegisteredWithLakeFormation *bool `type:"boolean"`
+
+	// Represents a slice of table data.
+	Partition *Partition `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnfilteredPartition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnfilteredPartition) GoString() string {
+	return s.String()
+}
+
+// SetAuthorizedColumns sets the AuthorizedColumns field's value.
+func (s *UnfilteredPartition) SetAuthorizedColumns(v []*string) *UnfilteredPartition {
+	s.AuthorizedColumns = v
+	return s
+}
+
+// SetIsRegisteredWithLakeFormation sets the IsRegisteredWithLakeFormation field's value.
+func (s *UnfilteredPartition) SetIsRegisteredWithLakeFormation(v bool) *UnfilteredPartition {
+	s.IsRegisteredWithLakeFormation = &v
+	return s
+}
+
+// SetPartition sets the Partition field's value.
+func (s *UnfilteredPartition) SetPartition(v *Partition) *UnfilteredPartition {
+	s.Partition = v
+	return s
+}
+
+// Specifies a transform that combines the rows from two or more datasets into
+// a single result.
+type Union struct {
+	_ struct{} `type:"structure"`
+
+	// The node ID inputs to the transform.
+	//
+	// Inputs is a required field
+	Inputs []*string `min:"2" type:"list" required:"true"`
+
+	// The name of the transform node.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Indicates the type of Union transform.
+	//
+	// Specify ALL to join all rows from data sources to the resulting DynamicFrame.
+	// The resulting union does not remove duplicate rows.
+	//
+	// Specify DISTINCT to remove duplicate rows in the resulting DynamicFrame.
+	//
+	// UnionType is a required field
+	UnionType *string `type:"string" required:"true" enum:"UnionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Union) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Union) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Union) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Union"}
+	if s.Inputs == nil {
+		invalidParams.Add(request.NewErrParamRequired("Inputs"))
+	}
+	if s.Inputs != nil && len(s.Inputs) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Inputs", 2))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.UnionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("UnionType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputs sets the Inputs field's value.
+func (s *Union) SetInputs(v []*string) *Union {
+	s.Inputs = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Union) SetName(v string) *Union {
+	s.Name = &v
+	return s
+}
+
+// SetUnionType sets the UnionType field's value.
+func (s *Union) SetUnionType(v string) *Union {
+	s.UnionType = &v
+	return s
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -48047,6 +61127,9 @@ type UpdateCrawlerInput struct {
 	// A description of the new crawler.
 	Description *string `type:"string"`
 
+	// Specifies Lake Formation configuration settings for the crawler.
+	LakeFormationConfiguration *LakeFormationConfiguration `type:"structure"`
+
 	// Specifies data lineage configuration settings for the crawler.
 	LineageConfiguration *LineageConfiguration `type:"structure"`
 
@@ -48145,6 +61228,12 @@ func (s *UpdateCrawlerInput) SetDatabaseName(v string) *UpdateCrawlerInput {
 // SetDescription sets the Description field's value.
 func (s *UpdateCrawlerInput) SetDescription(v string) *UpdateCrawlerInput {
 	s.Description = &v
+	return s
+}
+
+// SetLakeFormationConfiguration sets the LakeFormationConfiguration field's value.
+func (s *UpdateCrawlerInput) SetLakeFormationConfiguration(v *LakeFormationConfiguration) *UpdateCrawlerInput {
+	s.LakeFormationConfiguration = v
 	return s
 }
 
@@ -48748,7 +61837,8 @@ type UpdateJobInput struct {
 	// JobName is a required field
 	JobName *string `min:"1" type:"string" required:"true"`
 
-	// Specifies the values with which to update the job definition.
+	// Specifies the values with which to update the job definition. Unspecified
+	// configuration is removed or reset to default values.
 	//
 	// JobUpdate is a required field
 	JobUpdate *JobUpdate `type:"structure" required:"true"`
@@ -49517,6 +62607,12 @@ type UpdateTableInput struct {
 	//
 	// TableInput is a required field
 	TableInput *TableInput `type:"structure" required:"true"`
+
+	// The transaction ID at which to update the table contents.
+	TransactionId *string `min:"1" type:"string"`
+
+	// The version ID at which to update the table contents.
+	VersionId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -49552,6 +62648,12 @@ func (s *UpdateTableInput) Validate() error {
 	if s.TableInput == nil {
 		invalidParams.Add(request.NewErrParamRequired("TableInput"))
 	}
+	if s.TransactionId != nil && len(*s.TransactionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TransactionId", 1))
+	}
+	if s.VersionId != nil && len(*s.VersionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionId", 1))
+	}
 	if s.TableInput != nil {
 		if err := s.TableInput.Validate(); err != nil {
 			invalidParams.AddNested("TableInput", err.(request.ErrInvalidParams))
@@ -49585,6 +62687,18 @@ func (s *UpdateTableInput) SetSkipArchive(v bool) *UpdateTableInput {
 // SetTableInput sets the TableInput field's value.
 func (s *UpdateTableInput) SetTableInput(v *TableInput) *UpdateTableInput {
 	s.TableInput = v
+	return s
+}
+
+// SetTransactionId sets the TransactionId field's value.
+func (s *UpdateTableInput) SetTransactionId(v string) *UpdateTableInput {
+	s.TransactionId = &v
+	return s
+}
+
+// SetVersionId sets the VersionId field's value.
+func (s *UpdateTableInput) SetVersionId(v string) *UpdateTableInput {
+	s.VersionId = &v
 	return s
 }
 
@@ -50008,6 +63122,56 @@ func (s *UpdateXMLClassifierRequest) SetName(v string) *UpdateXMLClassifierReque
 // SetRowTag sets the RowTag field's value.
 func (s *UpdateXMLClassifierRequest) SetRowTag(v string) *UpdateXMLClassifierRequest {
 	s.RowTag = &v
+	return s
+}
+
+// The options to configure an upsert operation when writing to a Redshift target .
+type UpsertRedshiftTargetOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the connection to use to write to Redshift.
+	ConnectionName *string `type:"string"`
+
+	// The physical location of the Redshift table.
+	TableLocation *string `type:"string"`
+
+	// The keys used to determine whether to perform an update or insert.
+	UpsertKeys []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpsertRedshiftTargetOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpsertRedshiftTargetOptions) GoString() string {
+	return s.String()
+}
+
+// SetConnectionName sets the ConnectionName field's value.
+func (s *UpsertRedshiftTargetOptions) SetConnectionName(v string) *UpsertRedshiftTargetOptions {
+	s.ConnectionName = &v
+	return s
+}
+
+// SetTableLocation sets the TableLocation field's value.
+func (s *UpsertRedshiftTargetOptions) SetTableLocation(v string) *UpsertRedshiftTargetOptions {
+	s.TableLocation = &v
+	return s
+}
+
+// SetUpsertKeys sets the UpsertKeys field's value.
+func (s *UpsertRedshiftTargetOptions) SetUpsertKeys(v []*string) *UpsertRedshiftTargetOptions {
+	s.UpsertKeys = v
 	return s
 }
 
@@ -50619,6 +63783,9 @@ func (s *WorkflowRun) SetWorkflowRunProperties(v map[string]*string) *WorkflowRu
 type WorkflowRunStatistics struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the count of job runs in the ERROR state in the workflow run.
+	ErroredActions *int64 `type:"integer"`
+
 	// Total number of Actions that have failed.
 	FailedActions *int64 `type:"integer"`
 
@@ -50636,6 +63803,9 @@ type WorkflowRunStatistics struct {
 
 	// Total number of Actions in the workflow run.
 	TotalActions *int64 `type:"integer"`
+
+	// Indicates the count of job runs in WAITING state in the workflow run.
+	WaitingActions *int64 `type:"integer"`
 }
 
 // String returns the string representation.
@@ -50654,6 +63824,12 @@ func (s WorkflowRunStatistics) String() string {
 // value will be replaced with "sensitive".
 func (s WorkflowRunStatistics) GoString() string {
 	return s.String()
+}
+
+// SetErroredActions sets the ErroredActions field's value.
+func (s *WorkflowRunStatistics) SetErroredActions(v int64) *WorkflowRunStatistics {
+	s.ErroredActions = &v
+	return s
 }
 
 // SetFailedActions sets the FailedActions field's value.
@@ -50689,6 +63865,12 @@ func (s *WorkflowRunStatistics) SetTimeoutActions(v int64) *WorkflowRunStatistic
 // SetTotalActions sets the TotalActions field's value.
 func (s *WorkflowRunStatistics) SetTotalActions(v int64) *WorkflowRunStatistics {
 	s.TotalActions = &v
+	return s
+}
+
+// SetWaitingActions sets the WaitingActions field's value.
+func (s *WorkflowRunStatistics) SetWaitingActions(v int64) *WorkflowRunStatistics {
+	s.WaitingActions = &v
 	return s
 }
 
@@ -50775,6 +63957,74 @@ func (s *XMLClassifier) SetRowTag(v string) *XMLClassifier {
 func (s *XMLClassifier) SetVersion(v int64) *XMLClassifier {
 	s.Version = &v
 	return s
+}
+
+const (
+	// AggFunctionAvg is a AggFunction enum value
+	AggFunctionAvg = "avg"
+
+	// AggFunctionCountDistinct is a AggFunction enum value
+	AggFunctionCountDistinct = "countDistinct"
+
+	// AggFunctionCount is a AggFunction enum value
+	AggFunctionCount = "count"
+
+	// AggFunctionFirst is a AggFunction enum value
+	AggFunctionFirst = "first"
+
+	// AggFunctionLast is a AggFunction enum value
+	AggFunctionLast = "last"
+
+	// AggFunctionKurtosis is a AggFunction enum value
+	AggFunctionKurtosis = "kurtosis"
+
+	// AggFunctionMax is a AggFunction enum value
+	AggFunctionMax = "max"
+
+	// AggFunctionMin is a AggFunction enum value
+	AggFunctionMin = "min"
+
+	// AggFunctionSkewness is a AggFunction enum value
+	AggFunctionSkewness = "skewness"
+
+	// AggFunctionStddevSamp is a AggFunction enum value
+	AggFunctionStddevSamp = "stddev_samp"
+
+	// AggFunctionStddevPop is a AggFunction enum value
+	AggFunctionStddevPop = "stddev_pop"
+
+	// AggFunctionSum is a AggFunction enum value
+	AggFunctionSum = "sum"
+
+	// AggFunctionSumDistinct is a AggFunction enum value
+	AggFunctionSumDistinct = "sumDistinct"
+
+	// AggFunctionVarSamp is a AggFunction enum value
+	AggFunctionVarSamp = "var_samp"
+
+	// AggFunctionVarPop is a AggFunction enum value
+	AggFunctionVarPop = "var_pop"
+)
+
+// AggFunction_Values returns all elements of the AggFunction enum
+func AggFunction_Values() []string {
+	return []string{
+		AggFunctionAvg,
+		AggFunctionCountDistinct,
+		AggFunctionCount,
+		AggFunctionFirst,
+		AggFunctionLast,
+		AggFunctionKurtosis,
+		AggFunctionMax,
+		AggFunctionMin,
+		AggFunctionSkewness,
+		AggFunctionStddevSamp,
+		AggFunctionStddevPop,
+		AggFunctionSum,
+		AggFunctionSumDistinct,
+		AggFunctionVarSamp,
+		AggFunctionVarPop,
+	}
 }
 
 const (
@@ -50990,6 +64240,22 @@ func Compatibility_Values() []string {
 }
 
 const (
+	// CompressionTypeGzip is a CompressionType enum value
+	CompressionTypeGzip = "gzip"
+
+	// CompressionTypeBzip2 is a CompressionType enum value
+	CompressionTypeBzip2 = "bzip2"
+)
+
+// CompressionType_Values returns all elements of the CompressionType enum
+func CompressionType_Values() []string {
+	return []string{
+		CompressionTypeGzip,
+		CompressionTypeBzip2,
+	}
+}
+
+const (
 	// ConnectionPropertyKeyHost is a ConnectionPropertyKey enum value
 	ConnectionPropertyKeyHost = "HOST"
 
@@ -51168,6 +64434,9 @@ const (
 
 	// CrawlStateFailed is a CrawlState enum value
 	CrawlStateFailed = "FAILED"
+
+	// CrawlStateError is a CrawlState enum value
+	CrawlStateError = "ERROR"
 )
 
 // CrawlState_Values returns all elements of the CrawlState enum
@@ -51178,6 +64447,31 @@ func CrawlState_Values() []string {
 		CrawlStateCancelled,
 		CrawlStateSucceeded,
 		CrawlStateFailed,
+		CrawlStateError,
+	}
+}
+
+const (
+	// CrawlerHistoryStateRunning is a CrawlerHistoryState enum value
+	CrawlerHistoryStateRunning = "RUNNING"
+
+	// CrawlerHistoryStateCompleted is a CrawlerHistoryState enum value
+	CrawlerHistoryStateCompleted = "COMPLETED"
+
+	// CrawlerHistoryStateFailed is a CrawlerHistoryState enum value
+	CrawlerHistoryStateFailed = "FAILED"
+
+	// CrawlerHistoryStateStopped is a CrawlerHistoryState enum value
+	CrawlerHistoryStateStopped = "STOPPED"
+)
+
+// CrawlerHistoryState_Values returns all elements of the CrawlerHistoryState enum
+func CrawlerHistoryState_Values() []string {
+	return []string{
+		CrawlerHistoryStateRunning,
+		CrawlerHistoryStateCompleted,
+		CrawlerHistoryStateFailed,
+		CrawlerHistoryStateStopped,
 	}
 }
 
@@ -51243,6 +64537,9 @@ const (
 
 	// DataFormatJson is a DataFormat enum value
 	DataFormatJson = "JSON"
+
+	// DataFormatProtobuf is a DataFormat enum value
+	DataFormatProtobuf = "PROTOBUF"
 )
 
 // DataFormat_Values returns all elements of the DataFormat enum
@@ -51250,6 +64547,7 @@ func DataFormat_Values() []string {
 	return []string{
 		DataFormatAvro,
 		DataFormatJson,
+		DataFormatProtobuf,
 	}
 }
 
@@ -51290,6 +64588,22 @@ func EnableHybridValues_Values() []string {
 }
 
 const (
+	// ExecutionClassFlex is a ExecutionClass enum value
+	ExecutionClassFlex = "FLEX"
+
+	// ExecutionClassStandard is a ExecutionClass enum value
+	ExecutionClassStandard = "STANDARD"
+)
+
+// ExecutionClass_Values returns all elements of the ExecutionClass enum
+func ExecutionClass_Values() []string {
+	return []string{
+		ExecutionClassFlex,
+		ExecutionClassStandard,
+	}
+}
+
+const (
 	// ExistConditionMustExist is a ExistCondition enum value
 	ExistConditionMustExist = "MUST_EXIST"
 
@@ -51306,6 +64620,346 @@ func ExistCondition_Values() []string {
 		ExistConditionMustExist,
 		ExistConditionNotExist,
 		ExistConditionNone,
+	}
+}
+
+const (
+	// FieldNameCrawlId is a FieldName enum value
+	FieldNameCrawlId = "CRAWL_ID"
+
+	// FieldNameState is a FieldName enum value
+	FieldNameState = "STATE"
+
+	// FieldNameStartTime is a FieldName enum value
+	FieldNameStartTime = "START_TIME"
+
+	// FieldNameEndTime is a FieldName enum value
+	FieldNameEndTime = "END_TIME"
+
+	// FieldNameDpuHour is a FieldName enum value
+	FieldNameDpuHour = "DPU_HOUR"
+)
+
+// FieldName_Values returns all elements of the FieldName enum
+func FieldName_Values() []string {
+	return []string{
+		FieldNameCrawlId,
+		FieldNameState,
+		FieldNameStartTime,
+		FieldNameEndTime,
+		FieldNameDpuHour,
+	}
+}
+
+const (
+	// FilterLogicalOperatorAnd is a FilterLogicalOperator enum value
+	FilterLogicalOperatorAnd = "AND"
+
+	// FilterLogicalOperatorOr is a FilterLogicalOperator enum value
+	FilterLogicalOperatorOr = "OR"
+)
+
+// FilterLogicalOperator_Values returns all elements of the FilterLogicalOperator enum
+func FilterLogicalOperator_Values() []string {
+	return []string{
+		FilterLogicalOperatorAnd,
+		FilterLogicalOperatorOr,
+	}
+}
+
+const (
+	// FilterOperationEq is a FilterOperation enum value
+	FilterOperationEq = "EQ"
+
+	// FilterOperationLt is a FilterOperation enum value
+	FilterOperationLt = "LT"
+
+	// FilterOperationGt is a FilterOperation enum value
+	FilterOperationGt = "GT"
+
+	// FilterOperationLte is a FilterOperation enum value
+	FilterOperationLte = "LTE"
+
+	// FilterOperationGte is a FilterOperation enum value
+	FilterOperationGte = "GTE"
+
+	// FilterOperationRegex is a FilterOperation enum value
+	FilterOperationRegex = "REGEX"
+
+	// FilterOperationIsnull is a FilterOperation enum value
+	FilterOperationIsnull = "ISNULL"
+)
+
+// FilterOperation_Values returns all elements of the FilterOperation enum
+func FilterOperation_Values() []string {
+	return []string{
+		FilterOperationEq,
+		FilterOperationLt,
+		FilterOperationGt,
+		FilterOperationLte,
+		FilterOperationGte,
+		FilterOperationRegex,
+		FilterOperationIsnull,
+	}
+}
+
+const (
+	// FilterOperatorGt is a FilterOperator enum value
+	FilterOperatorGt = "GT"
+
+	// FilterOperatorGe is a FilterOperator enum value
+	FilterOperatorGe = "GE"
+
+	// FilterOperatorLt is a FilterOperator enum value
+	FilterOperatorLt = "LT"
+
+	// FilterOperatorLe is a FilterOperator enum value
+	FilterOperatorLe = "LE"
+
+	// FilterOperatorEq is a FilterOperator enum value
+	FilterOperatorEq = "EQ"
+
+	// FilterOperatorNe is a FilterOperator enum value
+	FilterOperatorNe = "NE"
+)
+
+// FilterOperator_Values returns all elements of the FilterOperator enum
+func FilterOperator_Values() []string {
+	return []string{
+		FilterOperatorGt,
+		FilterOperatorGe,
+		FilterOperatorLt,
+		FilterOperatorLe,
+		FilterOperatorEq,
+		FilterOperatorNe,
+	}
+}
+
+const (
+	// FilterValueTypeColumnextracted is a FilterValueType enum value
+	FilterValueTypeColumnextracted = "COLUMNEXTRACTED"
+
+	// FilterValueTypeConstant is a FilterValueType enum value
+	FilterValueTypeConstant = "CONSTANT"
+)
+
+// FilterValueType_Values returns all elements of the FilterValueType enum
+func FilterValueType_Values() []string {
+	return []string{
+		FilterValueTypeColumnextracted,
+		FilterValueTypeConstant,
+	}
+}
+
+const (
+	// GlueRecordTypeDate is a GlueRecordType enum value
+	GlueRecordTypeDate = "DATE"
+
+	// GlueRecordTypeString is a GlueRecordType enum value
+	GlueRecordTypeString = "STRING"
+
+	// GlueRecordTypeTimestamp is a GlueRecordType enum value
+	GlueRecordTypeTimestamp = "TIMESTAMP"
+
+	// GlueRecordTypeInt is a GlueRecordType enum value
+	GlueRecordTypeInt = "INT"
+
+	// GlueRecordTypeFloat is a GlueRecordType enum value
+	GlueRecordTypeFloat = "FLOAT"
+
+	// GlueRecordTypeLong is a GlueRecordType enum value
+	GlueRecordTypeLong = "LONG"
+
+	// GlueRecordTypeBigdecimal is a GlueRecordType enum value
+	GlueRecordTypeBigdecimal = "BIGDECIMAL"
+
+	// GlueRecordTypeByte is a GlueRecordType enum value
+	GlueRecordTypeByte = "BYTE"
+
+	// GlueRecordTypeShort is a GlueRecordType enum value
+	GlueRecordTypeShort = "SHORT"
+
+	// GlueRecordTypeDouble is a GlueRecordType enum value
+	GlueRecordTypeDouble = "DOUBLE"
+)
+
+// GlueRecordType_Values returns all elements of the GlueRecordType enum
+func GlueRecordType_Values() []string {
+	return []string{
+		GlueRecordTypeDate,
+		GlueRecordTypeString,
+		GlueRecordTypeTimestamp,
+		GlueRecordTypeInt,
+		GlueRecordTypeFloat,
+		GlueRecordTypeLong,
+		GlueRecordTypeBigdecimal,
+		GlueRecordTypeByte,
+		GlueRecordTypeShort,
+		GlueRecordTypeDouble,
+	}
+}
+
+const (
+	// JDBCDataTypeArray is a JDBCDataType enum value
+	JDBCDataTypeArray = "ARRAY"
+
+	// JDBCDataTypeBigint is a JDBCDataType enum value
+	JDBCDataTypeBigint = "BIGINT"
+
+	// JDBCDataTypeBinary is a JDBCDataType enum value
+	JDBCDataTypeBinary = "BINARY"
+
+	// JDBCDataTypeBit is a JDBCDataType enum value
+	JDBCDataTypeBit = "BIT"
+
+	// JDBCDataTypeBlob is a JDBCDataType enum value
+	JDBCDataTypeBlob = "BLOB"
+
+	// JDBCDataTypeBoolean is a JDBCDataType enum value
+	JDBCDataTypeBoolean = "BOOLEAN"
+
+	// JDBCDataTypeChar is a JDBCDataType enum value
+	JDBCDataTypeChar = "CHAR"
+
+	// JDBCDataTypeClob is a JDBCDataType enum value
+	JDBCDataTypeClob = "CLOB"
+
+	// JDBCDataTypeDatalink is a JDBCDataType enum value
+	JDBCDataTypeDatalink = "DATALINK"
+
+	// JDBCDataTypeDate is a JDBCDataType enum value
+	JDBCDataTypeDate = "DATE"
+
+	// JDBCDataTypeDecimal is a JDBCDataType enum value
+	JDBCDataTypeDecimal = "DECIMAL"
+
+	// JDBCDataTypeDistinct is a JDBCDataType enum value
+	JDBCDataTypeDistinct = "DISTINCT"
+
+	// JDBCDataTypeDouble is a JDBCDataType enum value
+	JDBCDataTypeDouble = "DOUBLE"
+
+	// JDBCDataTypeFloat is a JDBCDataType enum value
+	JDBCDataTypeFloat = "FLOAT"
+
+	// JDBCDataTypeInteger is a JDBCDataType enum value
+	JDBCDataTypeInteger = "INTEGER"
+
+	// JDBCDataTypeJavaObject is a JDBCDataType enum value
+	JDBCDataTypeJavaObject = "JAVA_OBJECT"
+
+	// JDBCDataTypeLongnvarchar is a JDBCDataType enum value
+	JDBCDataTypeLongnvarchar = "LONGNVARCHAR"
+
+	// JDBCDataTypeLongvarbinary is a JDBCDataType enum value
+	JDBCDataTypeLongvarbinary = "LONGVARBINARY"
+
+	// JDBCDataTypeLongvarchar is a JDBCDataType enum value
+	JDBCDataTypeLongvarchar = "LONGVARCHAR"
+
+	// JDBCDataTypeNchar is a JDBCDataType enum value
+	JDBCDataTypeNchar = "NCHAR"
+
+	// JDBCDataTypeNclob is a JDBCDataType enum value
+	JDBCDataTypeNclob = "NCLOB"
+
+	// JDBCDataTypeNull is a JDBCDataType enum value
+	JDBCDataTypeNull = "NULL"
+
+	// JDBCDataTypeNumeric is a JDBCDataType enum value
+	JDBCDataTypeNumeric = "NUMERIC"
+
+	// JDBCDataTypeNvarchar is a JDBCDataType enum value
+	JDBCDataTypeNvarchar = "NVARCHAR"
+
+	// JDBCDataTypeOther is a JDBCDataType enum value
+	JDBCDataTypeOther = "OTHER"
+
+	// JDBCDataTypeReal is a JDBCDataType enum value
+	JDBCDataTypeReal = "REAL"
+
+	// JDBCDataTypeRef is a JDBCDataType enum value
+	JDBCDataTypeRef = "REF"
+
+	// JDBCDataTypeRefCursor is a JDBCDataType enum value
+	JDBCDataTypeRefCursor = "REF_CURSOR"
+
+	// JDBCDataTypeRowid is a JDBCDataType enum value
+	JDBCDataTypeRowid = "ROWID"
+
+	// JDBCDataTypeSmallint is a JDBCDataType enum value
+	JDBCDataTypeSmallint = "SMALLINT"
+
+	// JDBCDataTypeSqlxml is a JDBCDataType enum value
+	JDBCDataTypeSqlxml = "SQLXML"
+
+	// JDBCDataTypeStruct is a JDBCDataType enum value
+	JDBCDataTypeStruct = "STRUCT"
+
+	// JDBCDataTypeTime is a JDBCDataType enum value
+	JDBCDataTypeTime = "TIME"
+
+	// JDBCDataTypeTimeWithTimezone is a JDBCDataType enum value
+	JDBCDataTypeTimeWithTimezone = "TIME_WITH_TIMEZONE"
+
+	// JDBCDataTypeTimestamp is a JDBCDataType enum value
+	JDBCDataTypeTimestamp = "TIMESTAMP"
+
+	// JDBCDataTypeTimestampWithTimezone is a JDBCDataType enum value
+	JDBCDataTypeTimestampWithTimezone = "TIMESTAMP_WITH_TIMEZONE"
+
+	// JDBCDataTypeTinyint is a JDBCDataType enum value
+	JDBCDataTypeTinyint = "TINYINT"
+
+	// JDBCDataTypeVarbinary is a JDBCDataType enum value
+	JDBCDataTypeVarbinary = "VARBINARY"
+
+	// JDBCDataTypeVarchar is a JDBCDataType enum value
+	JDBCDataTypeVarchar = "VARCHAR"
+)
+
+// JDBCDataType_Values returns all elements of the JDBCDataType enum
+func JDBCDataType_Values() []string {
+	return []string{
+		JDBCDataTypeArray,
+		JDBCDataTypeBigint,
+		JDBCDataTypeBinary,
+		JDBCDataTypeBit,
+		JDBCDataTypeBlob,
+		JDBCDataTypeBoolean,
+		JDBCDataTypeChar,
+		JDBCDataTypeClob,
+		JDBCDataTypeDatalink,
+		JDBCDataTypeDate,
+		JDBCDataTypeDecimal,
+		JDBCDataTypeDistinct,
+		JDBCDataTypeDouble,
+		JDBCDataTypeFloat,
+		JDBCDataTypeInteger,
+		JDBCDataTypeJavaObject,
+		JDBCDataTypeLongnvarchar,
+		JDBCDataTypeLongvarbinary,
+		JDBCDataTypeLongvarchar,
+		JDBCDataTypeNchar,
+		JDBCDataTypeNclob,
+		JDBCDataTypeNull,
+		JDBCDataTypeNumeric,
+		JDBCDataTypeNvarchar,
+		JDBCDataTypeOther,
+		JDBCDataTypeReal,
+		JDBCDataTypeRef,
+		JDBCDataTypeRefCursor,
+		JDBCDataTypeRowid,
+		JDBCDataTypeSmallint,
+		JDBCDataTypeSqlxml,
+		JDBCDataTypeStruct,
+		JDBCDataTypeTime,
+		JDBCDataTypeTimeWithTimezone,
+		JDBCDataTypeTimestamp,
+		JDBCDataTypeTimestampWithTimezone,
+		JDBCDataTypeTinyint,
+		JDBCDataTypeVarbinary,
+		JDBCDataTypeVarchar,
 	}
 }
 
@@ -51346,6 +65000,12 @@ const (
 
 	// JobRunStateTimeout is a JobRunState enum value
 	JobRunStateTimeout = "TIMEOUT"
+
+	// JobRunStateError is a JobRunState enum value
+	JobRunStateError = "ERROR"
+
+	// JobRunStateWaiting is a JobRunState enum value
+	JobRunStateWaiting = "WAITING"
 )
 
 // JobRunState_Values returns all elements of the JobRunState enum
@@ -51358,6 +65018,40 @@ func JobRunState_Values() []string {
 		JobRunStateSucceeded,
 		JobRunStateFailed,
 		JobRunStateTimeout,
+		JobRunStateError,
+		JobRunStateWaiting,
+	}
+}
+
+const (
+	// JoinTypeEquijoin is a JoinType enum value
+	JoinTypeEquijoin = "equijoin"
+
+	// JoinTypeLeft is a JoinType enum value
+	JoinTypeLeft = "left"
+
+	// JoinTypeRight is a JoinType enum value
+	JoinTypeRight = "right"
+
+	// JoinTypeOuter is a JoinType enum value
+	JoinTypeOuter = "outer"
+
+	// JoinTypeLeftsemi is a JoinType enum value
+	JoinTypeLeftsemi = "leftsemi"
+
+	// JoinTypeLeftanti is a JoinType enum value
+	JoinTypeLeftanti = "leftanti"
+)
+
+// JoinType_Values returns all elements of the JoinType enum
+func JoinType_Values() []string {
+	return []string{
+		JoinTypeEquijoin,
+		JoinTypeLeft,
+		JoinTypeRight,
+		JoinTypeOuter,
+		JoinTypeLeftsemi,
+		JoinTypeLeftanti,
 	}
 }
 
@@ -51462,6 +65156,34 @@ func NodeType_Values() []string {
 }
 
 const (
+	// ParquetCompressionTypeSnappy is a ParquetCompressionType enum value
+	ParquetCompressionTypeSnappy = "snappy"
+
+	// ParquetCompressionTypeLzo is a ParquetCompressionType enum value
+	ParquetCompressionTypeLzo = "lzo"
+
+	// ParquetCompressionTypeGzip is a ParquetCompressionType enum value
+	ParquetCompressionTypeGzip = "gzip"
+
+	// ParquetCompressionTypeUncompressed is a ParquetCompressionType enum value
+	ParquetCompressionTypeUncompressed = "uncompressed"
+
+	// ParquetCompressionTypeNone is a ParquetCompressionType enum value
+	ParquetCompressionTypeNone = "none"
+)
+
+// ParquetCompressionType_Values returns all elements of the ParquetCompressionType enum
+func ParquetCompressionType_Values() []string {
+	return []string{
+		ParquetCompressionTypeSnappy,
+		ParquetCompressionTypeLzo,
+		ParquetCompressionTypeGzip,
+		ParquetCompressionTypeUncompressed,
+		ParquetCompressionTypeNone,
+	}
+}
+
+const (
 	// PartitionIndexStatusCreating is a PartitionIndexStatus enum value
 	PartitionIndexStatusCreating = "CREATING"
 
@@ -51530,6 +65252,46 @@ func Permission_Values() []string {
 }
 
 const (
+	// PermissionTypeColumnPermission is a PermissionType enum value
+	PermissionTypeColumnPermission = "COLUMN_PERMISSION"
+
+	// PermissionTypeCellFilterPermission is a PermissionType enum value
+	PermissionTypeCellFilterPermission = "CELL_FILTER_PERMISSION"
+)
+
+// PermissionType_Values returns all elements of the PermissionType enum
+func PermissionType_Values() []string {
+	return []string{
+		PermissionTypeColumnPermission,
+		PermissionTypeCellFilterPermission,
+	}
+}
+
+const (
+	// PiiTypeRowAudit is a PiiType enum value
+	PiiTypeRowAudit = "RowAudit"
+
+	// PiiTypeRowMasking is a PiiType enum value
+	PiiTypeRowMasking = "RowMasking"
+
+	// PiiTypeColumnAudit is a PiiType enum value
+	PiiTypeColumnAudit = "ColumnAudit"
+
+	// PiiTypeColumnMasking is a PiiType enum value
+	PiiTypeColumnMasking = "ColumnMasking"
+)
+
+// PiiType_Values returns all elements of the PiiType enum
+func PiiType_Values() []string {
+	return []string{
+		PiiTypeRowAudit,
+		PiiTypeRowMasking,
+		PiiTypeColumnAudit,
+		PiiTypeColumnMasking,
+	}
+}
+
+const (
 	// PrincipalTypeUser is a PrincipalType enum value
 	PrincipalTypeUser = "USER"
 
@@ -51546,6 +65308,30 @@ func PrincipalType_Values() []string {
 		PrincipalTypeUser,
 		PrincipalTypeRole,
 		PrincipalTypeGroup,
+	}
+}
+
+const (
+	// QuoteCharQuote is a QuoteChar enum value
+	QuoteCharQuote = "quote"
+
+	// QuoteCharQuillemet is a QuoteChar enum value
+	QuoteCharQuillemet = "quillemet"
+
+	// QuoteCharSingleQuote is a QuoteChar enum value
+	QuoteCharSingleQuote = "single_quote"
+
+	// QuoteCharDisabled is a QuoteChar enum value
+	QuoteCharDisabled = "disabled"
+)
+
+// QuoteChar_Values returns all elements of the QuoteChar enum
+func QuoteChar_Values() []string {
+	return []string{
+		QuoteCharQuote,
+		QuoteCharQuillemet,
+		QuoteCharSingleQuote,
+		QuoteCharDisabled,
 	}
 }
 
@@ -51718,6 +65504,66 @@ func SchemaVersionStatus_Values() []string {
 }
 
 const (
+	// SeparatorComma is a Separator enum value
+	SeparatorComma = "comma"
+
+	// SeparatorCtrla is a Separator enum value
+	SeparatorCtrla = "ctrla"
+
+	// SeparatorPipe is a Separator enum value
+	SeparatorPipe = "pipe"
+
+	// SeparatorSemicolon is a Separator enum value
+	SeparatorSemicolon = "semicolon"
+
+	// SeparatorTab is a Separator enum value
+	SeparatorTab = "tab"
+)
+
+// Separator_Values returns all elements of the Separator enum
+func Separator_Values() []string {
+	return []string{
+		SeparatorComma,
+		SeparatorCtrla,
+		SeparatorPipe,
+		SeparatorSemicolon,
+		SeparatorTab,
+	}
+}
+
+const (
+	// SessionStatusProvisioning is a SessionStatus enum value
+	SessionStatusProvisioning = "PROVISIONING"
+
+	// SessionStatusReady is a SessionStatus enum value
+	SessionStatusReady = "READY"
+
+	// SessionStatusFailed is a SessionStatus enum value
+	SessionStatusFailed = "FAILED"
+
+	// SessionStatusTimeout is a SessionStatus enum value
+	SessionStatusTimeout = "TIMEOUT"
+
+	// SessionStatusStopping is a SessionStatus enum value
+	SessionStatusStopping = "STOPPING"
+
+	// SessionStatusStopped is a SessionStatus enum value
+	SessionStatusStopped = "STOPPED"
+)
+
+// SessionStatus_Values returns all elements of the SessionStatus enum
+func SessionStatus_Values() []string {
+	return []string{
+		SessionStatusProvisioning,
+		SessionStatusReady,
+		SessionStatusFailed,
+		SessionStatusTimeout,
+		SessionStatusStopping,
+		SessionStatusStopped,
+	}
+}
+
+const (
 	// SortAsc is a Sort enum value
 	SortAsc = "ASC"
 
@@ -51746,6 +65592,86 @@ func SortDirectionType_Values() []string {
 	return []string{
 		SortDirectionTypeDescending,
 		SortDirectionTypeAscending,
+	}
+}
+
+const (
+	// StartingPositionLatest is a StartingPosition enum value
+	StartingPositionLatest = "latest"
+
+	// StartingPositionTrimHorizon is a StartingPosition enum value
+	StartingPositionTrimHorizon = "trim_horizon"
+
+	// StartingPositionEarliest is a StartingPosition enum value
+	StartingPositionEarliest = "earliest"
+)
+
+// StartingPosition_Values returns all elements of the StartingPosition enum
+func StartingPosition_Values() []string {
+	return []string{
+		StartingPositionLatest,
+		StartingPositionTrimHorizon,
+		StartingPositionEarliest,
+	}
+}
+
+const (
+	// StatementStateWaiting is a StatementState enum value
+	StatementStateWaiting = "WAITING"
+
+	// StatementStateRunning is a StatementState enum value
+	StatementStateRunning = "RUNNING"
+
+	// StatementStateAvailable is a StatementState enum value
+	StatementStateAvailable = "AVAILABLE"
+
+	// StatementStateCancelling is a StatementState enum value
+	StatementStateCancelling = "CANCELLING"
+
+	// StatementStateCancelled is a StatementState enum value
+	StatementStateCancelled = "CANCELLED"
+
+	// StatementStateError is a StatementState enum value
+	StatementStateError = "ERROR"
+)
+
+// StatementState_Values returns all elements of the StatementState enum
+func StatementState_Values() []string {
+	return []string{
+		StatementStateWaiting,
+		StatementStateRunning,
+		StatementStateAvailable,
+		StatementStateCancelling,
+		StatementStateCancelled,
+		StatementStateError,
+	}
+}
+
+const (
+	// TargetFormatJson is a TargetFormat enum value
+	TargetFormatJson = "json"
+
+	// TargetFormatCsv is a TargetFormat enum value
+	TargetFormatCsv = "csv"
+
+	// TargetFormatAvro is a TargetFormat enum value
+	TargetFormatAvro = "avro"
+
+	// TargetFormatOrc is a TargetFormat enum value
+	TargetFormatOrc = "orc"
+
+	// TargetFormatParquet is a TargetFormat enum value
+	TargetFormatParquet = "parquet"
+)
+
+// TargetFormat_Values returns all elements of the TargetFormat enum
+func TargetFormat_Values() []string {
+	return []string{
+		TargetFormatJson,
+		TargetFormatCsv,
+		TargetFormatAvro,
+		TargetFormatOrc,
+		TargetFormatParquet,
 	}
 }
 
@@ -51958,6 +65884,22 @@ func TriggerType_Values() []string {
 }
 
 const (
+	// UnionTypeAll is a UnionType enum value
+	UnionTypeAll = "ALL"
+
+	// UnionTypeDistinct is a UnionType enum value
+	UnionTypeDistinct = "DISTINCT"
+)
+
+// UnionType_Values returns all elements of the UnionType enum
+func UnionType_Values() []string {
+	return []string{
+		UnionTypeAll,
+		UnionTypeDistinct,
+	}
+}
+
+const (
 	// UpdateBehaviorLog is a UpdateBehavior enum value
 	UpdateBehaviorLog = "LOG"
 
@@ -51974,6 +65916,22 @@ func UpdateBehavior_Values() []string {
 }
 
 const (
+	// UpdateCatalogBehaviorUpdateInDatabase is a UpdateCatalogBehavior enum value
+	UpdateCatalogBehaviorUpdateInDatabase = "UPDATE_IN_DATABASE"
+
+	// UpdateCatalogBehaviorLog is a UpdateCatalogBehavior enum value
+	UpdateCatalogBehaviorLog = "LOG"
+)
+
+// UpdateCatalogBehavior_Values returns all elements of the UpdateCatalogBehavior enum
+func UpdateCatalogBehavior_Values() []string {
+	return []string{
+		UpdateCatalogBehaviorUpdateInDatabase,
+		UpdateCatalogBehaviorLog,
+	}
+}
+
+const (
 	// WorkerTypeStandard is a WorkerType enum value
 	WorkerTypeStandard = "Standard"
 
@@ -51982,6 +65940,9 @@ const (
 
 	// WorkerTypeG2x is a WorkerType enum value
 	WorkerTypeG2x = "G.2X"
+
+	// WorkerTypeG025x is a WorkerType enum value
+	WorkerTypeG025x = "G.025X"
 )
 
 // WorkerType_Values returns all elements of the WorkerType enum
@@ -51990,6 +65951,7 @@ func WorkerType_Values() []string {
 		WorkerTypeStandard,
 		WorkerTypeG1x,
 		WorkerTypeG2x,
+		WorkerTypeG025x,
 	}
 }
 

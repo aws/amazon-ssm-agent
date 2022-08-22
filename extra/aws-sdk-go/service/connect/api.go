@@ -214,6 +214,100 @@ func (c *Connect) AssociateBotWithContext(ctx aws.Context, input *AssociateBotIn
 	return out, req.Send()
 }
 
+const opAssociateDefaultVocabulary = "AssociateDefaultVocabulary"
+
+// AssociateDefaultVocabularyRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateDefaultVocabulary operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateDefaultVocabulary for more information on using the AssociateDefaultVocabulary
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateDefaultVocabularyRequest method.
+//    req, resp := client.AssociateDefaultVocabularyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/AssociateDefaultVocabulary
+func (c *Connect) AssociateDefaultVocabularyRequest(input *AssociateDefaultVocabularyInput) (req *request.Request, output *AssociateDefaultVocabularyOutput) {
+	op := &request.Operation{
+		Name:       opAssociateDefaultVocabulary,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/default-vocabulary/{InstanceId}/{LanguageCode}",
+	}
+
+	if input == nil {
+		input = &AssociateDefaultVocabularyInput{}
+	}
+
+	output = &AssociateDefaultVocabularyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AssociateDefaultVocabulary API operation for Amazon Connect Service.
+//
+// Associates an existing vocabulary as the default. Contact Lens for Amazon
+// Connect uses the vocabulary in post-call and real-time analysis sessions
+// for the given language.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation AssociateDefaultVocabulary for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/AssociateDefaultVocabulary
+func (c *Connect) AssociateDefaultVocabulary(input *AssociateDefaultVocabularyInput) (*AssociateDefaultVocabularyOutput, error) {
+	req, out := c.AssociateDefaultVocabularyRequest(input)
+	return out, req.Send()
+}
+
+// AssociateDefaultVocabularyWithContext is the same as AssociateDefaultVocabulary with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateDefaultVocabulary for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) AssociateDefaultVocabularyWithContext(ctx aws.Context, input *AssociateDefaultVocabularyInput, opts ...request.Option) (*AssociateDefaultVocabularyOutput, error) {
+	req, out := c.AssociateDefaultVocabularyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opAssociateInstanceStorageConfig = "AssociateInstanceStorageConfig"
 
 // AssociateInstanceStorageConfigRequest generates a "aws/request.Request" representing the
@@ -519,6 +613,99 @@ func (c *Connect) AssociateLexBotWithContext(ctx aws.Context, input *AssociateLe
 	return out, req.Send()
 }
 
+const opAssociatePhoneNumberContactFlow = "AssociatePhoneNumberContactFlow"
+
+// AssociatePhoneNumberContactFlowRequest generates a "aws/request.Request" representing the
+// client's request for the AssociatePhoneNumberContactFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociatePhoneNumberContactFlow for more information on using the AssociatePhoneNumberContactFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociatePhoneNumberContactFlowRequest method.
+//    req, resp := client.AssociatePhoneNumberContactFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/AssociatePhoneNumberContactFlow
+func (c *Connect) AssociatePhoneNumberContactFlowRequest(input *AssociatePhoneNumberContactFlowInput) (req *request.Request, output *AssociatePhoneNumberContactFlowOutput) {
+	op := &request.Operation{
+		Name:       opAssociatePhoneNumberContactFlow,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/phone-number/{PhoneNumberId}/contact-flow",
+	}
+
+	if input == nil {
+		input = &AssociatePhoneNumberContactFlowInput{}
+	}
+
+	output = &AssociatePhoneNumberContactFlowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AssociatePhoneNumberContactFlow API operation for Amazon Connect Service.
+//
+// Associates a contact flow with a phone number claimed to your Amazon Connect
+// instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation AssociatePhoneNumberContactFlow for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/AssociatePhoneNumberContactFlow
+func (c *Connect) AssociatePhoneNumberContactFlow(input *AssociatePhoneNumberContactFlowInput) (*AssociatePhoneNumberContactFlowOutput, error) {
+	req, out := c.AssociatePhoneNumberContactFlowRequest(input)
+	return out, req.Send()
+}
+
+// AssociatePhoneNumberContactFlowWithContext is the same as AssociatePhoneNumberContactFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociatePhoneNumberContactFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) AssociatePhoneNumberContactFlowWithContext(ctx aws.Context, input *AssociatePhoneNumberContactFlowInput, opts ...request.Option) (*AssociatePhoneNumberContactFlowOutput, error) {
+	req, out := c.AssociatePhoneNumberContactFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opAssociateQueueQuickConnects = "AssociateQueueQuickConnects"
 
 // AssociateQueueQuickConnectsRequest generates a "aws/request.Request" representing the
@@ -807,6 +994,100 @@ func (c *Connect) AssociateSecurityKeyWithContext(ctx aws.Context, input *Associ
 	return out, req.Send()
 }
 
+const opClaimPhoneNumber = "ClaimPhoneNumber"
+
+// ClaimPhoneNumberRequest generates a "aws/request.Request" representing the
+// client's request for the ClaimPhoneNumber operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ClaimPhoneNumber for more information on using the ClaimPhoneNumber
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ClaimPhoneNumberRequest method.
+//    req, resp := client.ClaimPhoneNumberRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ClaimPhoneNumber
+func (c *Connect) ClaimPhoneNumberRequest(input *ClaimPhoneNumberInput) (req *request.Request, output *ClaimPhoneNumberOutput) {
+	op := &request.Operation{
+		Name:       opClaimPhoneNumber,
+		HTTPMethod: "POST",
+		HTTPPath:   "/phone-number/claim",
+	}
+
+	if input == nil {
+		input = &ClaimPhoneNumberInput{}
+	}
+
+	output = &ClaimPhoneNumberOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ClaimPhoneNumber API operation for Amazon Connect Service.
+//
+// Claims an available phone number to your Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ClaimPhoneNumber for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * IdempotencyException
+//   An entity with the same name already exists.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ClaimPhoneNumber
+func (c *Connect) ClaimPhoneNumber(input *ClaimPhoneNumberInput) (*ClaimPhoneNumberOutput, error) {
+	req, out := c.ClaimPhoneNumberRequest(input)
+	return out, req.Send()
+}
+
+// ClaimPhoneNumberWithContext is the same as ClaimPhoneNumber with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ClaimPhoneNumber for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ClaimPhoneNumberWithContext(ctx aws.Context, input *ClaimPhoneNumberInput, opts ...request.Option) (*ClaimPhoneNumberOutput, error) {
+	req, out := c.ClaimPhoneNumberRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateAgentStatus = "CreateAgentStatus"
 
 // CreateAgentStatusRequest generates a "aws/request.Request" representing the
@@ -1004,6 +1285,112 @@ func (c *Connect) CreateContactFlow(input *CreateContactFlowInput) (*CreateConta
 // for more information on using Contexts.
 func (c *Connect) CreateContactFlowWithContext(ctx aws.Context, input *CreateContactFlowInput, opts ...request.Option) (*CreateContactFlowOutput, error) {
 	req, out := c.CreateContactFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateContactFlowModule = "CreateContactFlowModule"
+
+// CreateContactFlowModuleRequest generates a "aws/request.Request" representing the
+// client's request for the CreateContactFlowModule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateContactFlowModule for more information on using the CreateContactFlowModule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateContactFlowModuleRequest method.
+//    req, resp := client.CreateContactFlowModuleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateContactFlowModule
+func (c *Connect) CreateContactFlowModuleRequest(input *CreateContactFlowModuleInput) (req *request.Request, output *CreateContactFlowModuleOutput) {
+	op := &request.Operation{
+		Name:       opCreateContactFlowModule,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/contact-flow-modules/{InstanceId}",
+	}
+
+	if input == nil {
+		input = &CreateContactFlowModuleInput{}
+	}
+
+	output = &CreateContactFlowModuleOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateContactFlowModule API operation for Amazon Connect Service.
+//
+// Creates a contact flow module for the specified Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation CreateContactFlowModule for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidContactFlowModuleException
+//   The problems with the module. Please fix before trying again.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * DuplicateResourceException
+//   A resource with the specified name already exists.
+//
+//   * LimitExceededException
+//   The allowed limit for the resource has been exceeded.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * IdempotencyException
+//   An entity with the same name already exists.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateContactFlowModule
+func (c *Connect) CreateContactFlowModule(input *CreateContactFlowModuleInput) (*CreateContactFlowModuleOutput, error) {
+	req, out := c.CreateContactFlowModuleRequest(input)
+	return out, req.Send()
+}
+
+// CreateContactFlowModuleWithContext is the same as CreateContactFlowModule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateContactFlowModule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) CreateContactFlowModuleWithContext(ctx aws.Context, input *CreateContactFlowModuleInput, opts ...request.Option) (*CreateContactFlowModuleOutput, error) {
+	req, out := c.CreateContactFlowModuleRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1254,7 +1641,8 @@ func (c *Connect) CreateIntegrationAssociationRequest(input *CreateIntegrationAs
 
 // CreateIntegrationAssociation API operation for Amazon Connect Service.
 //
-// Creates an AWS resource association with an Amazon Connect instance.
+// Creates an Amazon Web Services resource association with an Amazon Connect
+// instance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1594,6 +1982,198 @@ func (c *Connect) CreateRoutingProfileWithContext(ctx aws.Context, input *Create
 	return out, req.Send()
 }
 
+const opCreateSecurityProfile = "CreateSecurityProfile"
+
+// CreateSecurityProfileRequest generates a "aws/request.Request" representing the
+// client's request for the CreateSecurityProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateSecurityProfile for more information on using the CreateSecurityProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateSecurityProfileRequest method.
+//    req, resp := client.CreateSecurityProfileRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateSecurityProfile
+func (c *Connect) CreateSecurityProfileRequest(input *CreateSecurityProfileInput) (req *request.Request, output *CreateSecurityProfileOutput) {
+	op := &request.Operation{
+		Name:       opCreateSecurityProfile,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/security-profiles/{InstanceId}",
+	}
+
+	if input == nil {
+		input = &CreateSecurityProfileInput{}
+	}
+
+	output = &CreateSecurityProfileOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateSecurityProfile API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// Creates a security profile.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation CreateSecurityProfile for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * LimitExceededException
+//   The allowed limit for the resource has been exceeded.
+//
+//   * DuplicateResourceException
+//   A resource with the specified name already exists.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateSecurityProfile
+func (c *Connect) CreateSecurityProfile(input *CreateSecurityProfileInput) (*CreateSecurityProfileOutput, error) {
+	req, out := c.CreateSecurityProfileRequest(input)
+	return out, req.Send()
+}
+
+// CreateSecurityProfileWithContext is the same as CreateSecurityProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateSecurityProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) CreateSecurityProfileWithContext(ctx aws.Context, input *CreateSecurityProfileInput, opts ...request.Option) (*CreateSecurityProfileOutput, error) {
+	req, out := c.CreateSecurityProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateTaskTemplate = "CreateTaskTemplate"
+
+// CreateTaskTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateTaskTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateTaskTemplate for more information on using the CreateTaskTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateTaskTemplateRequest method.
+//    req, resp := client.CreateTaskTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateTaskTemplate
+func (c *Connect) CreateTaskTemplateRequest(input *CreateTaskTemplateInput) (req *request.Request, output *CreateTaskTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateTaskTemplate,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/instance/{InstanceId}/task/template",
+	}
+
+	if input == nil {
+		input = &CreateTaskTemplateInput{}
+	}
+
+	output = &CreateTaskTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateTaskTemplate API operation for Amazon Connect Service.
+//
+// Creates a new task template in the specified Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation CreateTaskTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * PropertyValidationException
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * ServiceQuotaExceededException
+//   The service quota has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateTaskTemplate
+func (c *Connect) CreateTaskTemplate(input *CreateTaskTemplateInput) (*CreateTaskTemplateOutput, error) {
+	req, out := c.CreateTaskTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateTaskTemplateWithContext is the same as CreateTaskTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateTaskTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) CreateTaskTemplateWithContext(ctx aws.Context, input *CreateTaskTemplateInput, opts ...request.Option) (*CreateTaskTemplateOutput, error) {
+	req, out := c.CreateTaskTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateUseCase = "CreateUseCase"
 
 // CreateUseCaseRequest generates a "aws/request.Request" representing the
@@ -1883,6 +2463,296 @@ func (c *Connect) CreateUserHierarchyGroupWithContext(ctx aws.Context, input *Cr
 	return out, req.Send()
 }
 
+const opCreateVocabulary = "CreateVocabulary"
+
+// CreateVocabularyRequest generates a "aws/request.Request" representing the
+// client's request for the CreateVocabulary operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateVocabulary for more information on using the CreateVocabulary
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateVocabularyRequest method.
+//    req, resp := client.CreateVocabularyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateVocabulary
+func (c *Connect) CreateVocabularyRequest(input *CreateVocabularyInput) (req *request.Request, output *CreateVocabularyOutput) {
+	op := &request.Operation{
+		Name:       opCreateVocabulary,
+		HTTPMethod: "POST",
+		HTTPPath:   "/vocabulary/{InstanceId}",
+	}
+
+	if input == nil {
+		input = &CreateVocabularyInput{}
+	}
+
+	output = &CreateVocabularyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateVocabulary API operation for Amazon Connect Service.
+//
+// Creates a custom vocabulary associated with your Amazon Connect instance.
+// You can set a custom vocabulary to be your default vocabulary for a given
+// language. Contact Lens for Amazon Connect uses the default vocabulary in
+// post-call and real-time contact analysis sessions for that language.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation CreateVocabulary for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * ResourceConflictException
+//   A resource already has that name.
+//
+//   * ServiceQuotaExceededException
+//   The service quota has been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/CreateVocabulary
+func (c *Connect) CreateVocabulary(input *CreateVocabularyInput) (*CreateVocabularyOutput, error) {
+	req, out := c.CreateVocabularyRequest(input)
+	return out, req.Send()
+}
+
+// CreateVocabularyWithContext is the same as CreateVocabulary with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateVocabulary for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) CreateVocabularyWithContext(ctx aws.Context, input *CreateVocabularyInput, opts ...request.Option) (*CreateVocabularyOutput, error) {
+	req, out := c.CreateVocabularyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteContactFlow = "DeleteContactFlow"
+
+// DeleteContactFlowRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteContactFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteContactFlow for more information on using the DeleteContactFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteContactFlowRequest method.
+//    req, resp := client.DeleteContactFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteContactFlow
+func (c *Connect) DeleteContactFlowRequest(input *DeleteContactFlowInput) (req *request.Request, output *DeleteContactFlowOutput) {
+	op := &request.Operation{
+		Name:       opDeleteContactFlow,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/contact-flows/{InstanceId}/{ContactFlowId}",
+	}
+
+	if input == nil {
+		input = &DeleteContactFlowInput{}
+	}
+
+	output = &DeleteContactFlowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteContactFlow API operation for Amazon Connect Service.
+//
+// Deletes a contact flow for the specified Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DeleteContactFlow for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteContactFlow
+func (c *Connect) DeleteContactFlow(input *DeleteContactFlowInput) (*DeleteContactFlowOutput, error) {
+	req, out := c.DeleteContactFlowRequest(input)
+	return out, req.Send()
+}
+
+// DeleteContactFlowWithContext is the same as DeleteContactFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteContactFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DeleteContactFlowWithContext(ctx aws.Context, input *DeleteContactFlowInput, opts ...request.Option) (*DeleteContactFlowOutput, error) {
+	req, out := c.DeleteContactFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteContactFlowModule = "DeleteContactFlowModule"
+
+// DeleteContactFlowModuleRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteContactFlowModule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteContactFlowModule for more information on using the DeleteContactFlowModule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteContactFlowModuleRequest method.
+//    req, resp := client.DeleteContactFlowModuleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteContactFlowModule
+func (c *Connect) DeleteContactFlowModuleRequest(input *DeleteContactFlowModuleInput) (req *request.Request, output *DeleteContactFlowModuleOutput) {
+	op := &request.Operation{
+		Name:       opDeleteContactFlowModule,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/contact-flow-modules/{InstanceId}/{ContactFlowModuleId}",
+	}
+
+	if input == nil {
+		input = &DeleteContactFlowModuleInput{}
+	}
+
+	output = &DeleteContactFlowModuleOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteContactFlowModule API operation for Amazon Connect Service.
+//
+// Deletes the specified contact flow module.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DeleteContactFlowModule for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteContactFlowModule
+func (c *Connect) DeleteContactFlowModule(input *DeleteContactFlowModuleInput) (*DeleteContactFlowModuleOutput, error) {
+	req, out := c.DeleteContactFlowModuleRequest(input)
+	return out, req.Send()
+}
+
+// DeleteContactFlowModuleWithContext is the same as DeleteContactFlowModule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteContactFlowModule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DeleteContactFlowModuleWithContext(ctx aws.Context, input *DeleteContactFlowModuleInput, opts ...request.Option) (*DeleteContactFlowModuleOutput, error) {
+	req, out := c.DeleteContactFlowModuleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteHoursOfOperation = "DeleteHoursOfOperation"
 
 // DeleteHoursOfOperationRequest generates a "aws/request.Request" representing the
@@ -2116,8 +2986,8 @@ func (c *Connect) DeleteIntegrationAssociationRequest(input *DeleteIntegrationAs
 
 // DeleteIntegrationAssociation API operation for Amazon Connect Service.
 //
-// Deletes an AWS resource association from an Amazon Connect instance. The
-// association must not have any use cases associated with it.
+// Deletes an Amazon Web Services resource association from an Amazon Connect
+// instance. The association must not have any use cases associated with it.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2248,6 +3118,198 @@ func (c *Connect) DeleteQuickConnect(input *DeleteQuickConnectInput) (*DeleteQui
 // for more information on using Contexts.
 func (c *Connect) DeleteQuickConnectWithContext(ctx aws.Context, input *DeleteQuickConnectInput, opts ...request.Option) (*DeleteQuickConnectOutput, error) {
 	req, out := c.DeleteQuickConnectRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteSecurityProfile = "DeleteSecurityProfile"
+
+// DeleteSecurityProfileRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteSecurityProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteSecurityProfile for more information on using the DeleteSecurityProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteSecurityProfileRequest method.
+//    req, resp := client.DeleteSecurityProfileRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteSecurityProfile
+func (c *Connect) DeleteSecurityProfileRequest(input *DeleteSecurityProfileInput) (req *request.Request, output *DeleteSecurityProfileOutput) {
+	op := &request.Operation{
+		Name:       opDeleteSecurityProfile,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/security-profiles/{InstanceId}/{SecurityProfileId}",
+	}
+
+	if input == nil {
+		input = &DeleteSecurityProfileInput{}
+	}
+
+	output = &DeleteSecurityProfileOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteSecurityProfile API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// Deletes a security profile.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DeleteSecurityProfile for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * ResourceInUseException
+//   That resource is already in use. Please try another.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteSecurityProfile
+func (c *Connect) DeleteSecurityProfile(input *DeleteSecurityProfileInput) (*DeleteSecurityProfileOutput, error) {
+	req, out := c.DeleteSecurityProfileRequest(input)
+	return out, req.Send()
+}
+
+// DeleteSecurityProfileWithContext is the same as DeleteSecurityProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteSecurityProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DeleteSecurityProfileWithContext(ctx aws.Context, input *DeleteSecurityProfileInput, opts ...request.Option) (*DeleteSecurityProfileOutput, error) {
+	req, out := c.DeleteSecurityProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteTaskTemplate = "DeleteTaskTemplate"
+
+// DeleteTaskTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteTaskTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteTaskTemplate for more information on using the DeleteTaskTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteTaskTemplateRequest method.
+//    req, resp := client.DeleteTaskTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteTaskTemplate
+func (c *Connect) DeleteTaskTemplateRequest(input *DeleteTaskTemplateInput) (req *request.Request, output *DeleteTaskTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteTaskTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/instance/{InstanceId}/task/template/{TaskTemplateId}",
+	}
+
+	if input == nil {
+		input = &DeleteTaskTemplateInput{}
+	}
+
+	output = &DeleteTaskTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteTaskTemplate API operation for Amazon Connect Service.
+//
+// Deletes the task template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DeleteTaskTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteTaskTemplate
+func (c *Connect) DeleteTaskTemplate(input *DeleteTaskTemplateInput) (*DeleteTaskTemplateOutput, error) {
+	req, out := c.DeleteTaskTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteTaskTemplateWithContext is the same as DeleteTaskTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteTaskTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DeleteTaskTemplateWithContext(ctx aws.Context, input *DeleteTaskTemplateInput, opts ...request.Option) (*DeleteTaskTemplateOutput, error) {
+	req, out := c.DeleteTaskTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2534,6 +3596,100 @@ func (c *Connect) DeleteUserHierarchyGroupWithContext(ctx aws.Context, input *De
 	return out, req.Send()
 }
 
+const opDeleteVocabulary = "DeleteVocabulary"
+
+// DeleteVocabularyRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteVocabulary operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteVocabulary for more information on using the DeleteVocabulary
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteVocabularyRequest method.
+//    req, resp := client.DeleteVocabularyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteVocabulary
+func (c *Connect) DeleteVocabularyRequest(input *DeleteVocabularyInput) (req *request.Request, output *DeleteVocabularyOutput) {
+	op := &request.Operation{
+		Name:       opDeleteVocabulary,
+		HTTPMethod: "POST",
+		HTTPPath:   "/vocabulary-remove/{InstanceId}/{VocabularyId}",
+	}
+
+	if input == nil {
+		input = &DeleteVocabularyInput{}
+	}
+
+	output = &DeleteVocabularyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteVocabulary API operation for Amazon Connect Service.
+//
+// Deletes the vocabulary that has the given identifier.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DeleteVocabulary for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * ResourceInUseException
+//   That resource is already in use. Please try another.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DeleteVocabulary
+func (c *Connect) DeleteVocabulary(input *DeleteVocabularyInput) (*DeleteVocabularyOutput, error) {
+	req, out := c.DeleteVocabularyRequest(input)
+	return out, req.Send()
+}
+
+// DeleteVocabularyWithContext is the same as DeleteVocabulary with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteVocabulary for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DeleteVocabularyWithContext(ctx aws.Context, input *DeleteVocabularyInput, opts ...request.Option) (*DeleteVocabularyOutput, error) {
+	req, out := c.DeleteVocabularyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeAgentStatus = "DescribeAgentStatus"
 
 // DescribeAgentStatusRequest generates a "aws/request.Request" representing the
@@ -2622,6 +3778,102 @@ func (c *Connect) DescribeAgentStatus(input *DescribeAgentStatusInput) (*Describ
 // for more information on using Contexts.
 func (c *Connect) DescribeAgentStatusWithContext(ctx aws.Context, input *DescribeAgentStatusInput, opts ...request.Option) (*DescribeAgentStatusOutput, error) {
 	req, out := c.DescribeAgentStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeContact = "DescribeContact"
+
+// DescribeContactRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeContact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeContact for more information on using the DescribeContact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeContactRequest method.
+//    req, resp := client.DescribeContactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeContact
+func (c *Connect) DescribeContactRequest(input *DescribeContactInput) (req *request.Request, output *DescribeContactOutput) {
+	op := &request.Operation{
+		Name:       opDescribeContact,
+		HTTPMethod: "GET",
+		HTTPPath:   "/contacts/{InstanceId}/{ContactId}",
+	}
+
+	if input == nil {
+		input = &DescribeContactInput{}
+	}
+
+	output = &DescribeContactOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeContact API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// Describes the specified contact.
+//
+// Contact information remains available in Amazon Connect for 24 months, and
+// then it is deleted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DescribeContact for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeContact
+func (c *Connect) DescribeContact(input *DescribeContactInput) (*DescribeContactOutput, error) {
+	req, out := c.DescribeContactRequest(input)
+	return out, req.Send()
+}
+
+// DescribeContactWithContext is the same as DescribeContact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeContact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DescribeContactWithContext(ctx aws.Context, input *DescribeContactInput, opts ...request.Option) (*DescribeContactOutput, error) {
+	req, out := c.DescribeContactRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2719,6 +3971,100 @@ func (c *Connect) DescribeContactFlow(input *DescribeContactFlowInput) (*Describ
 // for more information on using Contexts.
 func (c *Connect) DescribeContactFlowWithContext(ctx aws.Context, input *DescribeContactFlowInput, opts ...request.Option) (*DescribeContactFlowOutput, error) {
 	req, out := c.DescribeContactFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeContactFlowModule = "DescribeContactFlowModule"
+
+// DescribeContactFlowModuleRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeContactFlowModule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeContactFlowModule for more information on using the DescribeContactFlowModule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeContactFlowModuleRequest method.
+//    req, resp := client.DescribeContactFlowModuleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeContactFlowModule
+func (c *Connect) DescribeContactFlowModuleRequest(input *DescribeContactFlowModuleInput) (req *request.Request, output *DescribeContactFlowModuleOutput) {
+	op := &request.Operation{
+		Name:       opDescribeContactFlowModule,
+		HTTPMethod: "GET",
+		HTTPPath:   "/contact-flow-modules/{InstanceId}/{ContactFlowModuleId}",
+	}
+
+	if input == nil {
+		input = &DescribeContactFlowModuleInput{}
+	}
+
+	output = &DescribeContactFlowModuleOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeContactFlowModule API operation for Amazon Connect Service.
+//
+// Describes the specified contact flow module.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DescribeContactFlowModule for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeContactFlowModule
+func (c *Connect) DescribeContactFlowModule(input *DescribeContactFlowModuleInput) (*DescribeContactFlowModuleOutput, error) {
+	req, out := c.DescribeContactFlowModuleRequest(input)
+	return out, req.Send()
+}
+
+// DescribeContactFlowModuleWithContext is the same as DescribeContactFlowModule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeContactFlowModule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DescribeContactFlowModuleWithContext(ctx aws.Context, input *DescribeContactFlowModuleInput, opts ...request.Option) (*DescribeContactFlowModuleOutput, error) {
+	req, out := c.DescribeContactFlowModuleRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3096,6 +4442,98 @@ func (c *Connect) DescribeInstanceStorageConfigWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opDescribePhoneNumber = "DescribePhoneNumber"
+
+// DescribePhoneNumberRequest generates a "aws/request.Request" representing the
+// client's request for the DescribePhoneNumber operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribePhoneNumber for more information on using the DescribePhoneNumber
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribePhoneNumberRequest method.
+//    req, resp := client.DescribePhoneNumberRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribePhoneNumber
+func (c *Connect) DescribePhoneNumberRequest(input *DescribePhoneNumberInput) (req *request.Request, output *DescribePhoneNumberOutput) {
+	op := &request.Operation{
+		Name:       opDescribePhoneNumber,
+		HTTPMethod: "GET",
+		HTTPPath:   "/phone-number/{PhoneNumberId}",
+	}
+
+	if input == nil {
+		input = &DescribePhoneNumberInput{}
+	}
+
+	output = &DescribePhoneNumberOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribePhoneNumber API operation for Amazon Connect Service.
+//
+// Gets details and status of a phone number that’s claimed to your Amazon
+// Connect instance
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DescribePhoneNumber for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribePhoneNumber
+func (c *Connect) DescribePhoneNumber(input *DescribePhoneNumberInput) (*DescribePhoneNumberOutput, error) {
+	req, out := c.DescribePhoneNumberRequest(input)
+	return out, req.Send()
+}
+
+// DescribePhoneNumberWithContext is the same as DescribePhoneNumber with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribePhoneNumber for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DescribePhoneNumberWithContext(ctx aws.Context, input *DescribePhoneNumberInput, opts ...request.Option) (*DescribePhoneNumberOutput, error) {
+	req, out := c.DescribePhoneNumberRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeQueue = "DescribeQueue"
 
 // DescribeQueueRequest generates a "aws/request.Request" representing the
@@ -3371,6 +4809,99 @@ func (c *Connect) DescribeRoutingProfileWithContext(ctx aws.Context, input *Desc
 	return out, req.Send()
 }
 
+const opDescribeSecurityProfile = "DescribeSecurityProfile"
+
+// DescribeSecurityProfileRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeSecurityProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeSecurityProfile for more information on using the DescribeSecurityProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeSecurityProfileRequest method.
+//    req, resp := client.DescribeSecurityProfileRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeSecurityProfile
+func (c *Connect) DescribeSecurityProfileRequest(input *DescribeSecurityProfileInput) (req *request.Request, output *DescribeSecurityProfileOutput) {
+	op := &request.Operation{
+		Name:       opDescribeSecurityProfile,
+		HTTPMethod: "GET",
+		HTTPPath:   "/security-profiles/{InstanceId}/{SecurityProfileId}",
+	}
+
+	if input == nil {
+		input = &DescribeSecurityProfileInput{}
+	}
+
+	output = &DescribeSecurityProfileOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeSecurityProfile API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// Gets basic information about the security profle.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DescribeSecurityProfile for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeSecurityProfile
+func (c *Connect) DescribeSecurityProfile(input *DescribeSecurityProfileInput) (*DescribeSecurityProfileOutput, error) {
+	req, out := c.DescribeSecurityProfileRequest(input)
+	return out, req.Send()
+}
+
+// DescribeSecurityProfileWithContext is the same as DescribeSecurityProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeSecurityProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DescribeSecurityProfileWithContext(ctx aws.Context, input *DescribeSecurityProfileInput, opts ...request.Option) (*DescribeSecurityProfileOutput, error) {
+	req, out := c.DescribeSecurityProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeUser = "DescribeUser"
 
 // DescribeUserRequest generates a "aws/request.Request" representing the
@@ -3641,6 +5172,97 @@ func (c *Connect) DescribeUserHierarchyStructure(input *DescribeUserHierarchyStr
 // for more information on using Contexts.
 func (c *Connect) DescribeUserHierarchyStructureWithContext(ctx aws.Context, input *DescribeUserHierarchyStructureInput, opts ...request.Option) (*DescribeUserHierarchyStructureOutput, error) {
 	req, out := c.DescribeUserHierarchyStructureRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeVocabulary = "DescribeVocabulary"
+
+// DescribeVocabularyRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeVocabulary operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeVocabulary for more information on using the DescribeVocabulary
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeVocabularyRequest method.
+//    req, resp := client.DescribeVocabularyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeVocabulary
+func (c *Connect) DescribeVocabularyRequest(input *DescribeVocabularyInput) (req *request.Request, output *DescribeVocabularyOutput) {
+	op := &request.Operation{
+		Name:       opDescribeVocabulary,
+		HTTPMethod: "GET",
+		HTTPPath:   "/vocabulary/{InstanceId}/{VocabularyId}",
+	}
+
+	if input == nil {
+		input = &DescribeVocabularyInput{}
+	}
+
+	output = &DescribeVocabularyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeVocabulary API operation for Amazon Connect Service.
+//
+// Describes the specified vocabulary.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DescribeVocabulary for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DescribeVocabulary
+func (c *Connect) DescribeVocabulary(input *DescribeVocabularyInput) (*DescribeVocabularyOutput, error) {
+	req, out := c.DescribeVocabularyRequest(input)
+	return out, req.Send()
+}
+
+// DescribeVocabularyWithContext is the same as DescribeVocabulary with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeVocabulary for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DescribeVocabularyWithContext(ctx aws.Context, input *DescribeVocabularyInput, opts ...request.Option) (*DescribeVocabularyOutput, error) {
+	req, out := c.DescribeVocabularyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4112,6 +5734,99 @@ func (c *Connect) DisassociateLexBot(input *DisassociateLexBotInput) (*Disassoci
 // for more information on using Contexts.
 func (c *Connect) DisassociateLexBotWithContext(ctx aws.Context, input *DisassociateLexBotInput, opts ...request.Option) (*DisassociateLexBotOutput, error) {
 	req, out := c.DisassociateLexBotRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDisassociatePhoneNumberContactFlow = "DisassociatePhoneNumberContactFlow"
+
+// DisassociatePhoneNumberContactFlowRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociatePhoneNumberContactFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociatePhoneNumberContactFlow for more information on using the DisassociatePhoneNumberContactFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociatePhoneNumberContactFlowRequest method.
+//    req, resp := client.DisassociatePhoneNumberContactFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DisassociatePhoneNumberContactFlow
+func (c *Connect) DisassociatePhoneNumberContactFlowRequest(input *DisassociatePhoneNumberContactFlowInput) (req *request.Request, output *DisassociatePhoneNumberContactFlowOutput) {
+	op := &request.Operation{
+		Name:       opDisassociatePhoneNumberContactFlow,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/phone-number/{PhoneNumberId}/contact-flow",
+	}
+
+	if input == nil {
+		input = &DisassociatePhoneNumberContactFlowInput{}
+	}
+
+	output = &DisassociatePhoneNumberContactFlowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisassociatePhoneNumberContactFlow API operation for Amazon Connect Service.
+//
+// Removes the contact flow association from a phone number claimed to your
+// Amazon Connect instance, if a contact flow association exists.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation DisassociatePhoneNumberContactFlow for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/DisassociatePhoneNumberContactFlow
+func (c *Connect) DisassociatePhoneNumberContactFlow(input *DisassociatePhoneNumberContactFlowInput) (*DisassociatePhoneNumberContactFlowOutput, error) {
+	req, out := c.DisassociatePhoneNumberContactFlowRequest(input)
+	return out, req.Send()
+}
+
+// DisassociatePhoneNumberContactFlowWithContext is the same as DisassociatePhoneNumberContactFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociatePhoneNumberContactFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) DisassociatePhoneNumberContactFlowWithContext(ctx aws.Context, input *DisassociatePhoneNumberContactFlowInput, opts ...request.Option) (*DisassociatePhoneNumberContactFlowOutput, error) {
+	req, out := c.DisassociatePhoneNumberContactFlowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4634,6 +6349,155 @@ func (c *Connect) GetCurrentMetricDataPagesWithContext(ctx aws.Context, input *G
 	return p.Err()
 }
 
+const opGetCurrentUserData = "GetCurrentUserData"
+
+// GetCurrentUserDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetCurrentUserData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCurrentUserData for more information on using the GetCurrentUserData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetCurrentUserDataRequest method.
+//    req, resp := client.GetCurrentUserDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetCurrentUserData
+func (c *Connect) GetCurrentUserDataRequest(input *GetCurrentUserDataInput) (req *request.Request, output *GetCurrentUserDataOutput) {
+	op := &request.Operation{
+		Name:       opGetCurrentUserData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/metrics/userdata/{InstanceId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetCurrentUserDataInput{}
+	}
+
+	output = &GetCurrentUserDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCurrentUserData API operation for Amazon Connect Service.
+//
+// Gets the real-time active user data from the specified Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation GetCurrentUserData for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetCurrentUserData
+func (c *Connect) GetCurrentUserData(input *GetCurrentUserDataInput) (*GetCurrentUserDataOutput, error) {
+	req, out := c.GetCurrentUserDataRequest(input)
+	return out, req.Send()
+}
+
+// GetCurrentUserDataWithContext is the same as GetCurrentUserData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCurrentUserData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetCurrentUserDataWithContext(ctx aws.Context, input *GetCurrentUserDataInput, opts ...request.Option) (*GetCurrentUserDataOutput, error) {
+	req, out := c.GetCurrentUserDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetCurrentUserDataPages iterates over the pages of a GetCurrentUserData operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetCurrentUserData method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetCurrentUserData operation.
+//    pageNum := 0
+//    err := client.GetCurrentUserDataPages(params,
+//        func(page *connect.GetCurrentUserDataOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) GetCurrentUserDataPages(input *GetCurrentUserDataInput, fn func(*GetCurrentUserDataOutput, bool) bool) error {
+	return c.GetCurrentUserDataPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetCurrentUserDataPagesWithContext same as GetCurrentUserDataPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetCurrentUserDataPagesWithContext(ctx aws.Context, input *GetCurrentUserDataInput, fn func(*GetCurrentUserDataOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetCurrentUserDataInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetCurrentUserDataRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetCurrentUserDataOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opGetFederationToken = "GetFederationToken"
 
 // GetFederationTokenRequest generates a "aws/request.Request" representing the
@@ -4885,6 +6749,98 @@ func (c *Connect) GetMetricDataPagesWithContext(ctx aws.Context, input *GetMetri
 	}
 
 	return p.Err()
+}
+
+const opGetTaskTemplate = "GetTaskTemplate"
+
+// GetTaskTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetTaskTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetTaskTemplate for more information on using the GetTaskTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetTaskTemplateRequest method.
+//    req, resp := client.GetTaskTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetTaskTemplate
+func (c *Connect) GetTaskTemplateRequest(input *GetTaskTemplateInput) (req *request.Request, output *GetTaskTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetTaskTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/instance/{InstanceId}/task/template/{TaskTemplateId}",
+	}
+
+	if input == nil {
+		input = &GetTaskTemplateInput{}
+	}
+
+	output = &GetTaskTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetTaskTemplate API operation for Amazon Connect Service.
+//
+// Gets details about a specific task template in the specified Amazon Connect
+// instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation GetTaskTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetTaskTemplate
+func (c *Connect) GetTaskTemplate(input *GetTaskTemplateInput) (*GetTaskTemplateOutput, error) {
+	req, out := c.GetTaskTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetTaskTemplateWithContext is the same as GetTaskTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetTaskTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetTaskTemplateWithContext(ctx aws.Context, input *GetTaskTemplateInput, opts ...request.Option) (*GetTaskTemplateOutput, error) {
+	req, out := c.GetTaskTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
 }
 
 const opListAgentStatuses = "ListAgentStatuses"
@@ -5338,6 +7294,159 @@ func (c *Connect) ListBotsPagesWithContext(ctx aws.Context, input *ListBotsInput
 	return p.Err()
 }
 
+const opListContactFlowModules = "ListContactFlowModules"
+
+// ListContactFlowModulesRequest generates a "aws/request.Request" representing the
+// client's request for the ListContactFlowModules operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListContactFlowModules for more information on using the ListContactFlowModules
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListContactFlowModulesRequest method.
+//    req, resp := client.ListContactFlowModulesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListContactFlowModules
+func (c *Connect) ListContactFlowModulesRequest(input *ListContactFlowModulesInput) (req *request.Request, output *ListContactFlowModulesOutput) {
+	op := &request.Operation{
+		Name:       opListContactFlowModules,
+		HTTPMethod: "GET",
+		HTTPPath:   "/contact-flow-modules-summary/{InstanceId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListContactFlowModulesInput{}
+	}
+
+	output = &ListContactFlowModulesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListContactFlowModules API operation for Amazon Connect Service.
+//
+// Provides information about the contact flow modules for the specified Amazon
+// Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ListContactFlowModules for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListContactFlowModules
+func (c *Connect) ListContactFlowModules(input *ListContactFlowModulesInput) (*ListContactFlowModulesOutput, error) {
+	req, out := c.ListContactFlowModulesRequest(input)
+	return out, req.Send()
+}
+
+// ListContactFlowModulesWithContext is the same as ListContactFlowModules with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListContactFlowModules for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListContactFlowModulesWithContext(ctx aws.Context, input *ListContactFlowModulesInput, opts ...request.Option) (*ListContactFlowModulesOutput, error) {
+	req, out := c.ListContactFlowModulesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListContactFlowModulesPages iterates over the pages of a ListContactFlowModules operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListContactFlowModules method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListContactFlowModules operation.
+//    pageNum := 0
+//    err := client.ListContactFlowModulesPages(params,
+//        func(page *connect.ListContactFlowModulesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) ListContactFlowModulesPages(input *ListContactFlowModulesInput, fn func(*ListContactFlowModulesOutput, bool) bool) error {
+	return c.ListContactFlowModulesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListContactFlowModulesPagesWithContext same as ListContactFlowModulesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListContactFlowModulesPagesWithContext(ctx aws.Context, input *ListContactFlowModulesInput, fn func(*ListContactFlowModulesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListContactFlowModulesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListContactFlowModulesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListContactFlowModulesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListContactFlows = "ListContactFlows"
 
 // ListContactFlowsRequest generates a "aws/request.Request" representing the
@@ -5487,6 +7596,304 @@ func (c *Connect) ListContactFlowsPagesWithContext(ctx aws.Context, input *ListC
 
 	for p.Next() {
 		if !fn(p.Page().(*ListContactFlowsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListContactReferences = "ListContactReferences"
+
+// ListContactReferencesRequest generates a "aws/request.Request" representing the
+// client's request for the ListContactReferences operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListContactReferences for more information on using the ListContactReferences
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListContactReferencesRequest method.
+//    req, resp := client.ListContactReferencesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListContactReferences
+func (c *Connect) ListContactReferencesRequest(input *ListContactReferencesInput) (req *request.Request, output *ListContactReferencesOutput) {
+	op := &request.Operation{
+		Name:       opListContactReferences,
+		HTTPMethod: "GET",
+		HTTPPath:   "/contact/references/{InstanceId}/{ContactId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListContactReferencesInput{}
+	}
+
+	output = &ListContactReferencesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListContactReferences API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// For the specified referenceTypes, returns a list of references associated
+// with the contact.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ListContactReferences for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListContactReferences
+func (c *Connect) ListContactReferences(input *ListContactReferencesInput) (*ListContactReferencesOutput, error) {
+	req, out := c.ListContactReferencesRequest(input)
+	return out, req.Send()
+}
+
+// ListContactReferencesWithContext is the same as ListContactReferences with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListContactReferences for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListContactReferencesWithContext(ctx aws.Context, input *ListContactReferencesInput, opts ...request.Option) (*ListContactReferencesOutput, error) {
+	req, out := c.ListContactReferencesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListContactReferencesPages iterates over the pages of a ListContactReferences operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListContactReferences method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListContactReferences operation.
+//    pageNum := 0
+//    err := client.ListContactReferencesPages(params,
+//        func(page *connect.ListContactReferencesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) ListContactReferencesPages(input *ListContactReferencesInput, fn func(*ListContactReferencesOutput, bool) bool) error {
+	return c.ListContactReferencesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListContactReferencesPagesWithContext same as ListContactReferencesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListContactReferencesPagesWithContext(ctx aws.Context, input *ListContactReferencesInput, fn func(*ListContactReferencesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListContactReferencesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListContactReferencesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListContactReferencesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListDefaultVocabularies = "ListDefaultVocabularies"
+
+// ListDefaultVocabulariesRequest generates a "aws/request.Request" representing the
+// client's request for the ListDefaultVocabularies operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListDefaultVocabularies for more information on using the ListDefaultVocabularies
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListDefaultVocabulariesRequest method.
+//    req, resp := client.ListDefaultVocabulariesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListDefaultVocabularies
+func (c *Connect) ListDefaultVocabulariesRequest(input *ListDefaultVocabulariesInput) (req *request.Request, output *ListDefaultVocabulariesOutput) {
+	op := &request.Operation{
+		Name:       opListDefaultVocabularies,
+		HTTPMethod: "POST",
+		HTTPPath:   "/default-vocabulary-summary/{InstanceId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListDefaultVocabulariesInput{}
+	}
+
+	output = &ListDefaultVocabulariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListDefaultVocabularies API operation for Amazon Connect Service.
+//
+// Lists the default vocabularies for the specified Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ListDefaultVocabularies for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListDefaultVocabularies
+func (c *Connect) ListDefaultVocabularies(input *ListDefaultVocabulariesInput) (*ListDefaultVocabulariesOutput, error) {
+	req, out := c.ListDefaultVocabulariesRequest(input)
+	return out, req.Send()
+}
+
+// ListDefaultVocabulariesWithContext is the same as ListDefaultVocabularies with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListDefaultVocabularies for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListDefaultVocabulariesWithContext(ctx aws.Context, input *ListDefaultVocabulariesInput, opts ...request.Option) (*ListDefaultVocabulariesOutput, error) {
+	req, out := c.ListDefaultVocabulariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListDefaultVocabulariesPages iterates over the pages of a ListDefaultVocabularies operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListDefaultVocabularies method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListDefaultVocabularies operation.
+//    pageNum := 0
+//    err := client.ListDefaultVocabulariesPages(params,
+//        func(page *connect.ListDefaultVocabulariesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) ListDefaultVocabulariesPages(input *ListDefaultVocabulariesInput, fn func(*ListDefaultVocabulariesOutput, bool) bool) error {
+	return c.ListDefaultVocabulariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListDefaultVocabulariesPagesWithContext same as ListDefaultVocabulariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListDefaultVocabulariesPagesWithContext(ctx aws.Context, input *ListDefaultVocabulariesInput, fn func(*ListDefaultVocabulariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListDefaultVocabulariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListDefaultVocabulariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListDefaultVocabulariesOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -6146,8 +8553,8 @@ func (c *Connect) ListIntegrationAssociationsRequest(input *ListIntegrationAssoc
 
 // ListIntegrationAssociations API operation for Amazon Connect Service.
 //
-// Provides summary information about the AWS resource associations for the
-// specified Amazon Connect instance.
+// Provides summary information about the Amazon Web Services resource associations
+// for the specified Amazon Connect instance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6694,6 +9101,159 @@ func (c *Connect) ListPhoneNumbersPagesWithContext(ctx aws.Context, input *ListP
 
 	for p.Next() {
 		if !fn(p.Page().(*ListPhoneNumbersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListPhoneNumbersV2 = "ListPhoneNumbersV2"
+
+// ListPhoneNumbersV2Request generates a "aws/request.Request" representing the
+// client's request for the ListPhoneNumbersV2 operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPhoneNumbersV2 for more information on using the ListPhoneNumbersV2
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListPhoneNumbersV2Request method.
+//    req, resp := client.ListPhoneNumbersV2Request(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListPhoneNumbersV2
+func (c *Connect) ListPhoneNumbersV2Request(input *ListPhoneNumbersV2Input) (req *request.Request, output *ListPhoneNumbersV2Output) {
+	op := &request.Operation{
+		Name:       opListPhoneNumbersV2,
+		HTTPMethod: "POST",
+		HTTPPath:   "/phone-number/list",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPhoneNumbersV2Input{}
+	}
+
+	output = &ListPhoneNumbersV2Output{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPhoneNumbersV2 API operation for Amazon Connect Service.
+//
+// Lists phone numbers claimed to your Amazon Connect instance.
+//
+// For more information about phone numbers, see Set Up Phone Numbers for Your
+// Contact Center (https://docs.aws.amazon.com/connect/latest/adminguide/contact-center-phone-number.html)
+// in the Amazon Connect Administrator Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ListPhoneNumbersV2 for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListPhoneNumbersV2
+func (c *Connect) ListPhoneNumbersV2(input *ListPhoneNumbersV2Input) (*ListPhoneNumbersV2Output, error) {
+	req, out := c.ListPhoneNumbersV2Request(input)
+	return out, req.Send()
+}
+
+// ListPhoneNumbersV2WithContext is the same as ListPhoneNumbersV2 with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPhoneNumbersV2 for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListPhoneNumbersV2WithContext(ctx aws.Context, input *ListPhoneNumbersV2Input, opts ...request.Option) (*ListPhoneNumbersV2Output, error) {
+	req, out := c.ListPhoneNumbersV2Request(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPhoneNumbersV2Pages iterates over the pages of a ListPhoneNumbersV2 operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPhoneNumbersV2 method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPhoneNumbersV2 operation.
+//    pageNum := 0
+//    err := client.ListPhoneNumbersV2Pages(params,
+//        func(page *connect.ListPhoneNumbersV2Output, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) ListPhoneNumbersV2Pages(input *ListPhoneNumbersV2Input, fn func(*ListPhoneNumbersV2Output, bool) bool) error {
+	return c.ListPhoneNumbersV2PagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPhoneNumbersV2PagesWithContext same as ListPhoneNumbersV2Pages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListPhoneNumbersV2PagesWithContext(ctx aws.Context, input *ListPhoneNumbersV2Input, fn func(*ListPhoneNumbersV2Output, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPhoneNumbersV2Input
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPhoneNumbersV2Request(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPhoneNumbersV2Output), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -7762,6 +10322,157 @@ func (c *Connect) ListSecurityKeysPagesWithContext(ctx aws.Context, input *ListS
 	return p.Err()
 }
 
+const opListSecurityProfilePermissions = "ListSecurityProfilePermissions"
+
+// ListSecurityProfilePermissionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSecurityProfilePermissions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSecurityProfilePermissions for more information on using the ListSecurityProfilePermissions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSecurityProfilePermissionsRequest method.
+//    req, resp := client.ListSecurityProfilePermissionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListSecurityProfilePermissions
+func (c *Connect) ListSecurityProfilePermissionsRequest(input *ListSecurityProfilePermissionsInput) (req *request.Request, output *ListSecurityProfilePermissionsOutput) {
+	op := &request.Operation{
+		Name:       opListSecurityProfilePermissions,
+		HTTPMethod: "GET",
+		HTTPPath:   "/security-profiles-permissions/{InstanceId}/{SecurityProfileId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSecurityProfilePermissionsInput{}
+	}
+
+	output = &ListSecurityProfilePermissionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSecurityProfilePermissions API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// Lists the permissions granted to a security profile.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ListSecurityProfilePermissions for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListSecurityProfilePermissions
+func (c *Connect) ListSecurityProfilePermissions(input *ListSecurityProfilePermissionsInput) (*ListSecurityProfilePermissionsOutput, error) {
+	req, out := c.ListSecurityProfilePermissionsRequest(input)
+	return out, req.Send()
+}
+
+// ListSecurityProfilePermissionsWithContext is the same as ListSecurityProfilePermissions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSecurityProfilePermissions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListSecurityProfilePermissionsWithContext(ctx aws.Context, input *ListSecurityProfilePermissionsInput, opts ...request.Option) (*ListSecurityProfilePermissionsOutput, error) {
+	req, out := c.ListSecurityProfilePermissionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSecurityProfilePermissionsPages iterates over the pages of a ListSecurityProfilePermissions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSecurityProfilePermissions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSecurityProfilePermissions operation.
+//    pageNum := 0
+//    err := client.ListSecurityProfilePermissionsPages(params,
+//        func(page *connect.ListSecurityProfilePermissionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) ListSecurityProfilePermissionsPages(input *ListSecurityProfilePermissionsInput, fn func(*ListSecurityProfilePermissionsOutput, bool) bool) error {
+	return c.ListSecurityProfilePermissionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSecurityProfilePermissionsPagesWithContext same as ListSecurityProfilePermissionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListSecurityProfilePermissionsPagesWithContext(ctx aws.Context, input *ListSecurityProfilePermissionsInput, fn func(*ListSecurityProfilePermissionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSecurityProfilePermissionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSecurityProfilePermissionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSecurityProfilePermissionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListSecurityProfiles = "ListSecurityProfiles"
 
 // ListSecurityProfilesRequest generates a "aws/request.Request" representing the
@@ -8008,6 +10719,155 @@ func (c *Connect) ListTagsForResourceWithContext(ctx aws.Context, input *ListTag
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opListTaskTemplates = "ListTaskTemplates"
+
+// ListTaskTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListTaskTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTaskTemplates for more information on using the ListTaskTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTaskTemplatesRequest method.
+//    req, resp := client.ListTaskTemplatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListTaskTemplates
+func (c *Connect) ListTaskTemplatesRequest(input *ListTaskTemplatesInput) (req *request.Request, output *ListTaskTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListTaskTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/instance/{InstanceId}/task/template",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListTaskTemplatesInput{}
+	}
+
+	output = &ListTaskTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTaskTemplates API operation for Amazon Connect Service.
+//
+// Lists task templates for the specified Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ListTaskTemplates for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ListTaskTemplates
+func (c *Connect) ListTaskTemplates(input *ListTaskTemplatesInput) (*ListTaskTemplatesOutput, error) {
+	req, out := c.ListTaskTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListTaskTemplatesWithContext is the same as ListTaskTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTaskTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListTaskTemplatesWithContext(ctx aws.Context, input *ListTaskTemplatesInput, opts ...request.Option) (*ListTaskTemplatesOutput, error) {
+	req, out := c.ListTaskTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListTaskTemplatesPages iterates over the pages of a ListTaskTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListTaskTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListTaskTemplates operation.
+//    pageNum := 0
+//    err := client.ListTaskTemplatesPages(params,
+//        func(page *connect.ListTaskTemplatesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) ListTaskTemplatesPages(input *ListTaskTemplatesInput, fn func(*ListTaskTemplatesOutput, bool) bool) error {
+	return c.ListTaskTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListTaskTemplatesPagesWithContext same as ListTaskTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ListTaskTemplatesPagesWithContext(ctx aws.Context, input *ListTaskTemplatesInput, fn func(*ListTaskTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListTaskTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListTaskTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListTaskTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListUseCases = "ListUseCases"
@@ -8460,6 +11320,204 @@ func (c *Connect) ListUsersPagesWithContext(ctx aws.Context, input *ListUsersInp
 	return p.Err()
 }
 
+const opPutUserStatus = "PutUserStatus"
+
+// PutUserStatusRequest generates a "aws/request.Request" representing the
+// client's request for the PutUserStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutUserStatus for more information on using the PutUserStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutUserStatusRequest method.
+//    req, resp := client.PutUserStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/PutUserStatus
+func (c *Connect) PutUserStatusRequest(input *PutUserStatusInput) (req *request.Request, output *PutUserStatusOutput) {
+	op := &request.Operation{
+		Name:       opPutUserStatus,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/users/{InstanceId}/{UserId}/status",
+	}
+
+	if input == nil {
+		input = &PutUserStatusInput{}
+	}
+
+	output = &PutUserStatusOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutUserStatus API operation for Amazon Connect Service.
+//
+// Changes the current status of a user or agent in Amazon Connect. If the agent
+// is currently handling a contact, this sets the agent's next status.
+//
+// For more information, see Agent status (https://docs.aws.amazon.com/connect/latest/adminguide/metrics-agent-status.html)
+// and Set your next status (https://docs.aws.amazon.com/connect/latest/adminguide/set-next-status.html)
+// in the Amazon Connect Administrator Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation PutUserStatus for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/PutUserStatus
+func (c *Connect) PutUserStatus(input *PutUserStatusInput) (*PutUserStatusOutput, error) {
+	req, out := c.PutUserStatusRequest(input)
+	return out, req.Send()
+}
+
+// PutUserStatusWithContext is the same as PutUserStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutUserStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) PutUserStatusWithContext(ctx aws.Context, input *PutUserStatusInput, opts ...request.Option) (*PutUserStatusOutput, error) {
+	req, out := c.PutUserStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opReleasePhoneNumber = "ReleasePhoneNumber"
+
+// ReleasePhoneNumberRequest generates a "aws/request.Request" representing the
+// client's request for the ReleasePhoneNumber operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ReleasePhoneNumber for more information on using the ReleasePhoneNumber
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ReleasePhoneNumberRequest method.
+//    req, resp := client.ReleasePhoneNumberRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ReleasePhoneNumber
+func (c *Connect) ReleasePhoneNumberRequest(input *ReleasePhoneNumberInput) (req *request.Request, output *ReleasePhoneNumberOutput) {
+	op := &request.Operation{
+		Name:       opReleasePhoneNumber,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/phone-number/{PhoneNumberId}",
+	}
+
+	if input == nil {
+		input = &ReleasePhoneNumberInput{}
+	}
+
+	output = &ReleasePhoneNumberOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// ReleasePhoneNumber API operation for Amazon Connect Service.
+//
+// Releases a phone number previously claimed to an Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation ReleasePhoneNumber for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ResourceInUseException
+//   That resource is already in use. Please try another.
+//
+//   * IdempotencyException
+//   An entity with the same name already exists.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/ReleasePhoneNumber
+func (c *Connect) ReleasePhoneNumber(input *ReleasePhoneNumberInput) (*ReleasePhoneNumberOutput, error) {
+	req, out := c.ReleasePhoneNumberRequest(input)
+	return out, req.Send()
+}
+
+// ReleasePhoneNumberWithContext is the same as ReleasePhoneNumber with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ReleasePhoneNumber for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) ReleasePhoneNumberWithContext(ctx aws.Context, input *ReleasePhoneNumberInput, opts ...request.Option) (*ReleasePhoneNumberOutput, error) {
+	req, out := c.ReleasePhoneNumberRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opResumeContactRecording = "ResumeContactRecording"
 
 // ResumeContactRecordingRequest generates a "aws/request.Request" representing the
@@ -8549,6 +11607,449 @@ func (c *Connect) ResumeContactRecordingWithContext(ctx aws.Context, input *Resu
 	return out, req.Send()
 }
 
+const opSearchAvailablePhoneNumbers = "SearchAvailablePhoneNumbers"
+
+// SearchAvailablePhoneNumbersRequest generates a "aws/request.Request" representing the
+// client's request for the SearchAvailablePhoneNumbers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SearchAvailablePhoneNumbers for more information on using the SearchAvailablePhoneNumbers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SearchAvailablePhoneNumbersRequest method.
+//    req, resp := client.SearchAvailablePhoneNumbersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/SearchAvailablePhoneNumbers
+func (c *Connect) SearchAvailablePhoneNumbersRequest(input *SearchAvailablePhoneNumbersInput) (req *request.Request, output *SearchAvailablePhoneNumbersOutput) {
+	op := &request.Operation{
+		Name:       opSearchAvailablePhoneNumbers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/phone-number/search-available",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &SearchAvailablePhoneNumbersInput{}
+	}
+
+	output = &SearchAvailablePhoneNumbersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SearchAvailablePhoneNumbers API operation for Amazon Connect Service.
+//
+// Searches for available phone numbers that you can claim to your Amazon Connect
+// instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation SearchAvailablePhoneNumbers for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/SearchAvailablePhoneNumbers
+func (c *Connect) SearchAvailablePhoneNumbers(input *SearchAvailablePhoneNumbersInput) (*SearchAvailablePhoneNumbersOutput, error) {
+	req, out := c.SearchAvailablePhoneNumbersRequest(input)
+	return out, req.Send()
+}
+
+// SearchAvailablePhoneNumbersWithContext is the same as SearchAvailablePhoneNumbers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SearchAvailablePhoneNumbers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) SearchAvailablePhoneNumbersWithContext(ctx aws.Context, input *SearchAvailablePhoneNumbersInput, opts ...request.Option) (*SearchAvailablePhoneNumbersOutput, error) {
+	req, out := c.SearchAvailablePhoneNumbersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// SearchAvailablePhoneNumbersPages iterates over the pages of a SearchAvailablePhoneNumbers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See SearchAvailablePhoneNumbers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a SearchAvailablePhoneNumbers operation.
+//    pageNum := 0
+//    err := client.SearchAvailablePhoneNumbersPages(params,
+//        func(page *connect.SearchAvailablePhoneNumbersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) SearchAvailablePhoneNumbersPages(input *SearchAvailablePhoneNumbersInput, fn func(*SearchAvailablePhoneNumbersOutput, bool) bool) error {
+	return c.SearchAvailablePhoneNumbersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// SearchAvailablePhoneNumbersPagesWithContext same as SearchAvailablePhoneNumbersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) SearchAvailablePhoneNumbersPagesWithContext(ctx aws.Context, input *SearchAvailablePhoneNumbersInput, fn func(*SearchAvailablePhoneNumbersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *SearchAvailablePhoneNumbersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.SearchAvailablePhoneNumbersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*SearchAvailablePhoneNumbersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opSearchUsers = "SearchUsers"
+
+// SearchUsersRequest generates a "aws/request.Request" representing the
+// client's request for the SearchUsers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SearchUsers for more information on using the SearchUsers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SearchUsersRequest method.
+//    req, resp := client.SearchUsersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/SearchUsers
+func (c *Connect) SearchUsersRequest(input *SearchUsersInput) (req *request.Request, output *SearchUsersOutput) {
+	op := &request.Operation{
+		Name:       opSearchUsers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/search-users",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &SearchUsersInput{}
+	}
+
+	output = &SearchUsersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SearchUsers API operation for Amazon Connect Service.
+//
+// Searches users in an Amazon Connect instance, with optional filtering.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation SearchUsers for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/SearchUsers
+func (c *Connect) SearchUsers(input *SearchUsersInput) (*SearchUsersOutput, error) {
+	req, out := c.SearchUsersRequest(input)
+	return out, req.Send()
+}
+
+// SearchUsersWithContext is the same as SearchUsers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SearchUsers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) SearchUsersWithContext(ctx aws.Context, input *SearchUsersInput, opts ...request.Option) (*SearchUsersOutput, error) {
+	req, out := c.SearchUsersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// SearchUsersPages iterates over the pages of a SearchUsers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See SearchUsers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a SearchUsers operation.
+//    pageNum := 0
+//    err := client.SearchUsersPages(params,
+//        func(page *connect.SearchUsersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) SearchUsersPages(input *SearchUsersInput, fn func(*SearchUsersOutput, bool) bool) error {
+	return c.SearchUsersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// SearchUsersPagesWithContext same as SearchUsersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) SearchUsersPagesWithContext(ctx aws.Context, input *SearchUsersInput, fn func(*SearchUsersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *SearchUsersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.SearchUsersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*SearchUsersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opSearchVocabularies = "SearchVocabularies"
+
+// SearchVocabulariesRequest generates a "aws/request.Request" representing the
+// client's request for the SearchVocabularies operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SearchVocabularies for more information on using the SearchVocabularies
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SearchVocabulariesRequest method.
+//    req, resp := client.SearchVocabulariesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/SearchVocabularies
+func (c *Connect) SearchVocabulariesRequest(input *SearchVocabulariesInput) (req *request.Request, output *SearchVocabulariesOutput) {
+	op := &request.Operation{
+		Name:       opSearchVocabularies,
+		HTTPMethod: "POST",
+		HTTPPath:   "/vocabulary-summary/{InstanceId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &SearchVocabulariesInput{}
+	}
+
+	output = &SearchVocabulariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SearchVocabularies API operation for Amazon Connect Service.
+//
+// Searches for vocabularies within a specific Amazon Connect instance using
+// State, NameStartsWith, and LanguageCode.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation SearchVocabularies for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/SearchVocabularies
+func (c *Connect) SearchVocabularies(input *SearchVocabulariesInput) (*SearchVocabulariesOutput, error) {
+	req, out := c.SearchVocabulariesRequest(input)
+	return out, req.Send()
+}
+
+// SearchVocabulariesWithContext is the same as SearchVocabularies with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SearchVocabularies for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) SearchVocabulariesWithContext(ctx aws.Context, input *SearchVocabulariesInput, opts ...request.Option) (*SearchVocabulariesOutput, error) {
+	req, out := c.SearchVocabulariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// SearchVocabulariesPages iterates over the pages of a SearchVocabularies operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See SearchVocabularies method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a SearchVocabularies operation.
+//    pageNum := 0
+//    err := client.SearchVocabulariesPages(params,
+//        func(page *connect.SearchVocabulariesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) SearchVocabulariesPages(input *SearchVocabulariesInput, fn func(*SearchVocabulariesOutput, bool) bool) error {
+	return c.SearchVocabulariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// SearchVocabulariesPagesWithContext same as SearchVocabulariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) SearchVocabulariesPagesWithContext(ctx aws.Context, input *SearchVocabulariesInput, fn func(*SearchVocabulariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *SearchVocabulariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.SearchVocabulariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*SearchVocabulariesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opStartChatContact = "StartChatContact"
 
 // StartChatContactRequest generates a "aws/request.Request" representing the
@@ -8603,13 +12104,17 @@ func (c *Connect) StartChatContactRequest(input *StartChatContactInput) (req *re
 // is achieved by invoking CreateParticipantConnection (https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html)
 // with WEBSOCKET and CONNECTION_CREDENTIALS.
 //
-// A 429 error occurs in two situations:
+// A 429 error occurs in the following situations:
 //
 //    * API rate limit is exceeded. API TPS throttling returns a TooManyRequests
 //    exception.
 //
 //    * The quota for concurrent active chats (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
 //    is exceeded. Active chat throttling returns a LimitExceededException.
+//
+// If you use the ChatDurationInMinutes parameter and receive a 400 error, your
+// account may not support the ability to configure custom chat durations. For
+// more information, contact Amazon Web Services Support.
 //
 // For more information about chat, see Chat (https://docs.aws.amazon.com/connect/latest/adminguide/chat.html)
 // in the Amazon Connect Administrator Guide.
@@ -8704,12 +12209,19 @@ func (c *Connect) StartContactRecordingRequest(input *StartContactRecordingInput
 
 // StartContactRecording API operation for Amazon Connect Service.
 //
-// Starts recording the contact when the agent joins the call. StartContactRecording
-// is a one-time action. For example, if you use StopContactRecording to stop
-// recording an ongoing call, you can't use StartContactRecording to restart
-// it. For scenarios where the recording has started and you want to suspend
-// and resume it, such as when collecting sensitive information (for example,
-// a credit card number), use SuspendContactRecording and ResumeContactRecording.
+// Starts recording the contact:
+//
+//    * If the API is called before the agent joins the call, recording starts
+//    when the agent joins the call.
+//
+//    * If the API is called after the agent joins the call, recording starts
+//    at the time of the API call.
+//
+// StartContactRecording is a one-time action. For example, if you use StopContactRecording
+// to stop recording an ongoing call, you can't use StartContactRecording to
+// restart it. For scenarios where the recording has started and you want to
+// suspend and resume it, such as when collecting sensitive information (for
+// example, a credit card number), use SuspendContactRecording and ResumeContactRecording.
 //
 // You can use this API to override the recording behavior configured in the
 // Set recording behavior (https://docs.aws.amazon.com/connect/latest/adminguide/set-recording-behavior.html)
@@ -8754,6 +12266,101 @@ func (c *Connect) StartContactRecording(input *StartContactRecordingInput) (*Sta
 // for more information on using Contexts.
 func (c *Connect) StartContactRecordingWithContext(ctx aws.Context, input *StartContactRecordingInput, opts ...request.Option) (*StartContactRecordingOutput, error) {
 	req, out := c.StartContactRecordingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartContactStreaming = "StartContactStreaming"
+
+// StartContactStreamingRequest generates a "aws/request.Request" representing the
+// client's request for the StartContactStreaming operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartContactStreaming for more information on using the StartContactStreaming
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartContactStreamingRequest method.
+//    req, resp := client.StartContactStreamingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/StartContactStreaming
+func (c *Connect) StartContactStreamingRequest(input *StartContactStreamingInput) (req *request.Request, output *StartContactStreamingOutput) {
+	op := &request.Operation{
+		Name:       opStartContactStreaming,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contact/start-streaming",
+	}
+
+	if input == nil {
+		input = &StartContactStreamingInput{}
+	}
+
+	output = &StartContactStreamingOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartContactStreaming API operation for Amazon Connect Service.
+//
+// Initiates real-time message streaming for a new chat contact.
+//
+// For more information about message streaming, see Enable real-time chat message
+// streaming (https://docs.aws.amazon.com/connect/latest/adminguide/chat-message-streaming.html)
+// in the Amazon Connect Administrator Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation StartContactStreaming for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * LimitExceededException
+//   The allowed limit for the resource has been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/StartContactStreaming
+func (c *Connect) StartContactStreaming(input *StartContactStreamingInput) (*StartContactStreamingOutput, error) {
+	req, out := c.StartContactStreamingRequest(input)
+	return out, req.Send()
+}
+
+// StartContactStreamingWithContext is the same as StartContactStreaming with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartContactStreaming for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) StartContactStreamingWithContext(ctx aws.Context, input *StartContactStreamingInput, opts ...request.Option) (*StartContactStreamingOutput, error) {
+	req, out := c.StartContactStreamingRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9014,7 +12621,14 @@ func (c *Connect) StopContactRequest(input *StopContactInput) (req *request.Requ
 
 // StopContact API operation for Amazon Connect Service.
 //
-// Ends the specified contact.
+// Ends the specified contact. This call does not work for the following initiation
+// methods:
+//
+//    * DISCONNECT
+//
+//    * TRANSFER
+//
+//    * QUEUE_TRANSFER
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9149,6 +12763,97 @@ func (c *Connect) StopContactRecording(input *StopContactRecordingInput) (*StopC
 // for more information on using Contexts.
 func (c *Connect) StopContactRecordingWithContext(ctx aws.Context, input *StopContactRecordingInput, opts ...request.Option) (*StopContactRecordingOutput, error) {
 	req, out := c.StopContactRecordingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopContactStreaming = "StopContactStreaming"
+
+// StopContactStreamingRequest generates a "aws/request.Request" representing the
+// client's request for the StopContactStreaming operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopContactStreaming for more information on using the StopContactStreaming
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopContactStreamingRequest method.
+//    req, resp := client.StopContactStreamingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/StopContactStreaming
+func (c *Connect) StopContactStreamingRequest(input *StopContactStreamingInput) (req *request.Request, output *StopContactStreamingOutput) {
+	op := &request.Operation{
+		Name:       opStopContactStreaming,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contact/stop-streaming",
+	}
+
+	if input == nil {
+		input = &StopContactStreamingInput{}
+	}
+
+	output = &StopContactStreamingOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StopContactStreaming API operation for Amazon Connect Service.
+//
+// Ends message streaming on a specified contact. To restart message streaming
+// on that contact, call the StartContactStreaming (https://docs.aws.amazon.com/connect/latest/APIReference/API_StartContactStreaming.html)
+// API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation StopContactStreaming for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/StopContactStreaming
+func (c *Connect) StopContactStreaming(input *StopContactStreamingInput) (*StopContactStreamingOutput, error) {
+	req, out := c.StopContactStreamingRequest(input)
+	return out, req.Send()
+}
+
+// StopContactStreamingWithContext is the same as StopContactStreaming with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopContactStreaming for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) StopContactStreamingWithContext(ctx aws.Context, input *StopContactStreamingInput, opts ...request.Option) (*StopContactStreamingOutput, error) {
+	req, out := c.StopContactStreamingRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9296,7 +13001,8 @@ func (c *Connect) TagResourceRequest(input *TagResourceInput) (req *request.Requ
 // Adds the specified tags to the specified resource.
 //
 // The supported resource types are users, routing profiles, queues, quick connects,
-// contact flows, agent status, and hours of operation.
+// contact flows, agent status, hours of operation, phone number, security profiles,
+// and task templates.
 //
 // For sample policies that use tags, see Amazon Connect Identity-Based Policy
 // Examples (https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html)
@@ -9342,6 +13048,120 @@ func (c *Connect) TagResource(input *TagResourceInput) (*TagResourceOutput, erro
 // for more information on using Contexts.
 func (c *Connect) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTransferContact = "TransferContact"
+
+// TransferContactRequest generates a "aws/request.Request" representing the
+// client's request for the TransferContact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TransferContact for more information on using the TransferContact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TransferContactRequest method.
+//    req, resp := client.TransferContactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/TransferContact
+func (c *Connect) TransferContactRequest(input *TransferContactInput) (req *request.Request, output *TransferContactOutput) {
+	op := &request.Operation{
+		Name:       opTransferContact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contact/transfer",
+	}
+
+	if input == nil {
+		input = &TransferContactInput{}
+	}
+
+	output = &TransferContactOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// TransferContact API operation for Amazon Connect Service.
+//
+// Transfers contacts from one agent or queue to another agent or queue at any
+// point after a contact is created. You can transfer a contact to another queue
+// by providing the contact flow which orchestrates the contact to the destination
+// queue. This gives you more control over contact handling and helps you adhere
+// to the service level agreement (SLA) guaranteed to your customers.
+//
+// Note the following requirements:
+//
+//    * Transfer is supported for only TASK contacts.
+//
+//    * Do not use both QueueId and UserId in the same call.
+//
+//    * The following contact flow types are supported: Inbound contact flow,
+//    Transfer to agent flow, and Transfer to queue flow.
+//
+//    * The TransferContact API can be called only on active contacts.
+//
+//    * A contact cannot be transferred more than 11 times.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation TransferContact for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * IdempotencyException
+//   An entity with the same name already exists.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ServiceQuotaExceededException
+//   The service quota has been exceeded.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/TransferContact
+func (c *Connect) TransferContact(input *TransferContactInput) (*TransferContactOutput, error) {
+	req, out := c.TransferContactRequest(input)
+	return out, req.Send()
+}
+
+// TransferContactWithContext is the same as TransferContact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TransferContact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) TransferContactWithContext(ctx aws.Context, input *TransferContactInput, opts ...request.Option) (*TransferContactOutput, error) {
+	req, out := c.TransferContactRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9534,6 +13354,104 @@ func (c *Connect) UpdateAgentStatus(input *UpdateAgentStatusInput) (*UpdateAgent
 // for more information on using Contexts.
 func (c *Connect) UpdateAgentStatusWithContext(ctx aws.Context, input *UpdateAgentStatusInput, opts ...request.Option) (*UpdateAgentStatusOutput, error) {
 	req, out := c.UpdateAgentStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateContact = "UpdateContact"
+
+// UpdateContactRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContact for more information on using the UpdateContact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContactRequest method.
+//    req, resp := client.UpdateContactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContact
+func (c *Connect) UpdateContactRequest(input *UpdateContactInput) (req *request.Request, output *UpdateContactOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contacts/{InstanceId}/{ContactId}",
+	}
+
+	if input == nil {
+		input = &UpdateContactInput{}
+	}
+
+	output = &UpdateContactOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateContact API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// Adds or updates user-defined contact information associated with the specified
+// contact. At least one field to be updated must be present in the request.
+//
+// You can add or update user-defined contact information for both ongoing and
+// completed contacts.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdateContact for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContact
+func (c *Connect) UpdateContact(input *UpdateContactInput) (*UpdateContactOutput, error) {
+	req, out := c.UpdateContactRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContactWithContext is the same as UpdateContact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdateContactWithContext(ctx aws.Context, input *UpdateContactInput, opts ...request.Option) (*UpdateContactOutput, error) {
+	req, out := c.UpdateContactRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9749,6 +13667,294 @@ func (c *Connect) UpdateContactFlowContentWithContext(ctx aws.Context, input *Up
 	return out, req.Send()
 }
 
+const opUpdateContactFlowMetadata = "UpdateContactFlowMetadata"
+
+// UpdateContactFlowMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContactFlowMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContactFlowMetadata for more information on using the UpdateContactFlowMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContactFlowMetadataRequest method.
+//    req, resp := client.UpdateContactFlowMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactFlowMetadata
+func (c *Connect) UpdateContactFlowMetadataRequest(input *UpdateContactFlowMetadataInput) (req *request.Request, output *UpdateContactFlowMetadataOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContactFlowMetadata,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contact-flows/{InstanceId}/{ContactFlowId}/metadata",
+	}
+
+	if input == nil {
+		input = &UpdateContactFlowMetadataInput{}
+	}
+
+	output = &UpdateContactFlowMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateContactFlowMetadata API operation for Amazon Connect Service.
+//
+// Updates metadata about specified contact flow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdateContactFlowMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * DuplicateResourceException
+//   A resource with the specified name already exists.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactFlowMetadata
+func (c *Connect) UpdateContactFlowMetadata(input *UpdateContactFlowMetadataInput) (*UpdateContactFlowMetadataOutput, error) {
+	req, out := c.UpdateContactFlowMetadataRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContactFlowMetadataWithContext is the same as UpdateContactFlowMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContactFlowMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdateContactFlowMetadataWithContext(ctx aws.Context, input *UpdateContactFlowMetadataInput, opts ...request.Option) (*UpdateContactFlowMetadataOutput, error) {
+	req, out := c.UpdateContactFlowMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateContactFlowModuleContent = "UpdateContactFlowModuleContent"
+
+// UpdateContactFlowModuleContentRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContactFlowModuleContent operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContactFlowModuleContent for more information on using the UpdateContactFlowModuleContent
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContactFlowModuleContentRequest method.
+//    req, resp := client.UpdateContactFlowModuleContentRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactFlowModuleContent
+func (c *Connect) UpdateContactFlowModuleContentRequest(input *UpdateContactFlowModuleContentInput) (req *request.Request, output *UpdateContactFlowModuleContentOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContactFlowModuleContent,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contact-flow-modules/{InstanceId}/{ContactFlowModuleId}/content",
+	}
+
+	if input == nil {
+		input = &UpdateContactFlowModuleContentInput{}
+	}
+
+	output = &UpdateContactFlowModuleContentOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateContactFlowModuleContent API operation for Amazon Connect Service.
+//
+// Updates specified contact flow module for the specified Amazon Connect instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdateContactFlowModuleContent for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidContactFlowModuleException
+//   The problems with the module. Please fix before trying again.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactFlowModuleContent
+func (c *Connect) UpdateContactFlowModuleContent(input *UpdateContactFlowModuleContentInput) (*UpdateContactFlowModuleContentOutput, error) {
+	req, out := c.UpdateContactFlowModuleContentRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContactFlowModuleContentWithContext is the same as UpdateContactFlowModuleContent with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContactFlowModuleContent for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdateContactFlowModuleContentWithContext(ctx aws.Context, input *UpdateContactFlowModuleContentInput, opts ...request.Option) (*UpdateContactFlowModuleContentOutput, error) {
+	req, out := c.UpdateContactFlowModuleContentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateContactFlowModuleMetadata = "UpdateContactFlowModuleMetadata"
+
+// UpdateContactFlowModuleMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContactFlowModuleMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContactFlowModuleMetadata for more information on using the UpdateContactFlowModuleMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContactFlowModuleMetadataRequest method.
+//    req, resp := client.UpdateContactFlowModuleMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactFlowModuleMetadata
+func (c *Connect) UpdateContactFlowModuleMetadataRequest(input *UpdateContactFlowModuleMetadataInput) (req *request.Request, output *UpdateContactFlowModuleMetadataOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContactFlowModuleMetadata,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contact-flow-modules/{InstanceId}/{ContactFlowModuleId}/metadata",
+	}
+
+	if input == nil {
+		input = &UpdateContactFlowModuleMetadataInput{}
+	}
+
+	output = &UpdateContactFlowModuleMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateContactFlowModuleMetadata API operation for Amazon Connect Service.
+//
+// Updates metadata about specified contact flow module.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdateContactFlowModuleMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * DuplicateResourceException
+//   A resource with the specified name already exists.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactFlowModuleMetadata
+func (c *Connect) UpdateContactFlowModuleMetadata(input *UpdateContactFlowModuleMetadataInput) (*UpdateContactFlowModuleMetadataOutput, error) {
+	req, out := c.UpdateContactFlowModuleMetadataRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContactFlowModuleMetadataWithContext is the same as UpdateContactFlowModuleMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContactFlowModuleMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdateContactFlowModuleMetadataWithContext(ctx aws.Context, input *UpdateContactFlowModuleMetadataInput, opts ...request.Option) (*UpdateContactFlowModuleMetadataOutput, error) {
+	req, out := c.UpdateContactFlowModuleMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateContactFlowName = "UpdateContactFlowName"
 
 // UpdateContactFlowNameRequest generates a "aws/request.Request" representing the
@@ -9842,6 +14048,101 @@ func (c *Connect) UpdateContactFlowName(input *UpdateContactFlowNameInput) (*Upd
 // for more information on using Contexts.
 func (c *Connect) UpdateContactFlowNameWithContext(ctx aws.Context, input *UpdateContactFlowNameInput, opts ...request.Option) (*UpdateContactFlowNameOutput, error) {
 	req, out := c.UpdateContactFlowNameRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateContactSchedule = "UpdateContactSchedule"
+
+// UpdateContactScheduleRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContactSchedule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContactSchedule for more information on using the UpdateContactSchedule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContactScheduleRequest method.
+//    req, resp := client.UpdateContactScheduleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactSchedule
+func (c *Connect) UpdateContactScheduleRequest(input *UpdateContactScheduleInput) (req *request.Request, output *UpdateContactScheduleOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContactSchedule,
+		HTTPMethod: "POST",
+		HTTPPath:   "/contact/schedule",
+	}
+
+	if input == nil {
+		input = &UpdateContactScheduleInput{}
+	}
+
+	output = &UpdateContactScheduleOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateContactSchedule API operation for Amazon Connect Service.
+//
+// Updates the scheduled time of a task contact that is already scheduled.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdateContactSchedule for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * LimitExceededException
+//   The allowed limit for the resource has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateContactSchedule
+func (c *Connect) UpdateContactSchedule(input *UpdateContactScheduleInput) (*UpdateContactScheduleOutput, error) {
+	req, out := c.UpdateContactScheduleRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContactScheduleWithContext is the same as UpdateContactSchedule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContactSchedule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdateContactScheduleWithContext(ctx aws.Context, input *UpdateContactScheduleInput, opts ...request.Option) (*UpdateContactScheduleOutput, error) {
+	req, out := c.UpdateContactScheduleRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -10127,6 +14428,104 @@ func (c *Connect) UpdateInstanceStorageConfig(input *UpdateInstanceStorageConfig
 // for more information on using Contexts.
 func (c *Connect) UpdateInstanceStorageConfigWithContext(ctx aws.Context, input *UpdateInstanceStorageConfigInput, opts ...request.Option) (*UpdateInstanceStorageConfigOutput, error) {
 	req, out := c.UpdateInstanceStorageConfigRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdatePhoneNumber = "UpdatePhoneNumber"
+
+// UpdatePhoneNumberRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePhoneNumber operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePhoneNumber for more information on using the UpdatePhoneNumber
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdatePhoneNumberRequest method.
+//    req, resp := client.UpdatePhoneNumberRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdatePhoneNumber
+func (c *Connect) UpdatePhoneNumberRequest(input *UpdatePhoneNumberInput) (req *request.Request, output *UpdatePhoneNumberOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePhoneNumber,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/phone-number/{PhoneNumberId}",
+	}
+
+	if input == nil {
+		input = &UpdatePhoneNumberInput{}
+	}
+
+	output = &UpdatePhoneNumberOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdatePhoneNumber API operation for Amazon Connect Service.
+//
+// Updates your claimed phone number from its current Amazon Connect instance
+// to another Amazon Connect instance in the same Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdatePhoneNumber for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+//   * ResourceInUseException
+//   That resource is already in use. Please try another.
+//
+//   * IdempotencyException
+//   An entity with the same name already exists.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdatePhoneNumber
+func (c *Connect) UpdatePhoneNumber(input *UpdatePhoneNumberInput) (*UpdatePhoneNumberOutput, error) {
+	req, out := c.UpdatePhoneNumberRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePhoneNumberWithContext is the same as UpdatePhoneNumber with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePhoneNumber for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdatePhoneNumberWithContext(ctx aws.Context, input *UpdatePhoneNumberInput, opts ...request.Option) (*UpdatePhoneNumberOutput, error) {
+	req, out := c.UpdatePhoneNumberRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -11166,6 +15565,195 @@ func (c *Connect) UpdateRoutingProfileQueuesWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opUpdateSecurityProfile = "UpdateSecurityProfile"
+
+// UpdateSecurityProfileRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateSecurityProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateSecurityProfile for more information on using the UpdateSecurityProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateSecurityProfileRequest method.
+//    req, resp := client.UpdateSecurityProfileRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateSecurityProfile
+func (c *Connect) UpdateSecurityProfileRequest(input *UpdateSecurityProfileInput) (req *request.Request, output *UpdateSecurityProfileOutput) {
+	op := &request.Operation{
+		Name:       opUpdateSecurityProfile,
+		HTTPMethod: "POST",
+		HTTPPath:   "/security-profiles/{InstanceId}/{SecurityProfileId}",
+	}
+
+	if input == nil {
+		input = &UpdateSecurityProfileInput{}
+	}
+
+	output = &UpdateSecurityProfileOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateSecurityProfile API operation for Amazon Connect Service.
+//
+// This API is in preview release for Amazon Connect and is subject to change.
+//
+// Updates a security profile.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdateSecurityProfile for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateSecurityProfile
+func (c *Connect) UpdateSecurityProfile(input *UpdateSecurityProfileInput) (*UpdateSecurityProfileOutput, error) {
+	req, out := c.UpdateSecurityProfileRequest(input)
+	return out, req.Send()
+}
+
+// UpdateSecurityProfileWithContext is the same as UpdateSecurityProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateSecurityProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdateSecurityProfileWithContext(ctx aws.Context, input *UpdateSecurityProfileInput, opts ...request.Option) (*UpdateSecurityProfileOutput, error) {
+	req, out := c.UpdateSecurityProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateTaskTemplate = "UpdateTaskTemplate"
+
+// UpdateTaskTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateTaskTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateTaskTemplate for more information on using the UpdateTaskTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateTaskTemplateRequest method.
+//    req, resp := client.UpdateTaskTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateTaskTemplate
+func (c *Connect) UpdateTaskTemplateRequest(input *UpdateTaskTemplateInput) (req *request.Request, output *UpdateTaskTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateTaskTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/instance/{InstanceId}/task/template/{TaskTemplateId}",
+	}
+
+	if input == nil {
+		input = &UpdateTaskTemplateInput{}
+	}
+
+	output = &UpdateTaskTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateTaskTemplate API operation for Amazon Connect Service.
+//
+// Updates details about a specific task template in the specified Amazon Connect
+// instance. This operation does not support partial updates. Instead it does
+// a full update of template content.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation UpdateTaskTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * PropertyValidationException
+//
+//   * InvalidParameterException
+//   One or more of the specified parameters are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ThrottlingException
+//   The throttling limit has been exceeded.
+//
+//   * ServiceQuotaExceededException
+//   The service quota has been exceeded.
+//
+//   * InternalServiceException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/UpdateTaskTemplate
+func (c *Connect) UpdateTaskTemplate(input *UpdateTaskTemplateInput) (*UpdateTaskTemplateOutput, error) {
+	req, out := c.UpdateTaskTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateTaskTemplateWithContext is the same as UpdateTaskTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateTaskTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) UpdateTaskTemplateWithContext(ctx aws.Context, input *UpdateTaskTemplateInput, opts ...request.Option) (*UpdateTaskTemplateOutput, error) {
+	req, out := c.UpdateTaskTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateUserHierarchy = "UpdateUserHierarchy"
 
 // UpdateUserHierarchyRequest generates a "aws/request.Request" representing the
@@ -11825,6 +16413,198 @@ func (c *Connect) UpdateUserSecurityProfilesWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+// You do not have sufficient permissions to perform this action.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Information about the contact (https://docs.aws.amazon.com/connect/latest/APIReference/API_Contact.html)
+// associated to the user.
+type AgentContactReference struct {
+	_ struct{} `type:"structure"`
+
+	// The state of the contact (https://docs.aws.amazon.com/connect/latest/adminguide/about-contact-states.html).
+	AgentContactState *string `type:"string" enum:"ContactState"`
+
+	// The channel of the contact.
+	Channel *string `type:"string" enum:"Channel"`
+
+	// The time at which the contact was connected to an agent.
+	ConnectedToAgentTimestamp *time.Time `type:"timestamp"`
+
+	// The identifier of the contact in this instance of Amazon Connect.
+	ContactId *string `min:"1" type:"string"`
+
+	// How the contact was initiated.
+	InitiationMethod *string `type:"string" enum:"ContactInitiationMethod"`
+
+	// Contains information about a queue resource for which metrics are returned.
+	Queue *QueueReference `type:"structure"`
+
+	// The epoch timestamp when the contact state started.
+	StateStartTimestamp *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AgentContactReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AgentContactReference) GoString() string {
+	return s.String()
+}
+
+// SetAgentContactState sets the AgentContactState field's value.
+func (s *AgentContactReference) SetAgentContactState(v string) *AgentContactReference {
+	s.AgentContactState = &v
+	return s
+}
+
+// SetChannel sets the Channel field's value.
+func (s *AgentContactReference) SetChannel(v string) *AgentContactReference {
+	s.Channel = &v
+	return s
+}
+
+// SetConnectedToAgentTimestamp sets the ConnectedToAgentTimestamp field's value.
+func (s *AgentContactReference) SetConnectedToAgentTimestamp(v time.Time) *AgentContactReference {
+	s.ConnectedToAgentTimestamp = &v
+	return s
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *AgentContactReference) SetContactId(v string) *AgentContactReference {
+	s.ContactId = &v
+	return s
+}
+
+// SetInitiationMethod sets the InitiationMethod field's value.
+func (s *AgentContactReference) SetInitiationMethod(v string) *AgentContactReference {
+	s.InitiationMethod = &v
+	return s
+}
+
+// SetQueue sets the Queue field's value.
+func (s *AgentContactReference) SetQueue(v *QueueReference) *AgentContactReference {
+	s.Queue = v
+	return s
+}
+
+// SetStateStartTimestamp sets the StateStartTimestamp field's value.
+func (s *AgentContactReference) SetStateStartTimestamp(v time.Time) *AgentContactReference {
+	s.StateStartTimestamp = &v
+	return s
+}
+
+// Information about the agent who accepted the contact.
+type AgentInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp when the contact was connected to the agent.
+	ConnectedToAgentTimestamp *time.Time `type:"timestamp"`
+
+	// The identifier of the agent who accepted the contact.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AgentInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AgentInfo) GoString() string {
+	return s.String()
+}
+
+// SetConnectedToAgentTimestamp sets the ConnectedToAgentTimestamp field's value.
+func (s *AgentInfo) SetConnectedToAgentTimestamp(v time.Time) *AgentInfo {
+	s.ConnectedToAgentTimestamp = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AgentInfo) SetId(v string) *AgentInfo {
+	s.Id = &v
+	return s
+}
+
 // Contains information about an agent status.
 type AgentStatus struct {
 	_ struct{} `type:"structure"`
@@ -11847,7 +16627,7 @@ type AgentStatus struct {
 	// The state of the agent status.
 	State *string `type:"string" enum:"AgentStatusState"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 
 	// The type of agent status.
@@ -11917,6 +16697,47 @@ func (s *AgentStatus) SetTags(v map[string]*string) *AgentStatus {
 // SetType sets the Type field's value.
 func (s *AgentStatus) SetType(v string) *AgentStatus {
 	s.Type = &v
+	return s
+}
+
+// Information about the agent's status.
+type AgentStatusReference struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the agent's status.
+	StatusArn *string `type:"string"`
+
+	// The start timestamp of the agent's status.
+	StatusStartTimestamp *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AgentStatusReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AgentStatusReference) GoString() string {
+	return s.String()
+}
+
+// SetStatusArn sets the StatusArn field's value.
+func (s *AgentStatusReference) SetStatusArn(v string) *AgentStatusReference {
+	s.StatusArn = &v
+	return s
+}
+
+// SetStatusStartTimestamp sets the StatusStartTimestamp field's value.
+func (s *AgentStatusReference) SetStatusStartTimestamp(v time.Time) *AgentStatusReference {
+	s.StatusStartTimestamp = &v
 	return s
 }
 
@@ -12086,7 +16907,7 @@ func (s *AssociateApprovedOriginInput) SetOrigin(v string) *AssociateApprovedOri
 }
 
 type AssociateApprovedOriginOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12181,7 +17002,7 @@ func (s *AssociateBotInput) SetLexV2Bot(v *LexV2Bot) *AssociateBotInput {
 }
 
 type AssociateBotOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12199,6 +17020,109 @@ func (s AssociateBotOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s AssociateBotOutput) GoString() string {
+	return s.String()
+}
+
+type AssociateDefaultVocabularyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The language code of the vocabulary entries. For a list of languages and
+	// their corresponding language codes, see What is Amazon Transcribe? (https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html)
+	//
+	// LanguageCode is a required field
+	LanguageCode *string `location:"uri" locationName:"LanguageCode" type:"string" required:"true" enum:"VocabularyLanguageCode"`
+
+	// The identifier of the custom vocabulary. If this is empty, the default is
+	// set to none.
+	VocabularyId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateDefaultVocabularyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateDefaultVocabularyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateDefaultVocabularyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateDefaultVocabularyInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.LanguageCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("LanguageCode"))
+	}
+	if s.LanguageCode != nil && len(*s.LanguageCode) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LanguageCode", 1))
+	}
+	if s.VocabularyId != nil && len(*s.VocabularyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VocabularyId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *AssociateDefaultVocabularyInput) SetInstanceId(v string) *AssociateDefaultVocabularyInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *AssociateDefaultVocabularyInput) SetLanguageCode(v string) *AssociateDefaultVocabularyInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetVocabularyId sets the VocabularyId field's value.
+func (s *AssociateDefaultVocabularyInput) SetVocabularyId(v string) *AssociateDefaultVocabularyInput {
+	s.VocabularyId = &v
+	return s
+}
+
+type AssociateDefaultVocabularyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateDefaultVocabularyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateDefaultVocabularyOutput) GoString() string {
 	return s.String()
 }
 
@@ -12386,7 +17310,7 @@ func (s *AssociateLambdaFunctionInput) SetInstanceId(v string) *AssociateLambdaF
 }
 
 type AssociateLambdaFunctionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12472,7 +17396,7 @@ func (s *AssociateLexBotInput) SetLexBot(v *LexBot) *AssociateLexBotInput {
 }
 
 type AssociateLexBotOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12490,6 +17414,109 @@ func (s AssociateLexBotOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s AssociateLexBotOutput) GoString() string {
+	return s.String()
+}
+
+type AssociatePhoneNumberContactFlowInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the contact flow.
+	//
+	// ContactFlowId is a required field
+	ContactFlowId *string `type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `min:"1" type:"string" required:"true"`
+
+	// A unique identifier for the phone number.
+	//
+	// PhoneNumberId is a required field
+	PhoneNumberId *string `location:"uri" locationName:"PhoneNumberId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePhoneNumberContactFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePhoneNumberContactFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociatePhoneNumberContactFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociatePhoneNumberContactFlowInput"}
+	if s.ContactFlowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowId"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.PhoneNumberId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumberId"))
+	}
+	if s.PhoneNumberId != nil && len(*s.PhoneNumberId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PhoneNumberId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *AssociatePhoneNumberContactFlowInput) SetContactFlowId(v string) *AssociatePhoneNumberContactFlowInput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *AssociatePhoneNumberContactFlowInput) SetInstanceId(v string) *AssociatePhoneNumberContactFlowInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *AssociatePhoneNumberContactFlowInput) SetPhoneNumberId(v string) *AssociatePhoneNumberContactFlowInput {
+	s.PhoneNumberId = &v
+	return s
+}
+
+type AssociatePhoneNumberContactFlowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePhoneNumberContactFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatePhoneNumberContactFlowOutput) GoString() string {
 	return s.String()
 }
 
@@ -12578,7 +17605,7 @@ func (s *AssociateQueueQuickConnectsInput) SetQuickConnectIds(v []*string) *Asso
 }
 
 type AssociateQueueQuickConnectsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12694,7 +17721,7 @@ func (s *AssociateRoutingProfileQueuesInput) SetRoutingProfileId(v string) *Asso
 }
 
 type AssociateRoutingProfileQueuesOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12814,6 +17841,57 @@ func (s *AssociateSecurityKeyOutput) SetAssociationId(v string) *AssociateSecuri
 	return s
 }
 
+// Information about a reference when the referenceType is ATTACHMENT. Otherwise,
+// null.
+type AttachmentReference struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the attachment reference.
+	Name *string `min:"1" type:"string"`
+
+	// Status of the attachment reference type.
+	Status *string `type:"string" enum:"ReferenceStatus"`
+
+	// The location path of the attachment reference.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttachmentReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttachmentReference) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *AttachmentReference) SetName(v string) *AttachmentReference {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AttachmentReference) SetStatus(v string) *AttachmentReference {
+	s.Status = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *AttachmentReference) SetValue(v string) *AttachmentReference {
+	s.Value = &v
+	return s
+}
+
 // A toggle for an individual feature at the instance level.
 type Attribute struct {
 	_ struct{} `type:"structure"`
@@ -12855,6 +17933,57 @@ func (s *Attribute) SetValue(v string) *Attribute {
 	return s
 }
 
+// Information about available phone numbers.
+type AvailableNumberSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The phone number. Phone numbers are formatted [+] [country code] [subscriber
+	// number including area code].
+	PhoneNumber *string `type:"string"`
+
+	// The ISO country code.
+	PhoneNumberCountryCode *string `type:"string" enum:"PhoneNumberCountryCode"`
+
+	// The type of phone number.
+	PhoneNumberType *string `type:"string" enum:"PhoneNumberType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AvailableNumberSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AvailableNumberSummary) GoString() string {
+	return s.String()
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *AvailableNumberSummary) SetPhoneNumber(v string) *AvailableNumberSummary {
+	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneNumberCountryCode sets the PhoneNumberCountryCode field's value.
+func (s *AvailableNumberSummary) SetPhoneNumberCountryCode(v string) *AvailableNumberSummary {
+	s.PhoneNumberCountryCode = &v
+	return s
+}
+
+// SetPhoneNumberType sets the PhoneNumberType field's value.
+func (s *AvailableNumberSummary) SetPhoneNumberType(v string) *AvailableNumberSummary {
+	s.PhoneNumberType = &v
+	return s
+}
+
 // A chat message.
 type ChatMessage struct {
 	_ struct{} `type:"structure"`
@@ -12864,7 +17993,7 @@ type ChatMessage struct {
 	// Content is a required field
 	Content *string `min:"1" type:"string" required:"true"`
 
-	// The type of the content. Supported types are text and plain.
+	// The type of the content. Supported types are text/plain.
 	//
 	// ContentType is a required field
 	ContentType *string `min:"1" type:"string" required:"true"`
@@ -12922,6 +18051,487 @@ func (s *ChatMessage) SetContentType(v string) *ChatMessage {
 	return s
 }
 
+// The streaming configuration, such as the Amazon SNS streaming endpoint.
+type ChatStreamingConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the standard Amazon SNS topic. The Amazon
+	// Resource Name (ARN) of the streaming endpoint that is used to publish real-time
+	// message streaming for chat conversations.
+	//
+	// StreamingEndpointArn is a required field
+	StreamingEndpointArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChatStreamingConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChatStreamingConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ChatStreamingConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ChatStreamingConfiguration"}
+	if s.StreamingEndpointArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreamingEndpointArn"))
+	}
+	if s.StreamingEndpointArn != nil && len(*s.StreamingEndpointArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamingEndpointArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStreamingEndpointArn sets the StreamingEndpointArn field's value.
+func (s *ChatStreamingConfiguration) SetStreamingEndpointArn(v string) *ChatStreamingConfiguration {
+	s.StreamingEndpointArn = &v
+	return s
+}
+
+type ClaimPhoneNumberInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// The phone number you want to claim. Phone numbers are formatted [+] [country
+	// code] [subscriber number including area code].
+	//
+	// PhoneNumber is a required field
+	PhoneNumber *string `type:"string" required:"true"`
+
+	// The description of the phone number.
+	PhoneNumberDescription *string `type:"string"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// The Amazon Resource Name (ARN) for Amazon Connect instances that phone numbers
+	// are claimed to.
+	//
+	// TargetArn is a required field
+	TargetArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClaimPhoneNumberInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClaimPhoneNumberInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ClaimPhoneNumberInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ClaimPhoneNumberInput"}
+	if s.PhoneNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumber"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.TargetArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *ClaimPhoneNumberInput) SetClientToken(v string) *ClaimPhoneNumberInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *ClaimPhoneNumberInput) SetPhoneNumber(v string) *ClaimPhoneNumberInput {
+	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneNumberDescription sets the PhoneNumberDescription field's value.
+func (s *ClaimPhoneNumberInput) SetPhoneNumberDescription(v string) *ClaimPhoneNumberInput {
+	s.PhoneNumberDescription = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ClaimPhoneNumberInput) SetTags(v map[string]*string) *ClaimPhoneNumberInput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *ClaimPhoneNumberInput) SetTargetArn(v string) *ClaimPhoneNumberInput {
+	s.TargetArn = &v
+	return s
+}
+
+type ClaimPhoneNumberOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the phone number.
+	PhoneNumberArn *string `type:"string"`
+
+	// A unique identifier for the phone number.
+	PhoneNumberId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClaimPhoneNumberOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClaimPhoneNumberOutput) GoString() string {
+	return s.String()
+}
+
+// SetPhoneNumberArn sets the PhoneNumberArn field's value.
+func (s *ClaimPhoneNumberOutput) SetPhoneNumberArn(v string) *ClaimPhoneNumberOutput {
+	s.PhoneNumberArn = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *ClaimPhoneNumberOutput) SetPhoneNumberId(v string) *ClaimPhoneNumberOutput {
+	s.PhoneNumberId = &v
+	return s
+}
+
+// Information about a phone number that has been claimed to your Amazon Connect
+// instance.
+type ClaimedPhoneNumberSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The phone number. Phone numbers are formatted [+] [country code] [subscriber
+	// number including area code].
+	PhoneNumber *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the phone number.
+	PhoneNumberArn *string `type:"string"`
+
+	// The ISO country code.
+	PhoneNumberCountryCode *string `type:"string" enum:"PhoneNumberCountryCode"`
+
+	// The description of the phone number.
+	PhoneNumberDescription *string `type:"string"`
+
+	// A unique identifier for the phone number.
+	PhoneNumberId *string `type:"string"`
+
+	// The status of the phone number.
+	PhoneNumberStatus *PhoneNumberStatus `type:"structure"`
+
+	// The type of phone number.
+	PhoneNumberType *string `type:"string" enum:"PhoneNumberType"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// The Amazon Resource Name (ARN) for Amazon Connect instances that phone numbers
+	// are claimed to.
+	TargetArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClaimedPhoneNumberSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClaimedPhoneNumberSummary) GoString() string {
+	return s.String()
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *ClaimedPhoneNumberSummary) SetPhoneNumber(v string) *ClaimedPhoneNumberSummary {
+	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneNumberArn sets the PhoneNumberArn field's value.
+func (s *ClaimedPhoneNumberSummary) SetPhoneNumberArn(v string) *ClaimedPhoneNumberSummary {
+	s.PhoneNumberArn = &v
+	return s
+}
+
+// SetPhoneNumberCountryCode sets the PhoneNumberCountryCode field's value.
+func (s *ClaimedPhoneNumberSummary) SetPhoneNumberCountryCode(v string) *ClaimedPhoneNumberSummary {
+	s.PhoneNumberCountryCode = &v
+	return s
+}
+
+// SetPhoneNumberDescription sets the PhoneNumberDescription field's value.
+func (s *ClaimedPhoneNumberSummary) SetPhoneNumberDescription(v string) *ClaimedPhoneNumberSummary {
+	s.PhoneNumberDescription = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *ClaimedPhoneNumberSummary) SetPhoneNumberId(v string) *ClaimedPhoneNumberSummary {
+	s.PhoneNumberId = &v
+	return s
+}
+
+// SetPhoneNumberStatus sets the PhoneNumberStatus field's value.
+func (s *ClaimedPhoneNumberSummary) SetPhoneNumberStatus(v *PhoneNumberStatus) *ClaimedPhoneNumberSummary {
+	s.PhoneNumberStatus = v
+	return s
+}
+
+// SetPhoneNumberType sets the PhoneNumberType field's value.
+func (s *ClaimedPhoneNumberSummary) SetPhoneNumberType(v string) *ClaimedPhoneNumberSummary {
+	s.PhoneNumberType = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ClaimedPhoneNumberSummary) SetTags(v map[string]*string) *ClaimedPhoneNumberSummary {
+	s.Tags = v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *ClaimedPhoneNumberSummary) SetTargetArn(v string) *ClaimedPhoneNumberSummary {
+	s.TargetArn = &v
+	return s
+}
+
+// Contains information about a contact.
+type Contact struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the agent who accepted the contact.
+	AgentInfo *AgentInfo `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the contact.
+	Arn *string `type:"string"`
+
+	// How the contact reached your contact center.
+	Channel *string `type:"string" enum:"Channel"`
+
+	// The description of the contact.
+	Description *string `type:"string"`
+
+	// The timestamp when the customer endpoint disconnected from Amazon Connect.
+	DisconnectTimestamp *time.Time `type:"timestamp"`
+
+	// The identifier for the contact.
+	Id *string `min:"1" type:"string"`
+
+	// If this contact is related to other contacts, this is the ID of the initial
+	// contact.
+	InitialContactId *string `min:"1" type:"string"`
+
+	// Indicates how the contact was initiated.
+	InitiationMethod *string `type:"string" enum:"ContactInitiationMethod"`
+
+	// The date and time this contact was initiated, in UTC time. For INBOUND, this
+	// is when the contact arrived. For OUTBOUND, this is when the agent began dialing.
+	// For CALLBACK, this is when the callback contact was created. For TRANSFER
+	// and QUEUE_TRANSFER, this is when the transfer was initiated. For API, this
+	// is when the request arrived.
+	InitiationTimestamp *time.Time `type:"timestamp"`
+
+	// The timestamp when contact was last updated.
+	LastUpdateTimestamp *time.Time `type:"timestamp"`
+
+	// The name of the contact.
+	Name *string `type:"string"`
+
+	// If this contact is not the first contact, this is the ID of the previous
+	// contact.
+	PreviousContactId *string `min:"1" type:"string"`
+
+	// If this contact was queued, this contains information about the queue.
+	QueueInfo *QueueInfo `type:"structure"`
+
+	// The timestamp, in Unix epoch time format, at which to start running the inbound
+	// flow.
+	ScheduledTimestamp *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Contact) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Contact) GoString() string {
+	return s.String()
+}
+
+// SetAgentInfo sets the AgentInfo field's value.
+func (s *Contact) SetAgentInfo(v *AgentInfo) *Contact {
+	s.AgentInfo = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *Contact) SetArn(v string) *Contact {
+	s.Arn = &v
+	return s
+}
+
+// SetChannel sets the Channel field's value.
+func (s *Contact) SetChannel(v string) *Contact {
+	s.Channel = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *Contact) SetDescription(v string) *Contact {
+	s.Description = &v
+	return s
+}
+
+// SetDisconnectTimestamp sets the DisconnectTimestamp field's value.
+func (s *Contact) SetDisconnectTimestamp(v time.Time) *Contact {
+	s.DisconnectTimestamp = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Contact) SetId(v string) *Contact {
+	s.Id = &v
+	return s
+}
+
+// SetInitialContactId sets the InitialContactId field's value.
+func (s *Contact) SetInitialContactId(v string) *Contact {
+	s.InitialContactId = &v
+	return s
+}
+
+// SetInitiationMethod sets the InitiationMethod field's value.
+func (s *Contact) SetInitiationMethod(v string) *Contact {
+	s.InitiationMethod = &v
+	return s
+}
+
+// SetInitiationTimestamp sets the InitiationTimestamp field's value.
+func (s *Contact) SetInitiationTimestamp(v time.Time) *Contact {
+	s.InitiationTimestamp = &v
+	return s
+}
+
+// SetLastUpdateTimestamp sets the LastUpdateTimestamp field's value.
+func (s *Contact) SetLastUpdateTimestamp(v time.Time) *Contact {
+	s.LastUpdateTimestamp = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Contact) SetName(v string) *Contact {
+	s.Name = &v
+	return s
+}
+
+// SetPreviousContactId sets the PreviousContactId field's value.
+func (s *Contact) SetPreviousContactId(v string) *Contact {
+	s.PreviousContactId = &v
+	return s
+}
+
+// SetQueueInfo sets the QueueInfo field's value.
+func (s *Contact) SetQueueInfo(v *QueueInfo) *Contact {
+	s.QueueInfo = v
+	return s
+}
+
+// SetScheduledTimestamp sets the ScheduledTimestamp field's value.
+func (s *Contact) SetScheduledTimestamp(v time.Time) *Contact {
+	s.ScheduledTimestamp = &v
+	return s
+}
+
+// Filters user data based on the contact information that is associated to
+// the users. It contains a list of contact states (https://docs.aws.amazon.com/connect/latest/adminguide/about-contact-states.html).
+type ContactFilter struct {
+	_ struct{} `type:"structure"`
+
+	// A list of up to 9 contact states (https://docs.aws.amazon.com/connect/latest/adminguide/about-contact-states.html).
+	ContactStates []*string `type:"list" enum:"ContactState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContactFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContactFilter) GoString() string {
+	return s.String()
+}
+
+// SetContactStates sets the ContactStates field's value.
+func (s *ContactFilter) SetContactStates(v []*string) *ContactFilter {
+	s.ContactStates = v
+	return s
+}
+
 // Contains information about a contact flow.
 type ContactFlow struct {
 	_ struct{} `type:"structure"`
@@ -12940,6 +18550,9 @@ type ContactFlow struct {
 
 	// The name of the contact flow.
 	Name *string `min:"1" type:"string"`
+
+	// The type of contact flow.
+	State *string `type:"string" enum:"ContactFlowState"`
 
 	// One or more tags.
 	Tags map[string]*string `min:"1" type:"map"`
@@ -12998,6 +18611,12 @@ func (s *ContactFlow) SetName(v string) *ContactFlow {
 	return s
 }
 
+// SetState sets the State field's value.
+func (s *ContactFlow) SetState(v string) *ContactFlow {
+	s.State = &v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *ContactFlow) SetTags(v map[string]*string) *ContactFlow {
 	s.Tags = v
@@ -13007,6 +18626,160 @@ func (s *ContactFlow) SetTags(v map[string]*string) *ContactFlow {
 // SetType sets the Type field's value.
 func (s *ContactFlow) SetType(v string) *ContactFlow {
 	s.Type = &v
+	return s
+}
+
+// Contains information about a contact flow module.
+type ContactFlowModule struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN).
+	Arn *string `type:"string"`
+
+	// The content of the contact flow module.
+	Content *string `min:"1" type:"string"`
+
+	// The description of the contact flow module.
+	Description *string `type:"string"`
+
+	// The identifier of the contact flow module.
+	Id *string `min:"1" type:"string"`
+
+	// The name of the contact flow module.
+	Name *string `min:"1" type:"string"`
+
+	// The type of contact flow module.
+	State *string `type:"string" enum:"ContactFlowModuleState"`
+
+	// The status of the contact flow module.
+	Status *string `type:"string" enum:"ContactFlowModuleStatus"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContactFlowModule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContactFlowModule) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ContactFlowModule) SetArn(v string) *ContactFlowModule {
+	s.Arn = &v
+	return s
+}
+
+// SetContent sets the Content field's value.
+func (s *ContactFlowModule) SetContent(v string) *ContactFlowModule {
+	s.Content = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ContactFlowModule) SetDescription(v string) *ContactFlowModule {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ContactFlowModule) SetId(v string) *ContactFlowModule {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ContactFlowModule) SetName(v string) *ContactFlowModule {
+	s.Name = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ContactFlowModule) SetState(v string) *ContactFlowModule {
+	s.State = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ContactFlowModule) SetStatus(v string) *ContactFlowModule {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ContactFlowModule) SetTags(v map[string]*string) *ContactFlowModule {
+	s.Tags = v
+	return s
+}
+
+// Contains summary information about a contact flow.
+type ContactFlowModuleSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the contact flow module.
+	Arn *string `type:"string"`
+
+	// The identifier of the contact flow module.
+	Id *string `min:"1" type:"string"`
+
+	// The name of the contact flow module.
+	Name *string `min:"1" type:"string"`
+
+	// The type of contact flow module.
+	State *string `type:"string" enum:"ContactFlowModuleState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContactFlowModuleSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContactFlowModuleSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ContactFlowModuleSummary) SetArn(v string) *ContactFlowModuleSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ContactFlowModuleSummary) SetId(v string) *ContactFlowModuleSummary {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ContactFlowModuleSummary) SetName(v string) *ContactFlowModuleSummary {
+	s.Name = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ContactFlowModuleSummary) SetState(v string) *ContactFlowModuleSummary {
+	s.State = &v
 	return s
 }
 
@@ -13085,6 +18858,9 @@ type ContactFlowSummary struct {
 	Arn *string `type:"string"`
 
 	// The type of contact flow.
+	ContactFlowState *string `type:"string" enum:"ContactFlowState"`
+
+	// The type of contact flow.
 	ContactFlowType *string `type:"string" enum:"ContactFlowType"`
 
 	// The identifier of the contact flow.
@@ -13115,6 +18891,12 @@ func (s ContactFlowSummary) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *ContactFlowSummary) SetArn(v string) *ContactFlowSummary {
 	s.Arn = &v
+	return s
+}
+
+// SetContactFlowState sets the ContactFlowState field's value.
+func (s *ContactFlowSummary) SetContactFlowState(v string) *ContactFlowSummary {
+	s.ContactFlowState = &v
 	return s
 }
 
@@ -13201,6 +18983,62 @@ func (s *ContactNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// An object that can be used to specify Tag conditions inside the SearchFilter.
+// This accepts an OR of AND (List of List) input where:
+//
+//    * Top level list specifies conditions that need to be applied with OR
+//    operator
+//
+//    * Inner list specifies conditions that need to be applied with AND operator.
+type ControlPlaneTagFilter struct {
+	_ struct{} `type:"structure"`
+
+	// A list of conditions which would be applied together with an AND condition.
+	AndConditions []*TagCondition `type:"list"`
+
+	// A list of conditions which would be applied together with an OR condition.
+	OrConditions [][]*TagCondition `type:"list"`
+
+	// A leaf node condition which can be used to specify a tag condition.
+	TagCondition *TagCondition `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ControlPlaneTagFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ControlPlaneTagFilter) GoString() string {
+	return s.String()
+}
+
+// SetAndConditions sets the AndConditions field's value.
+func (s *ControlPlaneTagFilter) SetAndConditions(v []*TagCondition) *ControlPlaneTagFilter {
+	s.AndConditions = v
+	return s
+}
+
+// SetOrConditions sets the OrConditions field's value.
+func (s *ControlPlaneTagFilter) SetOrConditions(v [][]*TagCondition) *ControlPlaneTagFilter {
+	s.OrConditions = v
+	return s
+}
+
+// SetTagCondition sets the TagCondition field's value.
+func (s *ControlPlaneTagFilter) SetTagCondition(v *TagCondition) *ControlPlaneTagFilter {
+	s.TagCondition = v
+	return s
+}
+
 type CreateAgentStatusInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13226,7 +19064,7 @@ type CreateAgentStatusInput struct {
 	// State is a required field
 	State *string `type:"string" required:"true" enum:"AgentStatusState"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 }
 
@@ -13475,6 +19313,161 @@ func (s *CreateContactFlowInput) SetType(v string) *CreateContactFlowInput {
 	return s
 }
 
+type CreateContactFlowModuleInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// The content of the contact flow module.
+	//
+	// Content is a required field
+	Content *string `min:"1" type:"string" required:"true"`
+
+	// The description of the contact flow module.
+	Description *string `type:"string"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The name of the contact flow module.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContactFlowModuleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContactFlowModuleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateContactFlowModuleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateContactFlowModuleInput"}
+	if s.Content == nil {
+		invalidParams.Add(request.NewErrParamRequired("Content"))
+	}
+	if s.Content != nil && len(*s.Content) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateContactFlowModuleInput) SetClientToken(v string) *CreateContactFlowModuleInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetContent sets the Content field's value.
+func (s *CreateContactFlowModuleInput) SetContent(v string) *CreateContactFlowModuleInput {
+	s.Content = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateContactFlowModuleInput) SetDescription(v string) *CreateContactFlowModuleInput {
+	s.Description = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *CreateContactFlowModuleInput) SetInstanceId(v string) *CreateContactFlowModuleInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateContactFlowModuleInput) SetName(v string) *CreateContactFlowModuleInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateContactFlowModuleInput) SetTags(v map[string]*string) *CreateContactFlowModuleInput {
+	s.Tags = v
+	return s
+}
+
+type CreateContactFlowModuleOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the contact flow module.
+	Arn *string `type:"string"`
+
+	// The identifier of the contact flow module.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContactFlowModuleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateContactFlowModuleOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateContactFlowModuleOutput) SetArn(v string) *CreateContactFlowModuleOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateContactFlowModuleOutput) SetId(v string) *CreateContactFlowModuleOutput {
+	s.Id = &v
+	return s
+}
+
 type CreateContactFlowOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -13538,7 +19531,7 @@ type CreateHoursOfOperationInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 
 	// The time zone of the hours of operation.
@@ -13867,7 +19860,7 @@ type CreateIntegrationAssociationInput struct {
 	// type.
 	SourceType *string `type:"string" enum:"SourceType"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 }
 
@@ -14034,7 +20027,7 @@ type CreateQueueInput struct {
 	// The quick connects available to agents who are working the queue.
 	QuickConnectIds []*string `min:"1" type:"list"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 }
 
@@ -14205,7 +20198,7 @@ type CreateQuickConnectInput struct {
 	// QuickConnectConfig is a required field
 	QuickConnectConfig *QuickConnectConfig `type:"structure" required:"true"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 }
 
@@ -14531,6 +20524,347 @@ func (s *CreateRoutingProfileOutput) SetRoutingProfileId(v string) *CreateRoutin
 	return s
 }
 
+type CreateSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the security profile.
+	Description *string `type:"string"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// Permissions assigned to the security profile.
+	Permissions []*string `type:"list"`
+
+	// The name of the security profile.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `type:"string" required:"true"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateSecurityProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateSecurityProfileInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateSecurityProfileInput) SetDescription(v string) *CreateSecurityProfileInput {
+	s.Description = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *CreateSecurityProfileInput) SetInstanceId(v string) *CreateSecurityProfileInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetPermissions sets the Permissions field's value.
+func (s *CreateSecurityProfileInput) SetPermissions(v []*string) *CreateSecurityProfileInput {
+	s.Permissions = v
+	return s
+}
+
+// SetSecurityProfileName sets the SecurityProfileName field's value.
+func (s *CreateSecurityProfileInput) SetSecurityProfileName(v string) *CreateSecurityProfileInput {
+	s.SecurityProfileName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateSecurityProfileInput) SetTags(v map[string]*string) *CreateSecurityProfileInput {
+	s.Tags = v
+	return s
+}
+
+type CreateSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the security profile.
+	SecurityProfileArn *string `type:"string"`
+
+	// The identifier for the security profle.
+	SecurityProfileId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SetSecurityProfileArn sets the SecurityProfileArn field's value.
+func (s *CreateSecurityProfileOutput) SetSecurityProfileArn(v string) *CreateSecurityProfileOutput {
+	s.SecurityProfileArn = &v
+	return s
+}
+
+// SetSecurityProfileId sets the SecurityProfileId field's value.
+func (s *CreateSecurityProfileOutput) SetSecurityProfileId(v string) *CreateSecurityProfileOutput {
+	s.SecurityProfileId = &v
+	return s
+}
+
+type CreateTaskTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// Constraints that are applicable to the fields listed.
+	Constraints *TaskTemplateConstraints `type:"structure"`
+
+	// The identifier of the flow that runs by default when a task is created by
+	// referencing this template.
+	ContactFlowId *string `type:"string"`
+
+	// The default values for fields when a task is created by referencing this
+	// template.
+	Defaults *TaskTemplateDefaults `type:"structure"`
+
+	// The description of the task template.
+	Description *string `min:"1" type:"string"`
+
+	// Fields that are part of the template.
+	//
+	// Fields is a required field
+	Fields []*TaskTemplateField `type:"list" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The name of the task template.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// Marks a template as ACTIVE or INACTIVE for a task to refer to it. Tasks can
+	// only be created from ACTIVE templates. If a template is marked as INACTIVE,
+	// then a task that refers to this template cannot be created.
+	Status *string `type:"string" enum:"TaskTemplateStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTaskTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTaskTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateTaskTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateTaskTemplateInput"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Fields == nil {
+		invalidParams.Add(request.NewErrParamRequired("Fields"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Constraints != nil {
+		if err := s.Constraints.Validate(); err != nil {
+			invalidParams.AddNested("Constraints", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Defaults != nil {
+		if err := s.Defaults.Validate(); err != nil {
+			invalidParams.AddNested("Defaults", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Fields != nil {
+		for i, v := range s.Fields {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Fields", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateTaskTemplateInput) SetClientToken(v string) *CreateTaskTemplateInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetConstraints sets the Constraints field's value.
+func (s *CreateTaskTemplateInput) SetConstraints(v *TaskTemplateConstraints) *CreateTaskTemplateInput {
+	s.Constraints = v
+	return s
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *CreateTaskTemplateInput) SetContactFlowId(v string) *CreateTaskTemplateInput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetDefaults sets the Defaults field's value.
+func (s *CreateTaskTemplateInput) SetDefaults(v *TaskTemplateDefaults) *CreateTaskTemplateInput {
+	s.Defaults = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateTaskTemplateInput) SetDescription(v string) *CreateTaskTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetFields sets the Fields field's value.
+func (s *CreateTaskTemplateInput) SetFields(v []*TaskTemplateField) *CreateTaskTemplateInput {
+	s.Fields = v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *CreateTaskTemplateInput) SetInstanceId(v string) *CreateTaskTemplateInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateTaskTemplateInput) SetName(v string) *CreateTaskTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateTaskTemplateInput) SetStatus(v string) *CreateTaskTemplateInput {
+	s.Status = &v
+	return s
+}
+
+type CreateTaskTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the task template resource.
+	//
+	// Arn is a required field
+	Arn *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the task template resource.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTaskTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTaskTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateTaskTemplateOutput) SetArn(v string) *CreateTaskTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateTaskTemplateOutput) SetId(v string) *CreateTaskTemplateOutput {
+	s.Id = &v
+	return s
+}
+
 type CreateUseCaseInput struct {
 	_ struct{} `type:"structure"`
 
@@ -14545,7 +20879,7 @@ type CreateUseCaseInput struct {
 	// IntegrationAssociationId is a required field
 	IntegrationAssociationId *string `location:"uri" locationName:"IntegrationAssociationId" min:"1" type:"string" required:"true"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 
 	// The type of use case to associate to the integration association. Each integration
@@ -14682,6 +21016,9 @@ type CreateUserHierarchyGroupInput struct {
 	// The identifier for the parent hierarchy group. The user hierarchy is created
 	// at level one if the parent group ID is null.
 	ParentGroupId *string `type:"string"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
 }
 
 // String returns the string representation.
@@ -14714,6 +21051,9 @@ func (s *CreateUserHierarchyGroupInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -14736,6 +21076,12 @@ func (s *CreateUserHierarchyGroupInput) SetName(v string) *CreateUserHierarchyGr
 // SetParentGroupId sets the ParentGroupId field's value.
 func (s *CreateUserHierarchyGroupInput) SetParentGroupId(v string) *CreateUserHierarchyGroupInput {
 	s.ParentGroupId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateUserHierarchyGroupInput) SetTags(v map[string]*string) *CreateUserHierarchyGroupInput {
+	s.Tags = v
 	return s
 }
 
@@ -15003,6 +21349,188 @@ func (s *CreateUserOutput) SetUserId(v string) *CreateUserOutput {
 	return s
 }
 
+type CreateVocabularyInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request. If a create request is received more than once with same
+	// client token, subsequent requests return the previous response without creating
+	// a vocabulary again.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// The content of the custom vocabulary in plain-text format with a table of
+	// values. Each row in the table represents a word or a phrase, described with
+	// Phrase, IPA, SoundsLike, and DisplayAs fields. Separate the fields with TAB
+	// characters. The size limit is 50KB. For more information, see Create a custom
+	// vocabulary using a table (https://docs.aws.amazon.com/transcribe/latest/dg/custom-vocabulary.html#create-vocabulary-table).
+	//
+	// Content is a required field
+	Content *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The language code of the vocabulary entries. For a list of languages and
+	// their corresponding language codes, see What is Amazon Transcribe? (https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html)
+	//
+	// LanguageCode is a required field
+	LanguageCode *string `type:"string" required:"true" enum:"VocabularyLanguageCode"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// A unique name of the custom vocabulary.
+	//
+	// VocabularyName is a required field
+	VocabularyName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVocabularyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVocabularyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateVocabularyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateVocabularyInput"}
+	if s.Content == nil {
+		invalidParams.Add(request.NewErrParamRequired("Content"))
+	}
+	if s.Content != nil && len(*s.Content) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.LanguageCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("LanguageCode"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.VocabularyName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VocabularyName"))
+	}
+	if s.VocabularyName != nil && len(*s.VocabularyName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VocabularyName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateVocabularyInput) SetClientToken(v string) *CreateVocabularyInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetContent sets the Content field's value.
+func (s *CreateVocabularyInput) SetContent(v string) *CreateVocabularyInput {
+	s.Content = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *CreateVocabularyInput) SetInstanceId(v string) *CreateVocabularyInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *CreateVocabularyInput) SetLanguageCode(v string) *CreateVocabularyInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateVocabularyInput) SetTags(v map[string]*string) *CreateVocabularyInput {
+	s.Tags = v
+	return s
+}
+
+// SetVocabularyName sets the VocabularyName field's value.
+func (s *CreateVocabularyInput) SetVocabularyName(v string) *CreateVocabularyInput {
+	s.VocabularyName = &v
+	return s
+}
+
+type CreateVocabularyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current state of the custom vocabulary.
+	//
+	// State is a required field
+	State *string `type:"string" required:"true" enum:"VocabularyState"`
+
+	// The Amazon Resource Name (ARN) of the custom vocabulary.
+	//
+	// VocabularyArn is a required field
+	VocabularyArn *string `type:"string" required:"true"`
+
+	// The identifier of the custom vocabulary.
+	//
+	// VocabularyId is a required field
+	VocabularyId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVocabularyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVocabularyOutput) GoString() string {
+	return s.String()
+}
+
+// SetState sets the State field's value.
+func (s *CreateVocabularyOutput) SetState(v string) *CreateVocabularyOutput {
+	s.State = &v
+	return s
+}
+
+// SetVocabularyArn sets the VocabularyArn field's value.
+func (s *CreateVocabularyOutput) SetVocabularyArn(v string) *CreateVocabularyOutput {
+	s.VocabularyArn = &v
+	return s
+}
+
+// SetVocabularyId sets the VocabularyId field's value.
+func (s *CreateVocabularyOutput) SetVocabularyId(v string) *CreateVocabularyOutput {
+	s.VocabularyId = &v
+	return s
+}
+
 // Contains credentials to use for federation.
 type Credentials struct {
 	_ struct{} `type:"structure"`
@@ -15196,6 +21724,295 @@ func (s *CurrentMetricResult) SetDimensions(v *Dimensions) *CurrentMetricResult 
 	return s
 }
 
+// Information about a reference when the referenceType is DATE. Otherwise,
+// null.
+type DateReference struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the date reference.
+	Name *string `min:"1" type:"string"`
+
+	// A valid date.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DateReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DateReference) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *DateReference) SetName(v string) *DateReference {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *DateReference) SetValue(v string) *DateReference {
+	s.Value = &v
+	return s
+}
+
+// Contains information about a default vocabulary.
+type DefaultVocabulary struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `min:"1" type:"string" required:"true"`
+
+	// The language code of the vocabulary entries. For a list of languages and
+	// their corresponding language codes, see What is Amazon Transcribe? (https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html)
+	//
+	// LanguageCode is a required field
+	LanguageCode *string `type:"string" required:"true" enum:"VocabularyLanguageCode"`
+
+	// The identifier of the custom vocabulary.
+	//
+	// VocabularyId is a required field
+	VocabularyId *string `min:"1" type:"string" required:"true"`
+
+	// A unique name of the custom vocabulary.
+	//
+	// VocabularyName is a required field
+	VocabularyName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultVocabulary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultVocabulary) GoString() string {
+	return s.String()
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DefaultVocabulary) SetInstanceId(v string) *DefaultVocabulary {
+	s.InstanceId = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *DefaultVocabulary) SetLanguageCode(v string) *DefaultVocabulary {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetVocabularyId sets the VocabularyId field's value.
+func (s *DefaultVocabulary) SetVocabularyId(v string) *DefaultVocabulary {
+	s.VocabularyId = &v
+	return s
+}
+
+// SetVocabularyName sets the VocabularyName field's value.
+func (s *DefaultVocabulary) SetVocabularyName(v string) *DefaultVocabulary {
+	s.VocabularyName = &v
+	return s
+}
+
+type DeleteContactFlowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the contact flow.
+	//
+	// ContactFlowId is a required field
+	ContactFlowId *string `location:"uri" locationName:"ContactFlowId" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteContactFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteContactFlowInput"}
+	if s.ContactFlowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowId"))
+	}
+	if s.ContactFlowId != nil && len(*s.ContactFlowId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactFlowId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *DeleteContactFlowInput) SetContactFlowId(v string) *DeleteContactFlowInput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DeleteContactFlowInput) SetInstanceId(v string) *DeleteContactFlowInput {
+	s.InstanceId = &v
+	return s
+}
+
+type DeleteContactFlowModuleInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the contact flow module.
+	//
+	// ContactFlowModuleId is a required field
+	ContactFlowModuleId *string `location:"uri" locationName:"ContactFlowModuleId" min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowModuleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowModuleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteContactFlowModuleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteContactFlowModuleInput"}
+	if s.ContactFlowModuleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowModuleId"))
+	}
+	if s.ContactFlowModuleId != nil && len(*s.ContactFlowModuleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactFlowModuleId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowModuleId sets the ContactFlowModuleId field's value.
+func (s *DeleteContactFlowModuleInput) SetContactFlowModuleId(v string) *DeleteContactFlowModuleInput {
+	s.ContactFlowModuleId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DeleteContactFlowModuleInput) SetInstanceId(v string) *DeleteContactFlowModuleInput {
+	s.InstanceId = &v
+	return s
+}
+
+type DeleteContactFlowModuleOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowModuleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowModuleOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteContactFlowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteContactFlowOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteHoursOfOperationInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -15264,7 +22081,7 @@ func (s *DeleteHoursOfOperationInput) SetInstanceId(v string) *DeleteHoursOfOper
 }
 
 type DeleteHoursOfOperationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15336,7 +22153,7 @@ func (s *DeleteInstanceInput) SetInstanceId(v string) *DeleteInstanceInput {
 }
 
 type DeleteInstanceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15425,7 +22242,7 @@ func (s *DeleteIntegrationAssociationInput) SetIntegrationAssociationId(v string
 }
 
 type DeleteIntegrationAssociationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15514,7 +22331,7 @@ func (s *DeleteQuickConnectInput) SetQuickConnectId(v string) *DeleteQuickConnec
 }
 
 type DeleteQuickConnectOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15532,6 +22349,184 @@ func (s DeleteQuickConnectOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DeleteQuickConnectOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteSecurityProfileInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The identifier for the security profle.
+	//
+	// SecurityProfileId is a required field
+	SecurityProfileId *string `location:"uri" locationName:"SecurityProfileId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSecurityProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteSecurityProfileInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.SecurityProfileId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecurityProfileId"))
+	}
+	if s.SecurityProfileId != nil && len(*s.SecurityProfileId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecurityProfileId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DeleteSecurityProfileInput) SetInstanceId(v string) *DeleteSecurityProfileInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetSecurityProfileId sets the SecurityProfileId field's value.
+func (s *DeleteSecurityProfileInput) SetSecurityProfileId(v string) *DeleteSecurityProfileInput {
+	s.SecurityProfileId = &v
+	return s
+}
+
+type DeleteSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteTaskTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// A unique identifier for the task template.
+	//
+	// TaskTemplateId is a required field
+	TaskTemplateId *string `location:"uri" locationName:"TaskTemplateId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTaskTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTaskTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteTaskTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteTaskTemplateInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.TaskTemplateId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TaskTemplateId"))
+	}
+	if s.TaskTemplateId != nil && len(*s.TaskTemplateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskTemplateId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DeleteTaskTemplateInput) SetInstanceId(v string) *DeleteTaskTemplateInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetTaskTemplateId sets the TaskTemplateId field's value.
+func (s *DeleteTaskTemplateInput) SetTaskTemplateId(v string) *DeleteTaskTemplateInput {
+	s.TaskTemplateId = &v
+	return s
+}
+
+type DeleteTaskTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTaskTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTaskTemplateOutput) GoString() string {
 	return s.String()
 }
 
@@ -15620,7 +22615,7 @@ func (s *DeleteUseCaseInput) SetUseCaseId(v string) *DeleteUseCaseInput {
 }
 
 type DeleteUseCaseOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15709,7 +22704,7 @@ func (s *DeleteUserHierarchyGroupInput) SetInstanceId(v string) *DeleteUserHiera
 }
 
 type DeleteUserHierarchyGroupOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15798,7 +22793,7 @@ func (s *DeleteUserInput) SetUserId(v string) *DeleteUserInput {
 }
 
 type DeleteUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15817,6 +22812,128 @@ func (s DeleteUserOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DeleteUserOutput) GoString() string {
 	return s.String()
+}
+
+type DeleteVocabularyInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The identifier of the custom vocabulary.
+	//
+	// VocabularyId is a required field
+	VocabularyId *string `location:"uri" locationName:"VocabularyId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVocabularyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVocabularyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteVocabularyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteVocabularyInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.VocabularyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VocabularyId"))
+	}
+	if s.VocabularyId != nil && len(*s.VocabularyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VocabularyId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DeleteVocabularyInput) SetInstanceId(v string) *DeleteVocabularyInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetVocabularyId sets the VocabularyId field's value.
+func (s *DeleteVocabularyInput) SetVocabularyId(v string) *DeleteVocabularyInput {
+	s.VocabularyId = &v
+	return s
+}
+
+type DeleteVocabularyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current state of the custom vocabulary.
+	//
+	// State is a required field
+	State *string `type:"string" required:"true" enum:"VocabularyState"`
+
+	// The Amazon Resource Name (ARN) of the custom vocabulary.
+	//
+	// VocabularyArn is a required field
+	VocabularyArn *string `type:"string" required:"true"`
+
+	// The identifier of the custom vocabulary.
+	//
+	// VocabularyId is a required field
+	VocabularyId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVocabularyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVocabularyOutput) GoString() string {
+	return s.String()
+}
+
+// SetState sets the State field's value.
+func (s *DeleteVocabularyOutput) SetState(v string) *DeleteVocabularyOutput {
+	s.State = &v
+	return s
+}
+
+// SetVocabularyArn sets the VocabularyArn field's value.
+func (s *DeleteVocabularyOutput) SetVocabularyArn(v string) *DeleteVocabularyOutput {
+	s.VocabularyArn = &v
+	return s
+}
+
+// SetVocabularyId sets the VocabularyId field's value.
+func (s *DeleteVocabularyOutput) SetVocabularyId(v string) *DeleteVocabularyOutput {
+	s.VocabularyId = &v
+	return s
 }
 
 type DescribeAgentStatusInput struct {
@@ -15983,6 +23100,104 @@ func (s *DescribeContactFlowInput) SetInstanceId(v string) *DescribeContactFlowI
 	return s
 }
 
+type DescribeContactFlowModuleInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the contact flow module.
+	//
+	// ContactFlowModuleId is a required field
+	ContactFlowModuleId *string `location:"uri" locationName:"ContactFlowModuleId" min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactFlowModuleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactFlowModuleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeContactFlowModuleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeContactFlowModuleInput"}
+	if s.ContactFlowModuleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowModuleId"))
+	}
+	if s.ContactFlowModuleId != nil && len(*s.ContactFlowModuleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactFlowModuleId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowModuleId sets the ContactFlowModuleId field's value.
+func (s *DescribeContactFlowModuleInput) SetContactFlowModuleId(v string) *DescribeContactFlowModuleInput {
+	s.ContactFlowModuleId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DescribeContactFlowModuleInput) SetInstanceId(v string) *DescribeContactFlowModuleInput {
+	s.InstanceId = &v
+	return s
+}
+
+type DescribeContactFlowModuleOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the contact flow module.
+	ContactFlowModule *ContactFlowModule `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactFlowModuleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactFlowModuleOutput) GoString() string {
+	return s.String()
+}
+
+// SetContactFlowModule sets the ContactFlowModule field's value.
+func (s *DescribeContactFlowModuleOutput) SetContactFlowModule(v *ContactFlowModule) *DescribeContactFlowModuleOutput {
+	s.ContactFlowModule = v
+	return s
+}
+
 type DescribeContactFlowOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -16011,6 +23226,104 @@ func (s DescribeContactFlowOutput) GoString() string {
 // SetContactFlow sets the ContactFlow field's value.
 func (s *DescribeContactFlowOutput) SetContactFlow(v *ContactFlow) *DescribeContactFlowOutput {
 	s.ContactFlow = v
+	return s
+}
+
+type DescribeContactInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the contact.
+	//
+	// ContactId is a required field
+	ContactId *string `location:"uri" locationName:"ContactId" min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeContactInput"}
+	if s.ContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactId"))
+	}
+	if s.ContactId != nil && len(*s.ContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *DescribeContactInput) SetContactId(v string) *DescribeContactInput {
+	s.ContactId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DescribeContactInput) SetInstanceId(v string) *DescribeContactInput {
+	s.InstanceId = &v
+	return s
+}
+
+type DescribeContactOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the contact.
+	Contact *Contact `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeContactOutput) GoString() string {
+	return s.String()
+}
+
+// SetContact sets the Contact field's value.
+func (s *DescribeContactOutput) SetContact(v *Contact) *DescribeContactOutput {
+	s.Contact = v
 	return s
 }
 
@@ -16404,6 +23717,87 @@ func (s *DescribeInstanceStorageConfigOutput) SetStorageConfig(v *InstanceStorag
 	return s
 }
 
+type DescribePhoneNumberInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for the phone number.
+	//
+	// PhoneNumberId is a required field
+	PhoneNumberId *string `location:"uri" locationName:"PhoneNumberId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePhoneNumberInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePhoneNumberInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribePhoneNumberInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribePhoneNumberInput"}
+	if s.PhoneNumberId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumberId"))
+	}
+	if s.PhoneNumberId != nil && len(*s.PhoneNumberId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PhoneNumberId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *DescribePhoneNumberInput) SetPhoneNumberId(v string) *DescribePhoneNumberInput {
+	s.PhoneNumberId = &v
+	return s
+}
+
+type DescribePhoneNumberOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about a phone number that's been claimed to your Amazon Connect
+	// instance.
+	ClaimedPhoneNumberSummary *ClaimedPhoneNumberSummary `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePhoneNumberOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePhoneNumberOutput) GoString() string {
+	return s.String()
+}
+
+// SetClaimedPhoneNumberSummary sets the ClaimedPhoneNumberSummary field's value.
+func (s *DescribePhoneNumberOutput) SetClaimedPhoneNumberSummary(v *ClaimedPhoneNumberSummary) *DescribePhoneNumberOutput {
+	s.ClaimedPhoneNumberSummary = v
+	return s
+}
+
 type DescribeQueueInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -16698,6 +24092,104 @@ func (s *DescribeRoutingProfileOutput) SetRoutingProfile(v *RoutingProfile) *Des
 	return s
 }
 
+type DescribeSecurityProfileInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The identifier for the security profle.
+	//
+	// SecurityProfileId is a required field
+	SecurityProfileId *string `location:"uri" locationName:"SecurityProfileId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeSecurityProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeSecurityProfileInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.SecurityProfileId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecurityProfileId"))
+	}
+	if s.SecurityProfileId != nil && len(*s.SecurityProfileId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecurityProfileId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DescribeSecurityProfileInput) SetInstanceId(v string) *DescribeSecurityProfileInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetSecurityProfileId sets the SecurityProfileId field's value.
+func (s *DescribeSecurityProfileInput) SetSecurityProfileId(v string) *DescribeSecurityProfileInput {
+	s.SecurityProfileId = &v
+	return s
+}
+
+type DescribeSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The security profile.
+	SecurityProfile *SecurityProfile `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SetSecurityProfile sets the SecurityProfile field's value.
+func (s *DescribeSecurityProfileOutput) SetSecurityProfile(v *SecurityProfile) *DescribeSecurityProfileOutput {
+	s.SecurityProfile = v
+	return s
+}
+
 type DescribeUserHierarchyGroupInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -16975,6 +24467,108 @@ func (s *DescribeUserOutput) SetUser(v *User) *DescribeUserOutput {
 	return s
 }
 
+type DescribeVocabularyInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The identifier of the custom vocabulary.
+	//
+	// VocabularyId is a required field
+	VocabularyId *string `location:"uri" locationName:"VocabularyId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVocabularyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVocabularyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeVocabularyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeVocabularyInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.VocabularyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VocabularyId"))
+	}
+	if s.VocabularyId != nil && len(*s.VocabularyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VocabularyId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DescribeVocabularyInput) SetInstanceId(v string) *DescribeVocabularyInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetVocabularyId sets the VocabularyId field's value.
+func (s *DescribeVocabularyInput) SetVocabularyId(v string) *DescribeVocabularyInput {
+	s.VocabularyId = &v
+	return s
+}
+
+type DescribeVocabularyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of specific words that you want Contact Lens for Amazon Connect to
+	// recognize in your audio input. They are generally domain-specific words and
+	// phrases, words that Contact Lens is not recognizing, or proper nouns.
+	//
+	// Vocabulary is a required field
+	Vocabulary *Vocabulary `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVocabularyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVocabularyOutput) GoString() string {
+	return s.String()
+}
+
+// SetVocabulary sets the Vocabulary field's value.
+func (s *DescribeVocabularyOutput) SetVocabulary(v *Vocabulary) *DescribeVocabularyOutput {
+	s.Vocabulary = v
+	return s
+}
+
 // Outbound calls to the destination number are not allowed.
 type DestinationNotAllowedException struct {
 	_            struct{}                  `type:"structure"`
@@ -17146,7 +24740,7 @@ func (s *DisassociateApprovedOriginInput) SetOrigin(v string) *DisassociateAppro
 }
 
 type DisassociateApprovedOriginOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17241,7 +24835,7 @@ func (s *DisassociateBotInput) SetLexV2Bot(v *LexV2Bot) *DisassociateBotInput {
 }
 
 type DisassociateBotOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17345,7 +24939,7 @@ func (s *DisassociateInstanceStorageConfigInput) SetResourceType(v string) *Disa
 }
 
 type DisassociateInstanceStorageConfigOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17434,7 +25028,7 @@ func (s *DisassociateLambdaFunctionInput) SetInstanceId(v string) *DisassociateL
 }
 
 type DisassociateLambdaFunctionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17534,7 +25128,7 @@ func (s *DisassociateLexBotInput) SetLexRegion(v string) *DisassociateLexBotInpu
 }
 
 type DisassociateLexBotOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17552,6 +25146,95 @@ func (s DisassociateLexBotOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DisassociateLexBotOutput) GoString() string {
+	return s.String()
+}
+
+type DisassociatePhoneNumberContactFlowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"querystring" locationName:"instanceId" min:"1" type:"string" required:"true"`
+
+	// A unique identifier for the phone number.
+	//
+	// PhoneNumberId is a required field
+	PhoneNumberId *string `location:"uri" locationName:"PhoneNumberId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePhoneNumberContactFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePhoneNumberContactFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociatePhoneNumberContactFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociatePhoneNumberContactFlowInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.PhoneNumberId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumberId"))
+	}
+	if s.PhoneNumberId != nil && len(*s.PhoneNumberId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PhoneNumberId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *DisassociatePhoneNumberContactFlowInput) SetInstanceId(v string) *DisassociatePhoneNumberContactFlowInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *DisassociatePhoneNumberContactFlowInput) SetPhoneNumberId(v string) *DisassociatePhoneNumberContactFlowInput {
+	s.PhoneNumberId = &v
+	return s
+}
+
+type DisassociatePhoneNumberContactFlowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePhoneNumberContactFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatePhoneNumberContactFlowOutput) GoString() string {
 	return s.String()
 }
 
@@ -17640,7 +25323,7 @@ func (s *DisassociateQueueQuickConnectsInput) SetQuickConnectIds(v []*string) *D
 }
 
 type DisassociateQueueQuickConnectsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17753,7 +25436,7 @@ func (s *DisassociateRoutingProfileQueuesInput) SetRoutingProfileId(v string) *D
 }
 
 type DisassociateRoutingProfileQueuesOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17843,7 +25526,7 @@ func (s *DisassociateSecurityKeyInput) SetInstanceId(v string) *DisassociateSecu
 }
 
 type DisassociateSecurityKeyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17928,6 +25611,48 @@ func (s *DuplicateResourceException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Information about a reference when the referenceType is EMAIL. Otherwise,
+// null.
+type EmailReference struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the email reference.
+	Name *string `min:"1" type:"string"`
+
+	// A valid email address.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EmailReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EmailReference) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *EmailReference) SetName(v string) *EmailReference {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *EmailReference) SetValue(v string) *EmailReference {
+	s.Value = &v
+	return s
+}
+
 // The encryption configuration.
 type EncryptionConfig struct {
 	_ struct{} `type:"structure"`
@@ -17999,10 +25724,11 @@ type Filters struct {
 	_ struct{} `type:"structure"`
 
 	// The channel to use to filter the metrics.
-	Channels []*string `type:"list"`
+	Channels []*string `type:"list" enum:"Channel"`
 
-	// The queues to use to filter the metrics. You can specify up to 100 queues
-	// per request.
+	// The queues to use to filter the metrics. You should specify at least one
+	// queue, and can specify up to 100 queues per request. The GetCurrentMetricsData
+	// API in particular requires a queue when you include a Filter in your request.
 	Queues []*string `min:"1" type:"list"`
 }
 
@@ -18259,7 +25985,7 @@ type GetCurrentMetricDataInput struct {
 	// VOICE, CHAT, and TASK channels are supported.
 	//
 	// If no Grouping is included in the request, a summary of metrics is returned.
-	Groupings []*string `type:"list"`
+	Groupings []*string `type:"list" enum:"Grouping"`
 
 	// The identifier of the Amazon Connect instance. You can find the instanceId
 	// in the ARN of the instance.
@@ -18416,6 +26142,139 @@ func (s *GetCurrentMetricDataOutput) SetNextToken(v string) *GetCurrentMetricDat
 	return s
 }
 
+type GetCurrentUserDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters up to 100 Queues, or up to 9 ContactStates. The user data is retrieved
+	// only for those users who are associated with the queues and have contacts
+	// that are in the specified ContactState.
+	//
+	// Filters is a required field
+	Filters *UserDataFilters `type:"structure" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCurrentUserDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCurrentUserDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCurrentUserDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCurrentUserDataInput"}
+	if s.Filters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Filters"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		if err := s.Filters.Validate(); err != nil {
+			invalidParams.AddNested("Filters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetCurrentUserDataInput) SetFilters(v *UserDataFilters) *GetCurrentUserDataInput {
+	s.Filters = v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetCurrentUserDataInput) SetInstanceId(v string) *GetCurrentUserDataInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetCurrentUserDataInput) SetMaxResults(v int64) *GetCurrentUserDataInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetCurrentUserDataInput) SetNextToken(v string) *GetCurrentUserDataInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetCurrentUserDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `type:"string"`
+
+	// A list of the user data that is returned.
+	UserDataList []*UserData `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCurrentUserDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCurrentUserDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetCurrentUserDataOutput) SetNextToken(v string) *GetCurrentUserDataOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetUserDataList sets the UserDataList field's value.
+func (s *GetCurrentUserDataOutput) SetUserDataList(v []*UserData) *GetCurrentUserDataOutput {
+	s.UserDataList = v
+	return s
+}
+
 type GetFederationTokenInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -18525,7 +26384,7 @@ type GetMetricDataInput struct {
 	// apply to the metrics for each queue rather than aggregated for all queues.
 	//
 	// If no grouping is specified, a summary of metrics for all queues is returned.
-	Groupings []*string `type:"list"`
+	Groupings []*string `type:"list" enum:"Grouping"`
 
 	// The metrics to retrieve. Specify the name, unit, and statistic for each metric.
 	// The following historical metrics are available. For a description of each
@@ -18865,6 +26724,233 @@ func (s *GetMetricDataOutput) SetNextToken(v string) *GetMetricDataOutput {
 	return s
 }
 
+type GetTaskTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The system generated version of a task template that is associated with a
+	// task, when the task is created.
+	SnapshotVersion *string `location:"querystring" locationName:"snapshotVersion" type:"string"`
+
+	// A unique identifier for the task template.
+	//
+	// TaskTemplateId is a required field
+	TaskTemplateId *string `location:"uri" locationName:"TaskTemplateId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetTaskTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetTaskTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetTaskTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetTaskTemplateInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.TaskTemplateId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TaskTemplateId"))
+	}
+	if s.TaskTemplateId != nil && len(*s.TaskTemplateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskTemplateId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetTaskTemplateInput) SetInstanceId(v string) *GetTaskTemplateInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetSnapshotVersion sets the SnapshotVersion field's value.
+func (s *GetTaskTemplateInput) SetSnapshotVersion(v string) *GetTaskTemplateInput {
+	s.SnapshotVersion = &v
+	return s
+}
+
+// SetTaskTemplateId sets the TaskTemplateId field's value.
+func (s *GetTaskTemplateInput) SetTaskTemplateId(v string) *GetTaskTemplateInput {
+	s.TaskTemplateId = &v
+	return s
+}
+
+type GetTaskTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN).
+	//
+	// Arn is a required field
+	Arn *string `min:"1" type:"string" required:"true"`
+
+	// Constraints that are applicable to the fields listed.
+	Constraints *TaskTemplateConstraints `type:"structure"`
+
+	// The identifier of the flow that runs by default when a task is created by
+	// referencing this template.
+	ContactFlowId *string `type:"string"`
+
+	// The timestamp when the task template was created.
+	CreatedTime *time.Time `type:"timestamp"`
+
+	// The default values for fields when a task is created by referencing this
+	// template.
+	Defaults *TaskTemplateDefaults `type:"structure"`
+
+	// The description of the task template.
+	Description *string `min:"1" type:"string"`
+
+	// Fields that are part of the template.
+	Fields []*TaskTemplateField `type:"list"`
+
+	// A unique identifier for the task template.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	InstanceId *string `min:"1" type:"string"`
+
+	// The timestamp when the task template was last modified.
+	LastModifiedTime *time.Time `type:"timestamp"`
+
+	// The name of the task template.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// Marks a template as ACTIVE or INACTIVE for a task to refer to it. Tasks can
+	// only be created from ACTIVE templates. If a template is marked as INACTIVE,
+	// then a task that refers to this template cannot be created.
+	Status *string `type:"string" enum:"TaskTemplateStatus"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetTaskTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetTaskTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetTaskTemplateOutput) SetArn(v string) *GetTaskTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConstraints sets the Constraints field's value.
+func (s *GetTaskTemplateOutput) SetConstraints(v *TaskTemplateConstraints) *GetTaskTemplateOutput {
+	s.Constraints = v
+	return s
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *GetTaskTemplateOutput) SetContactFlowId(v string) *GetTaskTemplateOutput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *GetTaskTemplateOutput) SetCreatedTime(v time.Time) *GetTaskTemplateOutput {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDefaults sets the Defaults field's value.
+func (s *GetTaskTemplateOutput) SetDefaults(v *TaskTemplateDefaults) *GetTaskTemplateOutput {
+	s.Defaults = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetTaskTemplateOutput) SetDescription(v string) *GetTaskTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetFields sets the Fields field's value.
+func (s *GetTaskTemplateOutput) SetFields(v []*TaskTemplateField) *GetTaskTemplateOutput {
+	s.Fields = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetTaskTemplateOutput) SetId(v string) *GetTaskTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetTaskTemplateOutput) SetInstanceId(v string) *GetTaskTemplateOutput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *GetTaskTemplateOutput) SetLastModifiedTime(v time.Time) *GetTaskTemplateOutput {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetTaskTemplateOutput) SetName(v string) *GetTaskTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetTaskTemplateOutput) SetStatus(v string) *GetTaskTemplateOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetTaskTemplateOutput) SetTags(v map[string]*string) *GetTaskTemplateOutput {
+	s.Tags = v
+	return s
+}
+
 // Contains information about a hierarchy group.
 type HierarchyGroup struct {
 	_ struct{} `type:"structure"`
@@ -18883,6 +26969,9 @@ type HierarchyGroup struct {
 
 	// The name of the hierarchy group.
 	Name *string `type:"string"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
 }
 
 // String returns the string representation.
@@ -18933,6 +27022,53 @@ func (s *HierarchyGroup) SetName(v string) *HierarchyGroup {
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *HierarchyGroup) SetTags(v map[string]*string) *HierarchyGroup {
+	s.Tags = v
+	return s
+}
+
+// A leaf node condition which can be used to specify a hierarchy group condition.
+type HierarchyGroupCondition struct {
+	_ struct{} `type:"structure"`
+
+	// The type of hierarchy group match.
+	HierarchyGroupMatchType *string `type:"string" enum:"HierarchyGroupMatchType"`
+
+	// The value in the hierarchy group condition.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchyGroupCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchyGroupCondition) GoString() string {
+	return s.String()
+}
+
+// SetHierarchyGroupMatchType sets the HierarchyGroupMatchType field's value.
+func (s *HierarchyGroupCondition) SetHierarchyGroupMatchType(v string) *HierarchyGroupCondition {
+	s.HierarchyGroupMatchType = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *HierarchyGroupCondition) SetValue(v string) *HierarchyGroupCondition {
+	s.Value = &v
+	return s
+}
+
 // Contains summary information about a hierarchy group.
 type HierarchyGroupSummary struct {
 	_ struct{} `type:"structure"`
@@ -18980,6 +27116,47 @@ func (s *HierarchyGroupSummary) SetId(v string) *HierarchyGroupSummary {
 // SetName sets the Name field's value.
 func (s *HierarchyGroupSummary) SetName(v string) *HierarchyGroupSummary {
 	s.Name = &v
+	return s
+}
+
+// Information about the hierarchy group.
+type HierarchyGroupSummaryReference struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the hierarchy group.
+	Arn *string `type:"string"`
+
+	// The unique identifier for the hierarchy group.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchyGroupSummaryReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchyGroupSummaryReference) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *HierarchyGroupSummaryReference) SetArn(v string) *HierarchyGroupSummaryReference {
+	s.Arn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *HierarchyGroupSummaryReference) SetId(v string) *HierarchyGroupSummaryReference {
+	s.Id = &v
 	return s
 }
 
@@ -19144,6 +27321,74 @@ func (s *HierarchyPath) SetLevelThree(v *HierarchyGroupSummary) *HierarchyPath {
 
 // SetLevelTwo sets the LevelTwo field's value.
 func (s *HierarchyPath) SetLevelTwo(v *HierarchyGroupSummary) *HierarchyPath {
+	s.LevelTwo = v
+	return s
+}
+
+// Information about the levels in the hierarchy group.
+type HierarchyPathReference struct {
+	_ struct{} `type:"structure"`
+
+	// Information about level five.
+	LevelFive *HierarchyGroupSummaryReference `type:"structure"`
+
+	// Information about level four.
+	LevelFour *HierarchyGroupSummaryReference `type:"structure"`
+
+	// Information about level one.
+	LevelOne *HierarchyGroupSummaryReference `type:"structure"`
+
+	// Information about level three.
+	LevelThree *HierarchyGroupSummaryReference `type:"structure"`
+
+	// Information about level two.
+	LevelTwo *HierarchyGroupSummaryReference `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchyPathReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HierarchyPathReference) GoString() string {
+	return s.String()
+}
+
+// SetLevelFive sets the LevelFive field's value.
+func (s *HierarchyPathReference) SetLevelFive(v *HierarchyGroupSummaryReference) *HierarchyPathReference {
+	s.LevelFive = v
+	return s
+}
+
+// SetLevelFour sets the LevelFour field's value.
+func (s *HierarchyPathReference) SetLevelFour(v *HierarchyGroupSummaryReference) *HierarchyPathReference {
+	s.LevelFour = v
+	return s
+}
+
+// SetLevelOne sets the LevelOne field's value.
+func (s *HierarchyPathReference) SetLevelOne(v *HierarchyGroupSummaryReference) *HierarchyPathReference {
+	s.LevelOne = v
+	return s
+}
+
+// SetLevelThree sets the LevelThree field's value.
+func (s *HierarchyPathReference) SetLevelThree(v *HierarchyGroupSummaryReference) *HierarchyPathReference {
+	s.LevelThree = v
+	return s
+}
+
+// SetLevelTwo sets the LevelTwo field's value.
+func (s *HierarchyPathReference) SetLevelTwo(v *HierarchyGroupSummaryReference) *HierarchyPathReference {
 	s.LevelTwo = v
 	return s
 }
@@ -19481,7 +27726,7 @@ type HoursOfOperation struct {
 	// The name for the hours of operation.
 	Name *string `min:"1" type:"string"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 
 	// The time zone for the hours of operation.
@@ -19557,12 +27802,12 @@ type HoursOfOperationConfig struct {
 	// Day is a required field
 	Day *string `type:"string" required:"true" enum:"HoursOfOperationDays"`
 
-	// The end time that your contact center is closes.
+	// The end time that your contact center closes.
 	//
 	// EndTime is a required field
 	EndTime *HoursOfOperationTimeSlice `type:"structure" required:"true"`
 
-	// The start time that your contact center is open.
+	// The start time that your contact center opens.
 	//
 	// StartTime is a required field
 	StartTime *HoursOfOperationTimeSlice `type:"structure" required:"true"`
@@ -19742,6 +27987,70 @@ func (s *HoursOfOperationTimeSlice) SetHours(v int64) *HoursOfOperationTimeSlice
 func (s *HoursOfOperationTimeSlice) SetMinutes(v int64) *HoursOfOperationTimeSlice {
 	s.Minutes = &v
 	return s
+}
+
+// An entity with the same name already exists.
+type IdempotencyException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IdempotencyException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IdempotencyException) GoString() string {
+	return s.String()
+}
+
+func newErrorIdempotencyException(v protocol.ResponseMetadata) error {
+	return &IdempotencyException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *IdempotencyException) Code() string {
+	return "IdempotencyException"
+}
+
+// Message returns the exception's message.
+func (s *IdempotencyException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *IdempotencyException) OrigErr() error {
+	return nil
+}
+
+func (s *IdempotencyException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *IdempotencyException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *IdempotencyException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // The Amazon Connect instance.
@@ -20346,6 +28655,72 @@ func (s *InvalidContactFlowException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The problems with the module. Please fix before trying again.
+type InvalidContactFlowModuleException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+
+	Problems []*ProblemDetail `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidContactFlowModuleException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidContactFlowModuleException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidContactFlowModuleException(v protocol.ResponseMetadata) error {
+	return &InvalidContactFlowModuleException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidContactFlowModuleException) Code() string {
+	return "InvalidContactFlowModuleException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidContactFlowModuleException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidContactFlowModuleException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidContactFlowModuleException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidContactFlowModuleException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidContactFlowModuleException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // One or more of the specified parameters are not valid.
 type InvalidParameterException struct {
 	_            struct{}                  `type:"structure"`
@@ -20474,6 +28849,53 @@ func (s *InvalidRequestException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *InvalidRequestException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// A field that is invisible to an agent.
+type InvisibleFieldInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the invisible field.
+	Id *TaskTemplateFieldIdentifier `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvisibleFieldInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvisibleFieldInfo) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InvisibleFieldInfo) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InvisibleFieldInfo"}
+	if s.Id != nil {
+		if err := s.Id.Validate(); err != nil {
+			invalidParams.AddNested("Id", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *InvisibleFieldInfo) SetId(v *TaskTemplateFieldIdentifier) *InvisibleFieldInfo {
+	s.Id = v
+	return s
 }
 
 // Configuration information of a Kinesis Data Firehose delivery stream.
@@ -20852,7 +29274,7 @@ type ListAgentStatusesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Available agent status types.
-	AgentStatusTypes []*string `location:"querystring" locationName:"AgentStatusTypes" type:"list"`
+	AgentStatusTypes []*string `location:"querystring" locationName:"AgentStatusTypes" type:"list" enum:"AgentStatusType"`
 
 	// The identifier of the Amazon Connect instance. You can find the instanceId
 	// in the ARN of the instance.
@@ -21208,11 +29630,132 @@ func (s *ListBotsOutput) SetNextToken(v string) *ListBotsOutput {
 	return s
 }
 
+type ListContactFlowModulesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The state of the contact flow module.
+	ContactFlowModuleState *string `location:"querystring" locationName:"state" type:"string" enum:"ContactFlowModuleState"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactFlowModulesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactFlowModulesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListContactFlowModulesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListContactFlowModulesInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowModuleState sets the ContactFlowModuleState field's value.
+func (s *ListContactFlowModulesInput) SetContactFlowModuleState(v string) *ListContactFlowModulesInput {
+	s.ContactFlowModuleState = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *ListContactFlowModulesInput) SetInstanceId(v string) *ListContactFlowModulesInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListContactFlowModulesInput) SetMaxResults(v int64) *ListContactFlowModulesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactFlowModulesInput) SetNextToken(v string) *ListContactFlowModulesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListContactFlowModulesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the contact flow module.
+	ContactFlowModulesSummaryList []*ContactFlowModuleSummary `type:"list"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactFlowModulesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactFlowModulesOutput) GoString() string {
+	return s.String()
+}
+
+// SetContactFlowModulesSummaryList sets the ContactFlowModulesSummaryList field's value.
+func (s *ListContactFlowModulesOutput) SetContactFlowModulesSummaryList(v []*ContactFlowModuleSummary) *ListContactFlowModulesOutput {
+	s.ContactFlowModulesSummaryList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactFlowModulesOutput) SetNextToken(v string) *ListContactFlowModulesOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListContactFlowsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The type of contact flow.
-	ContactFlowTypes []*string `location:"querystring" locationName:"contactFlowTypes" type:"list"`
+	ContactFlowTypes []*string `location:"querystring" locationName:"contactFlowTypes" type:"list" enum:"ContactFlowType"`
 
 	// The identifier of the Amazon Connect instance. You can find the instanceId
 	// in the ARN of the instance.
@@ -21325,6 +29868,269 @@ func (s *ListContactFlowsOutput) SetContactFlowSummaryList(v []*ContactFlowSumma
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListContactFlowsOutput) SetNextToken(v string) *ListContactFlowsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListContactReferencesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the initial contact.
+	//
+	// ContactId is a required field
+	ContactId *string `location:"uri" locationName:"ContactId" min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	//
+	// This is not expected to be set, because the value returned in the previous
+	// response is always null.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The type of reference.
+	//
+	// ReferenceTypes is a required field
+	ReferenceTypes []*string `location:"querystring" locationName:"referenceTypes" type:"list" required:"true" enum:"ReferenceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactReferencesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactReferencesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListContactReferencesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListContactReferencesInput"}
+	if s.ContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactId"))
+	}
+	if s.ContactId != nil && len(*s.ContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.ReferenceTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReferenceTypes"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *ListContactReferencesInput) SetContactId(v string) *ListContactReferencesInput {
+	s.ContactId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *ListContactReferencesInput) SetInstanceId(v string) *ListContactReferencesInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactReferencesInput) SetNextToken(v string) *ListContactReferencesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetReferenceTypes sets the ReferenceTypes field's value.
+func (s *ListContactReferencesInput) SetReferenceTypes(v []*string) *ListContactReferencesInput {
+	s.ReferenceTypes = v
+	return s
+}
+
+type ListContactReferencesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are additional results, this is the token for the next set of results.
+	//
+	// This is always returned as null in the response.
+	NextToken *string `type:"string"`
+
+	// Information about the contact flows.
+	ReferenceSummaryList []*ReferenceSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactReferencesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListContactReferencesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactReferencesOutput) SetNextToken(v string) *ListContactReferencesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetReferenceSummaryList sets the ReferenceSummaryList field's value.
+func (s *ListContactReferencesOutput) SetReferenceSummaryList(v []*ReferenceSummary) *ListContactReferencesOutput {
+	s.ReferenceSummaryList = v
+	return s
+}
+
+type ListDefaultVocabulariesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The language code of the vocabulary entries. For a list of languages and
+	// their corresponding language codes, see What is Amazon Transcribe? (https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html)
+	LanguageCode *string `type:"string" enum:"VocabularyLanguageCode"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDefaultVocabulariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDefaultVocabulariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDefaultVocabulariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListDefaultVocabulariesInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *ListDefaultVocabulariesInput) SetInstanceId(v string) *ListDefaultVocabulariesInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *ListDefaultVocabulariesInput) SetLanguageCode(v string) *ListDefaultVocabulariesInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListDefaultVocabulariesInput) SetMaxResults(v int64) *ListDefaultVocabulariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListDefaultVocabulariesInput) SetNextToken(v string) *ListDefaultVocabulariesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListDefaultVocabulariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of default vocabularies.
+	//
+	// DefaultVocabularyList is a required field
+	DefaultVocabularyList []*DefaultVocabulary `type:"list" required:"true"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDefaultVocabulariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListDefaultVocabulariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetDefaultVocabularyList sets the DefaultVocabularyList field's value.
+func (s *ListDefaultVocabulariesOutput) SetDefaultVocabularyList(v []*DefaultVocabulary) *ListDefaultVocabulariesOutput {
+	s.DefaultVocabularyList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListDefaultVocabulariesOutput) SetNextToken(v string) *ListDefaultVocabulariesOutput {
 	s.NextToken = &v
 	return s
 }
@@ -21782,6 +30588,7 @@ type ListIntegrationAssociationsInput struct {
 	// InstanceId is a required field
 	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
 
+	// The integration type.
 	IntegrationType *string `location:"querystring" locationName:"integrationType" type:"string" enum:"IntegrationType"`
 
 	// The maximum number of results to return per page.
@@ -22014,7 +30821,8 @@ type ListLexBotsInput struct {
 	// InstanceId is a required field
 	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
 
-	// The maximum number of results to return per page.
+	// The maximum number of results to return per page. If no value is specified,
+	// the default is 10.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The token for the next set of results. Use the value returned in the previous
@@ -22135,10 +30943,10 @@ type ListPhoneNumbersInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// The ISO country code.
-	PhoneNumberCountryCodes []*string `location:"querystring" locationName:"phoneNumberCountryCodes" type:"list"`
+	PhoneNumberCountryCodes []*string `location:"querystring" locationName:"phoneNumberCountryCodes" type:"list" enum:"PhoneNumberCountryCode"`
 
 	// The type of phone number.
-	PhoneNumberTypes []*string `location:"querystring" locationName:"phoneNumberTypes" type:"list"`
+	PhoneNumberTypes []*string `location:"querystring" locationName:"phoneNumberTypes" type:"list" enum:"PhoneNumberType"`
 }
 
 // String returns the string representation.
@@ -22245,6 +31053,223 @@ func (s *ListPhoneNumbersOutput) SetNextToken(v string) *ListPhoneNumbersOutput 
 // SetPhoneNumberSummaryList sets the PhoneNumberSummaryList field's value.
 func (s *ListPhoneNumbersOutput) SetPhoneNumberSummaryList(v []*PhoneNumberSummary) *ListPhoneNumbersOutput {
 	s.PhoneNumberSummaryList = v
+	return s
+}
+
+// Information about phone numbers that have been claimed to your Amazon Connect
+// instance.
+type ListPhoneNumbersSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The phone number. Phone numbers are formatted [+] [country code] [subscriber
+	// number including area code].
+	PhoneNumber *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the phone number.
+	PhoneNumberArn *string `type:"string"`
+
+	// The ISO country code.
+	PhoneNumberCountryCode *string `type:"string" enum:"PhoneNumberCountryCode"`
+
+	// A unique identifier for the phone number.
+	PhoneNumberId *string `type:"string"`
+
+	// The type of phone number.
+	PhoneNumberType *string `type:"string" enum:"PhoneNumberType"`
+
+	// The Amazon Resource Name (ARN) for Amazon Connect instances that phone numbers
+	// are claimed to.
+	TargetArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPhoneNumbersSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPhoneNumbersSummary) GoString() string {
+	return s.String()
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *ListPhoneNumbersSummary) SetPhoneNumber(v string) *ListPhoneNumbersSummary {
+	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneNumberArn sets the PhoneNumberArn field's value.
+func (s *ListPhoneNumbersSummary) SetPhoneNumberArn(v string) *ListPhoneNumbersSummary {
+	s.PhoneNumberArn = &v
+	return s
+}
+
+// SetPhoneNumberCountryCode sets the PhoneNumberCountryCode field's value.
+func (s *ListPhoneNumbersSummary) SetPhoneNumberCountryCode(v string) *ListPhoneNumbersSummary {
+	s.PhoneNumberCountryCode = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *ListPhoneNumbersSummary) SetPhoneNumberId(v string) *ListPhoneNumbersSummary {
+	s.PhoneNumberId = &v
+	return s
+}
+
+// SetPhoneNumberType sets the PhoneNumberType field's value.
+func (s *ListPhoneNumbersSummary) SetPhoneNumberType(v string) *ListPhoneNumbersSummary {
+	s.PhoneNumberType = &v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *ListPhoneNumbersSummary) SetTargetArn(v string) *ListPhoneNumbersSummary {
+	s.TargetArn = &v
+	return s
+}
+
+type ListPhoneNumbersV2Input struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The ISO country code.
+	PhoneNumberCountryCodes []*string `type:"list" enum:"PhoneNumberCountryCode"`
+
+	// The prefix of the phone number. If provided, it must contain + as part of
+	// the country code.
+	PhoneNumberPrefix *string `type:"string"`
+
+	// The type of phone number.
+	PhoneNumberTypes []*string `type:"list" enum:"PhoneNumberType"`
+
+	// The Amazon Resource Name (ARN) for Amazon Connect instances that phone numbers
+	// are claimed to. If TargetArn input is not provided, this API lists numbers
+	// claimed to all the Amazon Connect instances belonging to your account.
+	TargetArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPhoneNumbersV2Input) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPhoneNumbersV2Input) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPhoneNumbersV2Input) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPhoneNumbersV2Input"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPhoneNumbersV2Input) SetMaxResults(v int64) *ListPhoneNumbersV2Input {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPhoneNumbersV2Input) SetNextToken(v string) *ListPhoneNumbersV2Input {
+	s.NextToken = &v
+	return s
+}
+
+// SetPhoneNumberCountryCodes sets the PhoneNumberCountryCodes field's value.
+func (s *ListPhoneNumbersV2Input) SetPhoneNumberCountryCodes(v []*string) *ListPhoneNumbersV2Input {
+	s.PhoneNumberCountryCodes = v
+	return s
+}
+
+// SetPhoneNumberPrefix sets the PhoneNumberPrefix field's value.
+func (s *ListPhoneNumbersV2Input) SetPhoneNumberPrefix(v string) *ListPhoneNumbersV2Input {
+	s.PhoneNumberPrefix = &v
+	return s
+}
+
+// SetPhoneNumberTypes sets the PhoneNumberTypes field's value.
+func (s *ListPhoneNumbersV2Input) SetPhoneNumberTypes(v []*string) *ListPhoneNumbersV2Input {
+	s.PhoneNumberTypes = v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *ListPhoneNumbersV2Input) SetTargetArn(v string) *ListPhoneNumbersV2Input {
+	s.TargetArn = &v
+	return s
+}
+
+type ListPhoneNumbersV2Output struct {
+	_ struct{} `type:"structure"`
+
+	// Information about phone numbers that have been claimed to your Amazon Connect
+	// instances.
+	ListPhoneNumbersSummaryList []*ListPhoneNumbersSummary `type:"list"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPhoneNumbersV2Output) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPhoneNumbersV2Output) GoString() string {
+	return s.String()
+}
+
+// SetListPhoneNumbersSummaryList sets the ListPhoneNumbersSummaryList field's value.
+func (s *ListPhoneNumbersV2Output) SetListPhoneNumbersSummaryList(v []*ListPhoneNumbersSummary) *ListPhoneNumbersV2Output {
+	s.ListPhoneNumbersSummaryList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPhoneNumbersV2Output) SetNextToken(v string) *ListPhoneNumbersV2Output {
+	s.NextToken = &v
 	return s
 }
 
@@ -22505,7 +31530,7 @@ type ListQueuesInput struct {
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// The type of queue.
-	QueueTypes []*string `location:"querystring" locationName:"queueTypes" type:"list"`
+	QueueTypes []*string `location:"querystring" locationName:"queueTypes" type:"list" enum:"QueueType"`
 }
 
 // String returns the string representation.
@@ -22628,7 +31653,7 @@ type ListQuickConnectsInput struct {
 	// The type of quick connect. In the Amazon Connect console, when you create
 	// a quick connect, you are prompted to assign one of the following types: Agent
 	// (USER), External (PHONE_NUMBER), or Queue (QUEUE).
-	QuickConnectTypes []*string `location:"querystring" locationName:"QuickConnectTypes" type:"list"`
+	QuickConnectTypes []*string `location:"querystring" locationName:"QuickConnectTypes" type:"list" enum:"QuickConnectType"`
 }
 
 // String returns the string representation.
@@ -23085,6 +32110,135 @@ func (s *ListSecurityKeysOutput) SetSecurityKeys(v []*SecurityKey) *ListSecurity
 	return s
 }
 
+type ListSecurityProfilePermissionsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The identifier for the security profle.
+	//
+	// SecurityProfileId is a required field
+	SecurityProfileId *string `location:"uri" locationName:"SecurityProfileId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSecurityProfilePermissionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSecurityProfilePermissionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSecurityProfilePermissionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSecurityProfilePermissionsInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.SecurityProfileId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecurityProfileId"))
+	}
+	if s.SecurityProfileId != nil && len(*s.SecurityProfileId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecurityProfileId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *ListSecurityProfilePermissionsInput) SetInstanceId(v string) *ListSecurityProfilePermissionsInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSecurityProfilePermissionsInput) SetMaxResults(v int64) *ListSecurityProfilePermissionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSecurityProfilePermissionsInput) SetNextToken(v string) *ListSecurityProfilePermissionsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSecurityProfileId sets the SecurityProfileId field's value.
+func (s *ListSecurityProfilePermissionsInput) SetSecurityProfileId(v string) *ListSecurityProfilePermissionsInput {
+	s.SecurityProfileId = &v
+	return s
+}
+
+type ListSecurityProfilePermissionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `type:"string"`
+
+	// The permissions granted to the security profile.
+	Permissions []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSecurityProfilePermissionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSecurityProfilePermissionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSecurityProfilePermissionsOutput) SetNextToken(v string) *ListSecurityProfilePermissionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPermissions sets the Permissions field's value.
+func (s *ListSecurityProfilePermissionsOutput) SetPermissions(v []*string) *ListSecurityProfilePermissionsOutput {
+	s.Permissions = v
+	return s
+}
+
 type ListSecurityProfilesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -23274,6 +32428,148 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+type ListTaskTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per page.
+	//
+	// It is not expected that you set this.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The name of the task template.
+	Name *string `location:"querystring" locationName:"name" min:"1" type:"string"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	//
+	// It is not expected that you set this because the value returned in the previous
+	// response is always null.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// Marks a template as ACTIVE or INACTIVE for a task to refer to it. Tasks can
+	// only be created from ACTIVE templates. If a template is marked as INACTIVE,
+	// then a task that refers to this template cannot be created.
+	Status *string `location:"querystring" locationName:"status" type:"string" enum:"TaskTemplateStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTaskTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTaskTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTaskTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTaskTemplatesInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *ListTaskTemplatesInput) SetInstanceId(v string) *ListTaskTemplatesInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListTaskTemplatesInput) SetMaxResults(v int64) *ListTaskTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ListTaskTemplatesInput) SetName(v string) *ListTaskTemplatesInput {
+	s.Name = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTaskTemplatesInput) SetNextToken(v string) *ListTaskTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListTaskTemplatesInput) SetStatus(v string) *ListTaskTemplatesInput {
+	s.Status = &v
+	return s
+}
+
+type ListTaskTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are additional results, this is the token for the next set of results.
+	//
+	// This is always returned as a null in the response.
+	NextToken *string `type:"string"`
+
+	// Provides details about a list of task templates belonging to an instance.
+	TaskTemplates []*TaskTemplateMetadata `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTaskTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTaskTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTaskTemplatesOutput) SetNextToken(v string) *ListTaskTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTaskTemplates sets the TaskTemplates field's value.
+func (s *ListTaskTemplatesOutput) SetTaskTemplates(v []*TaskTemplateMetadata) *ListTaskTemplatesOutput {
+	s.TaskTemplates = v
 	return s
 }
 
@@ -23703,6 +32999,48 @@ func (s *MediaConcurrency) SetConcurrency(v int64) *MediaConcurrency {
 	return s
 }
 
+// Information about a reference when the referenceType is NUMBER. Otherwise,
+// null.
+type NumberReference struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the number reference.
+	Name *string `min:"1" type:"string"`
+
+	// A valid number.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NumberReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NumberReference) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *NumberReference) SetName(v string) *NumberReference {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *NumberReference) SetValue(v string) *NumberReference {
+	s.Value = &v
+	return s
+}
+
 // The outbound caller ID name, number, and outbound whisper flow.
 type OutboundCallerConfig struct {
 	_ struct{} `type:"structure"`
@@ -23928,6 +33266,47 @@ func (s *PhoneNumberQuickConnectConfig) SetPhoneNumber(v string) *PhoneNumberQui
 	return s
 }
 
+// The status of the phone number.
+type PhoneNumberStatus struct {
+	_ struct{} `type:"structure"`
+
+	// The status message.
+	Message *string `type:"string"`
+
+	// The status.
+	Status *string `type:"string" enum:"PhoneNumberWorkflowStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PhoneNumberStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PhoneNumberStatus) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *PhoneNumberStatus) SetMessage(v string) *PhoneNumberStatus {
+	s.Message = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *PhoneNumberStatus) SetStatus(v string) *PhoneNumberStatus {
+	s.Status = &v
+	return s
+}
+
 // Contains summary information about a phone number for a contact center.
 type PhoneNumberSummary struct {
 	_ struct{} `type:"structure"`
@@ -24078,6 +33457,230 @@ func (s *PromptSummary) SetName(v string) *PromptSummary {
 	return s
 }
 
+type PropertyValidationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+
+	PropertyList []*PropertyValidationExceptionProperty `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PropertyValidationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PropertyValidationException) GoString() string {
+	return s.String()
+}
+
+func newErrorPropertyValidationException(v protocol.ResponseMetadata) error {
+	return &PropertyValidationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *PropertyValidationException) Code() string {
+	return "PropertyValidationException"
+}
+
+// Message returns the exception's message.
+func (s *PropertyValidationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *PropertyValidationException) OrigErr() error {
+	return nil
+}
+
+func (s *PropertyValidationException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *PropertyValidationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *PropertyValidationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Contains information about why a property is not valid.
+type PropertyValidationExceptionProperty struct {
+	_ struct{} `type:"structure"`
+
+	// A message describing why the property is not valid.
+	//
+	// Message is a required field
+	Message *string `type:"string" required:"true"`
+
+	// The full property path.
+	//
+	// PropertyPath is a required field
+	PropertyPath *string `type:"string" required:"true"`
+
+	// Why the property is not valid.
+	//
+	// Reason is a required field
+	Reason *string `type:"string" required:"true" enum:"PropertyValidationExceptionReason"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PropertyValidationExceptionProperty) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PropertyValidationExceptionProperty) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *PropertyValidationExceptionProperty) SetMessage(v string) *PropertyValidationExceptionProperty {
+	s.Message = &v
+	return s
+}
+
+// SetPropertyPath sets the PropertyPath field's value.
+func (s *PropertyValidationExceptionProperty) SetPropertyPath(v string) *PropertyValidationExceptionProperty {
+	s.PropertyPath = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *PropertyValidationExceptionProperty) SetReason(v string) *PropertyValidationExceptionProperty {
+	s.Reason = &v
+	return s
+}
+
+type PutUserStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the agent status.
+	//
+	// AgentStatusId is a required field
+	AgentStatusId *string `type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The identifier of the user.
+	//
+	// UserId is a required field
+	UserId *string `location:"uri" locationName:"UserId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutUserStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutUserStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutUserStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutUserStatusInput"}
+	if s.AgentStatusId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AgentStatusId"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.UserId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAgentStatusId sets the AgentStatusId field's value.
+func (s *PutUserStatusInput) SetAgentStatusId(v string) *PutUserStatusInput {
+	s.AgentStatusId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *PutUserStatusInput) SetInstanceId(v string) *PutUserStatusInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *PutUserStatusInput) SetUserId(v string) *PutUserStatusInput {
+	s.UserId = &v
+	return s
+}
+
+type PutUserStatusOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutUserStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutUserStatusOutput) GoString() string {
+	return s.String()
+}
+
 // Contains information about a queue.
 type Queue struct {
 	_ struct{} `type:"structure"`
@@ -24107,7 +33710,7 @@ type Queue struct {
 	// The status of the queue.
 	Status *string `type:"string" enum:"QueueStatus"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 }
 
@@ -24180,6 +33783,47 @@ func (s *Queue) SetStatus(v string) *Queue {
 // SetTags sets the Tags field's value.
 func (s *Queue) SetTags(v map[string]*string) *Queue {
 	s.Tags = v
+	return s
+}
+
+// If this contact was queued, this contains information about the queue.
+type QueueInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp when the contact was added to the queue.
+	EnqueueTimestamp *time.Time `type:"timestamp"`
+
+	// The identifier of the agent who accepted the contact.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueueInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueueInfo) GoString() string {
+	return s.String()
+}
+
+// SetEnqueueTimestamp sets the EnqueueTimestamp field's value.
+func (s *QueueInfo) SetEnqueueTimestamp(v time.Time) *QueueInfo {
+	s.EnqueueTimestamp = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *QueueInfo) SetId(v string) *QueueInfo {
+	s.Id = &v
 	return s
 }
 
@@ -24364,7 +34008,7 @@ type QuickConnect struct {
 	// The identifier for the quick connect.
 	QuickConnectId *string `type:"string"`
 
-	// One or more tags.
+	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 }
 
@@ -24574,17 +34218,65 @@ func (s *QuickConnectSummary) SetQuickConnectType(v string) *QuickConnectSummary
 	return s
 }
 
-// A link that an agent selects to complete a given task. You can have up to
-// 4,096 UTF-8 bytes across all references for a contact.
+// Indicates a field that is read-only to an agent.
+type ReadOnlyFieldInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the read-only field.
+	Id *TaskTemplateFieldIdentifier `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadOnlyFieldInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadOnlyFieldInfo) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReadOnlyFieldInfo) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReadOnlyFieldInfo"}
+	if s.Id != nil {
+		if err := s.Id.Validate(); err != nil {
+			invalidParams.AddNested("Id", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *ReadOnlyFieldInfo) SetId(v *TaskTemplateFieldIdentifier) *ReadOnlyFieldInfo {
+	s.Id = v
+	return s
+}
+
+// Well-formed data on a contact, used by agents to complete a contact request.
+// You can have up to 4,096 UTF-8 bytes across all references for a contact.
 type Reference struct {
 	_ struct{} `type:"structure"`
 
-	// A valid URL.
+	// The type of the reference.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"ReferenceType"`
 
-	// A formatted URL that displays to an agent in the Contact Control Panel (CCP)
+	// A valid value for the reference. For example, for a URL reference, a formatted
+	// URL that is displayed to an agent in the Contact Control Panel (CCP).
 	//
 	// Value is a required field
 	Value *string `type:"string" required:"true"`
@@ -24633,6 +34325,219 @@ func (s *Reference) SetType(v string) *Reference {
 // SetValue sets the Value field's value.
 func (s *Reference) SetValue(v string) *Reference {
 	s.Value = &v
+	return s
+}
+
+// Contains summary information about a reference. ReferenceSummary contains
+// only one non null field between the URL and attachment based on the reference
+// type.
+type ReferenceSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the reference when the referenceType is ATTACHMENT. Otherwise,
+	// null.
+	Attachment *AttachmentReference `type:"structure"`
+
+	// Information about a reference when the referenceType is DATE. Otherwise,
+	// null.
+	Date *DateReference `type:"structure"`
+
+	// Information about a reference when the referenceType is EMAIL. Otherwise,
+	// null.
+	Email *EmailReference `type:"structure"`
+
+	// Information about a reference when the referenceType is NUMBER. Otherwise,
+	// null.
+	Number *NumberReference `type:"structure"`
+
+	// Information about a reference when the referenceType is STRING. Otherwise,
+	// null.
+	String_ *StringReference `locationName:"String" type:"structure"`
+
+	// Information about the reference when the referenceType is URL. Otherwise,
+	// null.
+	Url *UrlReference `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReferenceSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReferenceSummary) GoString() string {
+	return s.String()
+}
+
+// SetAttachment sets the Attachment field's value.
+func (s *ReferenceSummary) SetAttachment(v *AttachmentReference) *ReferenceSummary {
+	s.Attachment = v
+	return s
+}
+
+// SetDate sets the Date field's value.
+func (s *ReferenceSummary) SetDate(v *DateReference) *ReferenceSummary {
+	s.Date = v
+	return s
+}
+
+// SetEmail sets the Email field's value.
+func (s *ReferenceSummary) SetEmail(v *EmailReference) *ReferenceSummary {
+	s.Email = v
+	return s
+}
+
+// SetNumber sets the Number field's value.
+func (s *ReferenceSummary) SetNumber(v *NumberReference) *ReferenceSummary {
+	s.Number = v
+	return s
+}
+
+// SetString_ sets the String_ field's value.
+func (s *ReferenceSummary) SetString_(v *StringReference) *ReferenceSummary {
+	s.String_ = v
+	return s
+}
+
+// SetUrl sets the Url field's value.
+func (s *ReferenceSummary) SetUrl(v *UrlReference) *ReferenceSummary {
+	s.Url = v
+	return s
+}
+
+type ReleasePhoneNumberInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `location:"querystring" locationName:"clientToken" type:"string" idempotencyToken:"true"`
+
+	// A unique identifier for the phone number.
+	//
+	// PhoneNumberId is a required field
+	PhoneNumberId *string `location:"uri" locationName:"PhoneNumberId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReleasePhoneNumberInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReleasePhoneNumberInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReleasePhoneNumberInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReleasePhoneNumberInput"}
+	if s.PhoneNumberId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumberId"))
+	}
+	if s.PhoneNumberId != nil && len(*s.PhoneNumberId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PhoneNumberId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *ReleasePhoneNumberInput) SetClientToken(v string) *ReleasePhoneNumberInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *ReleasePhoneNumberInput) SetPhoneNumberId(v string) *ReleasePhoneNumberInput {
+	s.PhoneNumberId = &v
+	return s
+}
+
+type ReleasePhoneNumberOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReleasePhoneNumberOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReleasePhoneNumberOutput) GoString() string {
+	return s.String()
+}
+
+// Information about a required field.
+type RequiredFieldInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier for the field.
+	Id *TaskTemplateFieldIdentifier `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RequiredFieldInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RequiredFieldInfo) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RequiredFieldInfo) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RequiredFieldInfo"}
+	if s.Id != nil {
+		if err := s.Id.Validate(); err != nil {
+			invalidParams.AddNested("Id", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *RequiredFieldInfo) SetId(v *TaskTemplateFieldIdentifier) *RequiredFieldInfo {
+	s.Id = v
 	return s
 }
 
@@ -24921,7 +34826,7 @@ func (s *ResumeContactRecordingInput) SetInstanceId(v string) *ResumeContactReco
 }
 
 type ResumeContactRecordingOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25282,6 +35187,47 @@ func (s *RoutingProfileQueueReference) SetQueueId(v string) *RoutingProfileQueue
 	return s
 }
 
+// Information about the routing profile assigned to the user.
+type RoutingProfileReference struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the routing profile.
+	Arn *string `type:"string"`
+
+	// The identifier of the routing profile.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RoutingProfileReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RoutingProfileReference) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *RoutingProfileReference) SetArn(v string) *RoutingProfileReference {
+	s.Arn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *RoutingProfileReference) SetId(v string) *RoutingProfileReference {
+	s.Id = &v
+	return s
+}
+
 // Contains summary information about a routing profile.
 type RoutingProfileSummary struct {
 	_ struct{} `type:"structure"`
@@ -25413,6 +35359,440 @@ func (s *S3Config) SetEncryptionConfig(v *EncryptionConfig) *S3Config {
 	return s
 }
 
+type SearchAvailablePhoneNumbersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The ISO country code.
+	//
+	// PhoneNumberCountryCode is a required field
+	PhoneNumberCountryCode *string `type:"string" required:"true" enum:"PhoneNumberCountryCode"`
+
+	// The prefix of the phone number. If provided, it must contain + as part of
+	// the country code.
+	PhoneNumberPrefix *string `type:"string"`
+
+	// The type of phone number.
+	//
+	// PhoneNumberType is a required field
+	PhoneNumberType *string `type:"string" required:"true" enum:"PhoneNumberType"`
+
+	// The Amazon Resource Name (ARN) for Amazon Connect instances that phone numbers
+	// are claimed to.
+	//
+	// TargetArn is a required field
+	TargetArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAvailablePhoneNumbersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAvailablePhoneNumbersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchAvailablePhoneNumbersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchAvailablePhoneNumbersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.PhoneNumberCountryCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumberCountryCode"))
+	}
+	if s.PhoneNumberType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumberType"))
+	}
+	if s.TargetArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *SearchAvailablePhoneNumbersInput) SetMaxResults(v int64) *SearchAvailablePhoneNumbersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchAvailablePhoneNumbersInput) SetNextToken(v string) *SearchAvailablePhoneNumbersInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPhoneNumberCountryCode sets the PhoneNumberCountryCode field's value.
+func (s *SearchAvailablePhoneNumbersInput) SetPhoneNumberCountryCode(v string) *SearchAvailablePhoneNumbersInput {
+	s.PhoneNumberCountryCode = &v
+	return s
+}
+
+// SetPhoneNumberPrefix sets the PhoneNumberPrefix field's value.
+func (s *SearchAvailablePhoneNumbersInput) SetPhoneNumberPrefix(v string) *SearchAvailablePhoneNumbersInput {
+	s.PhoneNumberPrefix = &v
+	return s
+}
+
+// SetPhoneNumberType sets the PhoneNumberType field's value.
+func (s *SearchAvailablePhoneNumbersInput) SetPhoneNumberType(v string) *SearchAvailablePhoneNumbersInput {
+	s.PhoneNumberType = &v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *SearchAvailablePhoneNumbersInput) SetTargetArn(v string) *SearchAvailablePhoneNumbersInput {
+	s.TargetArn = &v
+	return s
+}
+
+type SearchAvailablePhoneNumbersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of available phone numbers that you can claim for your Amazon Connect
+	// instance.
+	AvailableNumbersList []*AvailableNumberSummary `type:"list"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAvailablePhoneNumbersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAvailablePhoneNumbersOutput) GoString() string {
+	return s.String()
+}
+
+// SetAvailableNumbersList sets the AvailableNumbersList field's value.
+func (s *SearchAvailablePhoneNumbersOutput) SetAvailableNumbersList(v []*AvailableNumberSummary) *SearchAvailablePhoneNumbersOutput {
+	s.AvailableNumbersList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchAvailablePhoneNumbersOutput) SetNextToken(v string) *SearchAvailablePhoneNumbersOutput {
+	s.NextToken = &v
+	return s
+}
+
+type SearchUsersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	InstanceId *string `min:"1" type:"string"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The search criteria to be used to return users.
+	SearchCriteria *UserSearchCriteria `type:"structure"`
+
+	// Filters to be applied to search results.
+	SearchFilter *UserSearchFilter `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchUsersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchUsersInput"}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *SearchUsersInput) SetInstanceId(v string) *SearchUsersInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *SearchUsersInput) SetMaxResults(v int64) *SearchUsersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchUsersInput) SetNextToken(v string) *SearchUsersInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSearchCriteria sets the SearchCriteria field's value.
+func (s *SearchUsersInput) SetSearchCriteria(v *UserSearchCriteria) *SearchUsersInput {
+	s.SearchCriteria = v
+	return s
+}
+
+// SetSearchFilter sets the SearchFilter field's value.
+func (s *SearchUsersInput) SetSearchFilter(v *UserSearchFilter) *SearchUsersInput {
+	s.SearchFilter = v
+	return s
+}
+
+type SearchUsersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The total number of users who matched your search query.
+	ApproximateTotalCount *int64 `type:"long"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// Information about the users.
+	Users []*UserSearchSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersOutput) GoString() string {
+	return s.String()
+}
+
+// SetApproximateTotalCount sets the ApproximateTotalCount field's value.
+func (s *SearchUsersOutput) SetApproximateTotalCount(v int64) *SearchUsersOutput {
+	s.ApproximateTotalCount = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchUsersOutput) SetNextToken(v string) *SearchUsersOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetUsers sets the Users field's value.
+func (s *SearchUsersOutput) SetUsers(v []*UserSearchSummary) *SearchUsersOutput {
+	s.Users = v
+	return s
+}
+
+type SearchVocabulariesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The language code of the vocabulary entries. For a list of languages and
+	// their corresponding language codes, see What is Amazon Transcribe? (https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html)
+	LanguageCode *string `type:"string" enum:"VocabularyLanguageCode"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The starting pattern of the name of the vocabulary.
+	NameStartsWith *string `min:"1" type:"string"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The current state of the custom vocabulary.
+	State *string `type:"string" enum:"VocabularyState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchVocabulariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchVocabulariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchVocabulariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchVocabulariesInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NameStartsWith != nil && len(*s.NameStartsWith) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NameStartsWith", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *SearchVocabulariesInput) SetInstanceId(v string) *SearchVocabulariesInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *SearchVocabulariesInput) SetLanguageCode(v string) *SearchVocabulariesInput {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *SearchVocabulariesInput) SetMaxResults(v int64) *SearchVocabulariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNameStartsWith sets the NameStartsWith field's value.
+func (s *SearchVocabulariesInput) SetNameStartsWith(v string) *SearchVocabulariesInput {
+	s.NameStartsWith = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchVocabulariesInput) SetNextToken(v string) *SearchVocabulariesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *SearchVocabulariesInput) SetState(v string) *SearchVocabulariesInput {
+	s.State = &v
+	return s
+}
+
+type SearchVocabulariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The list of the available custom vocabularies.
+	VocabularySummaryList []*VocabularySummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchVocabulariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchVocabulariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchVocabulariesOutput) SetNextToken(v string) *SearchVocabulariesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVocabularySummaryList sets the VocabularySummaryList field's value.
+func (s *SearchVocabulariesOutput) SetVocabularySummaryList(v []*VocabularySummary) *SearchVocabulariesOutput {
+	s.VocabularySummaryList = v
+	return s
+}
+
 // Configuration information of the security key.
 type SecurityKey struct {
 	_ struct{} `type:"structure"`
@@ -25461,6 +35841,83 @@ func (s *SecurityKey) SetCreationTime(v time.Time) *SecurityKey {
 // SetKey sets the Key field's value.
 func (s *SecurityKey) SetKey(v string) *SecurityKey {
 	s.Key = &v
+	return s
+}
+
+// Contains information about a security profile.
+type SecurityProfile struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the secruity profile.
+	Arn *string `type:"string"`
+
+	// The description of the security profile.
+	Description *string `type:"string"`
+
+	// The identifier for the security profile.
+	Id *string `type:"string"`
+
+	// The organization resource identifier for the security profile.
+	OrganizationResourceId *string `min:"1" type:"string"`
+
+	// The name for the security profile.
+	SecurityProfileName *string `type:"string"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityProfile) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityProfile) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *SecurityProfile) SetArn(v string) *SecurityProfile {
+	s.Arn = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *SecurityProfile) SetDescription(v string) *SecurityProfile {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *SecurityProfile) SetId(v string) *SecurityProfile {
+	s.Id = &v
+	return s
+}
+
+// SetOrganizationResourceId sets the OrganizationResourceId field's value.
+func (s *SecurityProfile) SetOrganizationResourceId(v string) *SecurityProfile {
+	s.OrganizationResourceId = &v
+	return s
+}
+
+// SetSecurityProfileName sets the SecurityProfileName field's value.
+func (s *SecurityProfile) SetSecurityProfileName(v string) *SecurityProfile {
+	s.SecurityProfileName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *SecurityProfile) SetTags(v map[string]*string) *SecurityProfile {
+	s.Tags = v
 	return s
 }
 
@@ -25589,6 +36046,11 @@ type StartChatContactInput struct {
 	// Attribute keys can include only alphanumeric, dash, and underscore characters.
 	Attributes map[string]*string `type:"map"`
 
+	// The total duration of the newly started chat session. If not specified, the
+	// chat session duration defaults to 25 hour. The minumum configurable time
+	// is 60 minutes. The maximum configurable time is 10,080 minutes (7 days).
+	ChatDurationInMinutes *int64 `min:"60" type:"integer"`
+
 	// A unique, case-sensitive identifier that you provide to ensure the idempotency
 	// of the request.
 	ClientToken *string `type:"string" idempotencyToken:"true"`
@@ -25617,6 +36079,10 @@ type StartChatContactInput struct {
 	//
 	// ParticipantDetails is a required field
 	ParticipantDetails *ParticipantDetails `type:"structure" required:"true"`
+
+	// The supported chat message content types. Content types can be text/plain
+	// or both text/plain and text/markdown.
+	SupportedMessagingContentTypes []*string `type:"list"`
 }
 
 // String returns the string representation.
@@ -25640,6 +36106,9 @@ func (s StartChatContactInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartChatContactInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartChatContactInput"}
+	if s.ChatDurationInMinutes != nil && *s.ChatDurationInMinutes < 60 {
+		invalidParams.Add(request.NewErrParamMinValue("ChatDurationInMinutes", 60))
+	}
 	if s.ContactFlowId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ContactFlowId"))
 	}
@@ -25675,6 +36144,12 @@ func (s *StartChatContactInput) SetAttributes(v map[string]*string) *StartChatCo
 	return s
 }
 
+// SetChatDurationInMinutes sets the ChatDurationInMinutes field's value.
+func (s *StartChatContactInput) SetChatDurationInMinutes(v int64) *StartChatContactInput {
+	s.ChatDurationInMinutes = &v
+	return s
+}
+
 // SetClientToken sets the ClientToken field's value.
 func (s *StartChatContactInput) SetClientToken(v string) *StartChatContactInput {
 	s.ClientToken = &v
@@ -25702,6 +36177,12 @@ func (s *StartChatContactInput) SetInstanceId(v string) *StartChatContactInput {
 // SetParticipantDetails sets the ParticipantDetails field's value.
 func (s *StartChatContactInput) SetParticipantDetails(v *ParticipantDetails) *StartChatContactInput {
 	s.ParticipantDetails = v
+	return s
+}
+
+// SetSupportedMessagingContentTypes sets the SupportedMessagingContentTypes field's value.
+func (s *StartChatContactInput) SetSupportedMessagingContentTypes(v []*string) *StartChatContactInput {
+	s.SupportedMessagingContentTypes = v
 	return s
 }
 
@@ -25857,7 +36338,7 @@ func (s *StartContactRecordingInput) SetVoiceRecordingConfiguration(v *VoiceReco
 }
 
 type StartContactRecordingOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25876,6 +36357,136 @@ func (s StartContactRecordingOutput) String() string {
 // value will be replaced with "sensitive".
 func (s StartContactRecordingOutput) GoString() string {
 	return s.String()
+}
+
+type StartContactStreamingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The streaming configuration, such as the Amazon SNS streaming endpoint.
+	//
+	// ChatStreamingConfiguration is a required field
+	ChatStreamingConfiguration *ChatStreamingConfiguration `type:"structure" required:"true"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// The identifier of the contact. This is the identifier of the contact associated
+	// with the first interaction with the contact center.
+	//
+	// ContactId is a required field
+	ContactId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartContactStreamingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartContactStreamingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartContactStreamingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartContactStreamingInput"}
+	if s.ChatStreamingConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChatStreamingConfiguration"))
+	}
+	if s.ContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactId"))
+	}
+	if s.ContactId != nil && len(*s.ContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.ChatStreamingConfiguration != nil {
+		if err := s.ChatStreamingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ChatStreamingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChatStreamingConfiguration sets the ChatStreamingConfiguration field's value.
+func (s *StartContactStreamingInput) SetChatStreamingConfiguration(v *ChatStreamingConfiguration) *StartContactStreamingInput {
+	s.ChatStreamingConfiguration = v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *StartContactStreamingInput) SetClientToken(v string) *StartContactStreamingInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *StartContactStreamingInput) SetContactId(v string) *StartContactStreamingInput {
+	s.ContactId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *StartContactStreamingInput) SetInstanceId(v string) *StartContactStreamingInput {
+	s.InstanceId = &v
+	return s
+}
+
+type StartContactStreamingOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the streaming configuration enabled.
+	//
+	// StreamingId is a required field
+	StreamingId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartContactStreamingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartContactStreamingOutput) GoString() string {
+	return s.String()
+}
+
+// SetStreamingId sets the StreamingId field's value.
+func (s *StartContactStreamingOutput) SetStreamingId(v string) *StartContactStreamingOutput {
+	s.StreamingId = &v
+	return s
 }
 
 type StartOutboundVoiceContactInput struct {
@@ -26095,9 +36706,7 @@ type StartTaskContactInput struct {
 	// The ContactFlowId is the last part of the ARN, shown here in bold:
 	//
 	// arn:aws:connect:us-west-2:xxxxxxxxxxxx:instance/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/contact-flow/846ec553-a005-41c0-8341-xxxxxxxxxxxx
-	//
-	// ContactFlowId is a required field
-	ContactFlowId *string `type:"string" required:"true"`
+	ContactFlowId *string `type:"string"`
 
 	// A description of the task that is shown to an agent in the Contact Control
 	// Panel (CCP).
@@ -26118,8 +36727,19 @@ type StartTaskContactInput struct {
 	// The identifier of the previous chat, voice, or task contact.
 	PreviousContactId *string `min:"1" type:"string"`
 
+	// The identifier for the quick connect.
+	QuickConnectId *string `type:"string"`
+
 	// A formatted URL that is shown to an agent in the Contact Control Panel (CCP).
 	References map[string]*Reference `type:"map"`
+
+	// The timestamp, in Unix Epoch seconds format, at which to start running the
+	// inbound contact flow. The scheduled time cannot be in the past. It must be
+	// within up to 6 days in future.
+	ScheduledTime *time.Time `type:"timestamp"`
+
+	// A unique identifier for the task template.
+	TaskTemplateId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -26143,9 +36763,6 @@ func (s StartTaskContactInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartTaskContactInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartTaskContactInput"}
-	if s.ContactFlowId == nil {
-		invalidParams.Add(request.NewErrParamRequired("ContactFlowId"))
-	}
 	if s.InstanceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
 	}
@@ -26157,6 +36774,9 @@ func (s *StartTaskContactInput) Validate() error {
 	}
 	if s.PreviousContactId != nil && len(*s.PreviousContactId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("PreviousContactId", 1))
+	}
+	if s.TaskTemplateId != nil && len(*s.TaskTemplateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskTemplateId", 1))
 	}
 	if s.References != nil {
 		for i, v := range s.References {
@@ -26217,9 +36837,27 @@ func (s *StartTaskContactInput) SetPreviousContactId(v string) *StartTaskContact
 	return s
 }
 
+// SetQuickConnectId sets the QuickConnectId field's value.
+func (s *StartTaskContactInput) SetQuickConnectId(v string) *StartTaskContactInput {
+	s.QuickConnectId = &v
+	return s
+}
+
 // SetReferences sets the References field's value.
 func (s *StartTaskContactInput) SetReferences(v map[string]*Reference) *StartTaskContactInput {
 	s.References = v
+	return s
+}
+
+// SetScheduledTime sets the ScheduledTime field's value.
+func (s *StartTaskContactInput) SetScheduledTime(v time.Time) *StartTaskContactInput {
+	s.ScheduledTime = &v
+	return s
+}
+
+// SetTaskTemplateId sets the TaskTemplateId field's value.
+func (s *StartTaskContactInput) SetTaskTemplateId(v string) *StartTaskContactInput {
+	s.TaskTemplateId = &v
 	return s
 }
 
@@ -26322,7 +36960,7 @@ func (s *StopContactInput) SetInstanceId(v string) *StopContactInput {
 }
 
 type StopContactOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -26429,7 +37067,7 @@ func (s *StopContactRecordingInput) SetInstanceId(v string) *StopContactRecordin
 }
 
 type StopContactRecordingOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -26448,6 +37086,206 @@ func (s StopContactRecordingOutput) String() string {
 // value will be replaced with "sensitive".
 func (s StopContactRecordingOutput) GoString() string {
 	return s.String()
+}
+
+type StopContactStreamingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the contact. This is the identifier of the contact that
+	// is associated with the first interaction with the contact center.
+	//
+	// ContactId is a required field
+	ContactId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the streaming configuration enabled.
+	//
+	// StreamingId is a required field
+	StreamingId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopContactStreamingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopContactStreamingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopContactStreamingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopContactStreamingInput"}
+	if s.ContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactId"))
+	}
+	if s.ContactId != nil && len(*s.ContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.StreamingId == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreamingId"))
+	}
+	if s.StreamingId != nil && len(*s.StreamingId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamingId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *StopContactStreamingInput) SetContactId(v string) *StopContactStreamingInput {
+	s.ContactId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *StopContactStreamingInput) SetInstanceId(v string) *StopContactStreamingInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetStreamingId sets the StreamingId field's value.
+func (s *StopContactStreamingInput) SetStreamingId(v string) *StopContactStreamingInput {
+	s.StreamingId = &v
+	return s
+}
+
+type StopContactStreamingOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopContactStreamingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopContactStreamingOutput) GoString() string {
+	return s.String()
+}
+
+// A leaf node condition which can be used to specify a string condition, for
+// example, username = 'abc'.
+type StringCondition struct {
+	_ struct{} `type:"structure"`
+
+	// The type of comparison to be made when evaluating the string condition.
+	ComparisonType *string `type:"string" enum:"StringComparisonType"`
+
+	// The name of the field in the string condition.
+	FieldName *string `type:"string"`
+
+	// The value of the string.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StringCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StringCondition) GoString() string {
+	return s.String()
+}
+
+// SetComparisonType sets the ComparisonType field's value.
+func (s *StringCondition) SetComparisonType(v string) *StringCondition {
+	s.ComparisonType = &v
+	return s
+}
+
+// SetFieldName sets the FieldName field's value.
+func (s *StringCondition) SetFieldName(v string) *StringCondition {
+	s.FieldName = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *StringCondition) SetValue(v string) *StringCondition {
+	s.Value = &v
+	return s
+}
+
+// Information about a reference when the referenceType is STRING. Otherwise,
+// null.
+type StringReference struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the string reference.
+	Name *string `min:"1" type:"string"`
+
+	// A valid string.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StringReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StringReference) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *StringReference) SetName(v string) *StringReference {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *StringReference) SetValue(v string) *StringReference {
+	s.Value = &v
+	return s
 }
 
 type SuspendContactRecordingInput struct {
@@ -26536,7 +37374,7 @@ func (s *SuspendContactRecordingInput) SetInstanceId(v string) *SuspendContactRe
 }
 
 type SuspendContactRecordingOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -26555,6 +37393,48 @@ func (s SuspendContactRecordingOutput) String() string {
 // value will be replaced with "sensitive".
 func (s SuspendContactRecordingOutput) GoString() string {
 	return s.String()
+}
+
+// A leaf node condition which can be used to specify a tag condition, for example,
+// HAVE BPO = 123.
+type TagCondition struct {
+	_ struct{} `type:"structure"`
+
+	// The tag key in the tag condition.
+	TagKey *string `type:"string"`
+
+	// The tag value in the tag condition.
+	TagValue *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagCondition) GoString() string {
+	return s.String()
+}
+
+// SetTagKey sets the TagKey field's value.
+func (s *TagCondition) SetTagKey(v string) *TagCondition {
+	s.TagKey = &v
+	return s
+}
+
+// SetTagValue sets the TagValue field's value.
+func (s *TagCondition) SetTagValue(v string) *TagCondition {
+	s.TagValue = &v
+	return s
 }
 
 type TagResourceInput struct {
@@ -26625,7 +37505,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -26644,6 +37524,419 @@ func (s TagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Describes constraints that apply to the template fields.
+type TaskTemplateConstraints struct {
+	_ struct{} `type:"structure"`
+
+	// Lists the fields that are invisible to agents.
+	InvisibleFields []*InvisibleFieldInfo `type:"list"`
+
+	// Lists the fields that are read-only to agents, and cannot be edited.
+	ReadOnlyFields []*ReadOnlyFieldInfo `type:"list"`
+
+	// Lists the fields that are required to be filled by agents.
+	RequiredFields []*RequiredFieldInfo `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateConstraints) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateConstraints) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TaskTemplateConstraints) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TaskTemplateConstraints"}
+	if s.InvisibleFields != nil {
+		for i, v := range s.InvisibleFields {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InvisibleFields", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ReadOnlyFields != nil {
+		for i, v := range s.ReadOnlyFields {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ReadOnlyFields", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.RequiredFields != nil {
+		for i, v := range s.RequiredFields {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "RequiredFields", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInvisibleFields sets the InvisibleFields field's value.
+func (s *TaskTemplateConstraints) SetInvisibleFields(v []*InvisibleFieldInfo) *TaskTemplateConstraints {
+	s.InvisibleFields = v
+	return s
+}
+
+// SetReadOnlyFields sets the ReadOnlyFields field's value.
+func (s *TaskTemplateConstraints) SetReadOnlyFields(v []*ReadOnlyFieldInfo) *TaskTemplateConstraints {
+	s.ReadOnlyFields = v
+	return s
+}
+
+// SetRequiredFields sets the RequiredFields field's value.
+func (s *TaskTemplateConstraints) SetRequiredFields(v []*RequiredFieldInfo) *TaskTemplateConstraints {
+	s.RequiredFields = v
+	return s
+}
+
+// Describes a default field and its corresponding value.
+type TaskTemplateDefaultFieldValue struct {
+	_ struct{} `type:"structure"`
+
+	// Default value for the field.
+	DefaultValue *string `type:"string"`
+
+	// Identifier of a field.
+	Id *TaskTemplateFieldIdentifier `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateDefaultFieldValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateDefaultFieldValue) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TaskTemplateDefaultFieldValue) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TaskTemplateDefaultFieldValue"}
+	if s.Id != nil {
+		if err := s.Id.Validate(); err != nil {
+			invalidParams.AddNested("Id", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultValue sets the DefaultValue field's value.
+func (s *TaskTemplateDefaultFieldValue) SetDefaultValue(v string) *TaskTemplateDefaultFieldValue {
+	s.DefaultValue = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *TaskTemplateDefaultFieldValue) SetId(v *TaskTemplateFieldIdentifier) *TaskTemplateDefaultFieldValue {
+	s.Id = v
+	return s
+}
+
+// Describes default values for fields on a template.
+type TaskTemplateDefaults struct {
+	_ struct{} `type:"structure"`
+
+	// Default value for the field.
+	DefaultFieldValues []*TaskTemplateDefaultFieldValue `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateDefaults) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateDefaults) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TaskTemplateDefaults) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TaskTemplateDefaults"}
+	if s.DefaultFieldValues != nil {
+		for i, v := range s.DefaultFieldValues {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DefaultFieldValues", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultFieldValues sets the DefaultFieldValues field's value.
+func (s *TaskTemplateDefaults) SetDefaultFieldValues(v []*TaskTemplateDefaultFieldValue) *TaskTemplateDefaults {
+	s.DefaultFieldValues = v
+	return s
+}
+
+// Describes a single task template field.
+type TaskTemplateField struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the field.
+	Description *string `min:"1" type:"string"`
+
+	// The unique identifier for the field.
+	//
+	// Id is a required field
+	Id *TaskTemplateFieldIdentifier `type:"structure" required:"true"`
+
+	// A list of options for a single select field.
+	SingleSelectOptions []*string `type:"list"`
+
+	// Indicates the type of field.
+	Type *string `type:"string" enum:"TaskTemplateFieldType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateField) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TaskTemplateField) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TaskTemplateField"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil {
+		if err := s.Id.Validate(); err != nil {
+			invalidParams.AddNested("Id", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *TaskTemplateField) SetDescription(v string) *TaskTemplateField {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *TaskTemplateField) SetId(v *TaskTemplateFieldIdentifier) *TaskTemplateField {
+	s.Id = v
+	return s
+}
+
+// SetSingleSelectOptions sets the SingleSelectOptions field's value.
+func (s *TaskTemplateField) SetSingleSelectOptions(v []*string) *TaskTemplateField {
+	s.SingleSelectOptions = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *TaskTemplateField) SetType(v string) *TaskTemplateField {
+	s.Type = &v
+	return s
+}
+
+// The identifier of the task template field.
+type TaskTemplateFieldIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the task template field.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateFieldIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateFieldIdentifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TaskTemplateFieldIdentifier) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TaskTemplateFieldIdentifier"}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *TaskTemplateFieldIdentifier) SetName(v string) *TaskTemplateFieldIdentifier {
+	s.Name = &v
+	return s
+}
+
+// Contains summary information about the task template.
+type TaskTemplateMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the task template.
+	Arn *string `min:"1" type:"string"`
+
+	// The timestamp when the task template was created.
+	CreatedTime *time.Time `type:"timestamp"`
+
+	// The description of the task template.
+	Description *string `min:"1" type:"string"`
+
+	// A unique identifier for the task template.
+	Id *string `min:"1" type:"string"`
+
+	// The timestamp when the task template was last modified.
+	LastModifiedTime *time.Time `type:"timestamp"`
+
+	// The name of the task template.
+	Name *string `min:"1" type:"string"`
+
+	// Marks a template as ACTIVE or INACTIVE for a task to refer to it. Tasks can
+	// only be created from ACTIVE templates. If a template is marked as INACTIVE,
+	// then a task that refers to this template cannot be created.
+	Status *string `type:"string" enum:"TaskTemplateStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TaskTemplateMetadata) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *TaskTemplateMetadata) SetArn(v string) *TaskTemplateMetadata {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *TaskTemplateMetadata) SetCreatedTime(v time.Time) *TaskTemplateMetadata {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *TaskTemplateMetadata) SetDescription(v string) *TaskTemplateMetadata {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *TaskTemplateMetadata) SetId(v string) *TaskTemplateMetadata {
+	s.Id = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *TaskTemplateMetadata) SetLastModifiedTime(v time.Time) *TaskTemplateMetadata {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *TaskTemplateMetadata) SetName(v string) *TaskTemplateMetadata {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *TaskTemplateMetadata) SetStatus(v string) *TaskTemplateMetadata {
+	s.Status = &v
+	return s
 }
 
 // Contains information about the threshold for service level metrics.
@@ -26751,6 +38044,158 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type TransferContactInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// The identifier of the contact flow.
+	//
+	// ContactFlowId is a required field
+	ContactFlowId *string `type:"string" required:"true"`
+
+	// The identifier of the contact in this instance of Amazon Connect.
+	//
+	// ContactId is a required field
+	ContactId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier for the queue.
+	QueueId *string `type:"string"`
+
+	// The identifier for the user.
+	UserId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TransferContactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TransferContactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TransferContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TransferContactInput"}
+	if s.ContactFlowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowId"))
+	}
+	if s.ContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactId"))
+	}
+	if s.ContactId != nil && len(*s.ContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *TransferContactInput) SetClientToken(v string) *TransferContactInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *TransferContactInput) SetContactFlowId(v string) *TransferContactInput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *TransferContactInput) SetContactId(v string) *TransferContactInput {
+	s.ContactId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *TransferContactInput) SetInstanceId(v string) *TransferContactInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetQueueId sets the QueueId field's value.
+func (s *TransferContactInput) SetQueueId(v string) *TransferContactInput {
+	s.QueueId = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *TransferContactInput) SetUserId(v string) *TransferContactInput {
+	s.UserId = &v
+	return s
+}
+
+type TransferContactOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the contact.
+	ContactArn *string `type:"string"`
+
+	// The identifier of the contact in this instance of Amazon Connect.
+	ContactId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TransferContactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TransferContactOutput) GoString() string {
+	return s.String()
+}
+
+// SetContactArn sets the ContactArn field's value.
+func (s *TransferContactOutput) SetContactArn(v string) *TransferContactOutput {
+	s.ContactArn = &v
+	return s
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *TransferContactOutput) SetContactId(v string) *TransferContactOutput {
+	s.ContactId = &v
+	return s
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -26818,7 +38263,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -26958,7 +38403,7 @@ func (s *UpdateAgentStatusInput) SetState(v string) *UpdateAgentStatusInput {
 }
 
 type UpdateAgentStatusOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27066,7 +38511,7 @@ func (s *UpdateContactAttributesInput) SetInstanceId(v string) *UpdateContactAtt
 }
 
 type UpdateContactAttributesOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27170,7 +38615,7 @@ func (s *UpdateContactFlowContentInput) SetInstanceId(v string) *UpdateContactFl
 }
 
 type UpdateContactFlowContentOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27188,6 +38633,350 @@ func (s UpdateContactFlowContentOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s UpdateContactFlowContentOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateContactFlowMetadataInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the contact flow.
+	//
+	// ContactFlowId is a required field
+	ContactFlowId *string `location:"uri" locationName:"ContactFlowId" type:"string" required:"true"`
+
+	// The state of contact flow.
+	ContactFlowState *string `type:"string" enum:"ContactFlowState"`
+
+	// The description of the contact flow.
+	Description *string `type:"string"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// TThe name of the contact flow.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContactFlowMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContactFlowMetadataInput"}
+	if s.ContactFlowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowId"))
+	}
+	if s.ContactFlowId != nil && len(*s.ContactFlowId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactFlowId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *UpdateContactFlowMetadataInput) SetContactFlowId(v string) *UpdateContactFlowMetadataInput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetContactFlowState sets the ContactFlowState field's value.
+func (s *UpdateContactFlowMetadataInput) SetContactFlowState(v string) *UpdateContactFlowMetadataInput {
+	s.ContactFlowState = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateContactFlowMetadataInput) SetDescription(v string) *UpdateContactFlowMetadataInput {
+	s.Description = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateContactFlowMetadataInput) SetInstanceId(v string) *UpdateContactFlowMetadataInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateContactFlowMetadataInput) SetName(v string) *UpdateContactFlowMetadataInput {
+	s.Name = &v
+	return s
+}
+
+type UpdateContactFlowMetadataOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowMetadataOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateContactFlowModuleContentInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the contact flow module.
+	//
+	// ContactFlowModuleId is a required field
+	ContactFlowModuleId *string `location:"uri" locationName:"ContactFlowModuleId" min:"1" type:"string" required:"true"`
+
+	// The content of the contact flow module.
+	//
+	// Content is a required field
+	Content *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleContentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleContentInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContactFlowModuleContentInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContactFlowModuleContentInput"}
+	if s.ContactFlowModuleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowModuleId"))
+	}
+	if s.ContactFlowModuleId != nil && len(*s.ContactFlowModuleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactFlowModuleId", 1))
+	}
+	if s.Content == nil {
+		invalidParams.Add(request.NewErrParamRequired("Content"))
+	}
+	if s.Content != nil && len(*s.Content) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowModuleId sets the ContactFlowModuleId field's value.
+func (s *UpdateContactFlowModuleContentInput) SetContactFlowModuleId(v string) *UpdateContactFlowModuleContentInput {
+	s.ContactFlowModuleId = &v
+	return s
+}
+
+// SetContent sets the Content field's value.
+func (s *UpdateContactFlowModuleContentInput) SetContent(v string) *UpdateContactFlowModuleContentInput {
+	s.Content = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateContactFlowModuleContentInput) SetInstanceId(v string) *UpdateContactFlowModuleContentInput {
+	s.InstanceId = &v
+	return s
+}
+
+type UpdateContactFlowModuleContentOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleContentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleContentOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateContactFlowModuleMetadataInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the contact flow module.
+	//
+	// ContactFlowModuleId is a required field
+	ContactFlowModuleId *string `location:"uri" locationName:"ContactFlowModuleId" min:"1" type:"string" required:"true"`
+
+	// The description of the contact flow module.
+	Description *string `type:"string"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The name of the contact flow module.
+	Name *string `min:"1" type:"string"`
+
+	// The state of contact flow module.
+	State *string `type:"string" enum:"ContactFlowModuleState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContactFlowModuleMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContactFlowModuleMetadataInput"}
+	if s.ContactFlowModuleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactFlowModuleId"))
+	}
+	if s.ContactFlowModuleId != nil && len(*s.ContactFlowModuleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactFlowModuleId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFlowModuleId sets the ContactFlowModuleId field's value.
+func (s *UpdateContactFlowModuleMetadataInput) SetContactFlowModuleId(v string) *UpdateContactFlowModuleMetadataInput {
+	s.ContactFlowModuleId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateContactFlowModuleMetadataInput) SetDescription(v string) *UpdateContactFlowModuleMetadataInput {
+	s.Description = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateContactFlowModuleMetadataInput) SetInstanceId(v string) *UpdateContactFlowModuleMetadataInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateContactFlowModuleMetadataInput) SetName(v string) *UpdateContactFlowModuleMetadataInput {
+	s.Name = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *UpdateContactFlowModuleMetadataInput) SetState(v string) *UpdateContactFlowModuleMetadataInput {
+	s.State = &v
+	return s
+}
+
+type UpdateContactFlowModuleMetadataOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactFlowModuleMetadataOutput) GoString() string {
 	return s.String()
 }
 
@@ -27279,7 +39068,7 @@ func (s *UpdateContactFlowNameInput) SetName(v string) *UpdateContactFlowNameInp
 }
 
 type UpdateContactFlowNameOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27297,6 +39086,238 @@ func (s UpdateContactFlowNameOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s UpdateContactFlowNameOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateContactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the contact. This is the identifier of the contact associated
+	// with the first interaction with your contact center.
+	//
+	// ContactId is a required field
+	ContactId *string `location:"uri" locationName:"ContactId" min:"1" type:"string" required:"true"`
+
+	// The description of the contact.
+	Description *string `type:"string"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The name of the contact.
+	Name *string `type:"string"`
+
+	// Well-formed data on contact, shown to agents on Contact Control Panel (CCP).
+	References map[string]*Reference `type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContactInput"}
+	if s.ContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactId"))
+	}
+	if s.ContactId != nil && len(*s.ContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.References != nil {
+		for i, v := range s.References {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "References", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *UpdateContactInput) SetContactId(v string) *UpdateContactInput {
+	s.ContactId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateContactInput) SetDescription(v string) *UpdateContactInput {
+	s.Description = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateContactInput) SetInstanceId(v string) *UpdateContactInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateContactInput) SetName(v string) *UpdateContactInput {
+	s.Name = &v
+	return s
+}
+
+// SetReferences sets the References field's value.
+func (s *UpdateContactInput) SetReferences(v map[string]*Reference) *UpdateContactInput {
+	s.References = v
+	return s
+}
+
+type UpdateContactOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateContactScheduleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the contact.
+	//
+	// ContactId is a required field
+	ContactId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `min:"1" type:"string" required:"true"`
+
+	// The timestamp, in Unix Epoch seconds format, at which to start running the
+	// inbound contact flow. The scheduled time cannot be in the past. It must be
+	// within up to 6 days in future.
+	//
+	// ScheduledTime is a required field
+	ScheduledTime *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactScheduleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactScheduleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContactScheduleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContactScheduleInput"}
+	if s.ContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactId"))
+	}
+	if s.ContactId != nil && len(*s.ContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.ScheduledTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScheduledTime"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactId sets the ContactId field's value.
+func (s *UpdateContactScheduleInput) SetContactId(v string) *UpdateContactScheduleInput {
+	s.ContactId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateContactScheduleInput) SetInstanceId(v string) *UpdateContactScheduleInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetScheduledTime sets the ScheduledTime field's value.
+func (s *UpdateContactScheduleInput) SetScheduledTime(v time.Time) *UpdateContactScheduleInput {
+	s.ScheduledTime = &v
+	return s
+}
+
+type UpdateContactScheduleOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactScheduleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateContactScheduleOutput) GoString() string {
 	return s.String()
 }
 
@@ -27417,7 +39438,7 @@ func (s *UpdateHoursOfOperationInput) SetTimeZone(v string) *UpdateHoursOfOperat
 }
 
 type UpdateHoursOfOperationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27444,7 +39465,7 @@ type UpdateInstanceAttributeInput struct {
 	// The type of attribute.
 	//
 	// Only allowlisted customers can consume USE_CUSTOM_TTS_VOICES. To access this
-	// feature, contact AWS Support for allowlisting.
+	// feature, contact Amazon Web Services Support for allowlisting.
 	//
 	// AttributeType is a required field
 	AttributeType *string `location:"uri" locationName:"AttributeType" type:"string" required:"true" enum:"InstanceAttributeType"`
@@ -27526,7 +39547,7 @@ func (s *UpdateInstanceAttributeInput) SetValue(v string) *UpdateInstanceAttribu
 }
 
 type UpdateInstanceAttributeOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27649,7 +39670,7 @@ func (s *UpdateInstanceStorageConfigInput) SetStorageConfig(v *InstanceStorageCo
 }
 
 type UpdateInstanceStorageConfigOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27668,6 +39689,120 @@ func (s UpdateInstanceStorageConfigOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateInstanceStorageConfigOutput) GoString() string {
 	return s.String()
+}
+
+type UpdatePhoneNumberInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// A unique identifier for the phone number.
+	//
+	// PhoneNumberId is a required field
+	PhoneNumberId *string `location:"uri" locationName:"PhoneNumberId" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) for Amazon Connect instances that phone numbers
+	// are claimed to.
+	//
+	// TargetArn is a required field
+	TargetArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePhoneNumberInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePhoneNumberInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePhoneNumberInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePhoneNumberInput"}
+	if s.PhoneNumberId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumberId"))
+	}
+	if s.PhoneNumberId != nil && len(*s.PhoneNumberId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PhoneNumberId", 1))
+	}
+	if s.TargetArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *UpdatePhoneNumberInput) SetClientToken(v string) *UpdatePhoneNumberInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *UpdatePhoneNumberInput) SetPhoneNumberId(v string) *UpdatePhoneNumberInput {
+	s.PhoneNumberId = &v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *UpdatePhoneNumberInput) SetTargetArn(v string) *UpdatePhoneNumberInput {
+	s.TargetArn = &v
+	return s
+}
+
+type UpdatePhoneNumberOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the phone number.
+	PhoneNumberArn *string `type:"string"`
+
+	// A unique identifier for the phone number.
+	PhoneNumberId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePhoneNumberOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePhoneNumberOutput) GoString() string {
+	return s.String()
+}
+
+// SetPhoneNumberArn sets the PhoneNumberArn field's value.
+func (s *UpdatePhoneNumberOutput) SetPhoneNumberArn(v string) *UpdatePhoneNumberOutput {
+	s.PhoneNumberArn = &v
+	return s
+}
+
+// SetPhoneNumberId sets the PhoneNumberId field's value.
+func (s *UpdatePhoneNumberOutput) SetPhoneNumberId(v string) *UpdatePhoneNumberOutput {
+	s.PhoneNumberId = &v
+	return s
 }
 
 type UpdateQueueHoursOfOperationInput struct {
@@ -27752,7 +39887,7 @@ func (s *UpdateQueueHoursOfOperationInput) SetQueueId(v string) *UpdateQueueHour
 }
 
 type UpdateQueueHoursOfOperationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27851,7 +39986,7 @@ func (s *UpdateQueueMaxContactsInput) SetQueueId(v string) *UpdateQueueMaxContac
 }
 
 type UpdateQueueMaxContactsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27964,7 +40099,7 @@ func (s *UpdateQueueNameInput) SetQueueId(v string) *UpdateQueueNameInput {
 }
 
 type UpdateQueueNameOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28072,7 +40207,7 @@ func (s *UpdateQueueOutboundCallerConfigInput) SetQueueId(v string) *UpdateQueue
 }
 
 type UpdateQueueOutboundCallerConfigOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28175,7 +40310,7 @@ func (s *UpdateQueueStatusInput) SetStatus(v string) *UpdateQueueStatusInput {
 }
 
 type UpdateQueueStatusOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28283,7 +40418,7 @@ func (s *UpdateQuickConnectConfigInput) SetQuickConnectId(v string) *UpdateQuick
 }
 
 type UpdateQuickConnectConfigOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28393,7 +40528,7 @@ func (s *UpdateQuickConnectNameInput) SetQuickConnectId(v string) *UpdateQuickCo
 }
 
 type UpdateQuickConnectNameOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28506,7 +40641,7 @@ func (s *UpdateRoutingProfileConcurrencyInput) SetRoutingProfileId(v string) *Up
 }
 
 type UpdateRoutingProfileConcurrencyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28609,7 +40744,7 @@ func (s *UpdateRoutingProfileDefaultOutboundQueueInput) SetRoutingProfileId(v st
 }
 
 type UpdateRoutingProfileDefaultOutboundQueueOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28722,7 +40857,7 @@ func (s *UpdateRoutingProfileNameInput) SetRoutingProfileId(v string) *UpdateRou
 }
 
 type UpdateRoutingProfileNameOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28839,7 +40974,7 @@ func (s *UpdateRoutingProfileQueuesInput) SetRoutingProfileId(v string) *UpdateR
 }
 
 type UpdateRoutingProfileQueuesOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28858,6 +40993,408 @@ func (s UpdateRoutingProfileQueuesOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateRoutingProfileQueuesOutput) GoString() string {
 	return s.String()
+}
+
+type UpdateSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the security profile.
+	Description *string `type:"string"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The permissions granted to a security profile.
+	Permissions []*string `type:"list"`
+
+	// The identifier for the security profle.
+	//
+	// SecurityProfileId is a required field
+	SecurityProfileId *string `location:"uri" locationName:"SecurityProfileId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateSecurityProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateSecurityProfileInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.SecurityProfileId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecurityProfileId"))
+	}
+	if s.SecurityProfileId != nil && len(*s.SecurityProfileId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecurityProfileId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateSecurityProfileInput) SetDescription(v string) *UpdateSecurityProfileInput {
+	s.Description = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateSecurityProfileInput) SetInstanceId(v string) *UpdateSecurityProfileInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetPermissions sets the Permissions field's value.
+func (s *UpdateSecurityProfileInput) SetPermissions(v []*string) *UpdateSecurityProfileInput {
+	s.Permissions = v
+	return s
+}
+
+// SetSecurityProfileId sets the SecurityProfileId field's value.
+func (s *UpdateSecurityProfileInput) SetSecurityProfileId(v string) *UpdateSecurityProfileInput {
+	s.SecurityProfileId = &v
+	return s
+}
+
+type UpdateSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateTaskTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// Constraints that are applicable to the fields listed.
+	Constraints *TaskTemplateConstraints `type:"structure"`
+
+	// The identifier of the flow that runs by default when a task is created by
+	// referencing this template.
+	ContactFlowId *string `type:"string"`
+
+	// The default values for fields when a task is created by referencing this
+	// template.
+	Defaults *TaskTemplateDefaults `type:"structure"`
+
+	// The description of the task template.
+	Description *string `min:"1" type:"string"`
+
+	// Fields that are part of the template.
+	Fields []*TaskTemplateField `type:"list"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// The name of the task template.
+	Name *string `min:"1" type:"string"`
+
+	// Marks a template as ACTIVE or INACTIVE for a task to refer to it. Tasks can
+	// only be created from ACTIVE templates. If a template is marked as INACTIVE,
+	// then a task that refers to this template cannot be created.
+	Status *string `type:"string" enum:"TaskTemplateStatus"`
+
+	// A unique identifier for the task template.
+	//
+	// TaskTemplateId is a required field
+	TaskTemplateId *string `location:"uri" locationName:"TaskTemplateId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTaskTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTaskTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateTaskTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateTaskTemplateInput"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.TaskTemplateId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TaskTemplateId"))
+	}
+	if s.TaskTemplateId != nil && len(*s.TaskTemplateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TaskTemplateId", 1))
+	}
+	if s.Constraints != nil {
+		if err := s.Constraints.Validate(); err != nil {
+			invalidParams.AddNested("Constraints", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Defaults != nil {
+		if err := s.Defaults.Validate(); err != nil {
+			invalidParams.AddNested("Defaults", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Fields != nil {
+		for i, v := range s.Fields {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Fields", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConstraints sets the Constraints field's value.
+func (s *UpdateTaskTemplateInput) SetConstraints(v *TaskTemplateConstraints) *UpdateTaskTemplateInput {
+	s.Constraints = v
+	return s
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *UpdateTaskTemplateInput) SetContactFlowId(v string) *UpdateTaskTemplateInput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetDefaults sets the Defaults field's value.
+func (s *UpdateTaskTemplateInput) SetDefaults(v *TaskTemplateDefaults) *UpdateTaskTemplateInput {
+	s.Defaults = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateTaskTemplateInput) SetDescription(v string) *UpdateTaskTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetFields sets the Fields field's value.
+func (s *UpdateTaskTemplateInput) SetFields(v []*TaskTemplateField) *UpdateTaskTemplateInput {
+	s.Fields = v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateTaskTemplateInput) SetInstanceId(v string) *UpdateTaskTemplateInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateTaskTemplateInput) SetName(v string) *UpdateTaskTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateTaskTemplateInput) SetStatus(v string) *UpdateTaskTemplateInput {
+	s.Status = &v
+	return s
+}
+
+// SetTaskTemplateId sets the TaskTemplateId field's value.
+func (s *UpdateTaskTemplateInput) SetTaskTemplateId(v string) *UpdateTaskTemplateInput {
+	s.TaskTemplateId = &v
+	return s
+}
+
+type UpdateTaskTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the task template resource.
+	Arn *string `min:"1" type:"string"`
+
+	// Constraints that are applicable to the fields listed.
+	Constraints *TaskTemplateConstraints `type:"structure"`
+
+	// The identifier of the flow that runs by default when a task is created by
+	// referencing this template.
+	ContactFlowId *string `type:"string"`
+
+	// The timestamp when the task template was created.
+	CreatedTime *time.Time `type:"timestamp"`
+
+	// The default values for fields when a task is created by referencing this
+	// template.
+	Defaults *TaskTemplateDefaults `type:"structure"`
+
+	// The description of the task template.
+	Description *string `min:"1" type:"string"`
+
+	// Fields that are part of the template.
+	Fields []*TaskTemplateField `type:"list"`
+
+	// The identifier of the task template resource.
+	Id *string `min:"1" type:"string"`
+
+	// The identifier of the Amazon Connect instance. You can find the instanceId
+	// in the ARN of the instance.
+	InstanceId *string `min:"1" type:"string"`
+
+	// The timestamp when the task template was last modified.
+	LastModifiedTime *time.Time `type:"timestamp"`
+
+	// The name of the task template.
+	Name *string `min:"1" type:"string"`
+
+	// Marks a template as ACTIVE or INACTIVE for a task to refer to it. Tasks can
+	// only be created from ACTIVE templates. If a template is marked as INACTIVE,
+	// then a task that refers to this template cannot be created.
+	Status *string `type:"string" enum:"TaskTemplateStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTaskTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTaskTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateTaskTemplateOutput) SetArn(v string) *UpdateTaskTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConstraints sets the Constraints field's value.
+func (s *UpdateTaskTemplateOutput) SetConstraints(v *TaskTemplateConstraints) *UpdateTaskTemplateOutput {
+	s.Constraints = v
+	return s
+}
+
+// SetContactFlowId sets the ContactFlowId field's value.
+func (s *UpdateTaskTemplateOutput) SetContactFlowId(v string) *UpdateTaskTemplateOutput {
+	s.ContactFlowId = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *UpdateTaskTemplateOutput) SetCreatedTime(v time.Time) *UpdateTaskTemplateOutput {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDefaults sets the Defaults field's value.
+func (s *UpdateTaskTemplateOutput) SetDefaults(v *TaskTemplateDefaults) *UpdateTaskTemplateOutput {
+	s.Defaults = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateTaskTemplateOutput) SetDescription(v string) *UpdateTaskTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetFields sets the Fields field's value.
+func (s *UpdateTaskTemplateOutput) SetFields(v []*TaskTemplateField) *UpdateTaskTemplateOutput {
+	s.Fields = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateTaskTemplateOutput) SetId(v string) *UpdateTaskTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *UpdateTaskTemplateOutput) SetInstanceId(v string) *UpdateTaskTemplateOutput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *UpdateTaskTemplateOutput) SetLastModifiedTime(v time.Time) *UpdateTaskTemplateOutput {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateTaskTemplateOutput) SetName(v string) *UpdateTaskTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateTaskTemplateOutput) SetStatus(v string) *UpdateTaskTemplateOutput {
+	s.Status = &v
+	return s
 }
 
 type UpdateUserHierarchyGroupNameInput struct {
@@ -28942,7 +41479,7 @@ func (s *UpdateUserHierarchyGroupNameInput) SetName(v string) *UpdateUserHierarc
 }
 
 type UpdateUserHierarchyGroupNameOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29040,7 +41577,7 @@ func (s *UpdateUserHierarchyInput) SetUserId(v string) *UpdateUserHierarchyInput
 }
 
 type UpdateUserHierarchyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29131,7 +41668,7 @@ func (s *UpdateUserHierarchyStructureInput) SetInstanceId(v string) *UpdateUserH
 }
 
 type UpdateUserHierarchyStructureOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29239,7 +41776,7 @@ func (s *UpdateUserIdentityInfoInput) SetUserId(v string) *UpdateUserIdentityInf
 }
 
 type UpdateUserIdentityInfoOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29347,7 +41884,7 @@ func (s *UpdateUserPhoneConfigInput) SetUserId(v string) *UpdateUserPhoneConfigI
 }
 
 type UpdateUserPhoneConfigOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29450,7 +41987,7 @@ func (s *UpdateUserRoutingProfileInput) SetUserId(v string) *UpdateUserRoutingPr
 }
 
 type UpdateUserRoutingProfileOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29556,7 +42093,7 @@ func (s *UpdateUserSecurityProfilesInput) SetUserId(v string) *UpdateUserSecurit
 }
 
 type UpdateUserSecurityProfilesOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29575,6 +42112,47 @@ func (s UpdateUserSecurityProfilesOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateUserSecurityProfilesOutput) GoString() string {
 	return s.String()
+}
+
+// The URL reference.
+type UrlReference struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the URL reference.
+	Name *string `min:"1" type:"string"`
+
+	// A valid URL.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UrlReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UrlReference) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *UrlReference) SetName(v string) *UrlReference {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *UrlReference) SetValue(v string) *UrlReference {
+	s.Value = &v
+	return s
 }
 
 // Contains the use case.
@@ -29741,6 +42319,164 @@ func (s *User) SetUsername(v string) *User {
 	return s
 }
 
+// Data for a user.
+type UserData struct {
+	_ struct{} `type:"structure"`
+
+	// A map of active slots by channel. The key is a channel name. The value is
+	// an integer: the number of active slots.
+	ActiveSlotsByChannel map[string]*int64 `type:"map"`
+
+	// A map of available slots by channel. The key is a channel name. The value
+	// is an integer: the available number of slots.
+	AvailableSlotsByChannel map[string]*int64 `type:"map"`
+
+	// A list of contact reference information.
+	Contacts []*AgentContactReference `type:"list"`
+
+	// Contains information about the levels of a hierarchy group assigned to a
+	// user.
+	HierarchyPath *HierarchyPathReference `type:"structure"`
+
+	// A map of maximum slots by channel. The key is a channel name. The value is
+	// an integer: the maximum number of slots. This is calculated from MediaConcurrency
+	// (https://docs.aws.amazon.com/connect/latest/APIReference/API_MediaConcurrency.html)
+	// of the RoutingProfile assigned to the agent.
+	MaxSlotsByChannel map[string]*int64 `type:"map"`
+
+	// Information about the routing profile that is assigned to the user.
+	RoutingProfile *RoutingProfileReference `type:"structure"`
+
+	// The status of the agent that they manually set in their Contact Control Panel
+	// (CCP), or that the supervisor manually changes in the real-time metrics report.
+	Status *AgentStatusReference `type:"structure"`
+
+	// Information about the user for the data that is returned. It contains resourceId
+	// and ARN of the user.
+	User *UserReference `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserData) GoString() string {
+	return s.String()
+}
+
+// SetActiveSlotsByChannel sets the ActiveSlotsByChannel field's value.
+func (s *UserData) SetActiveSlotsByChannel(v map[string]*int64) *UserData {
+	s.ActiveSlotsByChannel = v
+	return s
+}
+
+// SetAvailableSlotsByChannel sets the AvailableSlotsByChannel field's value.
+func (s *UserData) SetAvailableSlotsByChannel(v map[string]*int64) *UserData {
+	s.AvailableSlotsByChannel = v
+	return s
+}
+
+// SetContacts sets the Contacts field's value.
+func (s *UserData) SetContacts(v []*AgentContactReference) *UserData {
+	s.Contacts = v
+	return s
+}
+
+// SetHierarchyPath sets the HierarchyPath field's value.
+func (s *UserData) SetHierarchyPath(v *HierarchyPathReference) *UserData {
+	s.HierarchyPath = v
+	return s
+}
+
+// SetMaxSlotsByChannel sets the MaxSlotsByChannel field's value.
+func (s *UserData) SetMaxSlotsByChannel(v map[string]*int64) *UserData {
+	s.MaxSlotsByChannel = v
+	return s
+}
+
+// SetRoutingProfile sets the RoutingProfile field's value.
+func (s *UserData) SetRoutingProfile(v *RoutingProfileReference) *UserData {
+	s.RoutingProfile = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UserData) SetStatus(v *AgentStatusReference) *UserData {
+	s.Status = v
+	return s
+}
+
+// SetUser sets the User field's value.
+func (s *UserData) SetUser(v *UserReference) *UserData {
+	s.User = v
+	return s
+}
+
+// A filter for the user data.
+type UserDataFilters struct {
+	_ struct{} `type:"structure"`
+
+	// A filter for the user data based on the contact information that is associated
+	// to the user. It contains a list of contact states.
+	ContactFilter *ContactFilter `type:"structure"`
+
+	// Contains information about a queue resource for which metrics are returned.
+	Queues []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserDataFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserDataFilters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserDataFilters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserDataFilters"}
+	if s.Queues != nil && len(s.Queues) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Queues", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactFilter sets the ContactFilter field's value.
+func (s *UserDataFilters) SetContactFilter(v *ContactFilter) *UserDataFilters {
+	s.ContactFilter = v
+	return s
+}
+
+// SetQueues sets the Queues field's value.
+func (s *UserDataFilters) SetQueues(v []*string) *UserDataFilters {
+	s.Queues = v
+	return s
+}
+
 // Contains information about the identity of a user.
 type UserIdentityInfo struct {
 	_ struct{} `type:"structure"`
@@ -29806,6 +42542,47 @@ func (s *UserIdentityInfo) SetFirstName(v string) *UserIdentityInfo {
 
 // SetLastName sets the LastName field's value.
 func (s *UserIdentityInfo) SetLastName(v string) *UserIdentityInfo {
+	s.LastName = &v
+	return s
+}
+
+// The user's first name and last name.
+type UserIdentityInfoLite struct {
+	_ struct{} `type:"structure"`
+
+	// The user's first name.
+	FirstName *string `min:"1" type:"string"`
+
+	// The user's last name.
+	LastName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserIdentityInfoLite) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserIdentityInfoLite) GoString() string {
+	return s.String()
+}
+
+// SetFirstName sets the FirstName field's value.
+func (s *UserIdentityInfoLite) SetFirstName(v string) *UserIdentityInfoLite {
+	s.FirstName = &v
+	return s
+}
+
+// SetLastName sets the LastName field's value.
+func (s *UserIdentityInfoLite) SetLastName(v string) *UserIdentityInfoLite {
 	s.LastName = &v
 	return s
 }
@@ -30010,6 +42787,257 @@ func (s *UserQuickConnectConfig) SetUserId(v string) *UserQuickConnectConfig {
 	return s
 }
 
+// Information about the user.
+type UserReference struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the user.
+	Arn *string `type:"string"`
+
+	// The unique identifier for the user.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserReference) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UserReference) SetArn(v string) *UserReference {
+	s.Arn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UserReference) SetId(v string) *UserReference {
+	s.Id = &v
+	return s
+}
+
+// The search criteria to be used to return users.
+type UserSearchCriteria struct {
+	_ struct{} `type:"structure"`
+
+	// A list of conditions which would be applied together with an AND condition.
+	AndConditions []*UserSearchCriteria `type:"list"`
+
+	// A leaf node condition which can be used to specify a hierarchy group condition.
+	HierarchyGroupCondition *HierarchyGroupCondition `type:"structure"`
+
+	// A list of conditions which would be applied together with an OR condition.
+	OrConditions []*UserSearchCriteria `type:"list"`
+
+	// A leaf node condition which can be used to specify a string condition.
+	StringCondition *StringCondition `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserSearchCriteria) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserSearchCriteria) GoString() string {
+	return s.String()
+}
+
+// SetAndConditions sets the AndConditions field's value.
+func (s *UserSearchCriteria) SetAndConditions(v []*UserSearchCriteria) *UserSearchCriteria {
+	s.AndConditions = v
+	return s
+}
+
+// SetHierarchyGroupCondition sets the HierarchyGroupCondition field's value.
+func (s *UserSearchCriteria) SetHierarchyGroupCondition(v *HierarchyGroupCondition) *UserSearchCriteria {
+	s.HierarchyGroupCondition = v
+	return s
+}
+
+// SetOrConditions sets the OrConditions field's value.
+func (s *UserSearchCriteria) SetOrConditions(v []*UserSearchCriteria) *UserSearchCriteria {
+	s.OrConditions = v
+	return s
+}
+
+// SetStringCondition sets the StringCondition field's value.
+func (s *UserSearchCriteria) SetStringCondition(v *StringCondition) *UserSearchCriteria {
+	s.StringCondition = v
+	return s
+}
+
+// Filters to be applied to search results.
+type UserSearchFilter struct {
+	_ struct{} `type:"structure"`
+
+	// An object that can be used to specify Tag conditions inside the SearchFilter.
+	// This accepts an OR of AND (List of List) input where:
+	//
+	//    * Top level list specifies conditions that need to be applied with OR
+	//    operator
+	//
+	//    * Inner list specifies conditions that need to be applied with AND operator.
+	TagFilter *ControlPlaneTagFilter `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserSearchFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserSearchFilter) GoString() string {
+	return s.String()
+}
+
+// SetTagFilter sets the TagFilter field's value.
+func (s *UserSearchFilter) SetTagFilter(v *ControlPlaneTagFilter) *UserSearchFilter {
+	s.TagFilter = v
+	return s
+}
+
+// Information about the returned users.
+type UserSearchSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the user.
+	Arn *string `type:"string"`
+
+	// The directory identifier of the user.
+	DirectoryUserId *string `type:"string"`
+
+	// The identifier of the user's hierarchy group.
+	HierarchyGroupId *string `type:"string"`
+
+	// The identifier of the user's summary.
+	Id *string `type:"string"`
+
+	// The user's first name and last name.
+	IdentityInfo *UserIdentityInfoLite `type:"structure"`
+
+	// Contains information about the phone configuration settings for a user.
+	PhoneConfig *UserPhoneConfig `type:"structure"`
+
+	// The identifier of the user's routing profile.
+	RoutingProfileId *string `type:"string"`
+
+	// The identifiers of the user's security profiles.
+	SecurityProfileIds []*string `min:"1" type:"list"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// The name of the user.
+	Username *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserSearchSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserSearchSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UserSearchSummary) SetArn(v string) *UserSearchSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetDirectoryUserId sets the DirectoryUserId field's value.
+func (s *UserSearchSummary) SetDirectoryUserId(v string) *UserSearchSummary {
+	s.DirectoryUserId = &v
+	return s
+}
+
+// SetHierarchyGroupId sets the HierarchyGroupId field's value.
+func (s *UserSearchSummary) SetHierarchyGroupId(v string) *UserSearchSummary {
+	s.HierarchyGroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UserSearchSummary) SetId(v string) *UserSearchSummary {
+	s.Id = &v
+	return s
+}
+
+// SetIdentityInfo sets the IdentityInfo field's value.
+func (s *UserSearchSummary) SetIdentityInfo(v *UserIdentityInfoLite) *UserSearchSummary {
+	s.IdentityInfo = v
+	return s
+}
+
+// SetPhoneConfig sets the PhoneConfig field's value.
+func (s *UserSearchSummary) SetPhoneConfig(v *UserPhoneConfig) *UserSearchSummary {
+	s.PhoneConfig = v
+	return s
+}
+
+// SetRoutingProfileId sets the RoutingProfileId field's value.
+func (s *UserSearchSummary) SetRoutingProfileId(v string) *UserSearchSummary {
+	s.RoutingProfileId = &v
+	return s
+}
+
+// SetSecurityProfileIds sets the SecurityProfileIds field's value.
+func (s *UserSearchSummary) SetSecurityProfileIds(v []*string) *UserSearchSummary {
+	s.SecurityProfileIds = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UserSearchSummary) SetTags(v map[string]*string) *UserSearchSummary {
+	s.Tags = v
+	return s
+}
+
+// SetUsername sets the Username field's value.
+func (s *UserSearchSummary) SetUsername(v string) *UserSearchSummary {
+	s.Username = &v
+	return s
+}
+
 // Contains summary information about a user.
 type UserSummary struct {
 	_ struct{} `type:"structure"`
@@ -30057,6 +43085,226 @@ func (s *UserSummary) SetId(v string) *UserSummary {
 // SetUsername sets the Username field's value.
 func (s *UserSummary) SetUsername(v string) *UserSummary {
 	s.Username = &v
+	return s
+}
+
+// Contains information about a custom vocabulary.
+type Vocabulary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the custom vocabulary.
+	//
+	// Arn is a required field
+	Arn *string `type:"string" required:"true"`
+
+	// The content of the custom vocabulary in plain-text format with a table of
+	// values. Each row in the table represents a word or a phrase, described with
+	// Phrase, IPA, SoundsLike, and DisplayAs fields. Separate the fields with TAB
+	// characters. For more information, see Create a custom vocabulary using a
+	// table (https://docs.aws.amazon.com/transcribe/latest/dg/custom-vocabulary.html#create-vocabulary-table).
+	Content *string `min:"1" type:"string"`
+
+	// The reason why the custom vocabulary was not created.
+	FailureReason *string `type:"string"`
+
+	// The identifier of the custom vocabulary.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The language code of the vocabulary entries. For a list of languages and
+	// their corresponding language codes, see What is Amazon Transcribe? (https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html)
+	//
+	// LanguageCode is a required field
+	LanguageCode *string `type:"string" required:"true" enum:"VocabularyLanguageCode"`
+
+	// The timestamp when the custom vocabulary was last modified.
+	//
+	// LastModifiedTime is a required field
+	LastModifiedTime *time.Time `type:"timestamp" required:"true"`
+
+	// A unique name of the custom vocabulary.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The current state of the custom vocabulary.
+	//
+	// State is a required field
+	State *string `type:"string" required:"true" enum:"VocabularyState"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Vocabulary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Vocabulary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *Vocabulary) SetArn(v string) *Vocabulary {
+	s.Arn = &v
+	return s
+}
+
+// SetContent sets the Content field's value.
+func (s *Vocabulary) SetContent(v string) *Vocabulary {
+	s.Content = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *Vocabulary) SetFailureReason(v string) *Vocabulary {
+	s.FailureReason = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Vocabulary) SetId(v string) *Vocabulary {
+	s.Id = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *Vocabulary) SetLanguageCode(v string) *Vocabulary {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *Vocabulary) SetLastModifiedTime(v time.Time) *Vocabulary {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Vocabulary) SetName(v string) *Vocabulary {
+	s.Name = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *Vocabulary) SetState(v string) *Vocabulary {
+	s.State = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Vocabulary) SetTags(v map[string]*string) *Vocabulary {
+	s.Tags = v
+	return s
+}
+
+// Contains summary information about the custom vocabulary.
+type VocabularySummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the custom vocabulary.
+	//
+	// Arn is a required field
+	Arn *string `type:"string" required:"true"`
+
+	// The reason why the custom vocabulary was not created.
+	FailureReason *string `type:"string"`
+
+	// The identifier of the custom vocabulary.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The language code of the vocabulary entries. For a list of languages and
+	// their corresponding language codes, see What is Amazon Transcribe? (https://docs.aws.amazon.com/transcribe/latest/dg/transcribe-whatis.html)
+	//
+	// LanguageCode is a required field
+	LanguageCode *string `type:"string" required:"true" enum:"VocabularyLanguageCode"`
+
+	// The timestamp when the custom vocabulary was last modified.
+	//
+	// LastModifiedTime is a required field
+	LastModifiedTime *time.Time `type:"timestamp" required:"true"`
+
+	// A unique name of the custom vocabulary.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The current state of the custom vocabulary.
+	//
+	// State is a required field
+	State *string `type:"string" required:"true" enum:"VocabularyState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VocabularySummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VocabularySummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *VocabularySummary) SetArn(v string) *VocabularySummary {
+	s.Arn = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *VocabularySummary) SetFailureReason(v string) *VocabularySummary {
+	s.FailureReason = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *VocabularySummary) SetId(v string) *VocabularySummary {
+	s.Id = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *VocabularySummary) SetLanguageCode(v string) *VocabularySummary {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *VocabularySummary) SetLastModifiedTime(v time.Time) *VocabularySummary {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *VocabularySummary) SetName(v string) *VocabularySummary {
+	s.Name = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *VocabularySummary) SetState(v string) *VocabularySummary {
+	s.State = &v
 	return s
 }
 
@@ -30161,6 +43409,54 @@ func Comparison_Values() []string {
 }
 
 const (
+	// ContactFlowModuleStateActive is a ContactFlowModuleState enum value
+	ContactFlowModuleStateActive = "ACTIVE"
+
+	// ContactFlowModuleStateArchived is a ContactFlowModuleState enum value
+	ContactFlowModuleStateArchived = "ARCHIVED"
+)
+
+// ContactFlowModuleState_Values returns all elements of the ContactFlowModuleState enum
+func ContactFlowModuleState_Values() []string {
+	return []string{
+		ContactFlowModuleStateActive,
+		ContactFlowModuleStateArchived,
+	}
+}
+
+const (
+	// ContactFlowModuleStatusPublished is a ContactFlowModuleStatus enum value
+	ContactFlowModuleStatusPublished = "PUBLISHED"
+
+	// ContactFlowModuleStatusSaved is a ContactFlowModuleStatus enum value
+	ContactFlowModuleStatusSaved = "SAVED"
+)
+
+// ContactFlowModuleStatus_Values returns all elements of the ContactFlowModuleStatus enum
+func ContactFlowModuleStatus_Values() []string {
+	return []string{
+		ContactFlowModuleStatusPublished,
+		ContactFlowModuleStatusSaved,
+	}
+}
+
+const (
+	// ContactFlowStateActive is a ContactFlowState enum value
+	ContactFlowStateActive = "ACTIVE"
+
+	// ContactFlowStateArchived is a ContactFlowState enum value
+	ContactFlowStateArchived = "ARCHIVED"
+)
+
+// ContactFlowState_Values returns all elements of the ContactFlowState enum
+func ContactFlowState_Values() []string {
+	return []string{
+		ContactFlowStateActive,
+		ContactFlowStateArchived,
+	}
+}
+
+const (
 	// ContactFlowTypeContactFlow is a ContactFlowType enum value
 	ContactFlowTypeContactFlow = "CONTACT_FLOW"
 
@@ -30201,6 +43497,82 @@ func ContactFlowType_Values() []string {
 		ContactFlowTypeOutboundWhisper,
 		ContactFlowTypeAgentTransfer,
 		ContactFlowTypeQueueTransfer,
+	}
+}
+
+const (
+	// ContactInitiationMethodInbound is a ContactInitiationMethod enum value
+	ContactInitiationMethodInbound = "INBOUND"
+
+	// ContactInitiationMethodOutbound is a ContactInitiationMethod enum value
+	ContactInitiationMethodOutbound = "OUTBOUND"
+
+	// ContactInitiationMethodTransfer is a ContactInitiationMethod enum value
+	ContactInitiationMethodTransfer = "TRANSFER"
+
+	// ContactInitiationMethodQueueTransfer is a ContactInitiationMethod enum value
+	ContactInitiationMethodQueueTransfer = "QUEUE_TRANSFER"
+
+	// ContactInitiationMethodCallback is a ContactInitiationMethod enum value
+	ContactInitiationMethodCallback = "CALLBACK"
+
+	// ContactInitiationMethodApi is a ContactInitiationMethod enum value
+	ContactInitiationMethodApi = "API"
+)
+
+// ContactInitiationMethod_Values returns all elements of the ContactInitiationMethod enum
+func ContactInitiationMethod_Values() []string {
+	return []string{
+		ContactInitiationMethodInbound,
+		ContactInitiationMethodOutbound,
+		ContactInitiationMethodTransfer,
+		ContactInitiationMethodQueueTransfer,
+		ContactInitiationMethodCallback,
+		ContactInitiationMethodApi,
+	}
+}
+
+const (
+	// ContactStateIncoming is a ContactState enum value
+	ContactStateIncoming = "INCOMING"
+
+	// ContactStatePending is a ContactState enum value
+	ContactStatePending = "PENDING"
+
+	// ContactStateConnecting is a ContactState enum value
+	ContactStateConnecting = "CONNECTING"
+
+	// ContactStateConnected is a ContactState enum value
+	ContactStateConnected = "CONNECTED"
+
+	// ContactStateConnectedOnhold is a ContactState enum value
+	ContactStateConnectedOnhold = "CONNECTED_ONHOLD"
+
+	// ContactStateMissed is a ContactState enum value
+	ContactStateMissed = "MISSED"
+
+	// ContactStateError is a ContactState enum value
+	ContactStateError = "ERROR"
+
+	// ContactStateEnded is a ContactState enum value
+	ContactStateEnded = "ENDED"
+
+	// ContactStateRejected is a ContactState enum value
+	ContactStateRejected = "REJECTED"
+)
+
+// ContactState_Values returns all elements of the ContactState enum
+func ContactState_Values() []string {
+	return []string{
+		ContactStateIncoming,
+		ContactStatePending,
+		ContactStateConnecting,
+		ContactStateConnected,
+		ContactStateConnectedOnhold,
+		ContactStateMissed,
+		ContactStateError,
+		ContactStateEnded,
+		ContactStateRejected,
 	}
 }
 
@@ -30310,6 +43682,22 @@ func Grouping_Values() []string {
 	return []string{
 		GroupingQueue,
 		GroupingChannel,
+	}
+}
+
+const (
+	// HierarchyGroupMatchTypeExact is a HierarchyGroupMatchType enum value
+	HierarchyGroupMatchTypeExact = "EXACT"
+
+	// HierarchyGroupMatchTypeWithChildGroups is a HierarchyGroupMatchType enum value
+	HierarchyGroupMatchTypeWithChildGroups = "WITH_CHILD_GROUPS"
+)
+
+// HierarchyGroupMatchType_Values returns all elements of the HierarchyGroupMatchType enum
+func HierarchyGroupMatchType_Values() []string {
+	return []string{
+		HierarchyGroupMatchTypeExact,
+		HierarchyGroupMatchTypeWithChildGroups,
 	}
 }
 
@@ -30479,6 +43867,12 @@ const (
 
 	// InstanceAttributeTypeEarlyMedia is a InstanceAttributeType enum value
 	InstanceAttributeTypeEarlyMedia = "EARLY_MEDIA"
+
+	// InstanceAttributeTypeMultiPartyConference is a InstanceAttributeType enum value
+	InstanceAttributeTypeMultiPartyConference = "MULTI_PARTY_CONFERENCE"
+
+	// InstanceAttributeTypeHighVolumeOutbound is a InstanceAttributeType enum value
+	InstanceAttributeTypeHighVolumeOutbound = "HIGH_VOLUME_OUTBOUND"
 )
 
 // InstanceAttributeType_Values returns all elements of the InstanceAttributeType enum
@@ -30491,6 +43885,8 @@ func InstanceAttributeType_Values() []string {
 		InstanceAttributeTypeAutoResolveBestVoices,
 		InstanceAttributeTypeUseCustomTtsVoices,
 		InstanceAttributeTypeEarlyMedia,
+		InstanceAttributeTypeMultiPartyConference,
+		InstanceAttributeTypeHighVolumeOutbound,
 	}
 }
 
@@ -30532,6 +43928,9 @@ const (
 
 	// InstanceStorageResourceTypeAgentEvents is a InstanceStorageResourceType enum value
 	InstanceStorageResourceTypeAgentEvents = "AGENT_EVENTS"
+
+	// InstanceStorageResourceTypeRealTimeContactAnalysisSegments is a InstanceStorageResourceType enum value
+	InstanceStorageResourceTypeRealTimeContactAnalysisSegments = "REAL_TIME_CONTACT_ANALYSIS_SEGMENTS"
 )
 
 // InstanceStorageResourceType_Values returns all elements of the InstanceStorageResourceType enum
@@ -30543,6 +43942,7 @@ func InstanceStorageResourceType_Values() []string {
 		InstanceStorageResourceTypeMediaStreams,
 		InstanceStorageResourceTypeContactTraceRecords,
 		InstanceStorageResourceTypeAgentEvents,
+		InstanceStorageResourceTypeRealTimeContactAnalysisSegments,
 	}
 }
 
@@ -31563,6 +44963,26 @@ func PhoneNumberType_Values() []string {
 }
 
 const (
+	// PhoneNumberWorkflowStatusClaimed is a PhoneNumberWorkflowStatus enum value
+	PhoneNumberWorkflowStatusClaimed = "CLAIMED"
+
+	// PhoneNumberWorkflowStatusInProgress is a PhoneNumberWorkflowStatus enum value
+	PhoneNumberWorkflowStatusInProgress = "IN_PROGRESS"
+
+	// PhoneNumberWorkflowStatusFailed is a PhoneNumberWorkflowStatus enum value
+	PhoneNumberWorkflowStatusFailed = "FAILED"
+)
+
+// PhoneNumberWorkflowStatus_Values returns all elements of the PhoneNumberWorkflowStatus enum
+func PhoneNumberWorkflowStatus_Values() []string {
+	return []string{
+		PhoneNumberWorkflowStatusClaimed,
+		PhoneNumberWorkflowStatusInProgress,
+		PhoneNumberWorkflowStatusFailed,
+	}
+}
+
+const (
 	// PhoneTypeSoftPhone is a PhoneType enum value
 	PhoneTypeSoftPhone = "SOFT_PHONE"
 
@@ -31575,6 +44995,38 @@ func PhoneType_Values() []string {
 	return []string{
 		PhoneTypeSoftPhone,
 		PhoneTypeDeskPhone,
+	}
+}
+
+const (
+	// PropertyValidationExceptionReasonInvalidFormat is a PropertyValidationExceptionReason enum value
+	PropertyValidationExceptionReasonInvalidFormat = "INVALID_FORMAT"
+
+	// PropertyValidationExceptionReasonUniqueConstraintViolated is a PropertyValidationExceptionReason enum value
+	PropertyValidationExceptionReasonUniqueConstraintViolated = "UNIQUE_CONSTRAINT_VIOLATED"
+
+	// PropertyValidationExceptionReasonReferencedResourceNotFound is a PropertyValidationExceptionReason enum value
+	PropertyValidationExceptionReasonReferencedResourceNotFound = "REFERENCED_RESOURCE_NOT_FOUND"
+
+	// PropertyValidationExceptionReasonResourceNameAlreadyExists is a PropertyValidationExceptionReason enum value
+	PropertyValidationExceptionReasonResourceNameAlreadyExists = "RESOURCE_NAME_ALREADY_EXISTS"
+
+	// PropertyValidationExceptionReasonRequiredPropertyMissing is a PropertyValidationExceptionReason enum value
+	PropertyValidationExceptionReasonRequiredPropertyMissing = "REQUIRED_PROPERTY_MISSING"
+
+	// PropertyValidationExceptionReasonNotSupported is a PropertyValidationExceptionReason enum value
+	PropertyValidationExceptionReasonNotSupported = "NOT_SUPPORTED"
+)
+
+// PropertyValidationExceptionReason_Values returns all elements of the PropertyValidationExceptionReason enum
+func PropertyValidationExceptionReason_Values() []string {
+	return []string{
+		PropertyValidationExceptionReasonInvalidFormat,
+		PropertyValidationExceptionReasonUniqueConstraintViolated,
+		PropertyValidationExceptionReasonReferencedResourceNotFound,
+		PropertyValidationExceptionReasonResourceNameAlreadyExists,
+		PropertyValidationExceptionReasonRequiredPropertyMissing,
+		PropertyValidationExceptionReasonNotSupported,
 	}
 }
 
@@ -31631,14 +45083,50 @@ func QuickConnectType_Values() []string {
 }
 
 const (
+	// ReferenceStatusApproved is a ReferenceStatus enum value
+	ReferenceStatusApproved = "APPROVED"
+
+	// ReferenceStatusRejected is a ReferenceStatus enum value
+	ReferenceStatusRejected = "REJECTED"
+)
+
+// ReferenceStatus_Values returns all elements of the ReferenceStatus enum
+func ReferenceStatus_Values() []string {
+	return []string{
+		ReferenceStatusApproved,
+		ReferenceStatusRejected,
+	}
+}
+
+const (
 	// ReferenceTypeUrl is a ReferenceType enum value
 	ReferenceTypeUrl = "URL"
+
+	// ReferenceTypeAttachment is a ReferenceType enum value
+	ReferenceTypeAttachment = "ATTACHMENT"
+
+	// ReferenceTypeNumber is a ReferenceType enum value
+	ReferenceTypeNumber = "NUMBER"
+
+	// ReferenceTypeString is a ReferenceType enum value
+	ReferenceTypeString = "STRING"
+
+	// ReferenceTypeDate is a ReferenceType enum value
+	ReferenceTypeDate = "DATE"
+
+	// ReferenceTypeEmail is a ReferenceType enum value
+	ReferenceTypeEmail = "EMAIL"
 )
 
 // ReferenceType_Values returns all elements of the ReferenceType enum
 func ReferenceType_Values() []string {
 	return []string{
 		ReferenceTypeUrl,
+		ReferenceTypeAttachment,
+		ReferenceTypeNumber,
+		ReferenceTypeString,
+		ReferenceTypeDate,
+		ReferenceTypeEmail,
 	}
 }
 
@@ -31739,6 +45227,98 @@ func StorageType_Values() []string {
 }
 
 const (
+	// StringComparisonTypeStartsWith is a StringComparisonType enum value
+	StringComparisonTypeStartsWith = "STARTS_WITH"
+
+	// StringComparisonTypeContains is a StringComparisonType enum value
+	StringComparisonTypeContains = "CONTAINS"
+
+	// StringComparisonTypeExact is a StringComparisonType enum value
+	StringComparisonTypeExact = "EXACT"
+)
+
+// StringComparisonType_Values returns all elements of the StringComparisonType enum
+func StringComparisonType_Values() []string {
+	return []string{
+		StringComparisonTypeStartsWith,
+		StringComparisonTypeContains,
+		StringComparisonTypeExact,
+	}
+}
+
+const (
+	// TaskTemplateFieldTypeName is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeName = "NAME"
+
+	// TaskTemplateFieldTypeDescription is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeDescription = "DESCRIPTION"
+
+	// TaskTemplateFieldTypeScheduledTime is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeScheduledTime = "SCHEDULED_TIME"
+
+	// TaskTemplateFieldTypeQuickConnect is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeQuickConnect = "QUICK_CONNECT"
+
+	// TaskTemplateFieldTypeUrl is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeUrl = "URL"
+
+	// TaskTemplateFieldTypeNumber is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeNumber = "NUMBER"
+
+	// TaskTemplateFieldTypeText is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeText = "TEXT"
+
+	// TaskTemplateFieldTypeTextArea is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeTextArea = "TEXT_AREA"
+
+	// TaskTemplateFieldTypeDateTime is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeDateTime = "DATE_TIME"
+
+	// TaskTemplateFieldTypeBoolean is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeBoolean = "BOOLEAN"
+
+	// TaskTemplateFieldTypeSingleSelect is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeSingleSelect = "SINGLE_SELECT"
+
+	// TaskTemplateFieldTypeEmail is a TaskTemplateFieldType enum value
+	TaskTemplateFieldTypeEmail = "EMAIL"
+)
+
+// TaskTemplateFieldType_Values returns all elements of the TaskTemplateFieldType enum
+func TaskTemplateFieldType_Values() []string {
+	return []string{
+		TaskTemplateFieldTypeName,
+		TaskTemplateFieldTypeDescription,
+		TaskTemplateFieldTypeScheduledTime,
+		TaskTemplateFieldTypeQuickConnect,
+		TaskTemplateFieldTypeUrl,
+		TaskTemplateFieldTypeNumber,
+		TaskTemplateFieldTypeText,
+		TaskTemplateFieldTypeTextArea,
+		TaskTemplateFieldTypeDateTime,
+		TaskTemplateFieldTypeBoolean,
+		TaskTemplateFieldTypeSingleSelect,
+		TaskTemplateFieldTypeEmail,
+	}
+}
+
+const (
+	// TaskTemplateStatusActive is a TaskTemplateStatus enum value
+	TaskTemplateStatusActive = "ACTIVE"
+
+	// TaskTemplateStatusInactive is a TaskTemplateStatus enum value
+	TaskTemplateStatusInactive = "INACTIVE"
+)
+
+// TaskTemplateStatus_Values returns all elements of the TaskTemplateStatus enum
+func TaskTemplateStatus_Values() []string {
+	return []string{
+		TaskTemplateStatusActive,
+		TaskTemplateStatusInactive,
+	}
+}
+
+const (
 	// TrafficTypeGeneral is a TrafficType enum value
 	TrafficTypeGeneral = "GENERAL"
 
@@ -31787,6 +45367,122 @@ func UseCaseType_Values() []string {
 	return []string{
 		UseCaseTypeRulesEvaluation,
 		UseCaseTypeConnectCampaigns,
+	}
+}
+
+const (
+	// VocabularyLanguageCodeArAe is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeArAe = "ar-AE"
+
+	// VocabularyLanguageCodeDeCh is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeDeCh = "de-CH"
+
+	// VocabularyLanguageCodeDeDe is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeDeDe = "de-DE"
+
+	// VocabularyLanguageCodeEnAb is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEnAb = "en-AB"
+
+	// VocabularyLanguageCodeEnAu is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEnAu = "en-AU"
+
+	// VocabularyLanguageCodeEnGb is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEnGb = "en-GB"
+
+	// VocabularyLanguageCodeEnIe is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEnIe = "en-IE"
+
+	// VocabularyLanguageCodeEnIn is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEnIn = "en-IN"
+
+	// VocabularyLanguageCodeEnUs is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEnUs = "en-US"
+
+	// VocabularyLanguageCodeEnWl is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEnWl = "en-WL"
+
+	// VocabularyLanguageCodeEsEs is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEsEs = "es-ES"
+
+	// VocabularyLanguageCodeEsUs is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeEsUs = "es-US"
+
+	// VocabularyLanguageCodeFrCa is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeFrCa = "fr-CA"
+
+	// VocabularyLanguageCodeFrFr is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeFrFr = "fr-FR"
+
+	// VocabularyLanguageCodeHiIn is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeHiIn = "hi-IN"
+
+	// VocabularyLanguageCodeItIt is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeItIt = "it-IT"
+
+	// VocabularyLanguageCodeJaJp is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeJaJp = "ja-JP"
+
+	// VocabularyLanguageCodeKoKr is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeKoKr = "ko-KR"
+
+	// VocabularyLanguageCodePtBr is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodePtBr = "pt-BR"
+
+	// VocabularyLanguageCodePtPt is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodePtPt = "pt-PT"
+
+	// VocabularyLanguageCodeZhCn is a VocabularyLanguageCode enum value
+	VocabularyLanguageCodeZhCn = "zh-CN"
+)
+
+// VocabularyLanguageCode_Values returns all elements of the VocabularyLanguageCode enum
+func VocabularyLanguageCode_Values() []string {
+	return []string{
+		VocabularyLanguageCodeArAe,
+		VocabularyLanguageCodeDeCh,
+		VocabularyLanguageCodeDeDe,
+		VocabularyLanguageCodeEnAb,
+		VocabularyLanguageCodeEnAu,
+		VocabularyLanguageCodeEnGb,
+		VocabularyLanguageCodeEnIe,
+		VocabularyLanguageCodeEnIn,
+		VocabularyLanguageCodeEnUs,
+		VocabularyLanguageCodeEnWl,
+		VocabularyLanguageCodeEsEs,
+		VocabularyLanguageCodeEsUs,
+		VocabularyLanguageCodeFrCa,
+		VocabularyLanguageCodeFrFr,
+		VocabularyLanguageCodeHiIn,
+		VocabularyLanguageCodeItIt,
+		VocabularyLanguageCodeJaJp,
+		VocabularyLanguageCodeKoKr,
+		VocabularyLanguageCodePtBr,
+		VocabularyLanguageCodePtPt,
+		VocabularyLanguageCodeZhCn,
+	}
+}
+
+const (
+	// VocabularyStateCreationInProgress is a VocabularyState enum value
+	VocabularyStateCreationInProgress = "CREATION_IN_PROGRESS"
+
+	// VocabularyStateActive is a VocabularyState enum value
+	VocabularyStateActive = "ACTIVE"
+
+	// VocabularyStateCreationFailed is a VocabularyState enum value
+	VocabularyStateCreationFailed = "CREATION_FAILED"
+
+	// VocabularyStateDeleteInProgress is a VocabularyState enum value
+	VocabularyStateDeleteInProgress = "DELETE_IN_PROGRESS"
+)
+
+// VocabularyState_Values returns all elements of the VocabularyState enum
+func VocabularyState_Values() []string {
+	return []string{
+		VocabularyStateCreationInProgress,
+		VocabularyStateActive,
+		VocabularyStateCreationFailed,
+		VocabularyStateDeleteInProgress,
 	}
 }
 

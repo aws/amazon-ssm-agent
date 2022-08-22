@@ -2051,6 +2051,54 @@ func (c *MQ) UpdateUserWithContext(ctx aws.Context, input *UpdateUserRequest, op
 	return out, req.Send()
 }
 
+// The action required to resolve a broker issue when the broker is in a CRITICAL_ACTION_REQUIRED
+// state.
+type ActionRequired struct {
+	_ struct{} `type:"structure"`
+
+	// The code you can use to resolve your broker issue when the broker is in a
+	// CRITICAL_ACTION_REQUIRED state. You can find instructions by choosing the
+	// link for your code from the list of action required codes in Amazon MQ action
+	// required codes (https://docs.aws.amazon.com//latest/developer-guide/troubleshooting-action-required-codes.html).
+	// Each code references a topic with detailed information, instructions, and
+	// recommendations for how to resolve the issue and prevent future occurrences.
+	ActionRequiredCode *string `locationName:"actionRequiredCode" type:"string"`
+
+	// Information about the action required to resolve your broker issue when the
+	// broker is in a CRITICAL_ACTION_REQUIRED state.
+	ActionRequiredInfo *string `locationName:"actionRequiredInfo" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ActionRequired) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ActionRequired) GoString() string {
+	return s.String()
+}
+
+// SetActionRequiredCode sets the ActionRequiredCode field's value.
+func (s *ActionRequired) SetActionRequiredCode(v string) *ActionRequired {
+	s.ActionRequiredCode = &v
+	return s
+}
+
+// SetActionRequiredInfo sets the ActionRequiredInfo field's value.
+func (s *ActionRequired) SetActionRequiredInfo(v string) *ActionRequired {
+	s.ActionRequiredInfo = &v
+	return s
+}
+
 // Name of the availability zone.
 type AvailabilityZone struct {
 	_ struct{} `type:"structure"`
@@ -2258,7 +2306,7 @@ type BrokerInstanceOption struct {
 	StorageType *string `locationName:"storageType" type:"string" enum:"BrokerStorageType"`
 
 	// The list of supported deployment modes.
-	SupportedDeploymentModes []*string `locationName:"supportedDeploymentModes" type:"list"`
+	SupportedDeploymentModes []*string `locationName:"supportedDeploymentModes" type:"list" enum:"DeploymentMode"`
 
 	// The list of supported engine versions.
 	SupportedEngineVersions []*string `locationName:"supportedEngineVersions" type:"list"`
@@ -3307,7 +3355,7 @@ func (s *CreateTagsInput) SetTags(v map[string]*string) *CreateTagsInput {
 }
 
 type CreateTagsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3329,7 +3377,7 @@ func (s CreateTagsOutput) GoString() string {
 }
 
 type CreateUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3577,7 +3625,7 @@ func (s *DeleteTagsInput) SetTagKeys(v []*string) *DeleteTagsInput {
 }
 
 type DeleteTagsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3661,7 +3709,7 @@ func (s *DeleteUserInput) SetUsername(v string) *DeleteUserInput {
 }
 
 type DeleteUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3958,6 +4006,8 @@ func (s *DescribeBrokerInstanceOptionsOutput) SetNextToken(v string) *DescribeBr
 type DescribeBrokerResponse struct {
 	_ struct{} `type:"structure"`
 
+	ActionsRequired []*ActionRequired `locationName:"actionsRequired" type:"list"`
+
 	// Optional. The authentication strategy used to secure the broker. The default
 	// is SIMPLE.
 	AuthenticationStrategy *string `locationName:"authenticationStrategy" type:"string" enum:"AuthenticationStrategy"`
@@ -4053,6 +4103,12 @@ func (s DescribeBrokerResponse) String() string {
 // value will be replaced with "sensitive".
 func (s DescribeBrokerResponse) GoString() string {
 	return s.String()
+}
+
+// SetActionsRequired sets the ActionsRequired field's value.
+func (s *DescribeBrokerResponse) SetActionsRequired(v []*ActionRequired) *DescribeBrokerResponse {
+	s.ActionsRequired = v
+	return s
 }
 
 // SetAuthenticationStrategy sets the AuthenticationStrategy field's value.
@@ -5964,7 +6020,7 @@ func (s *RebootBrokerInput) SetBrokerId(v string) *RebootBrokerInput {
 }
 
 type RebootBrokerOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6501,7 +6557,7 @@ func (s *UpdateConfigurationResponse) SetWarnings(v []*SanitizationWarning) *Upd
 }
 
 type UpdateUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6909,6 +6965,9 @@ const (
 
 	// BrokerStateRebootInProgress is a BrokerState enum value
 	BrokerStateRebootInProgress = "REBOOT_IN_PROGRESS"
+
+	// BrokerStateCriticalActionRequired is a BrokerState enum value
+	BrokerStateCriticalActionRequired = "CRITICAL_ACTION_REQUIRED"
 )
 
 // BrokerState_Values returns all elements of the BrokerState enum
@@ -6919,6 +6978,7 @@ func BrokerState_Values() []string {
 		BrokerStateDeletionInProgress,
 		BrokerStateRunning,
 		BrokerStateRebootInProgress,
+		BrokerStateCriticalActionRequired,
 	}
 }
 

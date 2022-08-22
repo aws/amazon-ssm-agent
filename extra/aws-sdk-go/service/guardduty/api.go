@@ -13,6 +13,90 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opAcceptAdministratorInvitation = "AcceptAdministratorInvitation"
+
+// AcceptAdministratorInvitationRequest generates a "aws/request.Request" representing the
+// client's request for the AcceptAdministratorInvitation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AcceptAdministratorInvitation for more information on using the AcceptAdministratorInvitation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AcceptAdministratorInvitationRequest method.
+//    req, resp := client.AcceptAdministratorInvitationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/AcceptAdministratorInvitation
+func (c *GuardDuty) AcceptAdministratorInvitationRequest(input *AcceptAdministratorInvitationInput) (req *request.Request, output *AcceptAdministratorInvitationOutput) {
+	op := &request.Operation{
+		Name:       opAcceptAdministratorInvitation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/detector/{detectorId}/administrator",
+	}
+
+	if input == nil {
+		input = &AcceptAdministratorInvitationInput{}
+	}
+
+	output = &AcceptAdministratorInvitationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AcceptAdministratorInvitation API operation for Amazon GuardDuty.
+//
+// Accepts the invitation to be a member account and get monitored by a GuardDuty
+// administrator account that sent the invitation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GuardDuty's
+// API operation AcceptAdministratorInvitation for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   A bad request exception object.
+//
+//   * InternalServerErrorException
+//   An internal server error exception object.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/AcceptAdministratorInvitation
+func (c *GuardDuty) AcceptAdministratorInvitation(input *AcceptAdministratorInvitationInput) (*AcceptAdministratorInvitationOutput, error) {
+	req, out := c.AcceptAdministratorInvitationRequest(input)
+	return out, req.Send()
+}
+
+// AcceptAdministratorInvitationWithContext is the same as AcceptAdministratorInvitation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AcceptAdministratorInvitation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) AcceptAdministratorInvitationWithContext(ctx aws.Context, input *AcceptAdministratorInvitationInput, opts ...request.Option) (*AcceptAdministratorInvitationOutput, error) {
+	req, out := c.AcceptAdministratorInvitationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opAcceptInvitation = "AcceptInvitation"
 
 // AcceptInvitationRequest generates a "aws/request.Request" representing the
@@ -39,7 +123,12 @@ const opAcceptInvitation = "AcceptInvitation"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/AcceptInvitation
+//
+// Deprecated: This operation is deprecated, use AcceptAdministratorInvitation instead
 func (c *GuardDuty) AcceptInvitationRequest(input *AcceptInvitationInput) (req *request.Request, output *AcceptInvitationOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, AcceptInvitation, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opAcceptInvitation,
 		HTTPMethod: "POST",
@@ -75,6 +164,8 @@ func (c *GuardDuty) AcceptInvitationRequest(input *AcceptInvitationInput) (req *
 //   An internal server error exception object.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/AcceptInvitation
+//
+// Deprecated: This operation is deprecated, use AcceptAdministratorInvitation instead
 func (c *GuardDuty) AcceptInvitation(input *AcceptInvitationInput) (*AcceptInvitationOutput, error) {
 	req, out := c.AcceptInvitationRequest(input)
 	return out, req.Send()
@@ -89,6 +180,8 @@ func (c *GuardDuty) AcceptInvitation(input *AcceptInvitationInput) (*AcceptInvit
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: This operation is deprecated, use AcceptAdministratorInvitation instead
 func (c *GuardDuty) AcceptInvitationWithContext(ctx aws.Context, input *AcceptInvitationInput, opts ...request.Option) (*AcceptInvitationOutput, error) {
 	req, out := c.AcceptInvitationRequest(input)
 	req.SetContext(ctx)
@@ -396,9 +489,9 @@ func (c *GuardDuty) CreateIPSetRequest(input *CreateIPSetInput) (req *request.Re
 //
 // Creates a new IPSet, which is called a trusted IP list in the console user
 // interface. An IPSet is a list of IP addresses that are trusted for secure
-// communication with AWS infrastructure and applications. GuardDuty doesn't
-// generate findings for IP addresses that are included in IPSets. Only users
-// from the administrator account can use this operation.
+// communication with Amazon Web Services infrastructure and applications. GuardDuty
+// doesn't generate findings for IP addresses that are included in IPSets. Only
+// users from the administrator account can use this operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -480,9 +573,10 @@ func (c *GuardDuty) CreateMembersRequest(input *CreateMembersInput) (req *reques
 
 // CreateMembers API operation for Amazon GuardDuty.
 //
-// Creates member accounts of the current AWS account by specifying a list of
-// AWS account IDs. This step is a prerequisite for managing the associated
-// member accounts either by invitation or through an organization.
+// Creates member accounts of the current Amazon Web Services account by specifying
+// a list of Amazon Web Services account IDs. This step is a prerequisite for
+// managing the associated member accounts either by invitation or through an
+// organization.
 //
 // When using Create Members as an organizations delegated administrator this
 // action will enable GuardDuty in the added member accounts, with the exception
@@ -825,8 +919,8 @@ func (c *GuardDuty) DeclineInvitationsRequest(input *DeclineInvitationsInput) (r
 
 // DeclineInvitations API operation for Amazon GuardDuty.
 //
-// Declines invitations sent to the current member account by AWS accounts specified
-// by their account IDs.
+// Declines invitations sent to the current member account by Amazon Web Services
+// accounts specified by their account IDs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1158,8 +1252,8 @@ func (c *GuardDuty) DeleteInvitationsRequest(input *DeleteInvitationsInput) (req
 
 // DeleteInvitations API operation for Amazon GuardDuty.
 //
-// Deletes invitations sent to the current member account by AWS accounts specified
-// by their account IDs.
+// Deletes invitations sent to the current member account by Amazon Web Services
+// accounts specified by their account IDs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1446,6 +1540,146 @@ func (c *GuardDuty) DeleteThreatIntelSetWithContext(ctx aws.Context, input *Dele
 	return out, req.Send()
 }
 
+const opDescribeMalwareScans = "DescribeMalwareScans"
+
+// DescribeMalwareScansRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMalwareScans operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeMalwareScans for more information on using the DescribeMalwareScans
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeMalwareScansRequest method.
+//    req, resp := client.DescribeMalwareScansRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/DescribeMalwareScans
+func (c *GuardDuty) DescribeMalwareScansRequest(input *DescribeMalwareScansInput) (req *request.Request, output *DescribeMalwareScansOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMalwareScans,
+		HTTPMethod: "POST",
+		HTTPPath:   "/detector/{detectorId}/malware-scans",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeMalwareScansInput{}
+	}
+
+	output = &DescribeMalwareScansOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeMalwareScans API operation for Amazon GuardDuty.
+//
+// Returns a list of malware scans.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GuardDuty's
+// API operation DescribeMalwareScans for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   A bad request exception object.
+//
+//   * InternalServerErrorException
+//   An internal server error exception object.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/DescribeMalwareScans
+func (c *GuardDuty) DescribeMalwareScans(input *DescribeMalwareScansInput) (*DescribeMalwareScansOutput, error) {
+	req, out := c.DescribeMalwareScansRequest(input)
+	return out, req.Send()
+}
+
+// DescribeMalwareScansWithContext is the same as DescribeMalwareScans with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeMalwareScans for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) DescribeMalwareScansWithContext(ctx aws.Context, input *DescribeMalwareScansInput, opts ...request.Option) (*DescribeMalwareScansOutput, error) {
+	req, out := c.DescribeMalwareScansRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeMalwareScansPages iterates over the pages of a DescribeMalwareScans operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeMalwareScans method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeMalwareScans operation.
+//    pageNum := 0
+//    err := client.DescribeMalwareScansPages(params,
+//        func(page *guardduty.DescribeMalwareScansOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *GuardDuty) DescribeMalwareScansPages(input *DescribeMalwareScansInput, fn func(*DescribeMalwareScansOutput, bool) bool) error {
+	return c.DescribeMalwareScansPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeMalwareScansPagesWithContext same as DescribeMalwareScansPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) DescribeMalwareScansPagesWithContext(ctx aws.Context, input *DescribeMalwareScansInput, fn func(*DescribeMalwareScansOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeMalwareScansInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeMalwareScansRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeMalwareScansOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeOrganizationConfiguration = "DescribeOrganizationConfiguration"
 
 // DescribeOrganizationConfigurationRequest generates a "aws/request.Request" representing the
@@ -1657,8 +1891,8 @@ func (c *GuardDuty) DisableOrganizationAdminAccountRequest(input *DisableOrganiz
 
 // DisableOrganizationAdminAccount API operation for Amazon GuardDuty.
 //
-// Disables an AWS account within the Organization as the GuardDuty delegated
-// administrator.
+// Disables an Amazon Web Services account within the Organization as the GuardDuty
+// delegated administrator.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1696,6 +1930,90 @@ func (c *GuardDuty) DisableOrganizationAdminAccountWithContext(ctx aws.Context, 
 	return out, req.Send()
 }
 
+const opDisassociateFromAdministratorAccount = "DisassociateFromAdministratorAccount"
+
+// DisassociateFromAdministratorAccountRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateFromAdministratorAccount operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateFromAdministratorAccount for more information on using the DisassociateFromAdministratorAccount
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateFromAdministratorAccountRequest method.
+//    req, resp := client.DisassociateFromAdministratorAccountRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/DisassociateFromAdministratorAccount
+func (c *GuardDuty) DisassociateFromAdministratorAccountRequest(input *DisassociateFromAdministratorAccountInput) (req *request.Request, output *DisassociateFromAdministratorAccountOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateFromAdministratorAccount,
+		HTTPMethod: "POST",
+		HTTPPath:   "/detector/{detectorId}/administrator/disassociate",
+	}
+
+	if input == nil {
+		input = &DisassociateFromAdministratorAccountInput{}
+	}
+
+	output = &DisassociateFromAdministratorAccountOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisassociateFromAdministratorAccount API operation for Amazon GuardDuty.
+//
+// Disassociates the current GuardDuty member account from its administrator
+// account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GuardDuty's
+// API operation DisassociateFromAdministratorAccount for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   A bad request exception object.
+//
+//   * InternalServerErrorException
+//   An internal server error exception object.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/DisassociateFromAdministratorAccount
+func (c *GuardDuty) DisassociateFromAdministratorAccount(input *DisassociateFromAdministratorAccountInput) (*DisassociateFromAdministratorAccountOutput, error) {
+	req, out := c.DisassociateFromAdministratorAccountRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateFromAdministratorAccountWithContext is the same as DisassociateFromAdministratorAccount with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateFromAdministratorAccount for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) DisassociateFromAdministratorAccountWithContext(ctx aws.Context, input *DisassociateFromAdministratorAccountInput, opts ...request.Option) (*DisassociateFromAdministratorAccountOutput, error) {
+	req, out := c.DisassociateFromAdministratorAccountRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDisassociateFromMasterAccount = "DisassociateFromMasterAccount"
 
 // DisassociateFromMasterAccountRequest generates a "aws/request.Request" representing the
@@ -1722,7 +2040,12 @@ const opDisassociateFromMasterAccount = "DisassociateFromMasterAccount"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/DisassociateFromMasterAccount
+//
+// Deprecated: This operation is deprecated, use DisassociateFromAdministratorAccount instead
 func (c *GuardDuty) DisassociateFromMasterAccountRequest(input *DisassociateFromMasterAccountInput) (req *request.Request, output *DisassociateFromMasterAccountOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DisassociateFromMasterAccount, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDisassociateFromMasterAccount,
 		HTTPMethod: "POST",
@@ -1759,6 +2082,8 @@ func (c *GuardDuty) DisassociateFromMasterAccountRequest(input *DisassociateFrom
 //   An internal server error exception object.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/DisassociateFromMasterAccount
+//
+// Deprecated: This operation is deprecated, use DisassociateFromAdministratorAccount instead
 func (c *GuardDuty) DisassociateFromMasterAccount(input *DisassociateFromMasterAccountInput) (*DisassociateFromMasterAccountOutput, error) {
 	req, out := c.DisassociateFromMasterAccountRequest(input)
 	return out, req.Send()
@@ -1773,6 +2098,8 @@ func (c *GuardDuty) DisassociateFromMasterAccount(input *DisassociateFromMasterA
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: This operation is deprecated, use DisassociateFromAdministratorAccount instead
 func (c *GuardDuty) DisassociateFromMasterAccountWithContext(ctx aws.Context, input *DisassociateFromMasterAccountInput, opts ...request.Option) (*DisassociateFromMasterAccountOutput, error) {
 	req, out := c.DisassociateFromMasterAccountRequest(input)
 	req.SetContext(ctx)
@@ -1908,8 +2235,8 @@ func (c *GuardDuty) EnableOrganizationAdminAccountRequest(input *EnableOrganizat
 
 // EnableOrganizationAdminAccount API operation for Amazon GuardDuty.
 //
-// Enables an AWS account within the organization as the GuardDuty delegated
-// administrator.
+// Enables an Amazon Web Services account within the organization as the GuardDuty
+// delegated administrator.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1942,6 +2269,89 @@ func (c *GuardDuty) EnableOrganizationAdminAccount(input *EnableOrganizationAdmi
 // for more information on using Contexts.
 func (c *GuardDuty) EnableOrganizationAdminAccountWithContext(ctx aws.Context, input *EnableOrganizationAdminAccountInput, opts ...request.Option) (*EnableOrganizationAdminAccountOutput, error) {
 	req, out := c.EnableOrganizationAdminAccountRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetAdministratorAccount = "GetAdministratorAccount"
+
+// GetAdministratorAccountRequest generates a "aws/request.Request" representing the
+// client's request for the GetAdministratorAccount operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAdministratorAccount for more information on using the GetAdministratorAccount
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetAdministratorAccountRequest method.
+//    req, resp := client.GetAdministratorAccountRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetAdministratorAccount
+func (c *GuardDuty) GetAdministratorAccountRequest(input *GetAdministratorAccountInput) (req *request.Request, output *GetAdministratorAccountOutput) {
+	op := &request.Operation{
+		Name:       opGetAdministratorAccount,
+		HTTPMethod: "GET",
+		HTTPPath:   "/detector/{detectorId}/administrator",
+	}
+
+	if input == nil {
+		input = &GetAdministratorAccountInput{}
+	}
+
+	output = &GetAdministratorAccountOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAdministratorAccount API operation for Amazon GuardDuty.
+//
+// Provides the details for the GuardDuty administrator account associated with
+// the current GuardDuty member account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GuardDuty's
+// API operation GetAdministratorAccount for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   A bad request exception object.
+//
+//   * InternalServerErrorException
+//   An internal server error exception object.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetAdministratorAccount
+func (c *GuardDuty) GetAdministratorAccount(input *GetAdministratorAccountInput) (*GetAdministratorAccountOutput, error) {
+	req, out := c.GetAdministratorAccountRequest(input)
+	return out, req.Send()
+}
+
+// GetAdministratorAccountWithContext is the same as GetAdministratorAccount with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAdministratorAccount for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) GetAdministratorAccountWithContext(ctx aws.Context, input *GetAdministratorAccountInput, opts ...request.Option) (*GetAdministratorAccountOutput, error) {
+	req, out := c.GetAdministratorAccountRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2440,6 +2850,88 @@ func (c *GuardDuty) GetInvitationsCountWithContext(ctx aws.Context, input *GetIn
 	return out, req.Send()
 }
 
+const opGetMalwareScanSettings = "GetMalwareScanSettings"
+
+// GetMalwareScanSettingsRequest generates a "aws/request.Request" representing the
+// client's request for the GetMalwareScanSettings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetMalwareScanSettings for more information on using the GetMalwareScanSettings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetMalwareScanSettingsRequest method.
+//    req, resp := client.GetMalwareScanSettingsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetMalwareScanSettings
+func (c *GuardDuty) GetMalwareScanSettingsRequest(input *GetMalwareScanSettingsInput) (req *request.Request, output *GetMalwareScanSettingsOutput) {
+	op := &request.Operation{
+		Name:       opGetMalwareScanSettings,
+		HTTPMethod: "GET",
+		HTTPPath:   "/detector/{detectorId}/malware-scan-settings",
+	}
+
+	if input == nil {
+		input = &GetMalwareScanSettingsInput{}
+	}
+
+	output = &GetMalwareScanSettingsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetMalwareScanSettings API operation for Amazon GuardDuty.
+//
+// Returns the details of the malware scan settings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GuardDuty's
+// API operation GetMalwareScanSettings for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   A bad request exception object.
+//
+//   * InternalServerErrorException
+//   An internal server error exception object.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetMalwareScanSettings
+func (c *GuardDuty) GetMalwareScanSettings(input *GetMalwareScanSettingsInput) (*GetMalwareScanSettingsOutput, error) {
+	req, out := c.GetMalwareScanSettingsRequest(input)
+	return out, req.Send()
+}
+
+// GetMalwareScanSettingsWithContext is the same as GetMalwareScanSettings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetMalwareScanSettings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) GetMalwareScanSettingsWithContext(ctx aws.Context, input *GetMalwareScanSettingsInput, opts ...request.Option) (*GetMalwareScanSettingsOutput, error) {
+	req, out := c.GetMalwareScanSettingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetMasterAccount = "GetMasterAccount"
 
 // GetMasterAccountRequest generates a "aws/request.Request" representing the
@@ -2466,7 +2958,12 @@ const opGetMasterAccount = "GetMasterAccount"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetMasterAccount
+//
+// Deprecated: This operation is deprecated, use GetAdministratorAccount instead
 func (c *GuardDuty) GetMasterAccountRequest(input *GetMasterAccountInput) (req *request.Request, output *GetMasterAccountOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetMasterAccount, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetMasterAccount,
 		HTTPMethod: "GET",
@@ -2502,6 +2999,8 @@ func (c *GuardDuty) GetMasterAccountRequest(input *GetMasterAccountInput) (req *
 //   An internal server error exception object.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetMasterAccount
+//
+// Deprecated: This operation is deprecated, use GetAdministratorAccount instead
 func (c *GuardDuty) GetMasterAccount(input *GetMasterAccountInput) (*GetMasterAccountOutput, error) {
 	req, out := c.GetMasterAccountRequest(input)
 	return out, req.Send()
@@ -2516,6 +3015,8 @@ func (c *GuardDuty) GetMasterAccount(input *GetMasterAccountInput) (*GetMasterAc
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: This operation is deprecated, use GetAdministratorAccount instead
 func (c *GuardDuty) GetMasterAccountWithContext(ctx aws.Context, input *GetMasterAccountInput, opts ...request.Option) (*GetMasterAccountOutput, error) {
 	req, out := c.GetMasterAccountRequest(input)
 	req.SetContext(ctx)
@@ -2688,6 +3189,89 @@ func (c *GuardDuty) GetMembersWithContext(ctx aws.Context, input *GetMembersInpu
 	return out, req.Send()
 }
 
+const opGetRemainingFreeTrialDays = "GetRemainingFreeTrialDays"
+
+// GetRemainingFreeTrialDaysRequest generates a "aws/request.Request" representing the
+// client's request for the GetRemainingFreeTrialDays operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetRemainingFreeTrialDays for more information on using the GetRemainingFreeTrialDays
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetRemainingFreeTrialDaysRequest method.
+//    req, resp := client.GetRemainingFreeTrialDaysRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetRemainingFreeTrialDays
+func (c *GuardDuty) GetRemainingFreeTrialDaysRequest(input *GetRemainingFreeTrialDaysInput) (req *request.Request, output *GetRemainingFreeTrialDaysOutput) {
+	op := &request.Operation{
+		Name:       opGetRemainingFreeTrialDays,
+		HTTPMethod: "POST",
+		HTTPPath:   "/detector/{detectorId}/freeTrial/daysRemaining",
+	}
+
+	if input == nil {
+		input = &GetRemainingFreeTrialDaysInput{}
+	}
+
+	output = &GetRemainingFreeTrialDaysOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetRemainingFreeTrialDays API operation for Amazon GuardDuty.
+//
+// Provides the number of days left for each data source used in the free trial
+// period.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GuardDuty's
+// API operation GetRemainingFreeTrialDays for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   A bad request exception object.
+//
+//   * InternalServerErrorException
+//   An internal server error exception object.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/GetRemainingFreeTrialDays
+func (c *GuardDuty) GetRemainingFreeTrialDays(input *GetRemainingFreeTrialDaysInput) (*GetRemainingFreeTrialDaysOutput, error) {
+	req, out := c.GetRemainingFreeTrialDaysRequest(input)
+	return out, req.Send()
+}
+
+// GetRemainingFreeTrialDaysWithContext is the same as GetRemainingFreeTrialDays with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetRemainingFreeTrialDays for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) GetRemainingFreeTrialDaysWithContext(ctx aws.Context, input *GetRemainingFreeTrialDaysInput, opts ...request.Option) (*GetRemainingFreeTrialDaysOutput, error) {
+	req, out := c.GetRemainingFreeTrialDaysRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetThreatIntelSet = "GetThreatIntelSet"
 
 // GetThreatIntelSetRequest generates a "aws/request.Request" representing the
@@ -2821,10 +3405,10 @@ func (c *GuardDuty) GetUsageStatisticsRequest(input *GetUsageStatisticsInput) (r
 // GetUsageStatistics API operation for Amazon GuardDuty.
 //
 // Lists Amazon GuardDuty usage statistics over the last 30 days for the specified
-// detector ID. For newly enabled detectors or data sources the cost returned
-// will include only the usage so far under 30 days, this may differ from the
-// cost metrics in the console, which projects usage over 30 days to provide
-// a monthly cost estimate. For more information see Understanding How Usage
+// detector ID. For newly enabled detectors or data sources, the cost returned
+// will include only the usage so far under 30 days. This may differ from the
+// cost metrics in the console, which project usage over 30 days to provide
+// a monthly cost estimate. For more information, see Understanding How Usage
 // Costs are Calculated (https://docs.aws.amazon.com/guardduty/latest/ug/monitoring_costs.html#usage-calculations).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2959,10 +3543,10 @@ func (c *GuardDuty) InviteMembersRequest(input *InviteMembersInput) (req *reques
 
 // InviteMembers API operation for Amazon GuardDuty.
 //
-// Invites other AWS accounts (created as members of the current AWS account
-// by CreateMembers) to enable GuardDuty, and allow the current AWS account
-// to view and manage these accounts' findings on their behalf as the GuardDuty
-// administrator account.
+// Invites other Amazon Web Services accounts (created as members of the current
+// Amazon Web Services account by CreateMembers) to enable GuardDuty, and allow
+// the current Amazon Web Services account to view and manage these accounts'
+// findings on their behalf as the GuardDuty administrator account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3613,7 +4197,7 @@ func (c *GuardDuty) ListInvitationsRequest(input *ListInvitationsInput) (req *re
 // ListInvitations API operation for Amazon GuardDuty.
 //
 // Lists all GuardDuty membership invitations that were sent to the current
-// AWS account.
+// Amazon Web Services account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4034,7 +4618,7 @@ func (c *GuardDuty) ListPublishingDestinationsRequest(input *ListPublishingDesti
 
 // ListPublishingDestinations API operation for Amazon GuardDuty.
 //
-// Returns a list of publishing destinations associated with the specified dectectorId.
+// Returns a list of publishing destinations associated with the specified detectorId.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5098,6 +5682,89 @@ func (c *GuardDuty) UpdateIPSetWithContext(ctx aws.Context, input *UpdateIPSetIn
 	return out, req.Send()
 }
 
+const opUpdateMalwareScanSettings = "UpdateMalwareScanSettings"
+
+// UpdateMalwareScanSettingsRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateMalwareScanSettings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateMalwareScanSettings for more information on using the UpdateMalwareScanSettings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateMalwareScanSettingsRequest method.
+//    req, resp := client.UpdateMalwareScanSettingsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/UpdateMalwareScanSettings
+func (c *GuardDuty) UpdateMalwareScanSettingsRequest(input *UpdateMalwareScanSettingsInput) (req *request.Request, output *UpdateMalwareScanSettingsOutput) {
+	op := &request.Operation{
+		Name:       opUpdateMalwareScanSettings,
+		HTTPMethod: "POST",
+		HTTPPath:   "/detector/{detectorId}/malware-scan-settings",
+	}
+
+	if input == nil {
+		input = &UpdateMalwareScanSettingsInput{}
+	}
+
+	output = &UpdateMalwareScanSettingsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateMalwareScanSettings API operation for Amazon GuardDuty.
+//
+// Updates the malware scan settings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GuardDuty's
+// API operation UpdateMalwareScanSettings for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   A bad request exception object.
+//
+//   * InternalServerErrorException
+//   An internal server error exception object.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/guardduty-2017-11-28/UpdateMalwareScanSettings
+func (c *GuardDuty) UpdateMalwareScanSettings(input *UpdateMalwareScanSettingsInput) (*UpdateMalwareScanSettingsOutput, error) {
+	req, out := c.UpdateMalwareScanSettingsRequest(input)
+	return out, req.Send()
+}
+
+// UpdateMalwareScanSettingsWithContext is the same as UpdateMalwareScanSettings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateMalwareScanSettings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GuardDuty) UpdateMalwareScanSettingsWithContext(ctx aws.Context, input *UpdateMalwareScanSettingsInput, opts ...request.Option) (*UpdateMalwareScanSettingsOutput, error) {
+	req, out := c.UpdateMalwareScanSettingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateMemberDetectors = "UpdateMemberDetectors"
 
 // UpdateMemberDetectorsRequest generates a "aws/request.Request" representing the
@@ -5429,8 +6096,110 @@ func (c *GuardDuty) UpdateThreatIntelSetWithContext(ctx aws.Context, input *Upda
 	return out, req.Send()
 }
 
-type AcceptInvitationInput struct {
+type AcceptAdministratorInvitationInput struct {
 	_ struct{} `type:"structure"`
+
+	// The account ID of the GuardDuty administrator account whose invitation you're
+	// accepting.
+	//
+	// AdministratorId is a required field
+	AdministratorId *string `locationName:"administratorId" type:"string" required:"true"`
+
+	// The unique ID of the detector of the GuardDuty member account.
+	//
+	// DetectorId is a required field
+	DetectorId *string `location:"uri" locationName:"detectorId" min:"1" type:"string" required:"true"`
+
+	// The value that is used to validate the administrator account to the member
+	// account.
+	//
+	// InvitationId is a required field
+	InvitationId *string `locationName:"invitationId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptAdministratorInvitationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptAdministratorInvitationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AcceptAdministratorInvitationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AcceptAdministratorInvitationInput"}
+	if s.AdministratorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AdministratorId"))
+	}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+	if s.InvitationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InvitationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdministratorId sets the AdministratorId field's value.
+func (s *AcceptAdministratorInvitationInput) SetAdministratorId(v string) *AcceptAdministratorInvitationInput {
+	s.AdministratorId = &v
+	return s
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *AcceptAdministratorInvitationInput) SetDetectorId(v string) *AcceptAdministratorInvitationInput {
+	s.DetectorId = &v
+	return s
+}
+
+// SetInvitationId sets the InvitationId field's value.
+func (s *AcceptAdministratorInvitationInput) SetInvitationId(v string) *AcceptAdministratorInvitationInput {
+	s.InvitationId = &v
+	return s
+}
+
+type AcceptAdministratorInvitationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptAdministratorInvitationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptAdministratorInvitationOutput) GoString() string {
+	return s.String()
+}
+
+// Deprecated: This input is deprecated, use AcceptAdministratorInvitationRequest instead
+type AcceptInvitationInput struct {
+	_ struct{} `deprecated:"true" type:"structure"`
 
 	// The unique ID of the detector of the GuardDuty member account.
 	//
@@ -5508,8 +6277,9 @@ func (s *AcceptInvitationInput) SetMasterId(v string) *AcceptInvitationInput {
 	return s
 }
 
+// Deprecated: This output is deprecated, use AcceptAdministratorInvitationResponse instead
 type AcceptInvitationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `deprecated:"true" type:"structure"`
 }
 
 // String returns the string representation.
@@ -5699,6 +6469,47 @@ func (s *AccountDetail) SetEmail(v string) *AccountDetail {
 	return s
 }
 
+// Provides details of the GuardDuty member account that uses a free trial service.
+type AccountFreeTrialInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The account identifier of the GuardDuty member account.
+	AccountId *string `locationName:"accountId" type:"string"`
+
+	// Describes the data source enabled for the GuardDuty member account.
+	DataSources *DataSourcesFreeTrial `locationName:"dataSources" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccountFreeTrialInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccountFreeTrialInfo) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *AccountFreeTrialInfo) SetAccountId(v string) *AccountFreeTrialInfo {
+	s.AccountId = &v
+	return s
+}
+
+// SetDataSources sets the DataSources field's value.
+func (s *AccountFreeTrialInfo) SetDataSources(v *DataSourcesFreeTrial) *AccountFreeTrialInfo {
+	s.DataSources = v
+	return s
+}
+
 // Contains information about the account level permissions on the S3 bucket.
 type AccountLevelPermissions struct {
 	_ struct{} `type:"structure"`
@@ -5744,6 +6555,9 @@ type Action struct {
 	// Information about the DNS_REQUEST action described in this finding.
 	DnsRequestAction *DnsRequestAction `locationName:"dnsRequestAction" type:"structure"`
 
+	// Information about the Kubernetes API call action described in this finding.
+	KubernetesApiCallAction *KubernetesApiCallAction `locationName:"kubernetesApiCallAction" type:"structure"`
+
 	// Information about the NETWORK_CONNECTION action described in this finding.
 	NetworkConnectionAction *NetworkConnectionAction `locationName:"networkConnectionAction" type:"structure"`
 
@@ -5787,6 +6601,12 @@ func (s *Action) SetDnsRequestAction(v *DnsRequestAction) *Action {
 	return s
 }
 
+// SetKubernetesApiCallAction sets the KubernetesApiCallAction field's value.
+func (s *Action) SetKubernetesApiCallAction(v *KubernetesApiCallAction) *Action {
+	s.KubernetesApiCallAction = v
+	return s
+}
+
 // SetNetworkConnectionAction sets the NetworkConnectionAction field's value.
 func (s *Action) SetNetworkConnectionAction(v *NetworkConnectionAction) *Action {
 	s.NetworkConnectionAction = v
@@ -5804,7 +6624,7 @@ func (s *Action) SetPortProbeAction(v *PortProbeAction) *Action {
 type AdminAccount struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account ID for the account.
+	// The Amazon Web Services account ID for the account.
 	AdminAccountId *string `locationName:"adminAccountId" type:"string"`
 
 	// Indicates whether the account is enabled as the delegated administrator.
@@ -5838,6 +6658,66 @@ func (s *AdminAccount) SetAdminAccountId(v string) *AdminAccount {
 // SetAdminStatus sets the AdminStatus field's value.
 func (s *AdminAccount) SetAdminStatus(v string) *AdminAccount {
 	s.AdminStatus = &v
+	return s
+}
+
+// Contains information about the administrator account and invitation.
+type Administrator struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the account used as the administrator account.
+	AccountId *string `locationName:"accountId" min:"12" type:"string"`
+
+	// The value that is used to validate the administrator account to the member
+	// account.
+	InvitationId *string `locationName:"invitationId" type:"string"`
+
+	// The timestamp when the invitation was sent.
+	InvitedAt *string `locationName:"invitedAt" type:"string"`
+
+	// The status of the relationship between the administrator and member accounts.
+	RelationshipStatus *string `locationName:"relationshipStatus" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Administrator) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Administrator) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *Administrator) SetAccountId(v string) *Administrator {
+	s.AccountId = &v
+	return s
+}
+
+// SetInvitationId sets the InvitationId field's value.
+func (s *Administrator) SetInvitationId(v string) *Administrator {
+	s.InvitationId = &v
+	return s
+}
+
+// SetInvitedAt sets the InvitedAt field's value.
+func (s *Administrator) SetInvitedAt(v string) *Administrator {
+	s.InvitedAt = &v
+	return s
+}
+
+// SetRelationshipStatus sets the RelationshipStatus field's value.
+func (s *Administrator) SetRelationshipStatus(v string) *Administrator {
+	s.RelationshipStatus = &v
 	return s
 }
 
@@ -5906,7 +6786,7 @@ func (s *ArchiveFindingsInput) SetFindingIds(v []*string) *ArchiveFindingsInput 
 }
 
 type ArchiveFindingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5931,23 +6811,35 @@ func (s ArchiveFindingsOutput) GoString() string {
 type AwsApiCallAction struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS API name.
+	// The details of the Amazon Web Services account that made the API call. This
+	// field identifies the resources that were affected by this API call.
+	AffectedResources map[string]*string `locationName:"affectedResources" type:"map"`
+
+	// The Amazon Web Services API name.
 	Api *string `locationName:"api" type:"string"`
 
-	// The AWS API caller type.
+	// The Amazon Web Services API caller type.
 	CallerType *string `locationName:"callerType" type:"string"`
 
-	// The domain information for the AWS API call.
+	// The domain information for the Amazon Web Services API call.
 	DomainDetails *DomainDetails `locationName:"domainDetails" type:"structure"`
 
-	// The error code of the failed AWS API action.
+	// The error code of the failed Amazon Web Services API action.
 	ErrorCode *string `locationName:"errorCode" type:"string"`
 
-	// The remote IP information of the connection that initiated the AWS API call.
+	// The details of the Amazon Web Services account that made the API call. This
+	// field appears if the call was made from outside your account.
+	RemoteAccountDetails *RemoteAccountDetails `locationName:"remoteAccountDetails" type:"structure"`
+
+	// The remote IP information of the connection that initiated the Amazon Web
+	// Services API call.
 	RemoteIpDetails *RemoteIpDetails `locationName:"remoteIpDetails" type:"structure"`
 
-	// The AWS service name whose API was invoked.
+	// The Amazon Web Services service name whose API was invoked.
 	ServiceName *string `locationName:"serviceName" type:"string"`
+
+	// The agent through which the API request was made.
+	UserAgent *string `locationName:"userAgent" type:"string"`
 }
 
 // String returns the string representation.
@@ -5966,6 +6858,12 @@ func (s AwsApiCallAction) String() string {
 // value will be replaced with "sensitive".
 func (s AwsApiCallAction) GoString() string {
 	return s.String()
+}
+
+// SetAffectedResources sets the AffectedResources field's value.
+func (s *AwsApiCallAction) SetAffectedResources(v map[string]*string) *AwsApiCallAction {
+	s.AffectedResources = v
+	return s
 }
 
 // SetApi sets the Api field's value.
@@ -5992,6 +6890,12 @@ func (s *AwsApiCallAction) SetErrorCode(v string) *AwsApiCallAction {
 	return s
 }
 
+// SetRemoteAccountDetails sets the RemoteAccountDetails field's value.
+func (s *AwsApiCallAction) SetRemoteAccountDetails(v *RemoteAccountDetails) *AwsApiCallAction {
+	s.RemoteAccountDetails = v
+	return s
+}
+
 // SetRemoteIpDetails sets the RemoteIpDetails field's value.
 func (s *AwsApiCallAction) SetRemoteIpDetails(v *RemoteIpDetails) *AwsApiCallAction {
 	s.RemoteIpDetails = v
@@ -6001,6 +6905,12 @@ func (s *AwsApiCallAction) SetRemoteIpDetails(v *RemoteIpDetails) *AwsApiCallAct
 // SetServiceName sets the ServiceName field's value.
 func (s *AwsApiCallAction) SetServiceName(v string) *AwsApiCallAction {
 	s.ServiceName = &v
+	return s
+}
+
+// SetUserAgent sets the UserAgent field's value.
+func (s *AwsApiCallAction) SetUserAgent(v string) *AwsApiCallAction {
+	s.UserAgent = &v
 	return s
 }
 
@@ -6449,6 +7359,94 @@ func (s *Condition) SetNotEquals(v []*string) *Condition {
 	return s
 }
 
+// Details of a container.
+type Container struct {
+	_ struct{} `type:"structure"`
+
+	// The container runtime (such as, Docker or containerd) used to run the container.
+	ContainerRuntime *string `locationName:"containerRuntime" type:"string"`
+
+	// Container ID.
+	Id *string `locationName:"id" type:"string"`
+
+	// Container image.
+	Image *string `locationName:"image" type:"string"`
+
+	// Part of the image name before the last slash. For example, imagePrefix for
+	// public.ecr.aws/amazonlinux/amazonlinux:latest would be public.ecr.aws/amazonlinux.
+	// If the image name is relative and does not have a slash, this field is empty.
+	ImagePrefix *string `locationName:"imagePrefix" type:"string"`
+
+	// Container name.
+	Name *string `locationName:"name" type:"string"`
+
+	// Container security context.
+	SecurityContext *SecurityContext `locationName:"securityContext" type:"structure"`
+
+	// Container volume mounts.
+	VolumeMounts []*VolumeMount `locationName:"volumeMounts" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Container) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Container) GoString() string {
+	return s.String()
+}
+
+// SetContainerRuntime sets the ContainerRuntime field's value.
+func (s *Container) SetContainerRuntime(v string) *Container {
+	s.ContainerRuntime = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Container) SetId(v string) *Container {
+	s.Id = &v
+	return s
+}
+
+// SetImage sets the Image field's value.
+func (s *Container) SetImage(v string) *Container {
+	s.Image = &v
+	return s
+}
+
+// SetImagePrefix sets the ImagePrefix field's value.
+func (s *Container) SetImagePrefix(v string) *Container {
+	s.ImagePrefix = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Container) SetName(v string) *Container {
+	s.Name = &v
+	return s
+}
+
+// SetSecurityContext sets the SecurityContext field's value.
+func (s *Container) SetSecurityContext(v *SecurityContext) *Container {
+	s.SecurityContext = v
+	return s
+}
+
+// SetVolumeMounts sets the VolumeMounts field's value.
+func (s *Container) SetVolumeMounts(v []*VolumeMount) *Container {
+	s.VolumeMounts = v
+	return s
+}
+
 // Contains information about the country where the remote IP address is located.
 type Country struct {
 	_ struct{} `type:"structure"`
@@ -6688,6 +7686,8 @@ type CreateFilterInput struct {
 	//
 	//    * service.action.awsApiCallAction.errorCode
 	//
+	//    * service.action.awsApiCallAction.userAgent
+	//
 	//    * service.action.awsApiCallAction.remoteIpDetails.city.cityName
 	//
 	//    * service.action.awsApiCallAction.remoteIpDetails.country.countryName
@@ -6725,6 +7725,16 @@ type CreateFilterInput struct {
 	//    * service.action.networkConnectionAction.remotePortDetails.port
 	//
 	//    * service.additionalInfo.threatListName
+	//
+	//    * resource.s3BucketDetails.publicAccess.effectivePermissions
+	//
+	//    * resource.s3BucketDetails.name
+	//
+	//    * resource.s3BucketDetails.tags.key
+	//
+	//    * resource.s3BucketDetails.tags.value
+	//
+	//    * resource.s3BucketDetails.type
 	//
 	//    * service.archived When this attribute is set to TRUE, only archived findings
 	//    are listed. When it's set to FALSE, only unarchived findings are listed.
@@ -6913,7 +7923,7 @@ type CreateIPSetInput struct {
 	// Format is a required field
 	Format *string `locationName:"format" min:"1" type:"string" required:"true" enum:"IpSetFormat"`
 
-	// The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.
+	// The URI of the file that contains the IPSet.
 	//
 	// Location is a required field
 	Location *string `locationName:"location" min:"1" type:"string" required:"true"`
@@ -7358,7 +8368,7 @@ func (s *CreateSampleFindingsInput) SetFindingTypes(v []*string) *CreateSampleFi
 }
 
 type CreateSampleFindingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7402,7 +8412,7 @@ type CreateThreatIntelSetInput struct {
 	// Format is a required field
 	Format *string `locationName:"format" min:"1" type:"string" required:"true" enum:"ThreatIntelSetFormat"`
 
-	// The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.
+	// The URI of the file that contains the ThreatIntelSet.
 	//
 	// Location is a required field
 	Location *string `locationName:"location" min:"1" type:"string" required:"true"`
@@ -7588,6 +8598,12 @@ func (s *DNSLogsConfigurationResult) SetStatus(v string) *DNSLogsConfigurationRe
 type DataSourceConfigurations struct {
 	_ struct{} `type:"structure"`
 
+	// Describes whether any Kubernetes logs are enabled as data sources.
+	Kubernetes *KubernetesConfiguration `locationName:"kubernetes" type:"structure"`
+
+	// Describes whether Malware Protection is enabled as a data source.
+	MalwareProtection *MalwareProtectionConfiguration `locationName:"malwareProtection" type:"structure"`
+
 	// Describes whether S3 data event logs are enabled as a data source.
 	S3Logs *S3LogsConfiguration `locationName:"s3Logs" type:"structure"`
 }
@@ -7613,6 +8629,11 @@ func (s DataSourceConfigurations) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DataSourceConfigurations) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DataSourceConfigurations"}
+	if s.Kubernetes != nil {
+		if err := s.Kubernetes.Validate(); err != nil {
+			invalidParams.AddNested("Kubernetes", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.S3Logs != nil {
 		if err := s.S3Logs.Validate(); err != nil {
 			invalidParams.AddNested("S3Logs", err.(request.ErrInvalidParams))
@@ -7623,6 +8644,18 @@ func (s *DataSourceConfigurations) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetKubernetes sets the Kubernetes field's value.
+func (s *DataSourceConfigurations) SetKubernetes(v *KubernetesConfiguration) *DataSourceConfigurations {
+	s.Kubernetes = v
+	return s
+}
+
+// SetMalwareProtection sets the MalwareProtection field's value.
+func (s *DataSourceConfigurations) SetMalwareProtection(v *MalwareProtectionConfiguration) *DataSourceConfigurations {
+	s.MalwareProtection = v
+	return s
 }
 
 // SetS3Logs sets the S3Logs field's value.
@@ -7651,6 +8684,13 @@ type DataSourceConfigurationsResult struct {
 	//
 	// FlowLogs is a required field
 	FlowLogs *FlowLogsConfigurationResult `locationName:"flowLogs" type:"structure" required:"true"`
+
+	// An object that contains information on the status of all Kubernetes data
+	// sources.
+	Kubernetes *KubernetesConfigurationResult `locationName:"kubernetes" type:"structure"`
+
+	// Describes the configuration of Malware Protection data sources.
+	MalwareProtection *MalwareProtectionConfigurationResult `locationName:"malwareProtection" type:"structure"`
 
 	// An object that contains information on the status of S3 Data event logs as
 	// a data source.
@@ -7695,8 +8735,132 @@ func (s *DataSourceConfigurationsResult) SetFlowLogs(v *FlowLogsConfigurationRes
 	return s
 }
 
+// SetKubernetes sets the Kubernetes field's value.
+func (s *DataSourceConfigurationsResult) SetKubernetes(v *KubernetesConfigurationResult) *DataSourceConfigurationsResult {
+	s.Kubernetes = v
+	return s
+}
+
+// SetMalwareProtection sets the MalwareProtection field's value.
+func (s *DataSourceConfigurationsResult) SetMalwareProtection(v *MalwareProtectionConfigurationResult) *DataSourceConfigurationsResult {
+	s.MalwareProtection = v
+	return s
+}
+
 // SetS3Logs sets the S3Logs field's value.
 func (s *DataSourceConfigurationsResult) SetS3Logs(v *S3LogsConfigurationResult) *DataSourceConfigurationsResult {
+	s.S3Logs = v
+	return s
+}
+
+// Contains information about which data sources are enabled for the GuardDuty
+// member account.
+type DataSourceFreeTrial struct {
+	_ struct{} `type:"structure"`
+
+	// A value that specifies the number of days left to use each enabled data source.
+	FreeTrialDaysRemaining *int64 `locationName:"freeTrialDaysRemaining" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceFreeTrial) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceFreeTrial) GoString() string {
+	return s.String()
+}
+
+// SetFreeTrialDaysRemaining sets the FreeTrialDaysRemaining field's value.
+func (s *DataSourceFreeTrial) SetFreeTrialDaysRemaining(v int64) *DataSourceFreeTrial {
+	s.FreeTrialDaysRemaining = &v
+	return s
+}
+
+// Contains information about which data sources are enabled for the GuardDuty
+// member account.
+type DataSourcesFreeTrial struct {
+	_ struct{} `type:"structure"`
+
+	// Describes whether any AWS CloudTrail management event logs are enabled as
+	// data sources.
+	CloudTrail *DataSourceFreeTrial `locationName:"cloudTrail" type:"structure"`
+
+	// Describes whether any DNS logs are enabled as data sources.
+	DnsLogs *DataSourceFreeTrial `locationName:"dnsLogs" type:"structure"`
+
+	// Describes whether any VPC Flow logs are enabled as data sources.
+	FlowLogs *DataSourceFreeTrial `locationName:"flowLogs" type:"structure"`
+
+	// Describes whether any Kubernetes logs are enabled as data sources.
+	Kubernetes *KubernetesDataSourceFreeTrial `locationName:"kubernetes" type:"structure"`
+
+	// Describes whether Malware Protection is enabled as a data source.
+	MalwareProtection *MalwareProtectionDataSourceFreeTrial `locationName:"malwareProtection" type:"structure"`
+
+	// Describes whether any S3 data event logs are enabled as data sources.
+	S3Logs *DataSourceFreeTrial `locationName:"s3Logs" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourcesFreeTrial) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourcesFreeTrial) GoString() string {
+	return s.String()
+}
+
+// SetCloudTrail sets the CloudTrail field's value.
+func (s *DataSourcesFreeTrial) SetCloudTrail(v *DataSourceFreeTrial) *DataSourcesFreeTrial {
+	s.CloudTrail = v
+	return s
+}
+
+// SetDnsLogs sets the DnsLogs field's value.
+func (s *DataSourcesFreeTrial) SetDnsLogs(v *DataSourceFreeTrial) *DataSourcesFreeTrial {
+	s.DnsLogs = v
+	return s
+}
+
+// SetFlowLogs sets the FlowLogs field's value.
+func (s *DataSourcesFreeTrial) SetFlowLogs(v *DataSourceFreeTrial) *DataSourcesFreeTrial {
+	s.FlowLogs = v
+	return s
+}
+
+// SetKubernetes sets the Kubernetes field's value.
+func (s *DataSourcesFreeTrial) SetKubernetes(v *KubernetesDataSourceFreeTrial) *DataSourcesFreeTrial {
+	s.Kubernetes = v
+	return s
+}
+
+// SetMalwareProtection sets the MalwareProtection field's value.
+func (s *DataSourcesFreeTrial) SetMalwareProtection(v *MalwareProtectionDataSourceFreeTrial) *DataSourcesFreeTrial {
+	s.MalwareProtection = v
+	return s
+}
+
+// SetS3Logs sets the S3Logs field's value.
+func (s *DataSourcesFreeTrial) SetS3Logs(v *DataSourceFreeTrial) *DataSourcesFreeTrial {
 	s.S3Logs = v
 	return s
 }
@@ -7704,8 +8868,8 @@ func (s *DataSourceConfigurationsResult) SetS3Logs(v *S3LogsConfigurationResult)
 type DeclineInvitationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of account IDs of the AWS accounts that sent invitations to the current
-	// member account that you want to decline invitations from.
+	// A list of account IDs of the Amazon Web Services accounts that sent invitations
+	// to the current member account that you want to decline invitations from.
 	//
 	// AccountIds is a required field
 	AccountIds []*string `locationName:"accountIds" min:"1" type:"list" required:"true"`
@@ -7879,7 +9043,7 @@ func (s *DeleteDetectorInput) SetDetectorId(v string) *DeleteDetectorInput {
 }
 
 type DeleteDetectorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7967,7 +9131,7 @@ func (s *DeleteFilterInput) SetFilterName(v string) *DeleteFilterInput {
 }
 
 type DeleteFilterOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8055,7 +9219,7 @@ func (s *DeleteIPSetInput) SetIpSetId(v string) *DeleteIPSetInput {
 }
 
 type DeleteIPSetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8079,8 +9243,8 @@ func (s DeleteIPSetOutput) GoString() string {
 type DeleteInvitationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of account IDs of the AWS accounts that sent invitations to the current
-	// member account that you want to delete invitations from.
+	// A list of account IDs of the Amazon Web Services accounts that sent invitations
+	// to the current member account that you want to delete invitations from.
 	//
 	// AccountIds is a required field
 	AccountIds []*string `locationName:"accountIds" min:"1" type:"list" required:"true"`
@@ -8328,7 +9492,7 @@ func (s *DeletePublishingDestinationInput) SetDetectorId(v string) *DeletePublis
 }
 
 type DeletePublishingDestinationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8416,7 +9580,7 @@ func (s *DeleteThreatIntelSetInput) SetThreatIntelSetId(v string) *DeleteThreatI
 }
 
 type DeleteThreatIntelSetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8435,6 +9599,146 @@ func (s DeleteThreatIntelSetOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DeleteThreatIntelSetOutput) GoString() string {
 	return s.String()
+}
+
+type DescribeMalwareScansInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ID of the detector that the request is associated with.
+	//
+	// DetectorId is a required field
+	DetectorId *string `location:"uri" locationName:"detectorId" min:"1" type:"string" required:"true"`
+
+	// Represents the criteria to be used in the filter for describing scan entries.
+	FilterCriteria *FilterCriteria `locationName:"filterCriteria" type:"structure"`
+
+	// You can use this parameter to indicate the maximum number of items that you
+	// want in the response. The default value is 50. The maximum value is 50.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// You can use this parameter when paginating results. Set the value of this
+	// parameter to null on your first call to the list action. For subsequent calls
+	// to the action, fill nextToken in the request with the value of NextToken
+	// from the previous response to continue listing data.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Represents the criteria used for sorting scan entries.
+	SortCriteria *SortCriteria `locationName:"sortCriteria" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMalwareScansInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMalwareScansInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMalwareScansInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMalwareScansInput"}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.FilterCriteria != nil {
+		if err := s.FilterCriteria.Validate(); err != nil {
+			invalidParams.AddNested("FilterCriteria", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *DescribeMalwareScansInput) SetDetectorId(v string) *DescribeMalwareScansInput {
+	s.DetectorId = &v
+	return s
+}
+
+// SetFilterCriteria sets the FilterCriteria field's value.
+func (s *DescribeMalwareScansInput) SetFilterCriteria(v *FilterCriteria) *DescribeMalwareScansInput {
+	s.FilterCriteria = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeMalwareScansInput) SetMaxResults(v int64) *DescribeMalwareScansInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeMalwareScansInput) SetNextToken(v string) *DescribeMalwareScansInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSortCriteria sets the SortCriteria field's value.
+func (s *DescribeMalwareScansInput) SetSortCriteria(v *SortCriteria) *DescribeMalwareScansInput {
+	s.SortCriteria = v
+	return s
+}
+
+type DescribeMalwareScansOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The pagination parameter to be used on the next list operation to retrieve
+	// more items.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Contains information about malware scans.
+	//
+	// Scans is a required field
+	Scans []*Scan `locationName:"scans" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMalwareScansOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMalwareScansOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeMalwareScansOutput) SetNextToken(v string) *DescribeMalwareScansOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetScans sets the Scans field's value.
+func (s *DescribeMalwareScansOutput) SetScans(v []*Scan) *DescribeMalwareScansOutput {
+	s.Scans = v
+	return s
 }
 
 type DescribeOrganizationConfigurationInput struct {
@@ -8753,6 +10057,8 @@ type DestinationProperties struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the resource to publish to.
+	//
+	// To specify an S3 bucket folder use the following format: arn:aws:s3:::DOC-EXAMPLE-BUCKET/myFolder/
 	DestinationArn *string `locationName:"destinationArn" type:"string"`
 
 	// The ARN of the KMS key to use for encryption.
@@ -8792,8 +10098,8 @@ func (s *DestinationProperties) SetKmsKeyArn(v string) *DestinationProperties {
 type DisableOrganizationAdminAccountInput struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS Account ID for the organizations account to be disabled as a GuardDuty
-	// delegated administrator.
+	// The Amazon Web Services Account ID for the organizations account to be disabled
+	// as a GuardDuty delegated administrator.
 	//
 	// AdminAccountId is a required field
 	AdminAccountId *string `locationName:"adminAccountId" type:"string" required:"true"`
@@ -8837,7 +10143,7 @@ func (s *DisableOrganizationAdminAccountInput) SetAdminAccountId(v string) *Disa
 }
 
 type DisableOrganizationAdminAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8858,8 +10164,80 @@ func (s DisableOrganizationAdminAccountOutput) GoString() string {
 	return s.String()
 }
 
-type DisassociateFromMasterAccountInput struct {
+type DisassociateFromAdministratorAccountInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique ID of the detector of the GuardDuty member account.
+	//
+	// DetectorId is a required field
+	DetectorId *string `location:"uri" locationName:"detectorId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFromAdministratorAccountInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFromAdministratorAccountInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateFromAdministratorAccountInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateFromAdministratorAccountInput"}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *DisassociateFromAdministratorAccountInput) SetDetectorId(v string) *DisassociateFromAdministratorAccountInput {
+	s.DetectorId = &v
+	return s
+}
+
+type DisassociateFromAdministratorAccountOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFromAdministratorAccountOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFromAdministratorAccountOutput) GoString() string {
+	return s.String()
+}
+
+// Deprecated: This input is deprecated, use DisassociateFromAdministratorAccountRequest instead
+type DisassociateFromMasterAccountInput struct {
+	_ struct{} `deprecated:"true" type:"structure" nopayload:"true"`
 
 	// The unique ID of the detector of the GuardDuty member account.
 	//
@@ -8907,8 +10285,9 @@ func (s *DisassociateFromMasterAccountInput) SetDetectorId(v string) *Disassocia
 	return s
 }
 
+// Deprecated: This output is deprecated, use DisassociateFromAdministratorAccountResponse instead
 type DisassociateFromMasterAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `deprecated:"true" type:"structure"`
 }
 
 // String returns the string representation.
@@ -9035,8 +10414,15 @@ func (s *DisassociateMembersOutput) SetUnprocessedAccounts(v []*UnprocessedAccou
 type DnsRequestAction struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates whether the targeted port is blocked.
+	Blocked *bool `locationName:"blocked" type:"boolean"`
+
 	// The domain information for the API request.
 	Domain *string `locationName:"domain" type:"string"`
+
+	// The network connection protocol observed in the activity that prompted GuardDuty
+	// to generate the finding.
+	Protocol *string `locationName:"protocol" type:"string"`
 }
 
 // String returns the string representation.
@@ -9057,9 +10443,21 @@ func (s DnsRequestAction) GoString() string {
 	return s.String()
 }
 
+// SetBlocked sets the Blocked field's value.
+func (s *DnsRequestAction) SetBlocked(v bool) *DnsRequestAction {
+	s.Blocked = &v
+	return s
+}
+
 // SetDomain sets the Domain field's value.
 func (s *DnsRequestAction) SetDomain(v string) *DnsRequestAction {
 	s.Domain = &v
+	return s
+}
+
+// SetProtocol sets the Protocol field's value.
+func (s *DnsRequestAction) SetProtocol(v string) *DnsRequestAction {
+	s.Protocol = &v
 	return s
 }
 
@@ -9067,7 +10465,7 @@ func (s *DnsRequestAction) SetDomain(v string) *DnsRequestAction {
 type DomainDetails struct {
 	_ struct{} `type:"structure"`
 
-	// The domain information for the AWS API call.
+	// The domain information for the Amazon Web Services API call.
 	Domain *string `locationName:"domain" type:"string"`
 }
 
@@ -9095,11 +10493,446 @@ func (s *DomainDetails) SetDomain(v string) *DomainDetails {
 	return s
 }
 
+// Contains list of scanned and skipped EBS volumes with details.
+type EbsVolumeDetails struct {
+	_ struct{} `type:"structure"`
+
+	// List of EBS volumes that were scanned.
+	ScannedVolumeDetails []*VolumeDetail `locationName:"scannedVolumeDetails" type:"list"`
+
+	// List of EBS volumes that were skipped from the malware scan.
+	SkippedVolumeDetails []*VolumeDetail `locationName:"skippedVolumeDetails" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EbsVolumeDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EbsVolumeDetails) GoString() string {
+	return s.String()
+}
+
+// SetScannedVolumeDetails sets the ScannedVolumeDetails field's value.
+func (s *EbsVolumeDetails) SetScannedVolumeDetails(v []*VolumeDetail) *EbsVolumeDetails {
+	s.ScannedVolumeDetails = v
+	return s
+}
+
+// SetSkippedVolumeDetails sets the SkippedVolumeDetails field's value.
+func (s *EbsVolumeDetails) SetSkippedVolumeDetails(v []*VolumeDetail) *EbsVolumeDetails {
+	s.SkippedVolumeDetails = v
+	return s
+}
+
+// Contains details from the malware scan that created a finding.
+type EbsVolumeScanDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the completion date and time of the malware scan.
+	ScanCompletedAt *time.Time `locationName:"scanCompletedAt" type:"timestamp"`
+
+	// Contains a complete view providing malware scan result details.
+	ScanDetections *ScanDetections `locationName:"scanDetections" type:"structure"`
+
+	// Unique Id of the malware scan that generated the finding.
+	ScanId *string `locationName:"scanId" type:"string"`
+
+	// Returns the start date and time of the malware scan.
+	ScanStartedAt *time.Time `locationName:"scanStartedAt" type:"timestamp"`
+
+	// Contains list of threat intelligence sources used to detect threats.
+	Sources []*string `locationName:"sources" type:"list"`
+
+	// GuardDuty finding ID that triggered a malware scan.
+	TriggerFindingId *string `locationName:"triggerFindingId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EbsVolumeScanDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EbsVolumeScanDetails) GoString() string {
+	return s.String()
+}
+
+// SetScanCompletedAt sets the ScanCompletedAt field's value.
+func (s *EbsVolumeScanDetails) SetScanCompletedAt(v time.Time) *EbsVolumeScanDetails {
+	s.ScanCompletedAt = &v
+	return s
+}
+
+// SetScanDetections sets the ScanDetections field's value.
+func (s *EbsVolumeScanDetails) SetScanDetections(v *ScanDetections) *EbsVolumeScanDetails {
+	s.ScanDetections = v
+	return s
+}
+
+// SetScanId sets the ScanId field's value.
+func (s *EbsVolumeScanDetails) SetScanId(v string) *EbsVolumeScanDetails {
+	s.ScanId = &v
+	return s
+}
+
+// SetScanStartedAt sets the ScanStartedAt field's value.
+func (s *EbsVolumeScanDetails) SetScanStartedAt(v time.Time) *EbsVolumeScanDetails {
+	s.ScanStartedAt = &v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *EbsVolumeScanDetails) SetSources(v []*string) *EbsVolumeScanDetails {
+	s.Sources = v
+	return s
+}
+
+// SetTriggerFindingId sets the TriggerFindingId field's value.
+func (s *EbsVolumeScanDetails) SetTriggerFindingId(v string) *EbsVolumeScanDetails {
+	s.TriggerFindingId = &v
+	return s
+}
+
+// Describes the configuration of scanning EBS volumes as a data source.
+type EbsVolumesResult struct {
+	_ struct{} `type:"structure"`
+
+	// Describes whether scanning EBS volumes is enabled as a data source.
+	Status *string `locationName:"status" min:"1" type:"string" enum:"DataSourceStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EbsVolumesResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EbsVolumesResult) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *EbsVolumesResult) SetStatus(v string) *EbsVolumesResult {
+	s.Status = &v
+	return s
+}
+
+// Contains information about the details of the ECS Cluster.
+type EcsClusterDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The number of services that are running on the cluster in an ACTIVE state.
+	ActiveServicesCount *int64 `locationName:"activeServicesCount" type:"integer"`
+
+	// The Amazon Resource Name (ARN) that identifies the cluster.
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The name of the ECS Cluster.
+	Name *string `locationName:"name" type:"string"`
+
+	// The number of container instances registered into the cluster.
+	RegisteredContainerInstancesCount *int64 `locationName:"registeredContainerInstancesCount" type:"integer"`
+
+	// The number of tasks in the cluster that are in the RUNNING state.
+	RunningTasksCount *int64 `locationName:"runningTasksCount" type:"integer"`
+
+	// The status of the ECS cluster.
+	Status *string `locationName:"status" type:"string"`
+
+	// The tags of the ECS Cluster.
+	Tags []*Tag `locationName:"tags" type:"list"`
+
+	// Contains information about the details of the ECS Task.
+	TaskDetails *EcsTaskDetails `locationName:"taskDetails" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EcsClusterDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EcsClusterDetails) GoString() string {
+	return s.String()
+}
+
+// SetActiveServicesCount sets the ActiveServicesCount field's value.
+func (s *EcsClusterDetails) SetActiveServicesCount(v int64) *EcsClusterDetails {
+	s.ActiveServicesCount = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *EcsClusterDetails) SetArn(v string) *EcsClusterDetails {
+	s.Arn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *EcsClusterDetails) SetName(v string) *EcsClusterDetails {
+	s.Name = &v
+	return s
+}
+
+// SetRegisteredContainerInstancesCount sets the RegisteredContainerInstancesCount field's value.
+func (s *EcsClusterDetails) SetRegisteredContainerInstancesCount(v int64) *EcsClusterDetails {
+	s.RegisteredContainerInstancesCount = &v
+	return s
+}
+
+// SetRunningTasksCount sets the RunningTasksCount field's value.
+func (s *EcsClusterDetails) SetRunningTasksCount(v int64) *EcsClusterDetails {
+	s.RunningTasksCount = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *EcsClusterDetails) SetStatus(v string) *EcsClusterDetails {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *EcsClusterDetails) SetTags(v []*Tag) *EcsClusterDetails {
+	s.Tags = v
+	return s
+}
+
+// SetTaskDetails sets the TaskDetails field's value.
+func (s *EcsClusterDetails) SetTaskDetails(v *EcsTaskDetails) *EcsClusterDetails {
+	s.TaskDetails = v
+	return s
+}
+
+// Contains information about the task in an ECS cluster.
+type EcsTaskDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the task.
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The containers that's associated with the task.
+	Containers []*Container `locationName:"containers" type:"list"`
+
+	// The ARN of the task definition that creates the task.
+	DefinitionArn *string `locationName:"definitionArn" type:"string"`
+
+	// The name of the task group that's associated with the task.
+	Group *string `locationName:"group" type:"string"`
+
+	// The Unix timestamp for the time when the task started.
+	StartedAt *time.Time `locationName:"startedAt" type:"timestamp"`
+
+	// Contains the tag specified when a task is started.
+	StartedBy *string `locationName:"startedBy" type:"string"`
+
+	// The tags of the ECS Task.
+	Tags []*Tag `locationName:"tags" type:"list"`
+
+	// The Unix timestamp for the time when the task was created.
+	TaskCreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The version counter for the task.
+	Version *string `locationName:"version" type:"string"`
+
+	// The list of data volume definitions for the task.
+	Volumes []*Volume `locationName:"volumes" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EcsTaskDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EcsTaskDetails) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *EcsTaskDetails) SetArn(v string) *EcsTaskDetails {
+	s.Arn = &v
+	return s
+}
+
+// SetContainers sets the Containers field's value.
+func (s *EcsTaskDetails) SetContainers(v []*Container) *EcsTaskDetails {
+	s.Containers = v
+	return s
+}
+
+// SetDefinitionArn sets the DefinitionArn field's value.
+func (s *EcsTaskDetails) SetDefinitionArn(v string) *EcsTaskDetails {
+	s.DefinitionArn = &v
+	return s
+}
+
+// SetGroup sets the Group field's value.
+func (s *EcsTaskDetails) SetGroup(v string) *EcsTaskDetails {
+	s.Group = &v
+	return s
+}
+
+// SetStartedAt sets the StartedAt field's value.
+func (s *EcsTaskDetails) SetStartedAt(v time.Time) *EcsTaskDetails {
+	s.StartedAt = &v
+	return s
+}
+
+// SetStartedBy sets the StartedBy field's value.
+func (s *EcsTaskDetails) SetStartedBy(v string) *EcsTaskDetails {
+	s.StartedBy = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *EcsTaskDetails) SetTags(v []*Tag) *EcsTaskDetails {
+	s.Tags = v
+	return s
+}
+
+// SetTaskCreatedAt sets the TaskCreatedAt field's value.
+func (s *EcsTaskDetails) SetTaskCreatedAt(v time.Time) *EcsTaskDetails {
+	s.TaskCreatedAt = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *EcsTaskDetails) SetVersion(v string) *EcsTaskDetails {
+	s.Version = &v
+	return s
+}
+
+// SetVolumes sets the Volumes field's value.
+func (s *EcsTaskDetails) SetVolumes(v []*Volume) *EcsTaskDetails {
+	s.Volumes = v
+	return s
+}
+
+// Details about the EKS cluster involved in a Kubernetes finding.
+type EksClusterDetails struct {
+	_ struct{} `type:"structure"`
+
+	// EKS cluster ARN.
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The timestamp when the EKS cluster was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// EKS cluster name.
+	Name *string `locationName:"name" type:"string"`
+
+	// The EKS cluster status.
+	Status *string `locationName:"status" type:"string"`
+
+	// The EKS cluster tags.
+	Tags []*Tag `locationName:"tags" type:"list"`
+
+	// The VPC ID to which the EKS cluster is attached.
+	VpcId *string `locationName:"vpcId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EksClusterDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EksClusterDetails) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *EksClusterDetails) SetArn(v string) *EksClusterDetails {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *EksClusterDetails) SetCreatedAt(v time.Time) *EksClusterDetails {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *EksClusterDetails) SetName(v string) *EksClusterDetails {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *EksClusterDetails) SetStatus(v string) *EksClusterDetails {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *EksClusterDetails) SetTags(v []*Tag) *EksClusterDetails {
+	s.Tags = v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *EksClusterDetails) SetVpcId(v string) *EksClusterDetails {
+	s.VpcId = &v
+	return s
+}
+
 type EnableOrganizationAdminAccountInput struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS Account ID for the organization account to be enabled as a GuardDuty
-	// delegated administrator.
+	// The Amazon Web Services Account ID for the organization account to be enabled
+	// as a GuardDuty delegated administrator.
 	//
 	// AdminAccountId is a required field
 	AdminAccountId *string `locationName:"adminAccountId" type:"string" required:"true"`
@@ -9143,7 +10976,7 @@ func (s *EnableOrganizationAdminAccountInput) SetAdminAccountId(v string) *Enabl
 }
 
 type EnableOrganizationAdminAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9196,6 +11029,183 @@ func (s *Evidence) SetThreatIntelligenceDetails(v []*ThreatIntelligenceDetail) *
 	return s
 }
 
+// Contains information about the condition.
+type FilterCondition struct {
+	_ struct{} `type:"structure"`
+
+	// Represents an equal condition to be applied to a single field when querying
+	// for scan entries.
+	EqualsValue *string `locationName:"equalsValue" min:"1" type:"string"`
+
+	// Represents a greater than condition to be applied to a single field when
+	// querying for scan entries.
+	GreaterThan *int64 `locationName:"greaterThan" type:"long"`
+
+	// Represents a less than condition to be applied to a single field when querying
+	// for scan entries.
+	LessThan *int64 `locationName:"lessThan" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCondition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterCondition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterCondition"}
+	if s.EqualsValue != nil && len(*s.EqualsValue) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EqualsValue", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEqualsValue sets the EqualsValue field's value.
+func (s *FilterCondition) SetEqualsValue(v string) *FilterCondition {
+	s.EqualsValue = &v
+	return s
+}
+
+// SetGreaterThan sets the GreaterThan field's value.
+func (s *FilterCondition) SetGreaterThan(v int64) *FilterCondition {
+	s.GreaterThan = &v
+	return s
+}
+
+// SetLessThan sets the LessThan field's value.
+func (s *FilterCondition) SetLessThan(v int64) *FilterCondition {
+	s.LessThan = &v
+	return s
+}
+
+// Represents the criteria to be used in the filter for describing scan entries.
+type FilterCriteria struct {
+	_ struct{} `type:"structure"`
+
+	// Represents a condition that when matched will be added to the response of
+	// the operation.
+	FilterCriterion []*FilterCriterion `locationName:"filterCriterion" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCriteria) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCriteria) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterCriteria) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterCriteria"}
+	if s.FilterCriterion != nil {
+		for i, v := range s.FilterCriterion {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FilterCriterion", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilterCriterion sets the FilterCriterion field's value.
+func (s *FilterCriteria) SetFilterCriterion(v []*FilterCriterion) *FilterCriteria {
+	s.FilterCriterion = v
+	return s
+}
+
+// Represents a condition that when matched will be added to the response of
+// the operation.
+type FilterCriterion struct {
+	_ struct{} `type:"structure"`
+
+	// An enum value representing possible scan properties to match with given scan
+	// entries.
+	CriterionKey *string `locationName:"criterionKey" type:"string" enum:"CriterionKey"`
+
+	// Contains information about the condition.
+	FilterCondition *FilterCondition `locationName:"filterCondition" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCriterion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterCriterion) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterCriterion) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterCriterion"}
+	if s.FilterCondition != nil {
+		if err := s.FilterCondition.Validate(); err != nil {
+			invalidParams.AddNested("FilterCondition", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCriterionKey sets the CriterionKey field's value.
+func (s *FilterCriterion) SetCriterionKey(v string) *FilterCriterion {
+	s.CriterionKey = &v
+	return s
+}
+
+// SetFilterCondition sets the FilterCondition field's value.
+func (s *FilterCriterion) SetFilterCondition(v *FilterCondition) *FilterCriterion {
+	s.FilterCondition = v
+	return s
+}
+
 // Contains information about the finding, which is generated when abnormal
 // or suspicious activity is detected.
 type Finding struct {
@@ -9235,8 +11245,8 @@ type Finding struct {
 	// Region is a required field
 	Region *string `locationName:"region" type:"string" required:"true"`
 
-	// Contains information about the AWS resource associated with the activity
-	// that prompted GuardDuty to generate a finding.
+	// Contains information about the Amazon Web Services resource associated with
+	// the activity that prompted GuardDuty to generate a finding.
 	//
 	// Resource is a required field
 	Resource *Resource `locationName:"resource" type:"structure" required:"true"`
@@ -9513,6 +11523,88 @@ func (s *GeoLocation) SetLat(v float64) *GeoLocation {
 // SetLon sets the Lon field's value.
 func (s *GeoLocation) SetLon(v float64) *GeoLocation {
 	s.Lon = &v
+	return s
+}
+
+type GetAdministratorAccountInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique ID of the detector of the GuardDuty member account.
+	//
+	// DetectorId is a required field
+	DetectorId *string `location:"uri" locationName:"detectorId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAdministratorAccountInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAdministratorAccountInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAdministratorAccountInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAdministratorAccountInput"}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *GetAdministratorAccountInput) SetDetectorId(v string) *GetAdministratorAccountInput {
+	s.DetectorId = &v
+	return s
+}
+
+type GetAdministratorAccountOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The administrator account details.
+	//
+	// Administrator is a required field
+	Administrator *Administrator `locationName:"administrator" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAdministratorAccountOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAdministratorAccountOutput) GoString() string {
+	return s.String()
+}
+
+// SetAdministrator sets the Administrator field's value.
+func (s *GetAdministratorAccountOutput) SetAdministrator(v *Administrator) *GetAdministratorAccountOutput {
+	s.Administrator = v
 	return s
 }
 
@@ -9925,7 +12017,7 @@ type GetFindingsStatisticsInput struct {
 	// The types of finding statistics to retrieve.
 	//
 	// FindingStatisticTypes is a required field
-	FindingStatisticTypes []*string `locationName:"findingStatisticTypes" type:"list" required:"true"`
+	FindingStatisticTypes []*string `locationName:"findingStatisticTypes" type:"list" required:"true" enum:"FindingStatisticType"`
 }
 
 // String returns the string representation.
@@ -10090,7 +12182,7 @@ type GetIPSetOutput struct {
 	// Format is a required field
 	Format *string `locationName:"format" min:"1" type:"string" required:"true" enum:"IpSetFormat"`
 
-	// The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.
+	// The URI of the file that contains the IPSet.
 	//
 	// Location is a required field
 	Location *string `locationName:"location" min:"1" type:"string" required:"true"`
@@ -10210,8 +12302,98 @@ func (s *GetInvitationsCountOutput) SetInvitationsCount(v int64) *GetInvitations
 	return s
 }
 
-type GetMasterAccountInput struct {
+type GetMalwareScanSettingsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique ID of the detector that the scan setting is associated with.
+	//
+	// DetectorId is a required field
+	DetectorId *string `location:"uri" locationName:"detectorId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMalwareScanSettingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMalwareScanSettingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMalwareScanSettingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMalwareScanSettingsInput"}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *GetMalwareScanSettingsInput) SetDetectorId(v string) *GetMalwareScanSettingsInput {
+	s.DetectorId = &v
+	return s
+}
+
+type GetMalwareScanSettingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An enum value representing possible snapshot preservations.
+	EbsSnapshotPreservation *string `locationName:"ebsSnapshotPreservation" type:"string" enum:"EbsSnapshotPreservation"`
+
+	// Represents the criteria to be used in the filter for scanning resources.
+	ScanResourceCriteria *ScanResourceCriteria `locationName:"scanResourceCriteria" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMalwareScanSettingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMalwareScanSettingsOutput) GoString() string {
+	return s.String()
+}
+
+// SetEbsSnapshotPreservation sets the EbsSnapshotPreservation field's value.
+func (s *GetMalwareScanSettingsOutput) SetEbsSnapshotPreservation(v string) *GetMalwareScanSettingsOutput {
+	s.EbsSnapshotPreservation = &v
+	return s
+}
+
+// SetScanResourceCriteria sets the ScanResourceCriteria field's value.
+func (s *GetMalwareScanSettingsOutput) SetScanResourceCriteria(v *ScanResourceCriteria) *GetMalwareScanSettingsOutput {
+	s.ScanResourceCriteria = v
+	return s
+}
+
+// Deprecated: This input is deprecated, use GetAdministratorAccountRequest instead
+type GetMasterAccountInput struct {
+	_ struct{} `deprecated:"true" type:"structure" nopayload:"true"`
 
 	// The unique ID of the detector of the GuardDuty member account.
 	//
@@ -10259,8 +12441,9 @@ func (s *GetMasterAccountInput) SetDetectorId(v string) *GetMasterAccountInput {
 	return s
 }
 
+// Deprecated: This output is deprecated, use GetAdministratorAccountResponse instead
 type GetMasterAccountOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `deprecated:"true" type:"structure"`
 
 	// The administrator account details.
 	//
@@ -10515,6 +12698,108 @@ func (s *GetMembersOutput) SetUnprocessedAccounts(v []*UnprocessedAccount) *GetM
 	return s
 }
 
+type GetRemainingFreeTrialDaysInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of account identifiers of the GuardDuty member account.
+	AccountIds []*string `locationName:"accountIds" min:"1" type:"list"`
+
+	// The unique ID of the detector of the GuardDuty member account.
+	//
+	// DetectorId is a required field
+	DetectorId *string `location:"uri" locationName:"detectorId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRemainingFreeTrialDaysInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRemainingFreeTrialDaysInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetRemainingFreeTrialDaysInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetRemainingFreeTrialDaysInput"}
+	if s.AccountIds != nil && len(s.AccountIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountIds", 1))
+	}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountIds sets the AccountIds field's value.
+func (s *GetRemainingFreeTrialDaysInput) SetAccountIds(v []*string) *GetRemainingFreeTrialDaysInput {
+	s.AccountIds = v
+	return s
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *GetRemainingFreeTrialDaysInput) SetDetectorId(v string) *GetRemainingFreeTrialDaysInput {
+	s.DetectorId = &v
+	return s
+}
+
+type GetRemainingFreeTrialDaysOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The member accounts which were included in a request and were processed successfully.
+	Accounts []*AccountFreeTrialInfo `locationName:"accounts" type:"list"`
+
+	// The member account that was included in a request but for which the request
+	// could not be processed.
+	UnprocessedAccounts []*UnprocessedAccount `locationName:"unprocessedAccounts" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRemainingFreeTrialDaysOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRemainingFreeTrialDaysOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccounts sets the Accounts field's value.
+func (s *GetRemainingFreeTrialDaysOutput) SetAccounts(v []*AccountFreeTrialInfo) *GetRemainingFreeTrialDaysOutput {
+	s.Accounts = v
+	return s
+}
+
+// SetUnprocessedAccounts sets the UnprocessedAccounts field's value.
+func (s *GetRemainingFreeTrialDaysOutput) SetUnprocessedAccounts(v []*UnprocessedAccount) *GetRemainingFreeTrialDaysOutput {
+	s.UnprocessedAccounts = v
+	return s
+}
+
 type GetThreatIntelSetInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -10589,7 +12874,7 @@ type GetThreatIntelSetOutput struct {
 	// Format is a required field
 	Format *string `locationName:"format" min:"1" type:"string" required:"true" enum:"ThreatIntelSetFormat"`
 
-	// The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.
+	// The URI of the file that contains the ThreatIntelSet.
 	//
 	// Location is a required field
 	Location *string `locationName:"location" min:"1" type:"string" required:"true"`
@@ -10816,6 +13101,91 @@ func (s *GetUsageStatisticsOutput) SetUsageStatistics(v *UsageStatistics) *GetUs
 	return s
 }
 
+// Contains details of the highest severity threat detected during scan and
+// number of infected files.
+type HighestSeverityThreatDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Total number of infected files with the highest severity threat detected.
+	Count *int64 `locationName:"count" type:"integer"`
+
+	// Severity level of the highest severity threat detected.
+	Severity *string `locationName:"severity" type:"string"`
+
+	// Threat name of the highest severity threat detected as part of the malware
+	// scan.
+	ThreatName *string `locationName:"threatName" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HighestSeverityThreatDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HighestSeverityThreatDetails) GoString() string {
+	return s.String()
+}
+
+// SetCount sets the Count field's value.
+func (s *HighestSeverityThreatDetails) SetCount(v int64) *HighestSeverityThreatDetails {
+	s.Count = &v
+	return s
+}
+
+// SetSeverity sets the Severity field's value.
+func (s *HighestSeverityThreatDetails) SetSeverity(v string) *HighestSeverityThreatDetails {
+	s.Severity = &v
+	return s
+}
+
+// SetThreatName sets the ThreatName field's value.
+func (s *HighestSeverityThreatDetails) SetThreatName(v string) *HighestSeverityThreatDetails {
+	s.ThreatName = &v
+	return s
+}
+
+// Represents a pre-existing file or directory on the host machine that the
+// volume maps to.
+type HostPath struct {
+	_ struct{} `type:"structure"`
+
+	// Path of the file or directory on the host that the volume maps to.
+	Path *string `locationName:"path" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HostPath) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HostPath) GoString() string {
+	return s.String()
+}
+
+// SetPath sets the Path field's value.
+func (s *HostPath) SetPath(v string) *HostPath {
+	s.Path = &v
+	return s
+}
+
 // Contains information about the EC2 instance profile.
 type IamInstanceProfile struct {
 	_ struct{} `type:"structure"`
@@ -10888,8 +13258,8 @@ type InstanceDetails struct {
 	// The elastic network interface information of the EC2 instance.
 	NetworkInterfaces []*NetworkInterface `locationName:"networkInterfaces" type:"list"`
 
-	// The Amazon Resource Name (ARN) of the AWS Outpost. Only applicable to AWS
-	// Outposts instances.
+	// The Amazon Resource Name (ARN) of the Amazon Web Services Outpost. Only applicable
+	// to Amazon Web Services Outposts instances.
 	OutpostArn *string `locationName:"outpostArn" type:"string"`
 
 	// The platform of the EC2 instance.
@@ -11248,6 +13618,472 @@ func (s *InviteMembersOutput) SetUnprocessedAccounts(v []*UnprocessedAccount) *I
 	return s
 }
 
+// Information about the Kubernetes API call action described in this finding.
+type KubernetesApiCallAction struct {
+	_ struct{} `type:"structure"`
+
+	// Parameters related to the Kubernetes API call action.
+	Parameters *string `locationName:"parameters" type:"string"`
+
+	// Contains information about the remote IP address of the connection.
+	RemoteIpDetails *RemoteIpDetails `locationName:"remoteIpDetails" type:"structure"`
+
+	// The Kubernetes API request URI.
+	RequestUri *string `locationName:"requestUri" type:"string"`
+
+	// The IP of the Kubernetes API caller and the IPs of any proxies or load balancers
+	// between the caller and the API endpoint.
+	SourceIps []*string `locationName:"sourceIps" type:"list"`
+
+	// The resulting HTTP response code of the Kubernetes API call action.
+	StatusCode *int64 `locationName:"statusCode" type:"integer"`
+
+	// The user agent of the caller of the Kubernetes API.
+	UserAgent *string `locationName:"userAgent" type:"string"`
+
+	// The Kubernetes API request HTTP verb.
+	Verb *string `locationName:"verb" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesApiCallAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesApiCallAction) GoString() string {
+	return s.String()
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *KubernetesApiCallAction) SetParameters(v string) *KubernetesApiCallAction {
+	s.Parameters = &v
+	return s
+}
+
+// SetRemoteIpDetails sets the RemoteIpDetails field's value.
+func (s *KubernetesApiCallAction) SetRemoteIpDetails(v *RemoteIpDetails) *KubernetesApiCallAction {
+	s.RemoteIpDetails = v
+	return s
+}
+
+// SetRequestUri sets the RequestUri field's value.
+func (s *KubernetesApiCallAction) SetRequestUri(v string) *KubernetesApiCallAction {
+	s.RequestUri = &v
+	return s
+}
+
+// SetSourceIps sets the SourceIps field's value.
+func (s *KubernetesApiCallAction) SetSourceIps(v []*string) *KubernetesApiCallAction {
+	s.SourceIps = v
+	return s
+}
+
+// SetStatusCode sets the StatusCode field's value.
+func (s *KubernetesApiCallAction) SetStatusCode(v int64) *KubernetesApiCallAction {
+	s.StatusCode = &v
+	return s
+}
+
+// SetUserAgent sets the UserAgent field's value.
+func (s *KubernetesApiCallAction) SetUserAgent(v string) *KubernetesApiCallAction {
+	s.UserAgent = &v
+	return s
+}
+
+// SetVerb sets the Verb field's value.
+func (s *KubernetesApiCallAction) SetVerb(v string) *KubernetesApiCallAction {
+	s.Verb = &v
+	return s
+}
+
+// Describes whether Kubernetes audit logs are enabled as a data source.
+type KubernetesAuditLogsConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The status of Kubernetes audit logs as a data source.
+	//
+	// Enable is a required field
+	Enable *bool `locationName:"enable" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesAuditLogsConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesAuditLogsConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KubernetesAuditLogsConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "KubernetesAuditLogsConfiguration"}
+	if s.Enable == nil {
+		invalidParams.Add(request.NewErrParamRequired("Enable"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnable sets the Enable field's value.
+func (s *KubernetesAuditLogsConfiguration) SetEnable(v bool) *KubernetesAuditLogsConfiguration {
+	s.Enable = &v
+	return s
+}
+
+// Describes whether Kubernetes audit logs are enabled as a data source.
+type KubernetesAuditLogsConfigurationResult struct {
+	_ struct{} `type:"structure"`
+
+	// A value that describes whether Kubernetes audit logs are enabled as a data
+	// source.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" min:"1" type:"string" required:"true" enum:"DataSourceStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesAuditLogsConfigurationResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesAuditLogsConfigurationResult) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *KubernetesAuditLogsConfigurationResult) SetStatus(v string) *KubernetesAuditLogsConfigurationResult {
+	s.Status = &v
+	return s
+}
+
+// Describes whether any Kubernetes data sources are enabled.
+type KubernetesConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The status of Kubernetes audit logs as a data source.
+	//
+	// AuditLogs is a required field
+	AuditLogs *KubernetesAuditLogsConfiguration `locationName:"auditLogs" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KubernetesConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "KubernetesConfiguration"}
+	if s.AuditLogs == nil {
+		invalidParams.Add(request.NewErrParamRequired("AuditLogs"))
+	}
+	if s.AuditLogs != nil {
+		if err := s.AuditLogs.Validate(); err != nil {
+			invalidParams.AddNested("AuditLogs", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuditLogs sets the AuditLogs field's value.
+func (s *KubernetesConfiguration) SetAuditLogs(v *KubernetesAuditLogsConfiguration) *KubernetesConfiguration {
+	s.AuditLogs = v
+	return s
+}
+
+// Describes whether any Kubernetes logs will be enabled as a data source.
+type KubernetesConfigurationResult struct {
+	_ struct{} `type:"structure"`
+
+	// Describes whether Kubernetes audit logs are enabled as a data source.
+	//
+	// AuditLogs is a required field
+	AuditLogs *KubernetesAuditLogsConfigurationResult `locationName:"auditLogs" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesConfigurationResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesConfigurationResult) GoString() string {
+	return s.String()
+}
+
+// SetAuditLogs sets the AuditLogs field's value.
+func (s *KubernetesConfigurationResult) SetAuditLogs(v *KubernetesAuditLogsConfigurationResult) *KubernetesConfigurationResult {
+	s.AuditLogs = v
+	return s
+}
+
+// Provides details about the Kubernetes resources when it is enabled as a data
+// source.
+type KubernetesDataSourceFreeTrial struct {
+	_ struct{} `type:"structure"`
+
+	// Describes whether Kubernetes audit logs are enabled as a data source.
+	AuditLogs *DataSourceFreeTrial `locationName:"auditLogs" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesDataSourceFreeTrial) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesDataSourceFreeTrial) GoString() string {
+	return s.String()
+}
+
+// SetAuditLogs sets the AuditLogs field's value.
+func (s *KubernetesDataSourceFreeTrial) SetAuditLogs(v *DataSourceFreeTrial) *KubernetesDataSourceFreeTrial {
+	s.AuditLogs = v
+	return s
+}
+
+// Details about Kubernetes resources such as a Kubernetes user or workload
+// resource involved in a Kubernetes finding.
+type KubernetesDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Details about the Kubernetes user involved in a Kubernetes finding.
+	KubernetesUserDetails *KubernetesUserDetails `locationName:"kubernetesUserDetails" type:"structure"`
+
+	// Details about the Kubernetes workload involved in a Kubernetes finding.
+	KubernetesWorkloadDetails *KubernetesWorkloadDetails `locationName:"kubernetesWorkloadDetails" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesDetails) GoString() string {
+	return s.String()
+}
+
+// SetKubernetesUserDetails sets the KubernetesUserDetails field's value.
+func (s *KubernetesDetails) SetKubernetesUserDetails(v *KubernetesUserDetails) *KubernetesDetails {
+	s.KubernetesUserDetails = v
+	return s
+}
+
+// SetKubernetesWorkloadDetails sets the KubernetesWorkloadDetails field's value.
+func (s *KubernetesDetails) SetKubernetesWorkloadDetails(v *KubernetesWorkloadDetails) *KubernetesDetails {
+	s.KubernetesWorkloadDetails = v
+	return s
+}
+
+// Details about the Kubernetes user involved in a Kubernetes finding.
+type KubernetesUserDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The groups that include the user who called the Kubernetes API.
+	Groups []*string `locationName:"groups" type:"list"`
+
+	// The user ID of the user who called the Kubernetes API.
+	Uid *string `locationName:"uid" type:"string"`
+
+	// The username of the user who called the Kubernetes API.
+	Username *string `locationName:"username" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesUserDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesUserDetails) GoString() string {
+	return s.String()
+}
+
+// SetGroups sets the Groups field's value.
+func (s *KubernetesUserDetails) SetGroups(v []*string) *KubernetesUserDetails {
+	s.Groups = v
+	return s
+}
+
+// SetUid sets the Uid field's value.
+func (s *KubernetesUserDetails) SetUid(v string) *KubernetesUserDetails {
+	s.Uid = &v
+	return s
+}
+
+// SetUsername sets the Username field's value.
+func (s *KubernetesUserDetails) SetUsername(v string) *KubernetesUserDetails {
+	s.Username = &v
+	return s
+}
+
+// Details about the Kubernetes workload involved in a Kubernetes finding.
+type KubernetesWorkloadDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Containers running as part of the Kubernetes workload.
+	Containers []*Container `locationName:"containers" type:"list"`
+
+	// Whether the hostNetwork flag is enabled for the pods included in the workload.
+	HostNetwork *bool `locationName:"hostNetwork" type:"boolean"`
+
+	// Kubernetes workload name.
+	Name *string `locationName:"name" type:"string"`
+
+	// Kubernetes namespace that the workload is part of.
+	Namespace *string `locationName:"namespace" type:"string"`
+
+	// Kubernetes workload type (e.g. Pod, Deployment, etc.).
+	Type *string `locationName:"type" type:"string"`
+
+	// Kubernetes workload ID.
+	Uid *string `locationName:"uid" type:"string"`
+
+	// Volumes used by the Kubernetes workload.
+	Volumes []*Volume `locationName:"volumes" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesWorkloadDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KubernetesWorkloadDetails) GoString() string {
+	return s.String()
+}
+
+// SetContainers sets the Containers field's value.
+func (s *KubernetesWorkloadDetails) SetContainers(v []*Container) *KubernetesWorkloadDetails {
+	s.Containers = v
+	return s
+}
+
+// SetHostNetwork sets the HostNetwork field's value.
+func (s *KubernetesWorkloadDetails) SetHostNetwork(v bool) *KubernetesWorkloadDetails {
+	s.HostNetwork = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *KubernetesWorkloadDetails) SetName(v string) *KubernetesWorkloadDetails {
+	s.Name = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *KubernetesWorkloadDetails) SetNamespace(v string) *KubernetesWorkloadDetails {
+	s.Namespace = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *KubernetesWorkloadDetails) SetType(v string) *KubernetesWorkloadDetails {
+	s.Type = &v
+	return s
+}
+
+// SetUid sets the Uid field's value.
+func (s *KubernetesWorkloadDetails) SetUid(v string) *KubernetesWorkloadDetails {
+	s.Uid = &v
+	return s
+}
+
+// SetVolumes sets the Volumes field's value.
+func (s *KubernetesWorkloadDetails) SetVolumes(v []*Volume) *KubernetesWorkloadDetails {
+	s.Volumes = v
+	return s
+}
+
 type ListDetectorsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -11549,8 +14385,6 @@ type ListFindingsInput struct {
 	//    * service.action.networkConnectionAction.localPortDetails.port
 	//
 	//    * service.action.networkConnectionAction.protocol
-	//
-	//    * service.action.networkConnectionAction.remoteIpDetails.city.cityName
 	//
 	//    * service.action.networkConnectionAction.remoteIpDetails.country.countryName
 	//
@@ -12528,6 +15362,115 @@ func (s *LocalPortDetails) SetPortName(v string) *LocalPortDetails {
 	return s
 }
 
+// Describes whether Malware Protection will be enabled as a data source.
+type MalwareProtectionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the configuration of Malware Protection for EC2 instances with
+	// findings.
+	ScanEc2InstanceWithFindings *ScanEc2InstanceWithFindings `locationName:"scanEc2InstanceWithFindings" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MalwareProtectionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MalwareProtectionConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetScanEc2InstanceWithFindings sets the ScanEc2InstanceWithFindings field's value.
+func (s *MalwareProtectionConfiguration) SetScanEc2InstanceWithFindings(v *ScanEc2InstanceWithFindings) *MalwareProtectionConfiguration {
+	s.ScanEc2InstanceWithFindings = v
+	return s
+}
+
+// An object that contains information on the status of all Malware Protection
+// data sources.
+type MalwareProtectionConfigurationResult struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the configuration of Malware Protection for EC2 instances with
+	// findings.
+	ScanEc2InstanceWithFindings *ScanEc2InstanceWithFindingsResult `locationName:"scanEc2InstanceWithFindings" type:"structure"`
+
+	// The GuardDuty Malware Protection service role.
+	ServiceRole *string `locationName:"serviceRole" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MalwareProtectionConfigurationResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MalwareProtectionConfigurationResult) GoString() string {
+	return s.String()
+}
+
+// SetScanEc2InstanceWithFindings sets the ScanEc2InstanceWithFindings field's value.
+func (s *MalwareProtectionConfigurationResult) SetScanEc2InstanceWithFindings(v *ScanEc2InstanceWithFindingsResult) *MalwareProtectionConfigurationResult {
+	s.ScanEc2InstanceWithFindings = v
+	return s
+}
+
+// SetServiceRole sets the ServiceRole field's value.
+func (s *MalwareProtectionConfigurationResult) SetServiceRole(v string) *MalwareProtectionConfigurationResult {
+	s.ServiceRole = &v
+	return s
+}
+
+// Provides details about Malware Protection when it is enabled as a data source.
+type MalwareProtectionDataSourceFreeTrial struct {
+	_ struct{} `type:"structure"`
+
+	// Describes whether Malware Protection for EC2 instances with findings is enabled
+	// as a data source.
+	ScanEc2InstanceWithFindings *DataSourceFreeTrial `locationName:"scanEc2InstanceWithFindings" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MalwareProtectionDataSourceFreeTrial) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MalwareProtectionDataSourceFreeTrial) GoString() string {
+	return s.String()
+}
+
+// SetScanEc2InstanceWithFindings sets the ScanEc2InstanceWithFindings field's value.
+func (s *MalwareProtectionDataSourceFreeTrial) SetScanEc2InstanceWithFindings(v *DataSourceFreeTrial) *MalwareProtectionDataSourceFreeTrial {
+	s.ScanEc2InstanceWithFindings = v
+	return s
+}
+
 // Contains information about the administrator account and invitation.
 type Master struct {
 	_ struct{} `type:"structure"`
@@ -12596,6 +15539,9 @@ type Member struct {
 	// AccountId is a required field
 	AccountId *string `locationName:"accountId" min:"12" type:"string" required:"true"`
 
+	// The administrator account ID.
+	AdministratorId *string `locationName:"administratorId" type:"string"`
+
 	// The detector ID of the member account.
 	DetectorId *string `locationName:"detectorId" min:"1" type:"string"`
 
@@ -12644,6 +15590,12 @@ func (s Member) GoString() string {
 // SetAccountId sets the AccountId field's value.
 func (s *Member) SetAccountId(v string) *Member {
 	s.AccountId = &v
+	return s
+}
+
+// SetAdministratorId sets the AdministratorId field's value.
+func (s *Member) SetAdministratorId(v string) *Member {
+	s.AdministratorId = &v
 	return s
 }
 
@@ -12993,6 +15945,14 @@ func (s *Organization) SetOrg(v string) *Organization {
 type OrganizationDataSourceConfigurations struct {
 	_ struct{} `type:"structure"`
 
+	// Describes the configuration of Kubernetes data sources for new members of
+	// the organization.
+	Kubernetes *OrganizationKubernetesConfiguration `locationName:"kubernetes" type:"structure"`
+
+	// Describes the configuration of Malware Protection for new members of the
+	// organization.
+	MalwareProtection *OrganizationMalwareProtectionConfiguration `locationName:"malwareProtection" type:"structure"`
+
 	// Describes whether S3 data event logs are enabled for new members of the organization.
 	S3Logs *OrganizationS3LogsConfiguration `locationName:"s3Logs" type:"structure"`
 }
@@ -13018,6 +15978,11 @@ func (s OrganizationDataSourceConfigurations) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *OrganizationDataSourceConfigurations) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "OrganizationDataSourceConfigurations"}
+	if s.Kubernetes != nil {
+		if err := s.Kubernetes.Validate(); err != nil {
+			invalidParams.AddNested("Kubernetes", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.S3Logs != nil {
 		if err := s.S3Logs.Validate(); err != nil {
 			invalidParams.AddNested("S3Logs", err.(request.ErrInvalidParams))
@@ -13030,6 +15995,18 @@ func (s *OrganizationDataSourceConfigurations) Validate() error {
 	return nil
 }
 
+// SetKubernetes sets the Kubernetes field's value.
+func (s *OrganizationDataSourceConfigurations) SetKubernetes(v *OrganizationKubernetesConfiguration) *OrganizationDataSourceConfigurations {
+	s.Kubernetes = v
+	return s
+}
+
+// SetMalwareProtection sets the MalwareProtection field's value.
+func (s *OrganizationDataSourceConfigurations) SetMalwareProtection(v *OrganizationMalwareProtectionConfiguration) *OrganizationDataSourceConfigurations {
+	s.MalwareProtection = v
+	return s
+}
+
 // SetS3Logs sets the S3Logs field's value.
 func (s *OrganizationDataSourceConfigurations) SetS3Logs(v *OrganizationS3LogsConfiguration) *OrganizationDataSourceConfigurations {
 	s.S3Logs = v
@@ -13040,6 +16017,12 @@ func (s *OrganizationDataSourceConfigurations) SetS3Logs(v *OrganizationS3LogsCo
 // enabled for new members within the organization.
 type OrganizationDataSourceConfigurationsResult struct {
 	_ struct{} `type:"structure"`
+
+	// Describes the configuration of Kubernetes data sources.
+	Kubernetes *OrganizationKubernetesConfigurationResult `locationName:"kubernetes" type:"structure"`
+
+	// Describes the configuration of Malware Protection data source for an organization.
+	MalwareProtection *OrganizationMalwareProtectionConfigurationResult `locationName:"malwareProtection" type:"structure"`
 
 	// Describes whether S3 data event logs are enabled as a data source.
 	//
@@ -13065,9 +16048,327 @@ func (s OrganizationDataSourceConfigurationsResult) GoString() string {
 	return s.String()
 }
 
+// SetKubernetes sets the Kubernetes field's value.
+func (s *OrganizationDataSourceConfigurationsResult) SetKubernetes(v *OrganizationKubernetesConfigurationResult) *OrganizationDataSourceConfigurationsResult {
+	s.Kubernetes = v
+	return s
+}
+
+// SetMalwareProtection sets the MalwareProtection field's value.
+func (s *OrganizationDataSourceConfigurationsResult) SetMalwareProtection(v *OrganizationMalwareProtectionConfigurationResult) *OrganizationDataSourceConfigurationsResult {
+	s.MalwareProtection = v
+	return s
+}
+
 // SetS3Logs sets the S3Logs field's value.
 func (s *OrganizationDataSourceConfigurationsResult) SetS3Logs(v *OrganizationS3LogsConfigurationResult) *OrganizationDataSourceConfigurationsResult {
 	s.S3Logs = v
+	return s
+}
+
+// Organization-wide EBS volumes scan configuration.
+type OrganizationEbsVolumes struct {
+	_ struct{} `type:"structure"`
+
+	// Whether scanning EBS volumes should be auto-enabled for new members joining
+	// the organization.
+	AutoEnable *bool `locationName:"autoEnable" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationEbsVolumes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationEbsVolumes) GoString() string {
+	return s.String()
+}
+
+// SetAutoEnable sets the AutoEnable field's value.
+func (s *OrganizationEbsVolumes) SetAutoEnable(v bool) *OrganizationEbsVolumes {
+	s.AutoEnable = &v
+	return s
+}
+
+// An object that contains information on the status of whether EBS volumes
+// scanning will be enabled as a data source for an organization.
+type OrganizationEbsVolumesResult struct {
+	_ struct{} `type:"structure"`
+
+	// An object that contains the status of whether scanning EBS volumes should
+	// be auto-enabled for new members joining the organization.
+	AutoEnable *bool `locationName:"autoEnable" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationEbsVolumesResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationEbsVolumesResult) GoString() string {
+	return s.String()
+}
+
+// SetAutoEnable sets the AutoEnable field's value.
+func (s *OrganizationEbsVolumesResult) SetAutoEnable(v bool) *OrganizationEbsVolumesResult {
+	s.AutoEnable = &v
+	return s
+}
+
+// Organization-wide Kubernetes audit logs configuration.
+type OrganizationKubernetesAuditLogsConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A value that contains information on whether Kubernetes audit logs should
+	// be enabled automatically as a data source for the organization.
+	//
+	// AutoEnable is a required field
+	AutoEnable *bool `locationName:"autoEnable" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesAuditLogsConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesAuditLogsConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OrganizationKubernetesAuditLogsConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OrganizationKubernetesAuditLogsConfiguration"}
+	if s.AutoEnable == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutoEnable"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAutoEnable sets the AutoEnable field's value.
+func (s *OrganizationKubernetesAuditLogsConfiguration) SetAutoEnable(v bool) *OrganizationKubernetesAuditLogsConfiguration {
+	s.AutoEnable = &v
+	return s
+}
+
+// The current configuration of Kubernetes audit logs as a data source for the
+// organization.
+type OrganizationKubernetesAuditLogsConfigurationResult struct {
+	_ struct{} `type:"structure"`
+
+	// Whether Kubernetes audit logs data source should be auto-enabled for new
+	// members joining the organization.
+	//
+	// AutoEnable is a required field
+	AutoEnable *bool `locationName:"autoEnable" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesAuditLogsConfigurationResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesAuditLogsConfigurationResult) GoString() string {
+	return s.String()
+}
+
+// SetAutoEnable sets the AutoEnable field's value.
+func (s *OrganizationKubernetesAuditLogsConfigurationResult) SetAutoEnable(v bool) *OrganizationKubernetesAuditLogsConfigurationResult {
+	s.AutoEnable = &v
+	return s
+}
+
+// Organization-wide Kubernetes data sources configurations.
+type OrganizationKubernetesConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Whether Kubernetes audit logs data source should be auto-enabled for new
+	// members joining the organization.
+	//
+	// AuditLogs is a required field
+	AuditLogs *OrganizationKubernetesAuditLogsConfiguration `locationName:"auditLogs" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OrganizationKubernetesConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OrganizationKubernetesConfiguration"}
+	if s.AuditLogs == nil {
+		invalidParams.Add(request.NewErrParamRequired("AuditLogs"))
+	}
+	if s.AuditLogs != nil {
+		if err := s.AuditLogs.Validate(); err != nil {
+			invalidParams.AddNested("AuditLogs", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuditLogs sets the AuditLogs field's value.
+func (s *OrganizationKubernetesConfiguration) SetAuditLogs(v *OrganizationKubernetesAuditLogsConfiguration) *OrganizationKubernetesConfiguration {
+	s.AuditLogs = v
+	return s
+}
+
+// The current configuration of all Kubernetes data sources for the organization.
+type OrganizationKubernetesConfigurationResult struct {
+	_ struct{} `type:"structure"`
+
+	// The current configuration of Kubernetes audit logs as a data source for the
+	// organization.
+	//
+	// AuditLogs is a required field
+	AuditLogs *OrganizationKubernetesAuditLogsConfigurationResult `locationName:"auditLogs" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesConfigurationResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationKubernetesConfigurationResult) GoString() string {
+	return s.String()
+}
+
+// SetAuditLogs sets the AuditLogs field's value.
+func (s *OrganizationKubernetesConfigurationResult) SetAuditLogs(v *OrganizationKubernetesAuditLogsConfigurationResult) *OrganizationKubernetesConfigurationResult {
+	s.AuditLogs = v
+	return s
+}
+
+// Organization-wide Malware Protection configurations.
+type OrganizationMalwareProtectionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Whether Malware Protection for EC2 instances with findings should be auto-enabled
+	// for new members joining the organization.
+	ScanEc2InstanceWithFindings *OrganizationScanEc2InstanceWithFindings `locationName:"scanEc2InstanceWithFindings" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationMalwareProtectionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationMalwareProtectionConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetScanEc2InstanceWithFindings sets the ScanEc2InstanceWithFindings field's value.
+func (s *OrganizationMalwareProtectionConfiguration) SetScanEc2InstanceWithFindings(v *OrganizationScanEc2InstanceWithFindings) *OrganizationMalwareProtectionConfiguration {
+	s.ScanEc2InstanceWithFindings = v
+	return s
+}
+
+// An object that contains information on the status of all Malware Protection
+// data source for an organization.
+type OrganizationMalwareProtectionConfigurationResult struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the configuration for scanning EC2 instances with findings for
+	// an organization.
+	ScanEc2InstanceWithFindings *OrganizationScanEc2InstanceWithFindingsResult `locationName:"scanEc2InstanceWithFindings" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationMalwareProtectionConfigurationResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationMalwareProtectionConfigurationResult) GoString() string {
+	return s.String()
+}
+
+// SetScanEc2InstanceWithFindings sets the ScanEc2InstanceWithFindings field's value.
+func (s *OrganizationMalwareProtectionConfigurationResult) SetScanEc2InstanceWithFindings(v *OrganizationScanEc2InstanceWithFindingsResult) *OrganizationMalwareProtectionConfigurationResult {
+	s.ScanEc2InstanceWithFindings = v
 	return s
 }
 
@@ -13153,6 +16454,72 @@ func (s OrganizationS3LogsConfigurationResult) GoString() string {
 // SetAutoEnable sets the AutoEnable field's value.
 func (s *OrganizationS3LogsConfigurationResult) SetAutoEnable(v bool) *OrganizationS3LogsConfigurationResult {
 	s.AutoEnable = &v
+	return s
+}
+
+// Organization-wide EC2 instances with findings scan configuration.
+type OrganizationScanEc2InstanceWithFindings struct {
+	_ struct{} `type:"structure"`
+
+	// Whether scanning EBS volumes should be auto-enabled for new members joining
+	// the organization.
+	EbsVolumes *OrganizationEbsVolumes `locationName:"ebsVolumes" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationScanEc2InstanceWithFindings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationScanEc2InstanceWithFindings) GoString() string {
+	return s.String()
+}
+
+// SetEbsVolumes sets the EbsVolumes field's value.
+func (s *OrganizationScanEc2InstanceWithFindings) SetEbsVolumes(v *OrganizationEbsVolumes) *OrganizationScanEc2InstanceWithFindings {
+	s.EbsVolumes = v
+	return s
+}
+
+// An object that contains information on the status of scanning EC2 instances
+// with findings for an organization.
+type OrganizationScanEc2InstanceWithFindingsResult struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the configuration for scanning EBS volumes for an organization.
+	EbsVolumes *OrganizationEbsVolumesResult `locationName:"ebsVolumes" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationScanEc2InstanceWithFindingsResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationScanEc2InstanceWithFindingsResult) GoString() string {
+	return s.String()
+}
+
+// SetEbsVolumes sets the EbsVolumes field's value.
+func (s *OrganizationScanEc2InstanceWithFindingsResult) SetEbsVolumes(v *OrganizationEbsVolumesResult) *OrganizationScanEc2InstanceWithFindingsResult {
+	s.EbsVolumes = v
 	return s
 }
 
@@ -13368,10 +16735,10 @@ type ProductCode struct {
 	_ struct{} `type:"structure"`
 
 	// The product code information.
-	Code *string `locationName:"code" type:"string"`
+	Code *string `locationName:"productCodeId" type:"string"`
 
 	// The product code type.
-	ProductType *string `locationName:"productType" type:"string"`
+	ProductType *string `locationName:"productCodeType" type:"string"`
 }
 
 // String returns the string representation.
@@ -13443,6 +16810,51 @@ func (s *PublicAccess) SetEffectivePermission(v string) *PublicAccess {
 // SetPermissionConfiguration sets the PermissionConfiguration field's value.
 func (s *PublicAccess) SetPermissionConfiguration(v *PermissionConfiguration) *PublicAccess {
 	s.PermissionConfiguration = v
+	return s
+}
+
+// Contains details about the remote Amazon Web Services account that made the
+// API call.
+type RemoteAccountDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Web Services account ID of the remote API caller.
+	AccountId *string `locationName:"accountId" type:"string"`
+
+	// Details on whether the Amazon Web Services account of the remote API caller
+	// is related to your GuardDuty environment. If this value is True the API caller
+	// is affiliated to your account in some way. If it is False the API caller
+	// is from outside your environment.
+	Affiliated *bool `locationName:"affiliated" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RemoteAccountDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RemoteAccountDetails) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *RemoteAccountDetails) SetAccountId(v string) *RemoteAccountDetails {
+	s.AccountId = &v
+	return s
+}
+
+// SetAffiliated sets the Affiliated field's value.
+func (s *RemoteAccountDetails) SetAffiliated(v bool) *RemoteAccountDetails {
+	s.Affiliated = &v
 	return s
 }
 
@@ -13555,8 +16967,8 @@ func (s *RemotePortDetails) SetPortName(v string) *RemotePortDetails {
 	return s
 }
 
-// Contains information about the AWS resource associated with the activity
-// that prompted GuardDuty to generate a finding.
+// Contains information about the Amazon Web Services resource associated with
+// the activity that prompted GuardDuty to generate a finding.
 type Resource struct {
 	_ struct{} `type:"structure"`
 
@@ -13564,11 +16976,26 @@ type Resource struct {
 	// in the activity that prompted GuardDuty to generate a finding.
 	AccessKeyDetails *AccessKeyDetails `locationName:"accessKeyDetails" type:"structure"`
 
+	// Details of a container.
+	ContainerDetails *Container `locationName:"containerDetails" type:"structure"`
+
+	// Contains list of scanned and skipped EBS volumes with details.
+	EbsVolumeDetails *EbsVolumeDetails `locationName:"ebsVolumeDetails" type:"structure"`
+
+	// Contains information about the details of the ECS Cluster.
+	EcsClusterDetails *EcsClusterDetails `locationName:"ecsClusterDetails" type:"structure"`
+
+	// Details about the EKS cluster involved in a Kubernetes finding.
+	EksClusterDetails *EksClusterDetails `locationName:"eksClusterDetails" type:"structure"`
+
 	// The information about the EC2 instance associated with the activity that
 	// prompted GuardDuty to generate a finding.
 	InstanceDetails *InstanceDetails `locationName:"instanceDetails" type:"structure"`
 
-	// The type of AWS resource.
+	// Details about the Kubernetes user and workload involved in a Kubernetes finding.
+	KubernetesDetails *KubernetesDetails `locationName:"kubernetesDetails" type:"structure"`
+
+	// The type of Amazon Web Services resource.
 	ResourceType *string `locationName:"resourceType" type:"string"`
 
 	// Contains information on the S3 bucket.
@@ -13599,9 +17026,39 @@ func (s *Resource) SetAccessKeyDetails(v *AccessKeyDetails) *Resource {
 	return s
 }
 
+// SetContainerDetails sets the ContainerDetails field's value.
+func (s *Resource) SetContainerDetails(v *Container) *Resource {
+	s.ContainerDetails = v
+	return s
+}
+
+// SetEbsVolumeDetails sets the EbsVolumeDetails field's value.
+func (s *Resource) SetEbsVolumeDetails(v *EbsVolumeDetails) *Resource {
+	s.EbsVolumeDetails = v
+	return s
+}
+
+// SetEcsClusterDetails sets the EcsClusterDetails field's value.
+func (s *Resource) SetEcsClusterDetails(v *EcsClusterDetails) *Resource {
+	s.EcsClusterDetails = v
+	return s
+}
+
+// SetEksClusterDetails sets the EksClusterDetails field's value.
+func (s *Resource) SetEksClusterDetails(v *EksClusterDetails) *Resource {
+	s.EksClusterDetails = v
+	return s
+}
+
 // SetInstanceDetails sets the InstanceDetails field's value.
 func (s *Resource) SetInstanceDetails(v *InstanceDetails) *Resource {
 	s.InstanceDetails = v
+	return s
+}
+
+// SetKubernetesDetails sets the KubernetesDetails field's value.
+func (s *Resource) SetKubernetesDetails(v *KubernetesDetails) *Resource {
+	s.KubernetesDetails = v
 	return s
 }
 
@@ -13614,6 +17071,38 @@ func (s *Resource) SetResourceType(v string) *Resource {
 // SetS3BucketDetails sets the S3BucketDetails field's value.
 func (s *Resource) SetS3BucketDetails(v []*S3BucketDetail) *Resource {
 	s.S3BucketDetails = v
+	return s
+}
+
+// Represents the resources that were scanned in the scan entry.
+type ResourceDetails struct {
+	_ struct{} `type:"structure"`
+
+	// InstanceArn that was scanned in the scan entry.
+	InstanceArn *string `locationName:"instanceArn" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceDetails) GoString() string {
+	return s.String()
+}
+
+// SetInstanceArn sets the InstanceArn field's value.
+func (s *ResourceDetails) SetInstanceArn(v string) *ResourceDetails {
+	s.InstanceArn = &v
 	return s
 }
 
@@ -13794,6 +17283,708 @@ func (s *S3LogsConfigurationResult) SetStatus(v string) *S3LogsConfigurationResu
 	return s
 }
 
+// Contains information about a malware scan.
+type Scan struct {
+	_ struct{} `type:"structure"`
+
+	// The ID for the account that belongs to the scan.
+	AccountId *string `locationName:"accountId" min:"12" type:"string"`
+
+	// The unique detector ID of the administrator account that the request is associated
+	// with. Note that this value will be the same as the one used for DetectorId
+	// if the account is an administrator.
+	AdminDetectorId *string `locationName:"adminDetectorId" min:"1" type:"string"`
+
+	// List of volumes that were attached to the original instance to be scanned.
+	AttachedVolumes []*VolumeDetail `locationName:"attachedVolumes" type:"list"`
+
+	// The unique ID of the detector that the request is associated with.
+	DetectorId *string `locationName:"detectorId" min:"1" type:"string"`
+
+	// Represents the reason for FAILED scan status.
+	FailureReason *string `locationName:"failureReason" min:"1" type:"string"`
+
+	// Represents the number of files that were scanned.
+	FileCount *int64 `locationName:"fileCount" type:"long"`
+
+	// Represents the resources that were scanned in the scan entry.
+	ResourceDetails *ResourceDetails `locationName:"resourceDetails" type:"structure"`
+
+	// The timestamp of when the scan was finished.
+	ScanEndTime *time.Time `locationName:"scanEndTime" type:"timestamp"`
+
+	// The unique scan ID associated with a scan entry.
+	ScanId *string `locationName:"scanId" min:"1" type:"string"`
+
+	// Represents the result of the scan.
+	ScanResultDetails *ScanResultDetails `locationName:"scanResultDetails" type:"structure"`
+
+	// The timestamp of when the scan was triggered.
+	ScanStartTime *time.Time `locationName:"scanStartTime" type:"timestamp"`
+
+	// An enum value representing possible scan statuses.
+	ScanStatus *string `locationName:"scanStatus" type:"string" enum:"ScanStatus"`
+
+	// Represents total bytes that were scanned.
+	TotalBytes *int64 `locationName:"totalBytes" type:"long"`
+
+	// Represents the reason the scan was triggered.
+	TriggerDetails *TriggerDetails `locationName:"triggerDetails" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Scan) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Scan) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *Scan) SetAccountId(v string) *Scan {
+	s.AccountId = &v
+	return s
+}
+
+// SetAdminDetectorId sets the AdminDetectorId field's value.
+func (s *Scan) SetAdminDetectorId(v string) *Scan {
+	s.AdminDetectorId = &v
+	return s
+}
+
+// SetAttachedVolumes sets the AttachedVolumes field's value.
+func (s *Scan) SetAttachedVolumes(v []*VolumeDetail) *Scan {
+	s.AttachedVolumes = v
+	return s
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *Scan) SetDetectorId(v string) *Scan {
+	s.DetectorId = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *Scan) SetFailureReason(v string) *Scan {
+	s.FailureReason = &v
+	return s
+}
+
+// SetFileCount sets the FileCount field's value.
+func (s *Scan) SetFileCount(v int64) *Scan {
+	s.FileCount = &v
+	return s
+}
+
+// SetResourceDetails sets the ResourceDetails field's value.
+func (s *Scan) SetResourceDetails(v *ResourceDetails) *Scan {
+	s.ResourceDetails = v
+	return s
+}
+
+// SetScanEndTime sets the ScanEndTime field's value.
+func (s *Scan) SetScanEndTime(v time.Time) *Scan {
+	s.ScanEndTime = &v
+	return s
+}
+
+// SetScanId sets the ScanId field's value.
+func (s *Scan) SetScanId(v string) *Scan {
+	s.ScanId = &v
+	return s
+}
+
+// SetScanResultDetails sets the ScanResultDetails field's value.
+func (s *Scan) SetScanResultDetails(v *ScanResultDetails) *Scan {
+	s.ScanResultDetails = v
+	return s
+}
+
+// SetScanStartTime sets the ScanStartTime field's value.
+func (s *Scan) SetScanStartTime(v time.Time) *Scan {
+	s.ScanStartTime = &v
+	return s
+}
+
+// SetScanStatus sets the ScanStatus field's value.
+func (s *Scan) SetScanStatus(v string) *Scan {
+	s.ScanStatus = &v
+	return s
+}
+
+// SetTotalBytes sets the TotalBytes field's value.
+func (s *Scan) SetTotalBytes(v int64) *Scan {
+	s.TotalBytes = &v
+	return s
+}
+
+// SetTriggerDetails sets the TriggerDetails field's value.
+func (s *Scan) SetTriggerDetails(v *TriggerDetails) *Scan {
+	s.TriggerDetails = v
+	return s
+}
+
+// Contains information about the condition.
+type ScanCondition struct {
+	_ struct{} `type:"structure"`
+
+	// Represents an mapEqual condition to be applied to a single field when triggering
+	// for malware scan.
+	//
+	// MapEquals is a required field
+	MapEquals []*ScanConditionPair `locationName:"mapEquals" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanCondition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScanCondition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScanCondition"}
+	if s.MapEquals == nil {
+		invalidParams.Add(request.NewErrParamRequired("MapEquals"))
+	}
+	if s.MapEquals != nil {
+		for i, v := range s.MapEquals {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "MapEquals", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMapEquals sets the MapEquals field's value.
+func (s *ScanCondition) SetMapEquals(v []*ScanConditionPair) *ScanCondition {
+	s.MapEquals = v
+	return s
+}
+
+// Represents key, value pair to be matched against given resource property.
+type ScanConditionPair struct {
+	_ struct{} `type:"structure"`
+
+	// Represents key in the map condition.
+	//
+	// Key is a required field
+	Key *string `locationName:"key" min:"1" type:"string" required:"true"`
+
+	// Represents optional value in the map condition. If not specified, only key
+	// will be matched.
+	Value *string `locationName:"value" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanConditionPair) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanConditionPair) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScanConditionPair) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScanConditionPair"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *ScanConditionPair) SetKey(v string) *ScanConditionPair {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *ScanConditionPair) SetValue(v string) *ScanConditionPair {
+	s.Value = &v
+	return s
+}
+
+// Contains a complete view providing malware scan result details.
+type ScanDetections struct {
+	_ struct{} `type:"structure"`
+
+	// Details of the highest severity threat detected during malware scan and number
+	// of infected files.
+	HighestSeverityThreatDetails *HighestSeverityThreatDetails `locationName:"highestSeverityThreatDetails" type:"structure"`
+
+	// Total number of scanned files.
+	ScannedItemCount *ScannedItemCount `locationName:"scannedItemCount" type:"structure"`
+
+	// Contains details about identified threats organized by threat name.
+	ThreatDetectedByName *ThreatDetectedByName `locationName:"threatDetectedByName" type:"structure"`
+
+	// Total number of infected files.
+	ThreatsDetectedItemCount *ThreatsDetectedItemCount `locationName:"threatsDetectedItemCount" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanDetections) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanDetections) GoString() string {
+	return s.String()
+}
+
+// SetHighestSeverityThreatDetails sets the HighestSeverityThreatDetails field's value.
+func (s *ScanDetections) SetHighestSeverityThreatDetails(v *HighestSeverityThreatDetails) *ScanDetections {
+	s.HighestSeverityThreatDetails = v
+	return s
+}
+
+// SetScannedItemCount sets the ScannedItemCount field's value.
+func (s *ScanDetections) SetScannedItemCount(v *ScannedItemCount) *ScanDetections {
+	s.ScannedItemCount = v
+	return s
+}
+
+// SetThreatDetectedByName sets the ThreatDetectedByName field's value.
+func (s *ScanDetections) SetThreatDetectedByName(v *ThreatDetectedByName) *ScanDetections {
+	s.ThreatDetectedByName = v
+	return s
+}
+
+// SetThreatsDetectedItemCount sets the ThreatsDetectedItemCount field's value.
+func (s *ScanDetections) SetThreatsDetectedItemCount(v *ThreatsDetectedItemCount) *ScanDetections {
+	s.ThreatsDetectedItemCount = v
+	return s
+}
+
+// Describes whether Malware Protection for EC2 instances with findings will
+// be enabled as a data source.
+type ScanEc2InstanceWithFindings struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the configuration for scanning EBS volumes as data source.
+	EbsVolumes *bool `locationName:"ebsVolumes" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanEc2InstanceWithFindings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanEc2InstanceWithFindings) GoString() string {
+	return s.String()
+}
+
+// SetEbsVolumes sets the EbsVolumes field's value.
+func (s *ScanEc2InstanceWithFindings) SetEbsVolumes(v bool) *ScanEc2InstanceWithFindings {
+	s.EbsVolumes = &v
+	return s
+}
+
+// An object that contains information on the status of whether Malware Protection
+// for EC2 instances with findings will be enabled as a data source.
+type ScanEc2InstanceWithFindingsResult struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the configuration of scanning EBS volumes as a data source.
+	EbsVolumes *EbsVolumesResult `locationName:"ebsVolumes" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanEc2InstanceWithFindingsResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanEc2InstanceWithFindingsResult) GoString() string {
+	return s.String()
+}
+
+// SetEbsVolumes sets the EbsVolumes field's value.
+func (s *ScanEc2InstanceWithFindingsResult) SetEbsVolumes(v *EbsVolumesResult) *ScanEc2InstanceWithFindingsResult {
+	s.EbsVolumes = v
+	return s
+}
+
+// Contains details of infected file including name, file path and hash.
+type ScanFilePath struct {
+	_ struct{} `type:"structure"`
+
+	// File name of the infected file.
+	FileName *string `locationName:"fileName" type:"string"`
+
+	// The file path of the infected file.
+	FilePath *string `locationName:"filePath" type:"string"`
+
+	// The hash value of the infected file.
+	Hash *string `locationName:"hash" type:"string"`
+
+	// EBS volume Arn details of the infected file.
+	VolumeArn *string `locationName:"volumeArn" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanFilePath) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanFilePath) GoString() string {
+	return s.String()
+}
+
+// SetFileName sets the FileName field's value.
+func (s *ScanFilePath) SetFileName(v string) *ScanFilePath {
+	s.FileName = &v
+	return s
+}
+
+// SetFilePath sets the FilePath field's value.
+func (s *ScanFilePath) SetFilePath(v string) *ScanFilePath {
+	s.FilePath = &v
+	return s
+}
+
+// SetHash sets the Hash field's value.
+func (s *ScanFilePath) SetHash(v string) *ScanFilePath {
+	s.Hash = &v
+	return s
+}
+
+// SetVolumeArn sets the VolumeArn field's value.
+func (s *ScanFilePath) SetVolumeArn(v string) *ScanFilePath {
+	s.VolumeArn = &v
+	return s
+}
+
+// Contains information about criteria used to filter resources before triggering
+// malware scan.
+type ScanResourceCriteria struct {
+	_ struct{} `type:"structure"`
+
+	// Represents condition that when matched will prevent a malware scan for a
+	// certain resource.
+	Exclude map[string]*ScanCondition `locationName:"exclude" type:"map"`
+
+	// Represents condition that when matched will allow a malware scan for a certain
+	// resource.
+	Include map[string]*ScanCondition `locationName:"include" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanResourceCriteria) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanResourceCriteria) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScanResourceCriteria) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScanResourceCriteria"}
+	if s.Exclude != nil {
+		for i, v := range s.Exclude {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Exclude", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Include != nil {
+		for i, v := range s.Include {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Include", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExclude sets the Exclude field's value.
+func (s *ScanResourceCriteria) SetExclude(v map[string]*ScanCondition) *ScanResourceCriteria {
+	s.Exclude = v
+	return s
+}
+
+// SetInclude sets the Include field's value.
+func (s *ScanResourceCriteria) SetInclude(v map[string]*ScanCondition) *ScanResourceCriteria {
+	s.Include = v
+	return s
+}
+
+// Represents the result of the scan.
+type ScanResultDetails struct {
+	_ struct{} `type:"structure"`
+
+	// An enum value representing possible scan results.
+	ScanResult *string `locationName:"scanResult" type:"string" enum:"ScanResult"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanResultDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanResultDetails) GoString() string {
+	return s.String()
+}
+
+// SetScanResult sets the ScanResult field's value.
+func (s *ScanResultDetails) SetScanResult(v string) *ScanResultDetails {
+	s.ScanResult = &v
+	return s
+}
+
+// Contains files infected with the given threat providing details of malware
+// name and severity.
+type ScanThreatName struct {
+	_ struct{} `type:"structure"`
+
+	// List of infected files in EBS volume with details.
+	FilePaths []*ScanFilePath `locationName:"filePaths" type:"list"`
+
+	// Total number of files infected with given threat.
+	ItemCount *int64 `locationName:"itemCount" type:"integer"`
+
+	// The name of the identified threat.
+	Name *string `locationName:"name" type:"string"`
+
+	// Severity of threat identified as part of the malware scan.
+	Severity *string `locationName:"severity" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanThreatName) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScanThreatName) GoString() string {
+	return s.String()
+}
+
+// SetFilePaths sets the FilePaths field's value.
+func (s *ScanThreatName) SetFilePaths(v []*ScanFilePath) *ScanThreatName {
+	s.FilePaths = v
+	return s
+}
+
+// SetItemCount sets the ItemCount field's value.
+func (s *ScanThreatName) SetItemCount(v int64) *ScanThreatName {
+	s.ItemCount = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ScanThreatName) SetName(v string) *ScanThreatName {
+	s.Name = &v
+	return s
+}
+
+// SetSeverity sets the Severity field's value.
+func (s *ScanThreatName) SetSeverity(v string) *ScanThreatName {
+	s.Severity = &v
+	return s
+}
+
+// Total number of scanned files.
+type ScannedItemCount struct {
+	_ struct{} `type:"structure"`
+
+	// Number of files scanned.
+	Files *int64 `locationName:"files" type:"integer"`
+
+	// Total GB of files scanned for malware.
+	TotalGb *int64 `locationName:"totalGb" type:"integer"`
+
+	// Total number of scanned volumes.
+	Volumes *int64 `locationName:"volumes" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScannedItemCount) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScannedItemCount) GoString() string {
+	return s.String()
+}
+
+// SetFiles sets the Files field's value.
+func (s *ScannedItemCount) SetFiles(v int64) *ScannedItemCount {
+	s.Files = &v
+	return s
+}
+
+// SetTotalGb sets the TotalGb field's value.
+func (s *ScannedItemCount) SetTotalGb(v int64) *ScannedItemCount {
+	s.TotalGb = &v
+	return s
+}
+
+// SetVolumes sets the Volumes field's value.
+func (s *ScannedItemCount) SetVolumes(v int64) *ScannedItemCount {
+	s.Volumes = &v
+	return s
+}
+
+// Container security context.
+type SecurityContext struct {
+	_ struct{} `type:"structure"`
+
+	// Whether the container is privileged.
+	Privileged *bool `locationName:"privileged" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityContext) GoString() string {
+	return s.String()
+}
+
+// SetPrivileged sets the Privileged field's value.
+func (s *SecurityContext) SetPrivileged(v bool) *SecurityContext {
+	s.Privileged = &v
+	return s
+}
+
 // Contains information about the security groups associated with the EC2 instance.
 type SecurityGroup struct {
 	_ struct{} `type:"structure"`
@@ -13842,6 +18033,9 @@ type Service struct {
 	// Information about the activity that is described in a finding.
 	Action *Action `locationName:"action" type:"structure"`
 
+	// Contains additional information about the generated finding.
+	AdditionalInfo *ServiceAdditionalInfo `locationName:"additionalInfo" type:"structure"`
+
 	// Indicates whether this finding is archived.
 	Archived *bool `locationName:"archived" type:"boolean"`
 
@@ -13850,6 +18044,9 @@ type Service struct {
 
 	// The detector ID for the GuardDuty service.
 	DetectorId *string `locationName:"detectorId" min:"1" type:"string"`
+
+	// Returns details from the malware scan that created a finding.
+	EbsVolumeScanDetails *EbsVolumeScanDetails `locationName:"ebsVolumeScanDetails" type:"structure"`
 
 	// The first-seen timestamp of the activity that prompted GuardDuty to generate
 	// this finding.
@@ -13862,10 +18059,14 @@ type Service struct {
 	// An evidence object associated with the service.
 	Evidence *Evidence `locationName:"evidence" type:"structure"`
 
+	// The name of the feature that generated a finding.
+	FeatureName *string `locationName:"featureName" type:"string"`
+
 	// The resource role information for this finding.
 	ResourceRole *string `locationName:"resourceRole" type:"string"`
 
-	// The name of the AWS service (GuardDuty) that generated a finding.
+	// The name of the Amazon Web Services service (GuardDuty) that generated a
+	// finding.
 	ServiceName *string `locationName:"serviceName" type:"string"`
 
 	// Feedback that was submitted about the finding.
@@ -13896,6 +18097,12 @@ func (s *Service) SetAction(v *Action) *Service {
 	return s
 }
 
+// SetAdditionalInfo sets the AdditionalInfo field's value.
+func (s *Service) SetAdditionalInfo(v *ServiceAdditionalInfo) *Service {
+	s.AdditionalInfo = v
+	return s
+}
+
 // SetArchived sets the Archived field's value.
 func (s *Service) SetArchived(v bool) *Service {
 	s.Archived = &v
@@ -13911,6 +18118,12 @@ func (s *Service) SetCount(v int64) *Service {
 // SetDetectorId sets the DetectorId field's value.
 func (s *Service) SetDetectorId(v string) *Service {
 	s.DetectorId = &v
+	return s
+}
+
+// SetEbsVolumeScanDetails sets the EbsVolumeScanDetails field's value.
+func (s *Service) SetEbsVolumeScanDetails(v *EbsVolumeScanDetails) *Service {
+	s.EbsVolumeScanDetails = v
 	return s
 }
 
@@ -13932,6 +18145,12 @@ func (s *Service) SetEvidence(v *Evidence) *Service {
 	return s
 }
 
+// SetFeatureName sets the FeatureName field's value.
+func (s *Service) SetFeatureName(v string) *Service {
+	s.FeatureName = &v
+	return s
+}
+
 // SetResourceRole sets the ResourceRole field's value.
 func (s *Service) SetResourceRole(v string) *Service {
 	s.ResourceRole = &v
@@ -13947,6 +18166,47 @@ func (s *Service) SetServiceName(v string) *Service {
 // SetUserFeedback sets the UserFeedback field's value.
 func (s *Service) SetUserFeedback(v string) *Service {
 	s.UserFeedback = &v
+	return s
+}
+
+// Additional information about the generated finding.
+type ServiceAdditionalInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the type of the additional information.
+	Type *string `locationName:"type" type:"string"`
+
+	// This field specifies the value of the additional information.
+	Value *string `locationName:"value" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceAdditionalInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceAdditionalInfo) GoString() string {
+	return s.String()
+}
+
+// SetType sets the Type field's value.
+func (s *ServiceAdditionalInfo) SetType(v string) *ServiceAdditionalInfo {
+	s.Type = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *ServiceAdditionalInfo) SetValue(v string) *ServiceAdditionalInfo {
+	s.Value = &v
 	return s
 }
 
@@ -14304,7 +18564,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -14323,6 +18583,67 @@ func (s TagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Contains details about identified threats organized by threat name.
+type ThreatDetectedByName struct {
+	_ struct{} `type:"structure"`
+
+	// Total number of infected files identified.
+	ItemCount *int64 `locationName:"itemCount" type:"integer"`
+
+	// Flag to determine if the finding contains every single infected file-path
+	// and/or every threat.
+	Shortened *bool `locationName:"shortened" type:"boolean"`
+
+	// List of identified threats with details, organized by threat name.
+	ThreatNames []*ScanThreatName `locationName:"threatNames" type:"list"`
+
+	// Total number of unique threats by name identified, as part of the malware
+	// scan.
+	UniqueThreatNameCount *int64 `locationName:"uniqueThreatNameCount" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThreatDetectedByName) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThreatDetectedByName) GoString() string {
+	return s.String()
+}
+
+// SetItemCount sets the ItemCount field's value.
+func (s *ThreatDetectedByName) SetItemCount(v int64) *ThreatDetectedByName {
+	s.ItemCount = &v
+	return s
+}
+
+// SetShortened sets the Shortened field's value.
+func (s *ThreatDetectedByName) SetShortened(v bool) *ThreatDetectedByName {
+	s.Shortened = &v
+	return s
+}
+
+// SetThreatNames sets the ThreatNames field's value.
+func (s *ThreatDetectedByName) SetThreatNames(v []*ScanThreatName) *ThreatDetectedByName {
+	s.ThreatNames = v
+	return s
+}
+
+// SetUniqueThreatNameCount sets the UniqueThreatNameCount field's value.
+func (s *ThreatDetectedByName) SetUniqueThreatNameCount(v int64) *ThreatDetectedByName {
+	s.UniqueThreatNameCount = &v
+	return s
 }
 
 // An instance of a threat intelligence detail that constitutes evidence for
@@ -14368,6 +18689,38 @@ func (s *ThreatIntelligenceDetail) SetThreatNames(v []*string) *ThreatIntelligen
 	return s
 }
 
+// Contains total number of infected files.
+type ThreatsDetectedItemCount struct {
+	_ struct{} `type:"structure"`
+
+	// Total number of infected files.
+	Files *int64 `locationName:"files" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThreatsDetectedItemCount) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThreatsDetectedItemCount) GoString() string {
+	return s.String()
+}
+
+// SetFiles sets the Files field's value.
+func (s *ThreatsDetectedItemCount) SetFiles(v int64) *ThreatsDetectedItemCount {
+	s.Files = &v
+	return s
+}
+
 // Contains the total usage with the corresponding currency unit for that value.
 type Total struct {
 	_ struct{} `type:"structure"`
@@ -14406,6 +18759,47 @@ func (s *Total) SetAmount(v string) *Total {
 // SetUnit sets the Unit field's value.
 func (s *Total) SetUnit(v string) *Total {
 	s.Unit = &v
+	return s
+}
+
+// Represents the reason the scan was triggered.
+type TriggerDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the scan trigger.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The ID of the GuardDuty finding that triggered the BirdDog scan.
+	GuardDutyFindingId *string `locationName:"guardDutyFindingId" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TriggerDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TriggerDetails) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *TriggerDetails) SetDescription(v string) *TriggerDetails {
+	s.Description = &v
+	return s
+}
+
+// SetGuardDutyFindingId sets the GuardDutyFindingId field's value.
+func (s *TriggerDetails) SetGuardDutyFindingId(v string) *TriggerDetails {
+	s.GuardDutyFindingId = &v
 	return s
 }
 
@@ -14473,7 +18867,7 @@ func (s *UnarchiveFindingsInput) SetFindingIds(v []*string) *UnarchiveFindingsIn
 }
 
 type UnarchiveFindingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -14498,7 +18892,7 @@ func (s UnarchiveFindingsOutput) GoString() string {
 type UnprocessedAccount struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account ID.
+	// The Amazon Web Services account ID.
 	//
 	// AccountId is a required field
 	AccountId *string `locationName:"accountId" min:"12" type:"string" required:"true"`
@@ -14606,7 +19000,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -14710,7 +19104,7 @@ func (s *UpdateDetectorInput) SetFindingPublishingFrequency(v string) *UpdateDet
 }
 
 type UpdateDetectorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -14962,7 +19356,7 @@ func (s *UpdateFindingsFeedbackInput) SetFindingIds(v []*string) *UpdateFindings
 }
 
 type UpdateFindingsFeedbackOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15000,7 +19394,7 @@ type UpdateIPSetInput struct {
 	// IpSetId is a required field
 	IpSetId *string `location:"uri" locationName:"ipSetId" type:"string" required:"true"`
 
-	// The updated URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.
+	// The updated URI of the file that contains the IPSet.
 	Location *string `locationName:"location" min:"1" type:"string"`
 
 	// The unique ID that specifies the IPSet that you want to update.
@@ -15084,7 +19478,7 @@ func (s *UpdateIPSetInput) SetName(v string) *UpdateIPSetInput {
 }
 
 type UpdateIPSetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15102,6 +19496,102 @@ func (s UpdateIPSetOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s UpdateIPSetOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateMalwareScanSettingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ID of the detector that specifies the GuardDuty service where
+	// you want to update scan settings.
+	//
+	// DetectorId is a required field
+	DetectorId *string `location:"uri" locationName:"detectorId" min:"1" type:"string" required:"true"`
+
+	// An enum value representing possible snapshot preservations.
+	EbsSnapshotPreservation *string `locationName:"ebsSnapshotPreservation" type:"string" enum:"EbsSnapshotPreservation"`
+
+	// Represents the criteria to be used in the filter for selecting resources
+	// to scan.
+	ScanResourceCriteria *ScanResourceCriteria `locationName:"scanResourceCriteria" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateMalwareScanSettingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateMalwareScanSettingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateMalwareScanSettingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateMalwareScanSettingsInput"}
+	if s.DetectorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DetectorId"))
+	}
+	if s.DetectorId != nil && len(*s.DetectorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DetectorId", 1))
+	}
+	if s.ScanResourceCriteria != nil {
+		if err := s.ScanResourceCriteria.Validate(); err != nil {
+			invalidParams.AddNested("ScanResourceCriteria", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectorId sets the DetectorId field's value.
+func (s *UpdateMalwareScanSettingsInput) SetDetectorId(v string) *UpdateMalwareScanSettingsInput {
+	s.DetectorId = &v
+	return s
+}
+
+// SetEbsSnapshotPreservation sets the EbsSnapshotPreservation field's value.
+func (s *UpdateMalwareScanSettingsInput) SetEbsSnapshotPreservation(v string) *UpdateMalwareScanSettingsInput {
+	s.EbsSnapshotPreservation = &v
+	return s
+}
+
+// SetScanResourceCriteria sets the ScanResourceCriteria field's value.
+func (s *UpdateMalwareScanSettingsInput) SetScanResourceCriteria(v *ScanResourceCriteria) *UpdateMalwareScanSettingsInput {
+	s.ScanResourceCriteria = v
+	return s
+}
+
+type UpdateMalwareScanSettingsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateMalwareScanSettingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateMalwareScanSettingsOutput) GoString() string {
 	return s.String()
 }
 
@@ -15297,7 +19787,7 @@ func (s *UpdateOrganizationConfigurationInput) SetDetectorId(v string) *UpdateOr
 }
 
 type UpdateOrganizationConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15395,7 +19885,7 @@ func (s *UpdatePublishingDestinationInput) SetDetectorId(v string) *UpdatePublis
 }
 
 type UpdatePublishingDestinationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15518,7 +20008,7 @@ func (s *UpdateThreatIntelSetInput) SetThreatIntelSetId(v string) *UpdateThreatI
 }
 
 type UpdateThreatIntelSetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15590,7 +20080,7 @@ type UsageCriteria struct {
 	// The data sources to aggregate usage statistics from.
 	//
 	// DataSources is a required field
-	DataSources []*string `locationName:"dataSources" type:"list" required:"true"`
+	DataSources []*string `locationName:"dataSources" type:"list" required:"true" enum:"DataSource"`
 
 	// The resources to aggregate usage statistics from. Only accepts exact resource
 	// names.
@@ -15690,11 +20180,12 @@ func (s *UsageDataSourceResult) SetTotal(v *Total) *UsageDataSourceResult {
 	return s
 }
 
-// Contains information on the sum of usage based on an AWS resource.
+// Contains information on the sum of usage based on an Amazon Web Services
+// resource.
 type UsageResourceResult struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS resource that generated usage.
+	// The Amazon Web Services resource that generated usage.
 	Resource *string `locationName:"resource" type:"string"`
 
 	// Represents the sum total of usage for the specified resource type.
@@ -15792,6 +20283,175 @@ func (s *UsageStatistics) SetTopResources(v []*UsageResourceResult) *UsageStatis
 	return s
 }
 
+// Volume used by the Kubernetes workload.
+type Volume struct {
+	_ struct{} `type:"structure"`
+
+	// Represents a pre-existing file or directory on the host machine that the
+	// volume maps to.
+	HostPath *HostPath `locationName:"hostPath" type:"structure"`
+
+	// Volume name.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Volume) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Volume) GoString() string {
+	return s.String()
+}
+
+// SetHostPath sets the HostPath field's value.
+func (s *Volume) SetHostPath(v *HostPath) *Volume {
+	s.HostPath = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Volume) SetName(v string) *Volume {
+	s.Name = &v
+	return s
+}
+
+// Contains EBS volume details.
+type VolumeDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The device name for the EBS volume.
+	DeviceName *string `locationName:"deviceName" type:"string"`
+
+	// EBS volume encryption type.
+	EncryptionType *string `locationName:"encryptionType" type:"string"`
+
+	// KMS key Arn used to encrypt the EBS volume.
+	KmsKeyArn *string `locationName:"kmsKeyArn" type:"string"`
+
+	// Snapshot Arn of the EBS volume.
+	SnapshotArn *string `locationName:"snapshotArn" type:"string"`
+
+	// EBS volume Arn information.
+	VolumeArn *string `locationName:"volumeArn" type:"string"`
+
+	// EBS volume size in GB.
+	VolumeSizeInGB *int64 `locationName:"volumeSizeInGB" type:"integer"`
+
+	// The EBS volume type.
+	VolumeType *string `locationName:"volumeType" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeDetail) GoString() string {
+	return s.String()
+}
+
+// SetDeviceName sets the DeviceName field's value.
+func (s *VolumeDetail) SetDeviceName(v string) *VolumeDetail {
+	s.DeviceName = &v
+	return s
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *VolumeDetail) SetEncryptionType(v string) *VolumeDetail {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *VolumeDetail) SetKmsKeyArn(v string) *VolumeDetail {
+	s.KmsKeyArn = &v
+	return s
+}
+
+// SetSnapshotArn sets the SnapshotArn field's value.
+func (s *VolumeDetail) SetSnapshotArn(v string) *VolumeDetail {
+	s.SnapshotArn = &v
+	return s
+}
+
+// SetVolumeArn sets the VolumeArn field's value.
+func (s *VolumeDetail) SetVolumeArn(v string) *VolumeDetail {
+	s.VolumeArn = &v
+	return s
+}
+
+// SetVolumeSizeInGB sets the VolumeSizeInGB field's value.
+func (s *VolumeDetail) SetVolumeSizeInGB(v int64) *VolumeDetail {
+	s.VolumeSizeInGB = &v
+	return s
+}
+
+// SetVolumeType sets the VolumeType field's value.
+func (s *VolumeDetail) SetVolumeType(v string) *VolumeDetail {
+	s.VolumeType = &v
+	return s
+}
+
+// Container volume mount.
+type VolumeMount struct {
+	_ struct{} `type:"structure"`
+
+	// Volume mount path.
+	MountPath *string `locationName:"mountPath" type:"string"`
+
+	// Volume mount name.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeMount) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VolumeMount) GoString() string {
+	return s.String()
+}
+
+// SetMountPath sets the MountPath field's value.
+func (s *VolumeMount) SetMountPath(v string) *VolumeMount {
+	s.MountPath = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *VolumeMount) SetName(v string) *VolumeMount {
+	s.Name = &v
+	return s
+}
+
 const (
 	// AdminStatusEnabled is a AdminStatus enum value
 	AdminStatusEnabled = "ENABLED"
@@ -15809,6 +20469,38 @@ func AdminStatus_Values() []string {
 }
 
 const (
+	// CriterionKeyEc2InstanceArn is a CriterionKey enum value
+	CriterionKeyEc2InstanceArn = "EC2_INSTANCE_ARN"
+
+	// CriterionKeyScanId is a CriterionKey enum value
+	CriterionKeyScanId = "SCAN_ID"
+
+	// CriterionKeyAccountId is a CriterionKey enum value
+	CriterionKeyAccountId = "ACCOUNT_ID"
+
+	// CriterionKeyGuarddutyFindingId is a CriterionKey enum value
+	CriterionKeyGuarddutyFindingId = "GUARDDUTY_FINDING_ID"
+
+	// CriterionKeyScanStartTime is a CriterionKey enum value
+	CriterionKeyScanStartTime = "SCAN_START_TIME"
+
+	// CriterionKeyScanStatus is a CriterionKey enum value
+	CriterionKeyScanStatus = "SCAN_STATUS"
+)
+
+// CriterionKey_Values returns all elements of the CriterionKey enum
+func CriterionKey_Values() []string {
+	return []string{
+		CriterionKeyEc2InstanceArn,
+		CriterionKeyScanId,
+		CriterionKeyAccountId,
+		CriterionKeyGuarddutyFindingId,
+		CriterionKeyScanStartTime,
+		CriterionKeyScanStatus,
+	}
+}
+
+const (
 	// DataSourceFlowLogs is a DataSource enum value
 	DataSourceFlowLogs = "FLOW_LOGS"
 
@@ -15820,6 +20512,12 @@ const (
 
 	// DataSourceS3Logs is a DataSource enum value
 	DataSourceS3Logs = "S3_LOGS"
+
+	// DataSourceKubernetesAuditLogs is a DataSource enum value
+	DataSourceKubernetesAuditLogs = "KUBERNETES_AUDIT_LOGS"
+
+	// DataSourceEc2MalwareScan is a DataSource enum value
+	DataSourceEc2MalwareScan = "EC2_MALWARE_SCAN"
 )
 
 // DataSource_Values returns all elements of the DataSource enum
@@ -15829,6 +20527,8 @@ func DataSource_Values() []string {
 		DataSourceCloudTrail,
 		DataSourceDnsLogs,
 		DataSourceS3Logs,
+		DataSourceKubernetesAuditLogs,
+		DataSourceEc2MalwareScan,
 	}
 }
 
@@ -15873,6 +20573,22 @@ func DetectorStatus_Values() []string {
 	return []string{
 		DetectorStatusEnabled,
 		DetectorStatusDisabled,
+	}
+}
+
+const (
+	// EbsSnapshotPreservationNoRetention is a EbsSnapshotPreservation enum value
+	EbsSnapshotPreservationNoRetention = "NO_RETENTION"
+
+	// EbsSnapshotPreservationRetentionWithFinding is a EbsSnapshotPreservation enum value
+	EbsSnapshotPreservationRetentionWithFinding = "RETENTION_WITH_FINDING"
+)
+
+// EbsSnapshotPreservation_Values returns all elements of the EbsSnapshotPreservation enum
+func EbsSnapshotPreservation_Values() []string {
+	return []string{
+		EbsSnapshotPreservationNoRetention,
+		EbsSnapshotPreservationRetentionWithFinding,
 	}
 }
 
@@ -16045,6 +20761,56 @@ func PublishingStatus_Values() []string {
 		PublishingStatusPublishing,
 		PublishingStatusUnableToPublishFixDestinationProperty,
 		PublishingStatusStopped,
+	}
+}
+
+// An enum value representing possible resource properties to match with given
+// scan condition.
+const (
+	// ScanCriterionKeyEc2InstanceTag is a ScanCriterionKey enum value
+	ScanCriterionKeyEc2InstanceTag = "EC2_INSTANCE_TAG"
+)
+
+// ScanCriterionKey_Values returns all elements of the ScanCriterionKey enum
+func ScanCriterionKey_Values() []string {
+	return []string{
+		ScanCriterionKeyEc2InstanceTag,
+	}
+}
+
+const (
+	// ScanResultClean is a ScanResult enum value
+	ScanResultClean = "CLEAN"
+
+	// ScanResultInfected is a ScanResult enum value
+	ScanResultInfected = "INFECTED"
+)
+
+// ScanResult_Values returns all elements of the ScanResult enum
+func ScanResult_Values() []string {
+	return []string{
+		ScanResultClean,
+		ScanResultInfected,
+	}
+}
+
+const (
+	// ScanStatusRunning is a ScanStatus enum value
+	ScanStatusRunning = "RUNNING"
+
+	// ScanStatusCompleted is a ScanStatus enum value
+	ScanStatusCompleted = "COMPLETED"
+
+	// ScanStatusFailed is a ScanStatus enum value
+	ScanStatusFailed = "FAILED"
+)
+
+// ScanStatus_Values returns all elements of the ScanStatus enum
+func ScanStatus_Values() []string {
+	return []string{
+		ScanStatusRunning,
+		ScanStatusCompleted,
+		ScanStatusFailed,
 	}
 }
 

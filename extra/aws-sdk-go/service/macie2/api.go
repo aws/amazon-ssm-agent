@@ -1685,8 +1685,8 @@ func (c *Macie2) DescribeOrganizationConfigurationRequest(input *DescribeOrganiz
 
 // DescribeOrganizationConfiguration API operation for Amazon Macie 2.
 //
-// Retrieves the Amazon Macie configuration settings for an Amazon Web Services
-// organization.
+// Retrieves the Amazon Macie configuration settings for an organization in
+// Organizations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1791,7 +1791,8 @@ func (c *Macie2) DisableMacieRequest(input *DisableMacieInput) (req *request.Req
 
 // DisableMacie API operation for Amazon Macie 2.
 //
-// Disables an Amazon Macie account and deletes Macie resources for the account.
+// Disables Amazon Macie and deletes all settings and resources for a Macie
+// account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1897,7 +1898,7 @@ func (c *Macie2) DisableOrganizationAdminAccountRequest(input *DisableOrganizati
 // DisableOrganizationAdminAccount API operation for Amazon Macie 2.
 //
 // Disables an account as the delegated Amazon Macie administrator account for
-// an Amazon Web Services organization.
+// an organization in Organizations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2426,7 +2427,7 @@ func (c *Macie2) EnableOrganizationAdminAccountRequest(input *EnableOrganization
 // EnableOrganizationAdminAccount API operation for Amazon Macie 2.
 //
 // Designates an account as the delegated Amazon Macie administrator account
-// for an Amazon Web Services organization.
+// for an organization in Organizations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2635,8 +2636,8 @@ func (c *Macie2) GetBucketStatisticsRequest(input *GetBucketStatisticsInput) (re
 
 // GetBucketStatistics API operation for Amazon Macie 2.
 //
-// Retrieves (queries) aggregated statistical data for all the S3 buckets that
-// Amazon Macie monitors and analyzes.
+// Retrieves (queries) aggregated statistical data about S3 buckets that Amazon
+// Macie monitors and analyzes.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3737,6 +3738,292 @@ func (c *Macie2) GetMember(input *GetMemberInput) (*GetMemberOutput, error) {
 // for more information on using Contexts.
 func (c *Macie2) GetMemberWithContext(ctx aws.Context, input *GetMemberInput, opts ...request.Option) (*GetMemberOutput, error) {
 	req, out := c.GetMemberRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetRevealConfiguration = "GetRevealConfiguration"
+
+// GetRevealConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the GetRevealConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetRevealConfiguration for more information on using the GetRevealConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetRevealConfigurationRequest method.
+//    req, resp := client.GetRevealConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetRevealConfiguration
+func (c *Macie2) GetRevealConfigurationRequest(input *GetRevealConfigurationInput) (req *request.Request, output *GetRevealConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opGetRevealConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/reveal-configuration",
+	}
+
+	if input == nil {
+		input = &GetRevealConfigurationInput{}
+	}
+
+	output = &GetRevealConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetRevealConfiguration API operation for Amazon Macie 2.
+//
+// Retrieves the status and configuration settings for retrieving (revealing)
+// occurrences of sensitive data reported by findings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Macie 2's
+// API operation GetRevealConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Provides information about an error that occurred because too many requests
+//   were sent during a certain amount of time.
+//
+//   * ValidationException
+//   Provides information about an error that occurred due to a syntax error in
+//   a request.
+//
+//   * InternalServerException
+//   Provides information about an error that occurred due to an unknown internal
+//   server error, exception, or failure.
+//
+//   * AccessDeniedException
+//   Provides information about an error that occurred due to insufficient access
+//   to a specified resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetRevealConfiguration
+func (c *Macie2) GetRevealConfiguration(input *GetRevealConfigurationInput) (*GetRevealConfigurationOutput, error) {
+	req, out := c.GetRevealConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// GetRevealConfigurationWithContext is the same as GetRevealConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetRevealConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Macie2) GetRevealConfigurationWithContext(ctx aws.Context, input *GetRevealConfigurationInput, opts ...request.Option) (*GetRevealConfigurationOutput, error) {
+	req, out := c.GetRevealConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetSensitiveDataOccurrences = "GetSensitiveDataOccurrences"
+
+// GetSensitiveDataOccurrencesRequest generates a "aws/request.Request" representing the
+// client's request for the GetSensitiveDataOccurrences operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSensitiveDataOccurrences for more information on using the GetSensitiveDataOccurrences
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSensitiveDataOccurrencesRequest method.
+//    req, resp := client.GetSensitiveDataOccurrencesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrences
+func (c *Macie2) GetSensitiveDataOccurrencesRequest(input *GetSensitiveDataOccurrencesInput) (req *request.Request, output *GetSensitiveDataOccurrencesOutput) {
+	op := &request.Operation{
+		Name:       opGetSensitiveDataOccurrences,
+		HTTPMethod: "GET",
+		HTTPPath:   "/findings/{findingId}/reveal",
+	}
+
+	if input == nil {
+		input = &GetSensitiveDataOccurrencesInput{}
+	}
+
+	output = &GetSensitiveDataOccurrencesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSensitiveDataOccurrences API operation for Amazon Macie 2.
+//
+// Retrieves (reveals) occurrences of sensitive data reported by a finding.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Macie 2's
+// API operation GetSensitiveDataOccurrences for usage and error information.
+//
+// Returned Error Types:
+//   * UnprocessableEntityException
+//   Provides information about an error that occurred due to an unprocessable
+//   entity.
+//
+//   * InternalServerException
+//   Provides information about an error that occurred due to an unknown internal
+//   server error, exception, or failure.
+//
+//   * ServiceQuotaExceededException
+//   Provides information about an error that occurred due to one or more service
+//   quotas for an account.
+//
+//   * AccessDeniedException
+//   Provides information about an error that occurred due to insufficient access
+//   to a specified resource.
+//
+//   * ResourceNotFoundException
+//   Provides information about an error that occurred because a specified resource
+//   wasn't found.
+//
+//   * ThrottlingException
+//   Provides information about an error that occurred because too many requests
+//   were sent during a certain amount of time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrences
+func (c *Macie2) GetSensitiveDataOccurrences(input *GetSensitiveDataOccurrencesInput) (*GetSensitiveDataOccurrencesOutput, error) {
+	req, out := c.GetSensitiveDataOccurrencesRequest(input)
+	return out, req.Send()
+}
+
+// GetSensitiveDataOccurrencesWithContext is the same as GetSensitiveDataOccurrences with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSensitiveDataOccurrences for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Macie2) GetSensitiveDataOccurrencesWithContext(ctx aws.Context, input *GetSensitiveDataOccurrencesInput, opts ...request.Option) (*GetSensitiveDataOccurrencesOutput, error) {
+	req, out := c.GetSensitiveDataOccurrencesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetSensitiveDataOccurrencesAvailability = "GetSensitiveDataOccurrencesAvailability"
+
+// GetSensitiveDataOccurrencesAvailabilityRequest generates a "aws/request.Request" representing the
+// client's request for the GetSensitiveDataOccurrencesAvailability operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSensitiveDataOccurrencesAvailability for more information on using the GetSensitiveDataOccurrencesAvailability
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSensitiveDataOccurrencesAvailabilityRequest method.
+//    req, resp := client.GetSensitiveDataOccurrencesAvailabilityRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrencesAvailability
+func (c *Macie2) GetSensitiveDataOccurrencesAvailabilityRequest(input *GetSensitiveDataOccurrencesAvailabilityInput) (req *request.Request, output *GetSensitiveDataOccurrencesAvailabilityOutput) {
+	op := &request.Operation{
+		Name:       opGetSensitiveDataOccurrencesAvailability,
+		HTTPMethod: "GET",
+		HTTPPath:   "/findings/{findingId}/reveal/availability",
+	}
+
+	if input == nil {
+		input = &GetSensitiveDataOccurrencesAvailabilityInput{}
+	}
+
+	output = &GetSensitiveDataOccurrencesAvailabilityOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSensitiveDataOccurrencesAvailability API operation for Amazon Macie 2.
+//
+// Checks whether occurrences of sensitive data can be retrieved (revealed)
+// for a finding.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Macie 2's
+// API operation GetSensitiveDataOccurrencesAvailability for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   Provides information about an error that occurred because a specified resource
+//   wasn't found.
+//
+//   * ThrottlingException
+//   Provides information about an error that occurred because too many requests
+//   were sent during a certain amount of time.
+//
+//   * InternalServerException
+//   Provides information about an error that occurred due to an unknown internal
+//   server error, exception, or failure.
+//
+//   * AccessDeniedException
+//   Provides information about an error that occurred due to insufficient access
+//   to a specified resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrencesAvailability
+func (c *Macie2) GetSensitiveDataOccurrencesAvailability(input *GetSensitiveDataOccurrencesAvailabilityInput) (*GetSensitiveDataOccurrencesAvailabilityOutput, error) {
+	req, out := c.GetSensitiveDataOccurrencesAvailabilityRequest(input)
+	return out, req.Send()
+}
+
+// GetSensitiveDataOccurrencesAvailabilityWithContext is the same as GetSensitiveDataOccurrencesAvailability with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSensitiveDataOccurrencesAvailability for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Macie2) GetSensitiveDataOccurrencesAvailabilityWithContext(ctx aws.Context, input *GetSensitiveDataOccurrencesAvailabilityInput, opts ...request.Option) (*GetSensitiveDataOccurrencesAvailabilityOutput, error) {
+	req, out := c.GetSensitiveDataOccurrencesAvailabilityRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5109,7 +5396,7 @@ func (c *Macie2) ListOrganizationAdminAccountsRequest(input *ListOrganizationAdm
 // ListOrganizationAdminAccounts API operation for Amazon Macie 2.
 //
 // Retrieves information about the delegated Amazon Macie administrator account
-// for an Amazon Web Services organization.
+// for an organization in Organizations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6180,8 +6467,8 @@ func (c *Macie2) UpdateMacieSessionRequest(input *UpdateMacieSessionInput) (req 
 
 // UpdateMacieSession API operation for Amazon Macie 2.
 //
-// Suspends or re-enables an Amazon Macie account, or updates the configuration
-// settings for a Macie account.
+// Suspends or re-enables Amazon Macie, or updates the configuration settings
+// for a Macie account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6286,7 +6573,8 @@ func (c *Macie2) UpdateMemberSessionRequest(input *UpdateMemberSessionInput) (re
 
 // UpdateMemberSession API operation for Amazon Macie 2.
 //
-// Enables an Amazon Macie administrator to suspend or re-enable a member account.
+// Enables an Amazon Macie administrator to suspend or re-enable Macie for a
+// member account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6391,8 +6679,7 @@ func (c *Macie2) UpdateOrganizationConfigurationRequest(input *UpdateOrganizatio
 
 // UpdateOrganizationConfiguration API operation for Amazon Macie 2.
 //
-// Updates the Amazon Macie configuration settings for an Amazon Web Services
-// organization.
+// Updates the Amazon Macie configuration settings for an organization in Organizations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6447,6 +6734,99 @@ func (c *Macie2) UpdateOrganizationConfiguration(input *UpdateOrganizationConfig
 // for more information on using Contexts.
 func (c *Macie2) UpdateOrganizationConfigurationWithContext(ctx aws.Context, input *UpdateOrganizationConfigurationInput, opts ...request.Option) (*UpdateOrganizationConfigurationOutput, error) {
 	req, out := c.UpdateOrganizationConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateRevealConfiguration = "UpdateRevealConfiguration"
+
+// UpdateRevealConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateRevealConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateRevealConfiguration for more information on using the UpdateRevealConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateRevealConfigurationRequest method.
+//    req, resp := client.UpdateRevealConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateRevealConfiguration
+func (c *Macie2) UpdateRevealConfigurationRequest(input *UpdateRevealConfigurationInput) (req *request.Request, output *UpdateRevealConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateRevealConfiguration,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/reveal-configuration",
+	}
+
+	if input == nil {
+		input = &UpdateRevealConfigurationInput{}
+	}
+
+	output = &UpdateRevealConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateRevealConfiguration API operation for Amazon Macie 2.
+//
+// Updates the status and configuration settings for retrieving (revealing)
+// occurrences of sensitive data reported by findings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Macie 2's
+// API operation UpdateRevealConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Provides information about an error that occurred because too many requests
+//   were sent during a certain amount of time.
+//
+//   * ValidationException
+//   Provides information about an error that occurred due to a syntax error in
+//   a request.
+//
+//   * InternalServerException
+//   Provides information about an error that occurred due to an unknown internal
+//   server error, exception, or failure.
+//
+//   * AccessDeniedException
+//   Provides information about an error that occurred due to insufficient access
+//   to a specified resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateRevealConfiguration
+func (c *Macie2) UpdateRevealConfiguration(input *UpdateRevealConfigurationInput) (*UpdateRevealConfigurationOutput, error) {
+	req, out := c.UpdateRevealConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateRevealConfigurationWithContext is the same as UpdateRevealConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateRevealConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Macie2) UpdateRevealConfigurationWithContext(ctx aws.Context, input *UpdateRevealConfigurationInput, opts ...request.Option) (*UpdateRevealConfigurationOutput, error) {
+	req, out := c.UpdateRevealConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -6519,7 +6899,7 @@ func (s *AcceptInvitationInput) SetMasterAccount(v string) *AcceptInvitationInpu
 }
 
 type AcceptInvitationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6741,14 +7121,14 @@ func (s *AccountLevelPermissions) SetBlockPublicAccess(v *BlockPublicAccess) *Ac
 }
 
 // Provides information about the delegated Amazon Macie administrator account
-// for an Amazon Web Services organization.
+// for an organization in Organizations.
 type AdminAccount struct {
 	_ struct{} `type:"structure"`
 
 	AccountId *string `locationName:"accountId" type:"string"`
 
 	// The current status of an account as the delegated Amazon Macie administrator
-	// account for an Amazon Web Services organization. Possible values are:
+	// account for an organization in Organizations. Possible values are:
 	Status *string `locationName:"status" type:"string" enum:"AdminStatus"`
 }
 
@@ -7538,9 +7918,10 @@ func (s *BucketLevelPermissions) SetBucketPolicy(v *BucketPolicy) *BucketLevelPe
 // Provides statistical data and other information about an S3 bucket that Amazon
 // Macie monitors and analyzes for your account. If an error occurs when Macie
 // attempts to retrieve and process information about the bucket or the bucket's
-// objects, the value for most of these properties is null. Exceptions are accountId,
-// bucketArn, bucketCreatedAt, bucketName, lastUpdated, and region. To identify
-// the cause of the error, refer to the errorCode and errorMessage values.
+// objects, the value for the versioning property is false and the value for
+// most other properties is null. Exceptions are accountId, bucketArn, bucketCreatedAt,
+// bucketName, lastUpdated, and region. To identify the cause of the error,
+// refer to the errorCode and errorMessage values.
 type BucketMetadata struct {
 	_ struct{} `type:"structure"`
 
@@ -8048,8 +8429,8 @@ func (s *Cell) SetRow(v int64) *Cell {
 	return s
 }
 
-// Provides information about a sensitive data finding, including the classification
-// job that produced the finding.
+// Provides information about a sensitive data finding and the details of the
+// finding.
 type ClassificationDetails struct {
 	_ struct{} `type:"structure"`
 
@@ -8058,6 +8439,10 @@ type ClassificationDetails struct {
 	JobArn *string `locationName:"jobArn" type:"string"`
 
 	JobId *string `locationName:"jobId" type:"string"`
+
+	// Specifies how Amazon Macie found the sensitive data that produced a finding.
+	// The only possible value is:
+	OriginType *string `locationName:"originType" type:"string" enum:"OriginType"`
 
 	// Provides the details of a sensitive data finding, including the types, number
 	// of occurrences, and locations of the sensitive data that was detected.
@@ -8097,6 +8482,12 @@ func (s *ClassificationDetails) SetJobArn(v string) *ClassificationDetails {
 // SetJobId sets the JobId field's value.
 func (s *ClassificationDetails) SetJobId(v string) *ClassificationDetails {
 	s.JobId = &v
+	return s
+}
+
+// SetOriginType sets the OriginType field's value.
+func (s *ClassificationDetails) SetOriginType(v string) *ClassificationDetails {
+	s.OriginType = &v
 	return s
 }
 
@@ -8542,10 +8933,10 @@ func (s *CreateClassificationJobOutput) SetJobId(v string) *CreateClassification
 	return s
 }
 
-// Specifies the criteria and other settings for a custom data identifier. You
-// can't change a custom data identifier after you create it. This helps ensure
-// that you have an immutable history of sensitive data findings and discovery
-// results for data privacy and protection audits or investigations.
+// Specifies the detection criteria and other settings for a custom data identifier.
+// You can't change a custom data identifier after you create it. This helps
+// ensure that you have an immutable history of sensitive data findings and
+// discovery results for data privacy and protection audits or investigations.
 type CreateCustomDataIdentifierInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8559,9 +8950,26 @@ type CreateCustomDataIdentifierInput struct {
 
 	MaximumMatchDistance *int64 `locationName:"maximumMatchDistance" type:"integer"`
 
-	Name *string `locationName:"name" type:"string"`
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
 
-	Regex *string `locationName:"regex" type:"string"`
+	// Regex is a required field
+	Regex *string `locationName:"regex" type:"string" required:"true"`
+
+	// The severity to assign to findings that the custom data identifier produces,
+	// based on the number of occurrences of text that matches the custom data identifier's
+	// detection criteria. You can specify as many as three SeverityLevel objects
+	// in this array, one for each severity: LOW, MEDIUM, or HIGH. If you specify
+	// more than one, the occurrences thresholds must be in ascending order by severity,
+	// moving from LOW to HIGH. For example, 1 for LOW, 50 for MEDIUM, and 100 for
+	// HIGH. If an S3 object contains fewer occurrences than the lowest specified
+	// threshold, Amazon Macie doesn't create a finding.
+	//
+	// If you don't specify any values for this array, Macie creates findings for
+	// S3 objects that contain at least one occurrence of text that matches the
+	// detection criteria, and Macie automatically assigns the MEDIUM severity to
+	// those findings.
+	SeverityLevels []*SeverityLevel `locationName:"severityLevels" type:"list"`
 
 	// A string-to-string map of key-value pairs that specifies the tags (keys and
 	// values) for a classification job, custom data identifier, findings filter,
@@ -8585,6 +8993,32 @@ func (s CreateCustomDataIdentifierInput) String() string {
 // value will be replaced with "sensitive".
 func (s CreateCustomDataIdentifierInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCustomDataIdentifierInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCustomDataIdentifierInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Regex == nil {
+		invalidParams.Add(request.NewErrParamRequired("Regex"))
+	}
+	if s.SeverityLevels != nil {
+		for i, v := range s.SeverityLevels {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SeverityLevels", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.
@@ -8626,6 +9060,12 @@ func (s *CreateCustomDataIdentifierInput) SetName(v string) *CreateCustomDataIde
 // SetRegex sets the Regex field's value.
 func (s *CreateCustomDataIdentifierInput) SetRegex(v string) *CreateCustomDataIdentifierInput {
 	s.Regex = &v
+	return s
+}
+
+// SetSeverityLevels sets the SeverityLevels field's value.
+func (s *CreateCustomDataIdentifierInput) SetSeverityLevels(v []*SeverityLevel) *CreateCustomDataIdentifierInput {
+	s.SeverityLevels = v
 	return s
 }
 
@@ -8818,7 +9258,12 @@ func (s *CreateFindingsFilterOutput) SetId(v string) *CreateFindingsFilterOutput
 	return s
 }
 
-// Specifies the settings for an Amazon Macie membership invitation.
+// Specifies the settings for an Amazon Macie membership invitation. When you
+// send an invitation, Macie notifies the recipient by creating an Health event
+// for the recipient's account and, if Macie is already enabled for the account,
+// displaying an Accounts badge and notification on the recipient's console.
+// You can optionally notify the recipient by also sending the invitation as
+// an email message.
 type CreateInvitationsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9008,12 +9453,11 @@ func (s *CreateMemberOutput) SetArn(v string) *CreateMemberOutput {
 	return s
 }
 
-// Specifies the types of findings to include in a set of sample findings that
-// Amazon Macie creates.
+// Specifies the types of sample findings to create.
 type CreateSampleFindingsInput struct {
 	_ struct{} `type:"structure"`
 
-	FindingTypes []*string `locationName:"findingTypes" type:"list"`
+	FindingTypes []*string `locationName:"findingTypes" type:"list" enum:"FindingType"`
 }
 
 // String returns the string representation.
@@ -9041,7 +9485,7 @@ func (s *CreateSampleFindingsInput) SetFindingTypes(v []*string) *CreateSampleFi
 }
 
 type CreateSampleFindingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9340,7 +9784,9 @@ type CustomDetection struct {
 
 	// Specifies the location of 1-15 occurrences of sensitive data that was detected
 	// by a managed data identifier or a custom data identifier and produced a sensitive
-	// data finding.
+	// data finding. Depending on the file or storage format of the affected S3
+	// object, you can optionally retrieve (reveal) sample occurrences of the sensitive
+	// data that was detected.
 	Occurrences *Occurrences `locationName:"occurrences" type:"structure"`
 }
 
@@ -9389,7 +9835,7 @@ func (s *CustomDetection) SetOccurrences(v *Occurrences) *CustomDetection {
 // Specifies that a classification job runs once a day, every day. This is an
 // empty object.
 type DailySchedule struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9497,7 +9943,9 @@ type DefaultDetection struct {
 
 	// Specifies the location of 1-15 occurrences of sensitive data that was detected
 	// by a managed data identifier or a custom data identifier and produced a sensitive
-	// data finding.
+	// data finding. Depending on the file or storage format of the affected S3
+	// object, you can optionally retrieve (reveal) sample occurrences of the sensitive
+	// data that was detected.
 	Occurrences *Occurrences `locationName:"occurrences" type:"structure"`
 
 	Type *string `locationName:"type" type:"string"`
@@ -9587,7 +10035,7 @@ func (s *DeleteCustomDataIdentifierInput) SetId(v string) *DeleteCustomDataIdent
 }
 
 type DeleteCustomDataIdentifierOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9656,7 +10104,7 @@ func (s *DeleteFindingsFilterInput) SetId(v string) *DeleteFindingsFilterInput {
 }
 
 type DeleteFindingsFilterOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9803,7 +10251,7 @@ func (s *DeleteMemberInput) SetId(v string) *DeleteMemberInput {
 }
 
 type DeleteMemberOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10205,7 +10653,7 @@ func (s DescribeOrganizationConfigurationInput) GoString() string {
 }
 
 // Provides information about the Amazon Macie configuration settings for an
-// Amazon Web Services organization.
+// organization in Organizations.
 type DescribeOrganizationConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -10244,6 +10692,39 @@ func (s *DescribeOrganizationConfigurationOutput) SetMaxAccountLimitReached(v bo
 	return s
 }
 
+// Specifies 1-10 occurrences of a specific type of sensitive data reported
+// by a finding.
+type DetectedDataDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Value is a required field
+	Value *string `locationName:"value" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedDataDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedDataDetails) GoString() string {
+	return s.String()
+}
+
+// SetValue sets the Value field's value.
+func (s *DetectedDataDetails) SetValue(v string) *DetectedDataDetails {
+	s.Value = &v
+	return s
+}
+
 type DisableMacieInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 }
@@ -10267,7 +10748,7 @@ func (s DisableMacieInput) GoString() string {
 }
 
 type DisableMacieOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10333,7 +10814,7 @@ func (s *DisableOrganizationAdminAccountInput) SetAdminAccountId(v string) *Disa
 }
 
 type DisableOrganizationAdminAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10377,7 +10858,7 @@ func (s DisassociateFromAdministratorAccountInput) GoString() string {
 }
 
 type DisassociateFromAdministratorAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10421,7 +10902,7 @@ func (s DisassociateFromMasterAccountInput) GoString() string {
 }
 
 type DisassociateFromMasterAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10490,7 +10971,7 @@ func (s *DisassociateMemberInput) SetId(v string) *DisassociateMemberInput {
 }
 
 type DisassociateMemberOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10598,7 +11079,7 @@ func (s *EnableMacieInput) SetStatus(v string) *EnableMacieInput {
 }
 
 type EnableMacieOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10619,10 +11100,9 @@ func (s EnableMacieOutput) GoString() string {
 	return s.String()
 }
 
-// Specifies an account to designate as a delegated Amazon Macie administrator
-// account for an Amazon Web Services organization. To submit this request,
-// you must be a user of the management account for the Amazon Web Services
-// organization.
+// Specifies an account to designate as the delegated Amazon Macie administrator
+// account for an organization in Organizations. To submit this request, you
+// must be a user of the Organizations management account.
 type EnableOrganizationAdminAccountInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10676,7 +11156,7 @@ func (s *EnableOrganizationAdminAccountInput) SetClientToken(v string) *EnableOr
 }
 
 type EnableOrganizationAdminAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10776,8 +11256,8 @@ type Finding struct {
 	// The category of the finding. Valid values are:
 	Category *string `locationName:"category" type:"string" enum:"FindingCategory"`
 
-	// Provides information about a sensitive data finding, including the classification
-	// job that produced the finding.
+	// Provides information about a sensitive data finding and the details of the
+	// finding.
 	ClassificationDetails *ClassificationDetails `locationName:"classificationDetails" type:"structure"`
 
 	Count *int64 `locationName:"count" type:"long"`
@@ -11215,8 +11695,7 @@ func (s GetAdministratorAccountInput) GoString() string {
 type GetAdministratorAccountOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Provides information about an Amazon Macie membership invitation that was
-	// received by an account.
+	// Provides information about an Amazon Macie membership invitation.
 	Administrator *Invitation `locationName:"administrator" type:"structure"`
 }
 
@@ -11532,8 +12011,8 @@ func (s *GetCustomDataIdentifierInput) SetId(v string) *GetCustomDataIdentifierI
 	return s
 }
 
-// Provides information about the criteria and other settings for a custom data
-// identifier.
+// Provides information about the detection criteria and other settings for
+// a custom data identifier.
 type GetCustomDataIdentifierOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11556,6 +12035,21 @@ type GetCustomDataIdentifierOutput struct {
 	Name *string `locationName:"name" type:"string"`
 
 	Regex *string `locationName:"regex" type:"string"`
+
+	// The severity to assign to findings that the custom data identifier produces,
+	// based on the number of occurrences of text that matches the custom data identifier's
+	// detection criteria. You can specify as many as three SeverityLevel objects
+	// in this array, one for each severity: LOW, MEDIUM, or HIGH. If you specify
+	// more than one, the occurrences thresholds must be in ascending order by severity,
+	// moving from LOW to HIGH. For example, 1 for LOW, 50 for MEDIUM, and 100 for
+	// HIGH. If an S3 object contains fewer occurrences than the lowest specified
+	// threshold, Amazon Macie doesn't create a finding.
+	//
+	// If you don't specify any values for this array, Macie creates findings for
+	// S3 objects that contain at least one occurrence of text that matches the
+	// detection criteria, and Macie automatically assigns the MEDIUM severity to
+	// those findings.
+	SeverityLevels []*SeverityLevel `locationName:"severityLevels" type:"list"`
 
 	// A string-to-string map of key-value pairs that specifies the tags (keys and
 	// values) for a classification job, custom data identifier, findings filter,
@@ -11638,6 +12132,12 @@ func (s *GetCustomDataIdentifierOutput) SetName(v string) *GetCustomDataIdentifi
 // SetRegex sets the Regex field's value.
 func (s *GetCustomDataIdentifierOutput) SetRegex(v string) *GetCustomDataIdentifierOutput {
 	s.Regex = &v
+	return s
+}
+
+// SetSeverityLevels sets the SeverityLevels field's value.
+func (s *GetCustomDataIdentifierOutput) SetSeverityLevels(v []*SeverityLevel) *GetCustomDataIdentifierOutput {
+	s.SeverityLevels = v
 	return s
 }
 
@@ -12214,8 +12714,7 @@ func (s GetMasterAccountInput) GoString() string {
 type GetMasterAccountOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Provides information about an Amazon Macie membership invitation that was
-	// received by an account.
+	// Provides information about an Amazon Macie membership invitation.
 	Master *Invitation `locationName:"master" type:"structure"`
 }
 
@@ -12308,7 +12807,7 @@ type GetMemberOutput struct {
 	MasterAccountId *string `locationName:"masterAccountId" type:"string"`
 
 	// The current status of the relationship between an account and an associated
-	// Amazon Macie administrator account (inviter account). Possible values are:
+	// Amazon Macie administrator account. Possible values are:
 	RelationshipStatus *string `locationName:"relationshipStatus" type:"string" enum:"RelationshipStatus"`
 
 	// A string-to-string map of key-value pairs that specifies the tags (keys and
@@ -12388,6 +12887,255 @@ func (s *GetMemberOutput) SetTags(v map[string]*string) *GetMemberOutput {
 // SetUpdatedAt sets the UpdatedAt field's value.
 func (s *GetMemberOutput) SetUpdatedAt(v time.Time) *GetMemberOutput {
 	s.UpdatedAt = &v
+	return s
+}
+
+type GetRevealConfigurationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRevealConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRevealConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Provides information about the configuration settings for retrieving occurrences
+// of sensitive data reported by findings, and the status of the configuration
+// for an Amazon Macie account.
+type GetRevealConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the configuration settings for retrieving occurrences of sensitive
+	// data reported by findings, and the status of the configuration for an Amazon
+	// Macie account. When you enable the configuration for the first time, your
+	// request must specify an AWS Key Management Service (AWS KMS) key. Otherwise,
+	// an error occurs. Macie uses the specified key to encrypt the sensitive data
+	// that you retrieve.
+	Configuration *RevealConfiguration `locationName:"configuration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRevealConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRevealConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *GetRevealConfigurationOutput) SetConfiguration(v *RevealConfiguration) *GetRevealConfigurationOutput {
+	s.Configuration = v
+	return s
+}
+
+type GetSensitiveDataOccurrencesAvailabilityInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// FindingId is a required field
+	FindingId *string `location:"uri" locationName:"findingId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesAvailabilityInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesAvailabilityInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSensitiveDataOccurrencesAvailabilityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSensitiveDataOccurrencesAvailabilityInput"}
+	if s.FindingId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FindingId"))
+	}
+	if s.FindingId != nil && len(*s.FindingId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FindingId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFindingId sets the FindingId field's value.
+func (s *GetSensitiveDataOccurrencesAvailabilityInput) SetFindingId(v string) *GetSensitiveDataOccurrencesAvailabilityInput {
+	s.FindingId = &v
+	return s
+}
+
+// Provides information about whether occurrences of sensitive data can be retrieved
+// for a finding and, if not, why the data can't be retrieved.
+type GetSensitiveDataOccurrencesAvailabilityOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether occurrences of sensitive data can be retrieved for a finding.
+	// Possible values are:
+	Code *string `locationName:"code" type:"string" enum:"AvailabilityCode"`
+
+	Reasons []*string `locationName:"reasons" type:"list" enum:"UnavailabilityReasonCode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesAvailabilityOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesAvailabilityOutput) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *GetSensitiveDataOccurrencesAvailabilityOutput) SetCode(v string) *GetSensitiveDataOccurrencesAvailabilityOutput {
+	s.Code = &v
+	return s
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *GetSensitiveDataOccurrencesAvailabilityOutput) SetReasons(v []*string) *GetSensitiveDataOccurrencesAvailabilityOutput {
+	s.Reasons = v
+	return s
+}
+
+type GetSensitiveDataOccurrencesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// FindingId is a required field
+	FindingId *string `location:"uri" locationName:"findingId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSensitiveDataOccurrencesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSensitiveDataOccurrencesInput"}
+	if s.FindingId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FindingId"))
+	}
+	if s.FindingId != nil && len(*s.FindingId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FindingId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFindingId sets the FindingId field's value.
+func (s *GetSensitiveDataOccurrencesInput) SetFindingId(v string) *GetSensitiveDataOccurrencesInput {
+	s.FindingId = &v
+	return s
+}
+
+// Provides the results of a request to retrieve occurrences of sensitive data
+// reported by a finding.
+type GetSensitiveDataOccurrencesOutput struct {
+	_ struct{} `type:"structure"`
+
+	Error *string `locationName:"error" type:"string"`
+
+	// Specifies a type of sensitive data reported by a finding and provides occurrences
+	// of the specified type of sensitive data.
+	SensitiveDataOccurrences map[string][]*DetectedDataDetails `locationName:"sensitiveDataOccurrences" type:"map"`
+
+	// The status of a request to retrieve occurrences of sensitive data reported
+	// by a finding. Possible values are:
+	Status *string `locationName:"status" type:"string" enum:"RevealRequestStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSensitiveDataOccurrencesOutput) GoString() string {
+	return s.String()
+}
+
+// SetError sets the Error field's value.
+func (s *GetSensitiveDataOccurrencesOutput) SetError(v string) *GetSensitiveDataOccurrencesOutput {
+	s.Error = &v
+	return s
+}
+
+// SetSensitiveDataOccurrences sets the SensitiveDataOccurrences field's value.
+func (s *GetSensitiveDataOccurrencesOutput) SetSensitiveDataOccurrences(v map[string][]*DetectedDataDetails) *GetSensitiveDataOccurrencesOutput {
+	s.SensitiveDataOccurrences = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetSensitiveDataOccurrencesOutput) SetStatus(v string) *GetSensitiveDataOccurrencesOutput {
+	s.Status = &v
 	return s
 }
 
@@ -12743,8 +13491,7 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Provides information about an Amazon Macie membership invitation that was
-// received by an account.
+// Provides information about an Amazon Macie membership invitation.
 type Invitation struct {
 	_ struct{} `type:"structure"`
 
@@ -12755,7 +13502,7 @@ type Invitation struct {
 	InvitedAt *time.Time `locationName:"invitedAt" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The current status of the relationship between an account and an associated
-	// Amazon Macie administrator account (inviter account). Possible values are:
+	// Amazon Macie administrator account. Possible values are:
 	RelationshipStatus *string `locationName:"relationshipStatus" type:"string" enum:"RelationshipStatus"`
 }
 
@@ -13914,7 +14661,8 @@ func (s *ListJobsFilterCriteria) SetIncludes(v []*ListJobsFilterTerm) *ListJobsF
 type ListJobsFilterTerm struct {
 	_ struct{} `type:"structure"`
 
-	// The operator to use in a condition. Valid values are:
+	// The operator to use in a condition. Depending on the type of condition, possible
+	// values are:
 	Comparator *string `locationName:"comparator" type:"string" enum:"JobComparator"`
 
 	// The property to use to filter the results. Valid values are:
@@ -14223,7 +14971,7 @@ func (s *ListOrganizationAdminAccountsInput) SetNextToken(v string) *ListOrganiz
 }
 
 // Provides information about the delegated Amazon Macie administrator accounts
-// for an Amazon Web Services organization.
+// for an organization in Organizations.
 type ListOrganizationAdminAccountsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -14597,7 +15345,7 @@ type Member struct {
 	MasterAccountId *string `locationName:"masterAccountId" type:"string"`
 
 	// The current status of the relationship between an account and an associated
-	// Amazon Macie administrator account (inviter account). Possible values are:
+	// Amazon Macie administrator account. Possible values are:
 	RelationshipStatus *string `locationName:"relationshipStatus" type:"string" enum:"RelationshipStatus"`
 
 	// A string-to-string map of key-value pairs that specifies the tags (keys and
@@ -14830,7 +15578,9 @@ func (s *ObjectLevelStatistics) SetTotal(v int64) *ObjectLevelStatistics {
 
 // Specifies the location of 1-15 occurrences of sensitive data that was detected
 // by a managed data identifier or a custom data identifier and produced a sensitive
-// data finding.
+// data finding. Depending on the file or storage format of the affected S3
+// object, you can optionally retrieve (reveal) sample occurrences of the sensitive
+// data that was detected.
 type Occurrences struct {
 	_ struct{} `type:"structure"`
 
@@ -14838,14 +15588,20 @@ type Occurrences struct {
 	// workbook, CSV file, or TSV file.
 	Cells []*Cell `locationName:"cells" type:"list"`
 
+	// Specifies the locations of occurrences of sensitive data in a non-binary
+	// text file.
 	LineRanges []*Range `locationName:"lineRanges" type:"list"`
 
+	// Specifies the locations of occurrences of sensitive data in a non-binary
+	// text file.
 	OffsetRanges []*Range `locationName:"offsetRanges" type:"list"`
 
 	// Specifies the location of occurrences of sensitive data in an Adobe Portable
 	// Document Format file.
 	Pages []*Page `locationName:"pages" type:"list"`
 
+	// Specifies the locations of occurrences of sensitive data in an Apache Avro
+	// object container or a structured data file.
 	Records []*Record `locationName:"records" type:"list"`
 }
 
@@ -15144,7 +15900,7 @@ func (s *PutFindingsPublicationConfigurationInput) SetSecurityHubConfiguration(v
 }
 
 type PutFindingsPublicationConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15405,6 +16161,70 @@ func (s *ResourcesAffected) SetS3Bucket(v *S3Bucket) *ResourcesAffected {
 // SetS3Object sets the S3Object field's value.
 func (s *ResourcesAffected) SetS3Object(v *S3Object) *ResourcesAffected {
 	s.S3Object = v
+	return s
+}
+
+// Specifies the configuration settings for retrieving occurrences of sensitive
+// data reported by findings, and the status of the configuration for an Amazon
+// Macie account. When you enable the configuration for the first time, your
+// request must specify an AWS Key Management Service (AWS KMS) key. Otherwise,
+// an error occurs. Macie uses the specified key to encrypt the sensitive data
+// that you retrieve.
+type RevealConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	KmsKeyId *string `locationName:"kmsKeyId" min:"1" type:"string"`
+
+	// The status of the configuration for the Amazon Macie account. In a request,
+	// valid values are:
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"RevealStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RevealConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RevealConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RevealConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RevealConfiguration"}
+	if s.KmsKeyId != nil && len(*s.KmsKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyId", 1))
+	}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *RevealConfiguration) SetKmsKeyId(v string) *RevealConfiguration {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *RevealConfiguration) SetStatus(v string) *RevealConfiguration {
+	s.Status = &v
 	return s
 }
 
@@ -16820,12 +17640,76 @@ func (s *Severity) SetScore(v int64) *Severity {
 	return s
 }
 
+// Specifies a severity level for findings that a custom data identifier produces.
+// A severity level determines which severity is assigned to the findings, based
+// on the number of occurrences of text that matches the custom data identifier's
+// detection criteria.
+type SeverityLevel struct {
+	_ struct{} `type:"structure"`
+
+	// OccurrencesThreshold is a required field
+	OccurrencesThreshold *int64 `locationName:"occurrencesThreshold" type:"long" required:"true"`
+
+	// The severity of a finding, ranging from LOW, for least severe, to HIGH, for
+	// most severe. Valid values are:
+	//
+	// Severity is a required field
+	Severity *string `locationName:"severity" type:"string" required:"true" enum:"DataIdentifierSeverity"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SeverityLevel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SeverityLevel) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SeverityLevel) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SeverityLevel"}
+	if s.OccurrencesThreshold == nil {
+		invalidParams.Add(request.NewErrParamRequired("OccurrencesThreshold"))
+	}
+	if s.Severity == nil {
+		invalidParams.Add(request.NewErrParamRequired("Severity"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOccurrencesThreshold sets the OccurrencesThreshold field's value.
+func (s *SeverityLevel) SetOccurrencesThreshold(v int64) *SeverityLevel {
+	s.OccurrencesThreshold = &v
+	return s
+}
+
+// SetSeverity sets the Severity field's value.
+func (s *SeverityLevel) SetSeverity(v string) *SeverityLevel {
+	s.Severity = &v
+	return s
+}
+
 // Specifies a property-based condition that determines whether an S3 bucket
 // is included or excluded from a classification job.
 type SimpleCriterionForJob struct {
 	_ struct{} `type:"structure"`
 
-	// The operator to use in a condition. Valid values are:
+	// The operator to use in a condition. Depending on the type of condition, possible
+	// values are:
 	Comparator *string `locationName:"comparator" type:"string" enum:"JobComparator"`
 
 	// The property to use in a condition that determines whether an S3 bucket is
@@ -16876,7 +17760,8 @@ func (s *SimpleCriterionForJob) SetValues(v []*string) *SimpleCriterionForJob {
 type SimpleScopeTerm struct {
 	_ struct{} `type:"structure"`
 
-	// The operator to use in a condition. Valid values are:
+	// The operator to use in a condition. Depending on the type of condition, possible
+	// values are:
 	Comparator *string `locationName:"comparator" type:"string" enum:"JobComparator"`
 
 	// The property to use in a condition that determines whether an S3 object is
@@ -17005,7 +17890,8 @@ func (s *Statistics) SetNumberOfRuns(v float64) *Statistics {
 type TagCriterionForJob struct {
 	_ struct{} `type:"structure"`
 
-	// The operator to use in a condition. Valid values are:
+	// The operator to use in a condition. Depending on the type of condition, possible
+	// values are:
 	Comparator *string `locationName:"comparator" type:"string" enum:"JobComparator"`
 
 	TagValues []*TagCriterionPairForJob `locationName:"tagValues" type:"list"`
@@ -17151,7 +18037,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 
 // The request succeeded. The specified tags were added to the resource.
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17177,7 +18063,8 @@ func (s TagResourceOutput) GoString() string {
 type TagScopeTerm struct {
 	_ struct{} `type:"structure"`
 
-	// The operator to use in a condition. Valid values are:
+	// The operator to use in a condition. Depending on the type of condition, possible
+	// values are:
 	Comparator *string `locationName:"comparator" type:"string" enum:"JobComparator"`
 
 	Key *string `locationName:"key" type:"string"`
@@ -17449,6 +18336,71 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Provides information about an error that occurred due to an unprocessable
+// entity.
+type UnprocessableEntityException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnprocessableEntityException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnprocessableEntityException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnprocessableEntityException(v protocol.ResponseMetadata) error {
+	return &UnprocessableEntityException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnprocessableEntityException) Code() string {
+	return "UnprocessableEntityException"
+}
+
+// Message returns the exception's message.
+func (s *UnprocessableEntityException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnprocessableEntityException) OrigErr() error {
+	return nil
+}
+
+func (s *UnprocessableEntityException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnprocessableEntityException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnprocessableEntityException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Provides information about an account-related request that hasn't been processed.
 type UnprocessedAccount struct {
 	_ struct{} `type:"structure"`
@@ -17558,7 +18510,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 
 // The request succeeded. The specified tags were removed from the resource.
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17645,7 +18597,7 @@ func (s *UpdateClassificationJobInput) SetJobStatus(v string) *UpdateClassificat
 }
 
 type UpdateClassificationJobOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17853,7 +18805,7 @@ func (s *UpdateMacieSessionInput) SetStatus(v string) *UpdateMacieSessionInput {
 }
 
 type UpdateMacieSessionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17874,7 +18826,7 @@ func (s UpdateMacieSessionOutput) GoString() string {
 	return s.String()
 }
 
-// Suspends (pauses) or re-enables an Amazon Macie member account.
+// Suspends (pauses) or re-enables Amazon Macie for a member account.
 type UpdateMemberSessionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17937,7 +18889,7 @@ func (s *UpdateMemberSessionInput) SetStatus(v string) *UpdateMemberSessionInput
 }
 
 type UpdateMemberSessionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17959,7 +18911,7 @@ func (s UpdateMemberSessionOutput) GoString() string {
 }
 
 // Specifies whether to enable Amazon Macie automatically for accounts that
-// are added to an Amazon Web Services organization.
+// are added to an organization in Organizations.
 type UpdateOrganizationConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18005,7 +18957,7 @@ func (s *UpdateOrganizationConfigurationInput) SetAutoEnable(v bool) *UpdateOrga
 }
 
 type UpdateOrganizationConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -18024,6 +18976,104 @@ func (s UpdateOrganizationConfigurationOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateOrganizationConfigurationOutput) GoString() string {
 	return s.String()
+}
+
+// Specifies the configuration settings for retrieving occurrences of sensitive
+// data reported by findings, and the status of the configuration for an Amazon
+// Macie account.
+type UpdateRevealConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the configuration settings for retrieving occurrences of sensitive
+	// data reported by findings, and the status of the configuration for an Amazon
+	// Macie account. When you enable the configuration for the first time, your
+	// request must specify an AWS Key Management Service (AWS KMS) key. Otherwise,
+	// an error occurs. Macie uses the specified key to encrypt the sensitive data
+	// that you retrieve.
+	//
+	// Configuration is a required field
+	Configuration *RevealConfiguration `locationName:"configuration" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRevealConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRevealConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateRevealConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateRevealConfigurationInput"}
+	if s.Configuration == nil {
+		invalidParams.Add(request.NewErrParamRequired("Configuration"))
+	}
+	if s.Configuration != nil {
+		if err := s.Configuration.Validate(); err != nil {
+			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *UpdateRevealConfigurationInput) SetConfiguration(v *RevealConfiguration) *UpdateRevealConfigurationInput {
+	s.Configuration = v
+	return s
+}
+
+// Provides information about updated configuration settings for retrieving
+// occurrences of sensitive data reported by findings, and the status of the
+// configuration for an Amazon Macie account.
+type UpdateRevealConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the configuration settings for retrieving occurrences of sensitive
+	// data reported by findings, and the status of the configuration for an Amazon
+	// Macie account. When you enable the configuration for the first time, your
+	// request must specify an AWS Key Management Service (AWS KMS) key. Otherwise,
+	// an error occurs. Macie uses the specified key to encrypt the sensitive data
+	// that you retrieve.
+	Configuration *RevealConfiguration `locationName:"configuration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRevealConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRevealConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *UpdateRevealConfigurationOutput) SetConfiguration(v *RevealConfiguration) *UpdateRevealConfigurationOutput {
+	s.Configuration = v
+	return s
 }
 
 // Provides data for a specific usage metric and the corresponding quota for
@@ -18580,7 +19630,7 @@ func (s *WeeklySchedule) SetDayOfWeek(v string) *WeeklySchedule {
 }
 
 // The current status of an account as the delegated Amazon Macie administrator
-// account for an Amazon Web Services organization. Possible values are:
+// account for an organization in Organizations. Possible values are:
 const (
 	// AdminStatusEnabled is a AdminStatus enum value
 	AdminStatusEnabled = "ENABLED"
@@ -18617,6 +19667,24 @@ func AllowsUnencryptedObjectUploads_Values() []string {
 	}
 }
 
+// Specifies whether occurrences of sensitive data can be retrieved for a finding.
+// Possible values are:
+const (
+	// AvailabilityCodeAvailable is a AvailabilityCode enum value
+	AvailabilityCodeAvailable = "AVAILABLE"
+
+	// AvailabilityCodeUnavailable is a AvailabilityCode enum value
+	AvailabilityCodeUnavailable = "UNAVAILABLE"
+)
+
+// AvailabilityCode_Values returns all elements of the AvailabilityCode enum
+func AvailabilityCode_Values() []string {
+	return []string{
+		AvailabilityCodeAvailable,
+		AvailabilityCodeUnavailable,
+	}
+}
+
 // The error code for an error that prevented Amazon Macie from retrieving and
 // processing information about an S3 bucket and the bucket's objects.
 const (
@@ -18642,6 +19710,28 @@ const (
 func Currency_Values() []string {
 	return []string{
 		CurrencyUsd,
+	}
+}
+
+// The severity of a finding, ranging from LOW, for least severe, to HIGH, for
+// most severe. Valid values are:
+const (
+	// DataIdentifierSeverityLow is a DataIdentifierSeverity enum value
+	DataIdentifierSeverityLow = "LOW"
+
+	// DataIdentifierSeverityMedium is a DataIdentifierSeverity enum value
+	DataIdentifierSeverityMedium = "MEDIUM"
+
+	// DataIdentifierSeverityHigh is a DataIdentifierSeverity enum value
+	DataIdentifierSeverityHigh = "HIGH"
+)
+
+// DataIdentifierSeverity_Values returns all elements of the DataIdentifierSeverity enum
+func DataIdentifierSeverity_Values() []string {
+	return []string{
+		DataIdentifierSeverityLow,
+		DataIdentifierSeverityMedium,
+		DataIdentifierSeverityHigh,
 	}
 }
 
@@ -18951,7 +20041,8 @@ func IsMonitoredByJob_Values() []string {
 	}
 }
 
-// The operator to use in a condition. Valid values are:
+// The operator to use in a condition. Depending on the type of condition, possible
+// values are:
 const (
 	// JobComparatorEq is a JobComparator enum value
 	JobComparatorEq = "EQ"
@@ -19170,8 +20261,22 @@ func OrderBy_Values() []string {
 	}
 }
 
+// Specifies how Amazon Macie found the sensitive data that produced a finding.
+// The only possible value is:
+const (
+	// OriginTypeSensitiveDataDiscoveryJob is a OriginType enum value
+	OriginTypeSensitiveDataDiscoveryJob = "SENSITIVE_DATA_DISCOVERY_JOB"
+)
+
+// OriginType_Values returns all elements of the OriginType enum
+func OriginType_Values() []string {
+	return []string{
+		OriginTypeSensitiveDataDiscoveryJob,
+	}
+}
+
 // The current status of the relationship between an account and an associated
-// Amazon Macie administrator account (inviter account). Possible values are:
+// Amazon Macie administrator account. Possible values are:
 const (
 	// RelationshipStatusEnabled is a RelationshipStatus enum value
 	RelationshipStatusEnabled = "Enabled"
@@ -19217,6 +20322,46 @@ func RelationshipStatus_Values() []string {
 		RelationshipStatusEmailVerificationFailed,
 		RelationshipStatusRegionDisabled,
 		RelationshipStatusAccountSuspended,
+	}
+}
+
+// The status of a request to retrieve occurrences of sensitive data reported
+// by a finding. Possible values are:
+const (
+	// RevealRequestStatusSuccess is a RevealRequestStatus enum value
+	RevealRequestStatusSuccess = "SUCCESS"
+
+	// RevealRequestStatusProcessing is a RevealRequestStatus enum value
+	RevealRequestStatusProcessing = "PROCESSING"
+
+	// RevealRequestStatusError is a RevealRequestStatus enum value
+	RevealRequestStatusError = "ERROR"
+)
+
+// RevealRequestStatus_Values returns all elements of the RevealRequestStatus enum
+func RevealRequestStatus_Values() []string {
+	return []string{
+		RevealRequestStatusSuccess,
+		RevealRequestStatusProcessing,
+		RevealRequestStatusError,
+	}
+}
+
+// The status of the configuration for the Amazon Macie account. In a request,
+// valid values are:
+const (
+	// RevealStatusEnabled is a RevealStatus enum value
+	RevealStatusEnabled = "ENABLED"
+
+	// RevealStatusDisabled is a RevealStatus enum value
+	RevealStatusDisabled = "DISABLED"
+)
+
+// RevealStatus_Values returns all elements of the RevealStatus enum
+func RevealStatus_Values() []string {
+	return []string{
+		RevealStatusEnabled,
+		RevealStatusDisabled,
 	}
 }
 
@@ -19499,6 +20644,36 @@ func Type_Values() []string {
 		TypeNone,
 		TypeAes256,
 		TypeAwsKms,
+	}
+}
+
+// Specifies why occurrences of sensitive data can't be retrieved for a finding.
+// Possible values are:
+const (
+	// UnavailabilityReasonCodeObjectExceedsSizeQuota is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeObjectExceedsSizeQuota = "OBJECT_EXCEEDS_SIZE_QUOTA"
+
+	// UnavailabilityReasonCodeUnsupportedObjectType is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeUnsupportedObjectType = "UNSUPPORTED_OBJECT_TYPE"
+
+	// UnavailabilityReasonCodeUnsupportedFindingType is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeUnsupportedFindingType = "UNSUPPORTED_FINDING_TYPE"
+
+	// UnavailabilityReasonCodeInvalidClassificationResult is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeInvalidClassificationResult = "INVALID_CLASSIFICATION_RESULT"
+
+	// UnavailabilityReasonCodeObjectUnavailable is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeObjectUnavailable = "OBJECT_UNAVAILABLE"
+)
+
+// UnavailabilityReasonCode_Values returns all elements of the UnavailabilityReasonCode enum
+func UnavailabilityReasonCode_Values() []string {
+	return []string{
+		UnavailabilityReasonCodeObjectExceedsSizeQuota,
+		UnavailabilityReasonCodeUnsupportedObjectType,
+		UnavailabilityReasonCodeUnsupportedFindingType,
+		UnavailabilityReasonCodeInvalidClassificationResult,
+		UnavailabilityReasonCodeObjectUnavailable,
 	}
 }
 

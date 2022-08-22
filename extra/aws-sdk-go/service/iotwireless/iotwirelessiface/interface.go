@@ -64,6 +64,18 @@ type IoTWirelessAPI interface {
 	AssociateAwsAccountWithPartnerAccountWithContext(aws.Context, *iotwireless.AssociateAwsAccountWithPartnerAccountInput, ...request.Option) (*iotwireless.AssociateAwsAccountWithPartnerAccountOutput, error)
 	AssociateAwsAccountWithPartnerAccountRequest(*iotwireless.AssociateAwsAccountWithPartnerAccountInput) (*request.Request, *iotwireless.AssociateAwsAccountWithPartnerAccountOutput)
 
+	AssociateMulticastGroupWithFuotaTask(*iotwireless.AssociateMulticastGroupWithFuotaTaskInput) (*iotwireless.AssociateMulticastGroupWithFuotaTaskOutput, error)
+	AssociateMulticastGroupWithFuotaTaskWithContext(aws.Context, *iotwireless.AssociateMulticastGroupWithFuotaTaskInput, ...request.Option) (*iotwireless.AssociateMulticastGroupWithFuotaTaskOutput, error)
+	AssociateMulticastGroupWithFuotaTaskRequest(*iotwireless.AssociateMulticastGroupWithFuotaTaskInput) (*request.Request, *iotwireless.AssociateMulticastGroupWithFuotaTaskOutput)
+
+	AssociateWirelessDeviceWithFuotaTask(*iotwireless.AssociateWirelessDeviceWithFuotaTaskInput) (*iotwireless.AssociateWirelessDeviceWithFuotaTaskOutput, error)
+	AssociateWirelessDeviceWithFuotaTaskWithContext(aws.Context, *iotwireless.AssociateWirelessDeviceWithFuotaTaskInput, ...request.Option) (*iotwireless.AssociateWirelessDeviceWithFuotaTaskOutput, error)
+	AssociateWirelessDeviceWithFuotaTaskRequest(*iotwireless.AssociateWirelessDeviceWithFuotaTaskInput) (*request.Request, *iotwireless.AssociateWirelessDeviceWithFuotaTaskOutput)
+
+	AssociateWirelessDeviceWithMulticastGroup(*iotwireless.AssociateWirelessDeviceWithMulticastGroupInput) (*iotwireless.AssociateWirelessDeviceWithMulticastGroupOutput, error)
+	AssociateWirelessDeviceWithMulticastGroupWithContext(aws.Context, *iotwireless.AssociateWirelessDeviceWithMulticastGroupInput, ...request.Option) (*iotwireless.AssociateWirelessDeviceWithMulticastGroupOutput, error)
+	AssociateWirelessDeviceWithMulticastGroupRequest(*iotwireless.AssociateWirelessDeviceWithMulticastGroupInput) (*request.Request, *iotwireless.AssociateWirelessDeviceWithMulticastGroupOutput)
+
 	AssociateWirelessDeviceWithThing(*iotwireless.AssociateWirelessDeviceWithThingInput) (*iotwireless.AssociateWirelessDeviceWithThingOutput, error)
 	AssociateWirelessDeviceWithThingWithContext(aws.Context, *iotwireless.AssociateWirelessDeviceWithThingInput, ...request.Option) (*iotwireless.AssociateWirelessDeviceWithThingOutput, error)
 	AssociateWirelessDeviceWithThingRequest(*iotwireless.AssociateWirelessDeviceWithThingInput) (*request.Request, *iotwireless.AssociateWirelessDeviceWithThingOutput)
@@ -76,6 +88,10 @@ type IoTWirelessAPI interface {
 	AssociateWirelessGatewayWithThingWithContext(aws.Context, *iotwireless.AssociateWirelessGatewayWithThingInput, ...request.Option) (*iotwireless.AssociateWirelessGatewayWithThingOutput, error)
 	AssociateWirelessGatewayWithThingRequest(*iotwireless.AssociateWirelessGatewayWithThingInput) (*request.Request, *iotwireless.AssociateWirelessGatewayWithThingOutput)
 
+	CancelMulticastGroupSession(*iotwireless.CancelMulticastGroupSessionInput) (*iotwireless.CancelMulticastGroupSessionOutput, error)
+	CancelMulticastGroupSessionWithContext(aws.Context, *iotwireless.CancelMulticastGroupSessionInput, ...request.Option) (*iotwireless.CancelMulticastGroupSessionOutput, error)
+	CancelMulticastGroupSessionRequest(*iotwireless.CancelMulticastGroupSessionInput) (*request.Request, *iotwireless.CancelMulticastGroupSessionOutput)
+
 	CreateDestination(*iotwireless.CreateDestinationInput) (*iotwireless.CreateDestinationOutput, error)
 	CreateDestinationWithContext(aws.Context, *iotwireless.CreateDestinationInput, ...request.Option) (*iotwireless.CreateDestinationOutput, error)
 	CreateDestinationRequest(*iotwireless.CreateDestinationInput) (*request.Request, *iotwireless.CreateDestinationOutput)
@@ -83,6 +99,18 @@ type IoTWirelessAPI interface {
 	CreateDeviceProfile(*iotwireless.CreateDeviceProfileInput) (*iotwireless.CreateDeviceProfileOutput, error)
 	CreateDeviceProfileWithContext(aws.Context, *iotwireless.CreateDeviceProfileInput, ...request.Option) (*iotwireless.CreateDeviceProfileOutput, error)
 	CreateDeviceProfileRequest(*iotwireless.CreateDeviceProfileInput) (*request.Request, *iotwireless.CreateDeviceProfileOutput)
+
+	CreateFuotaTask(*iotwireless.CreateFuotaTaskInput) (*iotwireless.CreateFuotaTaskOutput, error)
+	CreateFuotaTaskWithContext(aws.Context, *iotwireless.CreateFuotaTaskInput, ...request.Option) (*iotwireless.CreateFuotaTaskOutput, error)
+	CreateFuotaTaskRequest(*iotwireless.CreateFuotaTaskInput) (*request.Request, *iotwireless.CreateFuotaTaskOutput)
+
+	CreateMulticastGroup(*iotwireless.CreateMulticastGroupInput) (*iotwireless.CreateMulticastGroupOutput, error)
+	CreateMulticastGroupWithContext(aws.Context, *iotwireless.CreateMulticastGroupInput, ...request.Option) (*iotwireless.CreateMulticastGroupOutput, error)
+	CreateMulticastGroupRequest(*iotwireless.CreateMulticastGroupInput) (*request.Request, *iotwireless.CreateMulticastGroupOutput)
+
+	CreateNetworkAnalyzerConfiguration(*iotwireless.CreateNetworkAnalyzerConfigurationInput) (*iotwireless.CreateNetworkAnalyzerConfigurationOutput, error)
+	CreateNetworkAnalyzerConfigurationWithContext(aws.Context, *iotwireless.CreateNetworkAnalyzerConfigurationInput, ...request.Option) (*iotwireless.CreateNetworkAnalyzerConfigurationOutput, error)
+	CreateNetworkAnalyzerConfigurationRequest(*iotwireless.CreateNetworkAnalyzerConfigurationInput) (*request.Request, *iotwireless.CreateNetworkAnalyzerConfigurationOutput)
 
 	CreateServiceProfile(*iotwireless.CreateServiceProfileInput) (*iotwireless.CreateServiceProfileOutput, error)
 	CreateServiceProfileWithContext(aws.Context, *iotwireless.CreateServiceProfileInput, ...request.Option) (*iotwireless.CreateServiceProfileOutput, error)
@@ -112,6 +140,22 @@ type IoTWirelessAPI interface {
 	DeleteDeviceProfileWithContext(aws.Context, *iotwireless.DeleteDeviceProfileInput, ...request.Option) (*iotwireless.DeleteDeviceProfileOutput, error)
 	DeleteDeviceProfileRequest(*iotwireless.DeleteDeviceProfileInput) (*request.Request, *iotwireless.DeleteDeviceProfileOutput)
 
+	DeleteFuotaTask(*iotwireless.DeleteFuotaTaskInput) (*iotwireless.DeleteFuotaTaskOutput, error)
+	DeleteFuotaTaskWithContext(aws.Context, *iotwireless.DeleteFuotaTaskInput, ...request.Option) (*iotwireless.DeleteFuotaTaskOutput, error)
+	DeleteFuotaTaskRequest(*iotwireless.DeleteFuotaTaskInput) (*request.Request, *iotwireless.DeleteFuotaTaskOutput)
+
+	DeleteMulticastGroup(*iotwireless.DeleteMulticastGroupInput) (*iotwireless.DeleteMulticastGroupOutput, error)
+	DeleteMulticastGroupWithContext(aws.Context, *iotwireless.DeleteMulticastGroupInput, ...request.Option) (*iotwireless.DeleteMulticastGroupOutput, error)
+	DeleteMulticastGroupRequest(*iotwireless.DeleteMulticastGroupInput) (*request.Request, *iotwireless.DeleteMulticastGroupOutput)
+
+	DeleteNetworkAnalyzerConfiguration(*iotwireless.DeleteNetworkAnalyzerConfigurationInput) (*iotwireless.DeleteNetworkAnalyzerConfigurationOutput, error)
+	DeleteNetworkAnalyzerConfigurationWithContext(aws.Context, *iotwireless.DeleteNetworkAnalyzerConfigurationInput, ...request.Option) (*iotwireless.DeleteNetworkAnalyzerConfigurationOutput, error)
+	DeleteNetworkAnalyzerConfigurationRequest(*iotwireless.DeleteNetworkAnalyzerConfigurationInput) (*request.Request, *iotwireless.DeleteNetworkAnalyzerConfigurationOutput)
+
+	DeleteQueuedMessages(*iotwireless.DeleteQueuedMessagesInput) (*iotwireless.DeleteQueuedMessagesOutput, error)
+	DeleteQueuedMessagesWithContext(aws.Context, *iotwireless.DeleteQueuedMessagesInput, ...request.Option) (*iotwireless.DeleteQueuedMessagesOutput, error)
+	DeleteQueuedMessagesRequest(*iotwireless.DeleteQueuedMessagesInput) (*request.Request, *iotwireless.DeleteQueuedMessagesOutput)
+
 	DeleteServiceProfile(*iotwireless.DeleteServiceProfileInput) (*iotwireless.DeleteServiceProfileOutput, error)
 	DeleteServiceProfileWithContext(aws.Context, *iotwireless.DeleteServiceProfileInput, ...request.Option) (*iotwireless.DeleteServiceProfileOutput, error)
 	DeleteServiceProfileRequest(*iotwireless.DeleteServiceProfileInput) (*request.Request, *iotwireless.DeleteServiceProfileOutput)
@@ -136,6 +180,18 @@ type IoTWirelessAPI interface {
 	DisassociateAwsAccountFromPartnerAccountWithContext(aws.Context, *iotwireless.DisassociateAwsAccountFromPartnerAccountInput, ...request.Option) (*iotwireless.DisassociateAwsAccountFromPartnerAccountOutput, error)
 	DisassociateAwsAccountFromPartnerAccountRequest(*iotwireless.DisassociateAwsAccountFromPartnerAccountInput) (*request.Request, *iotwireless.DisassociateAwsAccountFromPartnerAccountOutput)
 
+	DisassociateMulticastGroupFromFuotaTask(*iotwireless.DisassociateMulticastGroupFromFuotaTaskInput) (*iotwireless.DisassociateMulticastGroupFromFuotaTaskOutput, error)
+	DisassociateMulticastGroupFromFuotaTaskWithContext(aws.Context, *iotwireless.DisassociateMulticastGroupFromFuotaTaskInput, ...request.Option) (*iotwireless.DisassociateMulticastGroupFromFuotaTaskOutput, error)
+	DisassociateMulticastGroupFromFuotaTaskRequest(*iotwireless.DisassociateMulticastGroupFromFuotaTaskInput) (*request.Request, *iotwireless.DisassociateMulticastGroupFromFuotaTaskOutput)
+
+	DisassociateWirelessDeviceFromFuotaTask(*iotwireless.DisassociateWirelessDeviceFromFuotaTaskInput) (*iotwireless.DisassociateWirelessDeviceFromFuotaTaskOutput, error)
+	DisassociateWirelessDeviceFromFuotaTaskWithContext(aws.Context, *iotwireless.DisassociateWirelessDeviceFromFuotaTaskInput, ...request.Option) (*iotwireless.DisassociateWirelessDeviceFromFuotaTaskOutput, error)
+	DisassociateWirelessDeviceFromFuotaTaskRequest(*iotwireless.DisassociateWirelessDeviceFromFuotaTaskInput) (*request.Request, *iotwireless.DisassociateWirelessDeviceFromFuotaTaskOutput)
+
+	DisassociateWirelessDeviceFromMulticastGroup(*iotwireless.DisassociateWirelessDeviceFromMulticastGroupInput) (*iotwireless.DisassociateWirelessDeviceFromMulticastGroupOutput, error)
+	DisassociateWirelessDeviceFromMulticastGroupWithContext(aws.Context, *iotwireless.DisassociateWirelessDeviceFromMulticastGroupInput, ...request.Option) (*iotwireless.DisassociateWirelessDeviceFromMulticastGroupOutput, error)
+	DisassociateWirelessDeviceFromMulticastGroupRequest(*iotwireless.DisassociateWirelessDeviceFromMulticastGroupInput) (*request.Request, *iotwireless.DisassociateWirelessDeviceFromMulticastGroupOutput)
+
 	DisassociateWirelessDeviceFromThing(*iotwireless.DisassociateWirelessDeviceFromThingInput) (*iotwireless.DisassociateWirelessDeviceFromThingOutput, error)
 	DisassociateWirelessDeviceFromThingWithContext(aws.Context, *iotwireless.DisassociateWirelessDeviceFromThingInput, ...request.Option) (*iotwireless.DisassociateWirelessDeviceFromThingOutput, error)
 	DisassociateWirelessDeviceFromThingRequest(*iotwireless.DisassociateWirelessDeviceFromThingInput) (*request.Request, *iotwireless.DisassociateWirelessDeviceFromThingOutput)
@@ -156,13 +212,45 @@ type IoTWirelessAPI interface {
 	GetDeviceProfileWithContext(aws.Context, *iotwireless.GetDeviceProfileInput, ...request.Option) (*iotwireless.GetDeviceProfileOutput, error)
 	GetDeviceProfileRequest(*iotwireless.GetDeviceProfileInput) (*request.Request, *iotwireless.GetDeviceProfileOutput)
 
+	GetEventConfigurationByResourceTypes(*iotwireless.GetEventConfigurationByResourceTypesInput) (*iotwireless.GetEventConfigurationByResourceTypesOutput, error)
+	GetEventConfigurationByResourceTypesWithContext(aws.Context, *iotwireless.GetEventConfigurationByResourceTypesInput, ...request.Option) (*iotwireless.GetEventConfigurationByResourceTypesOutput, error)
+	GetEventConfigurationByResourceTypesRequest(*iotwireless.GetEventConfigurationByResourceTypesInput) (*request.Request, *iotwireless.GetEventConfigurationByResourceTypesOutput)
+
+	GetFuotaTask(*iotwireless.GetFuotaTaskInput) (*iotwireless.GetFuotaTaskOutput, error)
+	GetFuotaTaskWithContext(aws.Context, *iotwireless.GetFuotaTaskInput, ...request.Option) (*iotwireless.GetFuotaTaskOutput, error)
+	GetFuotaTaskRequest(*iotwireless.GetFuotaTaskInput) (*request.Request, *iotwireless.GetFuotaTaskOutput)
+
 	GetLogLevelsByResourceTypes(*iotwireless.GetLogLevelsByResourceTypesInput) (*iotwireless.GetLogLevelsByResourceTypesOutput, error)
 	GetLogLevelsByResourceTypesWithContext(aws.Context, *iotwireless.GetLogLevelsByResourceTypesInput, ...request.Option) (*iotwireless.GetLogLevelsByResourceTypesOutput, error)
 	GetLogLevelsByResourceTypesRequest(*iotwireless.GetLogLevelsByResourceTypesInput) (*request.Request, *iotwireless.GetLogLevelsByResourceTypesOutput)
 
+	GetMulticastGroup(*iotwireless.GetMulticastGroupInput) (*iotwireless.GetMulticastGroupOutput, error)
+	GetMulticastGroupWithContext(aws.Context, *iotwireless.GetMulticastGroupInput, ...request.Option) (*iotwireless.GetMulticastGroupOutput, error)
+	GetMulticastGroupRequest(*iotwireless.GetMulticastGroupInput) (*request.Request, *iotwireless.GetMulticastGroupOutput)
+
+	GetMulticastGroupSession(*iotwireless.GetMulticastGroupSessionInput) (*iotwireless.GetMulticastGroupSessionOutput, error)
+	GetMulticastGroupSessionWithContext(aws.Context, *iotwireless.GetMulticastGroupSessionInput, ...request.Option) (*iotwireless.GetMulticastGroupSessionOutput, error)
+	GetMulticastGroupSessionRequest(*iotwireless.GetMulticastGroupSessionInput) (*request.Request, *iotwireless.GetMulticastGroupSessionOutput)
+
+	GetNetworkAnalyzerConfiguration(*iotwireless.GetNetworkAnalyzerConfigurationInput) (*iotwireless.GetNetworkAnalyzerConfigurationOutput, error)
+	GetNetworkAnalyzerConfigurationWithContext(aws.Context, *iotwireless.GetNetworkAnalyzerConfigurationInput, ...request.Option) (*iotwireless.GetNetworkAnalyzerConfigurationOutput, error)
+	GetNetworkAnalyzerConfigurationRequest(*iotwireless.GetNetworkAnalyzerConfigurationInput) (*request.Request, *iotwireless.GetNetworkAnalyzerConfigurationOutput)
+
 	GetPartnerAccount(*iotwireless.GetPartnerAccountInput) (*iotwireless.GetPartnerAccountOutput, error)
 	GetPartnerAccountWithContext(aws.Context, *iotwireless.GetPartnerAccountInput, ...request.Option) (*iotwireless.GetPartnerAccountOutput, error)
 	GetPartnerAccountRequest(*iotwireless.GetPartnerAccountInput) (*request.Request, *iotwireless.GetPartnerAccountOutput)
+
+	GetPosition(*iotwireless.GetPositionInput) (*iotwireless.GetPositionOutput, error)
+	GetPositionWithContext(aws.Context, *iotwireless.GetPositionInput, ...request.Option) (*iotwireless.GetPositionOutput, error)
+	GetPositionRequest(*iotwireless.GetPositionInput) (*request.Request, *iotwireless.GetPositionOutput)
+
+	GetPositionConfiguration(*iotwireless.GetPositionConfigurationInput) (*iotwireless.GetPositionConfigurationOutput, error)
+	GetPositionConfigurationWithContext(aws.Context, *iotwireless.GetPositionConfigurationInput, ...request.Option) (*iotwireless.GetPositionConfigurationOutput, error)
+	GetPositionConfigurationRequest(*iotwireless.GetPositionConfigurationInput) (*request.Request, *iotwireless.GetPositionConfigurationOutput)
+
+	GetResourceEventConfiguration(*iotwireless.GetResourceEventConfigurationInput) (*iotwireless.GetResourceEventConfigurationOutput, error)
+	GetResourceEventConfigurationWithContext(aws.Context, *iotwireless.GetResourceEventConfigurationInput, ...request.Option) (*iotwireless.GetResourceEventConfigurationOutput, error)
+	GetResourceEventConfigurationRequest(*iotwireless.GetResourceEventConfigurationInput) (*request.Request, *iotwireless.GetResourceEventConfigurationOutput)
 
 	GetResourceLogLevel(*iotwireless.GetResourceLogLevelInput) (*iotwireless.GetResourceLogLevelOutput, error)
 	GetResourceLogLevelWithContext(aws.Context, *iotwireless.GetResourceLogLevelInput, ...request.Option) (*iotwireless.GetResourceLogLevelOutput, error)
@@ -222,9 +310,55 @@ type IoTWirelessAPI interface {
 	ListDeviceProfilesPages(*iotwireless.ListDeviceProfilesInput, func(*iotwireless.ListDeviceProfilesOutput, bool) bool) error
 	ListDeviceProfilesPagesWithContext(aws.Context, *iotwireless.ListDeviceProfilesInput, func(*iotwireless.ListDeviceProfilesOutput, bool) bool, ...request.Option) error
 
+	ListEventConfigurations(*iotwireless.ListEventConfigurationsInput) (*iotwireless.ListEventConfigurationsOutput, error)
+	ListEventConfigurationsWithContext(aws.Context, *iotwireless.ListEventConfigurationsInput, ...request.Option) (*iotwireless.ListEventConfigurationsOutput, error)
+	ListEventConfigurationsRequest(*iotwireless.ListEventConfigurationsInput) (*request.Request, *iotwireless.ListEventConfigurationsOutput)
+
+	ListFuotaTasks(*iotwireless.ListFuotaTasksInput) (*iotwireless.ListFuotaTasksOutput, error)
+	ListFuotaTasksWithContext(aws.Context, *iotwireless.ListFuotaTasksInput, ...request.Option) (*iotwireless.ListFuotaTasksOutput, error)
+	ListFuotaTasksRequest(*iotwireless.ListFuotaTasksInput) (*request.Request, *iotwireless.ListFuotaTasksOutput)
+
+	ListFuotaTasksPages(*iotwireless.ListFuotaTasksInput, func(*iotwireless.ListFuotaTasksOutput, bool) bool) error
+	ListFuotaTasksPagesWithContext(aws.Context, *iotwireless.ListFuotaTasksInput, func(*iotwireless.ListFuotaTasksOutput, bool) bool, ...request.Option) error
+
+	ListMulticastGroups(*iotwireless.ListMulticastGroupsInput) (*iotwireless.ListMulticastGroupsOutput, error)
+	ListMulticastGroupsWithContext(aws.Context, *iotwireless.ListMulticastGroupsInput, ...request.Option) (*iotwireless.ListMulticastGroupsOutput, error)
+	ListMulticastGroupsRequest(*iotwireless.ListMulticastGroupsInput) (*request.Request, *iotwireless.ListMulticastGroupsOutput)
+
+	ListMulticastGroupsPages(*iotwireless.ListMulticastGroupsInput, func(*iotwireless.ListMulticastGroupsOutput, bool) bool) error
+	ListMulticastGroupsPagesWithContext(aws.Context, *iotwireless.ListMulticastGroupsInput, func(*iotwireless.ListMulticastGroupsOutput, bool) bool, ...request.Option) error
+
+	ListMulticastGroupsByFuotaTask(*iotwireless.ListMulticastGroupsByFuotaTaskInput) (*iotwireless.ListMulticastGroupsByFuotaTaskOutput, error)
+	ListMulticastGroupsByFuotaTaskWithContext(aws.Context, *iotwireless.ListMulticastGroupsByFuotaTaskInput, ...request.Option) (*iotwireless.ListMulticastGroupsByFuotaTaskOutput, error)
+	ListMulticastGroupsByFuotaTaskRequest(*iotwireless.ListMulticastGroupsByFuotaTaskInput) (*request.Request, *iotwireless.ListMulticastGroupsByFuotaTaskOutput)
+
+	ListMulticastGroupsByFuotaTaskPages(*iotwireless.ListMulticastGroupsByFuotaTaskInput, func(*iotwireless.ListMulticastGroupsByFuotaTaskOutput, bool) bool) error
+	ListMulticastGroupsByFuotaTaskPagesWithContext(aws.Context, *iotwireless.ListMulticastGroupsByFuotaTaskInput, func(*iotwireless.ListMulticastGroupsByFuotaTaskOutput, bool) bool, ...request.Option) error
+
+	ListNetworkAnalyzerConfigurations(*iotwireless.ListNetworkAnalyzerConfigurationsInput) (*iotwireless.ListNetworkAnalyzerConfigurationsOutput, error)
+	ListNetworkAnalyzerConfigurationsWithContext(aws.Context, *iotwireless.ListNetworkAnalyzerConfigurationsInput, ...request.Option) (*iotwireless.ListNetworkAnalyzerConfigurationsOutput, error)
+	ListNetworkAnalyzerConfigurationsRequest(*iotwireless.ListNetworkAnalyzerConfigurationsInput) (*request.Request, *iotwireless.ListNetworkAnalyzerConfigurationsOutput)
+
+	ListNetworkAnalyzerConfigurationsPages(*iotwireless.ListNetworkAnalyzerConfigurationsInput, func(*iotwireless.ListNetworkAnalyzerConfigurationsOutput, bool) bool) error
+	ListNetworkAnalyzerConfigurationsPagesWithContext(aws.Context, *iotwireless.ListNetworkAnalyzerConfigurationsInput, func(*iotwireless.ListNetworkAnalyzerConfigurationsOutput, bool) bool, ...request.Option) error
+
 	ListPartnerAccounts(*iotwireless.ListPartnerAccountsInput) (*iotwireless.ListPartnerAccountsOutput, error)
 	ListPartnerAccountsWithContext(aws.Context, *iotwireless.ListPartnerAccountsInput, ...request.Option) (*iotwireless.ListPartnerAccountsOutput, error)
 	ListPartnerAccountsRequest(*iotwireless.ListPartnerAccountsInput) (*request.Request, *iotwireless.ListPartnerAccountsOutput)
+
+	ListPositionConfigurations(*iotwireless.ListPositionConfigurationsInput) (*iotwireless.ListPositionConfigurationsOutput, error)
+	ListPositionConfigurationsWithContext(aws.Context, *iotwireless.ListPositionConfigurationsInput, ...request.Option) (*iotwireless.ListPositionConfigurationsOutput, error)
+	ListPositionConfigurationsRequest(*iotwireless.ListPositionConfigurationsInput) (*request.Request, *iotwireless.ListPositionConfigurationsOutput)
+
+	ListPositionConfigurationsPages(*iotwireless.ListPositionConfigurationsInput, func(*iotwireless.ListPositionConfigurationsOutput, bool) bool) error
+	ListPositionConfigurationsPagesWithContext(aws.Context, *iotwireless.ListPositionConfigurationsInput, func(*iotwireless.ListPositionConfigurationsOutput, bool) bool, ...request.Option) error
+
+	ListQueuedMessages(*iotwireless.ListQueuedMessagesInput) (*iotwireless.ListQueuedMessagesOutput, error)
+	ListQueuedMessagesWithContext(aws.Context, *iotwireless.ListQueuedMessagesInput, ...request.Option) (*iotwireless.ListQueuedMessagesOutput, error)
+	ListQueuedMessagesRequest(*iotwireless.ListQueuedMessagesInput) (*request.Request, *iotwireless.ListQueuedMessagesOutput)
+
+	ListQueuedMessagesPages(*iotwireless.ListQueuedMessagesInput, func(*iotwireless.ListQueuedMessagesOutput, bool) bool) error
+	ListQueuedMessagesPagesWithContext(aws.Context, *iotwireless.ListQueuedMessagesInput, func(*iotwireless.ListQueuedMessagesOutput, bool) bool, ...request.Option) error
 
 	ListServiceProfiles(*iotwireless.ListServiceProfilesInput) (*iotwireless.ListServiceProfilesOutput, error)
 	ListServiceProfilesWithContext(aws.Context, *iotwireless.ListServiceProfilesInput, ...request.Option) (*iotwireless.ListServiceProfilesOutput, error)
@@ -255,6 +389,10 @@ type IoTWirelessAPI interface {
 	ListWirelessGatewaysPages(*iotwireless.ListWirelessGatewaysInput, func(*iotwireless.ListWirelessGatewaysOutput, bool) bool) error
 	ListWirelessGatewaysPagesWithContext(aws.Context, *iotwireless.ListWirelessGatewaysInput, func(*iotwireless.ListWirelessGatewaysOutput, bool) bool, ...request.Option) error
 
+	PutPositionConfiguration(*iotwireless.PutPositionConfigurationInput) (*iotwireless.PutPositionConfigurationOutput, error)
+	PutPositionConfigurationWithContext(aws.Context, *iotwireless.PutPositionConfigurationInput, ...request.Option) (*iotwireless.PutPositionConfigurationOutput, error)
+	PutPositionConfigurationRequest(*iotwireless.PutPositionConfigurationInput) (*request.Request, *iotwireless.PutPositionConfigurationOutput)
+
 	PutResourceLogLevel(*iotwireless.PutResourceLogLevelInput) (*iotwireless.PutResourceLogLevelOutput, error)
 	PutResourceLogLevelWithContext(aws.Context, *iotwireless.PutResourceLogLevelInput, ...request.Option) (*iotwireless.PutResourceLogLevelOutput, error)
 	PutResourceLogLevelRequest(*iotwireless.PutResourceLogLevelInput) (*request.Request, *iotwireless.PutResourceLogLevelOutput)
@@ -267,9 +405,29 @@ type IoTWirelessAPI interface {
 	ResetResourceLogLevelWithContext(aws.Context, *iotwireless.ResetResourceLogLevelInput, ...request.Option) (*iotwireless.ResetResourceLogLevelOutput, error)
 	ResetResourceLogLevelRequest(*iotwireless.ResetResourceLogLevelInput) (*request.Request, *iotwireless.ResetResourceLogLevelOutput)
 
+	SendDataToMulticastGroup(*iotwireless.SendDataToMulticastGroupInput) (*iotwireless.SendDataToMulticastGroupOutput, error)
+	SendDataToMulticastGroupWithContext(aws.Context, *iotwireless.SendDataToMulticastGroupInput, ...request.Option) (*iotwireless.SendDataToMulticastGroupOutput, error)
+	SendDataToMulticastGroupRequest(*iotwireless.SendDataToMulticastGroupInput) (*request.Request, *iotwireless.SendDataToMulticastGroupOutput)
+
 	SendDataToWirelessDevice(*iotwireless.SendDataToWirelessDeviceInput) (*iotwireless.SendDataToWirelessDeviceOutput, error)
 	SendDataToWirelessDeviceWithContext(aws.Context, *iotwireless.SendDataToWirelessDeviceInput, ...request.Option) (*iotwireless.SendDataToWirelessDeviceOutput, error)
 	SendDataToWirelessDeviceRequest(*iotwireless.SendDataToWirelessDeviceInput) (*request.Request, *iotwireless.SendDataToWirelessDeviceOutput)
+
+	StartBulkAssociateWirelessDeviceWithMulticastGroup(*iotwireless.StartBulkAssociateWirelessDeviceWithMulticastGroupInput) (*iotwireless.StartBulkAssociateWirelessDeviceWithMulticastGroupOutput, error)
+	StartBulkAssociateWirelessDeviceWithMulticastGroupWithContext(aws.Context, *iotwireless.StartBulkAssociateWirelessDeviceWithMulticastGroupInput, ...request.Option) (*iotwireless.StartBulkAssociateWirelessDeviceWithMulticastGroupOutput, error)
+	StartBulkAssociateWirelessDeviceWithMulticastGroupRequest(*iotwireless.StartBulkAssociateWirelessDeviceWithMulticastGroupInput) (*request.Request, *iotwireless.StartBulkAssociateWirelessDeviceWithMulticastGroupOutput)
+
+	StartBulkDisassociateWirelessDeviceFromMulticastGroup(*iotwireless.StartBulkDisassociateWirelessDeviceFromMulticastGroupInput) (*iotwireless.StartBulkDisassociateWirelessDeviceFromMulticastGroupOutput, error)
+	StartBulkDisassociateWirelessDeviceFromMulticastGroupWithContext(aws.Context, *iotwireless.StartBulkDisassociateWirelessDeviceFromMulticastGroupInput, ...request.Option) (*iotwireless.StartBulkDisassociateWirelessDeviceFromMulticastGroupOutput, error)
+	StartBulkDisassociateWirelessDeviceFromMulticastGroupRequest(*iotwireless.StartBulkDisassociateWirelessDeviceFromMulticastGroupInput) (*request.Request, *iotwireless.StartBulkDisassociateWirelessDeviceFromMulticastGroupOutput)
+
+	StartFuotaTask(*iotwireless.StartFuotaTaskInput) (*iotwireless.StartFuotaTaskOutput, error)
+	StartFuotaTaskWithContext(aws.Context, *iotwireless.StartFuotaTaskInput, ...request.Option) (*iotwireless.StartFuotaTaskOutput, error)
+	StartFuotaTaskRequest(*iotwireless.StartFuotaTaskInput) (*request.Request, *iotwireless.StartFuotaTaskOutput)
+
+	StartMulticastGroupSession(*iotwireless.StartMulticastGroupSessionInput) (*iotwireless.StartMulticastGroupSessionOutput, error)
+	StartMulticastGroupSessionWithContext(aws.Context, *iotwireless.StartMulticastGroupSessionInput, ...request.Option) (*iotwireless.StartMulticastGroupSessionOutput, error)
+	StartMulticastGroupSessionRequest(*iotwireless.StartMulticastGroupSessionInput) (*request.Request, *iotwireless.StartMulticastGroupSessionOutput)
 
 	TagResource(*iotwireless.TagResourceInput) (*iotwireless.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *iotwireless.TagResourceInput, ...request.Option) (*iotwireless.TagResourceOutput, error)
@@ -287,13 +445,37 @@ type IoTWirelessAPI interface {
 	UpdateDestinationWithContext(aws.Context, *iotwireless.UpdateDestinationInput, ...request.Option) (*iotwireless.UpdateDestinationOutput, error)
 	UpdateDestinationRequest(*iotwireless.UpdateDestinationInput) (*request.Request, *iotwireless.UpdateDestinationOutput)
 
+	UpdateEventConfigurationByResourceTypes(*iotwireless.UpdateEventConfigurationByResourceTypesInput) (*iotwireless.UpdateEventConfigurationByResourceTypesOutput, error)
+	UpdateEventConfigurationByResourceTypesWithContext(aws.Context, *iotwireless.UpdateEventConfigurationByResourceTypesInput, ...request.Option) (*iotwireless.UpdateEventConfigurationByResourceTypesOutput, error)
+	UpdateEventConfigurationByResourceTypesRequest(*iotwireless.UpdateEventConfigurationByResourceTypesInput) (*request.Request, *iotwireless.UpdateEventConfigurationByResourceTypesOutput)
+
+	UpdateFuotaTask(*iotwireless.UpdateFuotaTaskInput) (*iotwireless.UpdateFuotaTaskOutput, error)
+	UpdateFuotaTaskWithContext(aws.Context, *iotwireless.UpdateFuotaTaskInput, ...request.Option) (*iotwireless.UpdateFuotaTaskOutput, error)
+	UpdateFuotaTaskRequest(*iotwireless.UpdateFuotaTaskInput) (*request.Request, *iotwireless.UpdateFuotaTaskOutput)
+
 	UpdateLogLevelsByResourceTypes(*iotwireless.UpdateLogLevelsByResourceTypesInput) (*iotwireless.UpdateLogLevelsByResourceTypesOutput, error)
 	UpdateLogLevelsByResourceTypesWithContext(aws.Context, *iotwireless.UpdateLogLevelsByResourceTypesInput, ...request.Option) (*iotwireless.UpdateLogLevelsByResourceTypesOutput, error)
 	UpdateLogLevelsByResourceTypesRequest(*iotwireless.UpdateLogLevelsByResourceTypesInput) (*request.Request, *iotwireless.UpdateLogLevelsByResourceTypesOutput)
 
+	UpdateMulticastGroup(*iotwireless.UpdateMulticastGroupInput) (*iotwireless.UpdateMulticastGroupOutput, error)
+	UpdateMulticastGroupWithContext(aws.Context, *iotwireless.UpdateMulticastGroupInput, ...request.Option) (*iotwireless.UpdateMulticastGroupOutput, error)
+	UpdateMulticastGroupRequest(*iotwireless.UpdateMulticastGroupInput) (*request.Request, *iotwireless.UpdateMulticastGroupOutput)
+
+	UpdateNetworkAnalyzerConfiguration(*iotwireless.UpdateNetworkAnalyzerConfigurationInput) (*iotwireless.UpdateNetworkAnalyzerConfigurationOutput, error)
+	UpdateNetworkAnalyzerConfigurationWithContext(aws.Context, *iotwireless.UpdateNetworkAnalyzerConfigurationInput, ...request.Option) (*iotwireless.UpdateNetworkAnalyzerConfigurationOutput, error)
+	UpdateNetworkAnalyzerConfigurationRequest(*iotwireless.UpdateNetworkAnalyzerConfigurationInput) (*request.Request, *iotwireless.UpdateNetworkAnalyzerConfigurationOutput)
+
 	UpdatePartnerAccount(*iotwireless.UpdatePartnerAccountInput) (*iotwireless.UpdatePartnerAccountOutput, error)
 	UpdatePartnerAccountWithContext(aws.Context, *iotwireless.UpdatePartnerAccountInput, ...request.Option) (*iotwireless.UpdatePartnerAccountOutput, error)
 	UpdatePartnerAccountRequest(*iotwireless.UpdatePartnerAccountInput) (*request.Request, *iotwireless.UpdatePartnerAccountOutput)
+
+	UpdatePosition(*iotwireless.UpdatePositionInput) (*iotwireless.UpdatePositionOutput, error)
+	UpdatePositionWithContext(aws.Context, *iotwireless.UpdatePositionInput, ...request.Option) (*iotwireless.UpdatePositionOutput, error)
+	UpdatePositionRequest(*iotwireless.UpdatePositionInput) (*request.Request, *iotwireless.UpdatePositionOutput)
+
+	UpdateResourceEventConfiguration(*iotwireless.UpdateResourceEventConfigurationInput) (*iotwireless.UpdateResourceEventConfigurationOutput, error)
+	UpdateResourceEventConfigurationWithContext(aws.Context, *iotwireless.UpdateResourceEventConfigurationInput, ...request.Option) (*iotwireless.UpdateResourceEventConfigurationOutput, error)
+	UpdateResourceEventConfigurationRequest(*iotwireless.UpdateResourceEventConfigurationInput) (*request.Request, *iotwireless.UpdateResourceEventConfigurationOutput)
 
 	UpdateWirelessDevice(*iotwireless.UpdateWirelessDeviceInput) (*iotwireless.UpdateWirelessDeviceOutput, error)
 	UpdateWirelessDeviceWithContext(aws.Context, *iotwireless.UpdateWirelessDeviceInput, ...request.Option) (*iotwireless.UpdateWirelessDeviceOutput, error)

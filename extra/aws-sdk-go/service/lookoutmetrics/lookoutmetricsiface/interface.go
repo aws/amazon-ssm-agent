@@ -80,6 +80,10 @@ type LookoutMetricsAPI interface {
 	CreateMetricSetWithContext(aws.Context, *lookoutmetrics.CreateMetricSetInput, ...request.Option) (*lookoutmetrics.CreateMetricSetOutput, error)
 	CreateMetricSetRequest(*lookoutmetrics.CreateMetricSetInput) (*request.Request, *lookoutmetrics.CreateMetricSetOutput)
 
+	DeactivateAnomalyDetector(*lookoutmetrics.DeactivateAnomalyDetectorInput) (*lookoutmetrics.DeactivateAnomalyDetectorOutput, error)
+	DeactivateAnomalyDetectorWithContext(aws.Context, *lookoutmetrics.DeactivateAnomalyDetectorInput, ...request.Option) (*lookoutmetrics.DeactivateAnomalyDetectorOutput, error)
+	DeactivateAnomalyDetectorRequest(*lookoutmetrics.DeactivateAnomalyDetectorInput) (*request.Request, *lookoutmetrics.DeactivateAnomalyDetectorOutput)
+
 	DeleteAlert(*lookoutmetrics.DeleteAlertInput) (*lookoutmetrics.DeleteAlertOutput, error)
 	DeleteAlertWithContext(aws.Context, *lookoutmetrics.DeleteAlertInput, ...request.Option) (*lookoutmetrics.DeleteAlertOutput, error)
 	DeleteAlertRequest(*lookoutmetrics.DeleteAlertInput) (*request.Request, *lookoutmetrics.DeleteAlertOutput)
@@ -106,6 +110,10 @@ type LookoutMetricsAPI interface {
 	DescribeMetricSet(*lookoutmetrics.DescribeMetricSetInput) (*lookoutmetrics.DescribeMetricSetOutput, error)
 	DescribeMetricSetWithContext(aws.Context, *lookoutmetrics.DescribeMetricSetInput, ...request.Option) (*lookoutmetrics.DescribeMetricSetOutput, error)
 	DescribeMetricSetRequest(*lookoutmetrics.DescribeMetricSetInput) (*request.Request, *lookoutmetrics.DescribeMetricSetOutput)
+
+	DetectMetricSetConfig(*lookoutmetrics.DetectMetricSetConfigInput) (*lookoutmetrics.DetectMetricSetConfigOutput, error)
+	DetectMetricSetConfigWithContext(aws.Context, *lookoutmetrics.DetectMetricSetConfigInput, ...request.Option) (*lookoutmetrics.DetectMetricSetConfigOutput, error)
+	DetectMetricSetConfigRequest(*lookoutmetrics.DetectMetricSetConfigInput) (*request.Request, *lookoutmetrics.DetectMetricSetConfigOutput)
 
 	GetAnomalyGroup(*lookoutmetrics.GetAnomalyGroupInput) (*lookoutmetrics.GetAnomalyGroupOutput, error)
 	GetAnomalyGroupWithContext(aws.Context, *lookoutmetrics.GetAnomalyGroupInput, ...request.Option) (*lookoutmetrics.GetAnomalyGroupOutput, error)
@@ -135,6 +143,13 @@ type LookoutMetricsAPI interface {
 
 	ListAnomalyDetectorsPages(*lookoutmetrics.ListAnomalyDetectorsInput, func(*lookoutmetrics.ListAnomalyDetectorsOutput, bool) bool) error
 	ListAnomalyDetectorsPagesWithContext(aws.Context, *lookoutmetrics.ListAnomalyDetectorsInput, func(*lookoutmetrics.ListAnomalyDetectorsOutput, bool) bool, ...request.Option) error
+
+	ListAnomalyGroupRelatedMetrics(*lookoutmetrics.ListAnomalyGroupRelatedMetricsInput) (*lookoutmetrics.ListAnomalyGroupRelatedMetricsOutput, error)
+	ListAnomalyGroupRelatedMetricsWithContext(aws.Context, *lookoutmetrics.ListAnomalyGroupRelatedMetricsInput, ...request.Option) (*lookoutmetrics.ListAnomalyGroupRelatedMetricsOutput, error)
+	ListAnomalyGroupRelatedMetricsRequest(*lookoutmetrics.ListAnomalyGroupRelatedMetricsInput) (*request.Request, *lookoutmetrics.ListAnomalyGroupRelatedMetricsOutput)
+
+	ListAnomalyGroupRelatedMetricsPages(*lookoutmetrics.ListAnomalyGroupRelatedMetricsInput, func(*lookoutmetrics.ListAnomalyGroupRelatedMetricsOutput, bool) bool) error
+	ListAnomalyGroupRelatedMetricsPagesWithContext(aws.Context, *lookoutmetrics.ListAnomalyGroupRelatedMetricsInput, func(*lookoutmetrics.ListAnomalyGroupRelatedMetricsOutput, bool) bool, ...request.Option) error
 
 	ListAnomalyGroupSummaries(*lookoutmetrics.ListAnomalyGroupSummariesInput) (*lookoutmetrics.ListAnomalyGroupSummariesOutput, error)
 	ListAnomalyGroupSummariesWithContext(aws.Context, *lookoutmetrics.ListAnomalyGroupSummariesInput, ...request.Option) (*lookoutmetrics.ListAnomalyGroupSummariesOutput, error)
@@ -172,6 +187,10 @@ type LookoutMetricsAPI interface {
 	UntagResource(*lookoutmetrics.UntagResourceInput) (*lookoutmetrics.UntagResourceOutput, error)
 	UntagResourceWithContext(aws.Context, *lookoutmetrics.UntagResourceInput, ...request.Option) (*lookoutmetrics.UntagResourceOutput, error)
 	UntagResourceRequest(*lookoutmetrics.UntagResourceInput) (*request.Request, *lookoutmetrics.UntagResourceOutput)
+
+	UpdateAlert(*lookoutmetrics.UpdateAlertInput) (*lookoutmetrics.UpdateAlertOutput, error)
+	UpdateAlertWithContext(aws.Context, *lookoutmetrics.UpdateAlertInput, ...request.Option) (*lookoutmetrics.UpdateAlertOutput, error)
+	UpdateAlertRequest(*lookoutmetrics.UpdateAlertInput) (*request.Request, *lookoutmetrics.UpdateAlertOutput)
 
 	UpdateAnomalyDetector(*lookoutmetrics.UpdateAnomalyDetectorInput) (*lookoutmetrics.UpdateAnomalyDetectorOutput, error)
 	UpdateAnomalyDetectorWithContext(aws.Context, *lookoutmetrics.UpdateAnomalyDetectorInput, ...request.Option) (*lookoutmetrics.UpdateAnomalyDetectorOutput, error)

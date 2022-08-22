@@ -2710,6 +2710,11 @@ type DashManifest struct {
 	// "HBBTV_1_5", HbbTV 1.5 compliant output is enabled.
 	Profile *string `locationName:"profile" type:"string" enum:"Profile"`
 
+	// The source of scte markers used. When set to SEGMENTS, the scte markers are
+	// sourced from the segments of the ingested content. When set to MANIFEST,
+	// the scte markers are sourced from the manifest of the ingested content.
+	ScteMarkersSource *string `locationName:"scteMarkersSource" type:"string" enum:"ScteMarkersSource"`
+
 	// A StreamSelection configuration.
 	StreamSelection *StreamSelection `locationName:"streamSelection" type:"structure"`
 }
@@ -2756,6 +2761,12 @@ func (s *DashManifest) SetProfile(v string) *DashManifest {
 	return s
 }
 
+// SetScteMarkersSource sets the ScteMarkersSource field's value.
+func (s *DashManifest) SetScteMarkersSource(v string) *DashManifest {
+	s.ScteMarkersSource = &v
+	return s
+}
+
 // SetStreamSelection sets the StreamSelection field's value.
 func (s *DashManifest) SetStreamSelection(v *StreamSelection) *DashManifest {
 	s.StreamSelection = v
@@ -2786,7 +2797,7 @@ type DashPackage struct {
 	// into multiple periods. If empty, the content will notbe partitioned into
 	// more than one period. If the list contains "ADS", new periods will be created
 	// wherethe Asset contains SCTE-35 ad markers.
-	PeriodTriggers []*string `locationName:"periodTriggers" type:"list"`
+	PeriodTriggers []*string `locationName:"periodTriggers" type:"list" enum:"PeriodTriggersElement"`
 
 	// Duration (in seconds) of each segment. Actual segments will berounded to
 	// the nearest multiple of the source segment duration.
@@ -2921,7 +2932,7 @@ func (s *DeleteAssetInput) SetId(v string) *DeleteAssetInput {
 }
 
 type DeleteAssetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -2990,7 +3001,7 @@ func (s *DeletePackagingConfigurationInput) SetId(v string) *DeletePackagingConf
 }
 
 type DeletePackagingConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3059,7 +3070,7 @@ func (s *DeletePackagingGroupInput) SetId(v string) *DeletePackagingGroupInput {
 }
 
 type DeletePackagingGroupOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3799,6 +3810,10 @@ type HlsPackage struct {
 	// HlsManifests is a required field
 	HlsManifests []*HlsManifest `locationName:"hlsManifests" type:"list" required:"true"`
 
+	// When enabled, MediaPackage passes through digital video broadcasting (DVB)
+	// subtitles into the output.
+	IncludeDvbSubtitles *bool `locationName:"includeDvbSubtitles" type:"boolean"`
+
 	// Duration (in seconds) of each fragment. Actual fragments will berounded to
 	// the nearest multiple of the source fragment duration.
 	SegmentDurationSeconds *int64 `locationName:"segmentDurationSeconds" type:"integer"`
@@ -3852,6 +3867,12 @@ func (s *HlsPackage) SetEncryption(v *HlsEncryption) *HlsPackage {
 // SetHlsManifests sets the HlsManifests field's value.
 func (s *HlsPackage) SetHlsManifests(v []*HlsManifest) *HlsPackage {
 	s.HlsManifests = v
+	return s
+}
+
+// SetIncludeDvbSubtitles sets the IncludeDvbSubtitles field's value.
+func (s *HlsPackage) SetIncludeDvbSubtitles(v bool) *HlsPackage {
+	s.IncludeDvbSubtitles = &v
 	return s
 }
 
@@ -4939,7 +4960,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5146,7 +5167,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5378,6 +5399,22 @@ func Profile_Values() []string {
 	return []string{
 		ProfileNone,
 		ProfileHbbtv15,
+	}
+}
+
+const (
+	// ScteMarkersSourceSegments is a ScteMarkersSource enum value
+	ScteMarkersSourceSegments = "SEGMENTS"
+
+	// ScteMarkersSourceManifest is a ScteMarkersSource enum value
+	ScteMarkersSourceManifest = "MANIFEST"
+)
+
+// ScteMarkersSource_Values returns all elements of the ScteMarkersSource enum
+func ScteMarkersSource_Values() []string {
+	return []string{
+		ScteMarkersSourceSegments,
+		ScteMarkersSourceManifest,
 	}
 }
 

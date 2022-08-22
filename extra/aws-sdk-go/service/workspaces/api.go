@@ -413,6 +413,101 @@ func (c *WorkSpaces) CopyWorkspaceImageWithContext(ctx aws.Context, input *CopyW
 	return out, req.Send()
 }
 
+const opCreateConnectClientAddIn = "CreateConnectClientAddIn"
+
+// CreateConnectClientAddInRequest generates a "aws/request.Request" representing the
+// client's request for the CreateConnectClientAddIn operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateConnectClientAddIn for more information on using the CreateConnectClientAddIn
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateConnectClientAddInRequest method.
+//    req, resp := client.CreateConnectClientAddInRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/CreateConnectClientAddIn
+func (c *WorkSpaces) CreateConnectClientAddInRequest(input *CreateConnectClientAddInInput) (req *request.Request, output *CreateConnectClientAddInOutput) {
+	op := &request.Operation{
+		Name:       opCreateConnectClientAddIn,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateConnectClientAddInInput{}
+	}
+
+	output = &CreateConnectClientAddInOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateConnectClientAddIn API operation for Amazon WorkSpaces.
+//
+// Creates a client-add-in for Amazon Connect within a directory. You can create
+// only one Amazon Connect client add-in within a directory.
+//
+// This client add-in allows WorkSpaces users to seamlessly connect to Amazon
+// Connect.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation CreateConnectClientAddIn for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * ResourceCreationFailedException
+//   The resource could not be created.
+//
+//   * ResourceAlreadyExistsException
+//   The specified resource already exists.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/CreateConnectClientAddIn
+func (c *WorkSpaces) CreateConnectClientAddIn(input *CreateConnectClientAddInInput) (*CreateConnectClientAddInOutput, error) {
+	req, out := c.CreateConnectClientAddInRequest(input)
+	return out, req.Send()
+}
+
+// CreateConnectClientAddInWithContext is the same as CreateConnectClientAddIn with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateConnectClientAddIn for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) CreateConnectClientAddInWithContext(ctx aws.Context, input *CreateConnectClientAddInInput, opts ...request.Option) (*CreateConnectClientAddInOutput, error) {
+	req, out := c.CreateConnectClientAddInRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateConnectionAlias = "CreateConnectionAlias"
 
 // CreateConnectionAliasRequest generates a "aws/request.Request" representing the
@@ -749,8 +844,8 @@ func (c *WorkSpaces) CreateUpdatedWorkspaceImageRequest(input *CreateUpdatedWork
 // To determine which WorkSpace images need to be updated with the latest Amazon
 // WorkSpaces requirements, use DescribeWorkspaceImages (https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceImages.html).
 //
-//    * Only Windows 10 WorkSpace images can be programmatically updated at
-//    this time.
+//    * Only Windows 10, Windows Sever 2016, and Windows Server 2019 WorkSpace
+//    images can be programmatically updated at this time.
 //
 //    * Microsoft Windows updates and other application updates are not included
 //    in the update process.
@@ -904,6 +999,103 @@ func (c *WorkSpaces) CreateWorkspaceBundleWithContext(ctx aws.Context, input *Cr
 	return out, req.Send()
 }
 
+const opCreateWorkspaceImage = "CreateWorkspaceImage"
+
+// CreateWorkspaceImageRequest generates a "aws/request.Request" representing the
+// client's request for the CreateWorkspaceImage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateWorkspaceImage for more information on using the CreateWorkspaceImage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateWorkspaceImageRequest method.
+//    req, resp := client.CreateWorkspaceImageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/CreateWorkspaceImage
+func (c *WorkSpaces) CreateWorkspaceImageRequest(input *CreateWorkspaceImageInput) (req *request.Request, output *CreateWorkspaceImageOutput) {
+	op := &request.Operation{
+		Name:       opCreateWorkspaceImage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateWorkspaceImageInput{}
+	}
+
+	output = &CreateWorkspaceImageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateWorkspaceImage API operation for Amazon WorkSpaces.
+//
+// Creates a new WorkSpace image from an existing WorkSpace.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation CreateWorkspaceImage for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ResourceAlreadyExistsException
+//   The specified resource already exists.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * OperationNotSupportedException
+//   This operation is not supported.
+//
+//   * InvalidResourceStateException
+//   The state of the resource is not valid for this operation.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/CreateWorkspaceImage
+func (c *WorkSpaces) CreateWorkspaceImage(input *CreateWorkspaceImageInput) (*CreateWorkspaceImageOutput, error) {
+	req, out := c.CreateWorkspaceImageRequest(input)
+	return out, req.Send()
+}
+
+// CreateWorkspaceImageWithContext is the same as CreateWorkspaceImage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateWorkspaceImage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) CreateWorkspaceImageWithContext(ctx aws.Context, input *CreateWorkspaceImageInput, opts ...request.Option) (*CreateWorkspaceImageOutput, error) {
+	req, out := c.CreateWorkspaceImageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateWorkspaces = "CreateWorkspaces"
 
 // CreateWorkspacesRequest generates a "aws/request.Request" representing the
@@ -983,6 +1175,184 @@ func (c *WorkSpaces) CreateWorkspaces(input *CreateWorkspacesInput) (*CreateWork
 // for more information on using Contexts.
 func (c *WorkSpaces) CreateWorkspacesWithContext(ctx aws.Context, input *CreateWorkspacesInput, opts ...request.Option) (*CreateWorkspacesOutput, error) {
 	req, out := c.CreateWorkspacesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteClientBranding = "DeleteClientBranding"
+
+// DeleteClientBrandingRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteClientBranding operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteClientBranding for more information on using the DeleteClientBranding
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteClientBrandingRequest method.
+//    req, resp := client.DeleteClientBrandingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DeleteClientBranding
+func (c *WorkSpaces) DeleteClientBrandingRequest(input *DeleteClientBrandingInput) (req *request.Request, output *DeleteClientBrandingOutput) {
+	op := &request.Operation{
+		Name:       opDeleteClientBranding,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteClientBrandingInput{}
+	}
+
+	output = &DeleteClientBrandingOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteClientBranding API operation for Amazon WorkSpaces.
+//
+// Deletes customized client branding. Client branding allows you to customize
+// your WorkSpace's client login portal. You can tailor your login portal company
+// logo, the support email address, support link, link to reset password, and
+// a custom message for users trying to sign in.
+//
+// After you delete your customized client branding, your login portal reverts
+// to the default client branding.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation DeleteClientBranding for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DeleteClientBranding
+func (c *WorkSpaces) DeleteClientBranding(input *DeleteClientBrandingInput) (*DeleteClientBrandingOutput, error) {
+	req, out := c.DeleteClientBrandingRequest(input)
+	return out, req.Send()
+}
+
+// DeleteClientBrandingWithContext is the same as DeleteClientBranding with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteClientBranding for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) DeleteClientBrandingWithContext(ctx aws.Context, input *DeleteClientBrandingInput, opts ...request.Option) (*DeleteClientBrandingOutput, error) {
+	req, out := c.DeleteClientBrandingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteConnectClientAddIn = "DeleteConnectClientAddIn"
+
+// DeleteConnectClientAddInRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteConnectClientAddIn operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteConnectClientAddIn for more information on using the DeleteConnectClientAddIn
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteConnectClientAddInRequest method.
+//    req, resp := client.DeleteConnectClientAddInRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DeleteConnectClientAddIn
+func (c *WorkSpaces) DeleteConnectClientAddInRequest(input *DeleteConnectClientAddInInput) (req *request.Request, output *DeleteConnectClientAddInOutput) {
+	op := &request.Operation{
+		Name:       opDeleteConnectClientAddIn,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteConnectClientAddInInput{}
+	}
+
+	output = &DeleteConnectClientAddInOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteConnectClientAddIn API operation for Amazon WorkSpaces.
+//
+// Deletes a client-add-in for Amazon Connect that is configured within a directory.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation DeleteConnectClientAddIn for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DeleteConnectClientAddIn
+func (c *WorkSpaces) DeleteConnectClientAddIn(input *DeleteConnectClientAddInInput) (*DeleteConnectClientAddInOutput, error) {
+	req, out := c.DeleteConnectClientAddInRequest(input)
+	return out, req.Send()
+}
+
+// DeleteConnectClientAddInWithContext is the same as DeleteConnectClientAddIn with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteConnectClientAddIn for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) DeleteConnectClientAddInWithContext(ctx aws.Context, input *DeleteConnectClientAddInInput, opts ...request.Option) (*DeleteConnectClientAddInOutput, error) {
+	req, out := c.DeleteConnectClientAddInRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1712,6 +2082,97 @@ func (c *WorkSpaces) DescribeAccountModificationsWithContext(ctx aws.Context, in
 	return out, req.Send()
 }
 
+const opDescribeClientBranding = "DescribeClientBranding"
+
+// DescribeClientBrandingRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeClientBranding operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeClientBranding for more information on using the DescribeClientBranding
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeClientBrandingRequest method.
+//    req, resp := client.DescribeClientBrandingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeClientBranding
+func (c *WorkSpaces) DescribeClientBrandingRequest(input *DescribeClientBrandingInput) (req *request.Request, output *DescribeClientBrandingOutput) {
+	op := &request.Operation{
+		Name:       opDescribeClientBranding,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeClientBrandingInput{}
+	}
+
+	output = &DescribeClientBrandingOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeClientBranding API operation for Amazon WorkSpaces.
+//
+// Describes the specified client branding. Client branding allows you to customize
+// the log in page of various device types for your users. You can add your
+// company logo, the support email address, support link, link to reset password,
+// and a custom message for users trying to sign in.
+//
+// Only device types that have branding information configured will be shown
+// in the response.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation DescribeClientBranding for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeClientBranding
+func (c *WorkSpaces) DescribeClientBranding(input *DescribeClientBrandingInput) (*DescribeClientBrandingOutput, error) {
+	req, out := c.DescribeClientBrandingRequest(input)
+	return out, req.Send()
+}
+
+// DescribeClientBrandingWithContext is the same as DescribeClientBranding with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeClientBranding for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) DescribeClientBrandingWithContext(ctx aws.Context, input *DescribeClientBrandingInput, opts ...request.Option) (*DescribeClientBrandingOutput, error) {
+	req, out := c.DescribeClientBrandingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeClientProperties = "DescribeClientProperties"
 
 // DescribeClientPropertiesRequest generates a "aws/request.Request" representing the
@@ -1792,6 +2253,91 @@ func (c *WorkSpaces) DescribeClientProperties(input *DescribeClientPropertiesInp
 // for more information on using Contexts.
 func (c *WorkSpaces) DescribeClientPropertiesWithContext(ctx aws.Context, input *DescribeClientPropertiesInput, opts ...request.Option) (*DescribeClientPropertiesOutput, error) {
 	req, out := c.DescribeClientPropertiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeConnectClientAddIns = "DescribeConnectClientAddIns"
+
+// DescribeConnectClientAddInsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeConnectClientAddIns operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeConnectClientAddIns for more information on using the DescribeConnectClientAddIns
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeConnectClientAddInsRequest method.
+//    req, resp := client.DescribeConnectClientAddInsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeConnectClientAddIns
+func (c *WorkSpaces) DescribeConnectClientAddInsRequest(input *DescribeConnectClientAddInsInput) (req *request.Request, output *DescribeConnectClientAddInsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeConnectClientAddIns,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeConnectClientAddInsInput{}
+	}
+
+	output = &DescribeConnectClientAddInsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeConnectClientAddIns API operation for Amazon WorkSpaces.
+//
+// Retrieves a list of Amazon Connect client add-ins that have been created.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation DescribeConnectClientAddIns for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeConnectClientAddIns
+func (c *WorkSpaces) DescribeConnectClientAddIns(input *DescribeConnectClientAddInsInput) (*DescribeConnectClientAddInsOutput, error) {
+	req, out := c.DescribeConnectClientAddInsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeConnectClientAddInsWithContext is the same as DescribeConnectClientAddIns with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeConnectClientAddIns for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) DescribeConnectClientAddInsWithContext(ctx aws.Context, input *DescribeConnectClientAddInsInput, opts ...request.Option) (*DescribeConnectClientAddInsOutput, error) {
+	req, out := c.DescribeConnectClientAddInsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3072,6 +3618,112 @@ func (c *WorkSpaces) DisassociateIpGroupsWithContext(ctx aws.Context, input *Dis
 	return out, req.Send()
 }
 
+const opImportClientBranding = "ImportClientBranding"
+
+// ImportClientBrandingRequest generates a "aws/request.Request" representing the
+// client's request for the ImportClientBranding operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ImportClientBranding for more information on using the ImportClientBranding
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ImportClientBrandingRequest method.
+//    req, resp := client.ImportClientBrandingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/ImportClientBranding
+func (c *WorkSpaces) ImportClientBrandingRequest(input *ImportClientBrandingInput) (req *request.Request, output *ImportClientBrandingOutput) {
+	op := &request.Operation{
+		Name:       opImportClientBranding,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ImportClientBrandingInput{}
+	}
+
+	output = &ImportClientBrandingOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ImportClientBranding API operation for Amazon WorkSpaces.
+//
+// Imports client branding. Client branding allows you to customize your WorkSpace's
+// client login portal. You can tailor your login portal company logo, the support
+// email address, support link, link to reset password, and a custom message
+// for users trying to sign in.
+//
+// After you import client branding, the default branding experience for the
+// specified platform type is replaced with the imported experience
+//
+//    * You must specify at least one platform type when importing client branding.
+//
+//    * You can import up to 6 MB of data with each request. If your request
+//    exceeds this limit, you can import client branding for different platform
+//    types using separate requests.
+//
+//    * In each platform type, the SupportEmail and SupportLink parameters are
+//    mutually exclusive. You can specify only one parameter for each platform
+//    type, but not both.
+//
+//    * Imported data can take up to a minute to appear in the WorkSpaces client.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation ImportClientBranding for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * ResourceLimitExceededException
+//   Your resource limits have been exceeded.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/ImportClientBranding
+func (c *WorkSpaces) ImportClientBranding(input *ImportClientBrandingInput) (*ImportClientBrandingOutput, error) {
+	req, out := c.ImportClientBrandingRequest(input)
+	return out, req.Send()
+}
+
+// ImportClientBrandingWithContext is the same as ImportClientBranding with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ImportClientBranding for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) ImportClientBrandingWithContext(ctx aws.Context, input *ImportClientBrandingInput, opts ...request.Option) (*ImportClientBrandingOutput, error) {
+	req, out := c.ImportClientBrandingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opImportWorkspaceImage = "ImportWorkspaceImage"
 
 // ImportWorkspaceImageRequest generates a "aws/request.Request" representing the
@@ -3543,6 +4195,97 @@ func (c *WorkSpaces) ModifyClientProperties(input *ModifyClientPropertiesInput) 
 // for more information on using Contexts.
 func (c *WorkSpaces) ModifyClientPropertiesWithContext(ctx aws.Context, input *ModifyClientPropertiesInput, opts ...request.Option) (*ModifyClientPropertiesOutput, error) {
 	req, out := c.ModifyClientPropertiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opModifySamlProperties = "ModifySamlProperties"
+
+// ModifySamlPropertiesRequest generates a "aws/request.Request" representing the
+// client's request for the ModifySamlProperties operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifySamlProperties for more information on using the ModifySamlProperties
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifySamlPropertiesRequest method.
+//    req, resp := client.ModifySamlPropertiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/ModifySamlProperties
+func (c *WorkSpaces) ModifySamlPropertiesRequest(input *ModifySamlPropertiesInput) (req *request.Request, output *ModifySamlPropertiesOutput) {
+	op := &request.Operation{
+		Name:       opModifySamlProperties,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifySamlPropertiesInput{}
+	}
+
+	output = &ModifySamlPropertiesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// ModifySamlProperties API operation for Amazon WorkSpaces.
+//
+// Modifies multiple properties related to SAML 2.0 authentication, including
+// the enablement status, user access URL, and relay state parameter name that
+// are used for configuring federation with an SAML 2.0 identity provider.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation ModifySamlProperties for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * OperationNotSupportedException
+//   This operation is not supported.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/ModifySamlProperties
+func (c *WorkSpaces) ModifySamlProperties(input *ModifySamlPropertiesInput) (*ModifySamlPropertiesOutput, error) {
+	req, out := c.ModifySamlPropertiesRequest(input)
+	return out, req.Send()
+}
+
+// ModifySamlPropertiesWithContext is the same as ModifySamlProperties with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifySamlProperties for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) ModifySamlPropertiesWithContext(ctx aws.Context, input *ModifySamlPropertiesInput, opts ...request.Option) (*ModifySamlPropertiesOutput, error) {
+	req, out := c.ModifySamlPropertiesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4713,6 +5456,93 @@ func (c *WorkSpaces) TerminateWorkspacesWithContext(ctx aws.Context, input *Term
 	return out, req.Send()
 }
 
+const opUpdateConnectClientAddIn = "UpdateConnectClientAddIn"
+
+// UpdateConnectClientAddInRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateConnectClientAddIn operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateConnectClientAddIn for more information on using the UpdateConnectClientAddIn
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateConnectClientAddInRequest method.
+//    req, resp := client.UpdateConnectClientAddInRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/UpdateConnectClientAddIn
+func (c *WorkSpaces) UpdateConnectClientAddInRequest(input *UpdateConnectClientAddInInput) (req *request.Request, output *UpdateConnectClientAddInOutput) {
+	op := &request.Operation{
+		Name:       opUpdateConnectClientAddIn,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateConnectClientAddInInput{}
+	}
+
+	output = &UpdateConnectClientAddInOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateConnectClientAddIn API operation for Amazon WorkSpaces.
+//
+// Updates a Amazon Connect client add-in. Use this action to update the name
+// and endpoint URL of a Amazon Connect client add-in.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkSpaces's
+// API operation UpdateConnectClientAddIn for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValuesException
+//   One or more parameter values are not valid.
+//
+//   * ResourceNotFoundException
+//   The resource could not be found.
+//
+//   * AccessDeniedException
+//   The user is not authorized to access a resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/UpdateConnectClientAddIn
+func (c *WorkSpaces) UpdateConnectClientAddIn(input *UpdateConnectClientAddInInput) (*UpdateConnectClientAddInOutput, error) {
+	req, out := c.UpdateConnectClientAddInRequest(input)
+	return out, req.Send()
+}
+
+// UpdateConnectClientAddInWithContext is the same as UpdateConnectClientAddIn with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateConnectClientAddIn for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkSpaces) UpdateConnectClientAddInWithContext(ctx aws.Context, input *UpdateConnectClientAddInInput, opts ...request.Option) (*UpdateConnectClientAddInOutput, error) {
+	req, out := c.UpdateConnectClientAddInRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateConnectionAliasPermission = "UpdateConnectionAliasPermission"
 
 // UpdateConnectionAliasPermissionRequest generates a "aws/request.Request" representing the
@@ -5645,6 +6475,65 @@ func (s *ComputeType) SetName(v string) *ComputeType {
 	return s
 }
 
+// Describes an Amazon Connect client add-in.
+type ConnectClientAddIn struct {
+	_ struct{} `type:"structure"`
+
+	// The client add-in identifier.
+	AddInId *string `min:"36" type:"string"`
+
+	// The name of the client add in.
+	Name *string `min:"1" type:"string"`
+
+	// The directory identifier for which the client add-in is configured.
+	ResourceId *string `min:"10" type:"string"`
+
+	// The endpoint URL of the client add-in.
+	URL *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectClientAddIn) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectClientAddIn) GoString() string {
+	return s.String()
+}
+
+// SetAddInId sets the AddInId field's value.
+func (s *ConnectClientAddIn) SetAddInId(v string) *ConnectClientAddIn {
+	s.AddInId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ConnectClientAddIn) SetName(v string) *ConnectClientAddIn {
+	s.Name = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *ConnectClientAddIn) SetResourceId(v string) *ConnectClientAddIn {
+	s.ResourceId = &v
+	return s
+}
+
+// SetURL sets the URL field's value.
+func (s *ConnectClientAddIn) SetURL(v string) *ConnectClientAddIn {
+	s.URL = &v
+	return s
+}
+
 // Describes a connection alias. Connection aliases are used for cross-Region
 // redirection. For more information, see Cross-Region Redirection for Amazon
 // WorkSpaces (https://docs.aws.amazon.com/workspaces/latest/adminguide/cross-region-redirection.html).
@@ -5986,6 +6875,120 @@ func (s CopyWorkspaceImageOutput) GoString() string {
 // SetImageId sets the ImageId field's value.
 func (s *CopyWorkspaceImageOutput) SetImageId(v string) *CopyWorkspaceImageOutput {
 	s.ImageId = &v
+	return s
+}
+
+type CreateConnectClientAddInInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the client add-in.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The directory identifier for which to configure the client add-in.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+
+	// The endpoint URL of the Amazon Connect client add-in.
+	//
+	// URL is a required field
+	URL *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectClientAddInInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectClientAddInInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateConnectClientAddInInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateConnectClientAddInInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+	if s.URL == nil {
+		invalidParams.Add(request.NewErrParamRequired("URL"))
+	}
+	if s.URL != nil && len(*s.URL) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("URL", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *CreateConnectClientAddInInput) SetName(v string) *CreateConnectClientAddInInput {
+	s.Name = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *CreateConnectClientAddInInput) SetResourceId(v string) *CreateConnectClientAddInInput {
+	s.ResourceId = &v
+	return s
+}
+
+// SetURL sets the URL field's value.
+func (s *CreateConnectClientAddInInput) SetURL(v string) *CreateConnectClientAddInInput {
+	s.URL = &v
+	return s
+}
+
+type CreateConnectClientAddInOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The client add-in identifier.
+	AddInId *string `min:"36" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectClientAddInOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectClientAddInOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddInId sets the AddInId field's value.
+func (s *CreateConnectClientAddInOutput) SetAddInId(v string) *CreateConnectClientAddInOutput {
+	s.AddInId = &v
 	return s
 }
 
@@ -6618,6 +7621,203 @@ func (s *CreateWorkspaceBundleOutput) SetWorkspaceBundle(v *WorkspaceBundle) *Cr
 	return s
 }
 
+type CreateWorkspaceImageInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the new WorkSpace image.
+	//
+	// Description is a required field
+	Description *string `min:"1" type:"string" required:"true"`
+
+	// The name of the new WorkSpace image.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The tags that you want to add to the new WorkSpace image. To add tags when
+	// you're creating the image, you must create an IAM policy that grants your
+	// IAM user permission to use workspaces:CreateTags.
+	Tags []*Tag `type:"list"`
+
+	// The identifier of the source WorkSpace
+	//
+	// WorkspaceId is a required field
+	WorkspaceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateWorkspaceImageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateWorkspaceImageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateWorkspaceImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateWorkspaceImageInput"}
+	if s.Description == nil {
+		invalidParams.Add(request.NewErrParamRequired("Description"))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.WorkspaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkspaceId"))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateWorkspaceImageInput) SetDescription(v string) *CreateWorkspaceImageInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateWorkspaceImageInput) SetName(v string) *CreateWorkspaceImageInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorkspaceImageInput) SetTags(v []*Tag) *CreateWorkspaceImageInput {
+	s.Tags = v
+	return s
+}
+
+// SetWorkspaceId sets the WorkspaceId field's value.
+func (s *CreateWorkspaceImageInput) SetWorkspaceId(v string) *CreateWorkspaceImageInput {
+	s.WorkspaceId = &v
+	return s
+}
+
+type CreateWorkspaceImageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The date when the image was created.
+	Created *time.Time `type:"timestamp"`
+
+	// The description of the image.
+	Description *string `min:"1" type:"string"`
+
+	// The identifier of the new WorkSpace image.
+	ImageId *string `type:"string"`
+
+	// The name of the image.
+	Name *string `min:"1" type:"string"`
+
+	// The operating system that the image is running.
+	OperatingSystem *OperatingSystem `type:"structure"`
+
+	// The identifier of the AWS account that owns the image.
+	OwnerAccountId *string `type:"string"`
+
+	// Specifies whether the image is running on dedicated hardware. When Bring
+	// Your Own License (BYOL) is enabled, this value is set to DEDICATED. For more
+	// information, see Bring Your Own Windows Desktop Images. (https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.htm)
+	RequiredTenancy *string `type:"string" enum:"WorkspaceImageRequiredTenancy"`
+
+	// The availability status of the image.
+	State *string `type:"string" enum:"WorkspaceImageState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateWorkspaceImageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateWorkspaceImageOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreated sets the Created field's value.
+func (s *CreateWorkspaceImageOutput) SetCreated(v time.Time) *CreateWorkspaceImageOutput {
+	s.Created = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateWorkspaceImageOutput) SetDescription(v string) *CreateWorkspaceImageOutput {
+	s.Description = &v
+	return s
+}
+
+// SetImageId sets the ImageId field's value.
+func (s *CreateWorkspaceImageOutput) SetImageId(v string) *CreateWorkspaceImageOutput {
+	s.ImageId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateWorkspaceImageOutput) SetName(v string) *CreateWorkspaceImageOutput {
+	s.Name = &v
+	return s
+}
+
+// SetOperatingSystem sets the OperatingSystem field's value.
+func (s *CreateWorkspaceImageOutput) SetOperatingSystem(v *OperatingSystem) *CreateWorkspaceImageOutput {
+	s.OperatingSystem = v
+	return s
+}
+
+// SetOwnerAccountId sets the OwnerAccountId field's value.
+func (s *CreateWorkspaceImageOutput) SetOwnerAccountId(v string) *CreateWorkspaceImageOutput {
+	s.OwnerAccountId = &v
+	return s
+}
+
+// SetRequiredTenancy sets the RequiredTenancy field's value.
+func (s *CreateWorkspaceImageOutput) SetRequiredTenancy(v string) *CreateWorkspaceImageOutput {
+	s.RequiredTenancy = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CreateWorkspaceImageOutput) SetState(v string) *CreateWorkspaceImageOutput {
+	s.State = &v
+	return s
+}
+
 type CreateWorkspacesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6721,6 +7921,211 @@ func (s *CreateWorkspacesOutput) SetPendingRequests(v []*Workspace) *CreateWorks
 	return s
 }
 
+// Returns default client branding attributes that were imported. These attributes
+// display on the client login screen.
+//
+// Client branding attributes are public facing. Ensure that you don't include
+// sensitive information.
+type DefaultClientBrandingAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// The forgotten password link. This is the web address that users can go to
+	// if they forget the password for their WorkSpace.
+	ForgotPasswordLink *string `min:"1" type:"string"`
+
+	// The login message. Specified as a key value pair, in which the key is a locale
+	// and the value is the localized message for that locale. The only key supported
+	// is en_US. The HTML tags supported include the following: a, b, blockquote,
+	// br, cite, code, dd, dl, dt, div, em, i, li, ol, p, pre, q, small, span, strike,
+	// strong, sub, sup, u, ul.
+	LoginMessage map[string]*string `type:"map"`
+
+	// The logo. The only image format accepted is a binary data object that is
+	// converted from a .png file.
+	LogoUrl *string `min:"1" type:"string"`
+
+	// The support email. The company's customer support email address.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive. You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default email is workspaces-feedback@amazon.com.
+	SupportEmail *string `min:"6" type:"string"`
+
+	// The support link. The link for the company's customer support page for their
+	// WorkSpace.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive.You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default support link is workspaces-feedback@amazon.com.
+	SupportLink *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultClientBrandingAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultClientBrandingAttributes) GoString() string {
+	return s.String()
+}
+
+// SetForgotPasswordLink sets the ForgotPasswordLink field's value.
+func (s *DefaultClientBrandingAttributes) SetForgotPasswordLink(v string) *DefaultClientBrandingAttributes {
+	s.ForgotPasswordLink = &v
+	return s
+}
+
+// SetLoginMessage sets the LoginMessage field's value.
+func (s *DefaultClientBrandingAttributes) SetLoginMessage(v map[string]*string) *DefaultClientBrandingAttributes {
+	s.LoginMessage = v
+	return s
+}
+
+// SetLogoUrl sets the LogoUrl field's value.
+func (s *DefaultClientBrandingAttributes) SetLogoUrl(v string) *DefaultClientBrandingAttributes {
+	s.LogoUrl = &v
+	return s
+}
+
+// SetSupportEmail sets the SupportEmail field's value.
+func (s *DefaultClientBrandingAttributes) SetSupportEmail(v string) *DefaultClientBrandingAttributes {
+	s.SupportEmail = &v
+	return s
+}
+
+// SetSupportLink sets the SupportLink field's value.
+func (s *DefaultClientBrandingAttributes) SetSupportLink(v string) *DefaultClientBrandingAttributes {
+	s.SupportLink = &v
+	return s
+}
+
+// The default client branding attributes to be imported. These attributes display
+// on the client login screen.
+//
+// Client branding attributes are public facing. Ensure that you do not include
+// sensitive information.
+type DefaultImportClientBrandingAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// The forgotten password link. This is the web address that users can go to
+	// if they forget the password for their WorkSpace.
+	ForgotPasswordLink *string `min:"1" type:"string"`
+
+	// The login message. Specified as a key value pair, in which the key is a locale
+	// and the value is the localized message for that locale. The only key supported
+	// is en_US. The HTML tags supported include the following: a, b, blockquote,
+	// br, cite, code, dd, dl, dt, div, em, i, li, ol, p, pre, q, small, span, strike,
+	// strong, sub, sup, u, ul.
+	LoginMessage map[string]*string `type:"map"`
+
+	// The logo. The only image format accepted is a binary data object that is
+	// converted from a .png file.
+	// Logo is automatically base64 encoded/decoded by the SDK.
+	Logo []byte `min:"1" type:"blob"`
+
+	// The support email. The company's customer support email address.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive. You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default email is workspaces-feedback@amazon.com.
+	SupportEmail *string `min:"6" type:"string"`
+
+	// The support link. The link for the company's customer support page for their
+	// WorkSpace.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive. You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default support link is workspaces-feedback@amazon.com.
+	SupportLink *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultImportClientBrandingAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultImportClientBrandingAttributes) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DefaultImportClientBrandingAttributes) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DefaultImportClientBrandingAttributes"}
+	if s.ForgotPasswordLink != nil && len(*s.ForgotPasswordLink) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ForgotPasswordLink", 1))
+	}
+	if s.Logo != nil && len(s.Logo) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Logo", 1))
+	}
+	if s.SupportEmail != nil && len(*s.SupportEmail) < 6 {
+		invalidParams.Add(request.NewErrParamMinLen("SupportEmail", 6))
+	}
+	if s.SupportLink != nil && len(*s.SupportLink) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SupportLink", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetForgotPasswordLink sets the ForgotPasswordLink field's value.
+func (s *DefaultImportClientBrandingAttributes) SetForgotPasswordLink(v string) *DefaultImportClientBrandingAttributes {
+	s.ForgotPasswordLink = &v
+	return s
+}
+
+// SetLoginMessage sets the LoginMessage field's value.
+func (s *DefaultImportClientBrandingAttributes) SetLoginMessage(v map[string]*string) *DefaultImportClientBrandingAttributes {
+	s.LoginMessage = v
+	return s
+}
+
+// SetLogo sets the Logo field's value.
+func (s *DefaultImportClientBrandingAttributes) SetLogo(v []byte) *DefaultImportClientBrandingAttributes {
+	s.Logo = v
+	return s
+}
+
+// SetSupportEmail sets the SupportEmail field's value.
+func (s *DefaultImportClientBrandingAttributes) SetSupportEmail(v string) *DefaultImportClientBrandingAttributes {
+	s.SupportEmail = &v
+	return s
+}
+
+// SetSupportLink sets the SupportLink field's value.
+func (s *DefaultImportClientBrandingAttributes) SetSupportLink(v string) *DefaultImportClientBrandingAttributes {
+	s.SupportLink = &v
+	return s
+}
+
 // Describes the default values that are used to create WorkSpaces. For more
 // information, see Update Directory Details for Your WorkSpaces (https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html).
 type DefaultWorkspaceCreationProperties struct {
@@ -6809,6 +8214,183 @@ func (s *DefaultWorkspaceCreationProperties) SetEnableWorkDocs(v bool) *DefaultW
 func (s *DefaultWorkspaceCreationProperties) SetUserEnabledAsLocalAdministrator(v bool) *DefaultWorkspaceCreationProperties {
 	s.UserEnabledAsLocalAdministrator = &v
 	return s
+}
+
+type DeleteClientBrandingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The device type for which you want to delete client branding.
+	//
+	// Platforms is a required field
+	Platforms []*string `min:"1" type:"list" required:"true" enum:"ClientDeviceType"`
+
+	// The directory identifier of the WorkSpace for which you want to delete client
+	// branding.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteClientBrandingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteClientBrandingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteClientBrandingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteClientBrandingInput"}
+	if s.Platforms == nil {
+		invalidParams.Add(request.NewErrParamRequired("Platforms"))
+	}
+	if s.Platforms != nil && len(s.Platforms) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Platforms", 1))
+	}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPlatforms sets the Platforms field's value.
+func (s *DeleteClientBrandingInput) SetPlatforms(v []*string) *DeleteClientBrandingInput {
+	s.Platforms = v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *DeleteClientBrandingInput) SetResourceId(v string) *DeleteClientBrandingInput {
+	s.ResourceId = &v
+	return s
+}
+
+type DeleteClientBrandingOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteClientBrandingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteClientBrandingOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteConnectClientAddInInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the client add-in to delete.
+	//
+	// AddInId is a required field
+	AddInId *string `min:"36" type:"string" required:"true"`
+
+	// The directory identifier for which the client add-in is configured.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectClientAddInInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectClientAddInInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteConnectClientAddInInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteConnectClientAddInInput"}
+	if s.AddInId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AddInId"))
+	}
+	if s.AddInId != nil && len(*s.AddInId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AddInId", 36))
+	}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddInId sets the AddInId field's value.
+func (s *DeleteConnectClientAddInInput) SetAddInId(v string) *DeleteConnectClientAddInInput {
+	s.AddInId = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *DeleteConnectClientAddInInput) SetResourceId(v string) *DeleteConnectClientAddInInput {
+	s.ResourceId = &v
+	return s
+}
+
+type DeleteConnectClientAddInOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectClientAddInOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectClientAddInOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteConnectionAliasInput struct {
@@ -7385,6 +8967,132 @@ func (s *DescribeAccountOutput) SetDedicatedTenancySupport(v string) *DescribeAc
 	return s
 }
 
+type DescribeClientBrandingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The directory identifier of the WorkSpace for which you want to view client
+	// branding information.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeClientBrandingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeClientBrandingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeClientBrandingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeClientBrandingInput"}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *DescribeClientBrandingInput) SetResourceId(v string) *DescribeClientBrandingInput {
+	s.ResourceId = &v
+	return s
+}
+
+type DescribeClientBrandingOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The branding information for Android devices.
+	DeviceTypeAndroid *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information for iOS devices.
+	DeviceTypeIos *IosClientBrandingAttributes `type:"structure"`
+
+	// The branding information for Linux devices.
+	DeviceTypeLinux *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information for macOS devices.
+	DeviceTypeOsx *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information for Web access.
+	DeviceTypeWeb *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information for Windows devices.
+	DeviceTypeWindows *DefaultClientBrandingAttributes `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeClientBrandingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeClientBrandingOutput) GoString() string {
+	return s.String()
+}
+
+// SetDeviceTypeAndroid sets the DeviceTypeAndroid field's value.
+func (s *DescribeClientBrandingOutput) SetDeviceTypeAndroid(v *DefaultClientBrandingAttributes) *DescribeClientBrandingOutput {
+	s.DeviceTypeAndroid = v
+	return s
+}
+
+// SetDeviceTypeIos sets the DeviceTypeIos field's value.
+func (s *DescribeClientBrandingOutput) SetDeviceTypeIos(v *IosClientBrandingAttributes) *DescribeClientBrandingOutput {
+	s.DeviceTypeIos = v
+	return s
+}
+
+// SetDeviceTypeLinux sets the DeviceTypeLinux field's value.
+func (s *DescribeClientBrandingOutput) SetDeviceTypeLinux(v *DefaultClientBrandingAttributes) *DescribeClientBrandingOutput {
+	s.DeviceTypeLinux = v
+	return s
+}
+
+// SetDeviceTypeOsx sets the DeviceTypeOsx field's value.
+func (s *DescribeClientBrandingOutput) SetDeviceTypeOsx(v *DefaultClientBrandingAttributes) *DescribeClientBrandingOutput {
+	s.DeviceTypeOsx = v
+	return s
+}
+
+// SetDeviceTypeWeb sets the DeviceTypeWeb field's value.
+func (s *DescribeClientBrandingOutput) SetDeviceTypeWeb(v *DefaultClientBrandingAttributes) *DescribeClientBrandingOutput {
+	s.DeviceTypeWeb = v
+	return s
+}
+
+// SetDeviceTypeWindows sets the DeviceTypeWindows field's value.
+func (s *DescribeClientBrandingOutput) SetDeviceTypeWindows(v *DefaultClientBrandingAttributes) *DescribeClientBrandingOutput {
+	s.DeviceTypeWindows = v
+	return s
+}
+
 type DescribeClientPropertiesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7462,6 +9170,121 @@ func (s DescribeClientPropertiesOutput) GoString() string {
 // SetClientPropertiesList sets the ClientPropertiesList field's value.
 func (s *DescribeClientPropertiesOutput) SetClientPropertiesList(v []*ClientPropertiesResult) *DescribeClientPropertiesOutput {
 	s.ClientPropertiesList = v
+	return s
+}
+
+type DescribeConnectClientAddInsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of items to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If you received a NextToken from a previous call that was paginated, provide
+	// this token to receive the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The directory identifier for which the client add-in is configured.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectClientAddInsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectClientAddInsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeConnectClientAddInsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeConnectClientAddInsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeConnectClientAddInsInput) SetMaxResults(v int64) *DescribeConnectClientAddInsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeConnectClientAddInsInput) SetNextToken(v string) *DescribeConnectClientAddInsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *DescribeConnectClientAddInsInput) SetResourceId(v string) *DescribeConnectClientAddInsInput {
+	s.ResourceId = &v
+	return s
+}
+
+type DescribeConnectClientAddInsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about client add-ins.
+	AddIns []*ConnectClientAddIn `type:"list"`
+
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectClientAddInsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectClientAddInsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddIns sets the AddIns field's value.
+func (s *DescribeConnectClientAddInsOutput) SetAddIns(v []*ConnectClientAddIn) *DescribeConnectClientAddInsOutput {
+	s.AddIns = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeConnectClientAddInsOutput) SetNextToken(v string) *DescribeConnectClientAddInsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -9000,6 +10823,216 @@ func (s *ImagePermission) SetSharedAccountId(v string) *ImagePermission {
 	return s
 }
 
+type ImportClientBrandingInput struct {
+	_ struct{} `type:"structure"`
+
+	// The branding information to import for Android devices.
+	DeviceTypeAndroid *DefaultImportClientBrandingAttributes `type:"structure"`
+
+	// The branding information to import for iOS devices.
+	DeviceTypeIos *IosImportClientBrandingAttributes `type:"structure"`
+
+	// The branding information to import for Linux devices.
+	DeviceTypeLinux *DefaultImportClientBrandingAttributes `type:"structure"`
+
+	// The branding information to import for macOS devices.
+	DeviceTypeOsx *DefaultImportClientBrandingAttributes `type:"structure"`
+
+	// The branding information to import for web access.
+	DeviceTypeWeb *DefaultImportClientBrandingAttributes `type:"structure"`
+
+	// The branding information to import for Windows devices.
+	DeviceTypeWindows *DefaultImportClientBrandingAttributes `type:"structure"`
+
+	// The directory identifier of the WorkSpace for which you want to import client
+	// branding.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportClientBrandingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportClientBrandingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ImportClientBrandingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ImportClientBrandingInput"}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+	if s.DeviceTypeAndroid != nil {
+		if err := s.DeviceTypeAndroid.Validate(); err != nil {
+			invalidParams.AddNested("DeviceTypeAndroid", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DeviceTypeIos != nil {
+		if err := s.DeviceTypeIos.Validate(); err != nil {
+			invalidParams.AddNested("DeviceTypeIos", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DeviceTypeLinux != nil {
+		if err := s.DeviceTypeLinux.Validate(); err != nil {
+			invalidParams.AddNested("DeviceTypeLinux", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DeviceTypeOsx != nil {
+		if err := s.DeviceTypeOsx.Validate(); err != nil {
+			invalidParams.AddNested("DeviceTypeOsx", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DeviceTypeWeb != nil {
+		if err := s.DeviceTypeWeb.Validate(); err != nil {
+			invalidParams.AddNested("DeviceTypeWeb", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DeviceTypeWindows != nil {
+		if err := s.DeviceTypeWindows.Validate(); err != nil {
+			invalidParams.AddNested("DeviceTypeWindows", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeviceTypeAndroid sets the DeviceTypeAndroid field's value.
+func (s *ImportClientBrandingInput) SetDeviceTypeAndroid(v *DefaultImportClientBrandingAttributes) *ImportClientBrandingInput {
+	s.DeviceTypeAndroid = v
+	return s
+}
+
+// SetDeviceTypeIos sets the DeviceTypeIos field's value.
+func (s *ImportClientBrandingInput) SetDeviceTypeIos(v *IosImportClientBrandingAttributes) *ImportClientBrandingInput {
+	s.DeviceTypeIos = v
+	return s
+}
+
+// SetDeviceTypeLinux sets the DeviceTypeLinux field's value.
+func (s *ImportClientBrandingInput) SetDeviceTypeLinux(v *DefaultImportClientBrandingAttributes) *ImportClientBrandingInput {
+	s.DeviceTypeLinux = v
+	return s
+}
+
+// SetDeviceTypeOsx sets the DeviceTypeOsx field's value.
+func (s *ImportClientBrandingInput) SetDeviceTypeOsx(v *DefaultImportClientBrandingAttributes) *ImportClientBrandingInput {
+	s.DeviceTypeOsx = v
+	return s
+}
+
+// SetDeviceTypeWeb sets the DeviceTypeWeb field's value.
+func (s *ImportClientBrandingInput) SetDeviceTypeWeb(v *DefaultImportClientBrandingAttributes) *ImportClientBrandingInput {
+	s.DeviceTypeWeb = v
+	return s
+}
+
+// SetDeviceTypeWindows sets the DeviceTypeWindows field's value.
+func (s *ImportClientBrandingInput) SetDeviceTypeWindows(v *DefaultImportClientBrandingAttributes) *ImportClientBrandingInput {
+	s.DeviceTypeWindows = v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *ImportClientBrandingInput) SetResourceId(v string) *ImportClientBrandingInput {
+	s.ResourceId = &v
+	return s
+}
+
+type ImportClientBrandingOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The branding information configured for Android devices.
+	DeviceTypeAndroid *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information configured for iOS devices.
+	DeviceTypeIos *IosClientBrandingAttributes `type:"structure"`
+
+	// The branding information configured for Linux devices.
+	DeviceTypeLinux *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information configured for macOS devices.
+	DeviceTypeOsx *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information configured for web access.
+	DeviceTypeWeb *DefaultClientBrandingAttributes `type:"structure"`
+
+	// The branding information configured for Windows devices.
+	DeviceTypeWindows *DefaultClientBrandingAttributes `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportClientBrandingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportClientBrandingOutput) GoString() string {
+	return s.String()
+}
+
+// SetDeviceTypeAndroid sets the DeviceTypeAndroid field's value.
+func (s *ImportClientBrandingOutput) SetDeviceTypeAndroid(v *DefaultClientBrandingAttributes) *ImportClientBrandingOutput {
+	s.DeviceTypeAndroid = v
+	return s
+}
+
+// SetDeviceTypeIos sets the DeviceTypeIos field's value.
+func (s *ImportClientBrandingOutput) SetDeviceTypeIos(v *IosClientBrandingAttributes) *ImportClientBrandingOutput {
+	s.DeviceTypeIos = v
+	return s
+}
+
+// SetDeviceTypeLinux sets the DeviceTypeLinux field's value.
+func (s *ImportClientBrandingOutput) SetDeviceTypeLinux(v *DefaultClientBrandingAttributes) *ImportClientBrandingOutput {
+	s.DeviceTypeLinux = v
+	return s
+}
+
+// SetDeviceTypeOsx sets the DeviceTypeOsx field's value.
+func (s *ImportClientBrandingOutput) SetDeviceTypeOsx(v *DefaultClientBrandingAttributes) *ImportClientBrandingOutput {
+	s.DeviceTypeOsx = v
+	return s
+}
+
+// SetDeviceTypeWeb sets the DeviceTypeWeb field's value.
+func (s *ImportClientBrandingOutput) SetDeviceTypeWeb(v *DefaultClientBrandingAttributes) *ImportClientBrandingOutput {
+	s.DeviceTypeWeb = v
+	return s
+}
+
+// SetDeviceTypeWindows sets the DeviceTypeWindows field's value.
+func (s *ImportClientBrandingOutput) SetDeviceTypeWindows(v *DefaultClientBrandingAttributes) *ImportClientBrandingOutput {
+	s.DeviceTypeWindows = v
+	return s
+}
+
 type ImportWorkspaceImageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9008,7 +11041,7 @@ type ImportWorkspaceImageInput struct {
 	// for BYOL images, see Bring Your Own Windows Desktop Licenses (https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html).
 	//
 	// Although this parameter is an array, only one item is allowed at this time.
-	Applications []*string `min:"1" type:"list"`
+	Applications []*string `min:"1" type:"list" enum:"Application"`
 
 	// The identifier of the EC2 image.
 	//
@@ -9293,6 +11326,281 @@ func (s *InvalidResourceStateException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *InvalidResourceStateException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The client branding attributes for iOS device types. These attributes are
+// displayed on the iOS client login screen only.
+//
+// Client branding attributes are public facing. Ensure you do not include sensitive
+// information.
+type IosClientBrandingAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// The forgotten password link. This is the web address that users can go to
+	// if they forget the password for their WorkSpace.
+	ForgotPasswordLink *string `min:"1" type:"string"`
+
+	// The login message. Specified as a key value pair, in which the key is a locale
+	// and the value is the localized message for that locale. The only key supported
+	// is en_US. The HTML tags supported include the following: a, b, blockquote,
+	// br, cite, code, dd, dl, dt, div, em, i, li, ol, p, pre, q, small, span, strike,
+	// strong, sub, sup, u, ul.
+	LoginMessage map[string]*string `type:"map"`
+
+	// The @2x version of the logo. This is the higher resolution display that offers
+	// a scale factor of 2.0 (or @2x). The only image format accepted is a binary
+	// data object that is converted from a .png file.
+	//
+	// For more information about iOS image size and resolution, see Image Size
+	// and Resolution (https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/image-size-and-resolution/)
+	// in the Apple Human Interface Guidelines.
+	Logo2xUrl *string `min:"1" type:"string"`
+
+	// The @3x version of the logo. This is the higher resolution display that offers
+	// a scale factor of 3.0 (or @3x).The only image format accepted is a binary
+	// data object that is converted from a .png file.
+	//
+	// For more information about iOS image size and resolution, see Image Size
+	// and Resolution (https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/image-size-and-resolution/)
+	// in the Apple Human Interface Guidelines.
+	Logo3xUrl *string `min:"1" type:"string"`
+
+	// The logo. This is the standard-resolution display that has a 1:1 pixel density
+	// (or @1x), where one pixel is equal to one point. The only image format accepted
+	// is a binary data object that is converted from a .png file.
+	LogoUrl *string `min:"1" type:"string"`
+
+	// The support email. The company's customer support email address.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive. You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default email is workspaces-feedback@amazon.com.
+	SupportEmail *string `min:"6" type:"string"`
+
+	// The support link. The link for the company's customer support page for their
+	// WorkSpace.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive. You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default support link is workspaces-feedback@amazon.com.
+	SupportLink *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IosClientBrandingAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IosClientBrandingAttributes) GoString() string {
+	return s.String()
+}
+
+// SetForgotPasswordLink sets the ForgotPasswordLink field's value.
+func (s *IosClientBrandingAttributes) SetForgotPasswordLink(v string) *IosClientBrandingAttributes {
+	s.ForgotPasswordLink = &v
+	return s
+}
+
+// SetLoginMessage sets the LoginMessage field's value.
+func (s *IosClientBrandingAttributes) SetLoginMessage(v map[string]*string) *IosClientBrandingAttributes {
+	s.LoginMessage = v
+	return s
+}
+
+// SetLogo2xUrl sets the Logo2xUrl field's value.
+func (s *IosClientBrandingAttributes) SetLogo2xUrl(v string) *IosClientBrandingAttributes {
+	s.Logo2xUrl = &v
+	return s
+}
+
+// SetLogo3xUrl sets the Logo3xUrl field's value.
+func (s *IosClientBrandingAttributes) SetLogo3xUrl(v string) *IosClientBrandingAttributes {
+	s.Logo3xUrl = &v
+	return s
+}
+
+// SetLogoUrl sets the LogoUrl field's value.
+func (s *IosClientBrandingAttributes) SetLogoUrl(v string) *IosClientBrandingAttributes {
+	s.LogoUrl = &v
+	return s
+}
+
+// SetSupportEmail sets the SupportEmail field's value.
+func (s *IosClientBrandingAttributes) SetSupportEmail(v string) *IosClientBrandingAttributes {
+	s.SupportEmail = &v
+	return s
+}
+
+// SetSupportLink sets the SupportLink field's value.
+func (s *IosClientBrandingAttributes) SetSupportLink(v string) *IosClientBrandingAttributes {
+	s.SupportLink = &v
+	return s
+}
+
+// The client branding attributes to import for iOS device types. These attributes
+// are displayed on the iOS client login screen.
+//
+// Client branding attributes are public facing. Ensure you do not include sensitive
+// information.
+type IosImportClientBrandingAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// The forgotten password link. This is the web address that users can go to
+	// if they forget the password for their WorkSpace.
+	ForgotPasswordLink *string `min:"1" type:"string"`
+
+	// The login message. Specified as a key value pair, in which the key is a locale
+	// and the value is the localized message for that locale. The only key supported
+	// is en_US. The HTML tags supported include the following: a, b, blockquote,
+	// br, cite, code, dd, dl, dt, div, em, i, li, ol, p, pre, q, small, span, strike,
+	// strong, sub, sup, u, ul.
+	LoginMessage map[string]*string `type:"map"`
+
+	// The logo. This is the standard-resolution display that has a 1:1 pixel density
+	// (or @1x), where one pixel is equal to one point. The only image format accepted
+	// is a binary data object that is converted from a .png file.
+	// Logo is automatically base64 encoded/decoded by the SDK.
+	Logo []byte `min:"1" type:"blob"`
+
+	// The @2x version of the logo. This is the higher resolution display that offers
+	// a scale factor of 2.0 (or @2x). The only image format accepted is a binary
+	// data object that is converted from a .png file.
+	//
+	// For more information about iOS image size and resolution, see Image Size
+	// and Resolution (https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/image-size-and-resolution/)
+	// in the Apple Human Interface Guidelines.
+	// Logo2x is automatically base64 encoded/decoded by the SDK.
+	Logo2x []byte `min:"1" type:"blob"`
+
+	// The @3x version of the logo. This is the higher resolution display that offers
+	// a scale factor of 3.0 (or @3x). The only image format accepted is a binary
+	// data object that is converted from a .png file.
+	//
+	// For more information about iOS image size and resolution, see Image Size
+	// and Resolution (https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/image-size-and-resolution/)
+	// in the Apple Human Interface Guidelines.
+	// Logo3x is automatically base64 encoded/decoded by the SDK.
+	Logo3x []byte `min:"1" type:"blob"`
+
+	// The support email. The company's customer support email address.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive. You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default email is workspaces-feedback@amazon.com.
+	SupportEmail *string `min:"6" type:"string"`
+
+	// The support link. The link for the company's customer support page for their
+	// WorkSpace.
+	//
+	//    * In each platform type, the SupportEmail and SupportLink parameters are
+	//    mutually exclusive. You can specify one parameter for each platform type,
+	//    but not both.
+	//
+	//    * The default support link is workspaces-feedback@amazon.com.
+	SupportLink *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IosImportClientBrandingAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IosImportClientBrandingAttributes) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IosImportClientBrandingAttributes) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IosImportClientBrandingAttributes"}
+	if s.ForgotPasswordLink != nil && len(*s.ForgotPasswordLink) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ForgotPasswordLink", 1))
+	}
+	if s.Logo != nil && len(s.Logo) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Logo", 1))
+	}
+	if s.Logo2x != nil && len(s.Logo2x) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Logo2x", 1))
+	}
+	if s.Logo3x != nil && len(s.Logo3x) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Logo3x", 1))
+	}
+	if s.SupportEmail != nil && len(*s.SupportEmail) < 6 {
+		invalidParams.Add(request.NewErrParamMinLen("SupportEmail", 6))
+	}
+	if s.SupportLink != nil && len(*s.SupportLink) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SupportLink", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetForgotPasswordLink sets the ForgotPasswordLink field's value.
+func (s *IosImportClientBrandingAttributes) SetForgotPasswordLink(v string) *IosImportClientBrandingAttributes {
+	s.ForgotPasswordLink = &v
+	return s
+}
+
+// SetLoginMessage sets the LoginMessage field's value.
+func (s *IosImportClientBrandingAttributes) SetLoginMessage(v map[string]*string) *IosImportClientBrandingAttributes {
+	s.LoginMessage = v
+	return s
+}
+
+// SetLogo sets the Logo field's value.
+func (s *IosImportClientBrandingAttributes) SetLogo(v []byte) *IosImportClientBrandingAttributes {
+	s.Logo = v
+	return s
+}
+
+// SetLogo2x sets the Logo2x field's value.
+func (s *IosImportClientBrandingAttributes) SetLogo2x(v []byte) *IosImportClientBrandingAttributes {
+	s.Logo2x = v
+	return s
+}
+
+// SetLogo3x sets the Logo3x field's value.
+func (s *IosImportClientBrandingAttributes) SetLogo3x(v []byte) *IosImportClientBrandingAttributes {
+	s.Logo3x = v
+	return s
+}
+
+// SetSupportEmail sets the SupportEmail field's value.
+func (s *IosImportClientBrandingAttributes) SetSupportEmail(v string) *IosImportClientBrandingAttributes {
+	s.SupportEmail = &v
+	return s
+}
+
+// SetSupportLink sets the SupportLink field's value.
+func (s *IosImportClientBrandingAttributes) SetSupportLink(v string) *IosImportClientBrandingAttributes {
+	s.SupportLink = &v
+	return s
 }
 
 // Describes an IP access control group.
@@ -9801,6 +12109,107 @@ func (s ModifyClientPropertiesOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s ModifyClientPropertiesOutput) GoString() string {
+	return s.String()
+}
+
+type ModifySamlPropertiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The SAML properties to delete as part of your request.
+	//
+	// Specify one of the following options:
+	//
+	//    * SAML_PROPERTIES_USER_ACCESS_URL to delete the user access URL.
+	//
+	//    * SAML_PROPERTIES_RELAY_STATE_PARAMETER_NAME to delete the relay state
+	//    parameter name.
+	PropertiesToDelete []*string `type:"list" enum:"DeletableSamlProperty"`
+
+	// The directory identifier for which you want to configure SAML properties.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+
+	// The properties for configuring SAML 2.0 authentication.
+	SamlProperties *SamlProperties `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySamlPropertiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySamlPropertiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifySamlPropertiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifySamlPropertiesInput"}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+	if s.SamlProperties != nil {
+		if err := s.SamlProperties.Validate(); err != nil {
+			invalidParams.AddNested("SamlProperties", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPropertiesToDelete sets the PropertiesToDelete field's value.
+func (s *ModifySamlPropertiesInput) SetPropertiesToDelete(v []*string) *ModifySamlPropertiesInput {
+	s.PropertiesToDelete = v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *ModifySamlPropertiesInput) SetResourceId(v string) *ModifySamlPropertiesInput {
+	s.ResourceId = &v
+	return s
+}
+
+// SetSamlProperties sets the SamlProperties field's value.
+func (s *ModifySamlPropertiesInput) SetSamlProperties(v *SamlProperties) *ModifySamlPropertiesInput {
+	s.SamlProperties = v
+	return s
+}
+
+type ModifySamlPropertiesOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySamlPropertiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySamlPropertiesOutput) GoString() string {
 	return s.String()
 }
 
@@ -10330,7 +12739,11 @@ type OperationNotSupportedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
+	// The exception error message.
 	Message_ *string `locationName:"message" type:"string"`
+
+	// The exception error reason.
+	Reason *string `locationName:"reason" type:"string"`
 }
 
 // String returns the string representation.
@@ -10376,7 +12789,7 @@ func (s *OperationNotSupportedException) OrigErr() error {
 }
 
 func (s *OperationNotSupportedException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
 }
 
 // Status code returns the HTTP status code for the request's response error.
@@ -11398,6 +13811,97 @@ func (s *RootStorage) SetCapacity(v string) *RootStorage {
 	return s
 }
 
+// Describes the enablement status, user access URL, and relay state parameter
+// name that are used for configuring federation with an SAML 2.0 identity provider.
+type SamlProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The relay state parameter name supported by the SAML 2.0 identity provider
+	// (IdP). When the end user is redirected to the user access URL from the WorkSpaces
+	// client application, this relay state parameter name is appended as a query
+	// parameter to the URL along with the relay state endpoint to return the user
+	// to the client application session.
+	//
+	// To use SAML 2.0 authentication with WorkSpaces, the IdP must support IdP-initiated
+	// deep linking for the relay state URL. Consult your IdP documentation for
+	// more information.
+	RelayStateParameterName *string `min:"1" type:"string"`
+
+	// Indicates the status of SAML 2.0 authentication. These statuses include the
+	// following.
+	//
+	//    * If the setting is DISABLED, end users will be directed to login with
+	//    their directory credentials.
+	//
+	//    * If the setting is ENABLED, end users will be directed to login via the
+	//    user access URL. Users attempting to connect to WorkSpaces from a client
+	//    application that does not support SAML 2.0 authentication will not be
+	//    able to connect.
+	//
+	//    * If the setting is ENABLED_WITH_DIRECTORY_LOGIN_FALLBACK, end users will
+	//    be directed to login via the user access URL on supported client applications,
+	//    but will not prevent clients that do not support SAML 2.0 authentication
+	//    from connecting as if SAML 2.0 authentication was disabled.
+	Status *string `type:"string" enum:"SamlStatusEnum"`
+
+	// The SAML 2.0 identity provider (IdP) user access URL is the URL a user would
+	// navigate to in their web browser in order to federate from the IdP and directly
+	// access the application, without any SAML 2.0 service provider (SP) bindings.
+	UserAccessUrl *string `min:"8" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SamlProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SamlProperties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SamlProperties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SamlProperties"}
+	if s.RelayStateParameterName != nil && len(*s.RelayStateParameterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RelayStateParameterName", 1))
+	}
+	if s.UserAccessUrl != nil && len(*s.UserAccessUrl) < 8 {
+		invalidParams.Add(request.NewErrParamMinLen("UserAccessUrl", 8))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRelayStateParameterName sets the RelayStateParameterName field's value.
+func (s *SamlProperties) SetRelayStateParameterName(v string) *SamlProperties {
+	s.RelayStateParameterName = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SamlProperties) SetStatus(v string) *SamlProperties {
+	s.Status = &v
+	return s
+}
+
+// SetUserAccessUrl sets the UserAccessUrl field's value.
+func (s *SamlProperties) SetUserAccessUrl(v string) *SamlProperties {
+	s.UserAccessUrl = &v
+	return s
+}
+
 // Describes the self-service permissions for a directory. For more information,
 // see Enable Self-Service WorkSpace Management Capabilities for Your Users
 // (https://docs.aws.amazon.com/workspaces/latest/adminguide/enable-user-self-service-workspace-management.html).
@@ -12053,6 +14557,118 @@ func (s *UnsupportedWorkspaceConfigurationException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *UnsupportedWorkspaceConfigurationException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+type UpdateConnectClientAddInInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the client add-in to update.
+	//
+	// AddInId is a required field
+	AddInId *string `min:"36" type:"string" required:"true"`
+
+	// The name of the client add-in.
+	Name *string `min:"1" type:"string"`
+
+	// The directory identifier for which the client add-in is configured.
+	//
+	// ResourceId is a required field
+	ResourceId *string `min:"10" type:"string" required:"true"`
+
+	// The endpoint URL of the Amazon Connect client add-in.
+	URL *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectClientAddInInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectClientAddInInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateConnectClientAddInInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateConnectClientAddInInput"}
+	if s.AddInId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AddInId"))
+	}
+	if s.AddInId != nil && len(*s.AddInId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AddInId", 36))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ResourceId != nil && len(*s.ResourceId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 10))
+	}
+	if s.URL != nil && len(*s.URL) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("URL", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddInId sets the AddInId field's value.
+func (s *UpdateConnectClientAddInInput) SetAddInId(v string) *UpdateConnectClientAddInInput {
+	s.AddInId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateConnectClientAddInInput) SetName(v string) *UpdateConnectClientAddInInput {
+	s.Name = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *UpdateConnectClientAddInInput) SetResourceId(v string) *UpdateConnectClientAddInInput {
+	s.ResourceId = &v
+	return s
+}
+
+// SetURL sets the URL field's value.
+func (s *UpdateConnectClientAddInInput) SetURL(v string) *UpdateConnectClientAddInInput {
+	s.URL = &v
+	return s
+}
+
+type UpdateConnectClientAddInOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectClientAddInOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectClientAddInOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateConnectionAliasPermissionInput struct {
@@ -13071,6 +15687,10 @@ type WorkspaceDirectory struct {
 	// in their Amazon WorkSpaces client application to connect to the directory.
 	RegistrationCode *string `min:"1" type:"string"`
 
+	// Describes the enablement status, user access URL, and relay state parameter
+	// name that are used for configuring federation with an SAML 2.0 identity provider.
+	SamlProperties *SamlProperties `type:"structure"`
+
 	// The default self-service permissions for WorkSpaces in the directory.
 	SelfservicePermissions *SelfservicePermissions `type:"structure"`
 
@@ -13170,6 +15790,12 @@ func (s *WorkspaceDirectory) SetIpGroupIds(v []*string) *WorkspaceDirectory {
 // SetRegistrationCode sets the RegistrationCode field's value.
 func (s *WorkspaceDirectory) SetRegistrationCode(v string) *WorkspaceDirectory {
 	s.RegistrationCode = &v
+	return s
+}
+
+// SetSamlProperties sets the SamlProperties field's value.
+func (s *WorkspaceDirectory) SetSamlProperties(v *SamlProperties) *WorkspaceDirectory {
+	s.SamlProperties = v
 	return s
 }
 
@@ -13681,6 +16307,38 @@ func AssociationStatus_Values() []string {
 }
 
 const (
+	// ClientDeviceTypeDeviceTypeWindows is a ClientDeviceType enum value
+	ClientDeviceTypeDeviceTypeWindows = "DeviceTypeWindows"
+
+	// ClientDeviceTypeDeviceTypeOsx is a ClientDeviceType enum value
+	ClientDeviceTypeDeviceTypeOsx = "DeviceTypeOsx"
+
+	// ClientDeviceTypeDeviceTypeAndroid is a ClientDeviceType enum value
+	ClientDeviceTypeDeviceTypeAndroid = "DeviceTypeAndroid"
+
+	// ClientDeviceTypeDeviceTypeIos is a ClientDeviceType enum value
+	ClientDeviceTypeDeviceTypeIos = "DeviceTypeIos"
+
+	// ClientDeviceTypeDeviceTypeLinux is a ClientDeviceType enum value
+	ClientDeviceTypeDeviceTypeLinux = "DeviceTypeLinux"
+
+	// ClientDeviceTypeDeviceTypeWeb is a ClientDeviceType enum value
+	ClientDeviceTypeDeviceTypeWeb = "DeviceTypeWeb"
+)
+
+// ClientDeviceType_Values returns all elements of the ClientDeviceType enum
+func ClientDeviceType_Values() []string {
+	return []string{
+		ClientDeviceTypeDeviceTypeWindows,
+		ClientDeviceTypeDeviceTypeOsx,
+		ClientDeviceTypeDeviceTypeAndroid,
+		ClientDeviceTypeDeviceTypeIos,
+		ClientDeviceTypeDeviceTypeLinux,
+		ClientDeviceTypeDeviceTypeWeb,
+	}
+}
+
+const (
 	// ComputeValue is a Compute enum value
 	ComputeValue = "VALUE"
 
@@ -13701,6 +16359,12 @@ const (
 
 	// ComputeGraphicspro is a Compute enum value
 	ComputeGraphicspro = "GRAPHICSPRO"
+
+	// ComputeGraphicsG4dn is a Compute enum value
+	ComputeGraphicsG4dn = "GRAPHICS_G4DN"
+
+	// ComputeGraphicsproG4dn is a Compute enum value
+	ComputeGraphicsproG4dn = "GRAPHICSPRO_G4DN"
 )
 
 // Compute_Values returns all elements of the Compute enum
@@ -13713,6 +16377,8 @@ func Compute_Values() []string {
 		ComputeGraphics,
 		ComputePowerpro,
 		ComputeGraphicspro,
+		ComputeGraphicsG4dn,
+		ComputeGraphicsproG4dn,
 	}
 }
 
@@ -13801,6 +16467,22 @@ func DedicatedTenancySupportResultEnum_Values() []string {
 	return []string{
 		DedicatedTenancySupportResultEnumEnabled,
 		DedicatedTenancySupportResultEnumDisabled,
+	}
+}
+
+const (
+	// DeletableSamlPropertySamlPropertiesUserAccessUrl is a DeletableSamlProperty enum value
+	DeletableSamlPropertySamlPropertiesUserAccessUrl = "SAML_PROPERTIES_USER_ACCESS_URL"
+
+	// DeletableSamlPropertySamlPropertiesRelayStateParameterName is a DeletableSamlProperty enum value
+	DeletableSamlPropertySamlPropertiesRelayStateParameterName = "SAML_PROPERTIES_RELAY_STATE_PARAMETER_NAME"
+)
+
+// DeletableSamlProperty_Values returns all elements of the DeletableSamlProperty enum
+func DeletableSamlProperty_Values() []string {
+	return []string{
+		DeletableSamlPropertySamlPropertiesUserAccessUrl,
+		DeletableSamlPropertySamlPropertiesRelayStateParameterName,
 	}
 }
 
@@ -13905,6 +16587,26 @@ func RunningMode_Values() []string {
 }
 
 const (
+	// SamlStatusEnumDisabled is a SamlStatusEnum enum value
+	SamlStatusEnumDisabled = "DISABLED"
+
+	// SamlStatusEnumEnabled is a SamlStatusEnum enum value
+	SamlStatusEnumEnabled = "ENABLED"
+
+	// SamlStatusEnumEnabledWithDirectoryLoginFallback is a SamlStatusEnum enum value
+	SamlStatusEnumEnabledWithDirectoryLoginFallback = "ENABLED_WITH_DIRECTORY_LOGIN_FALLBACK"
+)
+
+// SamlStatusEnum_Values returns all elements of the SamlStatusEnum enum
+func SamlStatusEnum_Values() []string {
+	return []string{
+		SamlStatusEnumDisabled,
+		SamlStatusEnumEnabled,
+		SamlStatusEnumEnabledWithDirectoryLoginFallback,
+	}
+}
+
+const (
 	// TargetWorkspaceStateAvailable is a TargetWorkspaceState enum value
 	TargetWorkspaceStateAvailable = "AVAILABLE"
 
@@ -13990,6 +16692,9 @@ const (
 	// WorkspaceImageIngestionProcessByolGraphicspro is a WorkspaceImageIngestionProcess enum value
 	WorkspaceImageIngestionProcessByolGraphicspro = "BYOL_GRAPHICSPRO"
 
+	// WorkspaceImageIngestionProcessByolGraphicsG4dn is a WorkspaceImageIngestionProcess enum value
+	WorkspaceImageIngestionProcessByolGraphicsG4dn = "BYOL_GRAPHICS_G4DN"
+
 	// WorkspaceImageIngestionProcessByolRegularWsp is a WorkspaceImageIngestionProcess enum value
 	WorkspaceImageIngestionProcessByolRegularWsp = "BYOL_REGULAR_WSP"
 )
@@ -14000,6 +16705,7 @@ func WorkspaceImageIngestionProcess_Values() []string {
 		WorkspaceImageIngestionProcessByolRegular,
 		WorkspaceImageIngestionProcessByolGraphics,
 		WorkspaceImageIngestionProcessByolGraphicspro,
+		WorkspaceImageIngestionProcessByolGraphicsG4dn,
 		WorkspaceImageIngestionProcessByolRegularWsp,
 	}
 }

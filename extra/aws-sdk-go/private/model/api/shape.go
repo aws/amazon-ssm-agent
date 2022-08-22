@@ -40,6 +40,11 @@ type ShapeRef struct {
 	Flattened     bool
 	Streaming     bool
 	XMLAttribute  bool
+
+	// References of struct members will include their originally modeled
+	// member name for cross references.
+	OriginalMemberName string `json:"-"`
+
 	// Ignore, if set, will not be sent over the wire
 	Ignore              bool
 	XMLNamespace        XMLInfo
@@ -70,13 +75,22 @@ type ShapeRef struct {
 
 	// Flag whether the member reference is a Account ID when endpoint shape ARN is present
 	AccountIDMemberWithARN bool
+
+	// Flags that the member was modeled as JSONValue but suppressed by the SDK.
+	SuppressedJSONValue bool `json:"-"`
 }
 
 // A Shape defines the definition of a shape type
 type Shape struct {
-	API              *API `json:"-"`
-	ShapeName        string
-	Documentation    string               `json:"-"`
+	API           *API `json:"-"`
+	ShapeName     string
+	Documentation string `json:"-"`
+
+	// References of struct members will include their originally modeled
+	// member name for cross references.
+	OriginalShapeName string `json:"-"`
+
+	// Map of exported member names to the ShapeReference.
 	MemberRefs       map[string]*ShapeRef `json:"members"`
 	MemberRef        ShapeRef             `json:"member"` // List ref
 	KeyRef           ShapeRef             `json:"key"`    // map key ref
@@ -224,6 +238,10 @@ func (s *Shape) Rename(newName string) {
 		r.ShapeName = newName
 	}
 
+	if s.OriginalShapeName == "" {
+		s.OriginalShapeName = s.ShapeName
+	}
+
 	delete(s.API.Shapes, s.ShapeName)
 	s.API.Shapes[newName] = s
 	s.ShapeName = newName
@@ -240,11 +258,23 @@ func (s *Shape) MemberNames() []string {
 	return names
 }
 
-// HasMember will return whether or not the shape has a given
-// member by name.
+// HasMember will return whether or not the shape has a given member by name.
+// Name passed in must match the SDK's exported name for the member, not the
+// modeled member name
 func (s *Shape) HasMember(name string) bool {
 	_, ok := s.MemberRefs[name]
 	return ok
+}
+
+// GetModeledMember returns the member's ShapeReference if it exists within the
+// shape. Returns nil if the member could not be found.
+func (s *Shape) GetModeledMember(name string) *ShapeRef {
+	for _, ref := range s.MemberRefs {
+		if ref.OriginalMemberName == name {
+			return ref
+		}
+	}
+	return nil
 }
 
 // GoTypeWithPkgName returns a shape's type as a string with the package name in
@@ -468,12 +498,16 @@ func (s ShapeTags) String() string {
 func (ref *ShapeRef) GoTags(toplevel bool, isRequired bool) string {
 	tags := append(ShapeTags{}, ref.CustomTags...)
 
+	var location string
 	if ref.Location != "" {
 		tags = append(tags, ShapeTag{"location", ref.Location})
+		location = ref.Location
 	} else if ref.Shape.Location != "" {
 		tags = append(tags, ShapeTag{"location", ref.Shape.Location})
+		location = ref.Shape.Location
 	} else if ref.IsEventHeader {
 		tags = append(tags, ShapeTag{"location", "header"})
+		location = "header"
 	}
 
 	if ref.LocationName != "" {
@@ -517,6 +551,10 @@ func (ref *ShapeRef) GoTags(toplevel bool, isRequired bool) string {
 			})
 		}
 	}
+	// Value that is encoded as a header that needs to be base64 encoded
+	if ref.SuppressedJSONValue && location == "header" {
+		tags = append(tags, ShapeTag{"suppressedJSONValue", "true"})
+	}
 
 	if ref.Shape.Flattened || ref.Flattened {
 		tags = append(tags, ShapeTag{"flattened", "true"})
@@ -529,13 +567,15 @@ func (ref *ShapeRef) GoTags(toplevel bool, isRequired bool) string {
 	}
 	if ref.Shape.IsEnum() {
 		tags = append(tags, ShapeTag{"enum", ref.ShapeName})
+	} else if ref.Shape.Type == "list" && ref.Shape.MemberRef.Shape.IsEnum() {
+		tags = append(tags, ShapeTag{"enum", ref.Shape.MemberRef.ShapeName})
 	}
 
 	if toplevel {
 		if name := ref.Shape.PayloadRefName(); len(name) > 0 {
 			tags = append(tags, ShapeTag{"payload", name})
 		}
-		if !ref.Shape.HasPayloadMembers() && ref.API.Metadata.Protocol == "rest-json" {
+		if ref.Shape.UsedAsInput && !ref.Shape.HasPayloadMembers() && ref.API.Metadata.Protocol == "rest-json" {
 			tags = append(tags, ShapeTag{"nopayload", "true"})
 		}
 	}

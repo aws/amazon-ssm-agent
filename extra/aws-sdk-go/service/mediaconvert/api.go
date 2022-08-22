@@ -3223,6 +3223,79 @@ func (s *AiffSettings) SetSampleRate(v int64) *AiffSettings {
 	return s
 }
 
+// Use Allowed renditions to specify a list of possible resolutions in your
+// ABR stack. * MediaConvert will create an ABR stack exclusively from the list
+// of resolutions that you specify. * Some resolutions in the Allowed renditions
+// list may not be included, however you can force a resolution to be included
+// by setting Required to ENABLED. * You must specify at least one resolution
+// that is greater than or equal to any resolutions that you specify in Min
+// top rendition size or Min bottom rendition size. * If you specify Allowed
+// renditions, you must not specify a separate rule for Force include renditions.
+type AllowedRenditionSize struct {
+	_ struct{} `type:"structure"`
+
+	// Use Height to define the video resolution height, in pixels, for this rule.
+	Height *int64 `locationName:"height" min:"32" type:"integer"`
+
+	// Set to ENABLED to force a rendition to be included.
+	Required *string `locationName:"required" type:"string" enum:"RequiredFlag"`
+
+	// Use Width to define the video resolution width, in pixels, for this rule.
+	Width *int64 `locationName:"width" min:"32" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AllowedRenditionSize) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AllowedRenditionSize) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AllowedRenditionSize) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AllowedRenditionSize"}
+	if s.Height != nil && *s.Height < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Height", 32))
+	}
+	if s.Width != nil && *s.Width < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Width", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHeight sets the Height field's value.
+func (s *AllowedRenditionSize) SetHeight(v int64) *AllowedRenditionSize {
+	s.Height = &v
+	return s
+}
+
+// SetRequired sets the Required field's value.
+func (s *AllowedRenditionSize) SetRequired(v string) *AllowedRenditionSize {
+	s.Required = &v
+	return s
+}
+
+// SetWidth sets the Width field's value.
+func (s *AllowedRenditionSize) SetWidth(v int64) *AllowedRenditionSize {
+	s.Width = &v
+	return s
+}
+
 // Settings for ancillary captions source.
 type AncillarySourceSettings struct {
 	_ struct{} `type:"structure"`
@@ -3345,7 +3418,7 @@ func (s *AssociateCertificateInput) SetArn(v string) *AssociateCertificateInput 
 // Successful association of Certificate Manager Amazon Resource Name (ARN)
 // with Mediaconvert returns an OK message.
 type AssociateCertificateOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3920,6 +3993,22 @@ func (s *AudioNormalizationSettings) SetTargetLkfs(v float64) *AudioNormalizatio
 type AudioSelector struct {
 	_ struct{} `type:"structure"`
 
+	// Apply audio timing corrections to help synchronize audio and video in your
+	// output. To apply timing corrections, your input must meet the following requirements:
+	// * Container: MP4, or MOV, with an accurate time-to-sample (STTS) table. *
+	// Audio track: AAC. Choose from the following audio timing correction settings:
+	// * Disabled (Default): Apply no correction. * Auto: Recommended for most inputs.
+	// MediaConvert analyzes the audio timing in your input and determines which
+	// correction setting to use, if needed. * Track: Adjust the duration of each
+	// audio frame by a constant amount to align the audio track length with STTS
+	// duration. Track-level correction does not affect pitch, and is recommended
+	// for tonal audio content such as music. * Frame: Adjust the duration of each
+	// audio frame by a variable amount to align audio frames with STTS timestamps.
+	// No corrections are made to already-aligned frames. Frame-level correction
+	// may affect the pitch of corrected frames, and is recommended for atonal audio
+	// content such as speech or percussion.
+	AudioDurationCorrection *string `locationName:"audioDurationCorrection" type:"string" enum:"AudioDurationCorrection"`
+
 	// Selects a specific language code from within an audio source, using the ISO
 	// 639-2 or ISO 639-3 three-letter language code
 	CustomLanguageCode *string `locationName:"customLanguageCode" min:"3" type:"string"`
@@ -4018,6 +4107,12 @@ func (s *AudioSelector) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAudioDurationCorrection sets the AudioDurationCorrection field's value.
+func (s *AudioSelector) SetAudioDurationCorrection(v string) *AudioSelector {
+	s.AudioDurationCorrection = &v
+	return s
 }
 
 // SetCustomLanguageCode sets the CustomLanguageCode field's value.
@@ -4125,6 +4220,162 @@ func (s *AudioSelectorGroup) SetAudioSelectorNames(v []*string) *AudioSelectorGr
 	return s
 }
 
+// Specify one or more Automated ABR rule types. Note: Force include and Allowed
+// renditions are mutually exclusive.
+type AutomatedAbrRule struct {
+	_ struct{} `type:"structure"`
+
+	// When customer adds the allowed renditions rule for auto ABR ladder, they
+	// are required to add at leat one rendition to allowedRenditions list
+	AllowedRenditions []*AllowedRenditionSize `locationName:"allowedRenditions" type:"list"`
+
+	// When customer adds the force include renditions rule for auto ABR ladder,
+	// they are required to add at leat one rendition to forceIncludeRenditions
+	// list
+	ForceIncludeRenditions []*ForceIncludeRenditionSize `locationName:"forceIncludeRenditions" type:"list"`
+
+	// Use Min bottom rendition size to specify a minimum size for the lowest resolution
+	// in your ABR stack. * The lowest resolution in your ABR stack will be equal
+	// to or greater than the value that you enter. For example: If you specify
+	// 640x360 the lowest resolution in your ABR stack will be equal to or greater
+	// than to 640x360. * If you specify a Min top rendition size rule, the value
+	// that you specify for Min bottom rendition size must be less than, or equal
+	// to, Min top rendition size.
+	MinBottomRenditionSize *MinBottomRenditionSize `locationName:"minBottomRenditionSize" type:"structure"`
+
+	// Use Min top rendition size to specify a minimum size for the highest resolution
+	// in your ABR stack. * The highest resolution in your ABR stack will be equal
+	// to or greater than the value that you enter. For example: If you specify
+	// 1280x720 the highest resolution in your ABR stack will be equal to or greater
+	// than 1280x720. * If you specify a value for Max resolution, the value that
+	// you specify for Min top rendition size must be less than, or equal to, Max
+	// resolution.
+	MinTopRenditionSize *MinTopRenditionSize `locationName:"minTopRenditionSize" type:"structure"`
+
+	// Use Min top rendition size to specify a minimum size for the highest resolution
+	// in your ABR stack. * The highest resolution in your ABR stack will be equal
+	// to or greater than the value that you enter. For example: If you specify
+	// 1280x720 the highest resolution in your ABR stack will be equal to or greater
+	// than 1280x720. * If you specify a value for Max resolution, the value that
+	// you specify for Min top rendition size must be less than, or equal to, Max
+	// resolution. Use Min bottom rendition size to specify a minimum size for the
+	// lowest resolution in your ABR stack. * The lowest resolution in your ABR
+	// stack will be equal to or greater than the value that you enter. For example:
+	// If you specify 640x360 the lowest resolution in your ABR stack will be equal
+	// to or greater than to 640x360. * If you specify a Min top rendition size
+	// rule, the value that you specify for Min bottom rendition size must be less
+	// than, or equal to, Min top rendition size. Use Force include renditions to
+	// specify one or more resolutions to include your ABR stack. * (Recommended)
+	// To optimize automated ABR, specify as few resolutions as possible. * (Required)
+	// The number of resolutions that you specify must be equal to, or less than,
+	// the Max renditions setting. * If you specify a Min top rendition size rule,
+	// specify at least one resolution that is equal to, or greater than, Min top
+	// rendition size. * If you specify a Min bottom rendition size rule, only specify
+	// resolutions that are equal to, or greater than, Min bottom rendition size.
+	// * If you specify a Force include renditions rule, do not specify a separate
+	// rule for Allowed renditions. * Note: The ABR stack may include other resolutions
+	// that you do not specify here, depending on the Max renditions setting. Use
+	// Allowed renditions to specify a list of possible resolutions in your ABR
+	// stack. * (Required) The number of resolutions that you specify must be equal
+	// to, or greater than, the Max renditions setting. * MediaConvert will create
+	// an ABR stack exclusively from the list of resolutions that you specify. *
+	// Some resolutions in the Allowed renditions list may not be included, however
+	// you can force a resolution to be included by setting Required to ENABLED.
+	// * You must specify at least one resolution that is greater than or equal
+	// to any resolutions that you specify in Min top rendition size or Min bottom
+	// rendition size. * If you specify Allowed renditions, you must not specify
+	// a separate rule for Force include renditions.
+	Type *string `locationName:"type" type:"string" enum:"RuleType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutomatedAbrRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutomatedAbrRule) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AutomatedAbrRule) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AutomatedAbrRule"}
+	if s.AllowedRenditions != nil {
+		for i, v := range s.AllowedRenditions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AllowedRenditions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ForceIncludeRenditions != nil {
+		for i, v := range s.ForceIncludeRenditions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ForceIncludeRenditions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.MinBottomRenditionSize != nil {
+		if err := s.MinBottomRenditionSize.Validate(); err != nil {
+			invalidParams.AddNested("MinBottomRenditionSize", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MinTopRenditionSize != nil {
+		if err := s.MinTopRenditionSize.Validate(); err != nil {
+			invalidParams.AddNested("MinTopRenditionSize", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowedRenditions sets the AllowedRenditions field's value.
+func (s *AutomatedAbrRule) SetAllowedRenditions(v []*AllowedRenditionSize) *AutomatedAbrRule {
+	s.AllowedRenditions = v
+	return s
+}
+
+// SetForceIncludeRenditions sets the ForceIncludeRenditions field's value.
+func (s *AutomatedAbrRule) SetForceIncludeRenditions(v []*ForceIncludeRenditionSize) *AutomatedAbrRule {
+	s.ForceIncludeRenditions = v
+	return s
+}
+
+// SetMinBottomRenditionSize sets the MinBottomRenditionSize field's value.
+func (s *AutomatedAbrRule) SetMinBottomRenditionSize(v *MinBottomRenditionSize) *AutomatedAbrRule {
+	s.MinBottomRenditionSize = v
+	return s
+}
+
+// SetMinTopRenditionSize sets the MinTopRenditionSize field's value.
+func (s *AutomatedAbrRule) SetMinTopRenditionSize(v *MinTopRenditionSize) *AutomatedAbrRule {
+	s.MinTopRenditionSize = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AutomatedAbrRule) SetType(v string) *AutomatedAbrRule {
+	s.Type = &v
+	return s
+}
+
 // Use automated ABR to have MediaConvert set up the renditions in your ABR
 // package for you automatically, based on characteristics of your input video.
 // This feature optimizes video quality while minimizing the overall size of
@@ -4151,6 +4402,12 @@ type AutomatedAbrSettings struct {
 	// with slow internet connections. If you don't specify a value, MediaConvert
 	// uses 600,000 (600 kb/s) by default.
 	MinAbrBitrate *int64 `locationName:"minAbrBitrate" min:"100000" type:"integer"`
+
+	// Optional. Use Automated ABR rules to specify restrictions for the rendition
+	// sizes MediaConvert will create in your ABR stack. You can use these rules
+	// if your ABR workflow has specific rendition size requirements, but you still
+	// want MediaConvert to optimize for video quality and overall file size.
+	Rules []*AutomatedAbrRule `locationName:"rules" type:"list"`
 }
 
 // String returns the string representation.
@@ -4183,6 +4440,16 @@ func (s *AutomatedAbrSettings) Validate() error {
 	if s.MinAbrBitrate != nil && *s.MinAbrBitrate < 100000 {
 		invalidParams.Add(request.NewErrParamMinValue("MinAbrBitrate", 100000))
 	}
+	if s.Rules != nil {
+		for i, v := range s.Rules {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Rules", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4205,6 +4472,12 @@ func (s *AutomatedAbrSettings) SetMaxRenditions(v int64) *AutomatedAbrSettings {
 // SetMinAbrBitrate sets the MinAbrBitrate field's value.
 func (s *AutomatedAbrSettings) SetMinAbrBitrate(v int64) *AutomatedAbrSettings {
 	s.MinAbrBitrate = &v
+	return s
+}
+
+// SetRules sets the Rules field's value.
+func (s *AutomatedAbrSettings) SetRules(v []*AutomatedAbrRule) *AutomatedAbrSettings {
+	s.Rules = v
 	return s
 }
 
@@ -4259,7 +4532,7 @@ func (s *AutomatedEncodingSettings) SetAbrSettings(v *AutomatedAbrSettings) *Aut
 	return s
 }
 
-// Settings for quality-defined variable bitrate encoding with the H.265 codec.
+// Settings for quality-defined variable bitrate encoding with the AV1 codec.
 // Use these settings only when you set QVBR for Rate control mode (RateControlMode).
 type Av1QvbrSettings struct {
 	_ struct{} `type:"structure"`
@@ -4338,6 +4611,10 @@ type Av1Settings struct {
 	// Specify the strength of any adaptive quantization filters that you enable.
 	// The value that you choose here applies to Spatial adaptive quantization (spatialAdaptiveQuantization).
 	AdaptiveQuantization *string `locationName:"adaptiveQuantization" type:"string" enum:"Av1AdaptiveQuantization"`
+
+	// Specify the Bit depth (Av1BitDepth). You can choose 8-bit (BIT_8) or 10-bit
+	// (BIT_10).
+	BitDepth *string `locationName:"bitDepth" type:"string" enum:"Av1BitDepth"`
 
 	// If you are using the console, use the Framerate setting to specify the frame
 	// rate for this output. If you want to keep the same frame rate as the input
@@ -4475,6 +4752,12 @@ func (s *Av1Settings) Validate() error {
 // SetAdaptiveQuantization sets the AdaptiveQuantization field's value.
 func (s *Av1Settings) SetAdaptiveQuantization(v string) *Av1Settings {
 	s.AdaptiveQuantization = &v
+	return s
+}
+
+// SetBitDepth sets the BitDepth field's value.
+func (s *Av1Settings) SetBitDepth(v string) *Av1Settings {
+	s.BitDepth = &v
 	return s
 }
 
@@ -4895,147 +5178,148 @@ func (s *BadRequestException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Settings related to burn-in captions. Set up burn-in captions in the same
-// output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/burn-in-output-captions.html.
+// Burn-in is a captions delivery method, rather than a captions format. Burn-in
+// writes the captions directly on your video frames, replacing pixels of video
+// content with the captions. Set up burn-in captions in the same output as
+// your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/burn-in-output-captions.html.
 // When you work directly in your JSON job specification, include this object
 // and any required children when you set destinationType to BURN_IN.
 type BurninDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
-	// If no explicit x_position or y_position is provided, setting alignment to
-	// centered will place the captions at the bottom center of the output. Similarly,
-	// setting a left alignment will align captions to the bottom left of the output.
-	// If x and y positions are given in conjunction with the alignment parameter,
-	// the font will be justified (either left or centered) relative to those coordinates.
-	// This option is not valid for source captions that are STL, 608/embedded or
-	// teletext. These source settings are already pre-defined by the caption stream.
-	// All burn-in and DVB-Sub font settings must match.
+	// Specify the alignment of your captions. If no explicit x_position is provided,
+	// setting alignment to centered will placethe captions at the bottom center
+	// of the output. Similarly, setting a left alignment willalign captions to
+	// the bottom left of the output. If x and y positions are given in conjunction
+	// with the alignment parameter, the font will be justified (either left or
+	// centered) relative to those coordinates.
 	Alignment *string `locationName:"alignment" type:"string" enum:"BurninSubtitleAlignment"`
 
-	// Ignore this setting unless your input captions are STL, any type of 608,
-	// teletext, or TTML, and your output captions are burned in. Specify how the
-	// service applies the color specified in the setting Font color (BurninSubtitleFontColor).
-	// By default, this color is white. When you choose WHITE_TEXT_ONLY, the service
-	// uses the specified font color only for text that is white in the input. When
-	// you choose ALL_TEXT, the service uses the specified font color for all output
-	// captions text. If you leave both settings at their default value, your output
-	// font color is the same as your input font color.
+	// Ignore this setting unless Style passthrough (StylePassthrough) is set to
+	// Enabled and Font color (FontColor) set to Black, Yellow, Red, Green, Blue,
+	// or Hex. Use Apply font color (ApplyFontColor) for additional font color controls.
+	// When you choose White text only (WHITE_TEXT_ONLY), or leave blank, your font
+	// color setting only applies to white text in your input captions. For example,
+	// if your font color setting is Yellow, and your input captions have red and
+	// white text, your output captions will have red and yellow text. When you
+	// choose ALL_TEXT, your font color setting applies to all of your output captions
+	// text.
 	ApplyFontColor *string `locationName:"applyFontColor" type:"string" enum:"BurninSubtitleApplyFontColor"`
 
-	// Specifies the color of the rectangle behind the captions.All burn-in and
-	// DVB-Sub font settings must match.
+	// Specify the color of the rectangle behind the captions. Leave background
+	// color (BackgroundColor) blank and set Style passthrough (StylePassthrough)
+	// to enabled to use the background color data from your input captions, if
+	// present.
 	BackgroundColor *string `locationName:"backgroundColor" type:"string" enum:"BurninSubtitleBackgroundColor"`
 
-	// Specifies the opacity of the background rectangle. 255 is opaque; 0 is transparent.
-	// Leaving this parameter blank is equivalent to setting it to 0 (transparent).
-	// All burn-in and DVB-Sub font settings must match.
+	// Specify the opacity of the background rectangle. Enter a value from 0 to
+	// 255, where 0 is transparent and 255 is opaque. If Style passthrough (StylePassthrough)
+	// is set to enabled, leave blank to pass through the background style information
+	// in your input captions to your output captions. If Style passthrough is set
+	// to disabled, leave blank to use a value of 0 and remove all backgrounds from
+	// your output captions.
 	BackgroundOpacity *int64 `locationName:"backgroundOpacity" type:"integer"`
 
 	// Specify the font that you want the service to use for your burn in captions
 	// when your input captions specify a font that MediaConvert doesn't support.
-	// When you keep the default value, Best match (BEST_MATCH), MediaConvert uses
-	// a supported font that most closely matches the font that your input captions
-	// specify. When there are multiple unsupported fonts in your input captions,
-	// MediaConvert matches each font with the supported font that matches best.
-	// When you explicitly choose a replacement font, MediaConvert uses that font
-	// to replace all unsupported fonts from your input.
+	// When you set Fallback font (FallbackFont) to best match (BEST_MATCH), or
+	// leave blank, MediaConvert uses a supported font that most closely matches
+	// the font that your input captions specify. When there are multiple unsupported
+	// fonts in your input captions, MediaConvert matches each font with the supported
+	// font that matches best. When you explicitly choose a replacement font, MediaConvert
+	// uses that font to replace all unsupported fonts from your input.
 	FallbackFont *string `locationName:"fallbackFont" type:"string" enum:"BurninSubtitleFallbackFont"`
 
-	// Specifies the color of the burned-in captions. This option is not valid for
-	// source captions that are STL, 608/embedded or teletext. These source settings
-	// are already pre-defined by the caption stream. All burn-in and DVB-Sub font
-	// settings must match.
+	// Specify the color of the burned-in captions text. Leave Font color (FontColor)
+	// blank and set Style passthrough (StylePassthrough) to enabled to use the
+	// font color data from your input captions, if present.
 	FontColor *string `locationName:"fontColor" type:"string" enum:"BurninSubtitleFontColor"`
 
-	// Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the opacity of the burned-in captions. 255 is opaque; 0 is transparent.
 	FontOpacity *int64 `locationName:"fontOpacity" type:"integer"`
 
-	// Font resolution in DPI (dots per inch); default is 96 dpi.All burn-in and
-	// DVB-Sub font settings must match.
+	// Specify the Font resolution (FontResolution) in DPI (dots per inch).
 	FontResolution *int64 `locationName:"fontResolution" min:"96" type:"integer"`
 
-	// Provide the font script, using an ISO 15924 script code, if the LanguageCode
-	// is not sufficient for determining the script type. Where LanguageCode or
-	// CustomLanguageCode is sufficient, use "AUTOMATIC" or leave unset. This is
-	// used to help determine the appropriate font for rendering burn-in captions.
+	// Set Font script (FontScript) to Automatically determined (AUTOMATIC), or
+	// leave blank, to automatically determine the font script in your input captions.
+	// Otherwise, set to Simplified Chinese (HANS) or Traditional Chinese (HANT)
+	// if your input font script uses Simplified or Traditional Chinese.
 	FontScript *string `locationName:"fontScript" type:"string" enum:"FontScript"`
 
-	// A positive integer indicates the exact font size in points. Set to 0 for
-	// automatic font size selection. All burn-in and DVB-Sub font settings must
-	// match.
+	// Specify the Font size (FontSize) in pixels. Must be a positive integer. Set
+	// to 0, or leave blank, for automatic font size.
 	FontSize *int64 `locationName:"fontSize" type:"integer"`
 
-	// Ignore this setting unless your BurninSubtitleFontColor setting is HEX. Format
-	// is six or eight hexidecimal digits, representing the red, green, and blue
-	// components, with the two extra digits used for an optional alpha value. For
-	// example a value of 1122AABB is a red value of 0x11, a green value of 0x22,
-	// a blue value of 0xAA, and an alpha value of 0xBB.
+	// Ignore this setting unless your Font color is set to Hex. Enter either six
+	// or eight hexidecimal digits, representing red, green, and blue, with two
+	// optional extra digits for alpha. For example a value of 1122AABB is a red
+	// value of 0x11, a green value of 0x22, a blue value of 0xAA, and an alpha
+	// value of 0xBB.
 	HexFontColor *string `locationName:"hexFontColor" min:"6" type:"string"`
 
-	// Specifies font outline color. This option is not valid for source captions
-	// that are either 608/embedded or teletext. These source settings are already
-	// pre-defined by the caption stream. All burn-in and DVB-Sub font settings
-	// must match.
+	// Specify font outline color. Leave Outline color (OutlineColor) blank and
+	// set Style passthrough (StylePassthrough) to enabled to use the font outline
+	// color data from your input captions, if present.
 	OutlineColor *string `locationName:"outlineColor" type:"string" enum:"BurninSubtitleOutlineColor"`
 
-	// Specifies font outline size in pixels. This option is not valid for source
-	// captions that are either 608/embedded or teletext. These source settings
-	// are already pre-defined by the caption stream. All burn-in and DVB-Sub font
-	// settings must match.
+	// Specify the Outline size (OutlineSize) of the caption text, in pixels. Leave
+	// Outline size blank and set Style passthrough (StylePassthrough) to enabled
+	// to use the outline size data from your input captions, if present.
 	OutlineSize *int64 `locationName:"outlineSize" type:"integer"`
 
-	// Specifies the color of the shadow cast by the captions.All burn-in and DVB-Sub
-	// font settings must match.
+	// Specify the color of the shadow cast by the captions. Leave Shadow color
+	// (ShadowColor) blank and set Style passthrough (StylePassthrough) to enabled
+	// to use the shadow color data from your input captions, if present.
 	ShadowColor *string `locationName:"shadowColor" type:"string" enum:"BurninSubtitleShadowColor"`
 
-	// Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Leaving
-	// this parameter blank is equivalent to setting it to 0 (transparent). All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the opacity of the shadow. Enter a value from 0 to 255, where 0 is
+	// transparent and 255 is opaque. If Style passthrough (StylePassthrough) is
+	// set to Enabled, leave Shadow opacity (ShadowOpacity) blank to pass through
+	// the shadow style information in your input captions to your output captions.
+	// If Style passthrough is set to disabled, leave blank to use a value of 0
+	// and remove all shadows from your output captions.
 	ShadowOpacity *int64 `locationName:"shadowOpacity" type:"integer"`
 
-	// Specifies the horizontal offset of the shadow relative to the captions in
+	// Specify the horizontal offset of the shadow, relative to the captions in
 	// pixels. A value of -2 would result in a shadow offset 2 pixels to the left.
-	// All burn-in and DVB-Sub font settings must match.
 	ShadowXOffset *int64 `locationName:"shadowXOffset" type:"integer"`
 
-	// Specifies the vertical offset of the shadow relative to the captions in pixels.
-	// A value of -2 would result in a shadow offset 2 pixels above the text. All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the vertical offset of the shadow relative to the captions in pixels.
+	// A value of -2 would result in a shadow offset 2 pixels above the text. Leave
+	// Shadow y-offset (ShadowYOffset) blank and set Style passthrough (StylePassthrough)
+	// to enabled to use the shadow y-offset data from your input captions, if present.
 	ShadowYOffset *int64 `locationName:"shadowYOffset" type:"integer"`
 
-	// Ignore this setting unless your output captions are burned in. Choose which
-	// set of style and position values the service applies to your output captions.
-	// When you choose ENABLED, the service uses the input style and position information
-	// from your input. When you choose DISABLED, the service uses any style values
-	// that you specify in your output settings. If you don't specify values, the
-	// service uses default style and position values. When you choose DISABLED,
-	// the service ignores all style and position values from your input.
+	// Set Style passthrough (StylePassthrough) to ENABLED to use the available
+	// style, color, and position information from your input captions. MediaConvert
+	// uses default settings for any missing style and position information in your
+	// input captions. Set Style passthrough to DISABLED, or leave blank, to ignore
+	// the style and position information from your input captions and use default
+	// settings: white text with black outlining, bottom-center positioning, and
+	// automatic sizing. Whether you set Style passthrough to enabled or not, you
+	// can also choose to manually override any of the individual style and position
+	// settings.
 	StylePassthrough *string `locationName:"stylePassthrough" type:"string" enum:"BurnInSubtitleStylePassthrough"`
 
-	// Only applies to jobs with input captions in Teletext or STL formats. Specify
-	// whether the spacing between letters in your captions is set by the captions
-	// grid or varies depending on letter width. Choose fixed grid to conform to
-	// the spacing specified in the captions file more accurately. Choose proportional
-	// to make the text easier to read if the captions are closed caption.
+	// Specify whether the text spacing (TeletextSpacing) in your captions is set
+	// by the captions grid, or varies depending on letter width. Choose fixed grid
+	// (FIXED_GRID) to conform to the spacing specified in the captions file more
+	// accurately. Choose proportional (PROPORTIONAL) to make the text easier to
+	// read for closed captions.
 	TeletextSpacing *string `locationName:"teletextSpacing" type:"string" enum:"BurninSubtitleTeletextSpacing"`
 
-	// Specifies the horizontal position of the caption relative to the left side
-	// of the output in pixels. A value of 10 would result in the captions starting
-	// 10 pixels from the left of the output. If no explicit x_position is provided,
-	// the horizontal caption position will be determined by the alignment parameter.
-	// This option is not valid for source captions that are STL, 608/embedded or
-	// teletext. These source settings are already pre-defined by the caption stream.
-	// All burn-in and DVB-Sub font settings must match.
+	// Specify the horizontal position (XPosition) of the captions, relative to
+	// the left side of the output in pixels. A value of 10 would result in the
+	// captions starting 10 pixels from the left of the output. If no explicit x_position
+	// is provided, the horizontal caption position will be determined by the alignment
+	// parameter.
 	XPosition *int64 `locationName:"xPosition" type:"integer"`
 
-	// Specifies the vertical position of the caption relative to the top of the
-	// output in pixels. A value of 10 would result in the captions starting 10
-	// pixels from the top of the output. If no explicit y_position is provided,
-	// the caption will be positioned towards the bottom of the output. This option
-	// is not valid for source captions that are STL, 608/embedded or teletext.
-	// These source settings are already pre-defined by the caption stream. All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the vertical position (YPosition) of the captions, relative to the
+	// top of the output in pixels. A value of 10 would result in the captions starting
+	// 10 pixels from the top of the output. If no explicit y_position is provided,
+	// the caption will be positioned towards the bottom of the output.
 	YPosition *int64 `locationName:"yPosition" type:"integer"`
 }
 
@@ -5257,7 +5541,7 @@ func (s *CancelJobInput) SetId(v string) *CancelJobInput {
 
 // A cancel job request will receive a response with an empty body.
 type CancelJobOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5493,8 +5777,10 @@ func (s *CaptionDescriptionPreset) SetLanguageDescription(v string) *CaptionDesc
 type CaptionDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
-	// Settings related to burn-in captions. Set up burn-in captions in the same
-	// output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/burn-in-output-captions.html.
+	// Burn-in is a captions delivery method, rather than a captions format. Burn-in
+	// writes the captions directly on your video frames, replacing pixels of video
+	// content with the captions. Set up burn-in captions in the same output as
+	// your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/burn-in-output-captions.html.
 	// When you work directly in your JSON job specification, include this object
 	// and any required children when you set destinationType to BURN_IN.
 	BurninDestinationSettings *BurninDestinationSettings `locationName:"burninDestinationSettings" type:"structure"`
@@ -5539,7 +5825,11 @@ type CaptionDestinationSettings struct {
 	// and any required children when you set destinationType to SCC.
 	SccDestinationSettings *SccDestinationSettings `locationName:"sccDestinationSettings" type:"structure"`
 
-	// SRT Destination Settings
+	// Settings related to SRT captions. SRT is a sidecar format that holds captions
+	// in a file that is separate from the video container. Set up sidecar captions
+	// in the same output group, but different output from your video. When you
+	// work directly in your JSON job specification, include this object and any
+	// required children when you set destinationType to SRT.
 	SrtDestinationSettings *SrtDestinationSettings `locationName:"srtDestinationSettings" type:"structure"`
 
 	// Settings related to teletext captions. Set up teletext captions in the same
@@ -5556,7 +5846,12 @@ type CaptionDestinationSettings struct {
 	// and any required children when you set destinationType to TTML.
 	TtmlDestinationSettings *TtmlDestinationSettings `locationName:"ttmlDestinationSettings" type:"structure"`
 
-	// WEBVTT Destination Settings
+	// Settings related to WebVTT captions. WebVTT is a sidecar format that holds
+	// captions in a file that is separate from the video container. Set up sidecar
+	// captions in the same output group, but different output from your video.
+	// For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/ttml-and-webvtt-output-captions.html.
+	// When you work directly in your JSON job specification, include this object
+	// and any required children when you set destinationType to WebVTT.
 	WebvttDestinationSettings *WebvttDestinationSettings `locationName:"webvttDestinationSettings" type:"structure"`
 }
 
@@ -5753,10 +6048,10 @@ func (s *CaptionSelector) SetSourceSettings(v *CaptionSourceSettings) *CaptionSe
 // Ignore this setting unless your input captions format is SCC. To have the
 // service compensate for differing frame rates between your input captions
 // and input video, specify the frame rate of the captions file. Specify this
-// value as a fraction, using the settings Framerate numerator (framerateNumerator)
-// and Framerate denominator (framerateDenominator). For example, you might
-// specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps,
-// or 30000 / 1001 for 29.97 fps.
+// value as a fraction. When you work directly in your JSON job specification,
+// use the settings framerateNumerator and framerateDenominator. For example,
+// you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for
+// 23.976 fps, or 30000 / 1001 for 29.97 fps.
 type CaptionSourceFramerate struct {
 	_ struct{} `type:"structure"`
 
@@ -6673,7 +6968,7 @@ type CmfcSettings struct {
 	// List the audio rendition groups that you want included with this video rendition.
 	// Use a comma-separated list. For example, say you want to include the audio
 	// rendition groups that have the audio group IDs "audio_aac_1" and "audio_dolby".
-	// Then you would specify this value: "audio_aac_1, audio_dolby". Related setting:
+	// Then you would specify this value: "audio_aac_1,audio_dolby". Related setting:
 	// The rendition groups that you include in your comma-separated list should
 	// all match values that you specify in the setting Audio group ID (AudioGroupId)
 	// for audio renditions in the same output group as this video rendition. Default
@@ -6721,6 +7016,13 @@ type CmfcSettings struct {
 	// value Exclude (EXCLUDE).
 	IFrameOnlyManifest *string `locationName:"iFrameOnlyManifest" type:"string" enum:"CmfcIFrameOnlyManifest"`
 
+	// To include key-length-value metadata in this output: Set KLV metadata insertion
+	// to Passthrough. MediaConvert reads KLV metadata present in your input and
+	// writes each instance to a separate event message box in the output, according
+	// to MISB ST1910.1. To exclude this KLV metadata: Set KLV metadata insertion
+	// to None or leave blank.
+	KlvMetadata *string `locationName:"klvMetadata" type:"string" enum:"CmfcKlvMetadata"`
+
 	// Use this setting only when you specify SCTE-35 markers from ESAM. Choose
 	// INSERT to put SCTE-35 markers in this output at the insertion points that
 	// you specify in an ESAM XML document. Provide the document in the setting
@@ -6732,6 +7034,13 @@ type CmfcSettings struct {
 	// in your input to also appear in this output. Choose None (NONE) if you don't
 	// want those SCTE-35 markers in this output.
 	Scte35Source *string `locationName:"scte35Source" type:"string" enum:"CmfcScte35Source"`
+
+	// To include ID3 metadata in this output: Set ID3 metadata (timedMetadata)
+	// to Passthrough (PASSTHROUGH). Specify this ID3 metadata in Custom ID3 metadata
+	// inserter (timedMetadataInsertion). MediaConvert writes each instance of ID3
+	// metadata in a separate Event Message (eMSG) box. To exclude this ID3 metadata:
+	// Set ID3 metadata to None (NONE) or leave blank.
+	TimedMetadata *string `locationName:"timedMetadata" type:"string" enum:"CmfcTimedMetadata"`
 }
 
 // String returns the string representation.
@@ -6788,6 +7097,12 @@ func (s *CmfcSettings) SetIFrameOnlyManifest(v string) *CmfcSettings {
 	return s
 }
 
+// SetKlvMetadata sets the KlvMetadata field's value.
+func (s *CmfcSettings) SetKlvMetadata(v string) *CmfcSettings {
+	s.KlvMetadata = &v
+	return s
+}
+
 // SetScte35Esam sets the Scte35Esam field's value.
 func (s *CmfcSettings) SetScte35Esam(v string) *CmfcSettings {
 	s.Scte35Esam = &v
@@ -6797,6 +7112,12 @@ func (s *CmfcSettings) SetScte35Esam(v string) *CmfcSettings {
 // SetScte35Source sets the Scte35Source field's value.
 func (s *CmfcSettings) SetScte35Source(v string) *CmfcSettings {
 	s.Scte35Source = &v
+	return s
+}
+
+// SetTimedMetadata sets the TimedMetadata field's value.
+func (s *CmfcSettings) SetTimedMetadata(v string) *CmfcSettings {
+	s.TimedMetadata = &v
 	return s
 }
 
@@ -8491,7 +8812,7 @@ func (s *DeleteJobTemplateInput) SetName(v string) *DeleteJobTemplateInput {
 // Delete job template requests will return an OK message or error message with
 // an empty body.
 type DeleteJobTemplateOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8537,7 +8858,7 @@ func (s DeletePolicyInput) GoString() string {
 
 // Successful DELETE policy requests will return an OK message.
 type DeletePolicyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8611,7 +8932,7 @@ func (s *DeletePresetInput) SetName(v string) *DeletePresetInput {
 // Delete preset requests will return an OK message or error message with an
 // empty body.
 type DeletePresetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8686,7 +9007,7 @@ func (s *DeleteQueueInput) SetName(v string) *DeleteQueueInput {
 // Delete queue requests return an OK message or error message with an empty
 // body.
 type DeleteQueueOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8892,7 +9213,7 @@ func (s *DisassociateCertificateInput) SetArn(v string) *DisassociateCertificate
 // Successful disassociation of Certificate Manager Amazon Resource Name (ARN)
 // with Mediaconvert returns an OK message.
 type DisassociateCertificateOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8913,9 +9234,7 @@ func (s DisassociateCertificateOutput) GoString() string {
 	return s.String()
 }
 
-// With AWS Elemental MediaConvert, you can create profile 5 Dolby Vision outputs
-// from MXF and IMF sources that contain mastering information as frame-interleaved
-// Dolby Vision metadata.
+// Create Dolby Vision Profile 5 or Profile 8.1 compatible video output.
 type DolbyVision struct {
 	_ struct{} `type:"structure"`
 
@@ -8927,9 +9246,22 @@ type DolbyVision struct {
 	// MaxCLL and MaxFALL properies.
 	L6Mode *string `locationName:"l6Mode" type:"string" enum:"DolbyVisionLevel6Mode"`
 
-	// In the current MediaConvert implementation, the Dolby Vision profile is always
-	// 5 (PROFILE_5). Therefore, all of your inputs must contain Dolby Vision frame
-	// interleaved data.
+	// Required when you set Dolby Vision Profile to Profile 8.1. When you set Content
+	// mapping to None, content mapping is not applied to the HDR10-compatible signal.
+	// Depending on the source peak nit level, clipping might occur on HDR devices
+	// without Dolby Vision. When you set Content mapping to HDR10 1000, the transcoder
+	// creates a 1,000 nits peak HDR10-compatible signal by applying static content
+	// mapping to the source. This mode is speed-optimized for PQ10 sources with
+	// metadata that is created from analysis. For graded Dolby Vision content,
+	// be aware that creative intent might not be guaranteed with extreme 1,000
+	// nits trims.
+	Mapping *string `locationName:"mapping" type:"string" enum:"DolbyVisionMapping"`
+
+	// Required when you enable Dolby Vision. Use Profile 5 to include frame-interleaved
+	// Dolby Vision metadata in your output. Your input must include Dolby Vision
+	// metadata or an HDR10 YUV color space. Use Profile 8.1 to include frame-interleaved
+	// Dolby Vision metadata and HDR10 metadata in your output. Your input must
+	// include Dolby Vision metadata.
 	Profile *string `locationName:"profile" type:"string" enum:"DolbyVisionProfile"`
 }
 
@@ -8960,6 +9292,12 @@ func (s *DolbyVision) SetL6Metadata(v *DolbyVisionLevel6Metadata) *DolbyVision {
 // SetL6Mode sets the L6Mode field's value.
 func (s *DolbyVision) SetL6Mode(v string) *DolbyVision {
 	s.L6Mode = &v
+	return s
+}
+
+// SetMapping sets the Mapping field's value.
+func (s *DolbyVision) SetMapping(v string) *DolbyVision {
+	s.Mapping = &v
 	return s
 }
 
@@ -9180,33 +9518,39 @@ func (s *DvbSdtSettings) SetServiceProviderName(v string) *DvbSdtSettings {
 type DvbSubDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
-	// If no explicit x_position or y_position is provided, setting alignment to
-	// centered will place the captions at the bottom center of the output. Similarly,
-	// setting a left alignment will align captions to the bottom left of the output.
-	// If x and y positions are given in conjunction with the alignment parameter,
-	// the font will be justified (either left or centered) relative to those coordinates.
-	// This option is not valid for source captions that are STL, 608/embedded or
-	// teletext. These source settings are already pre-defined by the caption stream.
-	// All burn-in and DVB-Sub font settings must match.
+	// Specify the alignment of your captions. If no explicit x_position is provided,
+	// setting alignment to centered will placethe captions at the bottom center
+	// of the output. Similarly, setting a left alignment willalign captions to
+	// the bottom left of the output. If x and y positions are given in conjunction
+	// with the alignment parameter, the font will be justified (either left or
+	// centered) relative to those coordinates. Within your job settings, all of
+	// your DVB-Sub settings must be identical.
 	Alignment *string `locationName:"alignment" type:"string" enum:"DvbSubtitleAlignment"`
 
-	// Ignore this setting unless your input captions are STL, any type of 608,
-	// teletext, or TTML, and your output captions are DVB-SUB. Specify how the
-	// service applies the color specified in the setting Font color (DvbSubtitleFontColor).
-	// By default, this color is white. When you choose WHITE_TEXT_ONLY, the service
-	// uses the specified font color only for text that is white in the input. When
-	// you choose ALL_TEXT, the service uses the specified font color for all output
-	// captions text. If you leave both settings at their default value, your output
-	// font color is the same as your input font color.
+	// Ignore this setting unless Style Passthrough (StylePassthrough) is set to
+	// Enabled and Font color (FontColor) set to Black, Yellow, Red, Green, Blue,
+	// or Hex. Use Apply font color (ApplyFontColor) for additional font color controls.
+	// When you choose White text only (WHITE_TEXT_ONLY), or leave blank, your font
+	// color setting only applies to white text in your input captions. For example,
+	// if your font color setting is Yellow, and your input captions have red and
+	// white text, your output captions will have red and yellow text. When you
+	// choose ALL_TEXT, your font color setting applies to all of your output captions
+	// text.
 	ApplyFontColor *string `locationName:"applyFontColor" type:"string" enum:"DvbSubtitleApplyFontColor"`
 
-	// Specifies the color of the rectangle behind the captions.All burn-in and
-	// DVB-Sub font settings must match.
+	// Specify the color of the rectangle behind the captions. Leave background
+	// color (BackgroundColor) blank and set Style passthrough (StylePassthrough)
+	// to enabled to use the background color data from your input captions, if
+	// present.
 	BackgroundColor *string `locationName:"backgroundColor" type:"string" enum:"DvbSubtitleBackgroundColor"`
 
-	// Specifies the opacity of the background rectangle. 255 is opaque; 0 is transparent.
-	// Leaving this parameter blank is equivalent to setting it to 0 (transparent).
-	// All burn-in and DVB-Sub font settings must match.
+	// Specify the opacity of the background rectangle. Enter a value from 0 to
+	// 255, where 0 is transparent and 255 is opaque. If Style passthrough (StylePassthrough)
+	// is set to enabled, leave blank to pass through the background style information
+	// in your input captions to your output captions. If Style passthrough is set
+	// to disabled, leave blank to use a value of 0 and remove all backgrounds from
+	// your output captions. Within your job settings, all of your DVB-Sub settings
+	// must be identical.
 	BackgroundOpacity *int64 `locationName:"backgroundOpacity" type:"integer"`
 
 	// Specify how MediaConvert handles the display definition segment (DDS). Keep
@@ -9249,37 +9593,38 @@ type DvbSubDestinationSettings struct {
 
 	// Specify the font that you want the service to use for your burn in captions
 	// when your input captions specify a font that MediaConvert doesn't support.
-	// When you keep the default value, Best match (BEST_MATCH), MediaConvert uses
-	// a supported font that most closely matches the font that your input captions
-	// specify. When there are multiple unsupported fonts in your input captions,
-	// MediaConvert matches each font with the supported font that matches best.
-	// When you explicitly choose a replacement font, MediaConvert uses that font
-	// to replace all unsupported fonts from your input.
+	// When you set Fallback font (FallbackFont) to best match (BEST_MATCH), or
+	// leave blank, MediaConvert uses a supported font that most closely matches
+	// the font that your input captions specify. When there are multiple unsupported
+	// fonts in your input captions, MediaConvert matches each font with the supported
+	// font that matches best. When you explicitly choose a replacement font, MediaConvert
+	// uses that font to replace all unsupported fonts from your input.
 	FallbackFont *string `locationName:"fallbackFont" type:"string" enum:"DvbSubSubtitleFallbackFont"`
 
-	// Specifies the color of the DVB-SUB captions. This option is not valid for
-	// source captions that are STL, 608/embedded or teletext. These source settings
-	// are already pre-defined by the caption stream. All burn-in and DVB-Sub font
-	// settings must match.
+	// Specify the color of the captions text. Leave Font color (FontColor) blank
+	// and set Style passthrough (StylePassthrough) to enabled to use the font color
+	// data from your input captions, if present. Within your job settings, all
+	// of your DVB-Sub settings must be identical.
 	FontColor *string `locationName:"fontColor" type:"string" enum:"DvbSubtitleFontColor"`
 
-	// Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the opacity of the burned-in captions. 255 is opaque; 0 is transparent.Within
+	// your job settings, all of your DVB-Sub settings must be identical.
 	FontOpacity *int64 `locationName:"fontOpacity" type:"integer"`
 
-	// Font resolution in DPI (dots per inch); default is 96 dpi.All burn-in and
-	// DVB-Sub font settings must match.
+	// Specify the Font resolution (FontResolution) in DPI (dots per inch).Within
+	// your job settings, all of your DVB-Sub settings must be identical.
 	FontResolution *int64 `locationName:"fontResolution" min:"96" type:"integer"`
 
-	// Provide the font script, using an ISO 15924 script code, if the LanguageCode
-	// is not sufficient for determining the script type. Where LanguageCode or
-	// CustomLanguageCode is sufficient, use "AUTOMATIC" or leave unset. This is
-	// used to help determine the appropriate font for rendering DVB-Sub captions.
+	// Set Font script (FontScript) to Automatically determined (AUTOMATIC), or
+	// leave blank, to automatically determine the font script in your input captions.
+	// Otherwise, set to Simplified Chinese (HANS) or Traditional Chinese (HANT)
+	// if your input font script uses Simplified or Traditional Chinese. Within
+	// your job settings, all of your DVB-Sub settings must be identical.
 	FontScript *string `locationName:"fontScript" type:"string" enum:"FontScript"`
 
-	// A positive integer indicates the exact font size in points. Set to 0 for
-	// automatic font size selection. All burn-in and DVB-Sub font settings must
-	// match.
+	// Specify the Font size (FontSize) in pixels. Must be a positive integer. Set
+	// to 0, or leave blank, for automatic font size. Within your job settings,
+	// all of your DVB-Sub settings must be identical.
 	FontSize *int64 `locationName:"fontSize" type:"integer"`
 
 	// Specify the height, in pixels, of this set of DVB-Sub captions. The default
@@ -9288,51 +9633,61 @@ type DvbSubDestinationSettings struct {
 	// and DVB-Sub font settings must match.
 	Height *int64 `locationName:"height" min:"1" type:"integer"`
 
-	// Ignore this setting unless your DvbSubtitleFontColor setting is HEX. Format
-	// is six or eight hexidecimal digits, representing the red, green, and blue
-	// components, with the two extra digits used for an optional alpha value. For
-	// example a value of 1122AABB is a red value of 0x11, a green value of 0x22,
-	// a blue value of 0xAA, and an alpha value of 0xBB.
+	// Ignore this setting unless your Font color is set to Hex. Enter either six
+	// or eight hexidecimal digits, representing red, green, and blue, with two
+	// optional extra digits for alpha. For example a value of 1122AABB is a red
+	// value of 0x11, a green value of 0x22, a blue value of 0xAA, and an alpha
+	// value of 0xBB.
 	HexFontColor *string `locationName:"hexFontColor" min:"6" type:"string"`
 
-	// Specifies font outline color. This option is not valid for source captions
-	// that are either 608/embedded or teletext. These source settings are already
-	// pre-defined by the caption stream. All burn-in and DVB-Sub font settings
-	// must match.
+	// Specify font outline color. Leave Outline color (OutlineColor) blank and
+	// set Style passthrough (StylePassthrough) to enabled to use the font outline
+	// color data from your input captions, if present. Within your job settings,
+	// all of your DVB-Sub settings must be identical.
 	OutlineColor *string `locationName:"outlineColor" type:"string" enum:"DvbSubtitleOutlineColor"`
 
-	// Specifies font outline size in pixels. This option is not valid for source
-	// captions that are either 608/embedded or teletext. These source settings
-	// are already pre-defined by the caption stream. All burn-in and DVB-Sub font
-	// settings must match.
+	// Specify the Outline size (OutlineSize) of the caption text, in pixels. Leave
+	// Outline size blank and set Style passthrough (StylePassthrough) to enabled
+	// to use the outline size data from your input captions, if present. Within
+	// your job settings, all of your DVB-Sub settings must be identical.
 	OutlineSize *int64 `locationName:"outlineSize" type:"integer"`
 
-	// Specifies the color of the shadow cast by the captions.All burn-in and DVB-Sub
-	// font settings must match.
+	// Specify the color of the shadow cast by the captions. Leave Shadow color
+	// (ShadowColor) blank and set Style passthrough (StylePassthrough) to enabled
+	// to use the shadow color data from your input captions, if present. Within
+	// your job settings, all of your DVB-Sub settings must be identical.
 	ShadowColor *string `locationName:"shadowColor" type:"string" enum:"DvbSubtitleShadowColor"`
 
-	// Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Leaving
-	// this parameter blank is equivalent to setting it to 0 (transparent). All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the opacity of the shadow. Enter a value from 0 to 255, where 0 is
+	// transparent and 255 is opaque. If Style passthrough (StylePassthrough) is
+	// set to Enabled, leave Shadow opacity (ShadowOpacity) blank to pass through
+	// the shadow style information in your input captions to your output captions.
+	// If Style passthrough is set to disabled, leave blank to use a value of 0
+	// and remove all shadows from your output captions. Within your job settings,
+	// all of your DVB-Sub settings must be identical.
 	ShadowOpacity *int64 `locationName:"shadowOpacity" type:"integer"`
 
-	// Specifies the horizontal offset of the shadow relative to the captions in
+	// Specify the horizontal offset of the shadow, relative to the captions in
 	// pixels. A value of -2 would result in a shadow offset 2 pixels to the left.
-	// All burn-in and DVB-Sub font settings must match.
+	// Within your job settings, all of your DVB-Sub settings must be identical.
 	ShadowXOffset *int64 `locationName:"shadowXOffset" type:"integer"`
 
-	// Specifies the vertical offset of the shadow relative to the captions in pixels.
-	// A value of -2 would result in a shadow offset 2 pixels above the text. All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the vertical offset of the shadow relative to the captions in pixels.
+	// A value of -2 would result in a shadow offset 2 pixels above the text. Leave
+	// Shadow y-offset (ShadowYOffset) blank and set Style passthrough (StylePassthrough)
+	// to enabled to use the shadow y-offset data from your input captions, if present.
+	// Within your job settings, all of your DVB-Sub settings must be identical.
 	ShadowYOffset *int64 `locationName:"shadowYOffset" type:"integer"`
 
-	// Choose which set of style and position values the service applies to your
-	// output captions. When you choose ENABLED, the service uses the input style
-	// and position information from your input. When you choose DISABLED, the service
-	// uses any style values that you specify in your output settings. If you don't
-	// specify values, the service uses default style and position values. When
-	// you choose DISABLED, the service ignores all style and position values from
-	// your input.
+	// Set Style passthrough (StylePassthrough) to ENABLED to use the available
+	// style, color, and position information from your input captions. MediaConvert
+	// uses default settings for any missing style and position information in your
+	// input captions. Set Style passthrough to DISABLED, or leave blank, to ignore
+	// the style and position information from your input captions and use default
+	// settings: white text with black outlining, bottom-center positioning, and
+	// automatic sizing. Whether you set Style passthrough to enabled or not, you
+	// can also choose to manually override any of the individual style and position
+	// settings.
 	StylePassthrough *string `locationName:"stylePassthrough" type:"string" enum:"DvbSubtitleStylePassthrough"`
 
 	// Specify whether your DVB subtitles are standard or for hearing impaired.
@@ -9340,11 +9695,12 @@ type DvbSubDestinationSettings struct {
 	// dialogue. Choose standard if your subtitles include only dialogue.
 	SubtitlingType *string `locationName:"subtitlingType" type:"string" enum:"DvbSubtitlingType"`
 
-	// Only applies to jobs with input captions in Teletext or STL formats. Specify
-	// whether the spacing between letters in your captions is set by the captions
-	// grid or varies depending on letter width. Choose fixed grid to conform to
-	// the spacing specified in the captions file more accurately. Choose proportional
-	// to make the text easier to read if the captions are closed caption.
+	// Specify whether the Text spacing (TeletextSpacing) in your captions is set
+	// by the captions grid, or varies depending on letter width. Choose fixed grid
+	// (FIXED_GRID) to conform to the spacing specified in the captions file more
+	// accurately. Choose proportional (PROPORTIONAL) to make the text easier to
+	// read for closed captions. Within your job settings, all of your DVB-Sub settings
+	// must be identical.
 	TeletextSpacing *string `locationName:"teletextSpacing" type:"string" enum:"DvbSubtitleTeletextSpacing"`
 
 	// Specify the width, in pixels, of this set of DVB-Sub captions. The default
@@ -9353,22 +9709,19 @@ type DvbSubDestinationSettings struct {
 	// and DVB-Sub font settings must match.
 	Width *int64 `locationName:"width" min:"1" type:"integer"`
 
-	// Specifies the horizontal position of the caption relative to the left side
-	// of the output in pixels. A value of 10 would result in the captions starting
-	// 10 pixels from the left of the output. If no explicit x_position is provided,
-	// the horizontal caption position will be determined by the alignment parameter.
-	// This option is not valid for source captions that are STL, 608/embedded or
-	// teletext. These source settings are already pre-defined by the caption stream.
-	// All burn-in and DVB-Sub font settings must match.
+	// Specify the horizontal position (XPosition) of the captions, relative to
+	// the left side of the outputin pixels. A value of 10 would result in the captions
+	// starting 10 pixels from the left ofthe output. If no explicit x_position
+	// is provided, the horizontal caption position will bedetermined by the alignment
+	// parameter. Within your job settings, all of your DVB-Sub settings must be
+	// identical.
 	XPosition *int64 `locationName:"xPosition" type:"integer"`
 
-	// Specifies the vertical position of the caption relative to the top of the
-	// output in pixels. A value of 10 would result in the captions starting 10
-	// pixels from the top of the output. If no explicit y_position is provided,
-	// the caption will be positioned towards the bottom of the output. This option
-	// is not valid for source captions that are STL, 608/embedded or teletext.
-	// These source settings are already pre-defined by the caption stream. All
-	// burn-in and DVB-Sub font settings must match.
+	// Specify the vertical position (YPosition) of the captions, relative to the
+	// top of the output in pixels. A value of 10 would result in the captions starting
+	// 10 pixels from the top of the output. If no explicit y_position is provided,
+	// the caption will be positioned towards the bottom of the output. Within your
+	// job settings, all of your DVB-Sub settings must be identical.
 	YPosition *int64 `locationName:"yPosition" type:"integer"`
 }
 
@@ -10702,19 +11055,36 @@ type FileSourceSettings struct {
 	// Ignore this setting unless your input captions format is SCC. To have the
 	// service compensate for differing frame rates between your input captions
 	// and input video, specify the frame rate of the captions file. Specify this
-	// value as a fraction, using the settings Framerate numerator (framerateNumerator)
-	// and Framerate denominator (framerateDenominator). For example, you might
-	// specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps,
-	// or 30000 / 1001 for 29.97 fps.
+	// value as a fraction. When you work directly in your JSON job specification,
+	// use the settings framerateNumerator and framerateDenominator. For example,
+	// you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for
+	// 23.976 fps, or 30000 / 1001 for 29.97 fps.
 	Framerate *CaptionSourceFramerate `locationName:"framerate" type:"structure"`
 
 	// External caption file used for loading captions. Accepted file extensions
 	// are 'scc', 'ttml', 'dfxp', 'stl', 'srt', 'xml', 'smi', 'webvtt', and 'vtt'.
 	SourceFile *string `locationName:"sourceFile" min:"14" type:"string"`
 
-	// Specifies a time delta in seconds to offset the captions from the source
-	// file.
+	// Optional. Use this setting when you need to adjust the sync between your
+	// sidecar captions and your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/time-delta-use-cases.html.
+	// Enter a positive or negative number to modify the times in the captions file.
+	// For example, type 15 to add 15 seconds to all the times in the captions file.
+	// Type -5 to subtract 5 seconds from the times in the captions file. You can
+	// optionally specify your time delta in milliseconds instead of seconds. When
+	// you do so, set the related setting, Time delta units (TimeDeltaUnits) to
+	// Milliseconds (MILLISECONDS). Note that, when you specify a time delta for
+	// timecode-based caption sources, such as SCC and STL, and your time delta
+	// isn't a multiple of the input frame rate, MediaConvert snaps the captions
+	// to the nearest frame. For example, when your input video frame rate is 25
+	// fps and you specify 1010ms for time delta, MediaConvert delays your captions
+	// by 1000 ms.
 	TimeDelta *int64 `locationName:"timeDelta" type:"integer"`
+
+	// When you use the setting Time delta (TimeDelta) to adjust the sync between
+	// your sidecar captions and your video, use this setting to specify the units
+	// for the delta that you specify. When you don't specify a value for Time delta
+	// units (TimeDeltaUnits), MediaConvert uses seconds by default.
+	TimeDeltaUnits *string `locationName:"timeDeltaUnits" type:"string" enum:"FileSourceTimeDeltaUnits"`
 }
 
 // String returns the string representation.
@@ -10780,6 +11150,12 @@ func (s *FileSourceSettings) SetTimeDelta(v int64) *FileSourceSettings {
 	return s
 }
 
+// SetTimeDeltaUnits sets the TimeDeltaUnits field's value.
+func (s *FileSourceSettings) SetTimeDeltaUnits(v string) *FileSourceSettings {
+	s.TimeDeltaUnits = &v
+	return s
+}
+
 type ForbiddenException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -10841,6 +11217,73 @@ func (s *ForbiddenException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ForbiddenException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Use Force include renditions to specify one or more resolutions to include
+// your ABR stack. * (Recommended) To optimize automated ABR, specify as few
+// resolutions as possible. * (Required) The number of resolutions that you
+// specify must be equal to, or less than, the Max renditions setting. * If
+// you specify a Min top rendition size rule, specify at least one resolution
+// that is equal to, or greater than, Min top rendition size. * If you specify
+// a Min bottom rendition size rule, only specify resolutions that are equal
+// to, or greater than, Min bottom rendition size. * If you specify a Force
+// include renditions rule, do not specify a separate rule for Allowed renditions.
+// * Note: The ABR stack may include other resolutions that you do not specify
+// here, depending on the Max renditions setting.
+type ForceIncludeRenditionSize struct {
+	_ struct{} `type:"structure"`
+
+	// Use Height to define the video resolution height, in pixels, for this rule.
+	Height *int64 `locationName:"height" min:"32" type:"integer"`
+
+	// Use Width to define the video resolution width, in pixels, for this rule.
+	Width *int64 `locationName:"width" min:"32" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ForceIncludeRenditionSize) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ForceIncludeRenditionSize) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ForceIncludeRenditionSize) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ForceIncludeRenditionSize"}
+	if s.Height != nil && *s.Height < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Height", 32))
+	}
+	if s.Width != nil && *s.Width < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Width", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHeight sets the Height field's value.
+func (s *ForceIncludeRenditionSize) SetHeight(v int64) *ForceIncludeRenditionSize {
+	s.Height = &v
+	return s
+}
+
+// SetWidth sets the Width field's value.
+func (s *ForceIncludeRenditionSize) SetWidth(v int64) *ForceIncludeRenditionSize {
+	s.Width = &v
+	return s
 }
 
 // Required when you set (Codec) under (VideoDescription)>(CodecSettings) to
@@ -11327,7 +11770,7 @@ func (s *GetQueueOutput) SetQueue(v *Queue) *GetQueueOutput {
 	return s
 }
 
-// Settings for quality-defined variable bitrate encoding with the H.265 codec.
+// Settings for quality-defined variable bitrate encoding with the H.264 codec.
 // Use these settings only when you set QVBR for Rate control mode (RateControlMode).
 type H264QvbrSettings struct {
 	_ struct{} `type:"structure"`
@@ -11521,17 +11964,37 @@ type H264Settings struct {
 	// 1.
 	GopBReference *string `locationName:"gopBReference" type:"string" enum:"H264GopBReference"`
 
-	// Frequency of closed GOPs. In streaming applications, it is recommended that
-	// this be set to 1 so a decoder joining mid-stream will receive an IDR frame
-	// as quickly as possible. Setting this value to 0 will break output segmenting.
+	// Specify the relative frequency of open to closed GOPs in this output. For
+	// example, if you want to allow four open GOPs and then require a closed GOP,
+	// set this value to 5. We recommend that you have the transcoder automatically
+	// choose this value for you based on characteristics of your input video. To
+	// enable this automatic behavior, keep the default value by leaving this setting
+	// out of your JSON job specification. In the console, do this by keeping the
+	// default empty value. If you do explicitly specify a value, for segmented
+	// outputs, don't set this value to 0.
 	GopClosedCadence *int64 `locationName:"gopClosedCadence" type:"integer"`
 
-	// GOP Length (keyframe interval) in frames or seconds. Must be greater than
-	// zero.
+	// Use this setting only when you set GOP mode control (GopSizeUnits) to Specified,
+	// frames (FRAMES) or Specified, seconds (SECONDS). Specify the GOP length using
+	// a whole number of frames or a decimal value of seconds. MediaConvert will
+	// interpret this value as frames or seconds depending on the value you choose
+	// for GOP mode control (GopSizeUnits). If you want to allow MediaConvert to
+	// automatically determine GOP size, leave GOP size blank and set GOP mode control
+	// to Auto (AUTO). If your output group specifies HLS, DASH, or CMAF, leave
+	// GOP size blank and set GOP mode control to Auto in each output in your output
+	// group.
 	GopSize *float64 `locationName:"gopSize" type:"double"`
 
-	// Indicates if the GOP Size in H264 is specified in frames or seconds. If seconds
-	// the system will convert the GOP Size into a frame count at run time.
+	// Specify how the transcoder determines GOP size for this output. We recommend
+	// that you have the transcoder automatically choose this value for you based
+	// on characteristics of your input video. To enable this automatic behavior,
+	// choose Auto (AUTO) and and leave GOP size (GopSize) blank. By default, if
+	// you don't specify GOP mode control (GopSizeUnits), MediaConvert will use
+	// automatic behavior. If your output group specifies HLS, DASH, or CMAF, set
+	// GOP mode control to Auto and leave GOP size blank in each output in your
+	// output group. To explicitly specify the GOP length, choose Specified, frames
+	// (FRAMES) or Specified, seconds (SECONDS) and then provide the GOP length
+	// in the related setting GOP size (GopSize).
 	GopSizeUnits *string `locationName:"gopSizeUnits" type:"string" enum:"H264GopSizeUnits"`
 
 	// Percentage of the buffer that should initially be filled (HRD buffer model).
@@ -11559,18 +12022,31 @@ type H264Settings struct {
 	// as 5000000. Required when Rate control mode is QVBR.
 	MaxBitrate *int64 `locationName:"maxBitrate" min:"1000" type:"integer"`
 
-	// Enforces separation between repeated (cadence) I-frames and I-frames inserted
-	// by Scene Change Detection. If a scene change I-frame is within I-interval
-	// frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene
-	// change I-frame. GOP stretch requires enabling lookahead as well as setting
-	// I-interval. The normal cadence resumes for the next GOP. This setting is
-	// only used when Scene Change Detect is enabled. Note: Maximum GOP stretch
-	// = GOP size + Min-I-interval - 1
+	// Use this setting only when you also enable Scene change detection (SceneChangeDetect).
+	// This setting determines how the encoder manages the spacing between I-frames
+	// that it inserts as part of the I-frame cadence and the I-frames that it inserts
+	// for Scene change detection. We recommend that you have the transcoder automatically
+	// choose this value for you based on characteristics of your input video. To
+	// enable this automatic behavior, keep the default value by leaving this setting
+	// out of your JSON job specification. In the console, do this by keeping the
+	// default empty value. When you explicitly specify a value for this setting,
+	// the encoder determines whether to skip a cadence-driven I-frame by the value
+	// you set. For example, if you set Min I interval (minIInterval) to 5 and a
+	// cadence-driven I-frame would fall within 5 frames of a scene-change I-frame,
+	// then the encoder skips the cadence-driven I-frame. In this way, one GOP is
+	// shrunk slightly and one GOP is stretched slightly. When the cadence-driven
+	// I-frames are farther from the scene-change I-frame than the value you set,
+	// then the encoder leaves all I-frames in place and the GOPs surrounding the
+	// scene change are smaller than the usual cadence GOPs.
 	MinIInterval *int64 `locationName:"minIInterval" type:"integer"`
 
-	// Specify the number of B-frames that MediaConvert puts between reference frames
-	// in this output. Valid values are whole numbers from 0 through 7. When you
-	// don't specify a value, MediaConvert defaults to 2.
+	// This setting to determines the number of B-frames that MediaConvert puts
+	// between reference frames in this output. We recommend that you use automatic
+	// behavior to allow the transcoder to choose the best value based on characteristics
+	// of your input video. In the console, choose AUTO to select this automatic
+	// behavior. When you manually edit your JSON job specification, leave this
+	// setting out to choose automatic behavior. When you want to specify this number
+	// explicitly, choose a whole number from 0 through 7.
 	NumberBFramesBetweenReferenceFrames *int64 `locationName:"numberBFramesBetweenReferenceFrames" type:"integer"`
 
 	// Number of reference frames to use. The encoder may use more than requested
@@ -12121,10 +12597,16 @@ func (s *H265QvbrSettings) SetQvbrQualityLevelFineTune(v float64) *H265QvbrSetti
 type H265Settings struct {
 	_ struct{} `type:"structure"`
 
-	// Specify the strength of any adaptive quantization filters that you enable.
-	// The value that you choose here applies to the following settings: Flicker
-	// adaptive quantization (flickerAdaptiveQuantization), Spatial adaptive quantization
-	// (spatialAdaptiveQuantization), and Temporal adaptive quantization (temporalAdaptiveQuantization).
+	// When you set Adaptive Quantization (H265AdaptiveQuantization) to Auto (AUTO),
+	// or leave blank, MediaConvert automatically applies quantization to improve
+	// the video quality of your output. Set Adaptive Quantization to Low (LOW),
+	// Medium (MEDIUM), High (HIGH), Higher (HIGHER), or Max (MAX) to manually control
+	// the strength of the quantization filter. When you do, you can specify a value
+	// for Spatial Adaptive Quantization (H265SpatialAdaptiveQuantization), Temporal
+	// Adaptive Quantization (H265TemporalAdaptiveQuantization), and Flicker Adaptive
+	// Quantization (H265FlickerAdaptiveQuantization), to further control the quantization
+	// filter. Set Adaptive Quantization to Off (OFF) to apply no quantization to
+	// your output.
 	AdaptiveQuantization *string `locationName:"adaptiveQuantization" type:"string" enum:"H265AdaptiveQuantization"`
 
 	// Enables Alternate Transfer Function SEI message for outputs using Hybrid
@@ -12205,17 +12687,37 @@ type H265Settings struct {
 	// 1.
 	GopBReference *string `locationName:"gopBReference" type:"string" enum:"H265GopBReference"`
 
-	// Frequency of closed GOPs. In streaming applications, it is recommended that
-	// this be set to 1 so a decoder joining mid-stream will receive an IDR frame
-	// as quickly as possible. Setting this value to 0 will break output segmenting.
+	// Specify the relative frequency of open to closed GOPs in this output. For
+	// example, if you want to allow four open GOPs and then require a closed GOP,
+	// set this value to 5. We recommend that you have the transcoder automatically
+	// choose this value for you based on characteristics of your input video. To
+	// enable this automatic behavior, keep the default value by leaving this setting
+	// out of your JSON job specification. In the console, do this by keeping the
+	// default empty value. If you do explicitly specify a value, for segmented
+	// outputs, don't set this value to 0.
 	GopClosedCadence *int64 `locationName:"gopClosedCadence" type:"integer"`
 
-	// GOP Length (keyframe interval) in frames or seconds. Must be greater than
-	// zero.
+	// Use this setting only when you set GOP mode control (GopSizeUnits) to Specified,
+	// frames (FRAMES) or Specified, seconds (SECONDS). Specify the GOP length using
+	// a whole number of frames or a decimal value of seconds. MediaConvert will
+	// interpret this value as frames or seconds depending on the value you choose
+	// for GOP mode control (GopSizeUnits). If you want to allow MediaConvert to
+	// automatically determine GOP size, leave GOP size blank and set GOP mode control
+	// to Auto (AUTO). If your output group specifies HLS, DASH, or CMAF, leave
+	// GOP size blank and set GOP mode control to Auto in each output in your output
+	// group.
 	GopSize *float64 `locationName:"gopSize" type:"double"`
 
-	// Indicates if the GOP Size in H265 is specified in frames or seconds. If seconds
-	// the system will convert the GOP Size into a frame count at run time.
+	// Specify how the transcoder determines GOP size for this output. We recommend
+	// that you have the transcoder automatically choose this value for you based
+	// on characteristics of your input video. To enable this automatic behavior,
+	// choose Auto (AUTO) and and leave GOP size (GopSize) blank. By default, if
+	// you don't specify GOP mode control (GopSizeUnits), MediaConvert will use
+	// automatic behavior. If your output group specifies HLS, DASH, or CMAF, set
+	// GOP mode control to Auto and leave GOP size blank in each output in your
+	// output group. To explicitly specify the GOP length, choose Specified, frames
+	// (FRAMES) or Specified, seconds (SECONDS) and then provide the GOP length
+	// in the related setting GOP size (GopSize).
 	GopSizeUnits *string `locationName:"gopSizeUnits" type:"string" enum:"H265GopSizeUnits"`
 
 	// Percentage of the buffer that should initially be filled (HRD buffer model).
@@ -12243,13 +12745,22 @@ type H265Settings struct {
 	// as 5000000. Required when Rate control mode is QVBR.
 	MaxBitrate *int64 `locationName:"maxBitrate" min:"1000" type:"integer"`
 
-	// Enforces separation between repeated (cadence) I-frames and I-frames inserted
-	// by Scene Change Detection. If a scene change I-frame is within I-interval
-	// frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene
-	// change I-frame. GOP stretch requires enabling lookahead as well as setting
-	// I-interval. The normal cadence resumes for the next GOP. This setting is
-	// only used when Scene Change Detect is enabled. Note: Maximum GOP stretch
-	// = GOP size + Min-I-interval - 1
+	// Use this setting only when you also enable Scene change detection (SceneChangeDetect).
+	// This setting determines how the encoder manages the spacing between I-frames
+	// that it inserts as part of the I-frame cadence and the I-frames that it inserts
+	// for Scene change detection. We recommend that you have the transcoder automatically
+	// choose this value for you based on characteristics of your input video. To
+	// enable this automatic behavior, keep the default value by leaving this setting
+	// out of your JSON job specification. In the console, do this by keeping the
+	// default empty value. When you explicitly specify a value for this setting,
+	// the encoder determines whether to skip a cadence-driven I-frame by the value
+	// you set. For example, if you set Min I interval (minIInterval) to 5 and a
+	// cadence-driven I-frame would fall within 5 frames of a scene-change I-frame,
+	// then the encoder skips the cadence-driven I-frame. In this way, one GOP is
+	// shrunk slightly and one GOP is stretched slightly. When the cadence-driven
+	// I-frames are farther from the scene-change I-frame than the value you set,
+	// then the encoder leaves all I-frames in place and the GOPs surrounding the
+	// scene change are smaller than the usual cadence GOPs.
 	MinIInterval *int64 `locationName:"minIInterval" type:"integer"`
 
 	// Specify the number of B-frames that MediaConvert puts between reference frames
@@ -13167,7 +13678,7 @@ type HlsGroupSettings struct {
 	// Choose one or more ad marker types to decorate your Apple HLS manifest. This
 	// setting does not determine whether SCTE-35 markers appear in the outputs
 	// themselves.
-	AdMarkers []*string `locationName:"adMarkers" type:"list"`
+	AdMarkers []*string `locationName:"adMarkers" type:"list" enum:"HlsAdMarkers"`
 
 	// By default, the service creates one top-level .m3u8 HLS manifest for each
 	// HLS output group in your job. This default manifest references every output
@@ -13199,6 +13710,14 @@ type HlsGroupSettings struct {
 	// CLOSED-CAPTIONS=NONE line in the manifest. Omit: Omit any CLOSED-CAPTIONS
 	// line from the manifest.
 	CaptionLanguageSetting *string `locationName:"captionLanguageSetting" type:"string" enum:"HlsCaptionLanguageSetting"`
+
+	// Set Caption segment length control (CaptionSegmentLengthControl) to Match
+	// video (MATCH_VIDEO) to create caption segments that align with the video
+	// segments from the first video output in this output group. For example, if
+	// the video segments are 2 seconds long, your WebVTT segments will also be
+	// 2 seconds long. Keep the default setting, Large segments (LARGE_SEGMENTS)
+	// to create caption segments that are 300 seconds long.
+	CaptionSegmentLengthControl *string `locationName:"captionSegmentLengthControl" type:"string" enum:"HlsCaptionSegmentLengthControl"`
 
 	// Disable this setting only when your workflow requires the #EXT-X-ALLOW-CACHE:no
 	// tag. Otherwise, keep the default value Enabled (ENABLED) and control caching
@@ -13316,10 +13835,19 @@ type HlsGroupSettings struct {
 	// the actual duration of a track in a segment is longer than the target duration.
 	TargetDurationCompatibilityMode *string `locationName:"targetDurationCompatibilityMode" type:"string" enum:"HlsTargetDurationCompatibilityMode"`
 
-	// Indicates ID3 frame that has the timecode.
+	// Specify the type of the ID3 frame (timedMetadataId3Frame) to use for ID3
+	// timestamps (timedMetadataId3Period) in your output. To include ID3 timestamps:
+	// Specify PRIV (PRIV) or TDRL (TDRL) and set ID3 metadata (timedMetadata) to
+	// Passthrough (PASSTHROUGH). To exclude ID3 timestamps: Set ID3 timestamp frame
+	// type to None (NONE).
 	TimedMetadataId3Frame *string `locationName:"timedMetadataId3Frame" type:"string" enum:"HlsTimedMetadataId3Frame"`
 
-	// Timed Metadata interval in seconds.
+	// Specify the interval in seconds to write ID3 timestamps in your output. The
+	// first timestamp starts at the output timecode and date, and increases incrementally
+	// with each ID3 timestamp. To use the default interval of 10 seconds: Leave
+	// blank. To include this metadata in your output: Set ID3 timestamp frame type
+	// (timedMetadataId3Frame) to PRIV (PRIV) or TDRL (TDRL), and set ID3 metadata
+	// (timedMetadata) to Passthrough (PASSTHROUGH).
 	TimedMetadataId3Period *int64 `locationName:"timedMetadataId3Period" type:"integer"`
 
 	// Provides an extra millisecond delta offset to fine tune the timestamps.
@@ -13429,6 +13957,12 @@ func (s *HlsGroupSettings) SetCaptionLanguageMappings(v []*HlsCaptionLanguageMap
 // SetCaptionLanguageSetting sets the CaptionLanguageSetting field's value.
 func (s *HlsGroupSettings) SetCaptionLanguageSetting(v string) *HlsGroupSettings {
 	s.CaptionLanguageSetting = &v
+	return s
+}
+
+// SetCaptionSegmentLengthControl sets the CaptionSegmentLengthControl field's value.
+func (s *HlsGroupSettings) SetCaptionSegmentLengthControl(v string) *HlsGroupSettings {
+	s.CaptionSegmentLengthControl = &v
 	return s
 }
 
@@ -13940,7 +14474,7 @@ func (s *HopDestination) SetWaitMinutes(v int64) *HopDestination {
 type Id3Insertion struct {
 	_ struct{} `type:"structure"`
 
-	// Use ID3 tag (Id3) to provide a tag value in base64-encode format.
+	// Use ID3 tag (Id3) to provide a fully formed ID3 tag in base64-encode format.
 	Id3 *string `locationName:"id3" type:"string"`
 
 	// Provide a Timecode (TimeCode) in HH:MM:SS:FF or HH:MM:SS;FF format.
@@ -14042,6 +14576,15 @@ func (s *ImageInserter) SetInsertableImages(v []*InsertableImage) *ImageInserter
 type ImscDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
+	// Set Accessibility subtitles to Enabled if the ISMC or WebVTT captions track
+	// is intended to provide accessibility for people who are deaf or hard of hearing.
+	// When you enable this feature, MediaConvert adds the following attributes
+	// under EXT-X-MEDIA in the HLS or CMAF manifest for this track: CHARACTERISTICS="public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
+	// and AUTOSELECT="YES". Keep the default value, Disabled, if the captions track
+	// is not intended to provide such accessibility. MediaConvert will not add
+	// the above attributes.
+	Accessibility *string `locationName:"accessibility" type:"string" enum:"ImscAccessibilitySubs"`
+
 	// Keep this setting enabled to have MediaConvert use the font style and position
 	// information from the captions source in the output. This option is available
 	// only when your input captions are IMSC, SMPTE-TT, or TTML. Disable this setting
@@ -14065,6 +14608,12 @@ func (s ImscDestinationSettings) String() string {
 // value will be replaced with "sensitive".
 func (s ImscDestinationSettings) GoString() string {
 	return s.String()
+}
+
+// SetAccessibility sets the Accessibility field's value.
+func (s *ImscDestinationSettings) SetAccessibility(v string) *ImscDestinationSettings {
+	s.Accessibility = &v
+	return s
 }
 
 // SetStylePassthrough sets the StylePassthrough field's value.
@@ -14117,6 +14666,16 @@ type Input struct {
 	// is disabled. Only applicable to MPEG2, H.264, H.265, and uncompressed video
 	// inputs.
 	DenoiseFilter *string `locationName:"denoiseFilter" type:"string" enum:"InputDenoiseFilter"`
+
+	// Use this setting only when your video source has Dolby Vision studio mastering
+	// metadata that is carried in a separate XML file. Specify the Amazon S3 location
+	// for the metadata XML file. MediaConvert uses this file to provide global
+	// and frame-level metadata for Dolby Vision preprocessing. When you specify
+	// a file here and your input also has interleaved global and frame level metadata,
+	// MediaConvert ignores the interleaved metadata and uses only the the metadata
+	// from this external XML file. Note that your IAM service role must grant MediaConvert
+	// read permissions to this file. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html.
+	DolbyVisionMetadataXml *string `locationName:"dolbyVisionMetadataXml" min:"14" type:"string"`
 
 	// Specify the source file for your transcoding job. You can use multiple inputs
 	// in a single job. The service concatenates these inputs, in the order that
@@ -14209,6 +14768,13 @@ type Input struct {
 	// For more information about timecodes, see https://docs.aws.amazon.com/console/mediaconvert/timecode.
 	TimecodeStart *string `locationName:"timecodeStart" min:"11" type:"string"`
 
+	// When you include Video generator, MediaConvert creates a video input with
+	// black frames. Use this setting if you do not have a video input or if you
+	// want to add black video frames before, or after, other inputs. You can specify
+	// Video generator, or you can specify an Input file, but you cannot specify
+	// both. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/video-generator.html
+	VideoGenerator *InputVideoGenerator `locationName:"videoGenerator" type:"structure"`
+
 	// Input video selectors contain the video settings for the input. Each of your
 	// inputs can have up to one video selector.
 	VideoSelector *VideoSelector `locationName:"videoSelector" type:"structure"`
@@ -14235,6 +14801,9 @@ func (s Input) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Input) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Input"}
+	if s.DolbyVisionMetadataXml != nil && len(*s.DolbyVisionMetadataXml) < 14 {
+		invalidParams.Add(request.NewErrParamMinLen("DolbyVisionMetadataXml", 14))
+	}
 	if s.FilterStrength != nil && *s.FilterStrength < -5 {
 		invalidParams.Add(request.NewErrParamMinValue("FilterStrength", -5))
 	}
@@ -14282,6 +14851,11 @@ func (s *Input) Validate() error {
 	if s.Position != nil {
 		if err := s.Position.Validate(); err != nil {
 			invalidParams.AddNested("Position", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.VideoGenerator != nil {
+		if err := s.VideoGenerator.Validate(); err != nil {
+			invalidParams.AddNested("VideoGenerator", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.VideoSelector != nil {
@@ -14335,6 +14909,12 @@ func (s *Input) SetDecryptionSettings(v *InputDecryptionSettings) *Input {
 // SetDenoiseFilter sets the DenoiseFilter field's value.
 func (s *Input) SetDenoiseFilter(v string) *Input {
 	s.DenoiseFilter = &v
+	return s
+}
+
+// SetDolbyVisionMetadataXml sets the DolbyVisionMetadataXml field's value.
+func (s *Input) SetDolbyVisionMetadataXml(v string) *Input {
+	s.DolbyVisionMetadataXml = &v
 	return s
 }
 
@@ -14407,6 +14987,12 @@ func (s *Input) SetTimecodeSource(v string) *Input {
 // SetTimecodeStart sets the TimecodeStart field's value.
 func (s *Input) SetTimecodeStart(v string) *Input {
 	s.TimecodeStart = &v
+	return s
+}
+
+// SetVideoGenerator sets the VideoGenerator field's value.
+func (s *Input) SetVideoGenerator(v *InputVideoGenerator) *Input {
+	s.VideoGenerator = v
 	return s
 }
 
@@ -14602,6 +15188,16 @@ type InputTemplate struct {
 	// inputs.
 	DenoiseFilter *string `locationName:"denoiseFilter" type:"string" enum:"InputDenoiseFilter"`
 
+	// Use this setting only when your video source has Dolby Vision studio mastering
+	// metadata that is carried in a separate XML file. Specify the Amazon S3 location
+	// for the metadata XML file. MediaConvert uses this file to provide global
+	// and frame-level metadata for Dolby Vision preprocessing. When you specify
+	// a file here and your input also has interleaved global and frame level metadata,
+	// MediaConvert ignores the interleaved metadata and uses only the the metadata
+	// from this external XML file. Note that your IAM service role must grant MediaConvert
+	// read permissions to this file. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html.
+	DolbyVisionMetadataXml *string `locationName:"dolbyVisionMetadataXml" min:"14" type:"string"`
+
 	// Specify how the transcoding service applies the denoise and deblock filters.
 	// You must also enable the filters separately, with Denoise (InputDenoiseFilter)
 	// and Deblock (InputDeblockFilter). * Auto - The transcoding service determines
@@ -14702,6 +15298,9 @@ func (s InputTemplate) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *InputTemplate) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "InputTemplate"}
+	if s.DolbyVisionMetadataXml != nil && len(*s.DolbyVisionMetadataXml) < 14 {
+		invalidParams.Add(request.NewErrParamMinLen("DolbyVisionMetadataXml", 14))
+	}
 	if s.FilterStrength != nil && *s.FilterStrength < -5 {
 		invalidParams.Add(request.NewErrParamMinValue("FilterStrength", -5))
 	}
@@ -14794,6 +15393,12 @@ func (s *InputTemplate) SetDenoiseFilter(v string) *InputTemplate {
 	return s
 }
 
+// SetDolbyVisionMetadataXml sets the DolbyVisionMetadataXml field's value.
+func (s *InputTemplate) SetDolbyVisionMetadataXml(v string) *InputTemplate {
+	s.DolbyVisionMetadataXml = &v
+	return s
+}
+
 // SetFilterEnable sets the FilterEnable field's value.
 func (s *InputTemplate) SetFilterEnable(v string) *InputTemplate {
 	s.FilterEnable = &v
@@ -14857,6 +15462,57 @@ func (s *InputTemplate) SetTimecodeStart(v string) *InputTemplate {
 // SetVideoSelector sets the VideoSelector field's value.
 func (s *InputTemplate) SetVideoSelector(v *VideoSelector) *InputTemplate {
 	s.VideoSelector = v
+	return s
+}
+
+// When you include Video generator, MediaConvert creates a video input with
+// black frames. Use this setting if you do not have a video input or if you
+// want to add black video frames before, or after, other inputs. You can specify
+// Video generator, or you can specify an Input file, but you cannot specify
+// both. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/video-generator.html
+type InputVideoGenerator struct {
+	_ struct{} `type:"structure"`
+
+	// Specify an integer value for Black video duration from 50 to 86400000 to
+	// generate a black video input for that many milliseconds. Required when you
+	// include Video generator.
+	Duration *int64 `locationName:"duration" min:"50" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputVideoGenerator) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputVideoGenerator) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputVideoGenerator) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputVideoGenerator"}
+	if s.Duration != nil && *s.Duration < 50 {
+		invalidParams.Add(request.NewErrParamMinValue("Duration", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDuration sets the Duration field's value.
+func (s *InputVideoGenerator) SetDuration(v int64) *InputVideoGenerator {
+	s.Duration = &v
 	return s
 }
 
@@ -15485,10 +16141,9 @@ type JobSettings struct {
 	// These settings don't affect input clipping.
 	TimecodeConfig *TimecodeConfig `locationName:"timecodeConfig" type:"structure"`
 
-	// Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags
-	// in any HLS outputs. To include timed metadata, you must enable it here, enable
-	// it in each output container, and specify tags and timecodes in ID3 insertion
-	// (Id3Insertion) objects.
+	// Insert user-defined custom ID3 metadata (id3) at timecodes (timecode) that
+	// you specify. In each output that you want to include this metadata, you must
+	// set ID3 metadata (timedMetadata) to Passthrough (PASSTHROUGH).
 	TimedMetadataInsertion *TimedMetadataInsertion `locationName:"timedMetadataInsertion" type:"structure"`
 }
 
@@ -15862,10 +16517,9 @@ type JobTemplateSettings struct {
 	// These settings don't affect input clipping.
 	TimecodeConfig *TimecodeConfig `locationName:"timecodeConfig" type:"structure"`
 
-	// Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags
-	// in any HLS outputs. To include timed metadata, you must enable it here, enable
-	// it in each output container, and specify tags and timecodes in ID3 insertion
-	// (Id3Insertion) objects.
+	// Insert user-defined custom ID3 metadata (id3) at timecodes (timecode) that
+	// you specify. In each output that you want to include this metadata, you must
+	// set ID3 metadata (timedMetadata) to Passthrough (PASSTHROUGH).
 	TimedMetadataInsertion *TimedMetadataInsertion `locationName:"timedMetadataInsertion" type:"structure"`
 }
 
@@ -16967,6 +17621,12 @@ type M2tsSettings struct {
 	// The length, in seconds, of each fragment. Only used with EBP markers.
 	FragmentTime *float64 `locationName:"fragmentTime" type:"double"`
 
+	// To include key-length-value metadata in this output: Set KLV metadata insertion
+	// to Passthrough. MediaConvert reads KLV metadata present in your input and
+	// passes it through to the output transport stream. To exclude this KLV metadata:
+	// Set KLV metadata insertion to None or leave blank.
+	KlvMetadata *string `locationName:"klvMetadata" type:"string" enum:"M2tsKlvMetadata"`
+
 	// Specify the maximum time, in milliseconds, between Program Clock References
 	// (PCRs) inserted into the transport stream.
 	MaxPcrInterval *int64 `locationName:"maxPcrInterval" type:"integer"`
@@ -17068,8 +17728,7 @@ type M2tsSettings struct {
 	// is set to _none_.
 	SegmentationTime *float64 `locationName:"segmentationTime" type:"double"`
 
-	// Specify the packet identifier (PID) for timed metadata in this output. Default
-	// is 502.
+	// Packet Identifier (PID) of the ID3 metadata stream in the transport stream.
 	TimedMetadataPid *int64 `locationName:"timedMetadataPid" min:"32" type:"integer"`
 
 	// Specify the ID for the transport stream itself in the program map table for
@@ -17250,6 +17909,12 @@ func (s *M2tsSettings) SetForceTsVideoEbpOrder(v string) *M2tsSettings {
 // SetFragmentTime sets the FragmentTime field's value.
 func (s *M2tsSettings) SetFragmentTime(v float64) *M2tsSettings {
 	s.FragmentTime = &v
+	return s
+}
+
+// SetKlvMetadata sets the KlvMetadata field's value.
+func (s *M2tsSettings) SetKlvMetadata(v string) *M2tsSettings {
+	s.KlvMetadata = &v
 	return s
 }
 
@@ -17462,11 +18127,14 @@ type M3u8Settings struct {
 	// XML (sccXml).
 	Scte35Source *string `locationName:"scte35Source" type:"string" enum:"M3u8Scte35Source"`
 
-	// Applies only to HLS outputs. Use this setting to specify whether the service
-	// inserts the ID3 timed metadata from the input in this output.
+	// Set ID3 metadata (timedMetadata) to Passthrough (PASSTHROUGH) to include
+	// ID3 metadata in this output. This includes ID3 metadata from the following
+	// features: ID3 timestamp period (timedMetadataId3Period), and Custom ID3 metadata
+	// inserter (timedMetadataInsertion). To exclude this ID3 metadata in this output:
+	// set ID3 metadata to None (NONE) or leave blank.
 	TimedMetadata *string `locationName:"timedMetadata" type:"string" enum:"TimedMetadata"`
 
-	// Packet Identifier (PID) of the timed metadata stream in the transport stream.
+	// Packet Identifier (PID) of the ID3 metadata stream in the transport stream.
 	TimedMetadataPid *int64 `locationName:"timedMetadataPid" min:"32" type:"integer"`
 
 	// The value of the transport stream ID field in the Program Map Table.
@@ -17633,6 +18301,132 @@ func (s *M3u8Settings) SetTransportStreamId(v int64) *M3u8Settings {
 // SetVideoPid sets the VideoPid field's value.
 func (s *M3u8Settings) SetVideoPid(v int64) *M3u8Settings {
 	s.VideoPid = &v
+	return s
+}
+
+// Use Min bottom rendition size to specify a minimum size for the lowest resolution
+// in your ABR stack. * The lowest resolution in your ABR stack will be equal
+// to or greater than the value that you enter. For example: If you specify
+// 640x360 the lowest resolution in your ABR stack will be equal to or greater
+// than to 640x360. * If you specify a Min top rendition size rule, the value
+// that you specify for Min bottom rendition size must be less than, or equal
+// to, Min top rendition size.
+type MinBottomRenditionSize struct {
+	_ struct{} `type:"structure"`
+
+	// Use Height to define the video resolution height, in pixels, for this rule.
+	Height *int64 `locationName:"height" min:"32" type:"integer"`
+
+	// Use Width to define the video resolution width, in pixels, for this rule.
+	Width *int64 `locationName:"width" min:"32" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MinBottomRenditionSize) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MinBottomRenditionSize) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MinBottomRenditionSize) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MinBottomRenditionSize"}
+	if s.Height != nil && *s.Height < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Height", 32))
+	}
+	if s.Width != nil && *s.Width < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Width", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHeight sets the Height field's value.
+func (s *MinBottomRenditionSize) SetHeight(v int64) *MinBottomRenditionSize {
+	s.Height = &v
+	return s
+}
+
+// SetWidth sets the Width field's value.
+func (s *MinBottomRenditionSize) SetWidth(v int64) *MinBottomRenditionSize {
+	s.Width = &v
+	return s
+}
+
+// Use Min top rendition size to specify a minimum size for the highest resolution
+// in your ABR stack. * The highest resolution in your ABR stack will be equal
+// to or greater than the value that you enter. For example: If you specify
+// 1280x720 the highest resolution in your ABR stack will be equal to or greater
+// than 1280x720. * If you specify a value for Max resolution, the value that
+// you specify for Min top rendition size must be less than, or equal to, Max
+// resolution.
+type MinTopRenditionSize struct {
+	_ struct{} `type:"structure"`
+
+	// Use Height to define the video resolution height, in pixels, for this rule.
+	Height *int64 `locationName:"height" min:"32" type:"integer"`
+
+	// Use Width to define the video resolution width, in pixels, for this rule.
+	Width *int64 `locationName:"width" min:"32" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MinTopRenditionSize) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MinTopRenditionSize) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MinTopRenditionSize) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MinTopRenditionSize"}
+	if s.Height != nil && *s.Height < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Height", 32))
+	}
+	if s.Width != nil && *s.Width < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Width", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHeight sets the Height field's value.
+func (s *MinTopRenditionSize) SetHeight(v int64) *MinTopRenditionSize {
+	s.Height = &v
+	return s
+}
+
+// SetWidth sets the Width field's value.
+func (s *MinTopRenditionSize) SetWidth(v int64) *MinTopRenditionSize {
+	s.Width = &v
 	return s
 }
 
@@ -18251,6 +19045,13 @@ type MpdSettings struct {
 	// MP4 files is separate from your video and audio fragmented MP4 files.
 	CaptionContainerType *string `locationName:"captionContainerType" type:"string" enum:"MpdCaptionContainerType"`
 
+	// To include key-length-value metadata in this output: Set KLV metadata insertion
+	// to Passthrough. MediaConvert reads KLV metadata present in your input and
+	// writes each instance to a separate event message box in the output, according
+	// to MISB ST1910.1. To exclude this KLV metadata: Set KLV metadata insertion
+	// to None or leave blank.
+	KlvMetadata *string `locationName:"klvMetadata" type:"string" enum:"MpdKlvMetadata"`
+
 	// Use this setting only when you specify SCTE-35 markers from ESAM. Choose
 	// INSERT to put SCTE-35 markers in this output at the insertion points that
 	// you specify in an ESAM XML document. Provide the document in the setting
@@ -18262,6 +19063,13 @@ type MpdSettings struct {
 	// in your input to also appear in this output. Choose None (NONE) if you don't
 	// want those SCTE-35 markers in this output.
 	Scte35Source *string `locationName:"scte35Source" type:"string" enum:"MpdScte35Source"`
+
+	// To include ID3 metadata in this output: Set ID3 metadata (timedMetadata)
+	// to Passthrough (PASSTHROUGH). Specify this ID3 metadata in Custom ID3 metadata
+	// inserter (timedMetadataInsertion). MediaConvert writes each instance of ID3
+	// metadata in a separate Event Message (eMSG) box. To exclude this ID3 metadata:
+	// Set ID3 metadata to None (NONE) or leave blank.
+	TimedMetadata *string `locationName:"timedMetadata" type:"string" enum:"MpdTimedMetadata"`
 }
 
 // String returns the string representation.
@@ -18300,6 +19108,12 @@ func (s *MpdSettings) SetCaptionContainerType(v string) *MpdSettings {
 	return s
 }
 
+// SetKlvMetadata sets the KlvMetadata field's value.
+func (s *MpdSettings) SetKlvMetadata(v string) *MpdSettings {
+	s.KlvMetadata = &v
+	return s
+}
+
 // SetScte35Esam sets the Scte35Esam field's value.
 func (s *MpdSettings) SetScte35Esam(v string) *MpdSettings {
 	s.Scte35Esam = &v
@@ -18309,6 +19123,12 @@ func (s *MpdSettings) SetScte35Esam(v string) *MpdSettings {
 // SetScte35Source sets the Scte35Source field's value.
 func (s *MpdSettings) SetScte35Source(v string) *MpdSettings {
 	s.Scte35Source = &v
+	return s
+}
+
+// SetTimedMetadata sets the TimedMetadata field's value.
+func (s *MpdSettings) SetTimedMetadata(v string) *MpdSettings {
+	s.TimedMetadata = &v
 	return s
 }
 
@@ -18382,9 +19202,12 @@ type Mpeg2Settings struct {
 	// number for Framerate. In this example, specify 23.976.
 	FramerateNumerator *int64 `locationName:"framerateNumerator" min:"24" type:"integer"`
 
-	// Frequency of closed GOPs. In streaming applications, it is recommended that
-	// this be set to 1 so a decoder joining mid-stream will receive an IDR frame
-	// as quickly as possible. Setting this value to 0 will break output segmenting.
+	// Specify the relative frequency of open to closed GOPs in this output. For
+	// example, if you want to allow four open GOPs and then require a closed GOP,
+	// set this value to 5. When you create a streaming output, we recommend that
+	// you keep the default value, 1, so that players starting mid-stream receive
+	// an IDR frame as quickly as possible. Don't set this value to 0; that would
+	// break output segmenting.
 	GopClosedCadence *int64 `locationName:"gopClosedCadence" type:"integer"`
 
 	// Specify the interval between keyframes, in seconds or frames, for this output.
@@ -18428,13 +19251,18 @@ type Mpeg2Settings struct {
 	// as 5000000.
 	MaxBitrate *int64 `locationName:"maxBitrate" min:"1000" type:"integer"`
 
-	// Enforces separation between repeated (cadence) I-frames and I-frames inserted
-	// by Scene Change Detection. If a scene change I-frame is within I-interval
-	// frames of a cadence I-frame, the GOP is shrunk and/or stretched to the scene
-	// change I-frame. GOP stretch requires enabling lookahead as well as setting
-	// I-interval. The normal cadence resumes for the next GOP. This setting is
-	// only used when Scene Change Detect is enabled. Note: Maximum GOP stretch
-	// = GOP size + Min-I-interval - 1
+	// Use this setting only when you also enable Scene change detection (SceneChangeDetect).
+	// This setting determines how the encoder manages the spacing between I-frames
+	// that it inserts as part of the I-frame cadence and the I-frames that it inserts
+	// for Scene change detection. When you specify a value for this setting, the
+	// encoder determines whether to skip a cadence-driven I-frame by the value
+	// you set. For example, if you set Min I interval (minIInterval) to 5 and a
+	// cadence-driven I-frame would fall within 5 frames of a scene-change I-frame,
+	// then the encoder skips the cadence-driven I-frame. In this way, one GOP is
+	// shrunk slightly and one GOP is stretched slightly. When the cadence-driven
+	// I-frames are farther from the scene-change I-frame than the value you set,
+	// then the encoder leaves all I-frames in place and the GOPs surrounding the
+	// scene change are smaller than the usual cadence GOPs.
 	MinIInterval *int64 `locationName:"minIInterval" type:"integer"`
 
 	// Specify the number of B-frames that MediaConvert puts between reference frames
@@ -19676,13 +20504,23 @@ type NoiseReducerTemporalFilterSettings struct {
 	// and creates better VQ for low bitrate outputs.
 	AggressiveMode *int64 `locationName:"aggressiveMode" type:"integer"`
 
-	// Optional. When you set Noise reducer (noiseReducer) to Temporal (TEMPORAL),
-	// you can use this setting to apply sharpening. The default behavior, Auto
-	// (AUTO), allows the transcoder to determine whether to apply filtering, depending
-	// on input type and quality. When you set Noise reducer to Temporal, your output
-	// bandwidth is reduced. When Post temporal sharpening is also enabled, that
-	// bandwidth reduction is smaller.
+	// When you set Noise reducer (noiseReducer) to Temporal (TEMPORAL), the bandwidth
+	// and sharpness of your output is reduced. You can optionally use Post temporal
+	// sharpening (postTemporalSharpening) to apply sharpening to the edges of your
+	// output. Note that Post temporal sharpening will also make the bandwidth reduction
+	// from the Noise reducer smaller. The default behavior, Auto (AUTO), allows
+	// the transcoder to determine whether to apply sharpening, depending on your
+	// input type and quality. When you set Post temporal sharpening to Enabled
+	// (ENABLED), specify how much sharpening is applied using Post temporal sharpening
+	// strength (postTemporalSharpeningStrength). Set Post temporal sharpening to
+	// Disabled (DISABLED) to not apply sharpening.
 	PostTemporalSharpening *string `locationName:"postTemporalSharpening" type:"string" enum:"NoiseFilterPostTemporalSharpening"`
+
+	// Use Post temporal sharpening strength (postTemporalSharpeningStrength) to
+	// define the amount of sharpening the transcoder applies to your output. Set
+	// Post temporal sharpening strength to Low (LOW), Medium (MEDIUM), or High
+	// (HIGH) to indicate the amount of sharpening.
+	PostTemporalSharpeningStrength *string `locationName:"postTemporalSharpeningStrength" type:"string" enum:"NoiseFilterPostTemporalSharpeningStrength"`
 
 	// The speed of the filter (higher number is faster). Low setting reduces bit
 	// rate at the cost of transcode time, high setting improves transcode time
@@ -19737,6 +20575,12 @@ func (s *NoiseReducerTemporalFilterSettings) SetAggressiveMode(v int64) *NoiseRe
 // SetPostTemporalSharpening sets the PostTemporalSharpening field's value.
 func (s *NoiseReducerTemporalFilterSettings) SetPostTemporalSharpening(v string) *NoiseReducerTemporalFilterSettings {
 	s.PostTemporalSharpening = &v
+	return s
+}
+
+// SetPostTemporalSharpeningStrength sets the PostTemporalSharpeningStrength field's value.
+func (s *NoiseReducerTemporalFilterSettings) SetPostTemporalSharpeningStrength(v string) *NoiseReducerTemporalFilterSettings {
+	s.PostTemporalSharpeningStrength = &v
 	return s
 }
 
@@ -21976,13 +22820,20 @@ func (s *SpekeKeyProviderCmaf) SetUrl(v string) *SpekeKeyProviderCmaf {
 	return s
 }
 
-// SRT Destination Settings
+// Settings related to SRT captions. SRT is a sidecar format that holds captions
+// in a file that is separate from the video container. Set up sidecar captions
+// in the same output group, but different output from your video. When you
+// work directly in your JSON job specification, include this object and any
+// required children when you set destinationType to SRT.
 type SrtDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
-	// Choose Enabled (ENABLED) to have MediaConvert use the font style, color,
-	// and position information from the captions source in the input. Keep the
-	// default value, Disabled (DISABLED), for simplified output captions.
+	// Set Style passthrough (StylePassthrough) to ENABLED to use the available
+	// style, color, and position information from your input captions. MediaConvert
+	// uses default settings for any missing style and position information in your
+	// input captions. Set Style passthrough to DISABLED, or leave blank, to ignore
+	// the style and position information from your input captions and use simplified
+	// output captions.
 	StylePassthrough *string `locationName:"stylePassthrough" type:"string" enum:"SrtStylePassthrough"`
 }
 
@@ -22141,7 +22992,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 
 // A successful request to add tags to a resource returns an OK message.
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -22180,7 +23031,7 @@ type TeletextDestinationSettings struct {
 	// If you pass through the entire set of Teletext data, don't use this field.
 	// When you pass through a set of Teletext pages, your output has the same page
 	// types as your input.
-	PageTypes []*string `locationName:"pageTypes" type:"list"`
+	PageTypes []*string `locationName:"pageTypes" type:"list" enum:"TeletextPageType"`
 }
 
 // String returns the string representation.
@@ -22430,10 +23281,9 @@ func (s *TimecodeConfig) SetTimestampOffset(v string) *TimecodeConfig {
 	return s
 }
 
-// Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags
-// in any HLS outputs. To include timed metadata, you must enable it here, enable
-// it in each output container, and specify tags and timecodes in ID3 insertion
-// (Id3Insertion) objects.
+// Insert user-defined custom ID3 metadata (id3) at timecodes (timecode) that
+// you specify. In each output that you want to include this metadata, you must
+// set ID3 metadata (timedMetadata) to Passthrough (PASSTHROUGH).
 type TimedMetadataInsertion struct {
 	_ struct{} `type:"structure"`
 
@@ -22733,7 +23583,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 
 // A successful request to remove tags from a resource returns an OK message.
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -24054,6 +24904,14 @@ type VideoSelector struct {
 	// the service defaults to using values you specify in the input settings.
 	ColorSpaceUsage *string `locationName:"colorSpaceUsage" type:"string" enum:"ColorSpaceUsage"`
 
+	// Set Embedded timecode override (embeddedTimecodeOverride) to Use MDPM (USE_MDPM)
+	// when your AVCHD input contains timecode tag data in the Modified Digital
+	// Video Pack Metadata (MDPM). When you do, we recommend you also set Timecode
+	// source (inputTimecodeSource) to Embedded (EMBEDDED). Leave Embedded timecode
+	// override blank, or set to None (NONE), when your input does not contain MDPM
+	// timecode.
+	EmbeddedTimecodeOverride *string `locationName:"embeddedTimecodeOverride" type:"string" enum:"EmbeddedTimecodeOverride"`
+
 	// Use these settings to provide HDR 10 metadata that is missing or inaccurate
 	// in your input video. Appropriate values vary depending on the input video
 	// and must be provided by a color grader. The color grader generates these
@@ -24066,6 +24924,16 @@ type VideoSelector struct {
 	// color metadata is included in an output, set Color metadata (ColorMetadata).
 	// For more information about MediaConvert HDR jobs, see https://docs.aws.amazon.com/console/mediaconvert/hdr.
 	Hdr10Metadata *Hdr10Metadata `locationName:"hdr10Metadata" type:"structure"`
+
+	// Use this setting if your input has video and audio durations that don't align,
+	// and your output or player has strict alignment requirements. Examples: Input
+	// audio track has a delayed start. Input video track ends before audio ends.
+	// When you set Pad video (padVideo) to Black (BLACK), MediaConvert generates
+	// black video frames so that output video and audio durations match. Black
+	// video frames are added at the beginning or end, depending on your input.
+	// To keep the default behavior and not generate black video, set Pad video
+	// to Disabled (DISABLED) or leave blank.
+	PadVideo *string `locationName:"padVideo" type:"string" enum:"PadVideo"`
 
 	// Use PID (Pid) to select specific video data from an input file. Specify this
 	// value as an integer; the system automatically converts it to the hexidecimal
@@ -24089,16 +24957,15 @@ type VideoSelector struct {
 	// rotation metadata.
 	Rotate *string `locationName:"rotate" type:"string" enum:"InputRotate"`
 
-	// Use this setting when your input video codec is AVC-Intra. Ignore this setting
-	// for all other inputs. If the sample range metadata in your input video is
-	// accurate, or if you don't know about sample range, keep the default value,
-	// Follow (FOLLOW), for this setting. When you do, the service automatically
-	// detects your input sample range. If your input video has metadata indicating
-	// the wrong sample range, specify the accurate sample range here. When you
-	// do, MediaConvert ignores any sample range information in the input metadata.
-	// Regardless of whether MediaConvert uses the input sample range or the sample
-	// range that you specify, MediaConvert uses the sample range for transcoding
-	// and also writes it to the output metadata.
+	// If the sample range metadata in your input video is accurate, or if you don't
+	// know about sample range, keep the default value, Follow (FOLLOW), for this
+	// setting. When you do, the service automatically detects your input sample
+	// range. If your input video has metadata indicating the wrong sample range,
+	// specify the accurate sample range here. When you do, MediaConvert ignores
+	// any sample range information in the input metadata. Regardless of whether
+	// MediaConvert uses the input sample range or the sample range that you specify,
+	// MediaConvert uses the sample range for transcoding and also writes it to
+	// the output metadata.
 	SampleRange *string `locationName:"sampleRange" type:"string" enum:"InputSampleRange"`
 }
 
@@ -24154,9 +25021,21 @@ func (s *VideoSelector) SetColorSpaceUsage(v string) *VideoSelector {
 	return s
 }
 
+// SetEmbeddedTimecodeOverride sets the EmbeddedTimecodeOverride field's value.
+func (s *VideoSelector) SetEmbeddedTimecodeOverride(v string) *VideoSelector {
+	s.EmbeddedTimecodeOverride = &v
+	return s
+}
+
 // SetHdr10Metadata sets the Hdr10Metadata field's value.
 func (s *VideoSelector) SetHdr10Metadata(v *Hdr10Metadata) *VideoSelector {
 	s.Hdr10Metadata = v
+	return s
+}
+
+// SetPadVideo sets the PadVideo field's value.
+func (s *VideoSelector) SetPadVideo(v string) *VideoSelector {
+	s.PadVideo = &v
 	return s
 }
 
@@ -24783,13 +25662,33 @@ func (s *WavSettings) SetSampleRate(v int64) *WavSettings {
 	return s
 }
 
-// WEBVTT Destination Settings
+// Settings related to WebVTT captions. WebVTT is a sidecar format that holds
+// captions in a file that is separate from the video container. Set up sidecar
+// captions in the same output group, but different output from your video.
+// For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/ttml-and-webvtt-output-captions.html.
+// When you work directly in your JSON job specification, include this object
+// and any required children when you set destinationType to WebVTT.
 type WebvttDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
-	// Choose Enabled (ENABLED) to have MediaConvert use the font style, color,
-	// and position information from the captions source in the input. Keep the
-	// default value, Disabled (DISABLED), for simplified output captions.
+	// Set Accessibility subtitles to Enabled if the ISMC or WebVTT captions track
+	// is intended to provide accessibility for people who are deaf or hard of hearing.
+	// When you enable this feature, MediaConvert adds the following attributes
+	// under EXT-X-MEDIA in the HLS or CMAF manifest for this track: CHARACTERISTICS="public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
+	// and AUTOSELECT="YES". Keep the default value, Disabled, if the captions track
+	// is not intended to provide such accessibility. MediaConvert will not add
+	// the above attributes.
+	Accessibility *string `locationName:"accessibility" type:"string" enum:"WebvttAccessibilitySubs"`
+
+	// To use the available style, color, and position information from your input
+	// captions: Set Style passthrough (stylePassthrough) to Enabled (ENABLED).
+	// MediaConvert uses default settings when style and position information is
+	// missing from your input captions. To recreate the input captions exactly:
+	// Set Style passthrough to Strict (STRICT). MediaConvert automatically applies
+	// timing adjustments, including adjustments for frame rate conversion, ad avails,
+	// and input clipping. Your input captions format must be WebVTT. To ignore
+	// the style and position information from your input captions and use simplified
+	// output captions: Set Style passthrough to Disabled (DISABLED), or leave blank.
 	StylePassthrough *string `locationName:"stylePassthrough" type:"string" enum:"WebvttStylePassthrough"`
 }
 
@@ -24809,6 +25708,12 @@ func (s WebvttDestinationSettings) String() string {
 // value will be replaced with "sensitive".
 func (s WebvttDestinationSettings) GoString() string {
 	return s.String()
+}
+
+// SetAccessibility sets the Accessibility field's value.
+func (s *WebvttDestinationSettings) SetAccessibility(v string) *WebvttDestinationSettings {
+	s.Accessibility = &v
+	return s
 }
 
 // SetStylePassthrough sets the StylePassthrough field's value.
@@ -26251,6 +27156,44 @@ func AudioDefaultSelection_Values() []string {
 	}
 }
 
+// Apply audio timing corrections to help synchronize audio and video in your
+// output. To apply timing corrections, your input must meet the following requirements:
+// * Container: MP4, or MOV, with an accurate time-to-sample (STTS) table. *
+// Audio track: AAC. Choose from the following audio timing correction settings:
+// * Disabled (Default): Apply no correction. * Auto: Recommended for most inputs.
+// MediaConvert analyzes the audio timing in your input and determines which
+// correction setting to use, if needed. * Track: Adjust the duration of each
+// audio frame by a constant amount to align the audio track length with STTS
+// duration. Track-level correction does not affect pitch, and is recommended
+// for tonal audio content such as music. * Frame: Adjust the duration of each
+// audio frame by a variable amount to align audio frames with STTS timestamps.
+// No corrections are made to already-aligned frames. Frame-level correction
+// may affect the pitch of corrected frames, and is recommended for atonal audio
+// content such as speech or percussion.
+const (
+	// AudioDurationCorrectionDisabled is a AudioDurationCorrection enum value
+	AudioDurationCorrectionDisabled = "DISABLED"
+
+	// AudioDurationCorrectionAuto is a AudioDurationCorrection enum value
+	AudioDurationCorrectionAuto = "AUTO"
+
+	// AudioDurationCorrectionTrack is a AudioDurationCorrection enum value
+	AudioDurationCorrectionTrack = "TRACK"
+
+	// AudioDurationCorrectionFrame is a AudioDurationCorrection enum value
+	AudioDurationCorrectionFrame = "FRAME"
+)
+
+// AudioDurationCorrection_Values returns all elements of the AudioDurationCorrection enum
+func AudioDurationCorrection_Values() []string {
+	return []string{
+		AudioDurationCorrectionDisabled,
+		AudioDurationCorrectionAuto,
+		AudioDurationCorrectionTrack,
+		AudioDurationCorrectionFrame,
+	}
+}
+
 // Specify which source for language code takes precedence for this audio track.
 // When you choose Follow input (FOLLOW_INPUT), the service uses the language
 // code from the input track if it's present. If there's no languge code on
@@ -26437,6 +27380,24 @@ func Av1AdaptiveQuantization_Values() []string {
 		Av1AdaptiveQuantizationHigh,
 		Av1AdaptiveQuantizationHigher,
 		Av1AdaptiveQuantizationMax,
+	}
+}
+
+// Specify the Bit depth (Av1BitDepth). You can choose 8-bit (BIT_8) or 10-bit
+// (BIT_10).
+const (
+	// Av1BitDepthBit8 is a Av1BitDepth enum value
+	Av1BitDepthBit8 = "BIT_8"
+
+	// Av1BitDepthBit10 is a Av1BitDepth enum value
+	Av1BitDepthBit10 = "BIT_10"
+)
+
+// Av1BitDepth_Values returns all elements of the Av1BitDepth enum
+func Av1BitDepth_Values() []string {
+	return []string{
+		Av1BitDepthBit8,
+		Av1BitDepthBit10,
 	}
 }
 
@@ -26791,13 +27752,15 @@ func BillingTagsSource_Values() []string {
 	}
 }
 
-// Ignore this setting unless your output captions are burned in. Choose which
-// set of style and position values the service applies to your output captions.
-// When you choose ENABLED, the service uses the input style and position information
-// from your input. When you choose DISABLED, the service uses any style values
-// that you specify in your output settings. If you don't specify values, the
-// service uses default style and position values. When you choose DISABLED,
-// the service ignores all style and position values from your input.
+// Set Style passthrough (StylePassthrough) to ENABLED to use the available
+// style, color, and position information from your input captions. MediaConvert
+// uses default settings for any missing style and position information in your
+// input captions. Set Style passthrough to DISABLED, or leave blank, to ignore
+// the style and position information from your input captions and use default
+// settings: white text with black outlining, bottom-center positioning, and
+// automatic sizing. Whether you set Style passthrough to enabled or not, you
+// can also choose to manually override any of the individual style and position
+// settings.
 const (
 	// BurnInSubtitleStylePassthroughEnabled is a BurnInSubtitleStylePassthrough enum value
 	BurnInSubtitleStylePassthroughEnabled = "ENABLED"
@@ -26814,14 +27777,12 @@ func BurnInSubtitleStylePassthrough_Values() []string {
 	}
 }
 
-// If no explicit x_position or y_position is provided, setting alignment to
-// centered will place the captions at the bottom center of the output. Similarly,
-// setting a left alignment will align captions to the bottom left of the output.
-// If x and y positions are given in conjunction with the alignment parameter,
-// the font will be justified (either left or centered) relative to those coordinates.
-// This option is not valid for source captions that are STL, 608/embedded or
-// teletext. These source settings are already pre-defined by the caption stream.
-// All burn-in and DVB-Sub font settings must match.
+// Specify the alignment of your captions. If no explicit x_position is provided,
+// setting alignment to centered will placethe captions at the bottom center
+// of the output. Similarly, setting a left alignment willalign captions to
+// the bottom left of the output. If x and y positions are given in conjunction
+// with the alignment parameter, the font will be justified (either left or
+// centered) relative to those coordinates.
 const (
 	// BurninSubtitleAlignmentCentered is a BurninSubtitleAlignment enum value
 	BurninSubtitleAlignmentCentered = "CENTERED"
@@ -26842,14 +27803,15 @@ func BurninSubtitleAlignment_Values() []string {
 	}
 }
 
-// Ignore this setting unless your input captions are STL, any type of 608,
-// teletext, or TTML, and your output captions are burned in. Specify how the
-// service applies the color specified in the setting Font color (BurninSubtitleFontColor).
-// By default, this color is white. When you choose WHITE_TEXT_ONLY, the service
-// uses the specified font color only for text that is white in the input. When
-// you choose ALL_TEXT, the service uses the specified font color for all output
-// captions text. If you leave both settings at their default value, your output
-// font color is the same as your input font color.
+// Ignore this setting unless Style passthrough (StylePassthrough) is set to
+// Enabled and Font color (FontColor) set to Black, Yellow, Red, Green, Blue,
+// or Hex. Use Apply font color (ApplyFontColor) for additional font color controls.
+// When you choose White text only (WHITE_TEXT_ONLY), or leave blank, your font
+// color setting only applies to white text in your input captions. For example,
+// if your font color setting is Yellow, and your input captions have red and
+// white text, your output captions will have red and yellow text. When you
+// choose ALL_TEXT, your font color setting applies to all of your output captions
+// text.
 const (
 	// BurninSubtitleApplyFontColorWhiteTextOnly is a BurninSubtitleApplyFontColor enum value
 	BurninSubtitleApplyFontColorWhiteTextOnly = "WHITE_TEXT_ONLY"
@@ -26866,8 +27828,10 @@ func BurninSubtitleApplyFontColor_Values() []string {
 	}
 }
 
-// Specifies the color of the rectangle behind the captions.All burn-in and
-// DVB-Sub font settings must match.
+// Specify the color of the rectangle behind the captions. Leave background
+// color (BackgroundColor) blank and set Style passthrough (StylePassthrough)
+// to enabled to use the background color data from your input captions, if
+// present.
 const (
 	// BurninSubtitleBackgroundColorNone is a BurninSubtitleBackgroundColor enum value
 	BurninSubtitleBackgroundColorNone = "NONE"
@@ -26894,12 +27858,12 @@ func BurninSubtitleBackgroundColor_Values() []string {
 
 // Specify the font that you want the service to use for your burn in captions
 // when your input captions specify a font that MediaConvert doesn't support.
-// When you keep the default value, Best match (BEST_MATCH), MediaConvert uses
-// a supported font that most closely matches the font that your input captions
-// specify. When there are multiple unsupported fonts in your input captions,
-// MediaConvert matches each font with the supported font that matches best.
-// When you explicitly choose a replacement font, MediaConvert uses that font
-// to replace all unsupported fonts from your input.
+// When you set Fallback font (FallbackFont) to best match (BEST_MATCH), or
+// leave blank, MediaConvert uses a supported font that most closely matches
+// the font that your input captions specify. When there are multiple unsupported
+// fonts in your input captions, MediaConvert matches each font with the supported
+// font that matches best. When you explicitly choose a replacement font, MediaConvert
+// uses that font to replace all unsupported fonts from your input.
 const (
 	// BurninSubtitleFallbackFontBestMatch is a BurninSubtitleFallbackFont enum value
 	BurninSubtitleFallbackFontBestMatch = "BEST_MATCH"
@@ -26928,10 +27892,9 @@ func BurninSubtitleFallbackFont_Values() []string {
 	}
 }
 
-// Specifies the color of the burned-in captions. This option is not valid for
-// source captions that are STL, 608/embedded or teletext. These source settings
-// are already pre-defined by the caption stream. All burn-in and DVB-Sub font
-// settings must match.
+// Specify the color of the burned-in captions text. Leave Font color (FontColor)
+// blank and set Style passthrough (StylePassthrough) to enabled to use the
+// font color data from your input captions, if present.
 const (
 	// BurninSubtitleFontColorWhite is a BurninSubtitleFontColor enum value
 	BurninSubtitleFontColorWhite = "WHITE"
@@ -26972,10 +27935,9 @@ func BurninSubtitleFontColor_Values() []string {
 	}
 }
 
-// Specifies font outline color. This option is not valid for source captions
-// that are either 608/embedded or teletext. These source settings are already
-// pre-defined by the caption stream. All burn-in and DVB-Sub font settings
-// must match.
+// Specify font outline color. Leave Outline color (OutlineColor) blank and
+// set Style passthrough (StylePassthrough) to enabled to use the font outline
+// color data from your input captions, if present.
 const (
 	// BurninSubtitleOutlineColorBlack is a BurninSubtitleOutlineColor enum value
 	BurninSubtitleOutlineColorBlack = "BLACK"
@@ -27012,8 +27974,9 @@ func BurninSubtitleOutlineColor_Values() []string {
 	}
 }
 
-// Specifies the color of the shadow cast by the captions.All burn-in and DVB-Sub
-// font settings must match.
+// Specify the color of the shadow cast by the captions. Leave Shadow color
+// (ShadowColor) blank and set Style passthrough (StylePassthrough) to enabled
+// to use the shadow color data from your input captions, if present.
 const (
 	// BurninSubtitleShadowColorNone is a BurninSubtitleShadowColor enum value
 	BurninSubtitleShadowColorNone = "NONE"
@@ -27038,11 +28001,11 @@ func BurninSubtitleShadowColor_Values() []string {
 	}
 }
 
-// Only applies to jobs with input captions in Teletext or STL formats. Specify
-// whether the spacing between letters in your captions is set by the captions
-// grid or varies depending on letter width. Choose fixed grid to conform to
-// the spacing specified in the captions file more accurately. Choose proportional
-// to make the text easier to read if the captions are closed caption.
+// Specify whether the text spacing (TeletextSpacing) in your captions is set
+// by the captions grid, or varies depending on letter width. Choose fixed grid
+// (FIXED_GRID) to conform to the spacing specified in the captions file more
+// accurately. Choose proportional (PROPORTIONAL) to make the text easier to
+// read for closed captions.
 const (
 	// BurninSubtitleTeletextSpacingFixedGrid is a BurninSubtitleTeletextSpacing enum value
 	BurninSubtitleTeletextSpacingFixedGrid = "FIXED_GRID"
@@ -27669,6 +28632,27 @@ func CmfcIFrameOnlyManifest_Values() []string {
 	}
 }
 
+// To include key-length-value metadata in this output: Set KLV metadata insertion
+// to Passthrough. MediaConvert reads KLV metadata present in your input and
+// writes each instance to a separate event message box in the output, according
+// to MISB ST1910.1. To exclude this KLV metadata: Set KLV metadata insertion
+// to None or leave blank.
+const (
+	// CmfcKlvMetadataPassthrough is a CmfcKlvMetadata enum value
+	CmfcKlvMetadataPassthrough = "PASSTHROUGH"
+
+	// CmfcKlvMetadataNone is a CmfcKlvMetadata enum value
+	CmfcKlvMetadataNone = "NONE"
+)
+
+// CmfcKlvMetadata_Values returns all elements of the CmfcKlvMetadata enum
+func CmfcKlvMetadata_Values() []string {
+	return []string{
+		CmfcKlvMetadataPassthrough,
+		CmfcKlvMetadataNone,
+	}
+}
+
 // Use this setting only when you specify SCTE-35 markers from ESAM. Choose
 // INSERT to put SCTE-35 markers in this output at the insertion points that
 // you specify in an ESAM XML document. Provide the document in the setting
@@ -27706,6 +28690,27 @@ func CmfcScte35Source_Values() []string {
 	return []string{
 		CmfcScte35SourcePassthrough,
 		CmfcScte35SourceNone,
+	}
+}
+
+// To include ID3 metadata in this output: Set ID3 metadata (timedMetadata)
+// to Passthrough (PASSTHROUGH). Specify this ID3 metadata in Custom ID3 metadata
+// inserter (timedMetadataInsertion). MediaConvert writes each instance of ID3
+// metadata in a separate Event Message (eMSG) box. To exclude this ID3 metadata:
+// Set ID3 metadata to None (NONE) or leave blank.
+const (
+	// CmfcTimedMetadataPassthrough is a CmfcTimedMetadata enum value
+	CmfcTimedMetadataPassthrough = "PASSTHROUGH"
+
+	// CmfcTimedMetadataNone is a CmfcTimedMetadata enum value
+	CmfcTimedMetadataNone = "NONE"
+)
+
+// CmfcTimedMetadata_Values returns all elements of the CmfcTimedMetadata enum
+func CmfcTimedMetadata_Values() []string {
+	return []string{
+		CmfcTimedMetadataPassthrough,
+		CmfcTimedMetadataNone,
 	}
 }
 
@@ -28274,18 +29279,49 @@ func DolbyVisionLevel6Mode_Values() []string {
 	}
 }
 
-// In the current MediaConvert implementation, the Dolby Vision profile is always
-// 5 (PROFILE_5). Therefore, all of your inputs must contain Dolby Vision frame
-// interleaved data.
+// Required when you set Dolby Vision Profile to Profile 8.1. When you set Content
+// mapping to None, content mapping is not applied to the HDR10-compatible signal.
+// Depending on the source peak nit level, clipping might occur on HDR devices
+// without Dolby Vision. When you set Content mapping to HDR10 1000, the transcoder
+// creates a 1,000 nits peak HDR10-compatible signal by applying static content
+// mapping to the source. This mode is speed-optimized for PQ10 sources with
+// metadata that is created from analysis. For graded Dolby Vision content,
+// be aware that creative intent might not be guaranteed with extreme 1,000
+// nits trims.
+const (
+	// DolbyVisionMappingHdr10Nomap is a DolbyVisionMapping enum value
+	DolbyVisionMappingHdr10Nomap = "HDR10_NOMAP"
+
+	// DolbyVisionMappingHdr101000 is a DolbyVisionMapping enum value
+	DolbyVisionMappingHdr101000 = "HDR10_1000"
+)
+
+// DolbyVisionMapping_Values returns all elements of the DolbyVisionMapping enum
+func DolbyVisionMapping_Values() []string {
+	return []string{
+		DolbyVisionMappingHdr10Nomap,
+		DolbyVisionMappingHdr101000,
+	}
+}
+
+// Required when you enable Dolby Vision. Use Profile 5 to include frame-interleaved
+// Dolby Vision metadata in your output. Your input must include Dolby Vision
+// metadata or an HDR10 YUV color space. Use Profile 8.1 to include frame-interleaved
+// Dolby Vision metadata and HDR10 metadata in your output. Your input must
+// include Dolby Vision metadata.
 const (
 	// DolbyVisionProfileProfile5 is a DolbyVisionProfile enum value
 	DolbyVisionProfileProfile5 = "PROFILE_5"
+
+	// DolbyVisionProfileProfile81 is a DolbyVisionProfile enum value
+	DolbyVisionProfileProfile81 = "PROFILE_8_1"
 )
 
 // DolbyVisionProfile_Values returns all elements of the DolbyVisionProfile enum
 func DolbyVisionProfile_Values() []string {
 	return []string{
 		DolbyVisionProfileProfile5,
+		DolbyVisionProfileProfile81,
 	}
 }
 
@@ -28311,12 +29347,12 @@ func DropFrameTimecode_Values() []string {
 
 // Specify the font that you want the service to use for your burn in captions
 // when your input captions specify a font that MediaConvert doesn't support.
-// When you keep the default value, Best match (BEST_MATCH), MediaConvert uses
-// a supported font that most closely matches the font that your input captions
-// specify. When there are multiple unsupported fonts in your input captions,
-// MediaConvert matches each font with the supported font that matches best.
-// When you explicitly choose a replacement font, MediaConvert uses that font
-// to replace all unsupported fonts from your input.
+// When you set Fallback font (FallbackFont) to best match (BEST_MATCH), or
+// leave blank, MediaConvert uses a supported font that most closely matches
+// the font that your input captions specify. When there are multiple unsupported
+// fonts in your input captions, MediaConvert matches each font with the supported
+// font that matches best. When you explicitly choose a replacement font, MediaConvert
+// uses that font to replace all unsupported fonts from your input.
 const (
 	// DvbSubSubtitleFallbackFontBestMatch is a DvbSubSubtitleFallbackFont enum value
 	DvbSubSubtitleFallbackFontBestMatch = "BEST_MATCH"
@@ -28345,14 +29381,13 @@ func DvbSubSubtitleFallbackFont_Values() []string {
 	}
 }
 
-// If no explicit x_position or y_position is provided, setting alignment to
-// centered will place the captions at the bottom center of the output. Similarly,
-// setting a left alignment will align captions to the bottom left of the output.
-// If x and y positions are given in conjunction with the alignment parameter,
-// the font will be justified (either left or centered) relative to those coordinates.
-// This option is not valid for source captions that are STL, 608/embedded or
-// teletext. These source settings are already pre-defined by the caption stream.
-// All burn-in and DVB-Sub font settings must match.
+// Specify the alignment of your captions. If no explicit x_position is provided,
+// setting alignment to centered will placethe captions at the bottom center
+// of the output. Similarly, setting a left alignment willalign captions to
+// the bottom left of the output. If x and y positions are given in conjunction
+// with the alignment parameter, the font will be justified (either left or
+// centered) relative to those coordinates. Within your job settings, all of
+// your DVB-Sub settings must be identical.
 const (
 	// DvbSubtitleAlignmentCentered is a DvbSubtitleAlignment enum value
 	DvbSubtitleAlignmentCentered = "CENTERED"
@@ -28373,14 +29408,15 @@ func DvbSubtitleAlignment_Values() []string {
 	}
 }
 
-// Ignore this setting unless your input captions are STL, any type of 608,
-// teletext, or TTML, and your output captions are DVB-SUB. Specify how the
-// service applies the color specified in the setting Font color (DvbSubtitleFontColor).
-// By default, this color is white. When you choose WHITE_TEXT_ONLY, the service
-// uses the specified font color only for text that is white in the input. When
-// you choose ALL_TEXT, the service uses the specified font color for all output
-// captions text. If you leave both settings at their default value, your output
-// font color is the same as your input font color.
+// Ignore this setting unless Style Passthrough (StylePassthrough) is set to
+// Enabled and Font color (FontColor) set to Black, Yellow, Red, Green, Blue,
+// or Hex. Use Apply font color (ApplyFontColor) for additional font color controls.
+// When you choose White text only (WHITE_TEXT_ONLY), or leave blank, your font
+// color setting only applies to white text in your input captions. For example,
+// if your font color setting is Yellow, and your input captions have red and
+// white text, your output captions will have red and yellow text. When you
+// choose ALL_TEXT, your font color setting applies to all of your output captions
+// text.
 const (
 	// DvbSubtitleApplyFontColorWhiteTextOnly is a DvbSubtitleApplyFontColor enum value
 	DvbSubtitleApplyFontColorWhiteTextOnly = "WHITE_TEXT_ONLY"
@@ -28397,8 +29433,10 @@ func DvbSubtitleApplyFontColor_Values() []string {
 	}
 }
 
-// Specifies the color of the rectangle behind the captions.All burn-in and
-// DVB-Sub font settings must match.
+// Specify the color of the rectangle behind the captions. Leave background
+// color (BackgroundColor) blank and set Style passthrough (StylePassthrough)
+// to enabled to use the background color data from your input captions, if
+// present.
 const (
 	// DvbSubtitleBackgroundColorNone is a DvbSubtitleBackgroundColor enum value
 	DvbSubtitleBackgroundColorNone = "NONE"
@@ -28423,10 +29461,10 @@ func DvbSubtitleBackgroundColor_Values() []string {
 	}
 }
 
-// Specifies the color of the DVB-SUB captions. This option is not valid for
-// source captions that are STL, 608/embedded or teletext. These source settings
-// are already pre-defined by the caption stream. All burn-in and DVB-Sub font
-// settings must match.
+// Specify the color of the captions text. Leave Font color (FontColor) blank
+// and set Style passthrough (StylePassthrough) to enabled to use the font color
+// data from your input captions, if present. Within your job settings, all
+// of your DVB-Sub settings must be identical.
 const (
 	// DvbSubtitleFontColorWhite is a DvbSubtitleFontColor enum value
 	DvbSubtitleFontColorWhite = "WHITE"
@@ -28467,10 +29505,10 @@ func DvbSubtitleFontColor_Values() []string {
 	}
 }
 
-// Specifies font outline color. This option is not valid for source captions
-// that are either 608/embedded or teletext. These source settings are already
-// pre-defined by the caption stream. All burn-in and DVB-Sub font settings
-// must match.
+// Specify font outline color. Leave Outline color (OutlineColor) blank and
+// set Style passthrough (StylePassthrough) to enabled to use the font outline
+// color data from your input captions, if present. Within your job settings,
+// all of your DVB-Sub settings must be identical.
 const (
 	// DvbSubtitleOutlineColorBlack is a DvbSubtitleOutlineColor enum value
 	DvbSubtitleOutlineColorBlack = "BLACK"
@@ -28507,8 +29545,10 @@ func DvbSubtitleOutlineColor_Values() []string {
 	}
 }
 
-// Specifies the color of the shadow cast by the captions.All burn-in and DVB-Sub
-// font settings must match.
+// Specify the color of the shadow cast by the captions. Leave Shadow color
+// (ShadowColor) blank and set Style passthrough (StylePassthrough) to enabled
+// to use the shadow color data from your input captions, if present. Within
+// your job settings, all of your DVB-Sub settings must be identical.
 const (
 	// DvbSubtitleShadowColorNone is a DvbSubtitleShadowColor enum value
 	DvbSubtitleShadowColorNone = "NONE"
@@ -28533,13 +29573,15 @@ func DvbSubtitleShadowColor_Values() []string {
 	}
 }
 
-// Choose which set of style and position values the service applies to your
-// output captions. When you choose ENABLED, the service uses the input style
-// and position information from your input. When you choose DISABLED, the service
-// uses any style values that you specify in your output settings. If you don't
-// specify values, the service uses default style and position values. When
-// you choose DISABLED, the service ignores all style and position values from
-// your input.
+// Set Style passthrough (StylePassthrough) to ENABLED to use the available
+// style, color, and position information from your input captions. MediaConvert
+// uses default settings for any missing style and position information in your
+// input captions. Set Style passthrough to DISABLED, or leave blank, to ignore
+// the style and position information from your input captions and use default
+// settings: white text with black outlining, bottom-center positioning, and
+// automatic sizing. Whether you set Style passthrough to enabled or not, you
+// can also choose to manually override any of the individual style and position
+// settings.
 const (
 	// DvbSubtitleStylePassthroughEnabled is a DvbSubtitleStylePassthrough enum value
 	DvbSubtitleStylePassthroughEnabled = "ENABLED"
@@ -28556,11 +29598,12 @@ func DvbSubtitleStylePassthrough_Values() []string {
 	}
 }
 
-// Only applies to jobs with input captions in Teletext or STL formats. Specify
-// whether the spacing between letters in your captions is set by the captions
-// grid or varies depending on letter width. Choose fixed grid to conform to
-// the spacing specified in the captions file more accurately. Choose proportional
-// to make the text easier to read if the captions are closed caption.
+// Specify whether the Text spacing (TeletextSpacing) in your captions is set
+// by the captions grid, or varies depending on letter width. Choose fixed grid
+// (FIXED_GRID) to conform to the spacing specified in the captions file more
+// accurately. Choose proportional (PROPORTIONAL) to make the text easier to
+// read for closed captions. Within your job settings, all of your DVB-Sub settings
+// must be identical.
 const (
 	// DvbSubtitleTeletextSpacingFixedGrid is a DvbSubtitleTeletextSpacing enum value
 	DvbSubtitleTeletextSpacingFixedGrid = "FIXED_GRID"
@@ -29269,6 +30312,28 @@ func EmbeddedTerminateCaptions_Values() []string {
 	}
 }
 
+// Set Embedded timecode override (embeddedTimecodeOverride) to Use MDPM (USE_MDPM)
+// when your AVCHD input contains timecode tag data in the Modified Digital
+// Video Pack Metadata (MDPM). When you do, we recommend you also set Timecode
+// source (inputTimecodeSource) to Embedded (EMBEDDED). Leave Embedded timecode
+// override blank, or set to None (NONE), when your input does not contain MDPM
+// timecode.
+const (
+	// EmbeddedTimecodeOverrideNone is a EmbeddedTimecodeOverride enum value
+	EmbeddedTimecodeOverrideNone = "NONE"
+
+	// EmbeddedTimecodeOverrideUseMdpm is a EmbeddedTimecodeOverride enum value
+	EmbeddedTimecodeOverrideUseMdpm = "USE_MDPM"
+)
+
+// EmbeddedTimecodeOverride_Values returns all elements of the EmbeddedTimecodeOverride enum
+func EmbeddedTimecodeOverride_Values() []string {
+	return []string{
+		EmbeddedTimecodeOverrideNone,
+		EmbeddedTimecodeOverrideUseMdpm,
+	}
+}
+
 // If set to PROGRESSIVE_DOWNLOAD, the MOOV atom is relocated to the beginning
 // of the archive as required for progressive downloading. Otherwise it is placed
 // normally at the end.
@@ -29306,6 +30371,26 @@ func FileSourceConvert608To708_Values() []string {
 	return []string{
 		FileSourceConvert608To708Upconvert,
 		FileSourceConvert608To708Disabled,
+	}
+}
+
+// When you use the setting Time delta (TimeDelta) to adjust the sync between
+// your sidecar captions and your video, use this setting to specify the units
+// for the delta that you specify. When you don't specify a value for Time delta
+// units (TimeDeltaUnits), MediaConvert uses seconds by default.
+const (
+	// FileSourceTimeDeltaUnitsSeconds is a FileSourceTimeDeltaUnits enum value
+	FileSourceTimeDeltaUnitsSeconds = "SECONDS"
+
+	// FileSourceTimeDeltaUnitsMilliseconds is a FileSourceTimeDeltaUnits enum value
+	FileSourceTimeDeltaUnitsMilliseconds = "MILLISECONDS"
+)
+
+// FileSourceTimeDeltaUnits_Values returns all elements of the FileSourceTimeDeltaUnits enum
+func FileSourceTimeDeltaUnits_Values() []string {
+	return []string{
+		FileSourceTimeDeltaUnitsSeconds,
+		FileSourceTimeDeltaUnitsMilliseconds,
 	}
 }
 
@@ -29656,14 +30741,25 @@ func H264GopBReference_Values() []string {
 	}
 }
 
-// Indicates if the GOP Size in H264 is specified in frames or seconds. If seconds
-// the system will convert the GOP Size into a frame count at run time.
+// Specify how the transcoder determines GOP size for this output. We recommend
+// that you have the transcoder automatically choose this value for you based
+// on characteristics of your input video. To enable this automatic behavior,
+// choose Auto (AUTO) and and leave GOP size (GopSize) blank. By default, if
+// you don't specify GOP mode control (GopSizeUnits), MediaConvert will use
+// automatic behavior. If your output group specifies HLS, DASH, or CMAF, set
+// GOP mode control to Auto and leave GOP size blank in each output in your
+// output group. To explicitly specify the GOP length, choose Specified, frames
+// (FRAMES) or Specified, seconds (SECONDS) and then provide the GOP length
+// in the related setting GOP size (GopSize).
 const (
 	// H264GopSizeUnitsFrames is a H264GopSizeUnits enum value
 	H264GopSizeUnitsFrames = "FRAMES"
 
 	// H264GopSizeUnitsSeconds is a H264GopSizeUnits enum value
 	H264GopSizeUnitsSeconds = "SECONDS"
+
+	// H264GopSizeUnitsAuto is a H264GopSizeUnits enum value
+	H264GopSizeUnitsAuto = "AUTO"
 )
 
 // H264GopSizeUnits_Values returns all elements of the H264GopSizeUnits enum
@@ -29671,6 +30767,7 @@ func H264GopSizeUnits_Values() []string {
 	return []string{
 		H264GopSizeUnitsFrames,
 		H264GopSizeUnitsSeconds,
+		H264GopSizeUnitsAuto,
 	}
 }
 
@@ -30015,10 +31112,16 @@ func H264UnregisteredSeiTimecode_Values() []string {
 	}
 }
 
-// Specify the strength of any adaptive quantization filters that you enable.
-// The value that you choose here applies to the following settings: Flicker
-// adaptive quantization (flickerAdaptiveQuantization), Spatial adaptive quantization
-// (spatialAdaptiveQuantization), and Temporal adaptive quantization (temporalAdaptiveQuantization).
+// When you set Adaptive Quantization (H265AdaptiveQuantization) to Auto (AUTO),
+// or leave blank, MediaConvert automatically applies quantization to improve
+// the video quality of your output. Set Adaptive Quantization to Low (LOW),
+// Medium (MEDIUM), High (HIGH), Higher (HIGHER), or Max (MAX) to manually control
+// the strength of the quantization filter. When you do, you can specify a value
+// for Spatial Adaptive Quantization (H265SpatialAdaptiveQuantization), Temporal
+// Adaptive Quantization (H265TemporalAdaptiveQuantization), and Flicker Adaptive
+// Quantization (H265FlickerAdaptiveQuantization), to further control the quantization
+// filter. Set Adaptive Quantization to Off (OFF) to apply no quantization to
+// your output.
 const (
 	// H265AdaptiveQuantizationOff is a H265AdaptiveQuantization enum value
 	H265AdaptiveQuantizationOff = "OFF"
@@ -30037,6 +31140,9 @@ const (
 
 	// H265AdaptiveQuantizationMax is a H265AdaptiveQuantization enum value
 	H265AdaptiveQuantizationMax = "MAX"
+
+	// H265AdaptiveQuantizationAuto is a H265AdaptiveQuantization enum value
+	H265AdaptiveQuantizationAuto = "AUTO"
 )
 
 // H265AdaptiveQuantization_Values returns all elements of the H265AdaptiveQuantization enum
@@ -30048,6 +31154,7 @@ func H265AdaptiveQuantization_Values() []string {
 		H265AdaptiveQuantizationHigh,
 		H265AdaptiveQuantizationHigher,
 		H265AdaptiveQuantizationMax,
+		H265AdaptiveQuantizationAuto,
 	}
 }
 
@@ -30296,14 +31403,25 @@ func H265GopBReference_Values() []string {
 	}
 }
 
-// Indicates if the GOP Size in H265 is specified in frames or seconds. If seconds
-// the system will convert the GOP Size into a frame count at run time.
+// Specify how the transcoder determines GOP size for this output. We recommend
+// that you have the transcoder automatically choose this value for you based
+// on characteristics of your input video. To enable this automatic behavior,
+// choose Auto (AUTO) and and leave GOP size (GopSize) blank. By default, if
+// you don't specify GOP mode control (GopSizeUnits), MediaConvert will use
+// automatic behavior. If your output group specifies HLS, DASH, or CMAF, set
+// GOP mode control to Auto and leave GOP size blank in each output in your
+// output group. To explicitly specify the GOP length, choose Specified, frames
+// (FRAMES) or Specified, seconds (SECONDS) and then provide the GOP length
+// in the related setting GOP size (GopSize).
 const (
 	// H265GopSizeUnitsFrames is a H265GopSizeUnits enum value
 	H265GopSizeUnitsFrames = "FRAMES"
 
 	// H265GopSizeUnitsSeconds is a H265GopSizeUnits enum value
 	H265GopSizeUnitsSeconds = "SECONDS"
+
+	// H265GopSizeUnitsAuto is a H265GopSizeUnits enum value
+	H265GopSizeUnitsAuto = "AUTO"
 )
 
 // H265GopSizeUnits_Values returns all elements of the H265GopSizeUnits enum
@@ -30311,6 +31429,7 @@ func H265GopSizeUnits_Values() []string {
 	return []string{
 		H265GopSizeUnitsFrames,
 		H265GopSizeUnitsSeconds,
+		H265GopSizeUnitsAuto,
 	}
 }
 
@@ -30816,6 +31935,28 @@ func HlsCaptionLanguageSetting_Values() []string {
 	}
 }
 
+// Set Caption segment length control (CaptionSegmentLengthControl) to Match
+// video (MATCH_VIDEO) to create caption segments that align with the video
+// segments from the first video output in this output group. For example, if
+// the video segments are 2 seconds long, your WebVTT segments will also be
+// 2 seconds long. Keep the default setting, Large segments (LARGE_SEGMENTS)
+// to create caption segments that are 300 seconds long.
+const (
+	// HlsCaptionSegmentLengthControlLargeSegments is a HlsCaptionSegmentLengthControl enum value
+	HlsCaptionSegmentLengthControlLargeSegments = "LARGE_SEGMENTS"
+
+	// HlsCaptionSegmentLengthControlMatchVideo is a HlsCaptionSegmentLengthControl enum value
+	HlsCaptionSegmentLengthControlMatchVideo = "MATCH_VIDEO"
+)
+
+// HlsCaptionSegmentLengthControl_Values returns all elements of the HlsCaptionSegmentLengthControl enum
+func HlsCaptionSegmentLengthControl_Values() []string {
+	return []string{
+		HlsCaptionSegmentLengthControlLargeSegments,
+		HlsCaptionSegmentLengthControlMatchVideo,
+	}
+}
+
 // Disable this setting only when your workflow requires the #EXT-X-ALLOW-CACHE:no
 // tag. Otherwise, keep the default value Enabled (ENABLED) and control caching
 // in your video distribution set up. For example, use the Cache-Control http
@@ -31197,7 +32338,11 @@ func HlsTargetDurationCompatibilityMode_Values() []string {
 	}
 }
 
-// Indicates ID3 frame that has the timecode.
+// Specify the type of the ID3 frame (timedMetadataId3Frame) to use for ID3
+// timestamps (timedMetadataId3Period) in your output. To include ID3 timestamps:
+// Specify PRIV (PRIV) or TDRL (TDRL) and set ID3 metadata (timedMetadata) to
+// Passthrough (PASSTHROUGH). To exclude ID3 timestamps: Set ID3 timestamp frame
+// type to None (NONE).
 const (
 	// HlsTimedMetadataId3FrameNone is a HlsTimedMetadataId3Frame enum value
 	HlsTimedMetadataId3FrameNone = "NONE"
@@ -31215,6 +32360,29 @@ func HlsTimedMetadataId3Frame_Values() []string {
 		HlsTimedMetadataId3FrameNone,
 		HlsTimedMetadataId3FramePriv,
 		HlsTimedMetadataId3FrameTdrl,
+	}
+}
+
+// Set Accessibility subtitles to Enabled if the ISMC or WebVTT captions track
+// is intended to provide accessibility for people who are deaf or hard of hearing.
+// When you enable this feature, MediaConvert adds the following attributes
+// under EXT-X-MEDIA in the HLS or CMAF manifest for this track: CHARACTERISTICS="public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
+// and AUTOSELECT="YES". Keep the default value, Disabled, if the captions track
+// is not intended to provide such accessibility. MediaConvert will not add
+// the above attributes.
+const (
+	// ImscAccessibilitySubsDisabled is a ImscAccessibilitySubs enum value
+	ImscAccessibilitySubsDisabled = "DISABLED"
+
+	// ImscAccessibilitySubsEnabled is a ImscAccessibilitySubs enum value
+	ImscAccessibilitySubsEnabled = "ENABLED"
+)
+
+// ImscAccessibilitySubs_Values returns all elements of the ImscAccessibilitySubs enum
+func ImscAccessibilitySubs_Values() []string {
+	return []string{
+		ImscAccessibilitySubsDisabled,
+		ImscAccessibilitySubsEnabled,
 	}
 }
 
@@ -31378,16 +32546,15 @@ func InputRotate_Values() []string {
 	}
 }
 
-// Use this setting when your input video codec is AVC-Intra. Ignore this setting
-// for all other inputs. If the sample range metadata in your input video is
-// accurate, or if you don't know about sample range, keep the default value,
-// Follow (FOLLOW), for this setting. When you do, the service automatically
-// detects your input sample range. If your input video has metadata indicating
-// the wrong sample range, specify the accurate sample range here. When you
-// do, MediaConvert ignores any sample range information in the input metadata.
-// Regardless of whether MediaConvert uses the input sample range or the sample
-// range that you specify, MediaConvert uses the sample range for transcoding
-// and also writes it to the output metadata.
+// If the sample range metadata in your input video is accurate, or if you don't
+// know about sample range, keep the default value, Follow (FOLLOW), for this
+// setting. When you do, the service automatically detects your input sample
+// range. If your input video has metadata indicating the wrong sample range,
+// specify the accurate sample range here. When you do, MediaConvert ignores
+// any sample range information in the input metadata. Regardless of whether
+// MediaConvert uses the input sample range or the sample range that you specify,
+// MediaConvert uses the sample range for transcoding and also writes it to
+// the output metadata.
 const (
 	// InputSampleRangeFollow is a InputSampleRange enum value
 	InputSampleRangeFollow = "FOLLOW"
@@ -32108,6 +33275,9 @@ const (
 
 	// LanguageCodeTng is a LanguageCode enum value
 	LanguageCodeTng = "TNG"
+
+	// LanguageCodeSrp is a LanguageCode enum value
+	LanguageCodeSrp = "SRP"
 )
 
 // LanguageCode_Values returns all elements of the LanguageCode enum
@@ -32304,6 +33474,7 @@ func LanguageCode_Values() []string {
 		LanguageCodeOrj,
 		LanguageCodeQpc,
 		LanguageCodeTng,
+		LanguageCodeSrp,
 	}
 }
 
@@ -32467,6 +33638,26 @@ func M2tsForceTsVideoEbpOrder_Values() []string {
 	return []string{
 		M2tsForceTsVideoEbpOrderForce,
 		M2tsForceTsVideoEbpOrderDefault,
+	}
+}
+
+// To include key-length-value metadata in this output: Set KLV metadata insertion
+// to Passthrough. MediaConvert reads KLV metadata present in your input and
+// passes it through to the output transport stream. To exclude this KLV metadata:
+// Set KLV metadata insertion to None or leave blank.
+const (
+	// M2tsKlvMetadataPassthrough is a M2tsKlvMetadata enum value
+	M2tsKlvMetadataPassthrough = "PASSTHROUGH"
+
+	// M2tsKlvMetadataNone is a M2tsKlvMetadata enum value
+	M2tsKlvMetadataNone = "NONE"
+)
+
+// M2tsKlvMetadata_Values returns all elements of the M2tsKlvMetadata enum
+func M2tsKlvMetadata_Values() []string {
+	return []string{
+		M2tsKlvMetadataPassthrough,
+		M2tsKlvMetadataNone,
 	}
 }
 
@@ -33002,6 +34193,27 @@ func MpdCaptionContainerType_Values() []string {
 	}
 }
 
+// To include key-length-value metadata in this output: Set KLV metadata insertion
+// to Passthrough. MediaConvert reads KLV metadata present in your input and
+// writes each instance to a separate event message box in the output, according
+// to MISB ST1910.1. To exclude this KLV metadata: Set KLV metadata insertion
+// to None or leave blank.
+const (
+	// MpdKlvMetadataNone is a MpdKlvMetadata enum value
+	MpdKlvMetadataNone = "NONE"
+
+	// MpdKlvMetadataPassthrough is a MpdKlvMetadata enum value
+	MpdKlvMetadataPassthrough = "PASSTHROUGH"
+)
+
+// MpdKlvMetadata_Values returns all elements of the MpdKlvMetadata enum
+func MpdKlvMetadata_Values() []string {
+	return []string{
+		MpdKlvMetadataNone,
+		MpdKlvMetadataPassthrough,
+	}
+}
+
 // Use this setting only when you specify SCTE-35 markers from ESAM. Choose
 // INSERT to put SCTE-35 markers in this output at the insertion points that
 // you specify in an ESAM XML document. Provide the document in the setting
@@ -33039,6 +34251,27 @@ func MpdScte35Source_Values() []string {
 	return []string{
 		MpdScte35SourcePassthrough,
 		MpdScte35SourceNone,
+	}
+}
+
+// To include ID3 metadata in this output: Set ID3 metadata (timedMetadata)
+// to Passthrough (PASSTHROUGH). Specify this ID3 metadata in Custom ID3 metadata
+// inserter (timedMetadataInsertion). MediaConvert writes each instance of ID3
+// metadata in a separate Event Message (eMSG) box. To exclude this ID3 metadata:
+// Set ID3 metadata to None (NONE) or leave blank.
+const (
+	// MpdTimedMetadataPassthrough is a MpdTimedMetadata enum value
+	MpdTimedMetadataPassthrough = "PASSTHROUGH"
+
+	// MpdTimedMetadataNone is a MpdTimedMetadata enum value
+	MpdTimedMetadataNone = "NONE"
+)
+
+// MpdTimedMetadata_Values returns all elements of the MpdTimedMetadata enum
+func MpdTimedMetadata_Values() []string {
+	return []string{
+		MpdTimedMetadataPassthrough,
+		MpdTimedMetadataNone,
 	}
 }
 
@@ -33718,12 +34951,16 @@ func NielsenUniqueTicPerAudioTrackType_Values() []string {
 	}
 }
 
-// Optional. When you set Noise reducer (noiseReducer) to Temporal (TEMPORAL),
-// you can use this setting to apply sharpening. The default behavior, Auto
-// (AUTO), allows the transcoder to determine whether to apply filtering, depending
-// on input type and quality. When you set Noise reducer to Temporal, your output
-// bandwidth is reduced. When Post temporal sharpening is also enabled, that
-// bandwidth reduction is smaller.
+// When you set Noise reducer (noiseReducer) to Temporal (TEMPORAL), the bandwidth
+// and sharpness of your output is reduced. You can optionally use Post temporal
+// sharpening (postTemporalSharpening) to apply sharpening to the edges of your
+// output. Note that Post temporal sharpening will also make the bandwidth reduction
+// from the Noise reducer smaller. The default behavior, Auto (AUTO), allows
+// the transcoder to determine whether to apply sharpening, depending on your
+// input type and quality. When you set Post temporal sharpening to Enabled
+// (ENABLED), specify how much sharpening is applied using Post temporal sharpening
+// strength (postTemporalSharpeningStrength). Set Post temporal sharpening to
+// Disabled (DISABLED) to not apply sharpening.
 const (
 	// NoiseFilterPostTemporalSharpeningDisabled is a NoiseFilterPostTemporalSharpening enum value
 	NoiseFilterPostTemporalSharpeningDisabled = "DISABLED"
@@ -33741,6 +34978,30 @@ func NoiseFilterPostTemporalSharpening_Values() []string {
 		NoiseFilterPostTemporalSharpeningDisabled,
 		NoiseFilterPostTemporalSharpeningEnabled,
 		NoiseFilterPostTemporalSharpeningAuto,
+	}
+}
+
+// Use Post temporal sharpening strength (postTemporalSharpeningStrength) to
+// define the amount of sharpening the transcoder applies to your output. Set
+// Post temporal sharpening strength to Low (LOW), Medium (MEDIUM), or High
+// (HIGH) to indicate the amount of sharpening.
+const (
+	// NoiseFilterPostTemporalSharpeningStrengthLow is a NoiseFilterPostTemporalSharpeningStrength enum value
+	NoiseFilterPostTemporalSharpeningStrengthLow = "LOW"
+
+	// NoiseFilterPostTemporalSharpeningStrengthMedium is a NoiseFilterPostTemporalSharpeningStrength enum value
+	NoiseFilterPostTemporalSharpeningStrengthMedium = "MEDIUM"
+
+	// NoiseFilterPostTemporalSharpeningStrengthHigh is a NoiseFilterPostTemporalSharpeningStrength enum value
+	NoiseFilterPostTemporalSharpeningStrengthHigh = "HIGH"
+)
+
+// NoiseFilterPostTemporalSharpeningStrength_Values returns all elements of the NoiseFilterPostTemporalSharpeningStrength enum
+func NoiseFilterPostTemporalSharpeningStrength_Values() []string {
+	return []string{
+		NoiseFilterPostTemporalSharpeningStrengthLow,
+		NoiseFilterPostTemporalSharpeningStrengthMedium,
+		NoiseFilterPostTemporalSharpeningStrengthHigh,
 	}
 }
 
@@ -33866,6 +35127,30 @@ func OutputSdt_Values() []string {
 		OutputSdtSdtFollowIfPresent,
 		OutputSdtSdtManual,
 		OutputSdtSdtNone,
+	}
+}
+
+// Use this setting if your input has video and audio durations that don't align,
+// and your output or player has strict alignment requirements. Examples: Input
+// audio track has a delayed start. Input video track ends before audio ends.
+// When you set Pad video (padVideo) to Black (BLACK), MediaConvert generates
+// black video frames so that output video and audio durations match. Black
+// video frames are added at the beginning or end, depending on your input.
+// To keep the default behavior and not generate black video, set Pad video
+// to Disabled (DISABLED) or leave blank.
+const (
+	// PadVideoDisabled is a PadVideo enum value
+	PadVideoDisabled = "DISABLED"
+
+	// PadVideoBlack is a PadVideo enum value
+	PadVideoBlack = "BLACK"
+)
+
+// PadVideo_Values returns all elements of the PadVideo enum
+func PadVideo_Values() []string {
+	return []string{
+		PadVideoDisabled,
+		PadVideoBlack,
 	}
 }
 
@@ -34228,6 +35513,23 @@ func RenewalType_Values() []string {
 	}
 }
 
+// Set to ENABLED to force a rendition to be included.
+const (
+	// RequiredFlagEnabled is a RequiredFlag enum value
+	RequiredFlagEnabled = "ENABLED"
+
+	// RequiredFlagDisabled is a RequiredFlag enum value
+	RequiredFlagDisabled = "DISABLED"
+)
+
+// RequiredFlag_Values returns all elements of the RequiredFlag enum
+func RequiredFlag_Values() []string {
+	return []string{
+		RequiredFlagEnabled,
+		RequiredFlagDisabled,
+	}
+}
+
 // Specifies whether the pricing plan for your reserved queue is ACTIVE or EXPIRED.
 const (
 	// ReservationPlanStatusActive is a ReservationPlanStatus enum value
@@ -34270,6 +35572,63 @@ func RespondToAfd_Values() []string {
 		RespondToAfdNone,
 		RespondToAfdRespond,
 		RespondToAfdPassthrough,
+	}
+}
+
+// Use Min top rendition size to specify a minimum size for the highest resolution
+// in your ABR stack. * The highest resolution in your ABR stack will be equal
+// to or greater than the value that you enter. For example: If you specify
+// 1280x720 the highest resolution in your ABR stack will be equal to or greater
+// than 1280x720. * If you specify a value for Max resolution, the value that
+// you specify for Min top rendition size must be less than, or equal to, Max
+// resolution. Use Min bottom rendition size to specify a minimum size for the
+// lowest resolution in your ABR stack. * The lowest resolution in your ABR
+// stack will be equal to or greater than the value that you enter. For example:
+// If you specify 640x360 the lowest resolution in your ABR stack will be equal
+// to or greater than to 640x360. * If you specify a Min top rendition size
+// rule, the value that you specify for Min bottom rendition size must be less
+// than, or equal to, Min top rendition size. Use Force include renditions to
+// specify one or more resolutions to include your ABR stack. * (Recommended)
+// To optimize automated ABR, specify as few resolutions as possible. * (Required)
+// The number of resolutions that you specify must be equal to, or less than,
+// the Max renditions setting. * If you specify a Min top rendition size rule,
+// specify at least one resolution that is equal to, or greater than, Min top
+// rendition size. * If you specify a Min bottom rendition size rule, only specify
+// resolutions that are equal to, or greater than, Min bottom rendition size.
+// * If you specify a Force include renditions rule, do not specify a separate
+// rule for Allowed renditions. * Note: The ABR stack may include other resolutions
+// that you do not specify here, depending on the Max renditions setting. Use
+// Allowed renditions to specify a list of possible resolutions in your ABR
+// stack. * (Required) The number of resolutions that you specify must be equal
+// to, or greater than, the Max renditions setting. * MediaConvert will create
+// an ABR stack exclusively from the list of resolutions that you specify. *
+// Some resolutions in the Allowed renditions list may not be included, however
+// you can force a resolution to be included by setting Required to ENABLED.
+// * You must specify at least one resolution that is greater than or equal
+// to any resolutions that you specify in Min top rendition size or Min bottom
+// rendition size. * If you specify Allowed renditions, you must not specify
+// a separate rule for Force include renditions.
+const (
+	// RuleTypeMinTopRenditionSize is a RuleType enum value
+	RuleTypeMinTopRenditionSize = "MIN_TOP_RENDITION_SIZE"
+
+	// RuleTypeMinBottomRenditionSize is a RuleType enum value
+	RuleTypeMinBottomRenditionSize = "MIN_BOTTOM_RENDITION_SIZE"
+
+	// RuleTypeForceIncludeRenditions is a RuleType enum value
+	RuleTypeForceIncludeRenditions = "FORCE_INCLUDE_RENDITIONS"
+
+	// RuleTypeAllowedRenditions is a RuleType enum value
+	RuleTypeAllowedRenditions = "ALLOWED_RENDITIONS"
+)
+
+// RuleType_Values returns all elements of the RuleType enum
+func RuleType_Values() []string {
+	return []string{
+		RuleTypeMinTopRenditionSize,
+		RuleTypeMinBottomRenditionSize,
+		RuleTypeForceIncludeRenditions,
+		RuleTypeAllowedRenditions,
 	}
 }
 
@@ -34427,9 +35786,12 @@ func SimulateReservedQueue_Values() []string {
 	}
 }
 
-// Choose Enabled (ENABLED) to have MediaConvert use the font style, color,
-// and position information from the captions source in the input. Keep the
-// default value, Disabled (DISABLED), for simplified output captions.
+// Set Style passthrough (StylePassthrough) to ENABLED to use the available
+// style, color, and position information from your input captions. MediaConvert
+// uses default settings for any missing style and position information in your
+// input captions. Set Style passthrough to DISABLED, or leave blank, to ignore
+// the style and position information from your input captions and use simplified
+// output captions.
 const (
 	// SrtStylePassthroughEnabled is a SrtStylePassthrough enum value
 	SrtStylePassthroughEnabled = "ENABLED"
@@ -34624,8 +35986,11 @@ func TimecodeSource_Values() []string {
 	}
 }
 
-// Applies only to HLS outputs. Use this setting to specify whether the service
-// inserts the ID3 timed metadata from the input in this output.
+// Set ID3 metadata (timedMetadata) to Passthrough (PASSTHROUGH) to include
+// ID3 metadata in this output. This includes ID3 metadata from the following
+// features: ID3 timestamp period (timedMetadataId3Period), and Custom ID3 metadata
+// inserter (timedMetadataInsertion). To exclude this ID3 metadata in this output:
+// set ID3 metadata to None (NONE) or leave blank.
 const (
 	// TimedMetadataPassthrough is a TimedMetadata enum value
 	TimedMetadataPassthrough = "PASSTHROUGH"
@@ -35229,15 +36594,47 @@ func WavFormat_Values() []string {
 	}
 }
 
-// Choose Enabled (ENABLED) to have MediaConvert use the font style, color,
-// and position information from the captions source in the input. Keep the
-// default value, Disabled (DISABLED), for simplified output captions.
+// Set Accessibility subtitles to Enabled if the ISMC or WebVTT captions track
+// is intended to provide accessibility for people who are deaf or hard of hearing.
+// When you enable this feature, MediaConvert adds the following attributes
+// under EXT-X-MEDIA in the HLS or CMAF manifest for this track: CHARACTERISTICS="public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
+// and AUTOSELECT="YES". Keep the default value, Disabled, if the captions track
+// is not intended to provide such accessibility. MediaConvert will not add
+// the above attributes.
+const (
+	// WebvttAccessibilitySubsDisabled is a WebvttAccessibilitySubs enum value
+	WebvttAccessibilitySubsDisabled = "DISABLED"
+
+	// WebvttAccessibilitySubsEnabled is a WebvttAccessibilitySubs enum value
+	WebvttAccessibilitySubsEnabled = "ENABLED"
+)
+
+// WebvttAccessibilitySubs_Values returns all elements of the WebvttAccessibilitySubs enum
+func WebvttAccessibilitySubs_Values() []string {
+	return []string{
+		WebvttAccessibilitySubsDisabled,
+		WebvttAccessibilitySubsEnabled,
+	}
+}
+
+// To use the available style, color, and position information from your input
+// captions: Set Style passthrough (stylePassthrough) to Enabled (ENABLED).
+// MediaConvert uses default settings when style and position information is
+// missing from your input captions. To recreate the input captions exactly:
+// Set Style passthrough to Strict (STRICT). MediaConvert automatically applies
+// timing adjustments, including adjustments for frame rate conversion, ad avails,
+// and input clipping. Your input captions format must be WebVTT. To ignore
+// the style and position information from your input captions and use simplified
+// output captions: Set Style passthrough to Disabled (DISABLED), or leave blank.
 const (
 	// WebvttStylePassthroughEnabled is a WebvttStylePassthrough enum value
 	WebvttStylePassthroughEnabled = "ENABLED"
 
 	// WebvttStylePassthroughDisabled is a WebvttStylePassthrough enum value
 	WebvttStylePassthroughDisabled = "DISABLED"
+
+	// WebvttStylePassthroughStrict is a WebvttStylePassthrough enum value
+	WebvttStylePassthroughStrict = "STRICT"
 )
 
 // WebvttStylePassthrough_Values returns all elements of the WebvttStylePassthrough enum
@@ -35245,6 +36642,7 @@ func WebvttStylePassthrough_Values() []string {
 	return []string{
 		WebvttStylePassthroughEnabled,
 		WebvttStylePassthroughDisabled,
+		WebvttStylePassthroughStrict,
 	}
 }
 

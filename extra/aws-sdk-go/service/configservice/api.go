@@ -353,8 +353,9 @@ func (c *ConfigService) DeleteConfigRuleRequest(input *DeleteConfigRuleInput) (r
 //
 // Returned Error Types:
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 //   * ResourceInUseException
 //   You see this exception in the following cases:
@@ -369,10 +370,10 @@ func (c *ConfigService) DeleteConfigRuleRequest(input *DeleteConfigRuleInput) (r
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -649,10 +650,10 @@ func (c *ConfigService) DeleteConformancePackRequest(input *DeleteConformancePac
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -830,8 +831,9 @@ func (c *ConfigService) DeleteEvaluationResultsRequest(input *DeleteEvaluationRe
 //
 // Returned Error Types:
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 //   * ResourceInUseException
 //   You see this exception in the following cases:
@@ -846,10 +848,10 @@ func (c *ConfigService) DeleteEvaluationResultsRequest(input *DeleteEvaluationRe
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -926,11 +928,11 @@ func (c *ConfigService) DeleteOrganizationConfigRuleRequest(input *DeleteOrganiz
 
 // DeleteOrganizationConfigRule API operation for AWS Config.
 //
-// Deletes the specified organization config rule and all of its evaluation
+// Deletes the specified organization Config rule and all of its evaluation
 // results from all member accounts in that organization.
 //
 // Only a master account and a delegated administrator account can delete an
-// organization config rule. When calling this API with a delegated administrator,
+// organization Config rule. When calling this API with a delegated administrator,
 // you must ensure Organizations ListDelegatedAdministrator permissions are
 // added.
 //
@@ -946,7 +948,9 @@ func (c *ConfigService) DeleteOrganizationConfigRuleRequest(input *DeleteOrganiz
 //
 // Returned Error Types:
 //   * NoSuchOrganizationConfigRuleException
-//   You specified one or more organization config rules that do not exist.
+//   The Config rule in the request is not valid. Verify that the rule is an organization
+//   Config Custom Policy rule, that the rule name is correct, and that valid
+//   Amazon Resouce Names (ARNs) are used before trying again.
 //
 //   * ResourceInUseException
 //   You see this exception in the following cases:
@@ -961,10 +965,10 @@ func (c *ConfigService) DeleteOrganizationConfigRuleRequest(input *DeleteOrganiz
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -1066,7 +1070,7 @@ func (c *ConfigService) DeleteOrganizationConformancePackRequest(input *DeleteOr
 
 // DeleteOrganizationConformancePack API operation for AWS Config.
 //
-// Deletes the specified organization conformance pack and all of the config
+// Deletes the specified organization conformance pack and all of the Config
 // rules and remediation actions from all member accounts in that organization.
 //
 // Only a master account or a delegated administrator account can delete an
@@ -1106,10 +1110,10 @@ func (c *ConfigService) DeleteOrganizationConformancePackRequest(input *DeleteOr
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -1319,13 +1323,13 @@ func (c *ConfigService) DeleteRemediationConfigurationRequest(input *DeleteRemed
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 //   * InvalidParameterValueException
 //   One or more of the specified parameters are invalid. Verify that your parameters
@@ -2355,8 +2359,9 @@ func (c *ConfigService) DescribeComplianceByConfigRuleRequest(input *DescribeCom
 //   are valid and try again.
 //
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 //   * InvalidNextTokenException
 //   The specified next token is invalid. Specify the nextToken string that was
@@ -2665,8 +2670,9 @@ func (c *ConfigService) DescribeConfigRuleEvaluationStatusRequest(input *Describ
 //
 // Returned Error Types:
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 //   * InvalidParameterValueException
 //   One or more of the specified parameters are invalid. Verify that your parameters
@@ -2811,8 +2817,9 @@ func (c *ConfigService) DescribeConfigRulesRequest(input *DescribeConfigRulesInp
 //
 // Returned Error Types:
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 //   * InvalidNextTokenException
 //   The specified next token is invalid. Specify the nextToken string that was
@@ -4025,16 +4032,16 @@ func (c *ConfigService) DescribeOrganizationConfigRuleStatusesRequest(input *Des
 
 // DescribeOrganizationConfigRuleStatuses API operation for AWS Config.
 //
-// Provides organization config rule deployment status for an organization.
+// Provides organization Config rule deployment status for an organization.
 //
-// The status is not considered successful until organization config rule is
+// The status is not considered successful until organization Config rule is
 // successfully deployed in all the member accounts with an exception of excluded
 // accounts.
 //
 // When you specify the limit and the next token, you receive a paginated response.
-// Limit and next token are not applicable if you specify organization config
+// Limit and next token are not applicable if you specify organization Config
 // rule names. It is only applicable, when you request all the organization
-// config rules.
+// Config rules.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4045,7 +4052,9 @@ func (c *ConfigService) DescribeOrganizationConfigRuleStatusesRequest(input *Des
 //
 // Returned Error Types:
 //   * NoSuchOrganizationConfigRuleException
-//   You specified one or more organization config rules that do not exist.
+//   The Config rule in the request is not valid. Verify that the rule is an organization
+//   Config Custom Policy rule, that the rule name is correct, and that valid
+//   Amazon Resouce Names (ARNs) are used before trying again.
 //
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
@@ -4203,12 +4212,26 @@ func (c *ConfigService) DescribeOrganizationConfigRulesRequest(input *DescribeOr
 
 // DescribeOrganizationConfigRules API operation for AWS Config.
 //
-// Returns a list of organization config rules.
+// Returns a list of organization Config rules.
 //
 // When you specify the limit and the next token, you receive a paginated response.
-// Limit and next token are not applicable if you specify organization config
+//
+// Limit and next token are not applicable if you specify organization Config
 // rule names. It is only applicable, when you request all the organization
-// config rules.
+// Config rules.
+//
+// For accounts within an organzation
+//
+// If you deploy an organizational rule or conformance pack in an organization
+// administrator account, and then establish a delegated administrator and deploy
+// an organizational rule or conformance pack in the delegated administrator
+// account, you won't be able to see the organizational rule or conformance
+// pack in the organization administrator account from the delegated administrator
+// account or see the organizational rule or conformance pack in the delegated
+// administrator account from organization administrator account. The DescribeOrganizationConfigRules
+// and DescribeOrganizationConformancePacks APIs can only see and interact with
+// the organization-related resource that were deployed from within the account
+// calling those APIs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4219,7 +4242,9 @@ func (c *ConfigService) DescribeOrganizationConfigRulesRequest(input *DescribeOr
 //
 // Returned Error Types:
 //   * NoSuchOrganizationConfigRuleException
-//   You specified one or more organization config rules that do not exist.
+//   The Config rule in the request is not valid. Verify that the rule is an organization
+//   Config Custom Policy rule, that the rule name is correct, and that valid
+//   Amazon Resouce Names (ARNs) are used before trying again.
 //
 //   * InvalidNextTokenException
 //   The specified next token is invalid. Specify the nextToken string that was
@@ -4566,6 +4591,19 @@ func (c *ConfigService) DescribeOrganizationConformancePacksRequest(input *Descr
 // Limit and next token are not applicable if you specify organization conformance
 // packs names. They are only applicable, when you request all the organization
 // conformance packs.
+//
+// For accounts within an organzation
+//
+// If you deploy an organizational rule or conformance pack in an organization
+// administrator account, and then establish a delegated administrator and deploy
+// an organizational rule or conformance pack in the delegated administrator
+// account, you won't be able to see the organizational rule or conformance
+// pack in the organization administrator account from the delegated administrator
+// account or see the organizational rule or conformance pack in the delegated
+// administrator account from organization administrator account. The DescribeOrganizationConfigRules
+// and DescribeOrganizationConformancePacks APIs can only see and interact with
+// the organization-related resource that were deployed from within the account
+// calling those APIs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6172,8 +6210,9 @@ func (c *ConfigService) GetComplianceDetailsByConfigRuleRequest(input *GetCompli
 //   returned in the previous response to get the next page of results.
 //
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetComplianceDetailsByConfigRule
 func (c *ConfigService) GetComplianceDetailsByConfigRule(input *GetComplianceDetailsByConfigRuleInput) (*GetComplianceDetailsByConfigRuleOutput, error) {
@@ -6844,6 +6883,88 @@ func (c *ConfigService) GetConformancePackComplianceSummaryPagesWithContext(ctx 
 	return p.Err()
 }
 
+const opGetCustomRulePolicy = "GetCustomRulePolicy"
+
+// GetCustomRulePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the GetCustomRulePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCustomRulePolicy for more information on using the GetCustomRulePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetCustomRulePolicyRequest method.
+//    req, resp := client.GetCustomRulePolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetCustomRulePolicy
+func (c *ConfigService) GetCustomRulePolicyRequest(input *GetCustomRulePolicyInput) (req *request.Request, output *GetCustomRulePolicyOutput) {
+	op := &request.Operation{
+		Name:       opGetCustomRulePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetCustomRulePolicyInput{}
+	}
+
+	output = &GetCustomRulePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCustomRulePolicy API operation for AWS Config.
+//
+// Returns the policy definition containing the logic for your Config Custom
+// Policy rule.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation GetCustomRulePolicy for usage and error information.
+//
+// Returned Error Types:
+//   * NoSuchConfigRuleException
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetCustomRulePolicy
+func (c *ConfigService) GetCustomRulePolicy(input *GetCustomRulePolicyInput) (*GetCustomRulePolicyOutput, error) {
+	req, out := c.GetCustomRulePolicyRequest(input)
+	return out, req.Send()
+}
+
+// GetCustomRulePolicyWithContext is the same as GetCustomRulePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCustomRulePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) GetCustomRulePolicyWithContext(ctx aws.Context, input *GetCustomRulePolicyInput, opts ...request.Option) (*GetCustomRulePolicyOutput, error) {
+	req, out := c.GetCustomRulePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetDiscoveredResourceCounts = "GetDiscoveredResourceCounts"
 
 // GetDiscoveredResourceCountsRequest generates a "aws/request.Request" representing the
@@ -7080,7 +7201,7 @@ func (c *ConfigService) GetOrganizationConfigRuleDetailedStatusRequest(input *Ge
 // GetOrganizationConfigRuleDetailedStatus API operation for AWS Config.
 //
 // Returns detailed status for each member account within an organization for
-// a given organization config rule.
+// a given organization Config rule.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7091,7 +7212,9 @@ func (c *ConfigService) GetOrganizationConfigRuleDetailedStatusRequest(input *Ge
 //
 // Returned Error Types:
 //   * NoSuchOrganizationConfigRuleException
-//   You specified one or more organization config rules that do not exist.
+//   The Config rule in the request is not valid. Verify that the rule is an organization
+//   Config Custom Policy rule, that the rule name is correct, and that valid
+//   Amazon Resouce Names (ARNs) are used before trying again.
 //
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
@@ -7371,6 +7494,113 @@ func (c *ConfigService) GetOrganizationConformancePackDetailedStatusPagesWithCon
 	}
 
 	return p.Err()
+}
+
+const opGetOrganizationCustomRulePolicy = "GetOrganizationCustomRulePolicy"
+
+// GetOrganizationCustomRulePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the GetOrganizationCustomRulePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetOrganizationCustomRulePolicy for more information on using the GetOrganizationCustomRulePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetOrganizationCustomRulePolicyRequest method.
+//    req, resp := client.GetOrganizationCustomRulePolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetOrganizationCustomRulePolicy
+func (c *ConfigService) GetOrganizationCustomRulePolicyRequest(input *GetOrganizationCustomRulePolicyInput) (req *request.Request, output *GetOrganizationCustomRulePolicyOutput) {
+	op := &request.Operation{
+		Name:       opGetOrganizationCustomRulePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetOrganizationCustomRulePolicyInput{}
+	}
+
+	output = &GetOrganizationCustomRulePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetOrganizationCustomRulePolicy API operation for AWS Config.
+//
+// Returns the policy definition containing the logic for your organization
+// Config Custom Policy rule.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation GetOrganizationCustomRulePolicy for usage and error information.
+//
+// Returned Error Types:
+//   * NoSuchOrganizationConfigRuleException
+//   The Config rule in the request is not valid. Verify that the rule is an organization
+//   Config Custom Policy rule, that the rule name is correct, and that valid
+//   Amazon Resouce Names (ARNs) are used before trying again.
+//
+//   * OrganizationAccessDeniedException
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your Amazon Web
+//      Services Organization management account or the delegated administrator
+//      role changed. Delete this aggregator and create a new one with the current
+//      Amazon Web Services Organization.
+//
+//      * The configuration aggregator is associated with a previous Amazon Web
+//      Services Organization and Config cannot aggregate data with current Amazon
+//      Web Services Organization. Delete this aggregator and create a new one
+//      with the current Amazon Web Services Organization.
+//
+//      * You are not a registered delegated administrator for Config with permissions
+//      to call ListDelegatedAdministrators API. Ensure that the management account
+//      registers delagated administrator for Config service principle name before
+//      the delegated administrator creates an aggregator.
+//
+//   For all OrganizationConfigRule and OrganizationConformancePack APIs, Config
+//   throws an exception if APIs are called from member accounts. All APIs must
+//   be called from organization master account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetOrganizationCustomRulePolicy
+func (c *ConfigService) GetOrganizationCustomRulePolicy(input *GetOrganizationCustomRulePolicyInput) (*GetOrganizationCustomRulePolicyOutput, error) {
+	req, out := c.GetOrganizationCustomRulePolicyRequest(input)
+	return out, req.Send()
+}
+
+// GetOrganizationCustomRulePolicyWithContext is the same as GetOrganizationCustomRulePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetOrganizationCustomRulePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) GetOrganizationCustomRulePolicyWithContext(ctx aws.Context, input *GetOrganizationCustomRulePolicyInput, opts ...request.Option) (*GetOrganizationCustomRulePolicyOutput, error) {
+	req, out := c.GetOrganizationCustomRulePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
 }
 
 const opGetResourceConfigHistory = "GetResourceConfigHistory"
@@ -7796,6 +8026,160 @@ func (c *ConfigService) ListAggregateDiscoveredResourcesPagesWithContext(ctx aws
 
 	for p.Next() {
 		if !fn(p.Page().(*ListAggregateDiscoveredResourcesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListConformancePackComplianceScores = "ListConformancePackComplianceScores"
+
+// ListConformancePackComplianceScoresRequest generates a "aws/request.Request" representing the
+// client's request for the ListConformancePackComplianceScores operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListConformancePackComplianceScores for more information on using the ListConformancePackComplianceScores
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListConformancePackComplianceScoresRequest method.
+//    req, resp := client.ListConformancePackComplianceScoresRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/ListConformancePackComplianceScores
+func (c *ConfigService) ListConformancePackComplianceScoresRequest(input *ListConformancePackComplianceScoresInput) (req *request.Request, output *ListConformancePackComplianceScoresOutput) {
+	op := &request.Operation{
+		Name:       opListConformancePackComplianceScores,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "Limit",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListConformancePackComplianceScoresInput{}
+	}
+
+	output = &ListConformancePackComplianceScoresOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListConformancePackComplianceScores API operation for AWS Config.
+//
+// Returns a list of conformance pack compliance scores. A compliance score
+// is the percentage of the number of compliant rule-resource combinations in
+// a conformance pack compared to the number of total possible rule-resource
+// combinations in the conformance pack. This metric provides you with a high-level
+// view of the compliance state of your conformance packs, and can be used to
+// identify, investigate, and understand the level of compliance in your conformance
+// packs.
+//
+// Conformance packs with no evaluation results will have a compliance score
+// of INSUFFICIENT_DATA.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation ListConformancePackComplianceScores for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterValueException
+//   One or more of the specified parameters are invalid. Verify that your parameters
+//   are valid and try again.
+//
+//   * InvalidLimitException
+//   The specified limit is outside the allowable range.
+//
+//   * InvalidNextTokenException
+//   The specified next token is invalid. Specify the nextToken string that was
+//   returned in the previous response to get the next page of results.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/ListConformancePackComplianceScores
+func (c *ConfigService) ListConformancePackComplianceScores(input *ListConformancePackComplianceScoresInput) (*ListConformancePackComplianceScoresOutput, error) {
+	req, out := c.ListConformancePackComplianceScoresRequest(input)
+	return out, req.Send()
+}
+
+// ListConformancePackComplianceScoresWithContext is the same as ListConformancePackComplianceScores with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListConformancePackComplianceScores for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) ListConformancePackComplianceScoresWithContext(ctx aws.Context, input *ListConformancePackComplianceScoresInput, opts ...request.Option) (*ListConformancePackComplianceScoresOutput, error) {
+	req, out := c.ListConformancePackComplianceScoresRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListConformancePackComplianceScoresPages iterates over the pages of a ListConformancePackComplianceScores operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListConformancePackComplianceScores method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListConformancePackComplianceScores operation.
+//    pageNum := 0
+//    err := client.ListConformancePackComplianceScoresPages(params,
+//        func(page *configservice.ListConformancePackComplianceScoresOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ConfigService) ListConformancePackComplianceScoresPages(input *ListConformancePackComplianceScoresInput, fn func(*ListConformancePackComplianceScoresOutput, bool) bool) error {
+	return c.ListConformancePackComplianceScoresPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListConformancePackComplianceScoresPagesWithContext same as ListConformancePackComplianceScoresPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) ListConformancePackComplianceScoresPagesWithContext(ctx aws.Context, input *ListConformancePackComplianceScoresInput, fn func(*ListConformancePackComplianceScoresOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListConformancePackComplianceScoresInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListConformancePackComplianceScoresRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListConformancePackComplianceScoresOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -8403,23 +8787,30 @@ func (c *ConfigService) PutConfigRuleRequest(input *PutConfigRuleInput) (req *re
 
 // PutConfigRule API operation for AWS Config.
 //
-// Adds or updates an Config rule for evaluating whether your Amazon Web Services
-// resources comply with your desired configurations.
+// Adds or updates an Config rule to evaluate if your Amazon Web Services resources
+// comply with your desired configurations. For information on how many Config
+// rules you can have per account, see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+// in the Config Developer Guide.
 //
-// You can use this action for custom Config rules and Config managed rules.
-// A custom Config rule is a rule that you develop and maintain. An Config managed
-// rule is a customizable, predefined rule that Config provides.
+// There are two types of rules: Config Custom Rules and Config Managed Rules.
+// You can use PutConfigRule to create both Config custom rules and Config managed
+// rules.
 //
-// If you are adding a new custom Config rule, you must first create the Lambda
-// function that the rule invokes to evaluate your resources. When you use the
-// PutConfigRule action to add the rule to Config, you must specify the Amazon
-// Resource Name (ARN) that Lambda assigns to the function. Specify the ARN
-// for the SourceIdentifier key. This key is part of the Source object, which
-// is part of the ConfigRule object.
+// Custom rules are rules that you can create using either Guard or Lambda functions.
+// Guard (Guard GitHub Repository (https://github.com/aws-cloudformation/cloudformation-guard))
+// is a policy-as-code language that allows you to write policies that are enforced
+// by Config Custom Policy rules. Lambda uses custom code that you upload to
+// evaluate a custom rule. If you are adding a new Custom Lambda rule, you first
+// need to create an Lambda function that the rule invokes to evaluate your
+// resources. When you use PutConfigRule to add a Custom Lambda rule to Config,
+// you must specify the Amazon Resource Name (ARN) that Lambda assigns to the
+// function. You specify the ARN in the SourceIdentifier key. This key is part
+// of the Source object, which is part of the ConfigRule object.
 //
-// If you are adding an Config managed rule, specify the rule's identifier for
-// the SourceIdentifier key. To reference Config managed rule identifiers, see
-// About Config managed rules (https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html).
+// Managed rules are predefined, customizable rules created by Config. For a
+// list of managed rules, see List of Config Managed Rules (https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html).
+// If you are adding an Config managed rule, you must specify the rule's identifier
+// for the SourceIdentifier key.
 //
 // For any new rule that you add, specify the ConfigRuleName in the ConfigRule
 // object. Do not specify the ConfigRuleArn or the ConfigRuleId. These values
@@ -8428,12 +8819,6 @@ func (c *ConfigService) PutConfigRuleRequest(input *PutConfigRuleInput) (req *re
 // If you are updating a rule that you added previously, you can specify the
 // rule by ConfigRuleName, ConfigRuleId, or ConfigRuleArn in the ConfigRule
 // data type that you use in this request.
-//
-// The maximum number of rules that Config supports is 150.
-//
-// For information about requesting a rule limit increase, see Config Limits
-// (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config)
-// in the Amazon Web Services General Reference Guide.
 //
 // For more information about developing and using Config rules, see Evaluating
 // Amazon Web Services resource Configurations with Config (https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html)
@@ -8469,10 +8854,10 @@ func (c *ConfigService) PutConfigRuleRequest(input *PutConfigRuleInput) (req *re
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -8491,13 +8876,13 @@ func (c *ConfigService) PutConfigRuleRequest(input *PutConfigRuleInput) (req *re
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 //   * NoAvailableConfigurationRecorderException
 //   There are no configuration recorders available to provide the role needed
@@ -8574,7 +8959,7 @@ func (c *ConfigService) PutConfigurationAggregatorRequest(input *PutConfiguratio
 // an organization.
 //
 // accountIds that are passed will be replaced with existing accounts. If you
-// want to add additional accounts into the aggregator, call DescribeAggregator
+// want to add additional accounts into the aggregator, call DescribeConfigurationAggregators
 // to get the previous accounts and then append new ones.
 //
 // Config should be enabled in source accounts and regions you want to aggregate.
@@ -8814,10 +9199,12 @@ func (c *ConfigService) PutConformancePackRequest(input *PutConformancePackInput
 //
 // Creates or updates a conformance pack. A conformance pack is a collection
 // of Config rules that can be easily deployed in an account and a region and
-// across Amazon Web Services Organization.
+// across Amazon Web Services Organization. For information on how many conformance
+// packs you can have per account, see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+// in the Config Developer Guide.
 //
-// This API creates a service linked role AWSServiceRoleForConfigConforms in
-// your account. The service linked role is created only when the role does
+// This API creates a service-linked role AWSServiceRoleForConfigConforms in
+// your account. The service-linked role is created only when the role does
 // not exist in your account.
 //
 // You must specify either the TemplateS3Uri or the TemplateBody parameter,
@@ -8841,13 +9228,13 @@ func (c *ConfigService) PutConformancePackRequest(input *PutConformancePackInput
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 //   * ConformancePackTemplateValidationException
 //   You have specified a template that is not valid or supported.
@@ -8865,10 +9252,10 @@ func (c *ConfigService) PutConformancePackRequest(input *PutConformancePackInput
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -9087,8 +9474,9 @@ func (c *ConfigService) PutEvaluationsRequest(input *PutEvaluationsInput) (req *
 //   The specified ResultToken is invalid.
 //
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutEvaluations
 func (c *ConfigService) PutEvaluations(input *PutEvaluationsInput) (*PutEvaluationsOutput, error) {
@@ -9169,8 +9557,9 @@ func (c *ConfigService) PutExternalEvaluationRequest(input *PutExternalEvaluatio
 //
 // Returned Error Types:
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 //   * InvalidParameterValueException
 //   One or more of the specified parameters are invalid. Verify that your parameters
@@ -9242,41 +9631,54 @@ func (c *ConfigService) PutOrganizationConfigRuleRequest(input *PutOrganizationC
 
 // PutOrganizationConfigRule API operation for AWS Config.
 //
-// Adds or updates organization config rule for your entire organization evaluating
-// whether your Amazon Web Services resources comply with your desired configurations.
+// Adds or updates an Config rule for your entire organization to evaluate if
+// your Amazon Web Services resources comply with your desired configurations.
+// For information on how many organization Config rules you can have per account,
+// see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+// in the Config Developer Guide.
 //
 // Only a master account and a delegated administrator can create or update
-// an organization config rule. When calling this API with a delegated administrator,
+// an organization Config rule. When calling this API with a delegated administrator,
 // you must ensure Organizations ListDelegatedAdministrator permissions are
-// added.
+// added. An organization can have up to 3 delegated administrators.
 //
 // This API enables organization service access through the EnableAWSServiceAccess
-// action and creates a service linked role AWSServiceRoleForConfigMultiAccountSetup
+// action and creates a service-linked role AWSServiceRoleForConfigMultiAccountSetup
 // in the master or delegated administrator account of your organization. The
-// service linked role is created only when the role does not exist in the caller
+// service-linked role is created only when the role does not exist in the caller
 // account. Config verifies the existence of role with GetRole action.
 //
 // To use this API with delegated administrator, register a delegated administrator
 // by calling Amazon Web Services Organization register-delegated-administrator
 // for config-multiaccountsetup.amazonaws.com.
 //
-// You can use this action to create both custom Config rules and Config managed
-// rules. If you are adding a new custom Config rule, you must first create
-// Lambda function in the master account or a delegated administrator that the
-// rule invokes to evaluate your resources. You also need to create an IAM role
-// in the managed-account that can be assumed by the Lambda function. When you
-// use the PutOrganizationConfigRule action to add the rule to Config, you must
-// specify the Amazon Resource Name (ARN) that Lambda assigns to the function.
-// If you are adding an Config managed rule, specify the rule's identifier for
-// the RuleIdentifier key.
+// There are two types of rules: Config Custom Rules and Config Managed Rules.
+// You can use PutOrganizationConfigRule to create both Config custom rules
+// and Config managed rules.
 //
-// The maximum number of organization config rules that Config supports is 150
-// and 3 delegated administrator per organization.
+// Custom rules are rules that you can create using either Guard or Lambda functions.
+// Guard (Guard GitHub Repository (https://github.com/aws-cloudformation/cloudformation-guard))
+// is a policy-as-code language that allows you to write policies that are enforced
+// by Config Custom Policy rules. Lambda uses custom code that you upload to
+// evaluate a custom rule. If you are adding a new Custom Lambda rule, you first
+// need to create an Lambda function in the master account or a delegated administrator
+// that the rule invokes to evaluate your resources. You also need to create
+// an IAM role in the managed account that can be assumed by the Lambda function.
+// When you use PutOrganizationConfigRule to add a Custom Lambda rule to Config,
+// you must specify the Amazon Resource Name (ARN) that Lambda assigns to the
+// function.
+//
+// Managed rules are predefined, customizable rules created by Config. For a
+// list of managed rules, see List of Config Managed Rules (https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html).
+// If you are adding an Config managed rule, you must specify the rule's identifier
+// for the RuleIdentifier key.
 //
 // Prerequisite: Ensure you call EnableAllFeatures API to enable all features
 // in an organization.
 //
-// Specify either OrganizationCustomRuleMetadata or OrganizationManagedRuleMetadata.
+// Make sure to specify one of either OrganizationCustomPolicyRuleMetadata for
+// Custom Policy rules, OrganizationCustomRuleMetadata for Custom Lambda rules,
+// or OrganizationManagedRuleMetadata for managed rules.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9287,7 +9689,7 @@ func (c *ConfigService) PutOrganizationConfigRuleRequest(input *PutOrganizationC
 //
 // Returned Error Types:
 //   * MaxNumberOfOrganizationConfigRulesExceededException
-//   You have reached the limit of the number of organization config rules you
+//   You have reached the limit of the number of organization Config rules you
 //   can create.
 //
 //   * ResourceInUseException
@@ -9303,10 +9705,10 @@ func (c *ConfigService) PutOrganizationConfigRuleRequest(input *PutOrganizationC
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -9372,13 +9774,13 @@ func (c *ConfigService) PutOrganizationConfigRuleRequest(input *PutOrganizationC
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutOrganizationConfigRule
 func (c *ConfigService) PutOrganizationConfigRule(input *PutOrganizationConfigRuleInput) (*PutOrganizationConfigRuleOutput, error) {
@@ -9447,16 +9849,19 @@ func (c *ConfigService) PutOrganizationConformancePackRequest(input *PutOrganiza
 // PutOrganizationConformancePack API operation for AWS Config.
 //
 // Deploys conformance packs across member accounts in an Amazon Web Services
-// Organization.
+// Organization. For information on how many organization conformance packs
+// and how many Config rules you can have per account, see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+// in the Config Developer Guide.
 //
 // Only a master account and a delegated administrator can call this API. When
 // calling this API with a delegated administrator, you must ensure Organizations
-// ListDelegatedAdministrator permissions are added.
+// ListDelegatedAdministrator permissions are added. An organization can have
+// up to 3 delegated administrators.
 //
 // This API enables organization service access for config-multiaccountsetup.amazonaws.com
-// through the EnableAWSServiceAccess action and creates a service linked role
+// through the EnableAWSServiceAccess action and creates a service-linked role
 // AWSServiceRoleForConfigMultiAccountSetup in the master or delegated administrator
-// account of your organization. The service linked role is created only when
+// account of your organization. The service-linked role is created only when
 // the role does not exist in the caller account. To use this API with delegated
 // administrator, register a delegated administrator by calling Amazon Web Services
 // Organization register-delegate-admin for config-multiaccountsetup.amazonaws.com.
@@ -9471,9 +9876,6 @@ func (c *ConfigService) PutOrganizationConformancePackRequest(input *PutOrganiza
 // Config sets the state of a conformance pack to CREATE_IN_PROGRESS and UPDATE_IN_PROGRESS
 // until the conformance pack is created or updated. You cannot update a conformance
 // pack while it is in this state.
-//
-// You can create 50 conformance packs with 25 Config rules in each pack and
-// 3 delegated administrator per organization.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9501,10 +9903,10 @@ func (c *ConfigService) PutOrganizationConformancePackRequest(input *PutOrganiza
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -9559,13 +9961,13 @@ func (c *ConfigService) PutOrganizationConformancePackRequest(input *PutOrganiza
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 //   * OrganizationConformancePackTemplateValidationException
 //   You have specified a template that is not valid or supported.
@@ -9656,6 +10058,14 @@ func (c *ConfigService) PutRemediationConfigurationsRequest(input *PutRemediatio
 // Config Rules such as Organization Config rules, the rules deployed by conformance
 // packs, and rules deployed by Amazon Web Services Security Hub.
 //
+// For manual remediation configuration, you need to provide a value for automationAssumeRole
+// or use a value in the assumeRolefield to remediate your resources. The SSM
+// automation document can use either as long as it maps to a valid parameter.
+//
+// However, for automatic remediation configuration, the only valid assumeRole
+// field value is AutomationAssumeRole and you need to provide a value for AutomationAssumeRole
+// to remediate your resources.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -9673,13 +10083,13 @@ func (c *ConfigService) PutRemediationConfigurationsRequest(input *PutRemediatio
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 //   * InvalidParameterValueException
 //   One or more of the specified parameters are invalid. Verify that your parameters
@@ -9780,13 +10190,13 @@ func (c *ConfigService) PutRemediationExceptionsRequest(input *PutRemediationExc
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutRemediationExceptions
 func (c *ConfigService) PutRemediationExceptions(input *PutRemediationExceptionsInput) (*PutRemediationExceptionsOutput, error) {
@@ -9899,13 +10309,13 @@ func (c *ConfigService) PutResourceConfigRequest(input *PutResourceConfigInput) 
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 //   * NoRunningConfigurationRecorderException
 //   There is no configuration recorder running.
@@ -10521,8 +10931,9 @@ func (c *ConfigService) StartConfigRulesEvaluationRequest(input *StartConfigRule
 //
 // Returned Error Types:
 //   * NoSuchConfigRuleException
-//   One or more Config rules in the request are invalid. Verify that the rule
-//   names are correct and try again.
+//   The Config rule in the request is not valid. Verify that the rule is an Config
+//   Custom Policy rule, that the rule name is correct, and that valid Amazon
+//   Resouce Names (ARNs) are used before trying again.
 //
 //   * LimitExceededException
 //   For StartConfigRulesEvaluation API, this exception is thrown if an evaluation
@@ -10545,10 +10956,10 @@ func (c *ConfigService) StartConfigRulesEvaluationRequest(input *StartConfigRule
 //      and Config cannot delete this rule. Delete the remediation action associated
 //      with the rule before deleting the rule and try your request again later.
 //
-//      * For PutConfigOrganizationRule, organization config rule deletion is
+//      * For PutConfigOrganizationRule, organization Config rule deletion is
 //      in progress. Try your request again later.
 //
-//      * For DeleteOrganizationConfigRule, organization config rule creation
+//      * For DeleteOrganizationConfigRule, organization Config rule creation
 //      is in progress. Try your request again later.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -10744,13 +11155,13 @@ func (c *ConfigService) StartRemediationExecutionRequest(input *StartRemediation
 //      * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //      function ARN, and check the function's permissions.
 //
-//      * For PutOrganizationConfigRule, organization config rule cannot be created
+//      * For PutOrganizationConfigRule, organization Config rule cannot be created
 //      because you do not have permissions to call IAM GetRole action or create
-//      a service linked role.
+//      a service-linked role.
 //
 //      * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //      pack cannot be created because you do not have permissions: To call IAM
-//      GetRole action or create a service linked role. To read Amazon S3 bucket.
+//      GetRole action or create a service-linked role. To read Amazon S3 bucket.
 //
 //   * NoSuchRemediationConfigurationException
 //   You specified an Config rule without a remediation configuration.
@@ -12691,20 +13102,28 @@ func (s *ConfigExportDeliveryInfo) SetNextDeliveryTime(v time.Time) *ConfigExpor
 	return s
 }
 
-// An Config rule represents an Lambda function that you create for a custom
-// rule or a predefined function for an Config managed rule. The function evaluates
-// configuration items to assess whether your Amazon Web Services resources
-// comply with your desired configurations. This function can run when Config
-// detects a configuration change to an Amazon Web Services resource and at
-// a periodic frequency that you choose (for example, every 24 hours).
+// Config rules evaluate the configuration settings of your Amazon Web Services
+// resources. A rule can run when Config detects a configuration change to an
+// Amazon Web Services resource or at a periodic frequency that you choose (for
+// example, every 24 hours). There are two types of rules: Config Managed Rules
+// and Config Custom Rules. Managed rules are predefined, customizable rules
+// created by Config. For a list of managed rules, see List of Config Managed
+// Rules (https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html).
 //
-// You can use the Amazon Web Services CLI and Amazon Web Services SDKs if you
-// want to create a rule that triggers evaluations for your resources when Config
-// delivers the configuration snapshot. For more information, see ConfigSnapshotDeliveryProperties.
+// Custom rules are rules that you can create using either Guard or Lambda functions.
+// Guard (Guard GitHub Repository (https://github.com/aws-cloudformation/cloudformation-guard))
+// is a policy-as-code language that allows you to write policies that are enforced
+// by Config Custom Policy rules. Lambda uses custom code that you upload to
+// evaluate a custom rule. It is invoked by events that are published to it
+// by an event source, which Config invokes when the custom rule is initiated.
 //
 // For more information about developing and using Config rules, see Evaluating
 // Amazon Web Services resource Configurations with Config (https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html)
 // in the Config Developer Guide.
+//
+// You can use the Amazon Web Services CLI and Amazon Web Services SDKs if you
+// want to create a rule that triggers evaluations for your resources when Config
+// delivers the configuration snapshot. For more information, see ConfigSnapshotDeliveryProperties.
 type ConfigRule struct {
 	_ struct{} `type:"structure"`
 
@@ -12736,7 +13155,7 @@ type ConfigRule struct {
 
 	// Service principal name of the service that created the rule.
 	//
-	// The field is populated only if the service linked rule is created by a service.
+	// The field is populated only if the service-linked rule is created by a service.
 	// The field is empty if you create your own rule.
 	CreatedBy *string `min:"1" type:"string"`
 
@@ -12749,8 +13168,7 @@ type ConfigRule struct {
 	// The maximum frequency with which Config runs evaluations for a rule. You
 	// can specify a value for MaximumExecutionFrequency when:
 	//
-	//    * You are using an Config managed rule that is triggered at a periodic
-	//    frequency.
+	//    * This is for an Config managed rule that is triggered at a periodic frequency.
 	//
 	//    * Your custom rule is triggered when Config delivers the configuration
 	//    snapshot. For more information, see ConfigSnapshotDeliveryProperties.
@@ -12770,9 +13188,10 @@ type ConfigRule struct {
 	// The scope can be empty.
 	Scope *Scope `type:"structure"`
 
-	// Provides the rule owner (Amazon Web Services or customer), the rule identifier,
-	// and the notifications that cause the function to evaluate your Amazon Web
-	// Services resources.
+	// Provides the rule owner (Amazon Web Services for managed rules, CUSTOM_POLICY
+	// for Custom Policy rules, and CUSTOM_LAMBDA for Custom Lambda rules), the
+	// rule identifier, and the notifications that cause the function to evaluate
+	// your Amazon Web Services resources.
 	//
 	// Source is a required field
 	Source *Source `type:"structure" required:"true"`
@@ -13028,11 +13447,12 @@ func (s *ConfigRuleComplianceSummaryFilters) SetAwsRegion(v string) *ConfigRuleC
 	return s
 }
 
-// Status information for your Config managed rules. The status includes information
-// such as the last time the rule ran, the last time it failed, and the related
-// error for the last failure.
+// Status information for your Config Managed rules and Config Custom Policy
+// rules. The status includes information such as the last time the rule ran,
+// the last time it failed, and the related error for the last failure.
 //
-// This action does not return status information about custom Config rules.
+// This action does not return status information about Config Custom Lambda
+// rules.
 type ConfigRuleEvaluationStatus struct {
 	_ struct{} `type:"structure"`
 
@@ -13054,12 +13474,24 @@ type ConfigRuleEvaluationStatus struct {
 	//    * true - Config has evaluated your Amazon Web Services resources against
 	//    the rule at least once.
 	//
-	//    * false - Config has not once finished evaluating your Amazon Web Services
-	//    resources against the rule.
+	//    * false - Config has not finished evaluating your Amazon Web Services
+	//    resources against the rule at least once.
 	FirstEvaluationStarted *bool `type:"boolean"`
 
 	// The time that you last turned off the Config rule.
 	LastDeactivatedTime *time.Time `type:"timestamp"`
+
+	// The status of the last attempted delivery of a debug log for your Config
+	// Custom Policy rules. Either Successful or Failed.
+	LastDebugLogDeliveryStatus *string `type:"string"`
+
+	// The reason Config was not able to deliver a debug log. This is for the last
+	// failed attempt to retrieve a debug log for your Config Custom Policy rules.
+	LastDebugLogDeliveryStatusReason *string `type:"string"`
+
+	// The time Config last attempted to deliver a debug log for your Config Custom
+	// Policy rules.
+	LastDebugLogDeliveryTime *time.Time `type:"timestamp"`
 
 	// The error code that Config returned when the rule last failed.
 	LastErrorCode *string `type:"string"`
@@ -13135,6 +13567,24 @@ func (s *ConfigRuleEvaluationStatus) SetFirstEvaluationStarted(v bool) *ConfigRu
 // SetLastDeactivatedTime sets the LastDeactivatedTime field's value.
 func (s *ConfigRuleEvaluationStatus) SetLastDeactivatedTime(v time.Time) *ConfigRuleEvaluationStatus {
 	s.LastDeactivatedTime = &v
+	return s
+}
+
+// SetLastDebugLogDeliveryStatus sets the LastDebugLogDeliveryStatus field's value.
+func (s *ConfigRuleEvaluationStatus) SetLastDebugLogDeliveryStatus(v string) *ConfigRuleEvaluationStatus {
+	s.LastDebugLogDeliveryStatus = &v
+	return s
+}
+
+// SetLastDebugLogDeliveryStatusReason sets the LastDebugLogDeliveryStatusReason field's value.
+func (s *ConfigRuleEvaluationStatus) SetLastDebugLogDeliveryStatusReason(v string) *ConfigRuleEvaluationStatus {
+	s.LastDebugLogDeliveryStatusReason = &v
+	return s
+}
+
+// SetLastDebugLogDeliveryTime sets the LastDebugLogDeliveryTime field's value.
+func (s *ConfigRuleEvaluationStatus) SetLastDebugLogDeliveryTime(v time.Time) *ConfigRuleEvaluationStatus {
+	s.LastDebugLogDeliveryTime = &v
 	return s
 }
 
@@ -13622,6 +14072,9 @@ type ConfigurationRecorder struct {
 
 	// Amazon Resource Name (ARN) of the IAM role used to describe the Amazon Web
 	// Services resources associated with the account.
+	//
+	// While the API model does not require this field, the server will reject a
+	// request without a defined roleARN for the configuration recorder.
 	RoleARN *string `locationName:"roleARN" type:"string"`
 }
 
@@ -13810,6 +14263,116 @@ func (s *ConformancePackComplianceFilters) SetComplianceType(v string) *Conforma
 // SetConfigRuleNames sets the ConfigRuleNames field's value.
 func (s *ConformancePackComplianceFilters) SetConfigRuleNames(v []*string) *ConformancePackComplianceFilters {
 	s.ConfigRuleNames = v
+	return s
+}
+
+// A compliance score is the percentage of the number of compliant rule-resource
+// combinations in a conformance pack compared to the number of total possible
+// rule-resource combinations in the conformance pack. This metric provides
+// you with a high-level view of the compliance state of your conformance packs,
+// and can be used to identify, investigate, and understand the level of compliance
+// in your conformance packs.
+type ConformancePackComplianceScore struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the conformance pack.
+	ConformancePackName *string `min:"1" type:"string"`
+
+	// The time that the conformance pack compliance score was last updated.
+	LastUpdatedTime *time.Time `type:"timestamp"`
+
+	// Compliance score for the conformance pack. Conformance packs with no evaluation
+	// results will have a compliance score of INSUFFICIENT_DATA.
+	Score *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConformancePackComplianceScore) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConformancePackComplianceScore) GoString() string {
+	return s.String()
+}
+
+// SetConformancePackName sets the ConformancePackName field's value.
+func (s *ConformancePackComplianceScore) SetConformancePackName(v string) *ConformancePackComplianceScore {
+	s.ConformancePackName = &v
+	return s
+}
+
+// SetLastUpdatedTime sets the LastUpdatedTime field's value.
+func (s *ConformancePackComplianceScore) SetLastUpdatedTime(v time.Time) *ConformancePackComplianceScore {
+	s.LastUpdatedTime = &v
+	return s
+}
+
+// SetScore sets the Score field's value.
+func (s *ConformancePackComplianceScore) SetScore(v string) *ConformancePackComplianceScore {
+	s.Score = &v
+	return s
+}
+
+// A list of filters to apply to the conformance pack compliance score result
+// set.
+type ConformancePackComplianceScoresFilters struct {
+	_ struct{} `type:"structure"`
+
+	// The names of the conformance packs whose compliance scores you want to include
+	// in the conformance pack compliance score result set. You can include up to
+	// 25 conformance packs in the ConformancePackNames array of strings, each with
+	// a character limit of 256 characters for the conformance pack name.
+	//
+	// ConformancePackNames is a required field
+	ConformancePackNames []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConformancePackComplianceScoresFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConformancePackComplianceScoresFilters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConformancePackComplianceScoresFilters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConformancePackComplianceScoresFilters"}
+	if s.ConformancePackNames == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConformancePackNames"))
+	}
+	if s.ConformancePackNames != nil && len(s.ConformancePackNames) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConformancePackNames", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConformancePackNames sets the ConformancePackNames field's value.
+func (s *ConformancePackComplianceScoresFilters) SetConformancePackNames(v []*string) *ConformancePackComplianceScoresFilters {
+	s.ConformancePackNames = v
 	return s
 }
 
@@ -14197,7 +14760,7 @@ type ConformancePackRuleCompliance struct {
 	// The allowed values are COMPLIANT, NON_COMPLIANT, and INSUFFICIENT_DATA.
 	ComplianceType *string `type:"string" enum:"ConformancePackComplianceType"`
 
-	// Name of the config rule.
+	// Name of the Config rule.
 	ConfigRuleName *string `min:"1" type:"string"`
 
 	// Controls for the conformance pack. A control is a process to prevent or detect
@@ -14425,6 +14988,86 @@ func (s *ConformancePackTemplateValidationException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ConformancePackTemplateValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Provides the runtime system, policy definition, and whether debug logging
+// enabled. You can specify the following CustomPolicyDetails parameter values
+// only for Config Custom Policy rules.
+type CustomPolicyDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The boolean expression for enabling debug logging for your Config Custom
+	// Policy rule. The default value is false.
+	EnableDebugLogDelivery *bool `type:"boolean"`
+
+	// The runtime system for your Config Custom Policy rule. Guard is a policy-as-code
+	// language that allows you to write policies that are enforced by Config Custom
+	// Policy rules. For more information about Guard, see the Guard GitHub Repository
+	// (https://github.com/aws-cloudformation/cloudformation-guard).
+	//
+	// PolicyRuntime is a required field
+	PolicyRuntime *string `min:"1" type:"string" required:"true"`
+
+	// The policy definition containing the logic for your Config Custom Policy
+	// rule.
+	//
+	// PolicyText is a required field
+	PolicyText *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomPolicyDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomPolicyDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomPolicyDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomPolicyDetails"}
+	if s.PolicyRuntime == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyRuntime"))
+	}
+	if s.PolicyRuntime != nil && len(*s.PolicyRuntime) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyRuntime", 1))
+	}
+	if s.PolicyText == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyText"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnableDebugLogDelivery sets the EnableDebugLogDelivery field's value.
+func (s *CustomPolicyDetails) SetEnableDebugLogDelivery(v bool) *CustomPolicyDetails {
+	s.EnableDebugLogDelivery = &v
+	return s
+}
+
+// SetPolicyRuntime sets the PolicyRuntime field's value.
+func (s *CustomPolicyDetails) SetPolicyRuntime(v string) *CustomPolicyDetails {
+	s.PolicyRuntime = &v
+	return s
+}
+
+// SetPolicyText sets the PolicyText field's value.
+func (s *CustomPolicyDetails) SetPolicyText(v string) *CustomPolicyDetails {
+	s.PolicyText = &v
+	return s
 }
 
 type DeleteAggregationAuthorizationInput struct {
@@ -14948,7 +15591,7 @@ func (s DeleteEvaluationResultsOutput) GoString() string {
 type DeleteOrganizationConfigRuleInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of organization config rule that you want to delete.
+	// The name of organization Config rule that you want to delete.
 	//
 	// OrganizationConfigRuleName is a required field
 	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
@@ -16187,7 +16830,7 @@ type DescribeComplianceByConfigRuleInput struct {
 	// Filters the results by compliance.
 	//
 	// The allowed values are COMPLIANT and NON_COMPLIANT.
-	ComplianceTypes []*string `type:"list"`
+	ComplianceTypes []*string `type:"list" enum:"ComplianceType"`
 
 	// Specify one or more Config rule names to filter the results by rule.
 	ConfigRuleNames []*string `type:"list"`
@@ -16280,7 +16923,7 @@ type DescribeComplianceByResourceInput struct {
 	// Filters the results by compliance.
 	//
 	// The allowed values are COMPLIANT, NON_COMPLIANT, and INSUFFICIENT_DATA.
-	ComplianceTypes []*string `type:"list"`
+	ComplianceTypes []*string `type:"list" enum:"ComplianceType"`
 
 	// The maximum number of evaluation results returned on each page. The default
 	// is 10. You cannot specify a number greater than 100. If you specify 0, Config
@@ -16614,7 +17257,7 @@ type DescribeConfigurationAggregatorSourcesStatusInput struct {
 	//    * Valid value SUCCEEDED indicates the data was successfully moved.
 	//
 	//    * Valid value OUTDATED indicates the data is not the most recent.
-	UpdateStatus []*string `min:"1" type:"list"`
+	UpdateStatus []*string `min:"1" type:"list" enum:"AggregatedSourceStatusType"`
 }
 
 // String returns the string representation.
@@ -17396,7 +18039,7 @@ type DescribeOrganizationConfigRuleStatusesInput struct {
 	// next page of results in a paginated response.
 	NextToken *string `type:"string"`
 
-	// The names of organization config rules for which you want status details.
+	// The names of organization Config rules for which you want status details.
 	// If you do not specify any names, Config returns details for all your organization
 	// Config rules.
 	OrganizationConfigRuleNames []*string `type:"list"`
@@ -17482,7 +18125,7 @@ func (s *DescribeOrganizationConfigRuleStatusesOutput) SetOrganizationConfigRule
 type DescribeOrganizationConfigRulesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of organization config rules returned on each page. If
+	// The maximum number of organization Config rules returned on each page. If
 	// you do no specify a number, Config uses the default. The default is 100.
 	Limit *int64 `type:"integer"`
 
@@ -17490,9 +18133,9 @@ type DescribeOrganizationConfigRulesInput struct {
 	// next page of results in a paginated response.
 	NextToken *string `type:"string"`
 
-	// The names of organization config rules for which you want details. If you
+	// The names of organization Config rules for which you want details. If you
 	// do not specify any names, Config returns details for all your organization
-	// config rules.
+	// Config rules.
 	OrganizationConfigRuleNames []*string `type:"list"`
 }
 
@@ -19614,7 +20257,7 @@ type GetComplianceDetailsByConfigRuleInput struct {
 	// Filters the results by compliance.
 	//
 	// The allowed values are COMPLIANT, NON_COMPLIANT, and NOT_APPLICABLE.
-	ComplianceTypes []*string `type:"list"`
+	ComplianceTypes []*string `type:"list" enum:"ComplianceType"`
 
 	// The name of the Config rule for which you want compliance information.
 	//
@@ -19737,7 +20380,7 @@ type GetComplianceDetailsByResourceInput struct {
 	// Filters the results by compliance.
 	//
 	// The allowed values are COMPLIANT, NON_COMPLIANT, and NOT_APPLICABLE.
-	ComplianceTypes []*string `type:"list"`
+	ComplianceTypes []*string `type:"list" enum:"ComplianceType"`
 
 	// The nextToken string returned on a previous page that you use to get the
 	// next page of results in a paginated response.
@@ -20229,6 +20872,82 @@ func (s *GetConformancePackComplianceSummaryOutput) SetNextToken(v string) *GetC
 	return s
 }
 
+type GetCustomRulePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of your Config Custom Policy rule.
+	ConfigRuleName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomRulePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomRulePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCustomRulePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCustomRulePolicyInput"}
+	if s.ConfigRuleName != nil && len(*s.ConfigRuleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigRuleName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfigRuleName sets the ConfigRuleName field's value.
+func (s *GetCustomRulePolicyInput) SetConfigRuleName(v string) *GetCustomRulePolicyInput {
+	s.ConfigRuleName = &v
+	return s
+}
+
+type GetCustomRulePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The policy definition containing the logic for your Config Custom Policy
+	// rule.
+	PolicyText *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomRulePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCustomRulePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetPolicyText sets the PolicyText field's value.
+func (s *GetCustomRulePolicyOutput) SetPolicyText(v string) *GetCustomRulePolicyOutput {
+	s.PolicyText = &v
+	return s
+}
+
 type GetDiscoveredResourceCountsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20369,8 +21088,8 @@ type GetOrganizationConfigRuleDetailedStatusInput struct {
 	// next page of results in a paginated response.
 	NextToken *string `type:"string"`
 
-	// The name of organization config rule for which you want status details for
-	// member accounts.
+	// The name of your organization Config rule for which you want status details
+	// for member accounts.
 	//
 	// OrganizationConfigRuleName is a required field
 	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
@@ -20593,6 +21312,87 @@ func (s *GetOrganizationConformancePackDetailedStatusOutput) SetNextToken(v stri
 // SetOrganizationConformancePackDetailedStatuses sets the OrganizationConformancePackDetailedStatuses field's value.
 func (s *GetOrganizationConformancePackDetailedStatusOutput) SetOrganizationConformancePackDetailedStatuses(v []*OrganizationConformancePackDetailedStatus) *GetOrganizationConformancePackDetailedStatusOutput {
 	s.OrganizationConformancePackDetailedStatuses = v
+	return s
+}
+
+type GetOrganizationCustomRulePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of your organization Config Custom Policy rule.
+	//
+	// OrganizationConfigRuleName is a required field
+	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOrganizationCustomRulePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOrganizationCustomRulePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOrganizationCustomRulePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOrganizationCustomRulePolicyInput"}
+	if s.OrganizationConfigRuleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationConfigRuleName"))
+	}
+	if s.OrganizationConfigRuleName != nil && len(*s.OrganizationConfigRuleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationConfigRuleName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOrganizationConfigRuleName sets the OrganizationConfigRuleName field's value.
+func (s *GetOrganizationCustomRulePolicyInput) SetOrganizationConfigRuleName(v string) *GetOrganizationCustomRulePolicyInput {
+	s.OrganizationConfigRuleName = &v
+	return s
+}
+
+type GetOrganizationCustomRulePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The policy definition containing the logic for your organization Config Custom
+	// Policy rule.
+	PolicyText *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOrganizationCustomRulePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOrganizationCustomRulePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetPolicyText sets the PolicyText field's value.
+func (s *GetOrganizationCustomRulePolicyOutput) SetPolicyText(v string) *GetOrganizationCustomRulePolicyOutput {
+	s.PolicyText = &v
 	return s
 }
 
@@ -20952,13 +21752,13 @@ func (s *InsufficientDeliveryPolicyException) RequestID() string {
 //    * For PutConfigRule, the Lambda function cannot be invoked. Check the
 //    function ARN, and check the function's permissions.
 //
-//    * For PutOrganizationConfigRule, organization config rule cannot be created
+//    * For PutOrganizationConfigRule, organization Config rule cannot be created
 //    because you do not have permissions to call IAM GetRole action or create
-//    a service linked role.
+//    a service-linked role.
 //
 //    * For PutConformancePack and PutOrganizationConformancePack, a conformance
 //    pack cannot be created because you do not have permissions: To call IAM
-//    GetRole action or create a service linked role. To read Amazon S3 bucket.
+//    GetRole action or create a service-linked role. To read Amazon S3 bucket.
 type InsufficientPermissionsException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -22130,6 +22930,142 @@ func (s *ListAggregateDiscoveredResourcesOutput) SetResourceIdentifiers(v []*Agg
 	return s
 }
 
+type ListConformancePackComplianceScoresInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the results based on the ConformancePackComplianceScoresFilters.
+	Filters *ConformancePackComplianceScoresFilters `type:"structure"`
+
+	// The maximum number of conformance pack compliance scores returned on each
+	// page.
+	Limit *int64 `type:"integer"`
+
+	// The nextToken string in a prior request that you can use to get the paginated
+	// response for next set of conformance pack compliance scores.
+	NextToken *string `type:"string"`
+
+	// Sorts your conformance pack compliance scores in either ascending or descending
+	// order, depending on SortOrder.
+	//
+	// By default, conformance pack compliance scores are sorted in ascending order
+	// by compliance score and alphabetically by name of the conformance pack if
+	// there is more than one conformance pack with the same compliance score.
+	SortBy *string `type:"string" enum:"SortBy"`
+
+	// Determines the order in which conformance pack compliance scores are sorted.
+	// Either in ascending or descending order.
+	//
+	// Conformance packs with a compliance score of INSUFFICIENT_DATA will be first
+	// when sorting by ascending order and last when sorting by descending order.
+	SortOrder *string `type:"string" enum:"SortOrder"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConformancePackComplianceScoresInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConformancePackComplianceScoresInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListConformancePackComplianceScoresInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListConformancePackComplianceScoresInput"}
+	if s.Filters != nil {
+		if err := s.Filters.Validate(); err != nil {
+			invalidParams.AddNested("Filters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListConformancePackComplianceScoresInput) SetFilters(v *ConformancePackComplianceScoresFilters) *ListConformancePackComplianceScoresInput {
+	s.Filters = v
+	return s
+}
+
+// SetLimit sets the Limit field's value.
+func (s *ListConformancePackComplianceScoresInput) SetLimit(v int64) *ListConformancePackComplianceScoresInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConformancePackComplianceScoresInput) SetNextToken(v string) *ListConformancePackComplianceScoresInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSortBy sets the SortBy field's value.
+func (s *ListConformancePackComplianceScoresInput) SetSortBy(v string) *ListConformancePackComplianceScoresInput {
+	s.SortBy = &v
+	return s
+}
+
+// SetSortOrder sets the SortOrder field's value.
+func (s *ListConformancePackComplianceScoresInput) SetSortOrder(v string) *ListConformancePackComplianceScoresInput {
+	s.SortOrder = &v
+	return s
+}
+
+type ListConformancePackComplianceScoresOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of ConformancePackComplianceScore objects.
+	//
+	// ConformancePackComplianceScores is a required field
+	ConformancePackComplianceScores []*ConformancePackComplianceScore `type:"list" required:"true"`
+
+	// The nextToken string that you can use to get the next page of results in
+	// a paginated response.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConformancePackComplianceScoresOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConformancePackComplianceScoresOutput) GoString() string {
+	return s.String()
+}
+
+// SetConformancePackComplianceScores sets the ConformancePackComplianceScores field's value.
+func (s *ListConformancePackComplianceScoresOutput) SetConformancePackComplianceScores(v []*ConformancePackComplianceScore) *ListConformancePackComplianceScoresOutput {
+	s.ConformancePackComplianceScores = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConformancePackComplianceScoresOutput) SetNextToken(v string) *ListConformancePackComplianceScoresOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListDiscoveredResourcesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22793,7 +23729,7 @@ func (s *MaxNumberOfDeliveryChannelsExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// You have reached the limit of the number of organization config rules you
+// You have reached the limit of the number of organization Config rules you
 // can create.
 type MaxNumberOfOrganizationConfigRulesExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -22989,7 +23925,7 @@ func (s *MaxNumberOfRetentionConfigurationsExceededException) RequestID() string
 	return s.RespMetadata.RequestID
 }
 
-// Organization config rule creation or deletion status in each member account.
+// Organization Config rule creation or deletion status in each member account.
 // This includes the name of the rule, the status, error code and error message
 // when the rule creation or deletion failed.
 type MemberAccountStatus struct {
@@ -23000,48 +23936,48 @@ type MemberAccountStatus struct {
 	// AccountId is a required field
 	AccountId *string `type:"string" required:"true"`
 
-	// The name of config rule deployed in the member account.
+	// The name of Config rule deployed in the member account.
 	//
 	// ConfigRuleName is a required field
 	ConfigRuleName *string `min:"1" type:"string" required:"true"`
 
-	// An error code that is returned when config rule creation or deletion failed
+	// An error code that is returned when Config rule creation or deletion failed
 	// in the member account.
 	ErrorCode *string `type:"string"`
 
-	// An error message indicating that config rule account creation or deletion
+	// An error message indicating that Config rule account creation or deletion
 	// has failed due to an error in the member account.
 	ErrorMessage *string `type:"string"`
 
 	// The timestamp of the last status update.
 	LastUpdateTime *time.Time `type:"timestamp"`
 
-	// Indicates deployment status for config rule in the member account. When master
-	// account calls PutOrganizationConfigRule action for the first time, config
+	// Indicates deployment status for Config rule in the member account. When master
+	// account calls PutOrganizationConfigRule action for the first time, Config
 	// rule status is created in the member account. When master account calls PutOrganizationConfigRule
-	// action for the second time, config rule status is updated in the member account.
+	// action for the second time, Config rule status is updated in the member account.
 	// Config rule status is deleted when the master account deletes OrganizationConfigRule
 	// and disables service access for config-multiaccountsetup.amazonaws.com.
 	//
 	// Config sets the state of the rule to:
 	//
-	//    * CREATE_SUCCESSFUL when config rule has been created in the member account.
+	//    * CREATE_SUCCESSFUL when Config rule has been created in the member account.
 	//
-	//    * CREATE_IN_PROGRESS when config rule is being created in the member account.
+	//    * CREATE_IN_PROGRESS when Config rule is being created in the member account.
 	//
-	//    * CREATE_FAILED when config rule creation has failed in the member account.
+	//    * CREATE_FAILED when Config rule creation has failed in the member account.
 	//
-	//    * DELETE_FAILED when config rule deletion has failed in the member account.
+	//    * DELETE_FAILED when Config rule deletion has failed in the member account.
 	//
-	//    * DELETE_IN_PROGRESS when config rule is being deleted in the member account.
+	//    * DELETE_IN_PROGRESS when Config rule is being deleted in the member account.
 	//
-	//    * DELETE_SUCCESSFUL when config rule has been deleted in the member account.
+	//    * DELETE_SUCCESSFUL when Config rule has been deleted in the member account.
 	//
-	//    * UPDATE_SUCCESSFUL when config rule has been updated in the member account.
+	//    * UPDATE_SUCCESSFUL when Config rule has been updated in the member account.
 	//
-	//    * UPDATE_IN_PROGRESS when config rule is being updated in the member account.
+	//    * UPDATE_IN_PROGRESS when Config rule is being updated in the member account.
 	//
-	//    * UPDATE_FAILED when config rule deletion has failed in the member account.
+	//    * UPDATE_FAILED when Config rule deletion has failed in the member account.
 	//
 	// MemberAccountRuleStatus is a required field
 	MemberAccountRuleStatus *string `type:"string" required:"true" enum:"MemberAccountRuleStatus"`
@@ -23422,8 +24358,9 @@ func (s *NoSuchBucketException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// One or more Config rules in the request are invalid. Verify that the rule
-// names are correct and try again.
+// The Config rule in the request is not valid. Verify that the rule is an Config
+// Custom Policy rule, that the rule name is correct, and that valid Amazon
+// Resouce Names (ARNs) are used before trying again.
 type NoSuchConfigRuleException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -23807,7 +24744,9 @@ func (s *NoSuchDeliveryChannelException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// You specified one or more organization config rules that do not exist.
+// The Config rule in the request is not valid. Verify that the rule is an organization
+// Config Custom Policy rule, that the rule name is correct, and that valid
+// Amazon Resouce Names (ARNs) are used before trying again.
 type NoSuchOrganizationConfigRuleException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -24352,26 +25291,34 @@ func (s *OrganizationAllFeaturesNotEnabledException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// An organization config rule that has information about config rules that
+// An organization Config rule that has information about Config rules that
 // Config creates in member accounts.
 type OrganizationConfigRule struct {
 	_ struct{} `type:"structure"`
 
-	// A comma-separated list of accounts excluded from organization config rule.
+	// A comma-separated list of accounts excluded from organization Config rule.
 	ExcludedAccounts []*string `type:"list"`
 
 	// The timestamp of the last update.
 	LastUpdateTime *time.Time `type:"timestamp"`
 
-	// Amazon Resource Name (ARN) of organization config rule.
+	// Amazon Resource Name (ARN) of organization Config rule.
 	//
 	// OrganizationConfigRuleArn is a required field
 	OrganizationConfigRuleArn *string `min:"1" type:"string" required:"true"`
 
-	// The name that you assign to organization config rule.
+	// The name that you assign to organization Config rule.
 	//
 	// OrganizationConfigRuleName is a required field
 	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
+
+	// An object that specifies metadata for your organization's Config Custom Policy
+	// rule. The metadata includes the runtime system in use, which accounts have
+	// debug logging enabled, and other custom rule metadata, such as resource type,
+	// resource ID of Amazon Web Services resource, and organization trigger types
+	// that initiate Config to evaluate Amazon Web Services resources against a
+	// rule.
+	OrganizationCustomPolicyRuleMetadata *OrganizationCustomPolicyRuleMetadataNoPolicy `type:"structure"`
 
 	// An OrganizationCustomRuleMetadata object.
 	OrganizationCustomRuleMetadata *OrganizationCustomRuleMetadata `type:"structure"`
@@ -24422,6 +25369,12 @@ func (s *OrganizationConfigRule) SetOrganizationConfigRuleName(v string) *Organi
 	return s
 }
 
+// SetOrganizationCustomPolicyRuleMetadata sets the OrganizationCustomPolicyRuleMetadata field's value.
+func (s *OrganizationConfigRule) SetOrganizationCustomPolicyRuleMetadata(v *OrganizationCustomPolicyRuleMetadataNoPolicy) *OrganizationConfigRule {
+	s.OrganizationCustomPolicyRuleMetadata = v
+	return s
+}
+
 // SetOrganizationCustomRuleMetadata sets the OrganizationCustomRuleMetadata field's value.
 func (s *OrganizationConfigRule) SetOrganizationCustomRuleMetadata(v *OrganizationCustomRuleMetadata) *OrganizationConfigRule {
 	s.OrganizationCustomRuleMetadata = v
@@ -24434,59 +25387,59 @@ func (s *OrganizationConfigRule) SetOrganizationManagedRuleMetadata(v *Organizat
 	return s
 }
 
-// Returns the status for an organization config rule in an organization.
+// Returns the status for an organization Config rule in an organization.
 type OrganizationConfigRuleStatus struct {
 	_ struct{} `type:"structure"`
 
-	// An error code that is returned when organization config rule creation or
+	// An error code that is returned when organization Config rule creation or
 	// deletion has failed.
 	ErrorCode *string `type:"string"`
 
-	// An error message indicating that organization config rule creation or deletion
+	// An error message indicating that organization Config rule creation or deletion
 	// failed due to an error.
 	ErrorMessage *string `type:"string"`
 
 	// The timestamp of the last update.
 	LastUpdateTime *time.Time `type:"timestamp"`
 
-	// The name that you assign to organization config rule.
+	// The name that you assign to organization Config rule.
 	//
 	// OrganizationConfigRuleName is a required field
 	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
 
-	// Indicates deployment status of an organization config rule. When master account
-	// calls PutOrganizationConfigRule action for the first time, config rule status
+	// Indicates deployment status of an organization Config rule. When master account
+	// calls PutOrganizationConfigRule action for the first time, Config rule status
 	// is created in all the member accounts. When master account calls PutOrganizationConfigRule
-	// action for the second time, config rule status is updated in all the member
-	// accounts. Additionally, config rule status is updated when one or more member
+	// action for the second time, Config rule status is updated in all the member
+	// accounts. Additionally, Config rule status is updated when one or more member
 	// accounts join or leave an organization. Config rule status is deleted when
 	// the master account deletes OrganizationConfigRule in all the member accounts
 	// and disables service access for config-multiaccountsetup.amazonaws.com.
 	//
 	// Config sets the state of the rule to:
 	//
-	//    * CREATE_SUCCESSFUL when an organization config rule has been successfully
+	//    * CREATE_SUCCESSFUL when an organization Config rule has been successfully
 	//    created in all the member accounts.
 	//
-	//    * CREATE_IN_PROGRESS when an organization config rule creation is in progress.
+	//    * CREATE_IN_PROGRESS when an organization Config rule creation is in progress.
 	//
-	//    * CREATE_FAILED when an organization config rule creation failed in one
+	//    * CREATE_FAILED when an organization Config rule creation failed in one
 	//    or more member accounts within that organization.
 	//
-	//    * DELETE_FAILED when an organization config rule deletion failed in one
+	//    * DELETE_FAILED when an organization Config rule deletion failed in one
 	//    or more member accounts within that organization.
 	//
-	//    * DELETE_IN_PROGRESS when an organization config rule deletion is in progress.
+	//    * DELETE_IN_PROGRESS when an organization Config rule deletion is in progress.
 	//
-	//    * DELETE_SUCCESSFUL when an organization config rule has been successfully
+	//    * DELETE_SUCCESSFUL when an organization Config rule has been successfully
 	//    deleted from all the member accounts.
 	//
-	//    * UPDATE_SUCCESSFUL when an organization config rule has been successfully
+	//    * UPDATE_SUCCESSFUL when an organization Config rule has been successfully
 	//    updated in all the member accounts.
 	//
-	//    * UPDATE_IN_PROGRESS when an organization config rule update is in progress.
+	//    * UPDATE_IN_PROGRESS when an organization Config rule update is in progress.
 	//
-	//    * UPDATE_FAILED when an organization config rule update failed in one
+	//    * UPDATE_FAILED when an organization Config rule update failed in one
 	//    or more member accounts within that organization.
 	//
 	// OrganizationRuleStatus is a required field
@@ -24935,6 +25888,328 @@ func (s *OrganizationConformancePackTemplateValidationException) RequestID() str
 	return s.RespMetadata.RequestID
 }
 
+// An object that specifies metadata for your organization's Config Custom Policy
+// rule. The metadata includes the runtime system in use, which accounts have
+// debug logging enabled, and other custom rule metadata, such as resource type,
+// resource ID of Amazon Web Services resource, and organization trigger types
+// that initiate Config to evaluate Amazon Web Services resources against a
+// rule.
+type OrganizationCustomPolicyRuleMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// A list of accounts that you can enable debug logging for your organization
+	// Config Custom Policy rule. List is null when debug logging is enabled for
+	// all accounts.
+	DebugLogDeliveryAccounts []*string `type:"list"`
+
+	// The description that you provide for your organization Config Custom Policy
+	// rule.
+	Description *string `type:"string"`
+
+	// A string, in JSON format, that is passed to your organization Config Custom
+	// Policy rule.
+	InputParameters *string `min:"1" type:"string"`
+
+	// The maximum frequency with which Config runs evaluations for a rule. Your
+	// Config Custom Policy rule is triggered when Config delivers the configuration
+	// snapshot. For more information, see ConfigSnapshotDeliveryProperties.
+	MaximumExecutionFrequency *string `type:"string" enum:"MaximumExecutionFrequency"`
+
+	// The type of notification that initiates Config to run an evaluation for a
+	// rule. For Config Custom Policy rules, Config supports change-initiated notification
+	// types:
+	//
+	//    * ConfigurationItemChangeNotification - Initiates an evaluation when Config
+	//    delivers a configuration item as a result of a resource change.
+	//
+	//    * OversizedConfigurationItemChangeNotification - Initiates an evaluation
+	//    when Config delivers an oversized configuration item. Config may generate
+	//    this notification type when a resource changes and the notification exceeds
+	//    the maximum size allowed by Amazon SNS.
+	OrganizationConfigRuleTriggerTypes []*string `type:"list" enum:"OrganizationConfigRuleTriggerTypeNoSN"`
+
+	// The runtime system for your organization Config Custom Policy rules. Guard
+	// is a policy-as-code language that allows you to write policies that are enforced
+	// by Config Custom Policy rules. For more information about Guard, see the
+	// Guard GitHub Repository (https://github.com/aws-cloudformation/cloudformation-guard).
+	//
+	// PolicyRuntime is a required field
+	PolicyRuntime *string `min:"1" type:"string" required:"true"`
+
+	// The policy definition containing the logic for your organization Config Custom
+	// Policy rule.
+	//
+	// PolicyText is a required field
+	PolicyText *string `type:"string" required:"true"`
+
+	// The ID of the Amazon Web Services resource that was evaluated.
+	ResourceIdScope *string `min:"1" type:"string"`
+
+	// The type of the Amazon Web Services resource that was evaluated.
+	ResourceTypesScope []*string `type:"list"`
+
+	// One part of a key-value pair that make up a tag. A key is a general label
+	// that acts like a category for more specific tag values.
+	TagKeyScope *string `min:"1" type:"string"`
+
+	// The optional part of a key-value pair that make up a tag. A value acts as
+	// a descriptor within a tag category (key).
+	TagValueScope *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationCustomPolicyRuleMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationCustomPolicyRuleMetadata) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OrganizationCustomPolicyRuleMetadata) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OrganizationCustomPolicyRuleMetadata"}
+	if s.InputParameters != nil && len(*s.InputParameters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputParameters", 1))
+	}
+	if s.PolicyRuntime == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyRuntime"))
+	}
+	if s.PolicyRuntime != nil && len(*s.PolicyRuntime) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyRuntime", 1))
+	}
+	if s.PolicyText == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyText"))
+	}
+	if s.ResourceIdScope != nil && len(*s.ResourceIdScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceIdScope", 1))
+	}
+	if s.TagKeyScope != nil && len(*s.TagKeyScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeyScope", 1))
+	}
+	if s.TagValueScope != nil && len(*s.TagValueScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagValueScope", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDebugLogDeliveryAccounts sets the DebugLogDeliveryAccounts field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetDebugLogDeliveryAccounts(v []*string) *OrganizationCustomPolicyRuleMetadata {
+	s.DebugLogDeliveryAccounts = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetDescription(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.Description = &v
+	return s
+}
+
+// SetInputParameters sets the InputParameters field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetInputParameters(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.InputParameters = &v
+	return s
+}
+
+// SetMaximumExecutionFrequency sets the MaximumExecutionFrequency field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetMaximumExecutionFrequency(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.MaximumExecutionFrequency = &v
+	return s
+}
+
+// SetOrganizationConfigRuleTriggerTypes sets the OrganizationConfigRuleTriggerTypes field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetOrganizationConfigRuleTriggerTypes(v []*string) *OrganizationCustomPolicyRuleMetadata {
+	s.OrganizationConfigRuleTriggerTypes = v
+	return s
+}
+
+// SetPolicyRuntime sets the PolicyRuntime field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetPolicyRuntime(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.PolicyRuntime = &v
+	return s
+}
+
+// SetPolicyText sets the PolicyText field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetPolicyText(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.PolicyText = &v
+	return s
+}
+
+// SetResourceIdScope sets the ResourceIdScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetResourceIdScope(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.ResourceIdScope = &v
+	return s
+}
+
+// SetResourceTypesScope sets the ResourceTypesScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetResourceTypesScope(v []*string) *OrganizationCustomPolicyRuleMetadata {
+	s.ResourceTypesScope = v
+	return s
+}
+
+// SetTagKeyScope sets the TagKeyScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetTagKeyScope(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.TagKeyScope = &v
+	return s
+}
+
+// SetTagValueScope sets the TagValueScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadata) SetTagValueScope(v string) *OrganizationCustomPolicyRuleMetadata {
+	s.TagValueScope = &v
+	return s
+}
+
+// An object that specifies metadata for your organization Config Custom Policy
+// rule including the runtime system in use, which accounts have debug logging
+// enabled, and other custom rule metadata such as resource type, resource ID
+// of Amazon Web Services resource, and organization trigger types that trigger
+// Config to evaluate Amazon Web Services resources against a rule.
+type OrganizationCustomPolicyRuleMetadataNoPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// A list of accounts that you can enable debug logging for your organization
+	// Config Custom Policy rule. List is null when debug logging is enabled for
+	// all accounts.
+	DebugLogDeliveryAccounts []*string `type:"list"`
+
+	// The description that you provide for your organization Config Custom Policy
+	// rule.
+	Description *string `type:"string"`
+
+	// A string, in JSON format, that is passed to your organization Config Custom
+	// Policy rule.
+	InputParameters *string `min:"1" type:"string"`
+
+	// The maximum frequency with which Config runs evaluations for a rule. Your
+	// Config Custom Policy rule is triggered when Config delivers the configuration
+	// snapshot. For more information, see ConfigSnapshotDeliveryProperties.
+	MaximumExecutionFrequency *string `type:"string" enum:"MaximumExecutionFrequency"`
+
+	// The type of notification that triggers Config to run an evaluation for a
+	// rule. For Config Custom Policy rules, Config supports change triggered notification
+	// types:
+	//
+	//    * ConfigurationItemChangeNotification - Triggers an evaluation when Config
+	//    delivers a configuration item as a result of a resource change.
+	//
+	//    * OversizedConfigurationItemChangeNotification - Triggers an evaluation
+	//    when Config delivers an oversized configuration item. Config may generate
+	//    this notification type when a resource changes and the notification exceeds
+	//    the maximum size allowed by Amazon SNS.
+	OrganizationConfigRuleTriggerTypes []*string `type:"list" enum:"OrganizationConfigRuleTriggerTypeNoSN"`
+
+	// The runtime system for your organization Config Custom Policy rules. Guard
+	// is a policy-as-code language that allows you to write policies that are enforced
+	// by Config Custom Policy rules. For more information about Guard, see the
+	// Guard GitHub Repository (https://github.com/aws-cloudformation/cloudformation-guard).
+	PolicyRuntime *string `min:"1" type:"string"`
+
+	// The ID of the Amazon Web Services resource that was evaluated.
+	ResourceIdScope *string `min:"1" type:"string"`
+
+	// The type of the Amazon Web Services resource that was evaluated.
+	ResourceTypesScope []*string `type:"list"`
+
+	// One part of a key-value pair that make up a tag. A key is a general label
+	// that acts like a category for more specific tag values.
+	TagKeyScope *string `min:"1" type:"string"`
+
+	// The optional part of a key-value pair that make up a tag. A value acts as
+	// a descriptor within a tag category (key).
+	TagValueScope *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationCustomPolicyRuleMetadataNoPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrganizationCustomPolicyRuleMetadataNoPolicy) GoString() string {
+	return s.String()
+}
+
+// SetDebugLogDeliveryAccounts sets the DebugLogDeliveryAccounts field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetDebugLogDeliveryAccounts(v []*string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.DebugLogDeliveryAccounts = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetDescription(v string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.Description = &v
+	return s
+}
+
+// SetInputParameters sets the InputParameters field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetInputParameters(v string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.InputParameters = &v
+	return s
+}
+
+// SetMaximumExecutionFrequency sets the MaximumExecutionFrequency field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetMaximumExecutionFrequency(v string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.MaximumExecutionFrequency = &v
+	return s
+}
+
+// SetOrganizationConfigRuleTriggerTypes sets the OrganizationConfigRuleTriggerTypes field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetOrganizationConfigRuleTriggerTypes(v []*string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.OrganizationConfigRuleTriggerTypes = v
+	return s
+}
+
+// SetPolicyRuntime sets the PolicyRuntime field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetPolicyRuntime(v string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.PolicyRuntime = &v
+	return s
+}
+
+// SetResourceIdScope sets the ResourceIdScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetResourceIdScope(v string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.ResourceIdScope = &v
+	return s
+}
+
+// SetResourceTypesScope sets the ResourceTypesScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetResourceTypesScope(v []*string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.ResourceTypesScope = v
+	return s
+}
+
+// SetTagKeyScope sets the TagKeyScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetTagKeyScope(v string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.TagKeyScope = &v
+	return s
+}
+
+// SetTagValueScope sets the TagValueScope field's value.
+func (s *OrganizationCustomPolicyRuleMetadataNoPolicy) SetTagValueScope(v string) *OrganizationCustomPolicyRuleMetadataNoPolicy {
+	s.TagValueScope = &v
+	return s
+}
+
 // An object that specifies organization custom rule metadata such as resource
 // type, resource ID of Amazon Web Services resource, Lambda function ARN, and
 // organization trigger types that trigger Config to evaluate your Amazon Web
@@ -24943,11 +26218,11 @@ func (s *OrganizationConformancePackTemplateValidationException) RequestID() str
 type OrganizationCustomRuleMetadata struct {
 	_ struct{} `type:"structure"`
 
-	// The description that you provide for organization config rule.
+	// The description that you provide for your organization Config rule.
 	Description *string `type:"string"`
 
-	// A string, in JSON format, that is passed to organization config rule Lambda
-	// function.
+	// A string, in JSON format, that is passed to your organization Config rule
+	// Lambda function.
 	InputParameters *string `min:"1" type:"string"`
 
 	// The lambda function ARN.
@@ -24979,7 +26254,7 @@ type OrganizationCustomRuleMetadata struct {
 	//    specified for MaximumExecutionFrequency.
 	//
 	// OrganizationConfigRuleTriggerTypes is a required field
-	OrganizationConfigRuleTriggerTypes []*string `type:"list" required:"true"`
+	OrganizationConfigRuleTriggerTypes []*string `type:"list" required:"true" enum:"OrganizationConfigRuleTriggerType"`
 
 	// The ID of the Amazon Web Services resource that was evaluated.
 	ResourceIdScope *string `min:"1" type:"string"`
@@ -25106,15 +26381,15 @@ func (s *OrganizationCustomRuleMetadata) SetTagValueScope(v string) *Organizatio
 type OrganizationManagedRuleMetadata struct {
 	_ struct{} `type:"structure"`
 
-	// The description that you provide for organization config rule.
+	// The description that you provide for your organization Config rule.
 	Description *string `type:"string"`
 
-	// A string, in JSON format, that is passed to organization config rule Lambda
-	// function.
+	// A string, in JSON format, that is passed to your organization Config rule
+	// Lambda function.
 	InputParameters *string `min:"1" type:"string"`
 
-	// The maximum frequency with which Config runs evaluations for a rule. You
-	// are using an Config managed rule that is triggered at a periodic frequency.
+	// The maximum frequency with which Config runs evaluations for a rule. This
+	// is for an Config managed rule that is triggered at a periodic frequency.
 	//
 	// By default, rules with a periodic trigger are evaluated every 24 hours. To
 	// change the frequency, specify a valid value for the MaximumExecutionFrequency
@@ -25857,8 +27132,8 @@ type PutConformancePackInput struct {
 	// the template body with a minimum length of 1 byte and a maximum length of
 	// 51,200 bytes.
 	//
-	// You can only use a YAML template with one resource type, that is, config
-	// rule and a remediation action.
+	// You can only use a YAML template with two resource types: Config rule (AWS::Config::ConfigRule)
+	// and a remediation action (AWS::Config::RemediationConfiguration).
 	TemplateBody *string `min:"1" type:"string"`
 
 	// Location of file containing the template body (s3://bucketname/prefix). The
@@ -26269,18 +27544,35 @@ type PutOrganizationConfigRuleInput struct {
 	_ struct{} `type:"structure"`
 
 	// A comma-separated list of accounts that you want to exclude from an organization
-	// config rule.
+	// Config rule.
 	ExcludedAccounts []*string `type:"list"`
 
-	// The name that you assign to an organization config rule.
+	// The name that you assign to an organization Config rule.
 	//
 	// OrganizationConfigRuleName is a required field
 	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
 
-	// An OrganizationCustomRuleMetadata object.
+	// An OrganizationCustomPolicyRuleMetadata object. This object specifies metadata
+	// for your organization's Config Custom Policy rule. The metadata includes
+	// the runtime system in use, which accounts have debug logging enabled, and
+	// other custom rule metadata, such as resource type, resource ID of Amazon
+	// Web Services resource, and organization trigger types that initiate Config
+	// to evaluate Amazon Web Services resources against a rule.
+	OrganizationCustomPolicyRuleMetadata *OrganizationCustomPolicyRuleMetadata `type:"structure"`
+
+	// An OrganizationCustomRuleMetadata object. This object specifies organization
+	// custom rule metadata such as resource type, resource ID of Amazon Web Services
+	// resource, Lambda function ARN, and organization trigger types that trigger
+	// Config to evaluate your Amazon Web Services resources against a rule. It
+	// also provides the frequency with which you want Config to run evaluations
+	// for the rule if the trigger type is periodic.
 	OrganizationCustomRuleMetadata *OrganizationCustomRuleMetadata `type:"structure"`
 
-	// An OrganizationManagedRuleMetadata object.
+	// An OrganizationManagedRuleMetadata object. This object specifies organization
+	// managed rule metadata such as resource type and ID of Amazon Web Services
+	// resource along with the rule identifier. It also provides the frequency with
+	// which you want Config to run evaluations for the rule if the trigger type
+	// is periodic.
 	OrganizationManagedRuleMetadata *OrganizationManagedRuleMetadata `type:"structure"`
 }
 
@@ -26311,6 +27603,11 @@ func (s *PutOrganizationConfigRuleInput) Validate() error {
 	if s.OrganizationConfigRuleName != nil && len(*s.OrganizationConfigRuleName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("OrganizationConfigRuleName", 1))
 	}
+	if s.OrganizationCustomPolicyRuleMetadata != nil {
+		if err := s.OrganizationCustomPolicyRuleMetadata.Validate(); err != nil {
+			invalidParams.AddNested("OrganizationCustomPolicyRuleMetadata", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.OrganizationCustomRuleMetadata != nil {
 		if err := s.OrganizationCustomRuleMetadata.Validate(); err != nil {
 			invalidParams.AddNested("OrganizationCustomRuleMetadata", err.(request.ErrInvalidParams))
@@ -26340,6 +27637,12 @@ func (s *PutOrganizationConfigRuleInput) SetOrganizationConfigRuleName(v string)
 	return s
 }
 
+// SetOrganizationCustomPolicyRuleMetadata sets the OrganizationCustomPolicyRuleMetadata field's value.
+func (s *PutOrganizationConfigRuleInput) SetOrganizationCustomPolicyRuleMetadata(v *OrganizationCustomPolicyRuleMetadata) *PutOrganizationConfigRuleInput {
+	s.OrganizationCustomPolicyRuleMetadata = v
+	return s
+}
+
 // SetOrganizationCustomRuleMetadata sets the OrganizationCustomRuleMetadata field's value.
 func (s *PutOrganizationConfigRuleInput) SetOrganizationCustomRuleMetadata(v *OrganizationCustomRuleMetadata) *PutOrganizationConfigRuleInput {
 	s.OrganizationCustomRuleMetadata = v
@@ -26355,7 +27658,7 @@ func (s *PutOrganizationConfigRuleInput) SetOrganizationManagedRuleMetadata(v *O
 type PutOrganizationConfigRuleOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of an organization config rule.
+	// The Amazon Resource Name (ARN) of an organization Config rule.
 	OrganizationConfigRuleArn *string `min:"1" type:"string"`
 }
 
@@ -26796,6 +28099,10 @@ type PutResourceConfigInput struct {
 	SchemaVersionId *string `min:"1" type:"string" required:"true"`
 
 	// Tags associated with the resource.
+	//
+	// This field is not to be confused with the Amazon Web Services-wide tag feature
+	// for Amazon Web Services resources. Tags for PutResourceConfig are tags that
+	// you supply for the configuration items of your custom resources.
 	Tags map[string]*string `type:"map"`
 }
 
@@ -27193,7 +28500,7 @@ type RecordingGroup struct {
 	//
 	// For a list of valid resourceTypes values, see the resourceType Value column
 	// in Supported Amazon Web Services resource Types (https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources).
-	ResourceTypes []*string `locationName:"resourceTypes" type:"list"`
+	ResourceTypes []*string `locationName:"resourceTypes" type:"list" enum:"ResourceType"`
 }
 
 // String returns the string representation.
@@ -27308,7 +28615,7 @@ type RemediationConfiguration struct {
 	// ConfigRuleName is a required field
 	ConfigRuleName *string `min:"1" type:"string" required:"true"`
 
-	// Name of the service that owns the service linked rule, if applicable.
+	// Name of the service that owns the service-linked rule, if applicable.
 	CreatedByService *string `min:"1" type:"string"`
 
 	// An ExecutionControls object.
@@ -28211,10 +29518,10 @@ func (s *ResourceIdentifier) SetResourceType(v string) *ResourceIdentifier {
 //    and Config cannot delete this rule. Delete the remediation action associated
 //    with the rule before deleting the rule and try your request again later.
 //
-//    * For PutConfigOrganizationRule, organization config rule deletion is
+//    * For PutConfigOrganizationRule, organization Config rule deletion is
 //    in progress. Try your request again later.
 //
-//    * For DeleteOrganizationConfigRule, organization config rule creation
+//    * For DeleteOrganizationConfigRule, organization Config rule creation
 //    is in progress. Try your request again later.
 //
 //    * For PutConformancePack and PutOrganizationConformancePack, a conformance
@@ -28928,31 +30235,51 @@ func (s *SelectResourceConfigOutput) SetResults(v []*string) *SelectResourceConf
 	return s
 }
 
-// Provides the Config rule owner (Amazon Web Services or customer), the rule
-// identifier, and the events that trigger the evaluation of your Amazon Web
-// Services resources.
+// Provides the CustomPolicyDetails, the rule owner (Amazon Web Services for
+// managed rules, CUSTOM_POLICY for Custom Policy rules, and CUSTOM_LAMBDA for
+// Custom Lambda rules), the rule identifier, and the events that cause the
+// evaluation of your Amazon Web Services resources.
 type Source struct {
 	_ struct{} `type:"structure"`
+
+	// Provides the runtime system, policy definition, and whether debug logging
+	// is enabled. Required when owner is set to CUSTOM_POLICY.
+	CustomPolicyDetails *CustomPolicyDetails `type:"structure"`
 
 	// Indicates whether Amazon Web Services or the customer owns and manages the
 	// Config rule.
 	//
+	// Config Managed Rules are predefined rules owned by Amazon Web Services. For
+	// more information, see Config Managed Rules (https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html)
+	// in the Config developer guide.
+	//
+	// Config Custom Rules are rules that you can develop either with Guard (CUSTOM_POLICY)
+	// or Lambda (CUSTOM_LAMBDA). For more information, see Config Custom Rules
+	// (https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_develop-rules.html)
+	// in the Config developer guide.
+	//
 	// Owner is a required field
 	Owner *string `type:"string" required:"true" enum:"Owner"`
 
-	// Provides the source and type of the event that causes Config to evaluate
-	// your Amazon Web Services resources.
+	// Provides the source and the message types that cause Config to evaluate your
+	// Amazon Web Services resources against a rule. It also provides the frequency
+	// with which you want Config to run evaluations for the rule if the trigger
+	// type is periodic.
+	//
+	// If the owner is set to CUSTOM_POLICY, the only acceptable values for the
+	// Config rule trigger message type are ConfigurationItemChangeNotification
+	// and OversizedConfigurationItemChangeNotification.
 	SourceDetails []*SourceDetail `type:"list"`
 
-	// For Config managed rules, a predefined identifier from a list. For example,
-	// IAM_PASSWORD_POLICY is a managed rule. To reference a managed rule, see Using
-	// Config managed rules (https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html).
+	// For Config Managed rules, a predefined identifier from a list. For example,
+	// IAM_PASSWORD_POLICY is a managed rule. To reference a managed rule, see List
+	// of Config Managed Rules (https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html).
 	//
-	// For custom rules, the identifier is the Amazon Resource Name (ARN) of the
-	// rule's Lambda function, such as arn:aws:lambda:us-east-2:123456789012:function:custom_rule_name.
+	// For Config Custom Lambda rules, the identifier is the Amazon Resource Name
+	// (ARN) of the rule's Lambda function, such as arn:aws:lambda:us-east-2:123456789012:function:custom_rule_name.
 	//
-	// SourceIdentifier is a required field
-	SourceIdentifier *string `min:"1" type:"string" required:"true"`
+	// For Config Custom Policy rules, this field will be ignored.
+	SourceIdentifier *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -28979,17 +30306,25 @@ func (s *Source) Validate() error {
 	if s.Owner == nil {
 		invalidParams.Add(request.NewErrParamRequired("Owner"))
 	}
-	if s.SourceIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("SourceIdentifier"))
-	}
 	if s.SourceIdentifier != nil && len(*s.SourceIdentifier) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SourceIdentifier", 1))
+	}
+	if s.CustomPolicyDetails != nil {
+		if err := s.CustomPolicyDetails.Validate(); err != nil {
+			invalidParams.AddNested("CustomPolicyDetails", err.(request.ErrInvalidParams))
+		}
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCustomPolicyDetails sets the CustomPolicyDetails field's value.
+func (s *Source) SetCustomPolicyDetails(v *CustomPolicyDetails) *Source {
+	s.CustomPolicyDetails = v
+	return s
 }
 
 // SetOwner sets the Owner field's value.
@@ -29466,39 +30801,39 @@ func (s *StaticValue) SetValues(v []*string) *StaticValue {
 }
 
 // Status filter object to filter results based on specific member account ID
-// or status type for an organization config rule.
+// or status type for an organization Config rule.
 type StatusDetailFilters struct {
 	_ struct{} `type:"structure"`
 
 	// The 12-digit account ID of the member account within an organization.
 	AccountId *string `type:"string"`
 
-	// Indicates deployment status for config rule in the member account. When master
-	// account calls PutOrganizationConfigRule action for the first time, config
+	// Indicates deployment status for Config rule in the member account. When master
+	// account calls PutOrganizationConfigRule action for the first time, Config
 	// rule status is created in the member account. When master account calls PutOrganizationConfigRule
-	// action for the second time, config rule status is updated in the member account.
+	// action for the second time, Config rule status is updated in the member account.
 	// Config rule status is deleted when the master account deletes OrganizationConfigRule
 	// and disables service access for config-multiaccountsetup.amazonaws.com.
 	//
 	// Config sets the state of the rule to:
 	//
-	//    * CREATE_SUCCESSFUL when config rule has been created in the member account.
+	//    * CREATE_SUCCESSFUL when Config rule has been created in the member account.
 	//
-	//    * CREATE_IN_PROGRESS when config rule is being created in the member account.
+	//    * CREATE_IN_PROGRESS when Config rule is being created in the member account.
 	//
-	//    * CREATE_FAILED when config rule creation has failed in the member account.
+	//    * CREATE_FAILED when Config rule creation has failed in the member account.
 	//
-	//    * DELETE_FAILED when config rule deletion has failed in the member account.
+	//    * DELETE_FAILED when Config rule deletion has failed in the member account.
 	//
-	//    * DELETE_IN_PROGRESS when config rule is being deleted in the member account.
+	//    * DELETE_IN_PROGRESS when Config rule is being deleted in the member account.
 	//
-	//    * DELETE_SUCCESSFUL when config rule has been deleted in the member account.
+	//    * DELETE_SUCCESSFUL when Config rule has been deleted in the member account.
 	//
-	//    * UPDATE_SUCCESSFUL when config rule has been updated in the member account.
+	//    * UPDATE_SUCCESSFUL when Config rule has been updated in the member account.
 	//
-	//    * UPDATE_IN_PROGRESS when config rule is being updated in the member account.
+	//    * UPDATE_IN_PROGRESS when Config rule is being updated in the member account.
 	//
-	//    * UPDATE_FAILED when config rule deletion has failed in the member account.
+	//    * UPDATE_FAILED when Config rule deletion has failed in the member account.
 	MemberAccountRuleStatus *string `type:"string" enum:"MemberAccountRuleStatus"`
 }
 
@@ -30511,6 +31846,22 @@ func OrganizationConfigRuleTriggerType_Values() []string {
 }
 
 const (
+	// OrganizationConfigRuleTriggerTypeNoSNConfigurationItemChangeNotification is a OrganizationConfigRuleTriggerTypeNoSN enum value
+	OrganizationConfigRuleTriggerTypeNoSNConfigurationItemChangeNotification = "ConfigurationItemChangeNotification"
+
+	// OrganizationConfigRuleTriggerTypeNoSNOversizedConfigurationItemChangeNotification is a OrganizationConfigRuleTriggerTypeNoSN enum value
+	OrganizationConfigRuleTriggerTypeNoSNOversizedConfigurationItemChangeNotification = "OversizedConfigurationItemChangeNotification"
+)
+
+// OrganizationConfigRuleTriggerTypeNoSN_Values returns all elements of the OrganizationConfigRuleTriggerTypeNoSN enum
+func OrganizationConfigRuleTriggerTypeNoSN_Values() []string {
+	return []string{
+		OrganizationConfigRuleTriggerTypeNoSNConfigurationItemChangeNotification,
+		OrganizationConfigRuleTriggerTypeNoSNOversizedConfigurationItemChangeNotification,
+	}
+}
+
+const (
 	// OrganizationResourceDetailedStatusCreateSuccessful is a OrganizationResourceDetailedStatus enum value
 	OrganizationResourceDetailedStatusCreateSuccessful = "CREATE_SUCCESSFUL"
 
@@ -30648,6 +31999,9 @@ const (
 
 	// OwnerAws is a Owner enum value
 	OwnerAws = "AWS"
+
+	// OwnerCustomPolicy is a Owner enum value
+	OwnerCustomPolicy = "CUSTOM_POLICY"
 )
 
 // Owner_Values returns all elements of the Owner enum
@@ -30655,6 +32009,7 @@ func Owner_Values() []string {
 	return []string{
 		OwnerCustomLambda,
 		OwnerAws,
+		OwnerCustomPolicy,
 	}
 }
 
@@ -31081,6 +32436,111 @@ const (
 
 	// ResourceTypeAwsOpenSearchDomain is a ResourceType enum value
 	ResourceTypeAwsOpenSearchDomain = "AWS::OpenSearch::Domain"
+
+	// ResourceTypeAwsEc2TransitGateway is a ResourceType enum value
+	ResourceTypeAwsEc2TransitGateway = "AWS::EC2::TransitGateway"
+
+	// ResourceTypeAwsKinesisStream is a ResourceType enum value
+	ResourceTypeAwsKinesisStream = "AWS::Kinesis::Stream"
+
+	// ResourceTypeAwsKinesisStreamConsumer is a ResourceType enum value
+	ResourceTypeAwsKinesisStreamConsumer = "AWS::Kinesis::StreamConsumer"
+
+	// ResourceTypeAwsCodeDeployApplication is a ResourceType enum value
+	ResourceTypeAwsCodeDeployApplication = "AWS::CodeDeploy::Application"
+
+	// ResourceTypeAwsCodeDeployDeploymentConfig is a ResourceType enum value
+	ResourceTypeAwsCodeDeployDeploymentConfig = "AWS::CodeDeploy::DeploymentConfig"
+
+	// ResourceTypeAwsCodeDeployDeploymentGroup is a ResourceType enum value
+	ResourceTypeAwsCodeDeployDeploymentGroup = "AWS::CodeDeploy::DeploymentGroup"
+
+	// ResourceTypeAwsEc2LaunchTemplate is a ResourceType enum value
+	ResourceTypeAwsEc2LaunchTemplate = "AWS::EC2::LaunchTemplate"
+
+	// ResourceTypeAwsEcrPublicRepository is a ResourceType enum value
+	ResourceTypeAwsEcrPublicRepository = "AWS::ECR::PublicRepository"
+
+	// ResourceTypeAwsGuardDutyDetector is a ResourceType enum value
+	ResourceTypeAwsGuardDutyDetector = "AWS::GuardDuty::Detector"
+
+	// ResourceTypeAwsEmrSecurityConfiguration is a ResourceType enum value
+	ResourceTypeAwsEmrSecurityConfiguration = "AWS::EMR::SecurityConfiguration"
+
+	// ResourceTypeAwsSageMakerCodeRepository is a ResourceType enum value
+	ResourceTypeAwsSageMakerCodeRepository = "AWS::SageMaker::CodeRepository"
+
+	// ResourceTypeAwsRoute53resolverResolverEndpoint is a ResourceType enum value
+	ResourceTypeAwsRoute53resolverResolverEndpoint = "AWS::Route53Resolver::ResolverEndpoint"
+
+	// ResourceTypeAwsRoute53resolverResolverRule is a ResourceType enum value
+	ResourceTypeAwsRoute53resolverResolverRule = "AWS::Route53Resolver::ResolverRule"
+
+	// ResourceTypeAwsRoute53resolverResolverRuleAssociation is a ResourceType enum value
+	ResourceTypeAwsRoute53resolverResolverRuleAssociation = "AWS::Route53Resolver::ResolverRuleAssociation"
+
+	// ResourceTypeAwsDmsReplicationSubnetGroup is a ResourceType enum value
+	ResourceTypeAwsDmsReplicationSubnetGroup = "AWS::DMS::ReplicationSubnetGroup"
+
+	// ResourceTypeAwsDmsEventSubscription is a ResourceType enum value
+	ResourceTypeAwsDmsEventSubscription = "AWS::DMS::EventSubscription"
+
+	// ResourceTypeAwsMskCluster is a ResourceType enum value
+	ResourceTypeAwsMskCluster = "AWS::MSK::Cluster"
+
+	// ResourceTypeAwsStepFunctionsActivity is a ResourceType enum value
+	ResourceTypeAwsStepFunctionsActivity = "AWS::StepFunctions::Activity"
+
+	// ResourceTypeAwsWorkSpacesWorkspace is a ResourceType enum value
+	ResourceTypeAwsWorkSpacesWorkspace = "AWS::WorkSpaces::Workspace"
+
+	// ResourceTypeAwsWorkSpacesConnectionAlias is a ResourceType enum value
+	ResourceTypeAwsWorkSpacesConnectionAlias = "AWS::WorkSpaces::ConnectionAlias"
+
+	// ResourceTypeAwsSageMakerModel is a ResourceType enum value
+	ResourceTypeAwsSageMakerModel = "AWS::SageMaker::Model"
+
+	// ResourceTypeAwsElasticLoadBalancingV2Listener is a ResourceType enum value
+	ResourceTypeAwsElasticLoadBalancingV2Listener = "AWS::ElasticLoadBalancingV2::Listener"
+
+	// ResourceTypeAwsStepFunctionsStateMachine is a ResourceType enum value
+	ResourceTypeAwsStepFunctionsStateMachine = "AWS::StepFunctions::StateMachine"
+
+	// ResourceTypeAwsBatchJobQueue is a ResourceType enum value
+	ResourceTypeAwsBatchJobQueue = "AWS::Batch::JobQueue"
+
+	// ResourceTypeAwsBatchComputeEnvironment is a ResourceType enum value
+	ResourceTypeAwsBatchComputeEnvironment = "AWS::Batch::ComputeEnvironment"
+
+	// ResourceTypeAwsAccessAnalyzerAnalyzer is a ResourceType enum value
+	ResourceTypeAwsAccessAnalyzerAnalyzer = "AWS::AccessAnalyzer::Analyzer"
+
+	// ResourceTypeAwsAthenaWorkGroup is a ResourceType enum value
+	ResourceTypeAwsAthenaWorkGroup = "AWS::Athena::WorkGroup"
+
+	// ResourceTypeAwsAthenaDataCatalog is a ResourceType enum value
+	ResourceTypeAwsAthenaDataCatalog = "AWS::Athena::DataCatalog"
+
+	// ResourceTypeAwsDetectiveGraph is a ResourceType enum value
+	ResourceTypeAwsDetectiveGraph = "AWS::Detective::Graph"
+
+	// ResourceTypeAwsGlobalAcceleratorAccelerator is a ResourceType enum value
+	ResourceTypeAwsGlobalAcceleratorAccelerator = "AWS::GlobalAccelerator::Accelerator"
+
+	// ResourceTypeAwsGlobalAcceleratorEndpointGroup is a ResourceType enum value
+	ResourceTypeAwsGlobalAcceleratorEndpointGroup = "AWS::GlobalAccelerator::EndpointGroup"
+
+	// ResourceTypeAwsGlobalAcceleratorListener is a ResourceType enum value
+	ResourceTypeAwsGlobalAcceleratorListener = "AWS::GlobalAccelerator::Listener"
+
+	// ResourceTypeAwsEc2TransitGatewayAttachment is a ResourceType enum value
+	ResourceTypeAwsEc2TransitGatewayAttachment = "AWS::EC2::TransitGatewayAttachment"
+
+	// ResourceTypeAwsEc2TransitGatewayRouteTable is a ResourceType enum value
+	ResourceTypeAwsEc2TransitGatewayRouteTable = "AWS::EC2::TransitGatewayRouteTable"
+
+	// ResourceTypeAwsDmsCertificate is a ResourceType enum value
+	ResourceTypeAwsDmsCertificate = "AWS::DMS::Certificate"
 )
 
 // ResourceType_Values returns all elements of the ResourceType enum
@@ -31195,6 +32655,41 @@ func ResourceType_Values() []string {
 		ResourceTypeAwsEfsFileSystem,
 		ResourceTypeAwsEksCluster,
 		ResourceTypeAwsOpenSearchDomain,
+		ResourceTypeAwsEc2TransitGateway,
+		ResourceTypeAwsKinesisStream,
+		ResourceTypeAwsKinesisStreamConsumer,
+		ResourceTypeAwsCodeDeployApplication,
+		ResourceTypeAwsCodeDeployDeploymentConfig,
+		ResourceTypeAwsCodeDeployDeploymentGroup,
+		ResourceTypeAwsEc2LaunchTemplate,
+		ResourceTypeAwsEcrPublicRepository,
+		ResourceTypeAwsGuardDutyDetector,
+		ResourceTypeAwsEmrSecurityConfiguration,
+		ResourceTypeAwsSageMakerCodeRepository,
+		ResourceTypeAwsRoute53resolverResolverEndpoint,
+		ResourceTypeAwsRoute53resolverResolverRule,
+		ResourceTypeAwsRoute53resolverResolverRuleAssociation,
+		ResourceTypeAwsDmsReplicationSubnetGroup,
+		ResourceTypeAwsDmsEventSubscription,
+		ResourceTypeAwsMskCluster,
+		ResourceTypeAwsStepFunctionsActivity,
+		ResourceTypeAwsWorkSpacesWorkspace,
+		ResourceTypeAwsWorkSpacesConnectionAlias,
+		ResourceTypeAwsSageMakerModel,
+		ResourceTypeAwsElasticLoadBalancingV2Listener,
+		ResourceTypeAwsStepFunctionsStateMachine,
+		ResourceTypeAwsBatchJobQueue,
+		ResourceTypeAwsBatchComputeEnvironment,
+		ResourceTypeAwsAccessAnalyzerAnalyzer,
+		ResourceTypeAwsAthenaWorkGroup,
+		ResourceTypeAwsAthenaDataCatalog,
+		ResourceTypeAwsDetectiveGraph,
+		ResourceTypeAwsGlobalAcceleratorAccelerator,
+		ResourceTypeAwsGlobalAcceleratorEndpointGroup,
+		ResourceTypeAwsGlobalAcceleratorListener,
+		ResourceTypeAwsEc2TransitGatewayAttachment,
+		ResourceTypeAwsEc2TransitGatewayRouteTable,
+		ResourceTypeAwsDmsCertificate,
 	}
 }
 
@@ -31207,5 +32702,33 @@ const (
 func ResourceValueType_Values() []string {
 	return []string{
 		ResourceValueTypeResourceId,
+	}
+}
+
+const (
+	// SortByScore is a SortBy enum value
+	SortByScore = "SCORE"
+)
+
+// SortBy_Values returns all elements of the SortBy enum
+func SortBy_Values() []string {
+	return []string{
+		SortByScore,
+	}
+}
+
+const (
+	// SortOrderAscending is a SortOrder enum value
+	SortOrderAscending = "ASCENDING"
+
+	// SortOrderDescending is a SortOrder enum value
+	SortOrderDescending = "DESCENDING"
+)
+
+// SortOrder_Values returns all elements of the SortOrder enum
+func SortOrder_Values() []string {
+	return []string{
+		SortOrderAscending,
+		SortOrderDescending,
 	}
 }

@@ -60,6 +60,9 @@ func (c *ConnectParticipant) CompleteAttachmentUploadRequest(input *CompleteAtta
 // Allows you to confirm that the attachment has been uploaded using the pre-signed
 // URL provided in StartAttachmentUpload API.
 //
+// The Amazon Connect Participant Service APIs do not use Signature Version
+// 4 authentication (https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -171,6 +174,18 @@ func (c *ConnectParticipant) CreateParticipantConnectionRequest(input *CreatePar
 // Upon websocket URL expiry, as specified in the response ConnectionExpiry
 // parameter, clients need to call this API again to obtain a new websocket
 // URL and perform the same steps as before.
+//
+// Message streaming support: This API can also be used together with the StartContactStreaming
+// (https://docs.aws.amazon.com/connect/latest/APIReference/API_StartContactStreaming.html)
+// API to create a participant connection for chat contacts that are not using
+// a websocket. For more information about message streaming, Enable real-time
+// chat message streaming (https://docs.aws.amazon.com/connect/latest/adminguide/chat-message-streaming.html)
+// in the Amazon Connect Administrator Guide.
+//
+// Feature specifications: For information about feature specifications, such
+// as the allowed number of open websocket connections per participant, see
+// Feature specifications (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html#feature-limits)
+// in the Amazon Connect Administrator Guide.
 //
 // The Amazon Connect Participant Service APIs do not use Signature Version
 // 4 authentication (https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
@@ -358,6 +373,9 @@ func (c *ConnectParticipant) GetAttachmentRequest(input *GetAttachmentInput) (re
 //
 // Provides a pre-signed URL for download of a completed attachment. This is
 // an asynchronous API for use with active contacts.
+//
+// The Amazon Connect Participant Service APIs do not use Signature Version
+// 4 authentication (https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -786,6 +804,9 @@ func (c *ConnectParticipant) StartAttachmentUploadRequest(input *StartAttachment
 // Provides a pre-signed Amazon S3 URL in response for uploading the file directly
 // to S3.
 //
+// The Amazon Connect Participant Service APIs do not use Signature Version
+// 4 authentication (https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1038,7 +1059,7 @@ func (s *CompleteAttachmentUploadInput) SetConnectionToken(v string) *CompleteAt
 }
 
 type CompleteAttachmentUploadOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -1170,9 +1191,13 @@ func (s *ConnectionCredentials) SetExpiry(v string) *ConnectionCredentials {
 type CreateParticipantConnectionInput struct {
 	_ struct{} `type:"structure"`
 
+	// Amazon Connect Participant is used to mark the participant as connected for
+	// message streaming.
+	ConnectParticipant *bool `type:"boolean"`
+
 	// This is a header parameter.
 	//
-	// The Participant Token as obtained from StartChatContact (https://docs.aws.amazon.com/connect/latest/APIReference/API_StartChatContact.html)
+	// The ParticipantToken as obtained from StartChatContact (https://docs.aws.amazon.com/connect/latest/APIReference/API_StartChatContact.html)
 	// API response.
 	//
 	// ParticipantToken is a required field
@@ -1181,7 +1206,7 @@ type CreateParticipantConnectionInput struct {
 	// Type of connection information required.
 	//
 	// Type is a required field
-	Type []*string `min:"1" type:"list" required:"true"`
+	Type []*string `min:"1" type:"list" required:"true" enum:"ConnectionType"`
 }
 
 // String returns the string representation.
@@ -1222,6 +1247,12 @@ func (s *CreateParticipantConnectionInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetConnectParticipant sets the ConnectParticipant field's value.
+func (s *CreateParticipantConnectionInput) SetConnectParticipant(v bool) *CreateParticipantConnectionInput {
+	s.ConnectParticipant = &v
+	return s
 }
 
 // SetParticipantToken sets the ParticipantToken field's value.
@@ -1337,7 +1368,7 @@ func (s *DisconnectParticipantInput) SetConnectionToken(v string) *DisconnectPar
 }
 
 type DisconnectParticipantOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -1427,8 +1458,8 @@ func (s *GetAttachmentInput) SetConnectionToken(v string) *GetAttachmentInput {
 type GetAttachmentOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The pre-signed URL using which file would be downloaded from Amazon S3 by
-	// the API caller.
+	// This is the pre-signed URL that can be used for uploading the file to Amazon
+	// S3 when used in response to StartAttachmentUpload (https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_StartAttachmentUpload.html).
 	Url *string `min:"1" type:"string"`
 
 	// The expiration time of the URL in ISO timestamp. It's specified in ISO 8601
@@ -2435,8 +2466,8 @@ type UploadMetadata struct {
 	// The headers to be provided while uploading the file to the URL.
 	HeadersToInclude map[string]*string `type:"map"`
 
-	// The pre-signed URL using which file would be downloaded from Amazon S3 by
-	// the API caller.
+	// This is the pre-signed URL that can be used for uploading the file to Amazon
+	// S3 when used in response to StartAttachmentUpload (https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_StartAttachmentUpload.html).
 	Url *string `min:"1" type:"string"`
 
 	// The expiration time of the URL in ISO timestamp. It's specified in ISO 8601

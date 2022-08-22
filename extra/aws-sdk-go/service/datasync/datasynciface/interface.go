@@ -72,9 +72,25 @@ type DataSyncAPI interface {
 	CreateLocationEfsWithContext(aws.Context, *datasync.CreateLocationEfsInput, ...request.Option) (*datasync.CreateLocationEfsOutput, error)
 	CreateLocationEfsRequest(*datasync.CreateLocationEfsInput) (*request.Request, *datasync.CreateLocationEfsOutput)
 
+	CreateLocationFsxLustre(*datasync.CreateLocationFsxLustreInput) (*datasync.CreateLocationFsxLustreOutput, error)
+	CreateLocationFsxLustreWithContext(aws.Context, *datasync.CreateLocationFsxLustreInput, ...request.Option) (*datasync.CreateLocationFsxLustreOutput, error)
+	CreateLocationFsxLustreRequest(*datasync.CreateLocationFsxLustreInput) (*request.Request, *datasync.CreateLocationFsxLustreOutput)
+
+	CreateLocationFsxOntap(*datasync.CreateLocationFsxOntapInput) (*datasync.CreateLocationFsxOntapOutput, error)
+	CreateLocationFsxOntapWithContext(aws.Context, *datasync.CreateLocationFsxOntapInput, ...request.Option) (*datasync.CreateLocationFsxOntapOutput, error)
+	CreateLocationFsxOntapRequest(*datasync.CreateLocationFsxOntapInput) (*request.Request, *datasync.CreateLocationFsxOntapOutput)
+
+	CreateLocationFsxOpenZfs(*datasync.CreateLocationFsxOpenZfsInput) (*datasync.CreateLocationFsxOpenZfsOutput, error)
+	CreateLocationFsxOpenZfsWithContext(aws.Context, *datasync.CreateLocationFsxOpenZfsInput, ...request.Option) (*datasync.CreateLocationFsxOpenZfsOutput, error)
+	CreateLocationFsxOpenZfsRequest(*datasync.CreateLocationFsxOpenZfsInput) (*request.Request, *datasync.CreateLocationFsxOpenZfsOutput)
+
 	CreateLocationFsxWindows(*datasync.CreateLocationFsxWindowsInput) (*datasync.CreateLocationFsxWindowsOutput, error)
 	CreateLocationFsxWindowsWithContext(aws.Context, *datasync.CreateLocationFsxWindowsInput, ...request.Option) (*datasync.CreateLocationFsxWindowsOutput, error)
 	CreateLocationFsxWindowsRequest(*datasync.CreateLocationFsxWindowsInput) (*request.Request, *datasync.CreateLocationFsxWindowsOutput)
+
+	CreateLocationHdfs(*datasync.CreateLocationHdfsInput) (*datasync.CreateLocationHdfsOutput, error)
+	CreateLocationHdfsWithContext(aws.Context, *datasync.CreateLocationHdfsInput, ...request.Option) (*datasync.CreateLocationHdfsOutput, error)
+	CreateLocationHdfsRequest(*datasync.CreateLocationHdfsInput) (*request.Request, *datasync.CreateLocationHdfsOutput)
 
 	CreateLocationNfs(*datasync.CreateLocationNfsInput) (*datasync.CreateLocationNfsOutput, error)
 	CreateLocationNfsWithContext(aws.Context, *datasync.CreateLocationNfsInput, ...request.Option) (*datasync.CreateLocationNfsOutput, error)
@@ -116,9 +132,25 @@ type DataSyncAPI interface {
 	DescribeLocationEfsWithContext(aws.Context, *datasync.DescribeLocationEfsInput, ...request.Option) (*datasync.DescribeLocationEfsOutput, error)
 	DescribeLocationEfsRequest(*datasync.DescribeLocationEfsInput) (*request.Request, *datasync.DescribeLocationEfsOutput)
 
+	DescribeLocationFsxLustre(*datasync.DescribeLocationFsxLustreInput) (*datasync.DescribeLocationFsxLustreOutput, error)
+	DescribeLocationFsxLustreWithContext(aws.Context, *datasync.DescribeLocationFsxLustreInput, ...request.Option) (*datasync.DescribeLocationFsxLustreOutput, error)
+	DescribeLocationFsxLustreRequest(*datasync.DescribeLocationFsxLustreInput) (*request.Request, *datasync.DescribeLocationFsxLustreOutput)
+
+	DescribeLocationFsxOntap(*datasync.DescribeLocationFsxOntapInput) (*datasync.DescribeLocationFsxOntapOutput, error)
+	DescribeLocationFsxOntapWithContext(aws.Context, *datasync.DescribeLocationFsxOntapInput, ...request.Option) (*datasync.DescribeLocationFsxOntapOutput, error)
+	DescribeLocationFsxOntapRequest(*datasync.DescribeLocationFsxOntapInput) (*request.Request, *datasync.DescribeLocationFsxOntapOutput)
+
+	DescribeLocationFsxOpenZfs(*datasync.DescribeLocationFsxOpenZfsInput) (*datasync.DescribeLocationFsxOpenZfsOutput, error)
+	DescribeLocationFsxOpenZfsWithContext(aws.Context, *datasync.DescribeLocationFsxOpenZfsInput, ...request.Option) (*datasync.DescribeLocationFsxOpenZfsOutput, error)
+	DescribeLocationFsxOpenZfsRequest(*datasync.DescribeLocationFsxOpenZfsInput) (*request.Request, *datasync.DescribeLocationFsxOpenZfsOutput)
+
 	DescribeLocationFsxWindows(*datasync.DescribeLocationFsxWindowsInput) (*datasync.DescribeLocationFsxWindowsOutput, error)
 	DescribeLocationFsxWindowsWithContext(aws.Context, *datasync.DescribeLocationFsxWindowsInput, ...request.Option) (*datasync.DescribeLocationFsxWindowsOutput, error)
 	DescribeLocationFsxWindowsRequest(*datasync.DescribeLocationFsxWindowsInput) (*request.Request, *datasync.DescribeLocationFsxWindowsOutput)
+
+	DescribeLocationHdfs(*datasync.DescribeLocationHdfsInput) (*datasync.DescribeLocationHdfsOutput, error)
+	DescribeLocationHdfsWithContext(aws.Context, *datasync.DescribeLocationHdfsInput, ...request.Option) (*datasync.DescribeLocationHdfsOutput, error)
+	DescribeLocationHdfsRequest(*datasync.DescribeLocationHdfsInput) (*request.Request, *datasync.DescribeLocationHdfsOutput)
 
 	DescribeLocationNfs(*datasync.DescribeLocationNfsInput) (*datasync.DescribeLocationNfsOutput, error)
 	DescribeLocationNfsWithContext(aws.Context, *datasync.DescribeLocationNfsInput, ...request.Option) (*datasync.DescribeLocationNfsOutput, error)
@@ -194,6 +226,10 @@ type DataSyncAPI interface {
 	UpdateAgent(*datasync.UpdateAgentInput) (*datasync.UpdateAgentOutput, error)
 	UpdateAgentWithContext(aws.Context, *datasync.UpdateAgentInput, ...request.Option) (*datasync.UpdateAgentOutput, error)
 	UpdateAgentRequest(*datasync.UpdateAgentInput) (*request.Request, *datasync.UpdateAgentOutput)
+
+	UpdateLocationHdfs(*datasync.UpdateLocationHdfsInput) (*datasync.UpdateLocationHdfsOutput, error)
+	UpdateLocationHdfsWithContext(aws.Context, *datasync.UpdateLocationHdfsInput, ...request.Option) (*datasync.UpdateLocationHdfsOutput, error)
+	UpdateLocationHdfsRequest(*datasync.UpdateLocationHdfsInput) (*request.Request, *datasync.UpdateLocationHdfsOutput)
 
 	UpdateLocationNfs(*datasync.UpdateLocationNfsInput) (*datasync.UpdateLocationNfsOutput, error)
 	UpdateLocationNfsWithContext(aws.Context, *datasync.UpdateLocationNfsInput, ...request.Option) (*datasync.UpdateLocationNfsOutput, error)

@@ -4474,6 +4474,101 @@ func (c *MediaLive) PurchaseOfferingWithContext(ctx aws.Context, input *Purchase
 	return out, req.Send()
 }
 
+const opRebootInputDevice = "RebootInputDevice"
+
+// RebootInputDeviceRequest generates a "aws/request.Request" representing the
+// client's request for the RebootInputDevice operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RebootInputDevice for more information on using the RebootInputDevice
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RebootInputDeviceRequest method.
+//    req, resp := client.RebootInputDeviceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RebootInputDevice
+func (c *MediaLive) RebootInputDeviceRequest(input *RebootInputDeviceInput) (req *request.Request, output *RebootInputDeviceOutput) {
+	op := &request.Operation{
+		Name:       opRebootInputDevice,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/reboot",
+	}
+
+	if input == nil {
+		input = &RebootInputDeviceInput{}
+	}
+
+	output = &RebootInputDeviceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// RebootInputDevice API operation for AWS Elemental MediaLive.
+//
+// Send a reboot command to the specified input device. The device will begin
+// rebooting within a few seconds of sending the command. When the reboot is
+// complete, the device’s connection status will change to connected.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation RebootInputDevice for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * NotFoundException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RebootInputDevice
+func (c *MediaLive) RebootInputDevice(input *RebootInputDeviceInput) (*RebootInputDeviceOutput, error) {
+	req, out := c.RebootInputDeviceRequest(input)
+	return out, req.Send()
+}
+
+// RebootInputDeviceWithContext is the same as RebootInputDevice with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RebootInputDevice for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) RebootInputDeviceWithContext(ctx aws.Context, input *RebootInputDeviceInput, opts ...request.Option) (*RebootInputDeviceOutput, error) {
+	req, out := c.RebootInputDeviceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRejectInputDeviceTransfer = "RejectInputDeviceTransfer"
 
 // RejectInputDeviceTransferRequest generates a "aws/request.Request" representing the
@@ -4656,6 +4751,106 @@ func (c *MediaLive) StartChannel(input *StartChannelInput) (*StartChannelOutput,
 // for more information on using Contexts.
 func (c *MediaLive) StartChannelWithContext(ctx aws.Context, input *StartChannelInput, opts ...request.Option) (*StartChannelOutput, error) {
 	req, out := c.StartChannelRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartInputDeviceMaintenanceWindow = "StartInputDeviceMaintenanceWindow"
+
+// StartInputDeviceMaintenanceWindowRequest generates a "aws/request.Request" representing the
+// client's request for the StartInputDeviceMaintenanceWindow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartInputDeviceMaintenanceWindow for more information on using the StartInputDeviceMaintenanceWindow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartInputDeviceMaintenanceWindowRequest method.
+//    req, resp := client.StartInputDeviceMaintenanceWindowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartInputDeviceMaintenanceWindow
+func (c *MediaLive) StartInputDeviceMaintenanceWindowRequest(input *StartInputDeviceMaintenanceWindowInput) (req *request.Request, output *StartInputDeviceMaintenanceWindowOutput) {
+	op := &request.Operation{
+		Name:       opStartInputDeviceMaintenanceWindow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/startInputDeviceMaintenanceWindow",
+	}
+
+	if input == nil {
+		input = &StartInputDeviceMaintenanceWindowInput{}
+	}
+
+	output = &StartInputDeviceMaintenanceWindowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StartInputDeviceMaintenanceWindow API operation for AWS Elemental MediaLive.
+//
+// Start a maintenance window for the specified input device. Starting a maintenance
+// window will give the device up to two hours to install software. If the device
+// was streaming prior to the maintenance, it will resume streaming when the
+// software is fully installed. Devices automatically install updates while
+// they are powered on and their MediaLive channels are stopped. A maintenance
+// window allows you to update a device without having to stop MediaLive channels
+// that use the device. The device must remain powered on and connected to the
+// internet for the duration of the maintenance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation StartInputDeviceMaintenanceWindow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * NotFoundException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartInputDeviceMaintenanceWindow
+func (c *MediaLive) StartInputDeviceMaintenanceWindow(input *StartInputDeviceMaintenanceWindowInput) (*StartInputDeviceMaintenanceWindowOutput, error) {
+	req, out := c.StartInputDeviceMaintenanceWindowRequest(input)
+	return out, req.Send()
+}
+
+// StartInputDeviceMaintenanceWindowWithContext is the same as StartInputDeviceMaintenanceWindow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartInputDeviceMaintenanceWindow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) StartInputDeviceMaintenanceWindowWithContext(ctx aws.Context, input *StartInputDeviceMaintenanceWindowInput, opts ...request.Option) (*StartInputDeviceMaintenanceWindowOutput, error) {
+	req, out := c.StartInputDeviceMaintenanceWindowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -6036,7 +6231,7 @@ func (s *AcceptInputDeviceTransferInput) SetInputDeviceId(v string) *AcceptInput
 }
 
 type AcceptInputDeviceTransferOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6370,7 +6565,7 @@ func (s *ArchiveS3Settings) SetCannedAcl(v string) *ArchiveS3Settings {
 
 // Arib Destination Settings
 type AribDestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6393,7 +6588,7 @@ func (s AribDestinationSettings) GoString() string {
 
 // Arib Source Settings
 type AribSourceSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8858,7 +9053,7 @@ func (s *CancelInputDeviceTransferInput) SetInputDeviceId(v string) *CancelInput
 }
 
 type CancelInputDeviceTransferOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8882,6 +9077,10 @@ func (s CancelInputDeviceTransferOutput) GoString() string {
 // Caption Description
 type CaptionDescription struct {
 	_ struct{} `type:"structure"`
+
+	// Indicates whether the caption track implements accessibility features such
+	// as written descriptions of spoken dialog, music, and sounds.
+	Accessibility *string `locationName:"accessibility" type:"string" enum:"AccessibilityType"`
 
 	// Specifies which input caption selector to use as a caption source when generating
 	// output captions. This field should match a captionSelector name.
@@ -8944,6 +9143,12 @@ func (s *CaptionDescription) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccessibility sets the Accessibility field's value.
+func (s *CaptionDescription) SetAccessibility(v string) *CaptionDescription {
+	s.Accessibility = &v
+	return s
 }
 
 // SetCaptionSelectorName sets the CaptionSelectorName field's value.
@@ -9606,6 +9811,9 @@ type Channel struct {
 	// The log level being written to CloudWatch Logs.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
+	// Maintenance settings for this channel.
+	Maintenance *MaintenanceStatus `locationName:"maintenance" type:"structure"`
+
 	// The name of the channel. (user-mutable)
 	Name *string `locationName:"name" type:"string"`
 
@@ -9702,6 +9910,12 @@ func (s *Channel) SetInputSpecification(v *InputSpecification) *Channel {
 // SetLogLevel sets the LogLevel field's value.
 func (s *Channel) SetLogLevel(v string) *Channel {
 	s.LogLevel = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *Channel) SetMaintenance(v *MaintenanceStatus) *Channel {
+	s.Maintenance = v
 	return s
 }
 
@@ -9811,6 +10025,9 @@ type ChannelSummary struct {
 	// The log level being written to CloudWatch Logs.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
+	// Maintenance settings for this channel.
+	Maintenance *MaintenanceStatus `locationName:"maintenance" type:"structure"`
+
 	// The name of the channel. (user-mutable)
 	Name *string `locationName:"name" type:"string"`
 
@@ -9901,6 +10118,12 @@ func (s *ChannelSummary) SetLogLevel(v string) *ChannelSummary {
 	return s
 }
 
+// SetMaintenance sets the Maintenance field's value.
+func (s *ChannelSummary) SetMaintenance(v *MaintenanceStatus) *ChannelSummary {
+	s.Maintenance = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *ChannelSummary) SetName(v string) *ChannelSummary {
 	s.Name = &v
@@ -9971,7 +10194,7 @@ func (s *ClaimDeviceInput) SetId(v string) *ClaimDeviceInput {
 }
 
 type ClaimDeviceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9994,7 +10217,7 @@ func (s ClaimDeviceOutput) GoString() string {
 
 // Passthrough applies no color space conversion to the output
 type ColorSpacePassthroughSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10098,6 +10321,8 @@ type CreateChannelInput struct {
 
 	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
+
+	Maintenance *MaintenanceCreateSettings `locationName:"maintenance" type:"structure"`
 
 	Name *string `locationName:"name" type:"string"`
 
@@ -10211,6 +10436,12 @@ func (s *CreateChannelInput) SetInputSpecification(v *InputSpecification) *Creat
 // SetLogLevel sets the LogLevel field's value.
 func (s *CreateChannelInput) SetLogLevel(v string) *CreateChannelInput {
 	s.LogLevel = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *CreateChannelInput) SetMaintenance(v *MaintenanceCreateSettings) *CreateChannelInput {
+	s.Maintenance = v
 	return s
 }
 
@@ -10897,7 +11128,7 @@ func (s *CreateTagsInput) SetTags(v map[string]*string) *CreateTagsInput {
 }
 
 type CreateTagsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10991,6 +11222,8 @@ type DeleteChannelOutput struct {
 
 	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
+
+	Maintenance *MaintenanceStatus `locationName:"maintenance" type:"structure"`
 
 	Name *string `locationName:"name" type:"string"`
 
@@ -11086,6 +11319,12 @@ func (s *DeleteChannelOutput) SetLogLevel(v string) *DeleteChannelOutput {
 	return s
 }
 
+// SetMaintenance sets the Maintenance field's value.
+func (s *DeleteChannelOutput) SetMaintenance(v *MaintenanceStatus) *DeleteChannelOutput {
+	s.Maintenance = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DeleteChannelOutput) SetName(v string) *DeleteChannelOutput {
 	s.Name = &v
@@ -11176,7 +11415,7 @@ func (s *DeleteInputInput) SetInputId(v string) *DeleteInputInput {
 }
 
 type DeleteInputOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11245,7 +11484,7 @@ func (s *DeleteInputSecurityGroupInput) SetInputSecurityGroupId(v string) *Delet
 }
 
 type DeleteInputSecurityGroupOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11619,6 +11858,9 @@ type DeleteReservationOutput struct {
 
 	Region *string `locationName:"region" type:"string"`
 
+	// The Renewal settings for Reservations
+	RenewalSettings *RenewalSettings `locationName:"renewalSettings" type:"structure"`
+
 	ReservationId *string `locationName:"reservationId" type:"string"`
 
 	// Resource configuration (codec, resolution, bitrate, ...)
@@ -11724,6 +11966,12 @@ func (s *DeleteReservationOutput) SetRegion(v string) *DeleteReservationOutput {
 	return s
 }
 
+// SetRenewalSettings sets the RenewalSettings field's value.
+func (s *DeleteReservationOutput) SetRenewalSettings(v *RenewalSettings) *DeleteReservationOutput {
+	s.RenewalSettings = v
+	return s
+}
+
 // SetReservationId sets the ReservationId field's value.
 func (s *DeleteReservationOutput) SetReservationId(v string) *DeleteReservationOutput {
 	s.ReservationId = &v
@@ -11808,7 +12056,7 @@ func (s *DeleteScheduleInput) SetChannelId(v string) *DeleteScheduleInput {
 }
 
 type DeleteScheduleOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11889,7 +12137,7 @@ func (s *DeleteTagsInput) SetTagKeys(v []*string) *DeleteTagsInput {
 }
 
 type DeleteTagsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11984,6 +12232,8 @@ type DescribeChannelOutput struct {
 	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
+	Maintenance *MaintenanceStatus `locationName:"maintenance" type:"structure"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	PipelineDetails []*PipelineDetail `locationName:"pipelineDetails" type:"list"`
@@ -12075,6 +12325,12 @@ func (s *DescribeChannelOutput) SetInputSpecification(v *InputSpecification) *De
 // SetLogLevel sets the LogLevel field's value.
 func (s *DescribeChannelOutput) SetLogLevel(v string) *DescribeChannelOutput {
 	s.LogLevel = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *DescribeChannelOutput) SetMaintenance(v *MaintenanceStatus) *DescribeChannelOutput {
+	s.Maintenance = v
 	return s
 }
 
@@ -13253,6 +13509,9 @@ type DescribeReservationOutput struct {
 
 	Region *string `locationName:"region" type:"string"`
 
+	// The Renewal settings for Reservations
+	RenewalSettings *RenewalSettings `locationName:"renewalSettings" type:"structure"`
+
 	ReservationId *string `locationName:"reservationId" type:"string"`
 
 	// Resource configuration (codec, resolution, bitrate, ...)
@@ -13355,6 +13614,12 @@ func (s *DescribeReservationOutput) SetOfferingType(v string) *DescribeReservati
 // SetRegion sets the Region field's value.
 func (s *DescribeReservationOutput) SetRegion(v string) *DescribeReservationOutput {
 	s.Region = &v
+	return s
+}
+
+// SetRenewalSettings sets the RenewalSettings field's value.
+func (s *DescribeReservationOutput) SetRenewalSettings(v *RenewalSettings) *DescribeReservationOutput {
+	s.RenewalSettings = v
 	return s
 }
 
@@ -14241,9 +14506,8 @@ func (s *Eac3Settings) SetSurroundMode(v string) *Eac3Settings {
 type EbuTtDDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
-	// Applies only if you plan to convert these source captions to EBU-TT-D or
-	// TTML in an output. Complete this field if you want to include the name of
-	// the copyright holder in the copyright metadata tag in the TTML
+	// Complete this field if you want to include the name of the copyright holder
+	// in the copyright tag in the captions metadata.
 	CopyrightHolder *string `locationName:"copyrightHolder" type:"string"`
 
 	// Specifies how to handle the gap between the lines (in multi-line captions).-
@@ -14318,7 +14582,7 @@ func (s *EbuTtDDestinationSettings) SetStyleControl(v string) *EbuTtDDestination
 
 // Embedded Destination Settings
 type EmbeddedDestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -14341,7 +14605,7 @@ func (s EmbeddedDestinationSettings) GoString() string {
 
 // Embedded Plus Scte20 Destination Settings
 type EmbeddedPlusScte20DestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15225,7 +15489,7 @@ func (s *FrameCaptureGroupSettings) SetFrameCaptureCdnSettings(v *FrameCaptureCd
 
 // Frame Capture Hls Settings
 type FrameCaptureHlsSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -16888,7 +17152,7 @@ type HlsGroupSettings struct {
 
 	// Choose one or more ad marker types to pass SCTE35 signals through to this
 	// group of Apple HLS outputs.
-	AdMarkers []*string `locationName:"adMarkers" type:"list"`
+	AdMarkers []*string `locationName:"adMarkers" type:"list" enum:"HlsAdMarkers"`
 
 	// A partial URI prefix that will be prepended to each output in the media .m3u8
 	// file. Can be used if base manifest is delivered from a different URL than
@@ -17054,10 +17318,17 @@ type HlsGroupSettings struct {
 	OutputSelection *string `locationName:"outputSelection" type:"string" enum:"HlsOutputSelection"`
 
 	// Includes or excludes EXT-X-PROGRAM-DATE-TIME tag in .m3u8 manifest files.
-	// The value is calculated as follows: either the program date and time are
-	// initialized using the input timecode source, or the time is initialized using
-	// the input timecode source and the date is initialized using the timestampOffset.
+	// The value is calculated using the program date time clock.
 	ProgramDateTime *string `locationName:"programDateTime" type:"string" enum:"HlsProgramDateTime"`
+
+	// Specifies the algorithm used to drive the HLS EXT-X-PROGRAM-DATE-TIME clock.
+	// Options include:INITIALIZE_FROM_OUTPUT_TIMECODE: The PDT clock is initialized
+	// as a function of the first output timecode, then incremented by the EXTINF
+	// duration of each encoded segment.SYSTEM_CLOCK: The PDT clock is initialized
+	// as a function of the UTC wall clock, then incremented by the EXTINF duration
+	// of each encoded segment. If the PDT clock diverges from the wall clock by
+	// more than 500ms, it is resynchronized to the wall clock.
+	ProgramDateTimeClock *string `locationName:"programDateTimeClock" type:"string" enum:"HlsProgramDateTimeClock"`
 
 	// Period of insertion of EXT-X-PROGRAM-DATE-TIME entry, in seconds.
 	ProgramDateTimePeriod *int64 `locationName:"programDateTimePeriod" type:"integer"`
@@ -17361,6 +17632,12 @@ func (s *HlsGroupSettings) SetOutputSelection(v string) *HlsGroupSettings {
 // SetProgramDateTime sets the ProgramDateTime field's value.
 func (s *HlsGroupSettings) SetProgramDateTime(v string) *HlsGroupSettings {
 	s.ProgramDateTime = &v
+	return s
+}
+
+// SetProgramDateTimeClock sets the ProgramDateTimeClock field's value.
+func (s *HlsGroupSettings) SetProgramDateTimeClock(v string) *HlsGroupSettings {
+	s.ProgramDateTimeClock = &v
 	return s
 }
 
@@ -17939,7 +18216,7 @@ func (s *HlsWebdavSettings) SetRestartDelay(v int64) *HlsWebdavSettings {
 
 // Html Motion Graphics Settings
 type HtmlMotionGraphicsSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17962,7 +18239,7 @@ func (s HtmlMotionGraphicsSettings) GoString() string {
 
 // Settings to configure an action so that it occurs as soon as possible.
 type ImmediateModeScheduleActionStartSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -19401,6 +19678,10 @@ type InputSettings struct {
 	// Input settings.
 	NetworkInputSettings *NetworkInputSettings `locationName:"networkInputSettings" type:"structure"`
 
+	// PID from which to read SCTE-35 messages. If left undefined, EML will select
+	// the first SCTE-35 PID found in the input.
+	Scte35Pid *int64 `locationName:"scte35Pid" min:"32" type:"integer"`
+
 	// Specifies whether to extract applicable ancillary data from a SMPTE-2038
 	// source in this input. Applicable data types are captions, timecode, AFD,
 	// and SCTE-104 messages.- PREFER: Extract from SMPTE-2038 if present in this
@@ -19439,6 +19720,9 @@ func (s *InputSettings) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "InputSettings"}
 	if s.FilterStrength != nil && *s.FilterStrength < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("FilterStrength", 1))
+	}
+	if s.Scte35Pid != nil && *s.Scte35Pid < 32 {
+		invalidParams.Add(request.NewErrParamMinValue("Scte35Pid", 32))
 	}
 	if s.AudioSelectors != nil {
 		for i, v := range s.AudioSelectors {
@@ -19506,6 +19790,12 @@ func (s *InputSettings) SetInputFilter(v string) *InputSettings {
 // SetNetworkInputSettings sets the NetworkInputSettings field's value.
 func (s *InputSettings) SetNetworkInputSettings(v *NetworkInputSettings) *InputSettings {
 	s.NetworkInputSettings = v
+	return s
+}
+
+// SetScte35Pid sets the Scte35Pid field's value.
+func (s *InputSettings) SetScte35Pid(v int64) *InputSettings {
+	s.Scte35Pid = &v
 	return s
 }
 
@@ -21788,6 +22078,159 @@ func (s *M3u8Settings) SetVideoPid(v string) *M3u8Settings {
 	return s
 }
 
+type MaintenanceCreateSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Choose one day of the week for maintenance. The chosen day is used for all
+	// future maintenance windows.
+	MaintenanceDay *string `locationName:"maintenanceDay" type:"string" enum:"MaintenanceDay"`
+
+	// Choose the hour that maintenance will start. The chosen time is used for
+	// all future maintenance windows.
+	MaintenanceStartTime *string `locationName:"maintenanceStartTime" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceCreateSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceCreateSettings) GoString() string {
+	return s.String()
+}
+
+// SetMaintenanceDay sets the MaintenanceDay field's value.
+func (s *MaintenanceCreateSettings) SetMaintenanceDay(v string) *MaintenanceCreateSettings {
+	s.MaintenanceDay = &v
+	return s
+}
+
+// SetMaintenanceStartTime sets the MaintenanceStartTime field's value.
+func (s *MaintenanceCreateSettings) SetMaintenanceStartTime(v string) *MaintenanceCreateSettings {
+	s.MaintenanceStartTime = &v
+	return s
+}
+
+type MaintenanceStatus struct {
+	_ struct{} `type:"structure"`
+
+	// The currently selected maintenance day.
+	MaintenanceDay *string `locationName:"maintenanceDay" type:"string" enum:"MaintenanceDay"`
+
+	// Maintenance is required by the displayed date and time. Date and time is
+	// in ISO.
+	MaintenanceDeadline *string `locationName:"maintenanceDeadline" type:"string"`
+
+	// The currently scheduled maintenance date and time. Date and time is in ISO.
+	MaintenanceScheduledDate *string `locationName:"maintenanceScheduledDate" type:"string"`
+
+	// The currently selected maintenance start time. Time is in UTC.
+	MaintenanceStartTime *string `locationName:"maintenanceStartTime" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceStatus) GoString() string {
+	return s.String()
+}
+
+// SetMaintenanceDay sets the MaintenanceDay field's value.
+func (s *MaintenanceStatus) SetMaintenanceDay(v string) *MaintenanceStatus {
+	s.MaintenanceDay = &v
+	return s
+}
+
+// SetMaintenanceDeadline sets the MaintenanceDeadline field's value.
+func (s *MaintenanceStatus) SetMaintenanceDeadline(v string) *MaintenanceStatus {
+	s.MaintenanceDeadline = &v
+	return s
+}
+
+// SetMaintenanceScheduledDate sets the MaintenanceScheduledDate field's value.
+func (s *MaintenanceStatus) SetMaintenanceScheduledDate(v string) *MaintenanceStatus {
+	s.MaintenanceScheduledDate = &v
+	return s
+}
+
+// SetMaintenanceStartTime sets the MaintenanceStartTime field's value.
+func (s *MaintenanceStatus) SetMaintenanceStartTime(v string) *MaintenanceStatus {
+	s.MaintenanceStartTime = &v
+	return s
+}
+
+type MaintenanceUpdateSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Choose one day of the week for maintenance. The chosen day is used for all
+	// future maintenance windows.
+	MaintenanceDay *string `locationName:"maintenanceDay" type:"string" enum:"MaintenanceDay"`
+
+	// Choose a specific date for maintenance to occur. The chosen date is used
+	// for the next maintenance window only.
+	MaintenanceScheduledDate *string `locationName:"maintenanceScheduledDate" type:"string"`
+
+	// Choose the hour that maintenance will start. The chosen time is used for
+	// all future maintenance windows.
+	MaintenanceStartTime *string `locationName:"maintenanceStartTime" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceUpdateSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceUpdateSettings) GoString() string {
+	return s.String()
+}
+
+// SetMaintenanceDay sets the MaintenanceDay field's value.
+func (s *MaintenanceUpdateSettings) SetMaintenanceDay(v string) *MaintenanceUpdateSettings {
+	s.MaintenanceDay = &v
+	return s
+}
+
+// SetMaintenanceScheduledDate sets the MaintenanceScheduledDate field's value.
+func (s *MaintenanceUpdateSettings) SetMaintenanceScheduledDate(v string) *MaintenanceUpdateSettings {
+	s.MaintenanceScheduledDate = &v
+	return s
+}
+
+// SetMaintenanceStartTime sets the MaintenanceStartTime field's value.
+func (s *MaintenanceUpdateSettings) SetMaintenanceStartTime(v string) *MaintenanceUpdateSettings {
+	s.MaintenanceStartTime = &v
+	return s
+}
+
 // The settings for a MediaConnect Flow.
 type MediaConnectFlow struct {
 	_ struct{} `type:"structure"`
@@ -21950,7 +22393,7 @@ func (s *MediaPackageOutputDestinationSettings) SetChannelId(v string) *MediaPac
 
 // Media Package Output Settings
 type MediaPackageOutputSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -22093,7 +22536,7 @@ func (s *MotionGraphicsConfiguration) SetMotionGraphicsSettings(v *MotionGraphic
 // Settings to specify the ending of rendering motion graphics into the video
 // stream.
 type MotionGraphicsDeactivateScheduleActionSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -22859,7 +23302,7 @@ func (s *Multiplex) SetTags(v map[string]*string) *Multiplex {
 
 // Multiplex Group Settings
 type MultiplexGroupSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -24564,8 +25007,7 @@ func (s *OutputDestinationSettings) SetUsername(v string) *OutputDestinationSett
 type OutputGroup struct {
 	_ struct{} `type:"structure"`
 
-	// Custom output group name optionally defined by the user. Only letters, numbers,
-	// and the underscore character allowed; only 32 characters allowed.
+	// Custom output group name optionally defined by the user.
 	Name *string `locationName:"name" type:"string"`
 
 	// Settings associated with the output group.
@@ -24942,7 +25384,7 @@ func (s *OutputSettings) SetUdpOutputSettings(v *UdpOutputSettings) *OutputSetti
 
 // Pass Through Settings
 type PassThroughSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25144,6 +25586,9 @@ type PurchaseOfferingInput struct {
 	// OfferingId is a required field
 	OfferingId *string `location:"uri" locationName:"offeringId" type:"string" required:"true"`
 
+	// The Renewal settings for Reservations
+	RenewalSettings *RenewalSettings `locationName:"renewalSettings" type:"structure"`
+
 	RequestId *string `locationName:"requestId" type:"string" idempotencyToken:"true"`
 
 	Start *string `locationName:"start" type:"string"`
@@ -25184,6 +25629,11 @@ func (s *PurchaseOfferingInput) Validate() error {
 	if s.OfferingId != nil && len(*s.OfferingId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("OfferingId", 1))
 	}
+	if s.RenewalSettings != nil {
+		if err := s.RenewalSettings.Validate(); err != nil {
+			invalidParams.AddNested("RenewalSettings", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -25206,6 +25656,12 @@ func (s *PurchaseOfferingInput) SetName(v string) *PurchaseOfferingInput {
 // SetOfferingId sets the OfferingId field's value.
 func (s *PurchaseOfferingInput) SetOfferingId(v string) *PurchaseOfferingInput {
 	s.OfferingId = &v
+	return s
+}
+
+// SetRenewalSettings sets the RenewalSettings field's value.
+func (s *PurchaseOfferingInput) SetRenewalSettings(v *RenewalSettings) *PurchaseOfferingInput {
+	s.RenewalSettings = v
 	return s
 }
 
@@ -25260,7 +25716,7 @@ func (s *PurchaseOfferingOutput) SetReservation(v *Reservation) *PurchaseOfferin
 
 // Raw Settings
 type RawSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25281,9 +25737,87 @@ func (s RawSettings) GoString() string {
 	return s.String()
 }
 
+type RebootInputDeviceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Whether or not to force reboot the input device.
+	Force *string `locationName:"force" type:"string" enum:"RebootInputDeviceForce"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RebootInputDeviceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RebootInputDeviceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RebootInputDeviceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RebootInputDeviceInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetForce sets the Force field's value.
+func (s *RebootInputDeviceInput) SetForce(v string) *RebootInputDeviceInput {
+	s.Force = &v
+	return s
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *RebootInputDeviceInput) SetInputDeviceId(v string) *RebootInputDeviceInput {
+	s.InputDeviceId = &v
+	return s
+}
+
+type RebootInputDeviceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RebootInputDeviceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RebootInputDeviceOutput) GoString() string {
+	return s.String()
+}
+
 // Rec601 Settings
 type Rec601Settings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25306,7 +25840,7 @@ func (s Rec601Settings) GoString() string {
 
 // Rec709 Settings
 type Rec709Settings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25375,7 +25909,7 @@ func (s *RejectInputDeviceTransferInput) SetInputDeviceId(v string) *RejectInput
 }
 
 type RejectInputDeviceTransferOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25477,6 +26011,60 @@ func (s *RemixSettings) SetChannelsOut(v int64) *RemixSettings {
 	return s
 }
 
+// The Renewal settings for Reservations
+type RenewalSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Automatic renewal status for the reservation
+	AutomaticRenewal *string `locationName:"automaticRenewal" type:"string" enum:"ReservationAutomaticRenewal"`
+
+	// Count for the reservation renewal
+	RenewalCount *int64 `locationName:"renewalCount" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RenewalSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RenewalSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RenewalSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RenewalSettings"}
+	if s.RenewalCount != nil && *s.RenewalCount < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("RenewalCount", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAutomaticRenewal sets the AutomaticRenewal field's value.
+func (s *RenewalSettings) SetAutomaticRenewal(v string) *RenewalSettings {
+	s.AutomaticRenewal = &v
+	return s
+}
+
+// SetRenewalCount sets the RenewalCount field's value.
+func (s *RenewalSettings) SetRenewalCount(v int64) *RenewalSettings {
+	s.RenewalCount = &v
+	return s
+}
+
 // Reserved resources available to use
 type Reservation struct {
 	_ struct{} `type:"structure"`
@@ -25517,6 +26105,9 @@ type Reservation struct {
 
 	// AWS region, e.g. 'us-west-2'
 	Region *string `locationName:"region" type:"string"`
+
+	// Renewal settings for the reservation
+	RenewalSettings *RenewalSettings `locationName:"renewalSettings" type:"structure"`
 
 	// Unique reservation ID, e.g. '1234567'
 	ReservationId *string `locationName:"reservationId" type:"string"`
@@ -25624,6 +26215,12 @@ func (s *Reservation) SetOfferingType(v string) *Reservation {
 // SetRegion sets the Region field's value.
 func (s *Reservation) SetRegion(v string) *Reservation {
 	s.Region = &v
+	return s
+}
+
+// SetRenewalSettings sets the RenewalSettings field's value.
+func (s *Reservation) SetRenewalSettings(v *RenewalSettings) *Reservation {
+	s.RenewalSettings = v
 	return s
 }
 
@@ -25760,7 +26357,7 @@ func (s *ReservationResourceSpecification) SetVideoQuality(v string) *Reservatio
 
 // Rtmp Caption Info Destination Settings
 type RtmpCaptionInfoDestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -25788,7 +26385,7 @@ type RtmpGroupSettings struct {
 	// Choose the ad marker type for this output group. MediaLive will create a
 	// message based on the content of each SCTE-35 message, format it for that
 	// marker type, and insert it in the datastream.
-	AdMarkers []*string `locationName:"adMarkers" type:"list"`
+	AdMarkers []*string `locationName:"adMarkers" type:"list" enum:"RtmpAdMarkers"`
 
 	// Authentication scheme to use when connecting with CDN
 	AuthenticationScheme *string `locationName:"authenticationScheme" type:"string" enum:"AuthenticationScheme"`
@@ -26325,7 +26922,7 @@ func (s *ScheduleActionStartSettings) SetImmediateModeScheduleActionStartSetting
 
 // Scte20 Plus Embedded Destination Settings
 type Scte20PlusEmbeddedDestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -26405,7 +27002,7 @@ func (s *Scte20SourceSettings) SetSource608ChannelNumber(v int64) *Scte20SourceS
 
 // Scte27 Destination Settings
 type Scte27DestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27150,7 +27747,7 @@ func (s *Scte35TimeSignalScheduleActionSettings) SetScte35Descriptors(v []*Scte3
 
 // Smpte Tt Destination Settings
 type SmpteTtDestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27302,6 +27899,8 @@ type StartChannelOutput struct {
 	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
+	Maintenance *MaintenanceStatus `locationName:"maintenance" type:"structure"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	PipelineDetails []*PipelineDetail `locationName:"pipelineDetails" type:"list"`
@@ -27396,6 +27995,12 @@ func (s *StartChannelOutput) SetLogLevel(v string) *StartChannelOutput {
 	return s
 }
 
+// SetMaintenance sets the Maintenance field's value.
+func (s *StartChannelOutput) SetMaintenance(v *MaintenanceStatus) *StartChannelOutput {
+	s.Maintenance = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *StartChannelOutput) SetName(v string) *StartChannelOutput {
 	s.Name = &v
@@ -27436,6 +28041,75 @@ func (s *StartChannelOutput) SetTags(v map[string]*string) *StartChannelOutput {
 func (s *StartChannelOutput) SetVpc(v *VpcOutputSettingsDescription) *StartChannelOutput {
 	s.Vpc = v
 	return s
+}
+
+type StartInputDeviceMaintenanceWindowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceMaintenanceWindowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceMaintenanceWindowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartInputDeviceMaintenanceWindowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartInputDeviceMaintenanceWindowInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *StartInputDeviceMaintenanceWindowInput) SetInputDeviceId(v string) *StartInputDeviceMaintenanceWindowInput {
+	s.InputDeviceId = &v
+	return s
+}
+
+type StartInputDeviceMaintenanceWindowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceMaintenanceWindowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceMaintenanceWindowOutput) GoString() string {
+	return s.String()
 }
 
 type StartMultiplexInput struct {
@@ -27962,6 +28636,8 @@ type StopChannelOutput struct {
 	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
+	Maintenance *MaintenanceStatus `locationName:"maintenance" type:"structure"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	PipelineDetails []*PipelineDetail `locationName:"pipelineDetails" type:"list"`
@@ -28053,6 +28729,12 @@ func (s *StopChannelOutput) SetInputSpecification(v *InputSpecification) *StopCh
 // SetLogLevel sets the LogLevel field's value.
 func (s *StopChannelOutput) SetLogLevel(v string) *StopChannelOutput {
 	s.LogLevel = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *StopChannelOutput) SetMaintenance(v *MaintenanceStatus) *StopChannelOutput {
+	s.Maintenance = v
 	return s
 }
 
@@ -28296,7 +28978,7 @@ func (s *StopTimecode) SetTimecode(v string) *StopTimecode {
 
 // Teletext Destination Settings
 type TeletextDestinationSettings struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28622,7 +29304,7 @@ func (s *TransferInputDeviceInput) SetTransferMessage(v string) *TransferInputDe
 }
 
 type TransferInputDeviceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28706,9 +29388,8 @@ func (s *TransferringInputDeviceSummary) SetTransferType(v string) *Transferring
 type TtmlDestinationSettings struct {
 	_ struct{} `type:"structure"`
 
-	// When set to passthrough, passes through style and position information from
-	// a TTML-like input source (TTML, SMPTE-TT, CFF-TT) to the CFF-TT output or
-	// TTML output.
+	// This field is not currently supported and will not affect the output styling.
+	// Leave the default value.
 	StyleControl *string `locationName:"styleControl" type:"string" enum:"TtmlDestinationStyleControl"`
 }
 
@@ -29127,6 +29808,8 @@ type UpdateChannelInput struct {
 	// The log level the user wants for their channel.
 	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
 
+	Maintenance *MaintenanceUpdateSettings `locationName:"maintenance" type:"structure"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	RoleArn *string `locationName:"roleArn" type:"string"`
@@ -29230,6 +29913,12 @@ func (s *UpdateChannelInput) SetInputSpecification(v *InputSpecification) *Updat
 // SetLogLevel sets the LogLevel field's value.
 func (s *UpdateChannelInput) SetLogLevel(v string) *UpdateChannelInput {
 	s.LogLevel = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *UpdateChannelInput) SetMaintenance(v *MaintenanceUpdateSettings) *UpdateChannelInput {
+	s.Maintenance = v
 	return s
 }
 
@@ -29919,6 +30608,9 @@ type UpdateReservationInput struct {
 
 	Name *string `locationName:"name" type:"string"`
 
+	// The Renewal settings for Reservations
+	RenewalSettings *RenewalSettings `locationName:"renewalSettings" type:"structure"`
+
 	// ReservationId is a required field
 	ReservationId *string `location:"uri" locationName:"reservationId" type:"string" required:"true"`
 }
@@ -29950,6 +30642,11 @@ func (s *UpdateReservationInput) Validate() error {
 	if s.ReservationId != nil && len(*s.ReservationId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ReservationId", 1))
 	}
+	if s.RenewalSettings != nil {
+		if err := s.RenewalSettings.Validate(); err != nil {
+			invalidParams.AddNested("RenewalSettings", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -29960,6 +30657,12 @@ func (s *UpdateReservationInput) Validate() error {
 // SetName sets the Name field's value.
 func (s *UpdateReservationInput) SetName(v string) *UpdateReservationInput {
 	s.Name = &v
+	return s
+}
+
+// SetRenewalSettings sets the RenewalSettings field's value.
+func (s *UpdateReservationInput) SetRenewalSettings(v *RenewalSettings) *UpdateReservationInput {
+	s.RenewalSettings = v
 	return s
 }
 
@@ -31020,6 +31723,23 @@ func AcceptHeader_Values() []string {
 	}
 }
 
+// Accessibility Type
+const (
+	// AccessibilityTypeDoesNotImplementAccessibilityFeatures is a AccessibilityType enum value
+	AccessibilityTypeDoesNotImplementAccessibilityFeatures = "DOES_NOT_IMPLEMENT_ACCESSIBILITY_FEATURES"
+
+	// AccessibilityTypeImplementsAccessibilityFeatures is a AccessibilityType enum value
+	AccessibilityTypeImplementsAccessibilityFeatures = "IMPLEMENTS_ACCESSIBILITY_FEATURES"
+)
+
+// AccessibilityType_Values returns all elements of the AccessibilityType enum
+func AccessibilityType_Values() []string {
+	return []string{
+		AccessibilityTypeDoesNotImplementAccessibilityFeatures,
+		AccessibilityTypeImplementsAccessibilityFeatures,
+	}
+}
+
 // Afd Signaling
 const (
 	// AfdSignalingAuto is a AfdSignaling enum value
@@ -31540,6 +32260,9 @@ const (
 
 	// DeviceUpdateStatusNotUpToDate is a DeviceUpdateStatus enum value
 	DeviceUpdateStatusNotUpToDate = "NOT_UP_TO_DATE"
+
+	// DeviceUpdateStatusUpdating is a DeviceUpdateStatus enum value
+	DeviceUpdateStatusUpdating = "UPDATING"
 )
 
 // DeviceUpdateStatus_Values returns all elements of the DeviceUpdateStatus enum
@@ -31547,6 +32270,7 @@ func DeviceUpdateStatus_Values() []string {
 	return []string{
 		DeviceUpdateStatusUpToDate,
 		DeviceUpdateStatusNotUpToDate,
+		DeviceUpdateStatusUpdating,
 	}
 }
 
@@ -33440,6 +34164,23 @@ func HlsProgramDateTime_Values() []string {
 	}
 }
 
+// Hls Program Date Time Clock
+const (
+	// HlsProgramDateTimeClockInitializeFromOutputTimecode is a HlsProgramDateTimeClock enum value
+	HlsProgramDateTimeClockInitializeFromOutputTimecode = "INITIALIZE_FROM_OUTPUT_TIMECODE"
+
+	// HlsProgramDateTimeClockSystemClock is a HlsProgramDateTimeClock enum value
+	HlsProgramDateTimeClockSystemClock = "SYSTEM_CLOCK"
+)
+
+// HlsProgramDateTimeClock_Values returns all elements of the HlsProgramDateTimeClock enum
+func HlsProgramDateTimeClock_Values() []string {
+	return []string{
+		HlsProgramDateTimeClockInitializeFromOutputTimecode,
+		HlsProgramDateTimeClockSystemClock,
+	}
+}
+
 // Hls Redundant Manifest
 const (
 	// HlsRedundantManifestDisabled is a HlsRedundantManifest enum value
@@ -34584,6 +35325,43 @@ func M3u8TimedMetadataBehavior_Values() []string {
 	}
 }
 
+// The currently selected maintenance day.
+const (
+	// MaintenanceDayMonday is a MaintenanceDay enum value
+	MaintenanceDayMonday = "MONDAY"
+
+	// MaintenanceDayTuesday is a MaintenanceDay enum value
+	MaintenanceDayTuesday = "TUESDAY"
+
+	// MaintenanceDayWednesday is a MaintenanceDay enum value
+	MaintenanceDayWednesday = "WEDNESDAY"
+
+	// MaintenanceDayThursday is a MaintenanceDay enum value
+	MaintenanceDayThursday = "THURSDAY"
+
+	// MaintenanceDayFriday is a MaintenanceDay enum value
+	MaintenanceDayFriday = "FRIDAY"
+
+	// MaintenanceDaySaturday is a MaintenanceDay enum value
+	MaintenanceDaySaturday = "SATURDAY"
+
+	// MaintenanceDaySunday is a MaintenanceDay enum value
+	MaintenanceDaySunday = "SUNDAY"
+)
+
+// MaintenanceDay_Values returns all elements of the MaintenanceDay enum
+func MaintenanceDay_Values() []string {
+	return []string{
+		MaintenanceDayMonday,
+		MaintenanceDayTuesday,
+		MaintenanceDayWednesday,
+		MaintenanceDayThursday,
+		MaintenanceDayFriday,
+		MaintenanceDaySaturday,
+		MaintenanceDaySunday,
+	}
+}
+
 // Motion Graphics Insertion
 const (
 	// MotionGraphicsInsertionDisabled is a MotionGraphicsInsertion enum value
@@ -34962,6 +35740,44 @@ func PreferredChannelPipeline_Values() []string {
 		PreferredChannelPipelineCurrentlyActive,
 		PreferredChannelPipelinePipeline0,
 		PreferredChannelPipelinePipeline1,
+	}
+}
+
+// Whether or not to force reboot the input device.
+const (
+	// RebootInputDeviceForceNo is a RebootInputDeviceForce enum value
+	RebootInputDeviceForceNo = "NO"
+
+	// RebootInputDeviceForceYes is a RebootInputDeviceForce enum value
+	RebootInputDeviceForceYes = "YES"
+)
+
+// RebootInputDeviceForce_Values returns all elements of the RebootInputDeviceForce enum
+func RebootInputDeviceForce_Values() []string {
+	return []string{
+		RebootInputDeviceForceNo,
+		RebootInputDeviceForceYes,
+	}
+}
+
+// Automatic Renewal Status for Reservation
+const (
+	// ReservationAutomaticRenewalDisabled is a ReservationAutomaticRenewal enum value
+	ReservationAutomaticRenewalDisabled = "DISABLED"
+
+	// ReservationAutomaticRenewalEnabled is a ReservationAutomaticRenewal enum value
+	ReservationAutomaticRenewalEnabled = "ENABLED"
+
+	// ReservationAutomaticRenewalUnavailable is a ReservationAutomaticRenewal enum value
+	ReservationAutomaticRenewalUnavailable = "UNAVAILABLE"
+)
+
+// ReservationAutomaticRenewal_Values returns all elements of the ReservationAutomaticRenewal enum
+func ReservationAutomaticRenewal_Values() []string {
+	return []string{
+		ReservationAutomaticRenewalDisabled,
+		ReservationAutomaticRenewalEnabled,
+		ReservationAutomaticRenewalUnavailable,
 	}
 }
 

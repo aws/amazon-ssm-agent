@@ -658,7 +658,7 @@ func (s *DeleteHumanLoopInput) SetHumanLoopName(v string) *DeleteHumanLoopInput 
 }
 
 type DeleteHumanLoopOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -734,7 +734,7 @@ type DescribeHumanLoopOutput struct {
 	// The creation time when Amazon Augmented AI created the human loop.
 	//
 	// CreationTime is a required field
-	CreationTime *time.Time `type:"timestamp" required:"true"`
+	CreationTime *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
 
 	// A failure code that identifies the type of failure.
 	//
@@ -849,7 +849,7 @@ type HumanLoopDataAttributes struct {
 	// view your task based on this information.
 	//
 	// ContentClassifiers is a required field
-	ContentClassifiers []*string `type:"list" required:"true"`
+	ContentClassifiers []*string `type:"list" required:"true" enum:"ContentClassifier"`
 }
 
 // String returns the string representation.
@@ -977,7 +977,7 @@ type HumanLoopSummary struct {
 	_ struct{} `type:"structure"`
 
 	// When Amazon Augmented AI created the human loop.
-	CreationTime *time.Time `type:"timestamp"`
+	CreationTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 
 	// The reason why the human loop failed. A failure reason is returned when the
 	// status of the human loop is Failed.
@@ -1112,11 +1112,11 @@ type ListHumanLoopsInput struct {
 
 	// (Optional) The timestamp of the date when you want the human loops to begin
 	// in ISO 8601 format. For example, 2020-02-24.
-	CreationTimeAfter *time.Time `location:"querystring" locationName:"CreationTimeAfter" type:"timestamp"`
+	CreationTimeAfter *time.Time `location:"querystring" locationName:"CreationTimeAfter" type:"timestamp" timestampFormat:"iso8601"`
 
 	// (Optional) The timestamp of the date before which you want the human loops
 	// to begin in ISO 8601 format. For example, 2020-02-24.
-	CreationTimeBefore *time.Time `location:"querystring" locationName:"CreationTimeBefore" type:"timestamp"`
+	CreationTimeBefore *time.Time `location:"querystring" locationName:"CreationTimeBefore" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The Amazon Resource Name (ARN) of a flow definition.
 	//
@@ -1563,7 +1563,7 @@ func (s *StopHumanLoopInput) SetHumanLoopName(v string) *StopHumanLoopInput {
 }
 
 type StopHumanLoopOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.

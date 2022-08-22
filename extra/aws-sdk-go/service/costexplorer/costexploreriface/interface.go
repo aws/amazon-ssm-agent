@@ -166,6 +166,13 @@ type CostExplorerAPI interface {
 	GetUsageForecastWithContext(aws.Context, *costexplorer.GetUsageForecastInput, ...request.Option) (*costexplorer.GetUsageForecastOutput, error)
 	GetUsageForecastRequest(*costexplorer.GetUsageForecastInput) (*request.Request, *costexplorer.GetUsageForecastOutput)
 
+	ListCostAllocationTags(*costexplorer.ListCostAllocationTagsInput) (*costexplorer.ListCostAllocationTagsOutput, error)
+	ListCostAllocationTagsWithContext(aws.Context, *costexplorer.ListCostAllocationTagsInput, ...request.Option) (*costexplorer.ListCostAllocationTagsOutput, error)
+	ListCostAllocationTagsRequest(*costexplorer.ListCostAllocationTagsInput) (*request.Request, *costexplorer.ListCostAllocationTagsOutput)
+
+	ListCostAllocationTagsPages(*costexplorer.ListCostAllocationTagsInput, func(*costexplorer.ListCostAllocationTagsOutput, bool) bool) error
+	ListCostAllocationTagsPagesWithContext(aws.Context, *costexplorer.ListCostAllocationTagsInput, func(*costexplorer.ListCostAllocationTagsOutput, bool) bool, ...request.Option) error
+
 	ListCostCategoryDefinitions(*costexplorer.ListCostCategoryDefinitionsInput) (*costexplorer.ListCostCategoryDefinitionsOutput, error)
 	ListCostCategoryDefinitionsWithContext(aws.Context, *costexplorer.ListCostCategoryDefinitionsInput, ...request.Option) (*costexplorer.ListCostCategoryDefinitionsOutput, error)
 	ListCostCategoryDefinitionsRequest(*costexplorer.ListCostCategoryDefinitionsInput) (*request.Request, *costexplorer.ListCostCategoryDefinitionsOutput)
@@ -173,9 +180,21 @@ type CostExplorerAPI interface {
 	ListCostCategoryDefinitionsPages(*costexplorer.ListCostCategoryDefinitionsInput, func(*costexplorer.ListCostCategoryDefinitionsOutput, bool) bool) error
 	ListCostCategoryDefinitionsPagesWithContext(aws.Context, *costexplorer.ListCostCategoryDefinitionsInput, func(*costexplorer.ListCostCategoryDefinitionsOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*costexplorer.ListTagsForResourceInput) (*costexplorer.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *costexplorer.ListTagsForResourceInput, ...request.Option) (*costexplorer.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*costexplorer.ListTagsForResourceInput) (*request.Request, *costexplorer.ListTagsForResourceOutput)
+
 	ProvideAnomalyFeedback(*costexplorer.ProvideAnomalyFeedbackInput) (*costexplorer.ProvideAnomalyFeedbackOutput, error)
 	ProvideAnomalyFeedbackWithContext(aws.Context, *costexplorer.ProvideAnomalyFeedbackInput, ...request.Option) (*costexplorer.ProvideAnomalyFeedbackOutput, error)
 	ProvideAnomalyFeedbackRequest(*costexplorer.ProvideAnomalyFeedbackInput) (*request.Request, *costexplorer.ProvideAnomalyFeedbackOutput)
+
+	TagResource(*costexplorer.TagResourceInput) (*costexplorer.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *costexplorer.TagResourceInput, ...request.Option) (*costexplorer.TagResourceOutput, error)
+	TagResourceRequest(*costexplorer.TagResourceInput) (*request.Request, *costexplorer.TagResourceOutput)
+
+	UntagResource(*costexplorer.UntagResourceInput) (*costexplorer.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *costexplorer.UntagResourceInput, ...request.Option) (*costexplorer.UntagResourceOutput, error)
+	UntagResourceRequest(*costexplorer.UntagResourceInput) (*request.Request, *costexplorer.UntagResourceOutput)
 
 	UpdateAnomalyMonitor(*costexplorer.UpdateAnomalyMonitorInput) (*costexplorer.UpdateAnomalyMonitorOutput, error)
 	UpdateAnomalyMonitorWithContext(aws.Context, *costexplorer.UpdateAnomalyMonitorInput, ...request.Option) (*costexplorer.UpdateAnomalyMonitorOutput, error)
@@ -184,6 +203,10 @@ type CostExplorerAPI interface {
 	UpdateAnomalySubscription(*costexplorer.UpdateAnomalySubscriptionInput) (*costexplorer.UpdateAnomalySubscriptionOutput, error)
 	UpdateAnomalySubscriptionWithContext(aws.Context, *costexplorer.UpdateAnomalySubscriptionInput, ...request.Option) (*costexplorer.UpdateAnomalySubscriptionOutput, error)
 	UpdateAnomalySubscriptionRequest(*costexplorer.UpdateAnomalySubscriptionInput) (*request.Request, *costexplorer.UpdateAnomalySubscriptionOutput)
+
+	UpdateCostAllocationTagsStatus(*costexplorer.UpdateCostAllocationTagsStatusInput) (*costexplorer.UpdateCostAllocationTagsStatusOutput, error)
+	UpdateCostAllocationTagsStatusWithContext(aws.Context, *costexplorer.UpdateCostAllocationTagsStatusInput, ...request.Option) (*costexplorer.UpdateCostAllocationTagsStatusOutput, error)
+	UpdateCostAllocationTagsStatusRequest(*costexplorer.UpdateCostAllocationTagsStatusInput) (*request.Request, *costexplorer.UpdateCostAllocationTagsStatusOutput)
 
 	UpdateCostCategoryDefinition(*costexplorer.UpdateCostCategoryDefinitionInput) (*costexplorer.UpdateCostCategoryDefinitionOutput, error)
 	UpdateCostCategoryDefinitionWithContext(aws.Context, *costexplorer.UpdateCostCategoryDefinitionInput, ...request.Option) (*costexplorer.UpdateCostCategoryDefinitionOutput, error)

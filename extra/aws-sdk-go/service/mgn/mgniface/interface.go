@@ -64,6 +64,10 @@ type MgnAPI interface {
 	ChangeServerLifeCycleStateWithContext(aws.Context, *mgn.ChangeServerLifeCycleStateInput, ...request.Option) (*mgn.ChangeServerLifeCycleStateOutput, error)
 	ChangeServerLifeCycleStateRequest(*mgn.ChangeServerLifeCycleStateInput) (*request.Request, *mgn.ChangeServerLifeCycleStateOutput)
 
+	CreateLaunchConfigurationTemplate(*mgn.CreateLaunchConfigurationTemplateInput) (*mgn.CreateLaunchConfigurationTemplateOutput, error)
+	CreateLaunchConfigurationTemplateWithContext(aws.Context, *mgn.CreateLaunchConfigurationTemplateInput, ...request.Option) (*mgn.CreateLaunchConfigurationTemplateOutput, error)
+	CreateLaunchConfigurationTemplateRequest(*mgn.CreateLaunchConfigurationTemplateInput) (*request.Request, *mgn.CreateLaunchConfigurationTemplateOutput)
+
 	CreateReplicationConfigurationTemplate(*mgn.CreateReplicationConfigurationTemplateInput) (*mgn.CreateReplicationConfigurationTemplateOutput, error)
 	CreateReplicationConfigurationTemplateWithContext(aws.Context, *mgn.CreateReplicationConfigurationTemplateInput, ...request.Option) (*mgn.CreateReplicationConfigurationTemplateOutput, error)
 	CreateReplicationConfigurationTemplateRequest(*mgn.CreateReplicationConfigurationTemplateInput) (*request.Request, *mgn.CreateReplicationConfigurationTemplateOutput)
@@ -72,6 +76,10 @@ type MgnAPI interface {
 	DeleteJobWithContext(aws.Context, *mgn.DeleteJobInput, ...request.Option) (*mgn.DeleteJobOutput, error)
 	DeleteJobRequest(*mgn.DeleteJobInput) (*request.Request, *mgn.DeleteJobOutput)
 
+	DeleteLaunchConfigurationTemplate(*mgn.DeleteLaunchConfigurationTemplateInput) (*mgn.DeleteLaunchConfigurationTemplateOutput, error)
+	DeleteLaunchConfigurationTemplateWithContext(aws.Context, *mgn.DeleteLaunchConfigurationTemplateInput, ...request.Option) (*mgn.DeleteLaunchConfigurationTemplateOutput, error)
+	DeleteLaunchConfigurationTemplateRequest(*mgn.DeleteLaunchConfigurationTemplateInput) (*request.Request, *mgn.DeleteLaunchConfigurationTemplateOutput)
+
 	DeleteReplicationConfigurationTemplate(*mgn.DeleteReplicationConfigurationTemplateInput) (*mgn.DeleteReplicationConfigurationTemplateOutput, error)
 	DeleteReplicationConfigurationTemplateWithContext(aws.Context, *mgn.DeleteReplicationConfigurationTemplateInput, ...request.Option) (*mgn.DeleteReplicationConfigurationTemplateOutput, error)
 	DeleteReplicationConfigurationTemplateRequest(*mgn.DeleteReplicationConfigurationTemplateInput) (*request.Request, *mgn.DeleteReplicationConfigurationTemplateOutput)
@@ -79,6 +87,10 @@ type MgnAPI interface {
 	DeleteSourceServer(*mgn.DeleteSourceServerInput) (*mgn.DeleteSourceServerOutput, error)
 	DeleteSourceServerWithContext(aws.Context, *mgn.DeleteSourceServerInput, ...request.Option) (*mgn.DeleteSourceServerOutput, error)
 	DeleteSourceServerRequest(*mgn.DeleteSourceServerInput) (*request.Request, *mgn.DeleteSourceServerOutput)
+
+	DeleteVcenterClient(*mgn.DeleteVcenterClientInput) (*mgn.DeleteVcenterClientOutput, error)
+	DeleteVcenterClientWithContext(aws.Context, *mgn.DeleteVcenterClientInput, ...request.Option) (*mgn.DeleteVcenterClientOutput, error)
+	DeleteVcenterClientRequest(*mgn.DeleteVcenterClientInput) (*request.Request, *mgn.DeleteVcenterClientOutput)
 
 	DescribeJobLogItems(*mgn.DescribeJobLogItemsInput) (*mgn.DescribeJobLogItemsOutput, error)
 	DescribeJobLogItemsWithContext(aws.Context, *mgn.DescribeJobLogItemsInput, ...request.Option) (*mgn.DescribeJobLogItemsOutput, error)
@@ -94,6 +106,13 @@ type MgnAPI interface {
 	DescribeJobsPages(*mgn.DescribeJobsInput, func(*mgn.DescribeJobsOutput, bool) bool) error
 	DescribeJobsPagesWithContext(aws.Context, *mgn.DescribeJobsInput, func(*mgn.DescribeJobsOutput, bool) bool, ...request.Option) error
 
+	DescribeLaunchConfigurationTemplates(*mgn.DescribeLaunchConfigurationTemplatesInput) (*mgn.DescribeLaunchConfigurationTemplatesOutput, error)
+	DescribeLaunchConfigurationTemplatesWithContext(aws.Context, *mgn.DescribeLaunchConfigurationTemplatesInput, ...request.Option) (*mgn.DescribeLaunchConfigurationTemplatesOutput, error)
+	DescribeLaunchConfigurationTemplatesRequest(*mgn.DescribeLaunchConfigurationTemplatesInput) (*request.Request, *mgn.DescribeLaunchConfigurationTemplatesOutput)
+
+	DescribeLaunchConfigurationTemplatesPages(*mgn.DescribeLaunchConfigurationTemplatesInput, func(*mgn.DescribeLaunchConfigurationTemplatesOutput, bool) bool) error
+	DescribeLaunchConfigurationTemplatesPagesWithContext(aws.Context, *mgn.DescribeLaunchConfigurationTemplatesInput, func(*mgn.DescribeLaunchConfigurationTemplatesOutput, bool) bool, ...request.Option) error
+
 	DescribeReplicationConfigurationTemplates(*mgn.DescribeReplicationConfigurationTemplatesInput) (*mgn.DescribeReplicationConfigurationTemplatesOutput, error)
 	DescribeReplicationConfigurationTemplatesWithContext(aws.Context, *mgn.DescribeReplicationConfigurationTemplatesInput, ...request.Option) (*mgn.DescribeReplicationConfigurationTemplatesOutput, error)
 	DescribeReplicationConfigurationTemplatesRequest(*mgn.DescribeReplicationConfigurationTemplatesInput) (*request.Request, *mgn.DescribeReplicationConfigurationTemplatesOutput)
@@ -107,6 +126,13 @@ type MgnAPI interface {
 
 	DescribeSourceServersPages(*mgn.DescribeSourceServersInput, func(*mgn.DescribeSourceServersOutput, bool) bool) error
 	DescribeSourceServersPagesWithContext(aws.Context, *mgn.DescribeSourceServersInput, func(*mgn.DescribeSourceServersOutput, bool) bool, ...request.Option) error
+
+	DescribeVcenterClients(*mgn.DescribeVcenterClientsInput) (*mgn.DescribeVcenterClientsOutput, error)
+	DescribeVcenterClientsWithContext(aws.Context, *mgn.DescribeVcenterClientsInput, ...request.Option) (*mgn.DescribeVcenterClientsOutput, error)
+	DescribeVcenterClientsRequest(*mgn.DescribeVcenterClientsInput) (*request.Request, *mgn.DescribeVcenterClientsOutput)
+
+	DescribeVcenterClientsPages(*mgn.DescribeVcenterClientsInput, func(*mgn.DescribeVcenterClientsOutput, bool) bool) error
+	DescribeVcenterClientsPagesWithContext(aws.Context, *mgn.DescribeVcenterClientsInput, func(*mgn.DescribeVcenterClientsOutput, bool) bool, ...request.Option) error
 
 	DisconnectFromService(*mgn.DisconnectFromServiceInput) (*mgn.DisconnectFromServiceOutput, error)
 	DisconnectFromServiceWithContext(aws.Context, *mgn.DisconnectFromServiceInput, ...request.Option) (*mgn.DisconnectFromServiceOutput, error)
@@ -144,6 +170,10 @@ type MgnAPI interface {
 	StartCutoverWithContext(aws.Context, *mgn.StartCutoverInput, ...request.Option) (*mgn.StartCutoverOutput, error)
 	StartCutoverRequest(*mgn.StartCutoverInput) (*request.Request, *mgn.StartCutoverOutput)
 
+	StartReplication(*mgn.StartReplicationInput) (*mgn.StartReplicationOutput, error)
+	StartReplicationWithContext(aws.Context, *mgn.StartReplicationInput, ...request.Option) (*mgn.StartReplicationOutput, error)
+	StartReplicationRequest(*mgn.StartReplicationInput) (*request.Request, *mgn.StartReplicationOutput)
+
 	StartTest(*mgn.StartTestInput) (*mgn.StartTestOutput, error)
 	StartTestWithContext(aws.Context, *mgn.StartTestInput, ...request.Option) (*mgn.StartTestOutput, error)
 	StartTestRequest(*mgn.StartTestInput) (*request.Request, *mgn.StartTestOutput)
@@ -164,6 +194,10 @@ type MgnAPI interface {
 	UpdateLaunchConfigurationWithContext(aws.Context, *mgn.UpdateLaunchConfigurationInput, ...request.Option) (*mgn.UpdateLaunchConfigurationOutput, error)
 	UpdateLaunchConfigurationRequest(*mgn.UpdateLaunchConfigurationInput) (*request.Request, *mgn.UpdateLaunchConfigurationOutput)
 
+	UpdateLaunchConfigurationTemplate(*mgn.UpdateLaunchConfigurationTemplateInput) (*mgn.UpdateLaunchConfigurationTemplateOutput, error)
+	UpdateLaunchConfigurationTemplateWithContext(aws.Context, *mgn.UpdateLaunchConfigurationTemplateInput, ...request.Option) (*mgn.UpdateLaunchConfigurationTemplateOutput, error)
+	UpdateLaunchConfigurationTemplateRequest(*mgn.UpdateLaunchConfigurationTemplateInput) (*request.Request, *mgn.UpdateLaunchConfigurationTemplateOutput)
+
 	UpdateReplicationConfiguration(*mgn.UpdateReplicationConfigurationInput) (*mgn.UpdateReplicationConfigurationOutput, error)
 	UpdateReplicationConfigurationWithContext(aws.Context, *mgn.UpdateReplicationConfigurationInput, ...request.Option) (*mgn.UpdateReplicationConfigurationOutput, error)
 	UpdateReplicationConfigurationRequest(*mgn.UpdateReplicationConfigurationInput) (*request.Request, *mgn.UpdateReplicationConfigurationOutput)
@@ -171,6 +205,10 @@ type MgnAPI interface {
 	UpdateReplicationConfigurationTemplate(*mgn.UpdateReplicationConfigurationTemplateInput) (*mgn.UpdateReplicationConfigurationTemplateOutput, error)
 	UpdateReplicationConfigurationTemplateWithContext(aws.Context, *mgn.UpdateReplicationConfigurationTemplateInput, ...request.Option) (*mgn.UpdateReplicationConfigurationTemplateOutput, error)
 	UpdateReplicationConfigurationTemplateRequest(*mgn.UpdateReplicationConfigurationTemplateInput) (*request.Request, *mgn.UpdateReplicationConfigurationTemplateOutput)
+
+	UpdateSourceServerReplicationType(*mgn.UpdateSourceServerReplicationTypeInput) (*mgn.UpdateSourceServerReplicationTypeOutput, error)
+	UpdateSourceServerReplicationTypeWithContext(aws.Context, *mgn.UpdateSourceServerReplicationTypeInput, ...request.Option) (*mgn.UpdateSourceServerReplicationTypeOutput, error)
+	UpdateSourceServerReplicationTypeRequest(*mgn.UpdateSourceServerReplicationTypeInput) (*request.Request, *mgn.UpdateSourceServerReplicationTypeOutput)
 }
 
 var _ MgnAPI = (*mgn.Mgn)(nil)

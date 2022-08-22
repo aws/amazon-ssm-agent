@@ -156,26 +156,7 @@ func (c *Backup) CreateBackupSelectionRequest(input *CreateBackupSelectionInput)
 // CreateBackupSelection API operation for AWS Backup.
 //
 // Creates a JSON document that specifies a set of resources to assign to a
-// backup plan. Resources can be included by specifying patterns for a ListOfTags
-// and selected Resources.
-//
-// For example, consider the following patterns:
-//
-//    * Resources: "arn:aws:ec2:region:account-id:volume/volume-id"
-//
-//    * ConditionKey:"department" ConditionValue:"finance" ConditionType:"StringEquals"
-//
-//    * ConditionKey:"importance" ConditionValue:"critical" ConditionType:"StringEquals"
-//
-// Using these patterns would back up all Amazon Elastic Block Store (Amazon
-// EBS) volumes that are tagged as "department=finance", "importance=critical",
-// in addition to an EBS volume with the specified volume ID.
-//
-// Resources and conditions are additive in that all resources that match the
-// pattern are selected. This shouldn't be confused with a logical AND, where
-// all conditions must match. The matching patterns are logically put together
-// using the OR operator. In other words, all patterns that match are selected
-// for backup.
+// backup plan. For examples, see Assigning resources programmatically (https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-json).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5343,7 +5324,10 @@ func (c *Backup) ListTagsRequest(input *ListTagsInput) (req *request.Request, ou
 // Returns a list of key-value pairs assigned to a target recovery point, backup
 // plan, or backup vault.
 //
-// ListTags are currently only supported with Amazon EFS backups.
+// ListTags only works for resource types that support full Backup management
+// of their backups. Those resource types are listed in the "Full Backup management"
+// section of the Feature availability by resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+// table.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5583,6 +5567,9 @@ func (c *Backup) PutBackupVaultLockConfigurationRequest(input *PutBackupVaultLoc
 // period of any recovery point currently stored in a backup vault. If specified,
 // Vault Lock enforces a minimum and maximum retention period for future backup
 // and copy jobs that target a backup vault.
+//
+// Backup Vault Lock has yet to receive a third-party assessment for SEC 17a-4(f)
+// and CFTC.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6710,14 +6697,17 @@ func (c *Backup) UpdateRecoveryPointLifecycleRequest(input *UpdateRecoveryPointL
 // according to the lifecycle that you define.
 //
 // Backups transitioned to cold storage must be stored in cold storage for a
-// minimum of 90 days. Therefore, the “expire after days” setting must be
-// 90 days greater than the “transition to cold after days” setting. The
-// “transition to cold after days” setting cannot be changed after a backup
-// has been transitioned to cold.
+// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+// greater than the “transition to cold after days” setting. The “transition
+// to cold after days” setting cannot be changed after a backup has been transitioned
+// to cold.
 //
-// Only Amazon EFS file system backups can be transitioned to cold storage.
+// Resource types that are able to be transitioned to cold storage are listed
+// in the "Lifecycle to cold storage" section of the Feature availability by
+// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+// table. Backup ignores this expression for other resource types.
 //
-// Does not support continuous backups.
+// This operation does not support continuous backups.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6733,6 +6723,10 @@ func (c *Backup) UpdateRecoveryPointLifecycleRequest(input *UpdateRecoveryPointL
 //   * InvalidParameterValueException
 //   Indicates that something is wrong with a parameter's value. For example,
 //   the value is out of range.
+//
+//   * InvalidRequestException
+//   Indicates that something is wrong with the input to the request. For example,
+//   a parameter is of the wrong type.
 //
 //   * MissingParameterValueException
 //   Indicates that a required parameter is missing.
@@ -7092,12 +7086,15 @@ func (s *AlreadyExistsException) RequestID() string {
 // according to the lifecycle that you define.
 //
 // Backups transitioned to cold storage must be stored in cold storage for a
-// minimum of 90 days. Therefore, the “expire after days” setting must be
-// 90 days greater than the “transition to cold after days” setting. The
-// “transition to cold after days” setting cannot be changed after a backup
-// has been transitioned to cold.
+// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+// greater than the “transition to cold after days” setting. The “transition
+// to cold after days” setting cannot be changed after a backup has been transitioned
+// to cold.
 //
-// Only Amazon EFS file system backups can be transitioned to cold storage.
+// Resource types that are able to be transitioned to cold storage are listed
+// in the "Lifecycle to cold storage" section of the Feature availability by
+// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+// table. Backup ignores this expression for other resource types.
 type CalculatedLifecycle struct {
 	_ struct{} `type:"structure"`
 
@@ -7139,25 +7136,28 @@ func (s *CalculatedLifecycle) SetMoveToColdStorageAt(v time.Time) *CalculatedLif
 }
 
 // Contains an array of triplets made up of a condition type (such as StringEquals),
-// a key, and a value. Conditions are used to filter resources in a selection
-// that is assigned to a backup plan.
+// a key, and a value. Used to filter resources using their tags and assign
+// them to a backup plan. Case sensitive.
 type Condition struct {
 	_ struct{} `type:"structure"`
 
-	// The key in a key-value pair. For example, in "ec2:ResourceTag/Department":
-	// "accounting", "ec2:ResourceTag/Department" is the key.
+	// The key in a key-value pair. For example, in the tag Department: Accounting,
+	// Department is the key.
 	//
 	// ConditionKey is a required field
 	ConditionKey *string `type:"string" required:"true"`
 
-	// An operation, such as StringEquals, that is applied to a key-value pair used
-	// to filter resources in a selection.
+	// An operation applied to a key-value pair used to assign resources to your
+	// backup plan. Condition only supports StringEquals. For more flexible assignment
+	// options, including StringLike and the ability to exclude resources from your
+	// backup plan, use Conditions (with an "s" on the end) for your BackupSelection
+	// (https://docs.aws.amazon.com/aws-backup/latest/devguide/API_BackupSelection.html).
 	//
 	// ConditionType is a required field
 	ConditionType *string `type:"string" required:"true" enum:"ConditionType"`
 
-	// The value in a key-value pair. For example, in "ec2:ResourceTag/Department":
-	// "accounting", "accounting" is the value.
+	// The value in a key-value pair. For example, in the tag Department: Accounting,
+	// Accounting is the value.
 	//
 	// ConditionValue is a required field
 	ConditionValue *string `type:"string" required:"true"`
@@ -7215,6 +7215,115 @@ func (s *Condition) SetConditionType(v string) *Condition {
 // SetConditionValue sets the ConditionValue field's value.
 func (s *Condition) SetConditionValue(v string) *Condition {
 	s.ConditionValue = &v
+	return s
+}
+
+// Includes information about tags you define to assign tagged resources to
+// a backup plan.
+type ConditionParameter struct {
+	_ struct{} `type:"structure"`
+
+	// The key in a key-value pair. For example, in the tag Department: Accounting,
+	// Department is the key.
+	ConditionKey *string `type:"string"`
+
+	// The value in a key-value pair. For example, in the tag Department: Accounting,
+	// Accounting is the value.
+	ConditionValue *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConditionParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConditionParameter) GoString() string {
+	return s.String()
+}
+
+// SetConditionKey sets the ConditionKey field's value.
+func (s *ConditionParameter) SetConditionKey(v string) *ConditionParameter {
+	s.ConditionKey = &v
+	return s
+}
+
+// SetConditionValue sets the ConditionValue field's value.
+func (s *ConditionParameter) SetConditionValue(v string) *ConditionParameter {
+	s.ConditionValue = &v
+	return s
+}
+
+// Contains information about which resources to include or exclude from a backup
+// plan using their tags. Conditions are case sensitive.
+type Conditions struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the values of your tagged resources for only those resources that
+	// you tagged with the same value. Also called "exact matching."
+	StringEquals []*ConditionParameter `type:"list"`
+
+	// Filters the values of your tagged resources for matching tag values with
+	// the use of a wildcard character (*) anywhere in the string. For example,
+	// "prod*" or "*rod*" matches the tag value "production".
+	StringLike []*ConditionParameter `type:"list"`
+
+	// Filters the values of your tagged resources for only those resources that
+	// you tagged that do not have the same value. Also called "negated matching."
+	StringNotEquals []*ConditionParameter `type:"list"`
+
+	// Filters the values of your tagged resources for non-matching tag values with
+	// the use of a wildcard character (*) anywhere in the string.
+	StringNotLike []*ConditionParameter `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Conditions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Conditions) GoString() string {
+	return s.String()
+}
+
+// SetStringEquals sets the StringEquals field's value.
+func (s *Conditions) SetStringEquals(v []*ConditionParameter) *Conditions {
+	s.StringEquals = v
+	return s
+}
+
+// SetStringLike sets the StringLike field's value.
+func (s *Conditions) SetStringLike(v []*ConditionParameter) *Conditions {
+	s.StringLike = v
+	return s
+}
+
+// SetStringNotEquals sets the StringNotEquals field's value.
+func (s *Conditions) SetStringNotEquals(v []*ConditionParameter) *Conditions {
+	s.StringNotEquals = v
+	return s
+}
+
+// SetStringNotLike sets the StringNotLike field's value.
+func (s *Conditions) SetStringNotLike(v []*ConditionParameter) *Conditions {
+	s.StringNotLike = v
 	return s
 }
 
@@ -7334,9 +7443,10 @@ func (s *ControlInputParameter) SetParameterValue(v string) *ControlInputParamet
 }
 
 // A framework consists of one or more controls. Each control has its own control
-// scope. The control scope defines what the control will evaluate. Three examples
-// of control scopes are: a specific backup plan, all backup plans with a specific
-// tag, or all backup plans.
+// scope. The control scope can include one or more resource types, a combination
+// of a tag key and value, or a combination of one resource type and one resource
+// ID. If no scope is specified, evaluations for the rule are triggered when
+// any resource in your recording group changes in configuration.
 //
 // To set a control scope that includes all of a particular resource, leave
 // the ControlScope empty or do not pass it when calling CreateFramework.
@@ -7351,8 +7461,10 @@ type ControlScope struct {
 	// such as EFS or RDS.
 	ComplianceResourceTypes []*string `type:"list"`
 
-	// Describes whether the control scope includes resources with one or more tags.
-	// Each tag is a key-value pair.
+	// The tag key-value pair applied to those Amazon Web Services resources that
+	// you want to trigger an evaluation for a rule. A maximum of one key-value
+	// pair can be provided. The tag value is optional, but it cannot be an empty
+	// string. The structure to assign a tag is: [{"Key":"string","Value":"string"}].
 	Tags map[string]*string `type:"map"`
 }
 
@@ -7419,12 +7531,15 @@ type CopyAction struct {
 	// a recovery point transitions to cold storage or is deleted.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, on the console, the “expire after days”
-	// setting must be 90 days greater than the “transition to cold after days”
-	// setting. The “transition to cold after days” setting cannot be changed
-	// after a backup has been transitioned to cold.
+	// minimum of 90 days. Therefore, on the console, the “retention” setting
+	// must be 90 days greater than the “transition to cold after days” setting.
+	// The “transition to cold after days” setting cannot be changed after a
+	// backup has been transitioned to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 }
 
@@ -7666,6 +7781,8 @@ type CreateBackupPlanInput struct {
 	// risk of running the operation twice. If the request includes a CreatorRequestId
 	// that matches an existing backup plan, that plan is returned. This parameter
 	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
 	CreatorRequestId *string `type:"string"`
 }
 
@@ -7812,7 +7929,10 @@ type CreateBackupSelectionInput struct {
 	BackupSelection *Selection `type:"structure" required:"true"`
 
 	// A unique string that identifies the request and allows failed requests to
-	// be retried without the risk of running the operation twice.
+	// be retried without the risk of running the operation twice. This parameter
+	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
 	CreatorRequestId *string `type:"string"`
 }
 
@@ -7949,7 +8069,10 @@ type CreateBackupVaultInput struct {
 	BackupVaultTags map[string]*string `type:"map" sensitive:"true"`
 
 	// A unique string that identifies the request and allows failed requests to
-	// be retried without the risk of running the operation twice.
+	// be retried without the risk of running the operation twice. This parameter
+	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
 	CreatorRequestId *string `type:"string"`
 
 	// The server-side encryption key that is used to protect your backups; for
@@ -8582,7 +8705,7 @@ func (s *DeleteBackupSelectionInput) SetSelectionId(v string) *DeleteBackupSelec
 }
 
 type DeleteBackupSelectionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8656,7 +8779,7 @@ func (s *DeleteBackupVaultAccessPolicyInput) SetBackupVaultName(v string) *Delet
 }
 
 type DeleteBackupVaultAccessPolicyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8779,7 +8902,7 @@ func (s *DeleteBackupVaultLockConfigurationInput) SetBackupVaultName(v string) *
 }
 
 type DeleteBackupVaultLockConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8853,7 +8976,7 @@ func (s *DeleteBackupVaultNotificationsInput) SetBackupVaultName(v string) *Dele
 }
 
 type DeleteBackupVaultNotificationsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8875,7 +8998,7 @@ func (s DeleteBackupVaultNotificationsOutput) GoString() string {
 }
 
 type DeleteBackupVaultOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8946,7 +9069,7 @@ func (s *DeleteFrameworkInput) SetFrameworkName(v string) *DeleteFrameworkInput 
 }
 
 type DeleteFrameworkOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9038,7 +9161,7 @@ func (s *DeleteRecoveryPointInput) SetRecoveryPointArn(v string) *DeleteRecovery
 }
 
 type DeleteRecoveryPointOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9109,7 +9232,7 @@ func (s *DeleteReportPlanInput) SetReportPlanName(v string) *DeleteReportPlanInp
 }
 
 type DeleteReportPlanOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10233,12 +10356,15 @@ type DescribeRecoveryPointOutput struct {
 	// according to the lifecycle that you define.
 	//
 	// Backups that are transitioned to cold storage must be stored in cold storage
-	// for a minimum of 90 days. Therefore, the “expire after days” setting
-	// must be 90 days greater than the “transition to cold after days” setting.
-	// The “transition to cold after days” setting cannot be changed after a
-	// backup has been transitioned to cold.
+	// for a minimum of 90 days. Therefore, the “retention” setting must be
+	// 90 days greater than the “transition to cold after days” setting. The
+	// “transition to cold after days” setting cannot be changed after a backup
+	// has been transitioned to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// An ARN that uniquely identifies a recovery point; for example, arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45.
@@ -10439,6 +10565,18 @@ func (s DescribeRegionSettingsInput) GoString() string {
 type DescribeRegionSettingsOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Returns whether Backup fully manages the backups for a resource type.
+	//
+	// For the benefits of full Backup management, see Full Backup management (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#full-management).
+	//
+	// For a list of resource types and whether each supports full Backup management,
+	// see the Feature availability by resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table.
+	//
+	// If "DynamoDB":false, you can enable full Backup management for DynamoDB backup
+	// by enabling Backup's advanced DynamoDB backup features (https://docs.aws.amazon.com/aws-backup/latest/devguide/advanced-ddb-backup.html#advanced-ddb-backup-enable-cli).
+	ResourceTypeManagementPreference map[string]*bool `type:"map"`
+
 	// Returns a list of all services along with the opt-in preferences in the Region.
 	ResourceTypeOptInPreference map[string]*bool `type:"map"`
 }
@@ -10459,6 +10597,12 @@ func (s DescribeRegionSettingsOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DescribeRegionSettingsOutput) GoString() string {
 	return s.String()
+}
+
+// SetResourceTypeManagementPreference sets the ResourceTypeManagementPreference field's value.
+func (s *DescribeRegionSettingsOutput) SetResourceTypeManagementPreference(v map[string]*bool) *DescribeRegionSettingsOutput {
+	s.ResourceTypeManagementPreference = v
+	return s
 }
 
 // SetResourceTypeOptInPreference sets the ResourceTypeOptInPreference field's value.
@@ -10902,7 +11046,7 @@ func (s *DisassociateRecoveryPointInput) SetRecoveryPointArn(v string) *Disassoc
 }
 
 type DisassociateRecoveryPointOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11110,7 +11254,7 @@ type FrameworkControl struct {
 	// The scope of a control. The control scope defines what the control will evaluate.
 	// Three examples of control scopes are: a specific backup plan, all backup
 	// plans with a specific tag, or all backup plans. For more information, see
-	// ControlScope.
+	// ControlScope. (aws-backup/latest/devguide/API_ControlScope.html)
 	ControlScope *ControlScope `type:"structure"`
 }
 
@@ -11809,7 +11953,7 @@ type GetBackupVaultNotificationsOutput struct {
 
 	// An array of events that indicate the status of jobs to back up resources
 	// to the backup vault.
-	BackupVaultEvents []*string `type:"list"`
+	BackupVaultEvents []*string `type:"list" enum:"VaultEvent"`
 
 	// The name of a logical container where backups are stored. Backup vaults are
 	// identified by names that are unique to the account used to create them and
@@ -12031,6 +12175,10 @@ type GetSupportedResourceTypesOutput struct {
 	//    * RDS for Amazon Relational Database Service
 	//
 	//    * Storage Gateway for Storage Gateway
+	//
+	//    * DocDB for Amazon DocumentDB (with MongoDB compatibility)
+	//
+	//    * Neptune for Amazon Neptune
 	ResourceTypes []*string `type:"list"`
 }
 
@@ -12514,12 +12662,15 @@ func (s *Job) SetStatusMessage(v string) *Job {
 // a recovery point transitions to cold storage or is deleted.
 //
 // Backups transitioned to cold storage must be stored in cold storage for a
-// minimum of 90 days. Therefore, on the console, the “expire after days”
-// setting must be 90 days greater than the “transition to cold after days”
-// setting. The “transition to cold after days” setting cannot be changed
-// after a backup has been transitioned to cold.
+// minimum of 90 days. Therefore, on the console, the “retention” setting
+// must be 90 days greater than the “transition to cold after days” setting.
+// The “transition to cold after days” setting cannot be changed after a
+// backup has been transitioned to cold.
 //
-// Only Amazon EFS file system backups can be transitioned to cold storage.
+// Resource types that are able to be transitioned to cold storage are listed
+// in the "Lifecycle to cold storage" section of the Feature availability by
+// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+// table. Backup ignores this expression for other resource types.
 type Lifecycle struct {
 	_ struct{} `type:"structure"`
 
@@ -12649,6 +12800,14 @@ type ListBackupJobsInput struct {
 	// They consist of lowercase letters, numbers, and hyphens.
 	ByBackupVaultName *string `location:"querystring" locationName:"backupVaultName" type:"string"`
 
+	// Returns only backup jobs completed after a date expressed in Unix format
+	// and Coordinated Universal Time (UTC).
+	ByCompleteAfter *time.Time `location:"querystring" locationName:"completeAfter" type:"timestamp"`
+
+	// Returns only backup jobs completed before a date expressed in Unix format
+	// and Coordinated Universal Time (UTC).
+	ByCompleteBefore *time.Time `location:"querystring" locationName:"completeBefore" type:"timestamp"`
+
 	// Returns only backup jobs that were created after the specified date.
 	ByCreatedAfter *time.Time `location:"querystring" locationName:"createdAfter" type:"timestamp"`
 
@@ -12661,6 +12820,10 @@ type ListBackupJobsInput struct {
 
 	// Returns only backup jobs for the specified resources:
 	//
+	//    * Aurora for Amazon Aurora
+	//
+	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
+	//
 	//    * DynamoDB for Amazon DynamoDB
 	//
 	//    * EBS for Amazon Elastic Block Store
@@ -12669,11 +12832,17 @@ type ListBackupJobsInput struct {
 	//
 	//    * EFS for Amazon Elastic File System
 	//
+	//    * FSx for Amazon FSx
+	//
+	//    * Neptune for Amazon Neptune
+	//
 	//    * RDS for Amazon Relational Database Service
 	//
-	//    * Aurora for Amazon Aurora
-	//
 	//    * Storage Gateway for Storage Gateway
+	//
+	//    * S3 for Amazon S3
+	//
+	//    * VirtualMachine for virtual machines
 	ByResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
 
 	// Returns only backup jobs that are in the specified state.
@@ -12729,6 +12898,18 @@ func (s *ListBackupJobsInput) SetByAccountId(v string) *ListBackupJobsInput {
 // SetByBackupVaultName sets the ByBackupVaultName field's value.
 func (s *ListBackupJobsInput) SetByBackupVaultName(v string) *ListBackupJobsInput {
 	s.ByBackupVaultName = &v
+	return s
+}
+
+// SetByCompleteAfter sets the ByCompleteAfter field's value.
+func (s *ListBackupJobsInput) SetByCompleteAfter(v time.Time) *ListBackupJobsInput {
+	s.ByCompleteAfter = &v
+	return s
+}
+
+// SetByCompleteBefore sets the ByCompleteBefore field's value.
+func (s *ListBackupJobsInput) SetByCompleteBefore(v time.Time) *ListBackupJobsInput {
+	s.ByCompleteBefore = &v
 	return s
 }
 
@@ -13369,6 +13550,14 @@ type ListCopyJobsInput struct {
 	// the specified account ID.
 	ByAccountId *string `location:"querystring" locationName:"accountId" type:"string"`
 
+	// Returns only copy jobs completed after a date expressed in Unix format and
+	// Coordinated Universal Time (UTC).
+	ByCompleteAfter *time.Time `location:"querystring" locationName:"completeAfter" type:"timestamp"`
+
+	// Returns only copy jobs completed before a date expressed in Unix format and
+	// Coordinated Universal Time (UTC).
+	ByCompleteBefore *time.Time `location:"querystring" locationName:"completeBefore" type:"timestamp"`
+
 	// Returns only copy jobs that were created after the specified date.
 	ByCreatedAfter *time.Time `location:"querystring" locationName:"createdAfter" type:"timestamp"`
 
@@ -13385,6 +13574,10 @@ type ListCopyJobsInput struct {
 
 	// Returns only backup jobs for the specified resources:
 	//
+	//    * Aurora for Amazon Aurora
+	//
+	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
+	//
 	//    * DynamoDB for Amazon DynamoDB
 	//
 	//    * EBS for Amazon Elastic Block Store
@@ -13393,11 +13586,17 @@ type ListCopyJobsInput struct {
 	//
 	//    * EFS for Amazon Elastic File System
 	//
+	//    * FSx for Amazon FSx
+	//
+	//    * Neptune for Amazon Neptune
+	//
 	//    * RDS for Amazon Relational Database Service
 	//
-	//    * Aurora for Amazon Aurora
-	//
 	//    * Storage Gateway for Storage Gateway
+	//
+	//    * S3 for Amazon S3
+	//
+	//    * VirtualMachine for virtual machines
 	ByResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
 
 	// Returns only copy jobs that are in the specified state.
@@ -13447,6 +13646,18 @@ func (s *ListCopyJobsInput) Validate() error {
 // SetByAccountId sets the ByAccountId field's value.
 func (s *ListCopyJobsInput) SetByAccountId(v string) *ListCopyJobsInput {
 	s.ByAccountId = &v
+	return s
+}
+
+// SetByCompleteAfter sets the ByCompleteAfter field's value.
+func (s *ListCopyJobsInput) SetByCompleteAfter(v time.Time) *ListCopyJobsInput {
+	s.ByCompleteAfter = &v
+	return s
+}
+
+// SetByCompleteBefore sets the ByCompleteBefore field's value.
+func (s *ListCopyJobsInput) SetByCompleteBefore(v time.Time) *ListCopyJobsInput {
+	s.ByCompleteBefore = &v
 	return s
 }
 
@@ -14279,6 +14490,14 @@ type ListRestoreJobsInput struct {
 	// with the specified account ID.
 	ByAccountId *string `location:"querystring" locationName:"accountId" type:"string"`
 
+	// Returns only copy jobs completed after a date expressed in Unix format and
+	// Coordinated Universal Time (UTC).
+	ByCompleteAfter *time.Time `location:"querystring" locationName:"completeAfter" type:"timestamp"`
+
+	// Returns only copy jobs completed before a date expressed in Unix format and
+	// Coordinated Universal Time (UTC).
+	ByCompleteBefore *time.Time `location:"querystring" locationName:"completeBefore" type:"timestamp"`
+
 	// Returns only restore jobs that were created after the specified date.
 	ByCreatedAfter *time.Time `location:"querystring" locationName:"createdAfter" type:"timestamp"`
 
@@ -14332,6 +14551,18 @@ func (s *ListRestoreJobsInput) Validate() error {
 // SetByAccountId sets the ByAccountId field's value.
 func (s *ListRestoreJobsInput) SetByAccountId(v string) *ListRestoreJobsInput {
 	s.ByAccountId = &v
+	return s
+}
+
+// SetByCompleteAfter sets the ByCompleteAfter field's value.
+func (s *ListRestoreJobsInput) SetByCompleteAfter(v time.Time) *ListRestoreJobsInput {
+	s.ByCompleteAfter = &v
+	return s
+}
+
+// SetByCompleteBefore sets the ByCompleteBefore field's value.
+func (s *ListRestoreJobsInput) SetByCompleteBefore(v time.Time) *ListRestoreJobsInput {
+	s.ByCompleteBefore = &v
 	return s
 }
 
@@ -14612,7 +14843,8 @@ type Plan struct {
 	// Contains a list of BackupOptions for each resource type.
 	AdvancedBackupSettings []*AdvancedBackupSetting `type:"list"`
 
-	// The display name of a backup plan.
+	// The display name of a backup plan. Must contain 1 to 50 alphanumeric or '-_.'
+	// characters.
 	//
 	// BackupPlanName is a required field
 	BackupPlanName *string `type:"string" required:"true"`
@@ -14670,7 +14902,8 @@ type PlanInput struct {
 	// are only available for Windows Volume Shadow Copy Service (VSS) backup jobs.
 	AdvancedBackupSettings []*AdvancedBackupSetting `type:"list"`
 
-	// The optional display name of a backup plan.
+	// The display name of a backup plan. Must contain 1 to 50 alphanumeric or '-_.'
+	// characters.
 	//
 	// BackupPlanName is a required field
 	BackupPlanName *string `type:"string" required:"true"`
@@ -14809,7 +15042,10 @@ type PlansListMember struct {
 	CreationDate *time.Time `type:"timestamp"`
 
 	// A unique string that identifies the request and allows failed requests to
-	// be retried without the risk of running the operation twice.
+	// be retried without the risk of running the operation twice. This parameter
+	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
 	CreatorRequestId *string `type:"string"`
 
 	// The date and time a backup plan is deleted, in Unix format and Coordinated
@@ -15020,7 +15256,7 @@ func (s *PutBackupVaultAccessPolicyInput) SetPolicy(v string) *PutBackupVaultAcc
 }
 
 type PutBackupVaultAccessPolicyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15083,7 +15319,9 @@ type PutBackupVaultLockConfigurationInput struct {
 	// the maximum retention period. If the job's retention period is longer than
 	// that maximum retention period, then the vault fails the backup or copy job,
 	// and you should either modify your lifecycle settings or use a different vault.
-	// Recovery points already saved in the vault prior to Vault Lock are not affected.
+	// The longest maximum retention period you can specify is 36500 days (approximately
+	// 100 years). Recovery points already saved in the vault prior to Vault Lock
+	// are not affected.
 	MaxRetentionDays *int64 `type:"long"`
 
 	// The Backup Vault Lock configuration that specifies the minimum retention
@@ -15099,7 +15337,8 @@ type PutBackupVaultLockConfigurationInput struct {
 	// minimum retention period. If the job's retention period is shorter than that
 	// minimum retention period, then the vault fails that backup or copy job, and
 	// you should either modify your lifecycle settings or use a different vault.
-	// Recovery points already saved in the vault prior to Vault Lock are not affected.
+	// The shortest minimum retention period you can specify is 1 day. Recovery
+	// points already saved in the vault prior to Vault Lock are not affected.
 	MinRetentionDays *int64 `type:"long"`
 }
 
@@ -15162,7 +15401,7 @@ func (s *PutBackupVaultLockConfigurationInput) SetMinRetentionDays(v int64) *Put
 }
 
 type PutBackupVaultLockConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15189,21 +15428,24 @@ type PutBackupVaultNotificationsInput struct {
 	// An array of events that indicate the status of jobs to back up resources
 	// to the backup vault.
 	//
+	// For common use cases and code samples, see Using Amazon SNS to track Backup
+	// events (https://docs.aws.amazon.com/aws-backup/latest/devguide/sns-notifications.html).
+	//
 	// The following events are supported:
 	//
-	// BACKUP_JOB_STARTED, BACKUP_JOB_COMPLETED,
+	//    * BACKUP_JOB_STARTED | BACKUP_JOB_COMPLETED
 	//
-	// COPY_JOB_STARTED, COPY_JOB_SUCCESSFUL, COPY_JOB_FAILED,
+	//    * COPY_JOB_STARTED | COPY_JOB_SUCCESSFUL | COPY_JOB_FAILED
 	//
-	// RESTORE_JOB_STARTED, RESTORE_JOB_COMPLETED, and RECOVERY_POINT_MODIFIED.
+	//    * RESTORE_JOB_STARTED | RESTORE_JOB_COMPLETED | RECOVERY_POINT_MODIFIED
 	//
-	// To find failed backup jobs, use BACKUP_JOB_COMPLETED and filter using event
-	// metadata.
+	//    * S3_BACKUP_OBJECT_FAILED | S3_RESTORE_OBJECT_FAILED
 	//
-	// Other events in the following list are deprecated.
+	// Ignore the list below because it includes deprecated events. Refer to the
+	// list above.
 	//
 	// BackupVaultEvents is a required field
-	BackupVaultEvents []*string `type:"list" required:"true"`
+	BackupVaultEvents []*string `type:"list" required:"true" enum:"VaultEvent"`
 
 	// The name of a logical container where backups are stored. Backup vaults are
 	// identified by names that are unique to the account used to create them and
@@ -15279,7 +15521,7 @@ func (s *PutBackupVaultNotificationsInput) SetSNSTopicArn(v string) *PutBackupVa
 }
 
 type PutBackupVaultNotificationsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -15361,12 +15603,15 @@ type RecoveryPointByBackupVault struct {
 	// according to the lifecycle that you define.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, the “expire after days” setting must be
-	// 90 days greater than the “transition to cold after days” setting. The
-	// “transition to cold after days” setting cannot be changed after a backup
-	// has been transitioned to cold.
+	// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+	// greater than the “transition to cold after days” setting. The “transition
+	// to cold after days” setting cannot be changed after a backup has been transitioned
+	// to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// An Amazon Resource Name (ARN) that uniquely identifies a recovery point;
@@ -16347,12 +16592,15 @@ type Rule struct {
 	// according to the lifecycle that you define.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, the “expire after days” setting must be
-	// 90 days greater than the “transition to cold after days” setting. The
-	// “transition to cold after days” setting cannot be changed after a backup
-	// has been transitioned to cold.
+	// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+	// greater than the “transition to cold after days” setting. The “transition
+	// to cold after days” setting cannot be changed after a backup has been transitioned
+	// to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// An array of key-value pair strings that are assigned to resources that are
@@ -16367,17 +16615,19 @@ type Rule struct {
 	// of resources.
 	RuleId *string `type:"string"`
 
-	// An optional display name for a backup rule.
+	// A display name for a backup rule. Must contain 1 to 50 alphanumeric or '-_.'
+	// characters.
 	//
 	// RuleName is a required field
 	RuleName *string `type:"string" required:"true"`
 
 	// A cron expression in UTC specifying when Backup initiates a backup job. For
-	// more information about cron expressions, see Schedule Expressions for Rules
-	// (https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
-	// in the Amazon CloudWatch Events User Guide.. Prior to specifying a value
-	// for this parameter, we recommend testing your cron expression using one of
-	// the many available cron generator and testing tools.
+	// more information about Amazon Web Services cron expressions, see Schedule
+	// Expressions for Rules (https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html)
+	// in the Amazon CloudWatch Events User Guide.. Two examples of Amazon Web Services
+	// cron expressions are 15 * ? * * * (take a backup every hour at 15 minutes
+	// past the hour) and 0 12 * * ? * (take a backup every day at 12 noon UTC).
+	// For a table of examples, click the preceding link and scroll down the page.
 	ScheduleExpression *string `type:"string"`
 
 	// A value in minutes after a backup is scheduled before a job will be canceled
@@ -16492,12 +16742,15 @@ type RuleInput struct {
 	// according to the lifecycle that you define.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, the “expire after days” setting must be
-	// 90 days greater than the “transition to cold after days” setting. The
-	// “transition to cold after days” setting cannot be changed after a backup
-	// has been transitioned to cold.
+	// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+	// greater than the “transition to cold after days” setting. The “transition
+	// to cold after days” setting cannot be changed after a backup has been transitioned
+	// to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// To help organize your resources, you can assign your own metadata to the
@@ -16508,7 +16761,8 @@ type RuleInput struct {
 	// String and GoString methods.
 	RecoveryPointTags map[string]*string `type:"map" sensitive:"true"`
 
-	// An optional display name for a backup rule.
+	// A display name for a backup rule. Must contain 1 to 50 alphanumeric or '-_.'
+	// characters.
 	//
 	// RuleName is a required field
 	RuleName *string `type:"string" required:"true"`
@@ -16628,8 +16882,26 @@ func (s *RuleInput) SetTargetBackupVaultName(v string) *RuleInput {
 }
 
 // Used to specify a set of resources to a backup plan.
+//
+// Specifying your desired Conditions, ListOfTags, NotResources, and/or Resources
+// is recommended. If none of these are specified, Backup will attempt to select
+// all supported and opted-in storage resources, which could have unintended
+// cost implications.
 type Selection struct {
 	_ struct{} `type:"structure"`
+
+	// A list of conditions that you define to assign resources to your backup plans
+	// using tags. For example, "StringEquals": { "ConditionKey": "aws:ResourceTag/CreatedByCryo",
+	// "ConditionValue": "true" },. Condition operators are case sensitive.
+	//
+	// Conditions differs from ListOfTags as follows:
+	//
+	//    * When you specify more than one condition, you only assign the resources
+	//    that match ALL conditions (using AND logic).
+	//
+	//    * Conditions supports StringEquals, StringLike, StringNotEquals, and StringNotLike.
+	//    ListOfTags only supports StringEquals.
+	Conditions *Conditions `type:"structure"`
 
 	// The ARN of the IAM role that Backup uses to authenticate when backing up
 	// the target resource; for example, arn:aws:iam::123456789012:role/S3Access.
@@ -16637,17 +16909,37 @@ type Selection struct {
 	// IamRoleArn is a required field
 	IamRoleArn *string `type:"string" required:"true"`
 
-	// An array of conditions used to specify a set of resources to assign to a
-	// backup plan; for example, "StringEquals": {"ec2:ResourceTag/Department":
-	// "accounting". Assigns the backup plan to every resource with at least one
-	// matching tag.
+	// A list of conditions that you define to assign resources to your backup plans
+	// using tags. For example, "StringEquals": { "ConditionKey": "aws:ResourceTag/CreatedByCryo",
+	// "ConditionValue": "true" },. Condition operators are case sensitive.
+	//
+	// ListOfTags differs from Conditions as follows:
+	//
+	//    * When you specify more than one condition, you assign all resources that
+	//    match AT LEAST ONE condition (using OR logic).
+	//
+	//    * ListOfTags only supports StringEquals. Conditions supports StringEquals,
+	//    StringLike, StringNotEquals, and StringNotLike.
 	ListOfTags []*Condition `type:"list"`
 
-	// An array of strings that contain Amazon Resource Names (ARNs) of resources
-	// to assign to a backup plan.
+	// A list of Amazon Resource Names (ARNs) to exclude from a backup plan. The
+	// maximum number of ARNs is 500 without wildcards, or 30 ARNs with wildcards.
+	//
+	// If you need to exclude many resources from a backup plan, consider a different
+	// resource selection strategy, such as assigning only one or a few resource
+	// types or refining your resource selection using tags.
+	NotResources []*string `type:"list"`
+
+	// A list of Amazon Resource Names (ARNs) to assign to a backup plan. The maximum
+	// number of ARNs is 500 without wildcards, or 30 ARNs with wildcards.
+	//
+	// If you need to assign many resources to a backup plan, consider a different
+	// resource selection strategy, such as assigning all resources of a resource
+	// type or refining your resource selection using tags.
 	Resources []*string `type:"list"`
 
-	// The display name of a resource selection document.
+	// The display name of a resource selection document. Must contain 1 to 50 alphanumeric
+	// or '-_.' characters.
 	//
 	// SelectionName is a required field
 	SelectionName *string `type:"string" required:"true"`
@@ -16697,6 +16989,12 @@ func (s *Selection) Validate() error {
 	return nil
 }
 
+// SetConditions sets the Conditions field's value.
+func (s *Selection) SetConditions(v *Conditions) *Selection {
+	s.Conditions = v
+	return s
+}
+
 // SetIamRoleArn sets the IamRoleArn field's value.
 func (s *Selection) SetIamRoleArn(v string) *Selection {
 	s.IamRoleArn = &v
@@ -16706,6 +17004,12 @@ func (s *Selection) SetIamRoleArn(v string) *Selection {
 // SetListOfTags sets the ListOfTags field's value.
 func (s *Selection) SetListOfTags(v []*Condition) *Selection {
 	s.ListOfTags = v
+	return s
+}
+
+// SetNotResources sets the NotResources field's value.
+func (s *Selection) SetNotResources(v []*string) *Selection {
+	s.NotResources = v
 	return s
 }
 
@@ -16735,7 +17039,10 @@ type SelectionsListMember struct {
 	CreationDate *time.Time `type:"timestamp"`
 
 	// A unique string that identifies the request and allows failed requests to
-	// be retried without the risk of running the operation twice.
+	// be retried without the risk of running the operation twice. This parameter
+	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
 	CreatorRequestId *string `type:"string"`
 
 	// Specifies the IAM role Amazon Resource Name (ARN) to create the target recovery
@@ -16893,10 +17200,9 @@ type StartBackupJobInput struct {
 	BackupVaultName *string `type:"string" required:"true"`
 
 	// A value in minutes during which a successfully started backup must complete,
-	// or else AWS Backup will cancel the job. This value is optional. This value
-	// begins counting down from when the backup was scheduled. It does not add
-	// additional time for StartWindowMinutes, or if the backup started later than
-	// scheduled.
+	// or else Backup will cancel the job. This value is optional. This value begins
+	// counting down from when the backup was scheduled. It does not add additional
+	// time for StartWindowMinutes, or if the backup started later than scheduled.
 	CompleteWindowMinutes *int64 `type:"long"`
 
 	// Specifies the IAM role ARN used to create the target recovery point; for
@@ -16915,12 +17221,15 @@ type StartBackupJobInput struct {
 	// according to the lifecycle that you define.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, the “expire after days” setting must be
-	// 90 days greater than the “transition to cold after days” setting. The
-	// “transition to cold after days” setting cannot be changed after a backup
-	// has been transitioned to cold.
+	// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+	// greater than the “transition to cold after days” setting. The “transition
+	// to cold after days” setting cannot be changed after a backup has been transitioned
+	// to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// To help organize your resources, you can assign your own metadata to the
@@ -17110,12 +17419,15 @@ type StartCopyJobInput struct {
 	// a recovery point transitions to cold storage or is deleted.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, on the console, the “expire after days”
-	// setting must be 90 days greater than the “transition to cold after days”
-	// setting. The “transition to cold after days” setting cannot be changed
-	// after a backup has been transitioned to cold.
+	// minimum of 90 days. Therefore, on the console, the “retention” setting
+	// must be 90 days greater than the “transition to cold after days” setting.
+	// The “transition to cold after days” setting cannot be changed after a
+	// backup has been transitioned to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// An ARN that uniquely identifies a recovery point to use for the copy job;
@@ -17350,9 +17662,7 @@ type StartRestoreJobInput struct {
 
 	// The Amazon Resource Name (ARN) of the IAM role that Backup uses to create
 	// the target recovery point; for example, arn:aws:iam::123456789012:role/S3Access.
-	//
-	// IamRoleArn is a required field
-	IamRoleArn *string `type:"string" required:"true"`
+	IamRoleArn *string `type:"string"`
 
 	// A customer-chosen string that you can use to distinguish between otherwise
 	// identical calls to StartRestoreJob. Retrying a successful request with the
@@ -17409,6 +17719,10 @@ type StartRestoreJobInput struct {
 
 	// Starts a job to restore a recovery point for one of the following resources:
 	//
+	//    * Aurora for Amazon Aurora
+	//
+	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
+	//
 	//    * DynamoDB for Amazon DynamoDB
 	//
 	//    * EBS for Amazon Elastic Block Store
@@ -17417,11 +17731,17 @@ type StartRestoreJobInput struct {
 	//
 	//    * EFS for Amazon Elastic File System
 	//
+	//    * FSx for Amazon FSx
+	//
+	//    * Neptune for Amazon Neptune
+	//
 	//    * RDS for Amazon Relational Database Service
 	//
-	//    * Aurora for Amazon Aurora
-	//
 	//    * Storage Gateway for Storage Gateway
+	//
+	//    * S3 for Amazon S3
+	//
+	//    * VirtualMachine for virtual machines
 	ResourceType *string `type:"string"`
 }
 
@@ -17446,9 +17766,6 @@ func (s StartRestoreJobInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartRestoreJobInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartRestoreJobInput"}
-	if s.IamRoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("IamRoleArn"))
-	}
 	if s.Metadata == nil {
 		invalidParams.Add(request.NewErrParamRequired("Metadata"))
 	}
@@ -17573,7 +17890,7 @@ func (s *StopBackupJobInput) SetBackupJobId(v string) *StopBackupJobInput {
 }
 
 type StopBackupJobOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17604,7 +17921,8 @@ type TagResourceInput struct {
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
 
 	// Key-value pairs that are used to help organize your resources. You can assign
-	// your own metadata to the resources you create.
+	// your own metadata to the resources you create. For clarity, this is the structure
+	// to assign tags: [{"Key":"string","Value":"string"}].
 	//
 	// Tags is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by TagResourceInput's
@@ -17664,7 +17982,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -17754,7 +18072,7 @@ func (s *UntagResourceInput) SetTagKeyList(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -18095,7 +18413,7 @@ func (s *UpdateGlobalSettingsInput) SetGlobalSettings(v map[string]*string) *Upd
 }
 
 type UpdateGlobalSettingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -18132,10 +18450,10 @@ type UpdateRecoveryPointLifecycleInput struct {
 	// according to the lifecycle that you define.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, the “expire after days” setting must be
-	// 90 days greater than the “transition to cold after days” setting. The
-	// “transition to cold after days” setting cannot be changed after a backup
-	// has been transitioned to cold.
+	// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+	// greater than the “transition to cold after days” setting. The “transition
+	// to cold after days” setting cannot be changed after a backup has been transitioned
+	// to cold.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// An Amazon Resource Name (ARN) that uniquely identifies a recovery point;
@@ -18218,12 +18536,15 @@ type UpdateRecoveryPointLifecycleOutput struct {
 	// according to the lifecycle that you define.
 	//
 	// Backups transitioned to cold storage must be stored in cold storage for a
-	// minimum of 90 days. Therefore, the “expire after days” setting must be
-	// 90 days greater than the “transition to cold after days” setting. The
-	// “transition to cold after days” setting cannot be changed after a backup
-	// has been transitioned to cold.
+	// minimum of 90 days. Therefore, the “retention” setting must be 90 days
+	// greater than the “transition to cold after days” setting. The “transition
+	// to cold after days” setting cannot be changed after a backup has been transitioned
+	// to cold.
 	//
-	// Only Amazon EFS file system backups can be transitioned to cold storage.
+	// Resource types that are able to be transitioned to cold storage are listed
+	// in the "Lifecycle to cold storage" section of the Feature availability by
+	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
+	// table. Backup ignores this expression for other resource types.
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// An Amazon Resource Name (ARN) that uniquely identifies a recovery point;
@@ -18276,6 +18597,13 @@ func (s *UpdateRecoveryPointLifecycleOutput) SetRecoveryPointArn(v string) *Upda
 type UpdateRegionSettingsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Enables or disables full Backup management of backups for a resource type.
+	// To enable full Backup management for DynamoDB along with Backup's advanced
+	// DynamoDB backup features (https://docs.aws.amazon.com/aws-backup/latest/devguide/advanced-ddb-backup.html),
+	// follow the procedure to enable advanced DynamoDB backup programmatically
+	// (https://docs.aws.amazon.com/aws-backup/latest/devguide/advanced-ddb-backup.html#advanced-ddb-backup-enable-cli).
+	ResourceTypeManagementPreference map[string]*bool `type:"map"`
+
 	// Updates the list of services along with the opt-in preferences for the Region.
 	ResourceTypeOptInPreference map[string]*bool `type:"map"`
 }
@@ -18298,6 +18626,12 @@ func (s UpdateRegionSettingsInput) GoString() string {
 	return s.String()
 }
 
+// SetResourceTypeManagementPreference sets the ResourceTypeManagementPreference field's value.
+func (s *UpdateRegionSettingsInput) SetResourceTypeManagementPreference(v map[string]*bool) *UpdateRegionSettingsInput {
+	s.ResourceTypeManagementPreference = v
+	return s
+}
+
 // SetResourceTypeOptInPreference sets the ResourceTypeOptInPreference field's value.
 func (s *UpdateRegionSettingsInput) SetResourceTypeOptInPreference(v map[string]*bool) *UpdateRegionSettingsInput {
 	s.ResourceTypeOptInPreference = v
@@ -18305,7 +18639,7 @@ func (s *UpdateRegionSettingsInput) SetResourceTypeOptInPreference(v map[string]
 }
 
 type UpdateRegionSettingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -18509,11 +18843,20 @@ type VaultListMember struct {
 	CreationDate *time.Time `type:"timestamp"`
 
 	// A unique string that identifies the request and allows failed requests to
-	// be retried without the risk of running the operation twice.
+	// be retried without the risk of running the operation twice. This parameter
+	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
 	CreatorRequestId *string `type:"string"`
 
-	// The server-side encryption key that is used to protect your backups; for
-	// example, arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab.
+	// A server-side encryption key you can specify to encrypt your backups from
+	// services that support full Backup management; for example, arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab.
+	// If you specify a key, you must specify its ARN, not its alias. If you do
+	// not specify a key, Backup creates a KMS key for you by default.
+	//
+	// To learn which Backup services support full Backup management and how Backup
+	// handles encryption for backups from services that do not yet support full
+	// Backup, see Encryption for backups in Backup (https://docs.aws.amazon.com/aws-backup/latest/devguide/encryption.html)
 	EncryptionKeyArn *string `type:"string"`
 
 	// The date and time when Backup Vault Lock configuration becomes immutable,
@@ -18833,6 +19176,12 @@ const (
 
 	// VaultEventBackupPlanModified is a VaultEvent enum value
 	VaultEventBackupPlanModified = "BACKUP_PLAN_MODIFIED"
+
+	// VaultEventS3BackupObjectFailed is a VaultEvent enum value
+	VaultEventS3BackupObjectFailed = "S3_BACKUP_OBJECT_FAILED"
+
+	// VaultEventS3RestoreObjectFailed is a VaultEvent enum value
+	VaultEventS3RestoreObjectFailed = "S3_RESTORE_OBJECT_FAILED"
 )
 
 // VaultEvent_Values returns all elements of the VaultEvent enum
@@ -18853,5 +19202,7 @@ func VaultEvent_Values() []string {
 		VaultEventRecoveryPointModified,
 		VaultEventBackupPlanCreated,
 		VaultEventBackupPlanModified,
+		VaultEventS3BackupObjectFailed,
+		VaultEventS3RestoreObjectFailed,
 	}
 }

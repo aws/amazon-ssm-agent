@@ -8747,6 +8747,103 @@ func (c *Pinpoint) SendMessagesWithContext(ctx aws.Context, input *SendMessagesI
 	return out, req.Send()
 }
 
+const opSendOTPMessage = "SendOTPMessage"
+
+// SendOTPMessageRequest generates a "aws/request.Request" representing the
+// client's request for the SendOTPMessage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SendOTPMessage for more information on using the SendOTPMessage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SendOTPMessageRequest method.
+//    req, resp := client.SendOTPMessageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-2016-12-01/SendOTPMessage
+func (c *Pinpoint) SendOTPMessageRequest(input *SendOTPMessageInput) (req *request.Request, output *SendOTPMessageOutput) {
+	op := &request.Operation{
+		Name:       opSendOTPMessage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/apps/{application-id}/otp",
+	}
+
+	if input == nil {
+		input = &SendOTPMessageInput{}
+	}
+
+	output = &SendOTPMessageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SendOTPMessage API operation for Amazon Pinpoint.
+//
+// Send an OTP message
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Pinpoint's
+// API operation SendOTPMessage for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Provides information about an API request or response.
+//
+//   * InternalServerErrorException
+//   Provides information about an API request or response.
+//
+//   * PayloadTooLargeException
+//   Provides information about an API request or response.
+//
+//   * ForbiddenException
+//   Provides information about an API request or response.
+//
+//   * NotFoundException
+//   Provides information about an API request or response.
+//
+//   * MethodNotAllowedException
+//   Provides information about an API request or response.
+//
+//   * TooManyRequestsException
+//   Provides information about an API request or response.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-2016-12-01/SendOTPMessage
+func (c *Pinpoint) SendOTPMessage(input *SendOTPMessageInput) (*SendOTPMessageOutput, error) {
+	req, out := c.SendOTPMessageRequest(input)
+	return out, req.Send()
+}
+
+// SendOTPMessageWithContext is the same as SendOTPMessage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SendOTPMessage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Pinpoint) SendOTPMessageWithContext(ctx aws.Context, input *SendOTPMessageInput, opts ...request.Option) (*SendOTPMessageOutput, error) {
+	req, out := c.SendOTPMessageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opSendUsersMessages = "SendUsersMessages"
 
 // SendUsersMessagesRequest generates a "aws/request.Request" representing the
@@ -11351,6 +11448,103 @@ func (c *Pinpoint) UpdateVoiceTemplateWithContext(ctx aws.Context, input *Update
 	return out, req.Send()
 }
 
+const opVerifyOTPMessage = "VerifyOTPMessage"
+
+// VerifyOTPMessageRequest generates a "aws/request.Request" representing the
+// client's request for the VerifyOTPMessage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See VerifyOTPMessage for more information on using the VerifyOTPMessage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the VerifyOTPMessageRequest method.
+//    req, resp := client.VerifyOTPMessageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-2016-12-01/VerifyOTPMessage
+func (c *Pinpoint) VerifyOTPMessageRequest(input *VerifyOTPMessageInput) (req *request.Request, output *VerifyOTPMessageOutput) {
+	op := &request.Operation{
+		Name:       opVerifyOTPMessage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/apps/{application-id}/verify-otp",
+	}
+
+	if input == nil {
+		input = &VerifyOTPMessageInput{}
+	}
+
+	output = &VerifyOTPMessageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// VerifyOTPMessage API operation for Amazon Pinpoint.
+//
+// Verify an OTP
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Pinpoint's
+// API operation VerifyOTPMessage for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Provides information about an API request or response.
+//
+//   * InternalServerErrorException
+//   Provides information about an API request or response.
+//
+//   * PayloadTooLargeException
+//   Provides information about an API request or response.
+//
+//   * ForbiddenException
+//   Provides information about an API request or response.
+//
+//   * NotFoundException
+//   Provides information about an API request or response.
+//
+//   * MethodNotAllowedException
+//   Provides information about an API request or response.
+//
+//   * TooManyRequestsException
+//   Provides information about an API request or response.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-2016-12-01/VerifyOTPMessage
+func (c *Pinpoint) VerifyOTPMessage(input *VerifyOTPMessageInput) (*VerifyOTPMessageOutput, error) {
+	req, out := c.VerifyOTPMessageRequest(input)
+	return out, req.Send()
+}
+
+// VerifyOTPMessageWithContext is the same as VerifyOTPMessage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See VerifyOTPMessage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Pinpoint) VerifyOTPMessageWithContext(ctx aws.Context, input *VerifyOTPMessageInput, opts ...request.Option) (*VerifyOTPMessageOutput, error) {
+	req, out := c.VerifyOTPMessageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // Specifies the status and settings of the ADM (Amazon Device Messaging) channel
 // for an application.
 type ADMChannelRequest struct {
@@ -13792,6 +13986,9 @@ type ApplicationResponse struct {
 	// Arn is a required field
 	Arn *string `type:"string" required:"true"`
 
+	// The date and time when the Application was created.
+	CreationDate *string `type:"string"`
+
 	// The unique identifier for the application. This identifier is displayed as
 	// the Project ID on the Amazon Pinpoint console.
 	//
@@ -13831,6 +14028,12 @@ func (s ApplicationResponse) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *ApplicationResponse) SetArn(v string) *ApplicationResponse {
 	s.Arn = &v
+	return s
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *ApplicationResponse) SetCreationDate(v string) *ApplicationResponse {
+	s.CreationDate = &v
 	return s
 }
 
@@ -15665,6 +15868,124 @@ func (s *ChannelsResponse) SetChannels(v map[string]*ChannelResponse) *ChannelsR
 	return s
 }
 
+// The time when journey will stop sending messages.
+type ClosedDays struct {
+	_ struct{} `type:"structure"`
+
+	// Rules for a Channel.
+	CUSTOM []*ClosedDaysRule `type:"list"`
+
+	// Rules for a Channel.
+	EMAIL []*ClosedDaysRule `type:"list"`
+
+	// Rules for a Channel.
+	PUSH []*ClosedDaysRule `type:"list"`
+
+	// Rules for a Channel.
+	SMS []*ClosedDaysRule `type:"list"`
+
+	// Rules for a Channel.
+	VOICE []*ClosedDaysRule `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClosedDays) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClosedDays) GoString() string {
+	return s.String()
+}
+
+// SetCUSTOM sets the CUSTOM field's value.
+func (s *ClosedDays) SetCUSTOM(v []*ClosedDaysRule) *ClosedDays {
+	s.CUSTOM = v
+	return s
+}
+
+// SetEMAIL sets the EMAIL field's value.
+func (s *ClosedDays) SetEMAIL(v []*ClosedDaysRule) *ClosedDays {
+	s.EMAIL = v
+	return s
+}
+
+// SetPUSH sets the PUSH field's value.
+func (s *ClosedDays) SetPUSH(v []*ClosedDaysRule) *ClosedDays {
+	s.PUSH = v
+	return s
+}
+
+// SetSMS sets the SMS field's value.
+func (s *ClosedDays) SetSMS(v []*ClosedDaysRule) *ClosedDays {
+	s.SMS = v
+	return s
+}
+
+// SetVOICE sets the VOICE field's value.
+func (s *ClosedDays) SetVOICE(v []*ClosedDaysRule) *ClosedDays {
+	s.VOICE = v
+	return s
+}
+
+// Closed Days Rule. Part of Journey sending schedule.
+type ClosedDaysRule struct {
+	_ struct{} `type:"structure"`
+
+	// End Datetime in ISO 8601 format.
+	EndDateTime *string `type:"string"`
+
+	// Name of the rule.
+	Name *string `type:"string"`
+
+	// Start Datetime in ISO 8601 format.
+	StartDateTime *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClosedDaysRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClosedDaysRule) GoString() string {
+	return s.String()
+}
+
+// SetEndDateTime sets the EndDateTime field's value.
+func (s *ClosedDaysRule) SetEndDateTime(v string) *ClosedDaysRule {
+	s.EndDateTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ClosedDaysRule) SetName(v string) *ClosedDaysRule {
+	s.Name = &v
+	return s
+}
+
+// SetStartDateTime sets the StartDateTime field's value.
+func (s *ClosedDaysRule) SetStartDateTime(v string) *ClosedDaysRule {
+	s.StartDateTime = &v
+	return s
+}
+
 // Specifies the conditions to evaluate for an activity in a journey, and how
 // to evaluate those conditions.
 type Condition struct {
@@ -17392,7 +17713,7 @@ type CustomDeliveryConfiguration struct {
 	// The types of endpoints to send the campaign or treatment to. Each valid value
 	// maps to a type of channel that you can associate with an endpoint by using
 	// the ChannelType property of an endpoint.
-	EndpointTypes []*string `type:"list"`
+	EndpointTypes []*string `type:"list" enum:"EndpointTypesElement"`
 }
 
 // String returns the string representation.
@@ -17457,7 +17778,7 @@ type CustomMessageActivity struct {
 	// The types of endpoints to send the custom message to. Each valid value maps
 	// to a type of channel that you can associate with an endpoint by using the
 	// ChannelType property of an endpoint.
-	EndpointTypes []*string `type:"list"`
+	EndpointTypes []*string `type:"list" enum:"EndpointTypesElement"`
 
 	// Specifies the message data included in a custom channel message that's sent
 	// to participants in a journey.
@@ -29761,6 +30082,10 @@ type JourneyResponse struct {
 	// ApplicationId is a required field
 	ApplicationId *string `type:"string" required:"true"`
 
+	// The time when journey will stop sending messages. QuietTime should be configured
+	// first and SendingSchedule should be set to true.
+	ClosedDays *ClosedDays `type:"structure"`
+
 	// The date, in ISO 8601 format, when the journey was created.
 	CreationDate *string `type:"string"`
 
@@ -29788,6 +30113,10 @@ type JourneyResponse struct {
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
 
+	// The time when journey allow to send messages. QuietTime should be configured
+	// first and SendingSchedule should be set to true.
+	OpenHours *OpenHours `type:"structure"`
+
 	// The quiet time settings for the journey. Quiet time is a specific time range
 	// when a journey doesn't send messages to participants, if all the following
 	// conditions are met:
@@ -29809,8 +30138,14 @@ type JourneyResponse struct {
 	// for the journey, as a duration in ISO 8601 format.
 	RefreshFrequency *string `type:"string"`
 
+	RefreshOnSegmentUpdate *bool `type:"boolean"`
+
 	// The schedule settings for the journey.
 	Schedule *JourneySchedule `type:"structure"`
+
+	// Indicates if journey have Advance Quiet Time (OpenHours and ClosedDays).
+	// This flag should be set to true in order to allow (OpenHours and ClosedDays)
+	SendingSchedule *bool `type:"boolean"`
 
 	// The unique identifier for the first activity in the journey.
 	StartActivity *string `type:"string"`
@@ -29849,6 +30184,8 @@ type JourneyResponse struct {
 
 	// This object is not used or supported.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	WaitForQuietTime *bool `type:"boolean"`
 }
 
 // String returns the string representation.
@@ -29878,6 +30215,12 @@ func (s *JourneyResponse) SetActivities(v map[string]*Activity) *JourneyResponse
 // SetApplicationId sets the ApplicationId field's value.
 func (s *JourneyResponse) SetApplicationId(v string) *JourneyResponse {
 	s.ApplicationId = &v
+	return s
+}
+
+// SetClosedDays sets the ClosedDays field's value.
+func (s *JourneyResponse) SetClosedDays(v *ClosedDays) *JourneyResponse {
+	s.ClosedDays = v
 	return s
 }
 
@@ -29923,6 +30266,12 @@ func (s *JourneyResponse) SetName(v string) *JourneyResponse {
 	return s
 }
 
+// SetOpenHours sets the OpenHours field's value.
+func (s *JourneyResponse) SetOpenHours(v *OpenHours) *JourneyResponse {
+	s.OpenHours = v
+	return s
+}
+
 // SetQuietTime sets the QuietTime field's value.
 func (s *JourneyResponse) SetQuietTime(v *QuietTime) *JourneyResponse {
 	s.QuietTime = v
@@ -29935,9 +30284,21 @@ func (s *JourneyResponse) SetRefreshFrequency(v string) *JourneyResponse {
 	return s
 }
 
+// SetRefreshOnSegmentUpdate sets the RefreshOnSegmentUpdate field's value.
+func (s *JourneyResponse) SetRefreshOnSegmentUpdate(v bool) *JourneyResponse {
+	s.RefreshOnSegmentUpdate = &v
+	return s
+}
+
 // SetSchedule sets the Schedule field's value.
 func (s *JourneyResponse) SetSchedule(v *JourneySchedule) *JourneyResponse {
 	s.Schedule = v
+	return s
+}
+
+// SetSendingSchedule sets the SendingSchedule field's value.
+func (s *JourneyResponse) SetSendingSchedule(v bool) *JourneyResponse {
+	s.SendingSchedule = &v
 	return s
 }
 
@@ -29962,6 +30323,12 @@ func (s *JourneyResponse) SetState(v string) *JourneyResponse {
 // SetTags sets the Tags field's value.
 func (s *JourneyResponse) SetTags(v map[string]*string) *JourneyResponse {
 	s.Tags = v
+	return s
+}
+
+// SetWaitForQuietTime sets the WaitForQuietTime field's value.
+func (s *JourneyResponse) SetWaitForQuietTime(v bool) *JourneyResponse {
+	s.WaitForQuietTime = &v
 	return s
 }
 
@@ -31750,6 +32117,116 @@ func (s *NumberValidateResponse) SetTimezone(v string) *NumberValidateResponse {
 // SetZipCode sets the ZipCode field's value.
 func (s *NumberValidateResponse) SetZipCode(v string) *NumberValidateResponse {
 	s.ZipCode = &v
+	return s
+}
+
+// The time when journey allow to send messages. QuietTime should be configured
+// first and SendingSchedule should be set to true.
+type OpenHours struct {
+	_ struct{} `type:"structure"`
+
+	// Rules for Custom Channel.
+	CUSTOM map[string][]*OpenHoursRule `type:"map"`
+
+	// Rules for Email Channel.
+	EMAIL map[string][]*OpenHoursRule `type:"map"`
+
+	// Rules for Push Channel.
+	PUSH map[string][]*OpenHoursRule `type:"map"`
+
+	// Rules for SMS Channel.
+	SMS map[string][]*OpenHoursRule `type:"map"`
+
+	// Rules for Email Channel.
+	VOICE map[string][]*OpenHoursRule `type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OpenHours) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OpenHours) GoString() string {
+	return s.String()
+}
+
+// SetCUSTOM sets the CUSTOM field's value.
+func (s *OpenHours) SetCUSTOM(v map[string][]*OpenHoursRule) *OpenHours {
+	s.CUSTOM = v
+	return s
+}
+
+// SetEMAIL sets the EMAIL field's value.
+func (s *OpenHours) SetEMAIL(v map[string][]*OpenHoursRule) *OpenHours {
+	s.EMAIL = v
+	return s
+}
+
+// SetPUSH sets the PUSH field's value.
+func (s *OpenHours) SetPUSH(v map[string][]*OpenHoursRule) *OpenHours {
+	s.PUSH = v
+	return s
+}
+
+// SetSMS sets the SMS field's value.
+func (s *OpenHours) SetSMS(v map[string][]*OpenHoursRule) *OpenHours {
+	s.SMS = v
+	return s
+}
+
+// SetVOICE sets the VOICE field's value.
+func (s *OpenHours) SetVOICE(v map[string][]*OpenHoursRule) *OpenHours {
+	s.VOICE = v
+	return s
+}
+
+// Open Hour Rules.
+type OpenHoursRule struct {
+	_ struct{} `type:"structure"`
+
+	// Local start time in ISO 8601 format.
+	EndTime *string `type:"string"`
+
+	// Local start time in ISO 8601 format.
+	StartTime *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OpenHoursRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OpenHoursRule) GoString() string {
+	return s.String()
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *OpenHoursRule) SetEndTime(v string) *OpenHoursRule {
+	s.EndTime = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *OpenHoursRule) SetStartTime(v string) *OpenHoursRule {
+	s.StartTime = &v
 	return s
 }
 
@@ -35081,6 +35558,264 @@ func (s *SendMessagesOutput) SetMessageResponse(v *MessageResponse) *SendMessage
 	return s
 }
 
+type SendOTPMessageInput struct {
+	_ struct{} `type:"structure" payload:"SendOTPMessageRequestParameters"`
+
+	// ApplicationId is a required field
+	ApplicationId *string `location:"uri" locationName:"application-id" type:"string" required:"true"`
+
+	// Send OTP message request parameters.
+	//
+	// SendOTPMessageRequestParameters is a required field
+	SendOTPMessageRequestParameters *SendOTPMessageRequestParameters `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendOTPMessageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendOTPMessageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendOTPMessageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendOTPMessageInput"}
+	if s.ApplicationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApplicationId"))
+	}
+	if s.ApplicationId != nil && len(*s.ApplicationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApplicationId", 1))
+	}
+	if s.SendOTPMessageRequestParameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("SendOTPMessageRequestParameters"))
+	}
+	if s.SendOTPMessageRequestParameters != nil {
+		if err := s.SendOTPMessageRequestParameters.Validate(); err != nil {
+			invalidParams.AddNested("SendOTPMessageRequestParameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApplicationId sets the ApplicationId field's value.
+func (s *SendOTPMessageInput) SetApplicationId(v string) *SendOTPMessageInput {
+	s.ApplicationId = &v
+	return s
+}
+
+// SetSendOTPMessageRequestParameters sets the SendOTPMessageRequestParameters field's value.
+func (s *SendOTPMessageInput) SetSendOTPMessageRequestParameters(v *SendOTPMessageRequestParameters) *SendOTPMessageInput {
+	s.SendOTPMessageRequestParameters = v
+	return s
+}
+
+type SendOTPMessageOutput struct {
+	_ struct{} `type:"structure" payload:"MessageResponse"`
+
+	// Provides information about the results of a request to send a message to
+	// an endpoint address.
+	//
+	// MessageResponse is a required field
+	MessageResponse *MessageResponse `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendOTPMessageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendOTPMessageOutput) GoString() string {
+	return s.String()
+}
+
+// SetMessageResponse sets the MessageResponse field's value.
+func (s *SendOTPMessageOutput) SetMessageResponse(v *MessageResponse) *SendOTPMessageOutput {
+	s.MessageResponse = v
+	return s
+}
+
+// Send OTP message request parameters.
+type SendOTPMessageRequestParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The attempts allowed to validate an OTP.
+	AllowedAttempts *int64 `type:"integer"`
+
+	// The brand name that will be substituted into the OTP message body. Should
+	// be owned by calling AWS account.
+	//
+	// BrandName is a required field
+	BrandName *string `type:"string" required:"true"`
+
+	// Channel type for the OTP message. Supported values: [SMS].
+	//
+	// Channel is a required field
+	Channel *string `type:"string" required:"true"`
+
+	// The number of characters in the generated OTP.
+	CodeLength *int64 `type:"integer"`
+
+	// The destination identity to send OTP to.
+	//
+	// DestinationIdentity is a required field
+	DestinationIdentity *string `type:"string" required:"true"`
+
+	// A unique Entity ID received from DLT after entity registration is approved.
+	EntityId *string `type:"string"`
+
+	// The language to be used for the outgoing message body containing the OTP.
+	Language *string `type:"string"`
+
+	// The origination identity used to send OTP from.
+	//
+	// OriginationIdentity is a required field
+	OriginationIdentity *string `type:"string" required:"true"`
+
+	// Developer-specified reference identifier. Required to match during OTP verification.
+	//
+	// ReferenceId is a required field
+	ReferenceId *string `type:"string" required:"true"`
+
+	// A unique Template ID received from DLT after entity registration is approved.
+	TemplateId *string `type:"string"`
+
+	// The time in minutes before the OTP is no longer valid.
+	ValidityPeriod *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendOTPMessageRequestParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendOTPMessageRequestParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendOTPMessageRequestParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendOTPMessageRequestParameters"}
+	if s.BrandName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BrandName"))
+	}
+	if s.Channel == nil {
+		invalidParams.Add(request.NewErrParamRequired("Channel"))
+	}
+	if s.DestinationIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationIdentity"))
+	}
+	if s.OriginationIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("OriginationIdentity"))
+	}
+	if s.ReferenceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReferenceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowedAttempts sets the AllowedAttempts field's value.
+func (s *SendOTPMessageRequestParameters) SetAllowedAttempts(v int64) *SendOTPMessageRequestParameters {
+	s.AllowedAttempts = &v
+	return s
+}
+
+// SetBrandName sets the BrandName field's value.
+func (s *SendOTPMessageRequestParameters) SetBrandName(v string) *SendOTPMessageRequestParameters {
+	s.BrandName = &v
+	return s
+}
+
+// SetChannel sets the Channel field's value.
+func (s *SendOTPMessageRequestParameters) SetChannel(v string) *SendOTPMessageRequestParameters {
+	s.Channel = &v
+	return s
+}
+
+// SetCodeLength sets the CodeLength field's value.
+func (s *SendOTPMessageRequestParameters) SetCodeLength(v int64) *SendOTPMessageRequestParameters {
+	s.CodeLength = &v
+	return s
+}
+
+// SetDestinationIdentity sets the DestinationIdentity field's value.
+func (s *SendOTPMessageRequestParameters) SetDestinationIdentity(v string) *SendOTPMessageRequestParameters {
+	s.DestinationIdentity = &v
+	return s
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *SendOTPMessageRequestParameters) SetEntityId(v string) *SendOTPMessageRequestParameters {
+	s.EntityId = &v
+	return s
+}
+
+// SetLanguage sets the Language field's value.
+func (s *SendOTPMessageRequestParameters) SetLanguage(v string) *SendOTPMessageRequestParameters {
+	s.Language = &v
+	return s
+}
+
+// SetOriginationIdentity sets the OriginationIdentity field's value.
+func (s *SendOTPMessageRequestParameters) SetOriginationIdentity(v string) *SendOTPMessageRequestParameters {
+	s.OriginationIdentity = &v
+	return s
+}
+
+// SetReferenceId sets the ReferenceId field's value.
+func (s *SendOTPMessageRequestParameters) SetReferenceId(v string) *SendOTPMessageRequestParameters {
+	s.ReferenceId = &v
+	return s
+}
+
+// SetTemplateId sets the TemplateId field's value.
+func (s *SendOTPMessageRequestParameters) SetTemplateId(v string) *SendOTPMessageRequestParameters {
+	s.TemplateId = &v
+	return s
+}
+
+// SetValidityPeriod sets the ValidityPeriod field's value.
+func (s *SendOTPMessageRequestParameters) SetValidityPeriod(v int64) *SendOTPMessageRequestParameters {
+	s.ValidityPeriod = &v
+	return s
+}
+
 // Specifies the configuration and other settings for a message to send to all
 // the endpoints that are associated with a list of users.
 type SendUsersMessageRequest struct {
@@ -35784,7 +36519,7 @@ func (s *TagResourceInput) SetTagsModel(v *TagsModel) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -36640,7 +37375,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -39394,6 +40129,212 @@ func (s *UpdateVoiceTemplateOutput) SetMessageBody(v *MessageBody) *UpdateVoiceT
 	return s
 }
 
+// Verify OTP Message Response.
+type VerificationResponse struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether the OTP is valid or not.
+	Valid *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerificationResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerificationResponse) GoString() string {
+	return s.String()
+}
+
+// SetValid sets the Valid field's value.
+func (s *VerificationResponse) SetValid(v bool) *VerificationResponse {
+	s.Valid = &v
+	return s
+}
+
+type VerifyOTPMessageInput struct {
+	_ struct{} `type:"structure" payload:"VerifyOTPMessageRequestParameters"`
+
+	// ApplicationId is a required field
+	ApplicationId *string `location:"uri" locationName:"application-id" type:"string" required:"true"`
+
+	// Verify OTP message request.
+	//
+	// VerifyOTPMessageRequestParameters is a required field
+	VerifyOTPMessageRequestParameters *VerifyOTPMessageRequestParameters `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifyOTPMessageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifyOTPMessageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VerifyOTPMessageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VerifyOTPMessageInput"}
+	if s.ApplicationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApplicationId"))
+	}
+	if s.ApplicationId != nil && len(*s.ApplicationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApplicationId", 1))
+	}
+	if s.VerifyOTPMessageRequestParameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("VerifyOTPMessageRequestParameters"))
+	}
+	if s.VerifyOTPMessageRequestParameters != nil {
+		if err := s.VerifyOTPMessageRequestParameters.Validate(); err != nil {
+			invalidParams.AddNested("VerifyOTPMessageRequestParameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApplicationId sets the ApplicationId field's value.
+func (s *VerifyOTPMessageInput) SetApplicationId(v string) *VerifyOTPMessageInput {
+	s.ApplicationId = &v
+	return s
+}
+
+// SetVerifyOTPMessageRequestParameters sets the VerifyOTPMessageRequestParameters field's value.
+func (s *VerifyOTPMessageInput) SetVerifyOTPMessageRequestParameters(v *VerifyOTPMessageRequestParameters) *VerifyOTPMessageInput {
+	s.VerifyOTPMessageRequestParameters = v
+	return s
+}
+
+type VerifyOTPMessageOutput struct {
+	_ struct{} `type:"structure" payload:"VerificationResponse"`
+
+	// Verify OTP Message Response.
+	//
+	// VerificationResponse is a required field
+	VerificationResponse *VerificationResponse `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifyOTPMessageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifyOTPMessageOutput) GoString() string {
+	return s.String()
+}
+
+// SetVerificationResponse sets the VerificationResponse field's value.
+func (s *VerifyOTPMessageOutput) SetVerificationResponse(v *VerificationResponse) *VerifyOTPMessageOutput {
+	s.VerificationResponse = v
+	return s
+}
+
+// Verify OTP message request.
+type VerifyOTPMessageRequestParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The destination identity to send OTP to.
+	//
+	// DestinationIdentity is a required field
+	DestinationIdentity *string `type:"string" required:"true"`
+
+	// The OTP the end user provided for verification.
+	//
+	// Otp is a required field
+	Otp *string `type:"string" required:"true"`
+
+	// The reference identifier provided when the OTP was previously sent.
+	//
+	// ReferenceId is a required field
+	ReferenceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifyOTPMessageRequestParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VerifyOTPMessageRequestParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VerifyOTPMessageRequestParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VerifyOTPMessageRequestParameters"}
+	if s.DestinationIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationIdentity"))
+	}
+	if s.Otp == nil {
+		invalidParams.Add(request.NewErrParamRequired("Otp"))
+	}
+	if s.ReferenceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReferenceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestinationIdentity sets the DestinationIdentity field's value.
+func (s *VerifyOTPMessageRequestParameters) SetDestinationIdentity(v string) *VerifyOTPMessageRequestParameters {
+	s.DestinationIdentity = &v
+	return s
+}
+
+// SetOtp sets the Otp field's value.
+func (s *VerifyOTPMessageRequestParameters) SetOtp(v string) *VerifyOTPMessageRequestParameters {
+	s.Otp = &v
+	return s
+}
+
+// SetReferenceId sets the ReferenceId field's value.
+func (s *VerifyOTPMessageRequestParameters) SetReferenceId(v string) *VerifyOTPMessageRequestParameters {
+	s.ReferenceId = &v
+	return s
+}
+
 // Specifies the status and settings of the voice channel for an application.
 type VoiceChannelRequest struct {
 	_ struct{} `type:"structure"`
@@ -40349,6 +41290,10 @@ type WriteJourneyRequest struct {
 	// must be alphanumeric characters.
 	Activities map[string]*Activity `type:"map"`
 
+	// The time when journey will stop sending messages. QuietTime should be configured
+	// first and SendingSchedule should be set to true.
+	ClosedDays *ClosedDays `type:"structure"`
+
 	// The date, in ISO 8601 format, when the journey was created.
 	CreationDate *string `type:"string"`
 
@@ -40373,6 +41318,10 @@ type WriteJourneyRequest struct {
 	//
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
+
+	// The time when journey allow to send messages. QuietTime should be configured
+	// first and SendingSchedule should be set to true.
+	OpenHours *OpenHours `type:"structure"`
 
 	// The quiet time settings for the journey. Quiet time is a specific time range
 	// when a journey doesn't send messages to participants, if all the following
@@ -40399,6 +41348,10 @@ type WriteJourneyRequest struct {
 
 	// The schedule settings for the journey.
 	Schedule *JourneySchedule `type:"structure"`
+
+	// Indicates if journey have Advance Quiet Time (OpenHours and ClosedDays).
+	// This flag should be set to true in order to allow (OpenHours and ClosedDays)
+	SendingSchedule *bool `type:"boolean"`
 
 	// The unique identifier for the first activity in the journey. The identifier
 	// for this activity can contain a maximum of 128 characters. The characters
@@ -40477,6 +41430,12 @@ func (s *WriteJourneyRequest) SetActivities(v map[string]*Activity) *WriteJourne
 	return s
 }
 
+// SetClosedDays sets the ClosedDays field's value.
+func (s *WriteJourneyRequest) SetClosedDays(v *ClosedDays) *WriteJourneyRequest {
+	s.ClosedDays = v
+	return s
+}
+
 // SetCreationDate sets the CreationDate field's value.
 func (s *WriteJourneyRequest) SetCreationDate(v string) *WriteJourneyRequest {
 	s.CreationDate = &v
@@ -40513,6 +41472,12 @@ func (s *WriteJourneyRequest) SetName(v string) *WriteJourneyRequest {
 	return s
 }
 
+// SetOpenHours sets the OpenHours field's value.
+func (s *WriteJourneyRequest) SetOpenHours(v *OpenHours) *WriteJourneyRequest {
+	s.OpenHours = v
+	return s
+}
+
 // SetQuietTime sets the QuietTime field's value.
 func (s *WriteJourneyRequest) SetQuietTime(v *QuietTime) *WriteJourneyRequest {
 	s.QuietTime = v
@@ -40534,6 +41499,12 @@ func (s *WriteJourneyRequest) SetRefreshOnSegmentUpdate(v bool) *WriteJourneyReq
 // SetSchedule sets the Schedule field's value.
 func (s *WriteJourneyRequest) SetSchedule(v *JourneySchedule) *WriteJourneyRequest {
 	s.Schedule = v
+	return s
+}
+
+// SetSendingSchedule sets the SendingSchedule field's value.
+func (s *WriteJourneyRequest) SetSendingSchedule(v bool) *WriteJourneyRequest {
+	s.SendingSchedule = &v
 	return s
 }
 
@@ -40955,6 +41926,43 @@ func ChannelType_Values() []string {
 		ChannelTypeBaidu,
 		ChannelTypeCustom,
 		ChannelTypeInApp,
+	}
+}
+
+// Day of a week.
+const (
+	// DayOfWeekMonday is a DayOfWeek enum value
+	DayOfWeekMonday = "MONDAY"
+
+	// DayOfWeekTuesday is a DayOfWeek enum value
+	DayOfWeekTuesday = "TUESDAY"
+
+	// DayOfWeekWednesday is a DayOfWeek enum value
+	DayOfWeekWednesday = "WEDNESDAY"
+
+	// DayOfWeekThursday is a DayOfWeek enum value
+	DayOfWeekThursday = "THURSDAY"
+
+	// DayOfWeekFriday is a DayOfWeek enum value
+	DayOfWeekFriday = "FRIDAY"
+
+	// DayOfWeekSaturday is a DayOfWeek enum value
+	DayOfWeekSaturday = "SATURDAY"
+
+	// DayOfWeekSunday is a DayOfWeek enum value
+	DayOfWeekSunday = "SUNDAY"
+)
+
+// DayOfWeek_Values returns all elements of the DayOfWeek enum
+func DayOfWeek_Values() []string {
+	return []string{
+		DayOfWeekMonday,
+		DayOfWeekTuesday,
+		DayOfWeekWednesday,
+		DayOfWeekThursday,
+		DayOfWeekFriday,
+		DayOfWeekSaturday,
+		DayOfWeekSunday,
 	}
 }
 

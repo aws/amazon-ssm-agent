@@ -83,6 +83,7 @@ func (c *TranscribeStreamingService) StartMedicalStreamTranscriptionRequest(inpu
 		"X-Amz-Content-Sha256": "STREAMING-AWS4-HMAC-SHA256-EVENTS",
 	}))
 	req.Handlers.Build.Swap(restjson.BuildHandler.Name, rest.BuildHandler)
+	eventstreamapi.ApplyHTTPTransportFixes(req)
 	req.Handlers.Send.Swap(client.LogHTTPRequestHandler.Name, client.LogHTTPRequestHeaderHandler)
 	req.Handlers.Unmarshal.PushBack(es.runInputStream)
 
@@ -193,7 +194,7 @@ type StartMedicalStreamTranscriptionEventStream struct {
 //
 // The Reader member must be set before reading events from the stream.
 //
-//   es := NewStartMedicalStreamTranscriptionEventStream(func(o *StartMedicalStreamTranscriptionEventStream{
+//   es := NewStartMedicalStreamTranscriptionEventStream(func(o *StartMedicalStreamTranscriptionEventStream){
 //       es.Writer = myMockStreamWriter
 //       es.Reader = myMockStreamReader
 //   })
@@ -462,6 +463,7 @@ func (c *TranscribeStreamingService) StartStreamTranscriptionRequest(input *Star
 		"X-Amz-Content-Sha256": "STREAMING-AWS4-HMAC-SHA256-EVENTS",
 	}))
 	req.Handlers.Build.Swap(restjson.BuildHandler.Name, rest.BuildHandler)
+	eventstreamapi.ApplyHTTPTransportFixes(req)
 	req.Handlers.Send.Swap(client.LogHTTPRequestHandler.Name, client.LogHTTPRequestHeaderHandler)
 	req.Handlers.Unmarshal.PushBack(es.runInputStream)
 
@@ -585,7 +587,7 @@ type StartStreamTranscriptionEventStream struct {
 //
 // The Reader member must be set before reading events from the stream.
 //
-//   es := NewStartStreamTranscriptionEventStream(func(o *StartStreamTranscriptionEventStream{
+//   es := NewStartStreamTranscriptionEventStream(func(o *StartStreamTranscriptionEventStream){
 //       es.Writer = myMockStreamWriter
 //       es.Reader = myMockStreamReader
 //   })
@@ -1159,7 +1161,7 @@ func (s *ConflictException) RequestID() string {
 type Entity struct {
 	_ struct{} `type:"structure"`
 
-	// The category of of information identified in this entity; for example, PII.
+	// The category of information identified in this entity; for example, PII.
 	Category *string `type:"string"`
 
 	// A value between zero and one that Amazon Transcribe assigns to PII identified
@@ -1336,8 +1338,8 @@ func (s *InternalFailureException) RequestID() string {
 type Item struct {
 	_ struct{} `type:"structure"`
 
-	// A value between 0 and 1 for an item that is a confidence score that Amazon
-	// Transcribe assigns to each word or phrase that it transcribes.
+	// A value between zero and one for an item that is a confidence score that
+	// Amazon Transcribe assigns to each word or phrase that it transcribes.
 	Confidence *float64 `type:"double"`
 
 	// The word or punctuation that was recognized in the input audio.
@@ -1348,7 +1350,7 @@ type Item struct {
 	EndTime *float64 `type:"double"`
 
 	// If speaker identification is enabled, shows the speakers identified in the
-	// real-time stream.
+	// media stream.
 	Speaker *string `type:"string"`
 
 	// If partial result stabilization has been enabled, indicates whether the word
@@ -1365,8 +1367,8 @@ type Item struct {
 	Type *string `type:"string" enum:"ItemType"`
 
 	// Indicates whether a word in the item matches a word in the vocabulary filter
-	// you've chosen for your real-time stream. If true then a word in the item
-	// matches your vocabulary filter.
+	// you've chosen for your media stream. If true then a word in the item matches
+	// your vocabulary filter.
 	VocabularyFilterMatch *bool `type:"boolean"`
 }
 
@@ -1433,6 +1435,51 @@ func (s *Item) SetType(v string) *Item {
 // SetVocabularyFilterMatch sets the VocabularyFilterMatch field's value.
 func (s *Item) SetVocabularyFilterMatch(v bool) *Item {
 	s.VocabularyFilterMatch = &v
+	return s
+}
+
+// The language codes of the identified languages and their associated confidence
+// scores. The confidence score is a value between zero and one; a larger value
+// indicates a higher confidence in the identified language.
+type LanguageWithScore struct {
+	_ struct{} `type:"structure"`
+
+	// The language code of the language identified by Amazon Transcribe.
+	LanguageCode *string `type:"string" enum:"LanguageCode"`
+
+	// The confidence score for the associated language code. Confidence scores
+	// are values between zero and one; larger values indicate a higher confidence
+	// in the identified language.
+	Score *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LanguageWithScore) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LanguageWithScore) GoString() string {
+	return s.String()
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *LanguageWithScore) SetLanguageCode(v string) *LanguageWithScore {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetScore sets the Score field's value.
+func (s *LanguageWithScore) SetScore(v float64) *LanguageWithScore {
+	s.Score = &v
 	return s
 }
 
@@ -2122,6 +2169,12 @@ type Result struct {
 	// result for the segment.
 	IsPartial *bool `type:"boolean"`
 
+	// The language code of the identified language in your media stream.
+	LanguageCode *string `type:"string" enum:"LanguageCode"`
+
+	// The language code of the dominant language identified in your media.
+	LanguageIdentification []*LanguageWithScore `type:"list"`
+
 	// A unique identifier for the result.
 	ResultId *string `type:"string"`
 
@@ -2169,6 +2222,18 @@ func (s *Result) SetEndTime(v float64) *Result {
 // SetIsPartial sets the IsPartial field's value.
 func (s *Result) SetIsPartial(v bool) *Result {
 	s.IsPartial = &v
+	return s
+}
+
+// SetLanguageCode sets the LanguageCode field's value.
+func (s *Result) SetLanguageCode(v string) *Result {
+	s.LanguageCode = &v
+	return s
+}
+
+// SetLanguageIdentification sets the LanguageIdentification field's value.
+func (s *Result) SetLanguageIdentification(v []*LanguageWithScore) *Result {
+	s.LanguageIdentification = v
 	return s
 }
 
@@ -2309,7 +2374,9 @@ type StartMedicalStreamTranscriptionInput struct {
 	// MediaEncoding is a required field
 	MediaEncoding *string `location:"header" locationName:"x-amzn-transcribe-media-encoding" type:"string" required:"true" enum:"MediaEncoding"`
 
-	// The sample rate of the input audio in Hertz.
+	// The sample rate of the input audio (in Hertz). Amazon Transcribe medical
+	// supports a range from 16,000 Hz to 48,000 Hz. Note that the sample rate you
+	// specify must match that of your audio.
 	//
 	// MediaSampleRateHertz is a required field
 	MediaSampleRateHertz *int64 `location:"header" locationName:"x-amzn-transcribe-sample-rate" min:"8000" type:"integer" required:"true"`
@@ -2482,7 +2549,7 @@ type StartMedicalStreamTranscriptionOutput struct {
 	// The encoding used for the input audio stream.
 	MediaEncoding *string `location:"header" locationName:"x-amzn-transcribe-media-encoding" type:"string" enum:"MediaEncoding"`
 
-	// The sample rate of the input audio in Hertz.
+	// The sample rate of the input audio, in Hertz (Hz).
 	MediaSampleRateHertz *int64 `location:"header" locationName:"x-amzn-transcribe-sample-rate" min:"8000" type:"integer"`
 
 	// The number of channels identified in the stream.
@@ -2623,14 +2690,11 @@ type StartStreamTranscriptionInput struct {
 	// the same request. If you set both, your request returns a BadRequestException.
 	ContentRedactionType *string `location:"header" locationName:"x-amzn-transcribe-content-redaction-type" type:"string" enum:"ContentRedactionType"`
 
-	// When true, instructs Amazon Transcribe to process each audio channel separately
-	// and then merge the transcription output of each channel into a single transcription.
+	// When true, instructs Amazon Transcribe to process each audio channel separately,
+	// then merges the transcription output of each channel into a single transcription.
 	//
 	// Amazon Transcribe also produces a transcription of each item. An item includes
 	// the start time, end time, and any alternative transcriptions.
-	//
-	// You can't set both ShowSpeakerLabel and EnableChannelIdentification in the
-	// same request. If you set both, your request returns a BadRequestException.
 	EnableChannelIdentification *bool `location:"header" locationName:"x-amzn-transcribe-enable-channel-identification" type:"boolean"`
 
 	// When true, instructs Amazon Transcribe to present transcription results that
@@ -2640,18 +2704,36 @@ type StartStreamTranscriptionInput struct {
 	// change in another partial result.
 	EnablePartialResultsStabilization *bool `location:"header" locationName:"x-amzn-transcribe-enable-partial-results-stabilization" type:"boolean"`
 
-	// Indicates the source language used in the input audio stream.
+	// Optional. Set this value to true to enable language identification for your
+	// media stream.
+	IdentifyLanguage *bool `location:"header" locationName:"x-amzn-transcribe-identify-language" type:"boolean"`
+
+	// The language code of the input audio stream.
+	LanguageCode *string `location:"header" locationName:"x-amzn-transcribe-language-code" type:"string" enum:"LanguageCode"`
+
+	// The name of the language model you want to use.
+	LanguageModelName *string `location:"header" locationName:"x-amzn-transcribe-language-model-name" min:"1" type:"string"`
+
+	// An object containing a list of languages that might be present in your audio.
 	//
-	// LanguageCode is a required field
-	LanguageCode *string `location:"header" locationName:"x-amzn-transcribe-language-code" type:"string" required:"true" enum:"LanguageCode"`
+	// You must provide two or more language codes to help Amazon Transcribe identify
+	// the correct language of your media stream with the highest possible accuracy.
+	// You can only select one variant per language; for example, you can't include
+	// both en-US and en-UK in the same request.
+	//
+	// You can only use this parameter if you've set IdentifyLanguage to truein
+	// your request.
+	LanguageOptions *string `location:"header" locationName:"x-amzn-transcribe-language-options" min:"1" type:"string"`
 
 	// The encoding used for the input audio.
 	//
 	// MediaEncoding is a required field
 	MediaEncoding *string `location:"header" locationName:"x-amzn-transcribe-media-encoding" type:"string" required:"true" enum:"MediaEncoding"`
 
-	// The sample rate, in Hertz, of the input audio. We suggest that you use 8,000
-	// Hz for low quality audio and 16,000 Hz for high quality audio.
+	// The sample rate of the input audio (in Hertz). Low-quality audio, such as
+	// telephone audio, is typically around 8,000 Hz. High-quality audio typically
+	// ranges from 16,000 Hz to 48,000 Hz. Note that the sample rate you specify
+	// must match that of your audio.
 	//
 	// MediaSampleRateHertz is a required field
 	MediaSampleRateHertz *int64 `location:"header" locationName:"x-amzn-transcribe-sample-rate" min:"8000" type:"integer" required:"true"`
@@ -2676,27 +2758,65 @@ type StartStreamTranscriptionInput struct {
 	// PiiEntityTypes is an optional parameter with a default value of ALL.
 	PiiEntityTypes *string `location:"header" locationName:"x-amzn-transcribe-pii-entity-types" min:"1" type:"string"`
 
+	// Optional. From the subset of languages codes you provided for LanguageOptions,
+	// you can select one preferred language for your transcription.
+	//
+	// You can only use this parameter if you've set IdentifyLanguage to truein
+	// your request.
+	PreferredLanguage *string `location:"header" locationName:"x-amzn-transcribe-preferred-language" type:"string" enum:"LanguageCode"`
+
 	// A identifier for the transcription session. Use this parameter when you want
 	// to retry a session. If you don't provide a session ID, Amazon Transcribe
 	// will generate one for you and return it in the response.
 	SessionId *string `location:"header" locationName:"x-amzn-transcribe-session-id" min:"36" type:"string"`
 
-	// When true, enables speaker identification in your real-time stream.
+	// When true, enables speaker identification in your media stream.
 	ShowSpeakerLabel *bool `location:"header" locationName:"x-amzn-transcribe-show-speaker-label" type:"boolean"`
 
 	// The manner in which you use your vocabulary filter to filter words in your
 	// transcript. Remove removes filtered words from your transcription results.
 	// Mask masks filtered words with a *** in your transcription results. Tag keeps
 	// the filtered words in your transcription results and tags them. The tag appears
-	// as VocabularyFilterMatch equal to True
+	// as VocabularyFilterMatch equal to True.
 	VocabularyFilterMethod *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-filter-method" type:"string" enum:"VocabularyFilterMethod"`
 
-	// The name of the vocabulary filter you've created that is unique to your account.
-	// Provide the name in this field to successfully use it in a stream.
+	// The name of the vocabulary filter you want to use with your transcription.
+	//
+	// This operation is not intended for use in conjunction with the IdentifyLanguage
+	// operation. If you're using IdentifyLanguage in your request and want to use
+	// one or more vocabulary filters with your transcription, use the VocabularyFilterNames
+	// operation instead.
 	VocabularyFilterName *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-filter-name" min:"1" type:"string"`
 
-	// The name of the vocabulary to use when processing the transcription job.
+	// The names of the vocabulary filters you want to use with your transcription.
+	//
+	// Note that if the vocabulary filters you specify are in languages that don't
+	// match the language identified in your media, your job fails.
+	//
+	// This operation is only intended for use in conjunction with the IdentifyLanguage
+	// operation. If you're not using IdentifyLanguage in your request and want
+	// to use a vocabulary filter with your transcription, use the VocabularyFilterName
+	// operation instead.
+	VocabularyFilterNames *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-filter-names" min:"1" type:"string"`
+
+	// The name of the custom vocabulary you want to use with your transcription.
+	//
+	// This operation is not intended for use in conjunction with the IdentifyLanguage
+	// operation. If you're using IdentifyLanguage in your request and want to use
+	// one or more custom vocabularies with your transcription, use the VocabularyNames
+	// operation instead.
 	VocabularyName *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-name" min:"1" type:"string"`
+
+	// The names of the custom vocabularies you want to use with your transcription.
+	//
+	// Note that if the custom vocabularies you specify are in languages that don't
+	// match the language identified in your media, your job fails.
+	//
+	// This operation is only intended for use in conjunction with the IdentifyLanguage
+	// operation. If you're not using IdentifyLanguage in your request and want
+	// to use a custom vocabulary with your transcription, use the VocabularyName
+	// operation instead.
+	VocabularyNames *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-names" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -2720,8 +2840,11 @@ func (s StartStreamTranscriptionInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartStreamTranscriptionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartStreamTranscriptionInput"}
-	if s.LanguageCode == nil {
-		invalidParams.Add(request.NewErrParamRequired("LanguageCode"))
+	if s.LanguageModelName != nil && len(*s.LanguageModelName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LanguageModelName", 1))
+	}
+	if s.LanguageOptions != nil && len(*s.LanguageOptions) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LanguageOptions", 1))
 	}
 	if s.MediaEncoding == nil {
 		invalidParams.Add(request.NewErrParamRequired("MediaEncoding"))
@@ -2744,8 +2867,14 @@ func (s *StartStreamTranscriptionInput) Validate() error {
 	if s.VocabularyFilterName != nil && len(*s.VocabularyFilterName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("VocabularyFilterName", 1))
 	}
+	if s.VocabularyFilterNames != nil && len(*s.VocabularyFilterNames) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VocabularyFilterNames", 1))
+	}
 	if s.VocabularyName != nil && len(*s.VocabularyName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("VocabularyName", 1))
+	}
+	if s.VocabularyNames != nil && len(*s.VocabularyNames) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VocabularyNames", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2778,9 +2907,27 @@ func (s *StartStreamTranscriptionInput) SetEnablePartialResultsStabilization(v b
 	return s
 }
 
+// SetIdentifyLanguage sets the IdentifyLanguage field's value.
+func (s *StartStreamTranscriptionInput) SetIdentifyLanguage(v bool) *StartStreamTranscriptionInput {
+	s.IdentifyLanguage = &v
+	return s
+}
+
 // SetLanguageCode sets the LanguageCode field's value.
 func (s *StartStreamTranscriptionInput) SetLanguageCode(v string) *StartStreamTranscriptionInput {
 	s.LanguageCode = &v
+	return s
+}
+
+// SetLanguageModelName sets the LanguageModelName field's value.
+func (s *StartStreamTranscriptionInput) SetLanguageModelName(v string) *StartStreamTranscriptionInput {
+	s.LanguageModelName = &v
+	return s
+}
+
+// SetLanguageOptions sets the LanguageOptions field's value.
+func (s *StartStreamTranscriptionInput) SetLanguageOptions(v string) *StartStreamTranscriptionInput {
+	s.LanguageOptions = &v
 	return s
 }
 
@@ -2814,6 +2961,12 @@ func (s *StartStreamTranscriptionInput) SetPiiEntityTypes(v string) *StartStream
 	return s
 }
 
+// SetPreferredLanguage sets the PreferredLanguage field's value.
+func (s *StartStreamTranscriptionInput) SetPreferredLanguage(v string) *StartStreamTranscriptionInput {
+	s.PreferredLanguage = &v
+	return s
+}
+
 // SetSessionId sets the SessionId field's value.
 func (s *StartStreamTranscriptionInput) SetSessionId(v string) *StartStreamTranscriptionInput {
 	s.SessionId = &v
@@ -2838,9 +2991,21 @@ func (s *StartStreamTranscriptionInput) SetVocabularyFilterName(v string) *Start
 	return s
 }
 
+// SetVocabularyFilterNames sets the VocabularyFilterNames field's value.
+func (s *StartStreamTranscriptionInput) SetVocabularyFilterNames(v string) *StartStreamTranscriptionInput {
+	s.VocabularyFilterNames = &v
+	return s
+}
+
 // SetVocabularyName sets the VocabularyName field's value.
 func (s *StartStreamTranscriptionInput) SetVocabularyName(v string) *StartStreamTranscriptionInput {
 	s.VocabularyName = &v
+	return s
+}
+
+// SetVocabularyNames sets the VocabularyNames field's value.
+func (s *StartStreamTranscriptionInput) SetVocabularyNames(v string) *StartStreamTranscriptionInput {
+	s.VocabularyNames = &v
 	return s
 }
 
@@ -2855,20 +3020,29 @@ type StartStreamTranscriptionOutput struct {
 	// Shows whether content redaction was enabled in this stream.
 	ContentRedactionType *string `location:"header" locationName:"x-amzn-transcribe-content-redaction-type" type:"string" enum:"ContentRedactionType"`
 
-	// Shows whether channel identification has been enabled in the stream.
+	// Shows whether channel identification was enabled in the stream.
 	EnableChannelIdentification *bool `location:"header" locationName:"x-amzn-transcribe-enable-channel-identification" type:"boolean"`
 
-	// Shows whether partial results stabilization has been enabled in the stream.
+	// Shows whether partial results stabilization was enabled in the transcription.
 	EnablePartialResultsStabilization *bool `location:"header" locationName:"x-amzn-transcribe-enable-partial-results-stabilization" type:"boolean"`
 
-	// The language code for the input audio stream.
+	// The language code of the language identified in your media stream.
+	IdentifyLanguage *bool `location:"header" locationName:"x-amzn-transcribe-identify-language" type:"boolean"`
+
+	// The language code of the input audio stream.
 	LanguageCode *string `location:"header" locationName:"x-amzn-transcribe-language-code" type:"string" enum:"LanguageCode"`
+
+	// The name of the custom language model used in the transcription.
+	LanguageModelName *string `location:"header" locationName:"x-amzn-transcribe-language-model-name" min:"1" type:"string"`
+
+	// The language codes used in the identification of your media stream's predominant
+	// language.
+	LanguageOptions *string `location:"header" locationName:"x-amzn-transcribe-language-options" min:"1" type:"string"`
 
 	// The encoding used for the input audio stream.
 	MediaEncoding *string `location:"header" locationName:"x-amzn-transcribe-media-encoding" type:"string" enum:"MediaEncoding"`
 
-	// The sample rate for the input audio stream. Use 8,000 Hz for low quality
-	// audio and 16,000 Hz for high quality audio.
+	// The sample rate, in Hertz (Hz), for the input audio stream.
 	MediaSampleRateHertz *int64 `location:"header" locationName:"x-amzn-transcribe-sample-rate" min:"8000" type:"integer"`
 
 	// The number of channels identified in the stream.
@@ -2881,23 +3055,32 @@ type StartStreamTranscriptionOutput struct {
 	// Lists the PII entity types you specified in your request.
 	PiiEntityTypes *string `location:"header" locationName:"x-amzn-transcribe-pii-entity-types" min:"1" type:"string"`
 
-	// An identifier for the streaming transcription.
+	// The preferred language you specified in your request.
+	PreferredLanguage *string `location:"header" locationName:"x-amzn-transcribe-preferred-language" type:"string" enum:"LanguageCode"`
+
+	// An identifier for the transcription.
 	RequestId *string `location:"header" locationName:"x-amzn-request-id" type:"string"`
 
 	// An identifier for a specific transcription session.
 	SessionId *string `location:"header" locationName:"x-amzn-transcribe-session-id" min:"36" type:"string"`
 
-	// Shows whether speaker identification was enabled in the stream.
+	// Shows whether speaker identification was enabled in the transcription.
 	ShowSpeakerLabel *bool `location:"header" locationName:"x-amzn-transcribe-show-speaker-label" type:"boolean"`
 
-	// The vocabulary filtering method used in the real-time stream.
+	// The vocabulary filtering method used when processing the stream.
 	VocabularyFilterMethod *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-filter-method" type:"string" enum:"VocabularyFilterMethod"`
 
-	// The name of the vocabulary filter used in your real-time stream.
+	// The name of the vocabulary filter used when processing the stream.
 	VocabularyFilterName *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-filter-name" min:"1" type:"string"`
 
-	// The name of the vocabulary used when processing the stream.
+	// The name of the vocabulary filter used when processing the stream.
+	VocabularyFilterNames *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-filter-names" min:"1" type:"string"`
+
+	// The name of the custom vocabulary used when processing the stream.
 	VocabularyName *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-name" min:"1" type:"string"`
+
+	// The name of the custom vocabulary used when processing the stream.
+	VocabularyNames *string `location:"header" locationName:"x-amzn-transcribe-vocabulary-names" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -2942,9 +3125,27 @@ func (s *StartStreamTranscriptionOutput) SetEnablePartialResultsStabilization(v 
 	return s
 }
 
+// SetIdentifyLanguage sets the IdentifyLanguage field's value.
+func (s *StartStreamTranscriptionOutput) SetIdentifyLanguage(v bool) *StartStreamTranscriptionOutput {
+	s.IdentifyLanguage = &v
+	return s
+}
+
 // SetLanguageCode sets the LanguageCode field's value.
 func (s *StartStreamTranscriptionOutput) SetLanguageCode(v string) *StartStreamTranscriptionOutput {
 	s.LanguageCode = &v
+	return s
+}
+
+// SetLanguageModelName sets the LanguageModelName field's value.
+func (s *StartStreamTranscriptionOutput) SetLanguageModelName(v string) *StartStreamTranscriptionOutput {
+	s.LanguageModelName = &v
+	return s
+}
+
+// SetLanguageOptions sets the LanguageOptions field's value.
+func (s *StartStreamTranscriptionOutput) SetLanguageOptions(v string) *StartStreamTranscriptionOutput {
+	s.LanguageOptions = &v
 	return s
 }
 
@@ -2978,6 +3179,12 @@ func (s *StartStreamTranscriptionOutput) SetPiiEntityTypes(v string) *StartStrea
 	return s
 }
 
+// SetPreferredLanguage sets the PreferredLanguage field's value.
+func (s *StartStreamTranscriptionOutput) SetPreferredLanguage(v string) *StartStreamTranscriptionOutput {
+	s.PreferredLanguage = &v
+	return s
+}
+
 // SetRequestId sets the RequestId field's value.
 func (s *StartStreamTranscriptionOutput) SetRequestId(v string) *StartStreamTranscriptionOutput {
 	s.RequestId = &v
@@ -3008,9 +3215,21 @@ func (s *StartStreamTranscriptionOutput) SetVocabularyFilterName(v string) *Star
 	return s
 }
 
+// SetVocabularyFilterNames sets the VocabularyFilterNames field's value.
+func (s *StartStreamTranscriptionOutput) SetVocabularyFilterNames(v string) *StartStreamTranscriptionOutput {
+	s.VocabularyFilterNames = &v
+	return s
+}
+
 // SetVocabularyName sets the VocabularyName field's value.
 func (s *StartStreamTranscriptionOutput) SetVocabularyName(v string) *StartStreamTranscriptionOutput {
 	s.VocabularyName = &v
+	return s
+}
+
+// SetVocabularyNames sets the VocabularyNames field's value.
+func (s *StartStreamTranscriptionOutput) SetVocabularyNames(v string) *StartStreamTranscriptionOutput {
+	s.VocabularyNames = &v
 	return s
 }
 

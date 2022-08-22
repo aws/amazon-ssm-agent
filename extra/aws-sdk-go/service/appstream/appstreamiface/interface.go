@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon AppStream.
 //    func myFunc(svc appstreamiface.AppStreamAPI) bool {
-//        // Make svc.AssociateFleet request
+//        // Make svc.AssociateApplicationFleet request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockAppStreamClient struct {
 //        appstreamiface.AppStreamAPI
 //    }
-//    func (m *mockAppStreamClient) AssociateFleet(input *appstream.AssociateFleetInput) (*appstream.AssociateFleetOutput, error) {
+//    func (m *mockAppStreamClient) AssociateApplicationFleet(input *appstream.AssociateApplicationFleetInput) (*appstream.AssociateApplicationFleetOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,14 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type AppStreamAPI interface {
+	AssociateApplicationFleet(*appstream.AssociateApplicationFleetInput) (*appstream.AssociateApplicationFleetOutput, error)
+	AssociateApplicationFleetWithContext(aws.Context, *appstream.AssociateApplicationFleetInput, ...request.Option) (*appstream.AssociateApplicationFleetOutput, error)
+	AssociateApplicationFleetRequest(*appstream.AssociateApplicationFleetInput) (*request.Request, *appstream.AssociateApplicationFleetOutput)
+
+	AssociateApplicationToEntitlement(*appstream.AssociateApplicationToEntitlementInput) (*appstream.AssociateApplicationToEntitlementOutput, error)
+	AssociateApplicationToEntitlementWithContext(aws.Context, *appstream.AssociateApplicationToEntitlementInput, ...request.Option) (*appstream.AssociateApplicationToEntitlementOutput, error)
+	AssociateApplicationToEntitlementRequest(*appstream.AssociateApplicationToEntitlementInput) (*request.Request, *appstream.AssociateApplicationToEntitlementOutput)
+
 	AssociateFleet(*appstream.AssociateFleetInput) (*appstream.AssociateFleetOutput, error)
 	AssociateFleetWithContext(aws.Context, *appstream.AssociateFleetInput, ...request.Option) (*appstream.AssociateFleetOutput, error)
 	AssociateFleetRequest(*appstream.AssociateFleetInput) (*request.Request, *appstream.AssociateFleetOutput)
@@ -76,9 +84,21 @@ type AppStreamAPI interface {
 	CopyImageWithContext(aws.Context, *appstream.CopyImageInput, ...request.Option) (*appstream.CopyImageOutput, error)
 	CopyImageRequest(*appstream.CopyImageInput) (*request.Request, *appstream.CopyImageOutput)
 
+	CreateAppBlock(*appstream.CreateAppBlockInput) (*appstream.CreateAppBlockOutput, error)
+	CreateAppBlockWithContext(aws.Context, *appstream.CreateAppBlockInput, ...request.Option) (*appstream.CreateAppBlockOutput, error)
+	CreateAppBlockRequest(*appstream.CreateAppBlockInput) (*request.Request, *appstream.CreateAppBlockOutput)
+
+	CreateApplication(*appstream.CreateApplicationInput) (*appstream.CreateApplicationOutput, error)
+	CreateApplicationWithContext(aws.Context, *appstream.CreateApplicationInput, ...request.Option) (*appstream.CreateApplicationOutput, error)
+	CreateApplicationRequest(*appstream.CreateApplicationInput) (*request.Request, *appstream.CreateApplicationOutput)
+
 	CreateDirectoryConfig(*appstream.CreateDirectoryConfigInput) (*appstream.CreateDirectoryConfigOutput, error)
 	CreateDirectoryConfigWithContext(aws.Context, *appstream.CreateDirectoryConfigInput, ...request.Option) (*appstream.CreateDirectoryConfigOutput, error)
 	CreateDirectoryConfigRequest(*appstream.CreateDirectoryConfigInput) (*request.Request, *appstream.CreateDirectoryConfigOutput)
+
+	CreateEntitlement(*appstream.CreateEntitlementInput) (*appstream.CreateEntitlementOutput, error)
+	CreateEntitlementWithContext(aws.Context, *appstream.CreateEntitlementInput, ...request.Option) (*appstream.CreateEntitlementOutput, error)
+	CreateEntitlementRequest(*appstream.CreateEntitlementInput) (*request.Request, *appstream.CreateEntitlementOutput)
 
 	CreateFleet(*appstream.CreateFleetInput) (*appstream.CreateFleetOutput, error)
 	CreateFleetWithContext(aws.Context, *appstream.CreateFleetInput, ...request.Option) (*appstream.CreateFleetOutput, error)
@@ -112,9 +132,21 @@ type AppStreamAPI interface {
 	CreateUserWithContext(aws.Context, *appstream.CreateUserInput, ...request.Option) (*appstream.CreateUserOutput, error)
 	CreateUserRequest(*appstream.CreateUserInput) (*request.Request, *appstream.CreateUserOutput)
 
+	DeleteAppBlock(*appstream.DeleteAppBlockInput) (*appstream.DeleteAppBlockOutput, error)
+	DeleteAppBlockWithContext(aws.Context, *appstream.DeleteAppBlockInput, ...request.Option) (*appstream.DeleteAppBlockOutput, error)
+	DeleteAppBlockRequest(*appstream.DeleteAppBlockInput) (*request.Request, *appstream.DeleteAppBlockOutput)
+
+	DeleteApplication(*appstream.DeleteApplicationInput) (*appstream.DeleteApplicationOutput, error)
+	DeleteApplicationWithContext(aws.Context, *appstream.DeleteApplicationInput, ...request.Option) (*appstream.DeleteApplicationOutput, error)
+	DeleteApplicationRequest(*appstream.DeleteApplicationInput) (*request.Request, *appstream.DeleteApplicationOutput)
+
 	DeleteDirectoryConfig(*appstream.DeleteDirectoryConfigInput) (*appstream.DeleteDirectoryConfigOutput, error)
 	DeleteDirectoryConfigWithContext(aws.Context, *appstream.DeleteDirectoryConfigInput, ...request.Option) (*appstream.DeleteDirectoryConfigOutput, error)
 	DeleteDirectoryConfigRequest(*appstream.DeleteDirectoryConfigInput) (*request.Request, *appstream.DeleteDirectoryConfigOutput)
+
+	DeleteEntitlement(*appstream.DeleteEntitlementInput) (*appstream.DeleteEntitlementOutput, error)
+	DeleteEntitlementWithContext(aws.Context, *appstream.DeleteEntitlementInput, ...request.Option) (*appstream.DeleteEntitlementOutput, error)
+	DeleteEntitlementRequest(*appstream.DeleteEntitlementInput) (*request.Request, *appstream.DeleteEntitlementOutput)
 
 	DeleteFleet(*appstream.DeleteFleetInput) (*appstream.DeleteFleetOutput, error)
 	DeleteFleetWithContext(aws.Context, *appstream.DeleteFleetInput, ...request.Option) (*appstream.DeleteFleetOutput, error)
@@ -144,9 +176,25 @@ type AppStreamAPI interface {
 	DeleteUserWithContext(aws.Context, *appstream.DeleteUserInput, ...request.Option) (*appstream.DeleteUserOutput, error)
 	DeleteUserRequest(*appstream.DeleteUserInput) (*request.Request, *appstream.DeleteUserOutput)
 
+	DescribeAppBlocks(*appstream.DescribeAppBlocksInput) (*appstream.DescribeAppBlocksOutput, error)
+	DescribeAppBlocksWithContext(aws.Context, *appstream.DescribeAppBlocksInput, ...request.Option) (*appstream.DescribeAppBlocksOutput, error)
+	DescribeAppBlocksRequest(*appstream.DescribeAppBlocksInput) (*request.Request, *appstream.DescribeAppBlocksOutput)
+
+	DescribeApplicationFleetAssociations(*appstream.DescribeApplicationFleetAssociationsInput) (*appstream.DescribeApplicationFleetAssociationsOutput, error)
+	DescribeApplicationFleetAssociationsWithContext(aws.Context, *appstream.DescribeApplicationFleetAssociationsInput, ...request.Option) (*appstream.DescribeApplicationFleetAssociationsOutput, error)
+	DescribeApplicationFleetAssociationsRequest(*appstream.DescribeApplicationFleetAssociationsInput) (*request.Request, *appstream.DescribeApplicationFleetAssociationsOutput)
+
+	DescribeApplications(*appstream.DescribeApplicationsInput) (*appstream.DescribeApplicationsOutput, error)
+	DescribeApplicationsWithContext(aws.Context, *appstream.DescribeApplicationsInput, ...request.Option) (*appstream.DescribeApplicationsOutput, error)
+	DescribeApplicationsRequest(*appstream.DescribeApplicationsInput) (*request.Request, *appstream.DescribeApplicationsOutput)
+
 	DescribeDirectoryConfigs(*appstream.DescribeDirectoryConfigsInput) (*appstream.DescribeDirectoryConfigsOutput, error)
 	DescribeDirectoryConfigsWithContext(aws.Context, *appstream.DescribeDirectoryConfigsInput, ...request.Option) (*appstream.DescribeDirectoryConfigsOutput, error)
 	DescribeDirectoryConfigsRequest(*appstream.DescribeDirectoryConfigsInput) (*request.Request, *appstream.DescribeDirectoryConfigsOutput)
+
+	DescribeEntitlements(*appstream.DescribeEntitlementsInput) (*appstream.DescribeEntitlementsOutput, error)
+	DescribeEntitlementsWithContext(aws.Context, *appstream.DescribeEntitlementsInput, ...request.Option) (*appstream.DescribeEntitlementsOutput, error)
+	DescribeEntitlementsRequest(*appstream.DescribeEntitlementsInput) (*request.Request, *appstream.DescribeEntitlementsOutput)
 
 	DescribeFleets(*appstream.DescribeFleetsInput) (*appstream.DescribeFleetsOutput, error)
 	DescribeFleetsWithContext(aws.Context, *appstream.DescribeFleetsInput, ...request.Option) (*appstream.DescribeFleetsOutput, error)
@@ -194,6 +242,14 @@ type AppStreamAPI interface {
 	DisableUserWithContext(aws.Context, *appstream.DisableUserInput, ...request.Option) (*appstream.DisableUserOutput, error)
 	DisableUserRequest(*appstream.DisableUserInput) (*request.Request, *appstream.DisableUserOutput)
 
+	DisassociateApplicationFleet(*appstream.DisassociateApplicationFleetInput) (*appstream.DisassociateApplicationFleetOutput, error)
+	DisassociateApplicationFleetWithContext(aws.Context, *appstream.DisassociateApplicationFleetInput, ...request.Option) (*appstream.DisassociateApplicationFleetOutput, error)
+	DisassociateApplicationFleetRequest(*appstream.DisassociateApplicationFleetInput) (*request.Request, *appstream.DisassociateApplicationFleetOutput)
+
+	DisassociateApplicationFromEntitlement(*appstream.DisassociateApplicationFromEntitlementInput) (*appstream.DisassociateApplicationFromEntitlementOutput, error)
+	DisassociateApplicationFromEntitlementWithContext(aws.Context, *appstream.DisassociateApplicationFromEntitlementInput, ...request.Option) (*appstream.DisassociateApplicationFromEntitlementOutput, error)
+	DisassociateApplicationFromEntitlementRequest(*appstream.DisassociateApplicationFromEntitlementInput) (*request.Request, *appstream.DisassociateApplicationFromEntitlementOutput)
+
 	DisassociateFleet(*appstream.DisassociateFleetInput) (*appstream.DisassociateFleetOutput, error)
 	DisassociateFleetWithContext(aws.Context, *appstream.DisassociateFleetInput, ...request.Option) (*appstream.DisassociateFleetOutput, error)
 	DisassociateFleetRequest(*appstream.DisassociateFleetInput) (*request.Request, *appstream.DisassociateFleetOutput)
@@ -213,6 +269,10 @@ type AppStreamAPI interface {
 	ListAssociatedStacks(*appstream.ListAssociatedStacksInput) (*appstream.ListAssociatedStacksOutput, error)
 	ListAssociatedStacksWithContext(aws.Context, *appstream.ListAssociatedStacksInput, ...request.Option) (*appstream.ListAssociatedStacksOutput, error)
 	ListAssociatedStacksRequest(*appstream.ListAssociatedStacksInput) (*request.Request, *appstream.ListAssociatedStacksOutput)
+
+	ListEntitledApplications(*appstream.ListEntitledApplicationsInput) (*appstream.ListEntitledApplicationsOutput, error)
+	ListEntitledApplicationsWithContext(aws.Context, *appstream.ListEntitledApplicationsInput, ...request.Option) (*appstream.ListEntitledApplicationsOutput, error)
+	ListEntitledApplicationsRequest(*appstream.ListEntitledApplicationsInput) (*request.Request, *appstream.ListEntitledApplicationsOutput)
 
 	ListTagsForResource(*appstream.ListTagsForResourceInput) (*appstream.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *appstream.ListTagsForResourceInput, ...request.Option) (*appstream.ListTagsForResourceOutput, error)
@@ -242,9 +302,17 @@ type AppStreamAPI interface {
 	UntagResourceWithContext(aws.Context, *appstream.UntagResourceInput, ...request.Option) (*appstream.UntagResourceOutput, error)
 	UntagResourceRequest(*appstream.UntagResourceInput) (*request.Request, *appstream.UntagResourceOutput)
 
+	UpdateApplication(*appstream.UpdateApplicationInput) (*appstream.UpdateApplicationOutput, error)
+	UpdateApplicationWithContext(aws.Context, *appstream.UpdateApplicationInput, ...request.Option) (*appstream.UpdateApplicationOutput, error)
+	UpdateApplicationRequest(*appstream.UpdateApplicationInput) (*request.Request, *appstream.UpdateApplicationOutput)
+
 	UpdateDirectoryConfig(*appstream.UpdateDirectoryConfigInput) (*appstream.UpdateDirectoryConfigOutput, error)
 	UpdateDirectoryConfigWithContext(aws.Context, *appstream.UpdateDirectoryConfigInput, ...request.Option) (*appstream.UpdateDirectoryConfigOutput, error)
 	UpdateDirectoryConfigRequest(*appstream.UpdateDirectoryConfigInput) (*request.Request, *appstream.UpdateDirectoryConfigOutput)
+
+	UpdateEntitlement(*appstream.UpdateEntitlementInput) (*appstream.UpdateEntitlementOutput, error)
+	UpdateEntitlementWithContext(aws.Context, *appstream.UpdateEntitlementInput, ...request.Option) (*appstream.UpdateEntitlementOutput, error)
+	UpdateEntitlementRequest(*appstream.UpdateEntitlementInput) (*request.Request, *appstream.UpdateEntitlementOutput)
 
 	UpdateFleet(*appstream.UpdateFleetInput) (*appstream.UpdateFleetOutput, error)
 	UpdateFleetWithContext(aws.Context, *appstream.UpdateFleetInput, ...request.Option) (*appstream.UpdateFleetOutput, error)

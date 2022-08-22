@@ -247,6 +247,9 @@ func (c *EMR) AddJobFlowStepsRequest(input *AddJobFlowStepsInput) (req *request.
 // You can only add steps to a cluster that is in one of the following states:
 // STARTING, BOOTSTRAPPING, RUNNING, or WAITING.
 //
+// The string values passed into HadoopJarStep object cannot exceed a total
+// of 10240 characters.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3849,6 +3852,10 @@ func (c *EMR) PutAutoTerminationPolicyRequest(input *PutAutoTerminationPolicyInp
 
 // PutAutoTerminationPolicy API operation for Amazon EMR.
 //
+//
+// Auto-termination is supported in Amazon EMR versions 5.30.0 and 6.1.0 and
+// later. For more information, see Using an auto-termination policy (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-auto-termination-policy.html).
+//
 // Creates or updates an auto-termination policy for an Amazon EMR cluster.
 // An auto-termination policy defines the amount of idle time in seconds after
 // which a cluster automatically terminates. For alternative cluster termination
@@ -4610,6 +4617,11 @@ func (c *EMR) SetVisibleToAllUsersRequest(input *SetVisibleToAllUsersInput) (req
 
 // SetVisibleToAllUsers API operation for Amazon EMR.
 //
+//
+// The SetVisibleToAllUsers parameter is no longer supported. Your cluster may
+// be visible to all users in your account. To restrict cluster access using
+// an IAM policy, see Identity and Access Management for EMR (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-access-iam.html).
+//
 // Sets the Cluster$VisibleToAllUsers value for an EMR cluster. When true, IAM
 // principals in the Amazon Web Services account can perform EMR cluster actions
 // that their IAM policies allow. When false, only the IAM principal that created
@@ -5324,6 +5336,15 @@ func (s *AddInstanceGroupsOutput) SetJobFlowId(v string) *AddInstanceGroupsOutpu
 type AddJobFlowStepsInput struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the runtime role for a step on the cluster.
+	// The runtime role can be a cross-account IAM role. The runtime role ARN is
+	// a combination of account ID, role name, and role type using the following
+	// format: arn:partition:service:region:account:resource.
+	//
+	// For example, arn:aws:iam::1234567890:role/ReadOnly is a correctly formatted
+	// runtime role ARN.
+	ExecutionRoleArn *string `min:"20" type:"string"`
+
 	// A string that uniquely identifies the job flow. This identifier is returned
 	// by RunJobFlow and can also be obtained from ListClusters.
 	//
@@ -5357,6 +5378,9 @@ func (s AddJobFlowStepsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *AddJobFlowStepsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AddJobFlowStepsInput"}
+	if s.ExecutionRoleArn != nil && len(*s.ExecutionRoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ExecutionRoleArn", 20))
+	}
 	if s.JobFlowId == nil {
 		invalidParams.Add(request.NewErrParamRequired("JobFlowId"))
 	}
@@ -5378,6 +5402,12 @@ func (s *AddJobFlowStepsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetExecutionRoleArn sets the ExecutionRoleArn field's value.
+func (s *AddJobFlowStepsInput) SetExecutionRoleArn(v string) *AddJobFlowStepsInput {
+	s.ExecutionRoleArn = &v
+	return s
 }
 
 // SetJobFlowId sets the JobFlowId field's value.
@@ -6440,6 +6470,11 @@ type Cluster struct {
 	// the actual billing rate.
 	NormalizedInstanceHours *int64 `type:"integer"`
 
+	// The Amazon Linux release specified in a cluster launch RunJobFlow request.
+	// If no Amazon Linux release was specified, the default Amazon Linux release
+	// is shown in the response.
+	OSReleaseLabel *string `type:"string"`
+
 	// The Amazon Resource Name (ARN) of the Outpost where the cluster is launched.
 	OutpostArn *string `type:"string"`
 
@@ -6512,11 +6547,7 @@ type Cluster struct {
 	//
 	// The default value is true if a value is not provided when creating a cluster
 	// using the EMR API RunJobFlow command, the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
-	// command, or the Amazon Web Services Management Console. IAM principals that
-	// are allowed to perform actions on the cluster can use the SetVisibleToAllUsers
-	// action to change the value on a running cluster. For more information, see
-	// Understanding the EMR Cluster VisibleToAllUsers Setting (https://docs.aws.amazon.com/emr/latest/ManagementGuide/security_iam_emr-with-iam.html#security_set_visible_to_all_users)
-	// in the Amazon EMRManagement Guide.
+	// command, or the Amazon Web Services Management Console.
 	VisibleToAllUsers *bool `type:"boolean"`
 }
 
@@ -6631,6 +6662,12 @@ func (s *Cluster) SetName(v string) *Cluster {
 // SetNormalizedInstanceHours sets the NormalizedInstanceHours field's value.
 func (s *Cluster) SetNormalizedInstanceHours(v int64) *Cluster {
 	s.NormalizedInstanceHours = &v
+	return s
+}
+
+// SetOSReleaseLabel sets the OSReleaseLabel field's value.
+func (s *Cluster) SetOSReleaseLabel(v string) *Cluster {
+	s.OSReleaseLabel = &v
 	return s
 }
 
@@ -7982,7 +8019,7 @@ type DescribeJobFlowsInput struct {
 	JobFlowIds []*string `type:"list"`
 
 	// Return only job flows whose state is contained in this list.
-	JobFlowStates []*string `type:"list"`
+	JobFlowStates []*string `type:"list" enum:"JobFlowExecutionState"`
 }
 
 // String returns the string representation.
@@ -8205,6 +8242,12 @@ type DescribeReleaseLabelOutput struct {
 	// the name of the application. Version is the concise version of the application.
 	Applications []*SimplifiedApplication `type:"list"`
 
+	// The list of available Amazon Linux release versions for an Amazon EMR release.
+	// Contains a Label field that is formatted as shown in Amazon Linux 2 Release
+	// Notes (https://docs.aws.amazon.com/AL2/latest/relnotes/relnotes-al2.html).
+	// For example, 2.0.20220218.1 (https://docs.aws.amazon.com/AL2/latest/relnotes/relnotes-20220218.html).
+	AvailableOSReleases []*OSRelease `type:"list"`
+
 	// The pagination token. Reserved for future use. Currently set to null.
 	NextToken *string `type:"string"`
 
@@ -8233,6 +8276,12 @@ func (s DescribeReleaseLabelOutput) GoString() string {
 // SetApplications sets the Applications field's value.
 func (s *DescribeReleaseLabelOutput) SetApplications(v []*SimplifiedApplication) *DescribeReleaseLabelOutput {
 	s.Applications = v
+	return s
+}
+
+// SetAvailableOSReleases sets the AvailableOSReleases field's value.
+func (s *DescribeReleaseLabelOutput) SetAvailableOSReleases(v []*OSRelease) *DescribeReleaseLabelOutput {
+	s.AvailableOSReleases = v
 	return s
 }
 
@@ -8521,8 +8570,9 @@ type EbsBlockDevice struct {
 	// The device name that is exposed to the instance, such as /dev/sdh.
 	Device *string `type:"string"`
 
-	// EBS volume specifications such as volume type, IOPS, and size (GiB) that
-	// will be requested for the EBS volume attached to an EC2 instance in the cluster.
+	// EBS volume specifications such as volume type, IOPS, size (GiB) and throughput
+	// (MiB/s) that are requested for the EBS volume attached to an EC2 instance
+	// in the cluster.
 	VolumeSpecification *VolumeSpecification `type:"structure"`
 }
 
@@ -8557,17 +8607,18 @@ func (s *EbsBlockDevice) SetVolumeSpecification(v *VolumeSpecification) *EbsBloc
 }
 
 // Configuration of requested EBS block device associated with the instance
-// group with count of volumes that will be associated to every instance.
+// group with count of volumes that are associated to every instance.
 type EbsBlockDeviceConfig struct {
 	_ struct{} `type:"structure"`
 
-	// EBS volume specifications such as volume type, IOPS, and size (GiB) that
-	// will be requested for the EBS volume attached to an EC2 instance in the cluster.
+	// EBS volume specifications such as volume type, IOPS, size (GiB) and throughput
+	// (MiB/s) that are requested for the EBS volume attached to an EC2 instance
+	// in the cluster.
 	//
 	// VolumeSpecification is a required field
 	VolumeSpecification *VolumeSpecification `type:"structure" required:"true"`
 
-	// Number of EBS volumes with a specific volume configuration that will be associated
+	// Number of EBS volumes with a specific volume configuration that are associated
 	// with every instance in the instance group
 	VolumesPerInstance *int64 `type:"integer"`
 }
@@ -10662,8 +10713,8 @@ type InstanceGroupDetail struct {
 	// The date/time the instance group was started.
 	StartDateTime *time.Time `type:"timestamp"`
 
-	// State of instance group. The following values are deprecated: STARTING, TERMINATED,
-	// and FAILED.
+	// State of instance group. The following values are no longer supported: STARTING,
+	// TERMINATED, and FAILED.
 	//
 	// State is a required field
 	State *string `type:"string" required:"true" enum:"InstanceGroupState"`
@@ -10796,6 +10847,9 @@ type InstanceGroupModifyConfig struct {
 	// InstanceGroupId is a required field
 	InstanceGroupId *string `type:"string" required:"true"`
 
+	// Type of reconfiguration requested. Valid values are MERGE and OVERWRITE.
+	ReconfigurationType *string `type:"string" enum:"ReconfigurationType"`
+
 	// Policy for customizing shrink operations.
 	ShrinkPolicy *ShrinkPolicy `type:"structure"`
 }
@@ -10852,6 +10906,12 @@ func (s *InstanceGroupModifyConfig) SetInstanceCount(v int64) *InstanceGroupModi
 // SetInstanceGroupId sets the InstanceGroupId field's value.
 func (s *InstanceGroupModifyConfig) SetInstanceGroupId(v string) *InstanceGroupModifyConfig {
 	s.InstanceGroupId = &v
+	return s
+}
+
+// SetReconfigurationType sets the ReconfigurationType field's value.
+func (s *InstanceGroupModifyConfig) SetReconfigurationType(v string) *InstanceGroupModifyConfig {
+	s.ReconfigurationType = &v
 	return s
 }
 
@@ -11714,11 +11774,7 @@ type JobFlowDetail struct {
 	//
 	// The default value is true if a value is not provided when creating a cluster
 	// using the EMR API RunJobFlow command, the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
-	// command, or the Amazon Web Services Management Console. IAM principals that
-	// are authorized to perform actions on the cluster can use the SetVisibleToAllUsers
-	// action to change the value on a running cluster. For more information, see
-	// Understanding the EMR Cluster VisibleToAllUsers Setting (https://docs.aws.amazon.com/emr/latest/ManagementGuide/security_iam_emr-with-iam.html#security_set_visible_to_all_users)
-	// in the Amazon EMRManagement Guide.
+	// command, or the Amazon Web Services Management Console.
 	VisibleToAllUsers *bool `type:"boolean"`
 }
 
@@ -12561,7 +12617,7 @@ type ListClustersInput struct {
 	// The cluster state filters to apply when listing clusters. Clusters that change
 	// state while this action runs may be not be returned as expected in the list
 	// of clusters.
-	ClusterStates []*string `type:"list"`
+	ClusterStates []*string `type:"list" enum:"ClusterState"`
 
 	// The creation date and time beginning value filter for listing clusters.
 	CreatedAfter *time.Time `type:"timestamp"`
@@ -12868,11 +12924,11 @@ type ListInstancesInput struct {
 	InstanceGroupId *string `type:"string"`
 
 	// The type of instance group for which to list the instances.
-	InstanceGroupTypes []*string `type:"list"`
+	InstanceGroupTypes []*string `type:"list" enum:"InstanceGroupType"`
 
 	// A list of instance states that will filter the instances returned with this
 	// request.
-	InstanceStates []*string `type:"list"`
+	InstanceStates []*string `type:"list" enum:"InstanceState"`
 
 	// The pagination token that indicates the next set of results to retrieve.
 	Marker *string `type:"string"`
@@ -13333,7 +13389,7 @@ type ListStepsInput struct {
 	StepIds []*string `type:"list"`
 
 	// The filter to limit the step list based on certain states.
-	StepStates []*string `type:"list"`
+	StepStates []*string `type:"list" enum:"StepState"`
 }
 
 // String returns the string representation.
@@ -14230,6 +14286,40 @@ func (s *NotebookExecutionSummary) SetStartTime(v time.Time) *NotebookExecutionS
 // SetStatus sets the Status field's value.
 func (s *NotebookExecutionSummary) SetStatus(v string) *NotebookExecutionSummary {
 	s.Status = &v
+	return s
+}
+
+// The Amazon Linux release specified for a cluster in the RunJobFlow request.
+type OSRelease struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Linux release specified for a cluster in the RunJobFlow request.
+	// The format is as shown in Amazon Linux 2 Release Notes (https://docs.aws.amazon.com/AL2/latest/relnotes/relnotes-20220218.html).
+	// For example, 2.0.20220218.1.
+	Label *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OSRelease) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OSRelease) GoString() string {
+	return s.String()
+}
+
+// SetLabel sets the Label field's value.
+func (s *OSRelease) SetLabel(v string) *OSRelease {
+	s.Label = &v
 	return s
 }
 
@@ -15300,7 +15390,7 @@ type RunJobFlowInput struct {
 	// Applies to Amazon EMR releases 4.0 and later. A case-insensitive list of
 	// applications for Amazon EMR to install and configure when launching the cluster.
 	// For a list of applications available for each Amazon EMR release version,
-	// see the Amazon EMR Release Guide (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/).
+	// see the Amazon EMRRelease Guide (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/).
 	Applications []*Application `type:"list"`
 
 	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
@@ -15402,6 +15492,11 @@ type RunJobFlowInput struct {
 	//    * "ganglia" - launch the cluster with the Ganglia Monitoring System installed.
 	NewSupportedProducts []*SupportedProductConfig `type:"list"`
 
+	// Specifies a particular Amazon Linux release for all nodes in a cluster launch
+	// RunJobFlow request. If a release is not specified, Amazon EMR uses the latest
+	// validated Amazon Linux release for cluster launch.
+	OSReleaseLabel *string `type:"string"`
+
 	// The specified placement group configuration for an Amazon EMR cluster.
 	PlacementGroupConfigs []*PlacementGroupConfig `type:"list"`
 
@@ -15466,6 +15561,10 @@ type RunJobFlowInput struct {
 	// A list of tags to associate with a cluster and propagate to Amazon EC2 instances.
 	Tags []*Tag `type:"list"`
 
+	//
+	// The VisibleToAllUsers parameter is no longer supported. By default, the value
+	// is set to true. Setting it to false now has no effect.
+	//
 	// Set this value to true so that IAM principals in the Amazon Web Services
 	// account associated with the cluster can perform EMR actions on the cluster
 	// that their IAM policies allow. This value defaults to true for clusters created
@@ -15659,6 +15758,12 @@ func (s *RunJobFlowInput) SetName(v string) *RunJobFlowInput {
 // SetNewSupportedProducts sets the NewSupportedProducts field's value.
 func (s *RunJobFlowInput) SetNewSupportedProducts(v []*SupportedProductConfig) *RunJobFlowInput {
 	s.NewSupportedProducts = v
+	return s
+}
+
+// SetOSReleaseLabel sets the OSReleaseLabel field's value.
+func (s *RunJobFlowInput) SetOSReleaseLabel(v string) *RunJobFlowInput {
+	s.OSReleaseLabel = &v
 	return s
 }
 
@@ -16673,6 +16778,11 @@ func (s *SimplifiedApplication) SetVersion(v string) *SimplifiedApplication {
 // The instance fleet configuration is available only in Amazon EMR versions
 // 4.8.0 and later, excluding 5.0.x versions. Spot Instance allocation strategy
 // is available in Amazon EMR version 5.12.1 and later.
+//
+// Spot Instances with a defined duration (also known as Spot blocks) are no
+// longer available to new customers from July 1, 2021. For customers who have
+// previously used the feature, we will continue to support Spot Instances with
+// a defined duration until December 31, 2022.
 type SpotProvisioningSpecification struct {
 	_ struct{} `type:"structure"`
 
@@ -16690,6 +16800,11 @@ type SpotProvisioningSpecification struct {
 	// EC2 marks the Spot Instance for termination and provides a Spot Instance
 	// termination notice, which gives the instance a two-minute warning before
 	// it terminates.
+	//
+	// Spot Instances with a defined duration (also known as Spot blocks) are no
+	// longer available to new customers from July 1, 2021. For customers who have
+	// previously used the feature, we will continue to support Spot Instances with
+	// a defined duration until December 31, 2022.
 	BlockDurationMinutes *int64 `type:"integer"`
 
 	// The action to take when TargetSpotCapacity has not been fulfilled when the
@@ -16962,6 +17077,15 @@ type Step struct {
 	// The Hadoop job configuration of the cluster step.
 	Config *HadoopStepConfig `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the runtime role for a step on the cluster.
+	// The runtime role can be a cross-account IAM role. The runtime role ARN is
+	// a combination of account ID, role name, and role type using the following
+	// format: arn:partition:service:region:account:resource.
+	//
+	// For example, arn:aws:iam::1234567890:role/ReadOnly is a correctly formatted
+	// runtime role ARN.
+	ExecutionRoleArn *string `type:"string"`
+
 	// The identifier of the cluster step.
 	Id *string `type:"string"`
 
@@ -16999,6 +17123,12 @@ func (s *Step) SetActionOnFailure(v string) *Step {
 // SetConfig sets the Config field's value.
 func (s *Step) SetConfig(v *HadoopStepConfig) *Step {
 	s.Config = v
+	return s
+}
+
+// SetExecutionRoleArn sets the ExecutionRoleArn field's value.
+func (s *Step) SetExecutionRoleArn(v string) *Step {
+	s.ExecutionRoleArn = &v
 	return s
 }
 
@@ -18189,8 +18319,9 @@ func (s UpdateStudioSessionMappingOutput) GoString() string {
 	return s.String()
 }
 
-// EBS volume specifications such as volume type, IOPS, and size (GiB) that
-// will be requested for the EBS volume attached to an EC2 instance in the cluster.
+// EBS volume specifications such as volume type, IOPS, size (GiB) and throughput
+// (MiB/s) that are requested for the EBS volume attached to an EC2 instance
+// in the cluster.
 type VolumeSpecification struct {
 	_ struct{} `type:"structure"`
 
@@ -18203,7 +18334,11 @@ type VolumeSpecification struct {
 	// SizeInGB is a required field
 	SizeInGB *int64 `type:"integer" required:"true"`
 
-	// The volume type. Volume types supported are gp2, io1, standard.
+	// The throughput, in mebibyte per second (MiB/s). This optional parameter can
+	// be a number from 125 - 1000 and is valid only for gp3 volumes.
+	Throughput *int64 `type:"integer"`
+
+	// The volume type. Volume types supported are gp2, io1, and standard.
 	//
 	// VolumeType is a required field
 	VolumeType *string `type:"string" required:"true"`
@@ -18252,6 +18387,12 @@ func (s *VolumeSpecification) SetIops(v int64) *VolumeSpecification {
 // SetSizeInGB sets the SizeInGB field's value.
 func (s *VolumeSpecification) SetSizeInGB(v int64) *VolumeSpecification {
 	s.SizeInGB = &v
+	return s
+}
+
+// SetThroughput sets the Throughput field's value.
+func (s *VolumeSpecification) SetThroughput(v int64) *VolumeSpecification {
+	s.Throughput = &v
 	return s
 }
 
@@ -18971,6 +19112,22 @@ func PlacementGroupStrategy_Values() []string {
 		PlacementGroupStrategyPartition,
 		PlacementGroupStrategyCluster,
 		PlacementGroupStrategyNone,
+	}
+}
+
+const (
+	// ReconfigurationTypeOverwrite is a ReconfigurationType enum value
+	ReconfigurationTypeOverwrite = "OVERWRITE"
+
+	// ReconfigurationTypeMerge is a ReconfigurationType enum value
+	ReconfigurationTypeMerge = "MERGE"
+)
+
+// ReconfigurationType_Values returns all elements of the ReconfigurationType enum
+func ReconfigurationType_Values() []string {
+	return []string{
+		ReconfigurationTypeOverwrite,
+		ReconfigurationTypeMerge,
 	}
 }
 

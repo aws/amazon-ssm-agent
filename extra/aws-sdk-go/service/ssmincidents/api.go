@@ -75,10 +75,11 @@ func (c *SSMIncidents) CreateReplicationSetRequest(input *CreateReplicationSetIn
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -169,13 +170,14 @@ func (c *SSMIncidents) CreateResponsePlanRequest(input *CreateResponsePlanInput)
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -267,13 +269,14 @@ func (c *SSMIncidents) CreateTimelineEventRequest(input *CreateTimelineEventInpu
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -363,10 +366,11 @@ func (c *SSMIncidents) DeleteIncidentRecordRequest(input *DeleteIncidentRecordIn
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -454,13 +458,14 @@ func (c *SSMIncidents) DeleteReplicationSetRequest(input *DeleteReplicationSetIn
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -533,8 +538,8 @@ func (c *SSMIncidents) DeleteResourcePolicyRequest(input *DeleteResourcePolicyIn
 
 // DeleteResourcePolicy API operation for AWS Systems Manager Incident Manager.
 //
-// Deletes the resource policy that AWS Resource Access Manager uses to share
-// your Incident Manager resource.
+// Deletes the resource policy that Resource Access Manager uses to share your
+// Incident Manager resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -548,13 +553,14 @@ func (c *SSMIncidents) DeleteResourcePolicyRequest(input *DeleteResourcePolicyIn
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -643,10 +649,11 @@ func (c *SSMIncidents) DeleteResponsePlanRequest(input *DeleteResponsePlanInput)
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -733,10 +740,11 @@ func (c *SSMIncidents) DeleteTimelineEventRequest(input *DeleteTimelineEventInpu
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -808,7 +816,7 @@ func (c *SSMIncidents) GetIncidentRecordRequest(input *GetIncidentRecordInput) (
 
 // GetIncidentRecord API operation for AWS Systems Manager Incident Manager.
 //
-// Returns the details of the specified incident record.
+// Returns the details for the specified incident record.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -822,13 +830,14 @@ func (c *SSMIncidents) GetIncidentRecordRequest(input *GetIncidentRecordInput) (
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -914,13 +923,14 @@ func (c *SSMIncidents) GetReplicationSetRequest(input *GetReplicationSetInput) (
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1012,13 +1022,14 @@ func (c *SSMIncidents) GetResourcePoliciesRequest(input *GetResourcePoliciesInpu
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1156,13 +1167,14 @@ func (c *SSMIncidents) GetResponsePlanRequest(input *GetResponsePlanInput) (req 
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1248,13 +1260,14 @@ func (c *SSMIncidents) GetTimelineEventRequest(input *GetTimelineEventInput) (re
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1347,10 +1360,11 @@ func (c *SSMIncidents) ListIncidentRecordsRequest(input *ListIncidentRecordsInpu
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1494,10 +1508,11 @@ func (c *SSMIncidents) ListRelatedItemsRequest(input *ListRelatedItemsInput) (re
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1641,10 +1656,11 @@ func (c *SSMIncidents) ListReplicationSetsRequest(input *ListReplicationSetsInpu
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1788,10 +1804,11 @@ func (c *SSMIncidents) ListResponsePlansRequest(input *ListResponsePlansInput) (
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -1929,13 +1946,14 @@ func (c *SSMIncidents) ListTagsForResourceRequest(input *ListTagsForResourceInpu
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -2013,7 +2031,7 @@ func (c *SSMIncidents) ListTimelineEventsRequest(input *ListTimelineEventsInput)
 
 // ListTimelineEvents API operation for AWS Systems Manager Incident Manager.
 //
-// Lists timeline events of the specified incident record.
+// Lists timeline events for the specified incident record.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2027,10 +2045,11 @@ func (c *SSMIncidents) ListTimelineEventsRequest(input *ListTimelineEventsInput)
 //   The request was denied due to request throttling.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -2154,7 +2173,10 @@ func (c *SSMIncidents) PutResourcePolicyRequest(input *PutResourcePolicyInput) (
 
 // PutResourcePolicy API operation for AWS Systems Manager Incident Manager.
 //
-// Adds a resource policy to the specified response plan.
+// Adds a resource policy to the specified response plan. The resource policy
+// is used to share the response plan using Resource Access Manager (RAM). For
+// more information about cross-account sharing, see Setting up cross-account
+// functionality (https://docs.aws.amazon.com/incident-manager/latest/userguide/xa.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2168,13 +2190,14 @@ func (c *SSMIncidents) PutResourcePolicyRequest(input *PutResourcePolicyInput) (
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -2261,13 +2284,14 @@ func (c *SSMIncidents) StartIncidentRequest(input *StartIncidentInput) (req *req
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -2360,13 +2384,14 @@ func (c *SSMIncidents) TagResourceRequest(input *TagResourceInput) (req *request
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -2456,13 +2481,14 @@ func (c *SSMIncidents) UntagResourceRequest(input *UntagResourceInput) (req *req
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -2553,13 +2579,14 @@ func (c *SSMIncidents) UpdateDeletionProtectionRequest(input *UpdateDeletionProt
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -2632,7 +2659,7 @@ func (c *SSMIncidents) UpdateIncidentRecordRequest(input *UpdateIncidentRecordIn
 
 // UpdateIncidentRecord API operation for AWS Systems Manager Incident Manager.
 //
-// Update the details of an incident record. You can use this action to update
+// Update the details of an incident record. You can use this operation to update
 // an incident record from the defined chat channel. For more information about
 // using actions in chat channels, see Interacting through chat (https://docs.aws.amazon.com/incident-manager/latest/userguide/chat.html#chat-interact).
 //
@@ -2648,13 +2675,14 @@ func (c *SSMIncidents) UpdateIncidentRecordRequest(input *UpdateIncidentRecordIn
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -2744,13 +2772,14 @@ func (c *SSMIncidents) UpdateRelatedItemsRequest(input *UpdateRelatedItemsInput)
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -2840,13 +2869,17 @@ func (c *SSMIncidents) UpdateReplicationSetRequest(input *UpdateReplicationSetIn
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
+//
+//   * ConflictException
+//   Updating or deleting a resource causes an inconsistent state.
 //
 //   * InternalServerException
 //   The request processing has failed because of an unknown error, exception
@@ -2933,13 +2966,14 @@ func (c *SSMIncidents) UpdateResponsePlanRequest(input *UpdateResponsePlanInput)
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -3029,13 +3063,14 @@ func (c *SSMIncidents) UpdateTimelineEventRequest(input *UpdateTimelineEventInpu
 //   The request was denied due to request throttling.
 //
 //   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   Request references a resource which doesn't exist.
 //
 //   * AccessDeniedException
-//   You don't have sufficient access to perform this action.
+//   You don't have sufficient access to perform this operation.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ConflictException
 //   Updating or deleting a resource causes an inconsistent state.
@@ -3066,7 +3101,7 @@ func (c *SSMIncidents) UpdateTimelineEventWithContext(ctx aws.Context, input *Up
 	return out, req.Send()
 }
 
-// You don't have sufficient access to perform this action.
+// You don't have sufficient access to perform this operation.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -3179,11 +3214,12 @@ func (s *Action) SetSsmAutomation(v *SsmAutomation) *Action {
 	return s
 }
 
-// Defines the Region and KMS key to add to the replication set.
+// Defines the Amazon Web Services Region and KMS key to add to the replication
+// set.
 type AddRegionAction struct {
 	_ struct{} `type:"structure"`
 
-	// The Region name to add to the replication set.
+	// The Amazon Web Services Region name to add to the replication set.
 	//
 	// RegionName is a required field
 	RegionName *string `locationName:"regionName" type:"string" required:"true"`
@@ -3309,13 +3345,13 @@ func (s *AutomationExecution) SetSsmExecutionArn(v string) *AutomationExecution 
 	return s
 }
 
-// The AWS Chatbot chat channel used for collaboration during an incident.
+// The Chatbot chat channel used for collaboration during an incident.
 type ChatChannel struct {
 	_ struct{} `type:"structure"`
 
-	// The SNS targets that AWS Chatbot uses to notify the chat channel of updates
+	// The Amazon SNS targets that Chatbot uses to notify the chat channel of updates
 	// to an incident. You can also make updates to the incident through the chat
-	// channel by using the SNS topics.
+	// channel by using the Amazon SNS topics.
 	ChatbotSns []*string `locationName:"chatbotSns" min:"1" type:"list"`
 
 	// Used to remove the chat channel from an incident record or response plan.
@@ -3430,6 +3466,9 @@ type ConflictException struct {
 
 	// The resource type
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
+
+	// If present in the output, the operation can be retried after this time
+	RetryAfter *time.Time `locationName:"retryAfter" type:"timestamp"`
 }
 
 // String returns the string representation.
@@ -3491,7 +3530,8 @@ func (s *ConflictException) RequestID() string {
 type CreateReplicationSetInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
 	// The Regions that Incident Manager replicates your data to. You can have up
@@ -3586,10 +3626,11 @@ type CreateResponsePlanInput struct {
 	// The actions that the response plan starts at the beginning of an incident.
 	Actions []*Action `locationName:"actions" type:"list"`
 
-	// The AWS Chatbot chat channel used for collaboration during an incident.
+	// The Chatbot chat channel used for collaboration during an incident.
 	ChatChannel *ChatChannel `locationName:"chatChannel" type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
 	// The long format of the response plan name. This field can contain spaces.
@@ -3760,8 +3801,7 @@ type CreateTimelineEventInput struct {
 	// A token ensuring that the action is called only once with the specified details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// A valid JSON string. There is no other schema imposed. A short description
-	// of the event.
+	// A short description of the event.
 	//
 	// EventData is a required field
 	EventData *string `locationName:"eventData" type:"string" required:"true"`
@@ -3776,8 +3816,8 @@ type CreateTimelineEventInput struct {
 	// EventType is a required field
 	EventType *string `locationName:"eventType" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of the incident record you are adding the
-	// event to.
+	// The Amazon Resource Name (ARN) of the incident record to which the event
+	// will be added.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -3944,7 +3984,7 @@ func (s *DeleteIncidentRecordInput) SetArn(v string) *DeleteIncidentRecordInput 
 }
 
 type DeleteIncidentRecordOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3965,12 +4005,13 @@ func (s DeleteIncidentRecordOutput) GoString() string {
 	return s.String()
 }
 
-// Defines the information about the Region you're deleting from your replication
-// set.
+// Defines the information about the Amazon Web Services Region you're deleting
+// from your replication set.
 type DeleteRegionAction struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the Region you're deleting from the replication set.
+	// The name of the Amazon Web Services Region you're deleting from the replication
+	// set.
 	//
 	// RegionName is a required field
 	RegionName *string `locationName:"regionName" type:"string" required:"true"`
@@ -4060,7 +4101,7 @@ func (s *DeleteReplicationSetInput) SetArn(v string) *DeleteReplicationSetInput 
 }
 
 type DeleteReplicationSetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4143,7 +4184,7 @@ func (s *DeleteResourcePolicyInput) SetResourceArn(v string) *DeleteResourcePoli
 }
 
 type DeleteResourcePolicyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4211,7 +4252,7 @@ func (s *DeleteResponsePlanInput) SetArn(v string) *DeleteResponsePlanInput {
 }
 
 type DeleteResponsePlanOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4240,7 +4281,8 @@ type DeleteTimelineEventInput struct {
 	// EventId is a required field
 	EventId *string `locationName:"eventId" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of the incident that the event is part of.
+	// The Amazon Resource Name (ARN) of the incident that includes the timeline
+	// event.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -4293,7 +4335,7 @@ func (s *DeleteTimelineEventInput) SetIncidentRecordArn(v string) *DeleteTimelin
 }
 
 type DeleteTimelineEventOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4314,9 +4356,42 @@ func (s DeleteTimelineEventOutput) GoString() string {
 	return s.String()
 }
 
+// The dynamic SSM parameter value.
+type DynamicSsmParameterValue struct {
+	_ struct{} `type:"structure"`
+
+	// Variable dynamic parameters. A parameter value is determined when an incident
+	// is created.
+	Variable *string `locationName:"variable" type:"string" enum:"VariableType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DynamicSsmParameterValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DynamicSsmParameterValue) GoString() string {
+	return s.String()
+}
+
+// SetVariable sets the Variable field's value.
+func (s *DynamicSsmParameterValue) SetVariable(v string) *DynamicSsmParameterValue {
+	s.Variable = &v
+	return s
+}
+
 // Used to remove the chat channel from an incident record or response plan.
 type EmptyChatChannel struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4526,7 +4601,7 @@ func (s *GetIncidentRecordInput) SetArn(v string) *GetIncidentRecordInput {
 type GetIncidentRecordOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Details structure of the incident record.
+	// Details the structure of the incident record.
 	//
 	// IncidentRecord is a required field
 	IncidentRecord *IncidentRecord `locationName:"incidentRecord" type:"structure" required:"true"`
@@ -4802,7 +4877,7 @@ type GetResponsePlanOutput struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The AWS Chatbot chat channel used for collaboration during an incident.
+	// The Chatbot chat channel used for collaboration during an incident.
 	ChatChannel *ChatChannel `locationName:"chatChannel" type:"structure"`
 
 	// The long format name of the response plan. Can contain spaces.
@@ -4817,7 +4892,7 @@ type GetResponsePlanOutput struct {
 	// IncidentTemplate is a required field
 	IncidentTemplate *IncidentTemplate `locationName:"incidentTemplate" type:"structure" required:"true"`
 
-	// The short format name of the response plan. Can't contain spaces.
+	// The short format name of the response plan. The name can't contain spaces.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
@@ -4886,14 +4961,14 @@ func (s *GetResponsePlanOutput) SetName(v string) *GetResponsePlanOutput {
 type GetTimelineEventInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ID of the event. You can get an event's ID when you create it or by using
-	// ListTimelineEvents.
+	// The ID of the event. You can get an event's ID when you create it, or by
+	// using ListTimelineEvents.
 	//
 	// EventId is a required field
 	EventId *string `location:"querystring" locationName:"eventId" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of the incident that the timeline event is
-	// part of.
+	// The Amazon Resource Name (ARN) of the incident that includes the timeline
+	// event.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `location:"querystring" locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -4999,7 +5074,7 @@ type IncidentRecord struct {
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" required:"true"`
 
 	// The string Incident Manager uses to prevent duplicate incidents from being
-	// created by the same incident.
+	// created by the same incident in the same account.
 	//
 	// DedupeString is a required field
 	DedupeString *string `locationName:"dedupeString" type:"string" required:"true"`
@@ -5024,7 +5099,7 @@ type IncidentRecord struct {
 	// LastModifiedTime is a required field
 	LastModifiedTime *time.Time `locationName:"lastModifiedTime" type:"timestamp" required:"true"`
 
-	// The SNS targets that are notified when updates are made to an incident.
+	// The Amazon SNS targets that are notified when updates are made to an incident.
 	NotificationTargets []*NotificationTargetItem `locationName:"notificationTargets" type:"list"`
 
 	// The time at which the incident was resolved. This appears as a timeline event.
@@ -5036,7 +5111,7 @@ type IncidentRecord struct {
 	Status *string `locationName:"status" type:"string" required:"true" enum:"IncidentRecordStatus"`
 
 	// The summary of the incident. The summary is a brief synopsis of what occurred,
-	// what is currently happening, and context.
+	// what's currently happening, and context of the incident.
 	Summary *string `locationName:"summary" type:"string"`
 
 	// The title of the incident.
@@ -5147,7 +5222,7 @@ func (s *IncidentRecord) SetTitle(v string) *IncidentRecord {
 	return s
 }
 
-// Details about how the incident record was created and when.
+// Details about what created the incident record and when it was created.
 type IncidentRecordSource struct {
 	_ struct{} `type:"structure"`
 
@@ -5156,15 +5231,16 @@ type IncidentRecordSource struct {
 	// CreatedBy is a required field
 	CreatedBy *string `locationName:"createdBy" type:"string" required:"true"`
 
-	// The principal the assumed the role specified of the createdBy.
+	// The service principal that assumed the role specified in createdBy. If no
+	// service principal assumed the role this will be left blank.
 	InvokedBy *string `locationName:"invokedBy" type:"string"`
 
 	// The resource that caused the incident to be created.
 	ResourceArn *string `locationName:"resourceArn" type:"string"`
 
 	// The service that started the incident. This can be manually created from
-	// Incident Manager, automatically created using an AWS CloudWatch alarm, or
-	// Amazon EventBridge event.
+	// Incident Manager, automatically created using an Amazon CloudWatch alarm,
+	// or Amazon EventBridge event.
 	//
 	// Source is a required field
 	Source *string `locationName:"source" type:"string" required:"true"`
@@ -5325,7 +5401,10 @@ type IncidentTemplate struct {
 	// Impact is a required field
 	Impact *int64 `locationName:"impact" min:"1" type:"integer" required:"true"`
 
-	// The SNS targets that are notified when updates are made to an incident.
+	// Tags to apply to an incident when calling the StartIncident API action.
+	IncidentTags map[string]*string `locationName:"incidentTags" min:"1" type:"map"`
+
+	// The Amazon SNS targets that are notified when updates are made to an incident.
 	NotificationTargets []*NotificationTargetItem `locationName:"notificationTargets" type:"list"`
 
 	// The summary of the incident. The summary is a brief synopsis of what occurred,
@@ -5365,6 +5444,9 @@ func (s *IncidentTemplate) Validate() error {
 	if s.Impact != nil && *s.Impact < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Impact", 1))
 	}
+	if s.IncidentTags != nil && len(s.IncidentTags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IncidentTags", 1))
+	}
 	if s.Title == nil {
 		invalidParams.Add(request.NewErrParamRequired("Title"))
 	}
@@ -5384,6 +5466,12 @@ func (s *IncidentTemplate) SetDedupeString(v string) *IncidentTemplate {
 // SetImpact sets the Impact field's value.
 func (s *IncidentTemplate) SetImpact(v int64) *IncidentTemplate {
 	s.Impact = &v
+	return s
+}
+
+// SetIncidentTags sets the IncidentTags field's value.
+func (s *IncidentTemplate) SetIncidentTags(v map[string]*string) *IncidentTemplate {
+	s.IncidentTags = v
 	return s
 }
 
@@ -5474,19 +5562,7 @@ func (s *InternalServerException) RequestID() string {
 type ItemIdentifier struct {
 	_ struct{} `type:"structure"`
 
-	// The type of related item. Incident Manager supports the following types:
-	//
-	//    * ANALYSIS
-	//
-	//    * INCIDENT
-	//
-	//    * METRIC
-	//
-	//    * PARENT
-	//
-	//    * ATTACHMENT
-	//
-	//    * OTHER
+	// The type of related item.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"ItemType"`
@@ -5551,10 +5627,10 @@ type ItemValue struct {
 	// an Amazon resource.
 	Arn *string `locationName:"arn" type:"string"`
 
-	// The metric definition, if the related item is a metric in CloudWatch.
+	// The metric definition, if the related item is a metric in Amazon CloudWatch.
 	MetricDefinition *string `locationName:"metricDefinition" type:"string"`
 
-	// The URL, if the related item is a non-AWS resource.
+	// The URL, if the related item is a non-Amazon Web Services resource.
 	Url *string `locationName:"url" type:"string"`
 }
 
@@ -5597,8 +5673,8 @@ func (s *ItemValue) SetUrl(v string) *ItemValue {
 type ListIncidentRecordsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Filter the list of incident records you are searching through. You can filter
-	// on the following keys:
+	// Filters the list of incident records through which you are searching. You
+	// can filter on the following keys:
 	//
 	//    * creationTime
 	//
@@ -5607,6 +5683,16 @@ type ListIncidentRecordsInput struct {
 	//    * status
 	//
 	//    * createdBy
+	//
+	// Note the following when deciding how to use Filters:
+	//
+	//    * If you don't specify a Filter, the response includes all incident records.
+	//
+	//    * If you specify more than one filter in a single request, the response
+	//    returns incident records that match all filters.
+	//
+	//    * If you specify a filter with more than one value, the response returns
+	//    incident records that match any of the values provided.
 	Filters []*Filter `locationName:"filters" type:"list"`
 
 	// The maximum number of results per page.
@@ -5720,8 +5806,8 @@ func (s *ListIncidentRecordsOutput) SetNextToken(v string) *ListIncidentRecordsO
 type ListRelatedItemsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the incident record that you are listing
-	// related items for.
+	// The Amazon Resource Name (ARN) of the incident record containing the listed
+	// related items.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -6108,9 +6194,20 @@ type ListTimelineEventsInput struct {
 	//    * eventTime
 	//
 	//    * eventType
+	//
+	// Note the following when deciding how to use Filters:
+	//
+	//    * If you don't specify a Filter, the response includes all timeline events.
+	//
+	//    * If you specify more than one filter in a single request, the response
+	//    returns timeline events that match all filters.
+	//
+	//    * If you specify a filter with more than one value, the response returns
+	//    timeline events that match any of the values provided.
 	Filters []*Filter `locationName:"filters" type:"list"`
 
-	// The Amazon Resource Name (ARN) of the incident that the event is part of.
+	// The Amazon Resource Name (ARN) of the incident that includes the timeline
+	// event.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -6376,22 +6473,24 @@ func (s *PutResourcePolicyOutput) SetPolicyId(v string) *PutResourcePolicyOutput
 	return s
 }
 
-// Information about a Region in your replication set.
+// Information about a Amazon Web Services Region in your replication set.
 type RegionInfo struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the KMS key used to encrypt the data in this Region.
+	// The ID of the KMS key used to encrypt the data in this Amazon Web Services
+	// Region.
 	SseKmsKeyId *string `locationName:"sseKmsKeyId" type:"string"`
 
-	// The status of the Region in the replication set.
+	// The status of the Amazon Web Services Region in the replication set.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"RegionStatus"`
 
-	// Information displayed about the status of the Region.
+	// Information displayed about the status of the Amazon Web Services Region.
 	StatusMessage *string `locationName:"statusMessage" type:"string"`
 
-	// The most recent date and time that the Region's status was updated.
+	// The most recent date and time that Incident Manager updated the Amazon Web
+	// Services Region's status.
 	//
 	// StatusUpdateDateTime is a required field
 	StatusUpdateDateTime *time.Time `locationName:"statusUpdateDateTime" type:"timestamp" required:"true"`
@@ -6439,7 +6538,8 @@ func (s *RegionInfo) SetStatusUpdateDateTime(v time.Time) *RegionInfo {
 	return s
 }
 
-// The mapping between a Region and the key that's used to encrypt the data.
+// The mapping between a Amazon Web Services Region and the key that's used
+// to encrypt the data.
 type RegionMapInputValue struct {
 	_ struct{} `type:"structure"`
 
@@ -6593,8 +6693,8 @@ func (s *RelatedItemsUpdate) SetItemToRemove(v *ItemIdentifier) *RelatedItemsUpd
 	return s
 }
 
-// The set of Regions that your Incident Manager data will be replicated to
-// and the KMS key used to encrypt the data.
+// The set of Amazon Web Services Region that your Incident Manager data will
+// be replicated to and the KMS key used to encrypt the data.
 type ReplicationSet struct {
 	_ struct{} `type:"structure"`
 
@@ -6612,8 +6712,8 @@ type ReplicationSet struct {
 	CreatedTime *time.Time `locationName:"createdTime" type:"timestamp" required:"true"`
 
 	// Determines if the replication set deletion protection is enabled or not.
-	// If deletion protection is enabled, you can't delete the last Region in the
-	// replication set.
+	// If deletion protection is enabled, you can't delete the last Amazon Web Services
+	// Region in the replication set.
 	//
 	// DeletionProtected is a required field
 	DeletionProtected *bool `locationName:"deletionProtected" type:"boolean" required:"true"`
@@ -6628,8 +6728,8 @@ type ReplicationSet struct {
 	// LastModifiedTime is a required field
 	LastModifiedTime *time.Time `locationName:"lastModifiedTime" type:"timestamp" required:"true"`
 
-	// The map between each Region in your replication set and the KMS key that
-	// is used to encrypt the data in that Region.
+	// The map between each Amazon Web Services Region in your replication set and
+	// the KMS key that's used to encrypt the data in that Region.
 	//
 	// RegionMap is a required field
 	RegionMap map[string]*RegionInfo `locationName:"regionMap" type:"map" required:"true"`
@@ -6707,7 +6807,7 @@ func (s *ReplicationSet) SetStatus(v string) *ReplicationSet {
 	return s
 }
 
-// Request references a resource which does not exist.
+// Request references a resource which doesn't exist.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6792,7 +6892,7 @@ type ResourcePolicy struct {
 	// PolicyId is a required field
 	PolicyId *string `locationName:"policyId" type:"string" required:"true"`
 
-	// The Region that policy allows resources to be used in.
+	// The Amazon Web Services Region that policy allows resources to be used in.
 	//
 	// RamResourceShareRegion is a required field
 	RamResourceShareRegion *string `locationName:"ramResourceShareRegion" type:"string" required:"true"`
@@ -6981,6 +7081,10 @@ type SsmAutomation struct {
 	// The automation document's version to use when running.
 	DocumentVersion *string `locationName:"documentVersion" type:"string"`
 
+	// The key-value pair to resolve dynamic parameter values when processing a
+	// Systems Manager Automation runbook.
+	DynamicParameters map[string]*DynamicSsmParameterValue `locationName:"dynamicParameters" min:"1" type:"map"`
+
 	// The key-value pair parameters to use when running the automation document.
 	Parameters map[string][]*string `locationName:"parameters" min:"1" type:"map"`
 
@@ -7019,6 +7123,9 @@ func (s *SsmAutomation) Validate() error {
 	if s.DocumentName == nil {
 		invalidParams.Add(request.NewErrParamRequired("DocumentName"))
 	}
+	if s.DynamicParameters != nil && len(s.DynamicParameters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DynamicParameters", 1))
+	}
 	if s.Parameters != nil && len(s.Parameters) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Parameters", 1))
 	}
@@ -7044,6 +7151,12 @@ func (s *SsmAutomation) SetDocumentVersion(v string) *SsmAutomation {
 	return s
 }
 
+// SetDynamicParameters sets the DynamicParameters field's value.
+func (s *SsmAutomation) SetDynamicParameters(v map[string]*DynamicSsmParameterValue) *SsmAutomation {
+	s.DynamicParameters = v
+	return s
+}
+
 // SetParameters sets the Parameters field's value.
 func (s *SsmAutomation) SetParameters(v map[string][]*string) *SsmAutomation {
 	s.Parameters = v
@@ -7065,7 +7178,8 @@ func (s *SsmAutomation) SetTargetAccount(v string) *SsmAutomation {
 type StartIncidentInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
 	// Defines the impact to the customers. Providing an impact overwrites the impact
@@ -7087,11 +7201,11 @@ type StartIncidentInput struct {
 	Impact *int64 `locationName:"impact" min:"1" type:"integer"`
 
 	// Add related items to the incident for other responders to use. Related items
-	// are AWS resources, external links, or files uploaded to an S3 bucket.
+	// are AWS resources, external links, or files uploaded to an Amazon S3 bucket.
 	RelatedItems []*RelatedItem `locationName:"relatedItems" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the response plan that pre-defines summary,
-	// chat channels, SNS topics, runbooks, title, and impact of the incident.
+	// chat channels, Amazon SNS topics, runbooks, title, and impact of the incident.
 	//
 	// ResponsePlanArn is a required field
 	ResponsePlanArn *string `locationName:"responsePlanArn" type:"string" required:"true"`
@@ -7290,7 +7404,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7479,14 +7593,14 @@ func (s *TimelineEvent) SetIncidentRecordArn(v string) *TimelineEvent {
 type TriggerDetails struct {
 	_ struct{} `type:"structure"`
 
-	// Raw data passed from either EventBridge, CloudWatch, or Incident Manager
-	// when an incident is created.
+	// Raw data passed from either Amazon EventBridge, Amazon CloudWatch, or Incident
+	// Manager when an incident is created.
 	RawData *string `locationName:"rawData" type:"string"`
 
 	// Identifies the service that sourced the event. All events sourced from within
-	// AWS begin with "aws." Customer-generated events can have any value here,
-	// as long as it doesn't begin with "aws." We recommend the use of Java package-name
-	// style reverse domain-name strings.
+	// Amazon Web Services begin with "aws." Customer-generated events can have
+	// any value here, as long as it doesn't begin with "aws." We recommend the
+	// use of Java package-name style reverse domain-name strings.
 	//
 	// Source is a required field
 	Source *string `locationName:"source" type:"string" required:"true"`
@@ -7496,7 +7610,7 @@ type TriggerDetails struct {
 	// Timestamp is a required field
 	Timestamp *time.Time `locationName:"timestamp" type:"timestamp" required:"true"`
 
-	// The ARN of the source that detected the incident.
+	// The Amazon Resource Name (ARN) of the source that detected the incident.
 	TriggerArn *string `locationName:"triggerArn" type:"string"`
 }
 
@@ -7626,7 +7740,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7655,7 +7769,8 @@ type UpdateDeletionProtectionInput struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
 	// Details if deletion protection is enabled or disabled in your account.
@@ -7717,7 +7832,7 @@ func (s *UpdateDeletionProtectionInput) SetDeletionProtected(v bool) *UpdateDele
 }
 
 type UpdateDeletionProtectionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7746,43 +7861,44 @@ type UpdateIncidentRecordInput struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The AWS Chatbot chat channel for responders to collaborate in.
+	// The Chatbot chat channel where responders can collaborate.
 	ChatChannel *ChatChannel `locationName:"chatChannel" type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token that ensures that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// Defines the impact to customers and applications. Providing an impact overwrites
-	// the impact provided by the response plan.
+	// Defines the impact of the incident to customers and applications. Providing
+	// an impact overwrites the impact provided by the response plan.
 	//
 	// Possible impacts:
 	//
-	//    * 1 - Critical impact, this typically relates to full application failure
-	//    that impacts many to all customers.
+	//    * 1 - Critical impact, full application failure that impacts many to all
+	//    customers.
 	//
 	//    * 2 - High impact, partial application failure with impact to many customers.
 	//
 	//    * 3 - Medium impact, the application is providing reduced service to customers.
 	//
-	//    * 4 - Low impact, customer might aren't impacted by the problem yet.
+	//    * 4 - Low impact, customer aren't impacted by the problem yet.
 	//
 	//    * 5 - No impact, customers aren't currently impacted but urgent action
 	//    is needed to avoid impact.
 	Impact *int64 `locationName:"impact" min:"1" type:"integer"`
 
-	// The SNS targets that are notified when updates are made to an incident.
+	// The Amazon SNS targets that are notified when updates are made to an incident.
 	//
-	// Using multiple SNS topics creates redundancy in the case that a Region is
+	// Using multiple SNS topics creates redundancy in the event that a Region is
 	// down during the incident.
 	NotificationTargets []*NotificationTargetItem `locationName:"notificationTargets" type:"list"`
 
 	// The status of the incident. An incident can be Open or Resolved.
 	Status *string `locationName:"status" type:"string" enum:"IncidentRecordStatus"`
 
-	// The summary describes what has happened during the incident.
+	// A longer description of what occurred during the incident.
 	Summary *string `locationName:"summary" type:"string"`
 
-	// The title of the incident is a brief and easily recognizable.
+	// A brief description of the incident.
 	Title *string `locationName:"title" type:"string"`
 }
 
@@ -7874,7 +7990,7 @@ func (s *UpdateIncidentRecordInput) SetTitle(v string) *UpdateIncidentRecordInpu
 }
 
 type UpdateIncidentRecordOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7898,11 +8014,12 @@ func (s UpdateIncidentRecordOutput) GoString() string {
 type UpdateRelatedItemsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// The Amazon Resource Name (ARN) of the incident record you are updating related
-	// items in.
+	// The Amazon Resource Name (ARN) of the incident record containing the related
+	// items you are updating.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -7971,7 +8088,7 @@ func (s *UpdateRelatedItemsInput) SetRelatedItemsUpdate(v *RelatedItemsUpdate) *
 }
 
 type UpdateRelatedItemsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7996,10 +8113,12 @@ func (s UpdateRelatedItemsOutput) GoString() string {
 type UpdateReplicationSetAction struct {
 	_ struct{} `type:"structure"`
 
-	// Details about the Region that you're adding to the replication set.
+	// Details about the Amazon Web Services Region that you're adding to the replication
+	// set.
 	AddRegionAction *AddRegionAction `locationName:"addRegionAction" type:"structure"`
 
-	// Details about the Region that you're deleting to the replication set.
+	// Details about the Amazon Web Services Region that you're deleting to the
+	// replication set.
 	DeleteRegionAction *DeleteRegionAction `locationName:"deleteRegionAction" type:"structure"`
 }
 
@@ -8066,7 +8185,8 @@ type UpdateReplicationSetInput struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 }
 
@@ -8136,7 +8256,7 @@ func (s *UpdateReplicationSetInput) SetClientToken(v string) *UpdateReplicationS
 }
 
 type UpdateReplicationSetOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8168,22 +8288,25 @@ type UpdateResponsePlanInput struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The AWS Chatbot chat channel used for collaboration during an incident.
+	// The Chatbot chat channel used for collaboration during an incident.
 	//
 	// Use the empty structure to remove the chat channel from the response plan.
 	ChatChannel *ChatChannel `locationName:"chatChannel" type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// The long format name of the response plan. Can't contain spaces.
+	// The long format name of the response plan. The display name can't contain
+	// spaces.
 	DisplayName *string `locationName:"displayName" type:"string"`
 
 	// The contacts and escalation plans that Incident Manager engages at the start
 	// of the incident.
 	Engagements []*string `locationName:"engagements" type:"list"`
 
-	// Used to create only one incident record for an incident.
+	// The string Incident Manager uses to prevent duplicate incidents from being
+	// created by the same incident in the same account.
 	IncidentTemplateDedupeString *string `locationName:"incidentTemplateDedupeString" type:"string"`
 
 	// Defines the impact to the customers. Providing an impact overwrites the impact
@@ -8202,14 +8325,19 @@ type UpdateResponsePlanInput struct {
 	//    * 1 - No impact
 	IncidentTemplateImpact *int64 `locationName:"incidentTemplateImpact" min:"1" type:"integer"`
 
-	// The SNS targets that are notified when updates are made to an incident.
+	// The Amazon SNS targets that are notified when updates are made to an incident.
 	IncidentTemplateNotificationTargets []*NotificationTargetItem `locationName:"incidentTemplateNotificationTargets" type:"list"`
 
 	// A brief summary of the incident. This typically contains what has happened,
 	// what's currently happening, and next steps.
 	IncidentTemplateSummary *string `locationName:"incidentTemplateSummary" type:"string"`
 
-	// The short format name of the incident. Can't contain spaces.
+	// Tags to apply to an incident when calling the StartIncident API action. To
+	// call this action, you must also have permission to call the TagResource API
+	// action for the incident record resource.
+	IncidentTemplateTags map[string]*string `locationName:"incidentTemplateTags" type:"map"`
+
+	// The short format name of the incident. The title can't contain spaces.
 	IncidentTemplateTitle *string `locationName:"incidentTemplateTitle" type:"string"`
 }
 
@@ -8322,6 +8450,12 @@ func (s *UpdateResponsePlanInput) SetIncidentTemplateSummary(v string) *UpdateRe
 	return s
 }
 
+// SetIncidentTemplateTags sets the IncidentTemplateTags field's value.
+func (s *UpdateResponsePlanInput) SetIncidentTemplateTags(v map[string]*string) *UpdateResponsePlanInput {
+	s.IncidentTemplateTags = v
+	return s
+}
+
 // SetIncidentTemplateTitle sets the IncidentTemplateTitle field's value.
 func (s *UpdateResponsePlanInput) SetIncidentTemplateTitle(v string) *UpdateResponsePlanInput {
 	s.IncidentTemplateTitle = &v
@@ -8329,7 +8463,7 @@ func (s *UpdateResponsePlanInput) SetIncidentTemplateTitle(v string) *UpdateResp
 }
 
 type UpdateResponsePlanOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8353,7 +8487,8 @@ func (s UpdateResponsePlanOutput) GoString() string {
 type UpdateTimelineEventInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token ensuring that the operation is called only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
 	// A short description of the event.
@@ -8370,8 +8505,8 @@ type UpdateTimelineEventInput struct {
 	// The type of the event. You can update events of type Custom Event.
 	EventType *string `locationName:"eventType" type:"string"`
 
-	// The Amazon Resource Name (ARN) of the incident that the timeline event is
-	// part of.
+	// The Amazon Resource Name (ARN) of the incident that includes the timeline
+	// event.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -8448,7 +8583,7 @@ func (s *UpdateTimelineEventInput) SetIncidentRecordArn(v string) *UpdateTimelin
 }
 
 type UpdateTimelineEventOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8469,7 +8604,8 @@ func (s UpdateTimelineEventOutput) GoString() string {
 	return s.String()
 }
 
-// The input fails to satisfy the constraints specified by an AWS service.
+// The input fails to satisfy the constraints specified by an Amazon Web Services
+// service.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -8567,6 +8703,12 @@ const (
 
 	// ItemTypeOther is a ItemType enum value
 	ItemTypeOther = "OTHER"
+
+	// ItemTypeAutomation is a ItemType enum value
+	ItemTypeAutomation = "AUTOMATION"
+
+	// ItemTypeInvolvedResource is a ItemType enum value
+	ItemTypeInvolvedResource = "INVOLVED_RESOURCE"
 )
 
 // ItemType_Values returns all elements of the ItemType enum
@@ -8578,6 +8720,8 @@ func ItemType_Values() []string {
 		ItemTypeParent,
 		ItemTypeAttachment,
 		ItemTypeOther,
+		ItemTypeAutomation,
+		ItemTypeInvolvedResource,
 	}
 }
 
@@ -8714,5 +8858,21 @@ const (
 func TimelineEventSort_Values() []string {
 	return []string{
 		TimelineEventSortEventTime,
+	}
+}
+
+const (
+	// VariableTypeIncidentRecordArn is a VariableType enum value
+	VariableTypeIncidentRecordArn = "INCIDENT_RECORD_ARN"
+
+	// VariableTypeInvolvedResources is a VariableType enum value
+	VariableTypeInvolvedResources = "INVOLVED_RESOURCES"
+)
+
+// VariableType_Values returns all elements of the VariableType enum
+func VariableType_Values() []string {
+	return []string{
+		VariableTypeIncidentRecordArn,
+		VariableTypeInvolvedResources,
 	}
 }

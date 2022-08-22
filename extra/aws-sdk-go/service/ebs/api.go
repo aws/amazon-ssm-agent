@@ -1148,23 +1148,27 @@ func (s *ConflictException) RequestID() string {
 type GetSnapshotBlockInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The block index of the block from which to get data.
-	//
-	// Obtain the BlockIndex by running the ListChangedBlocks or ListSnapshotBlocks
-	// operations.
+	// The block index of the block in which to read the data. A block index is
+	// a logical index in units of 512 KiB blocks. To identify the block index,
+	// divide the logical offset of the data in the logical volume by the block
+	// size (logical offset of data/524288). The logical offset of the data must
+	// be 512 KiB aligned.
 	//
 	// BlockIndex is a required field
 	BlockIndex *int64 `location:"uri" locationName:"blockIndex" type:"integer" required:"true"`
 
-	// The block token of the block from which to get data.
-	//
-	// Obtain the BlockToken by running the ListChangedBlocks or ListSnapshotBlocks
-	// operations.
+	// The block token of the block from which to get data. You can obtain the BlockToken
+	// by running the ListChangedBlocks or ListSnapshotBlocks operations.
 	//
 	// BlockToken is a required field
 	BlockToken *string `location:"querystring" locationName:"blockToken" type:"string" required:"true"`
 
 	// The ID of the snapshot containing the block from which to get data.
+	//
+	// If the specified snapshot is encrypted, you must have permission to use the
+	// KMS key that was used to encrypt the snapshot. For more information, see
+	// Using encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapis-using-encryption.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
 	//
 	// SnapshotId is a required field
 	SnapshotId *string `location:"uri" locationName:"snapshotId" min:"1" type:"string" required:"true"`
@@ -1363,10 +1367,19 @@ type ListChangedBlocksInput struct {
 	// otherwise, an error occurs.
 	FirstSnapshotId *string `location:"querystring" locationName:"firstSnapshotId" min:"1" type:"string"`
 
-	// The number of results to return.
+	// The maximum number of blocks to be returned by the request.
+	//
+	// Even if additional blocks can be retrieved from the snapshot, the request
+	// can return less blocks than MaxResults or an empty array of blocks.
+	//
+	// To retrieve the next set of blocks from the snapshot, make another request
+	// with the returned NextToken value. The value of NextToken is null when there
+	// are no more blocks to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"100" type:"integer"`
 
 	// The token to request the next page of results.
+	//
+	// If you specify NextToken, then StartingBlockIndex is ignored.
 	NextToken *string `location:"querystring" locationName:"pageToken" type:"string"`
 
 	// The ID of the second snapshot to use for the comparison.
@@ -1381,6 +1394,8 @@ type ListChangedBlocksInput struct {
 	//
 	// The list in the response will start from this block index or the next valid
 	// block index in the snapshots.
+	//
+	// If you specify NextToken, then StartingBlockIndex is ignored.
 	StartingBlockIndex *int64 `location:"querystring" locationName:"startingBlockIndex" type:"integer"`
 }
 
@@ -1525,10 +1540,19 @@ func (s *ListChangedBlocksOutput) SetVolumeSize(v int64) *ListChangedBlocksOutpu
 type ListSnapshotBlocksInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The number of results to return.
+	// The maximum number of blocks to be returned by the request.
+	//
+	// Even if additional blocks can be retrieved from the snapshot, the request
+	// can return less blocks than MaxResults or an empty array of blocks.
+	//
+	// To retrieve the next set of blocks from the snapshot, make another request
+	// with the returned NextToken value. The value of NextToken is null when there
+	// are no more blocks to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"100" type:"integer"`
 
 	// The token to request the next page of results.
+	//
+	// If you specify NextToken, then StartingBlockIndex is ignored.
 	NextToken *string `location:"querystring" locationName:"pageToken" type:"string"`
 
 	// The ID of the snapshot from which to get block indexes and block tokens.
@@ -1538,6 +1562,8 @@ type ListSnapshotBlocksInput struct {
 
 	// The block index from which the list should start. The list in the response
 	// will start from this block index or the next valid block index in the snapshot.
+	//
+	// If you specify NextToken, then StartingBlockIndex is ignored.
 	StartingBlockIndex *int64 `location:"querystring" locationName:"startingBlockIndex" type:"integer"`
 }
 
@@ -1735,6 +1761,11 @@ type PutSnapshotBlockInput struct {
 
 	// The ID of the snapshot.
 	//
+	// If the specified snapshot is encrypted, you must have permission to use the
+	// KMS key that was used to encrypt the snapshot. For more information, see
+	// Using encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapis-using-encryption.html)
+	// in the Amazon Elastic Compute Cloud User Guide..
+	//
 	// SnapshotId is a required field
 	SnapshotId *string `location:"uri" locationName:"snapshotId" min:"1" type:"string" required:"true"`
 }
@@ -1831,7 +1862,7 @@ func (s *PutSnapshotBlockInput) SetSnapshotId(v string) *PutSnapshotBlockInput {
 }
 
 type PutSnapshotBlockOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 
 	// The SHA256 checksum generated for the block data by Amazon EBS.
 	Checksum *string `location:"header" locationName:"x-amz-Checksum" type:"string"`
@@ -2091,32 +2122,36 @@ type StartSnapshotInput struct {
 	// A description for the snapshot.
 	Description *string `type:"string"`
 
-	// Indicates whether to encrypt the snapshot. To create an encrypted snapshot,
-	// specify true. To create an unencrypted snapshot, omit this parameter.
+	// Indicates whether to encrypt the snapshot.
 	//
-	// If you specify a value for ParentSnapshotId, omit this parameter.
+	// You can't specify Encrypted and ParentSnapshotId in the same request. If
+	// you specify both parameters, the request fails with ValidationException.
 	//
-	// If you specify true, the snapshot is encrypted using the KMS key specified
-	// using the KmsKeyArn parameter. If no value is specified for KmsKeyArn, the
-	// default KMS key for your account is used. If no default KMS key has been
-	// specified for your account, the Amazon Web Services managed KMS key is used.
-	// To set a default KMS key for your account, use ModifyEbsDefaultKmsKeyId (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyEbsDefaultKmsKeyId.html).
+	// The encryption status of the snapshot depends on the values that you specify
+	// for Encrypted, KmsKeyArn, and ParentSnapshotId, and whether your Amazon Web
+	// Services account is enabled for encryption by default (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default).
+	// For more information, see Using encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapis-using-encryption.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
 	//
-	// If your account is enabled for encryption by default, you cannot set this
-	// parameter to false. In this case, you can omit this parameter.
-	//
-	// For more information, see Using encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-accessing-snapshot.html#ebsapis-using-encryption)
+	// To create an encrypted snapshot, you must have permission to use the KMS
+	// key. For more information, see Permissions to use Key Management Service
+	// keys (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapi-permissions.html#ebsapi-kms-permissions)
 	// in the Amazon Elastic Compute Cloud User Guide.
 	Encrypted *bool `type:"boolean"`
 
 	// The Amazon Resource Name (ARN) of the Key Management Service (KMS) key to
-	// be used to encrypt the snapshot. If you do not specify a KMS key, the default
-	// Amazon Web Services managed KMS key is used.
+	// be used to encrypt the snapshot.
 	//
-	// If you specify a ParentSnapshotId, omit this parameter; the snapshot will
-	// be encrypted using the same KMS key that was used to encrypt the parent snapshot.
+	// The encryption status of the snapshot depends on the values that you specify
+	// for Encrypted, KmsKeyArn, and ParentSnapshotId, and whether your Amazon Web
+	// Services account is enabled for encryption by default (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default).
+	// For more information, see Using encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapis-using-encryption.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
 	//
-	// If Encrypted is set to true, you must specify a KMS key ARN.
+	// To create an encrypted snapshot, you must have permission to use the KMS
+	// key. For more information, see Permissions to use Key Management Service
+	// keys (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapi-permissions.html#ebsapi-kms-permissions)
+	// in the Amazon Elastic Compute Cloud User Guide.
 	//
 	// KmsKeyArn is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by StartSnapshotInput's
@@ -2126,9 +2161,19 @@ type StartSnapshotInput struct {
 	// The ID of the parent snapshot. If there is no parent snapshot, or if you
 	// are creating the first snapshot for an on-premises volume, omit this parameter.
 	//
-	// If your account is enabled for encryption by default, you cannot use an unencrypted
-	// snapshot as a parent snapshot. You must first create an encrypted copy of
-	// the parent snapshot using CopySnapshot (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CopySnapshot.html).
+	// You can't specify ParentSnapshotId and Encrypted in the same request. If
+	// you specify both parameters, the request fails with ValidationException.
+	//
+	// The encryption status of the snapshot depends on the values that you specify
+	// for Encrypted, KmsKeyArn, and ParentSnapshotId, and whether your Amazon Web
+	// Services account is enabled for encryption by default (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default).
+	// For more information, see Using encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapis-using-encryption.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	//
+	// If you specify an encrypted parent snapshot, you must have permission to
+	// use the KMS key that was used to encrypt the parent snapshot. For more information,
+	// see Permissions to use Key Management Service keys (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebsapi-permissions.html#ebsapi-kms-permissions)
+	// in the Amazon Elastic Compute Cloud User Guide.
 	ParentSnapshotId *string `min:"1" type:"string"`
 
 	// The tags to apply to the snapshot.
@@ -2514,6 +2559,9 @@ const (
 
 	// RequestThrottledExceptionReasonDependencyRequestThrottled is a RequestThrottledExceptionReason enum value
 	RequestThrottledExceptionReasonDependencyRequestThrottled = "DEPENDENCY_REQUEST_THROTTLED"
+
+	// RequestThrottledExceptionReasonResourceLevelThrottle is a RequestThrottledExceptionReason enum value
+	RequestThrottledExceptionReasonResourceLevelThrottle = "RESOURCE_LEVEL_THROTTLE"
 )
 
 // RequestThrottledExceptionReason_Values returns all elements of the RequestThrottledExceptionReason enum
@@ -2521,6 +2569,7 @@ func RequestThrottledExceptionReason_Values() []string {
 	return []string{
 		RequestThrottledExceptionReasonAccountThrottled,
 		RequestThrottledExceptionReasonDependencyRequestThrottled,
+		RequestThrottledExceptionReasonResourceLevelThrottle,
 	}
 }
 
@@ -2605,6 +2654,9 @@ const (
 
 	// ValidationExceptionReasonInvalidVolumeSize is a ValidationExceptionReason enum value
 	ValidationExceptionReasonInvalidVolumeSize = "INVALID_VOLUME_SIZE"
+
+	// ValidationExceptionReasonConflictingBlockUpdate is a ValidationExceptionReason enum value
+	ValidationExceptionReasonConflictingBlockUpdate = "CONFLICTING_BLOCK_UPDATE"
 )
 
 // ValidationExceptionReason_Values returns all elements of the ValidationExceptionReason enum
@@ -2621,5 +2673,6 @@ func ValidationExceptionReason_Values() []string {
 		ValidationExceptionReasonInvalidDependencyRequest,
 		ValidationExceptionReasonInvalidParameterValue,
 		ValidationExceptionReasonInvalidVolumeSize,
+		ValidationExceptionReasonConflictingBlockUpdate,
 	}
 }

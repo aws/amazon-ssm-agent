@@ -13,6 +13,114 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opAssociateChannelFlow = "AssociateChannelFlow"
+
+// AssociateChannelFlowRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateChannelFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateChannelFlow for more information on using the AssociateChannelFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateChannelFlowRequest method.
+//    req, resp := client.AssociateChannelFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/AssociateChannelFlow
+func (c *ChimeSDKMessaging) AssociateChannelFlowRequest(input *AssociateChannelFlowInput) (req *request.Request, output *AssociateChannelFlowOutput) {
+	op := &request.Operation{
+		Name:       opAssociateChannelFlow,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/channels/{channelArn}/channel-flow",
+	}
+
+	if input == nil {
+		input = &AssociateChannelFlowInput{}
+	}
+
+	output = &AssociateChannelFlowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AssociateChannelFlow API operation for Amazon Chime SDK Messaging.
+//
+// Associates a channel flow with a channel. Once associated, all messages to
+// that channel go through channel flow processors. To stop processing, use
+// the DisassociateChannelFlow API.
+//
+// Only administrators or channel moderators can associate a channel flow. The
+// x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
+// of the user that makes the API call as the value in the header.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation AssociateChannelFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * NotFoundException
+//   One or more of the resources in the request does not exist in the system.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/AssociateChannelFlow
+func (c *ChimeSDKMessaging) AssociateChannelFlow(input *AssociateChannelFlowInput) (*AssociateChannelFlowOutput, error) {
+	req, out := c.AssociateChannelFlowRequest(input)
+	return out, req.Send()
+}
+
+// AssociateChannelFlowWithContext is the same as AssociateChannelFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateChannelFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) AssociateChannelFlowWithContext(ctx aws.Context, input *AssociateChannelFlowInput, opts ...request.Option) (*AssociateChannelFlowOutput, error) {
+	req, out := c.AssociateChannelFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchCreateChannelMembership = "BatchCreateChannelMembership"
 
 // BatchCreateChannelMembershipRequest generates a "aws/request.Request" representing the
@@ -79,11 +187,17 @@ func (c *ChimeSDKMessaging) BatchCreateChannelMembershipRequest(input *BatchCrea
 //   * BadRequestException
 //   The input parameters don't match the service's restrictions.
 //
+//   * NotFoundException
+//   One or more of the resources in the request does not exist in the system.
+//
 //   * ForbiddenException
 //   The client is permanently forbidden from making the request.
 //
 //   * ThrottledClientException
 //   The client exceeded its request rate limit.
+//
+//   * ResourceLimitExceededException
+//   The request exceeds the resource limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/BatchCreateChannelMembership
 func (c *ChimeSDKMessaging) BatchCreateChannelMembership(input *BatchCreateChannelMembershipInput) (*BatchCreateChannelMembershipOutput, error) {
@@ -102,6 +216,113 @@ func (c *ChimeSDKMessaging) BatchCreateChannelMembership(input *BatchCreateChann
 // for more information on using Contexts.
 func (c *ChimeSDKMessaging) BatchCreateChannelMembershipWithContext(ctx aws.Context, input *BatchCreateChannelMembershipInput, opts ...request.Option) (*BatchCreateChannelMembershipOutput, error) {
 	req, out := c.BatchCreateChannelMembershipRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opChannelFlowCallback = "ChannelFlowCallback"
+
+// ChannelFlowCallbackRequest generates a "aws/request.Request" representing the
+// client's request for the ChannelFlowCallback operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ChannelFlowCallback for more information on using the ChannelFlowCallback
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ChannelFlowCallbackRequest method.
+//    req, resp := client.ChannelFlowCallbackRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ChannelFlowCallback
+func (c *ChimeSDKMessaging) ChannelFlowCallbackRequest(input *ChannelFlowCallbackInput) (req *request.Request, output *ChannelFlowCallbackOutput) {
+	op := &request.Operation{
+		Name:       opChannelFlowCallback,
+		HTTPMethod: "POST",
+		HTTPPath:   "/channels/{channelArn}?operation=channel-flow-callback",
+	}
+
+	if input == nil {
+		input = &ChannelFlowCallbackInput{}
+	}
+
+	output = &ChannelFlowCallbackOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ChannelFlowCallback API operation for Amazon Chime SDK Messaging.
+//
+// Calls back Chime SDK Messaging with a processing response message. This should
+// be invoked from the processor Lambda. This is a developer API.
+//
+// You can return one of the following processing responses:
+//
+//    * Update message content or metadata
+//
+//    * Deny a message
+//
+//    * Make no changes to the message
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation ChannelFlowCallback for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ChannelFlowCallback
+func (c *ChimeSDKMessaging) ChannelFlowCallback(input *ChannelFlowCallbackInput) (*ChannelFlowCallbackOutput, error) {
+	req, out := c.ChannelFlowCallbackRequest(input)
+	return out, req.Send()
+}
+
+// ChannelFlowCallbackWithContext is the same as ChannelFlowCallback with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ChannelFlowCallback for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ChannelFlowCallbackWithContext(ctx aws.Context, input *ChannelFlowCallbackInput, opts ...request.Option) (*ChannelFlowCallbackOutput, error) {
+	req, out := c.ChannelFlowCallbackRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -322,6 +543,124 @@ func (c *ChimeSDKMessaging) CreateChannelBanWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opCreateChannelFlow = "CreateChannelFlow"
+
+// CreateChannelFlowRequest generates a "aws/request.Request" representing the
+// client's request for the CreateChannelFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateChannelFlow for more information on using the CreateChannelFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateChannelFlowRequest method.
+//    req, resp := client.CreateChannelFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/CreateChannelFlow
+func (c *ChimeSDKMessaging) CreateChannelFlowRequest(input *CreateChannelFlowInput) (req *request.Request, output *CreateChannelFlowOutput) {
+	op := &request.Operation{
+		Name:       opCreateChannelFlow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/channel-flows",
+	}
+
+	if input == nil {
+		input = &CreateChannelFlowInput{}
+	}
+
+	output = &CreateChannelFlowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateChannelFlow API operation for Amazon Chime SDK Messaging.
+//
+// Creates a channel flow, a container for processors. Processors are AWS Lambda
+// functions that perform actions on chat messages, such as stripping out profanity.
+// You can associate channel flows with channels, and the processors in the
+// channel flow then take action on all messages sent to that channel. This
+// is a developer API.
+//
+// Channel flows process the following items:
+//
+// New and updated messages
+//
+// Persistent and non-persistent messages
+//
+// The Standard message type
+//
+// Channel flows don't process Control or System messages. For more information
+// about the message types provided by Chime SDK Messaging, refer to Message
+// types (https://docs.aws.amazon.com/chime/latest/dg/using-the-messaging-sdk.html#msg-types)
+// in the Amazon Chime developer guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation CreateChannelFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * ResourceLimitExceededException
+//   The request exceeds the resource limit.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/CreateChannelFlow
+func (c *ChimeSDKMessaging) CreateChannelFlow(input *CreateChannelFlowInput) (*CreateChannelFlowOutput, error) {
+	req, out := c.CreateChannelFlowRequest(input)
+	return out, req.Send()
+}
+
+// CreateChannelFlowWithContext is the same as CreateChannelFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateChannelFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) CreateChannelFlowWithContext(ctx aws.Context, input *CreateChannelFlowInput, opts ...request.Option) (*CreateChannelFlowOutput, error) {
+	req, out := c.CreateChannelFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateChannelMembership = "CreateChannelMembership"
 
 // CreateChannelMembershipRequest generates a "aws/request.Request" representing the
@@ -366,8 +705,8 @@ func (c *ChimeSDKMessaging) CreateChannelMembershipRequest(input *CreateChannelM
 
 // CreateChannelMembership API operation for Amazon Chime SDK Messaging.
 //
-// Adds a user to a channel. The InvitedBy response field is derived from the
-// request header. A channel member can:
+// Adds a user to a channel. The InvitedBy field in ChannelMembership is derived
+// from the request header. A channel member can:
 //
 //    * List messages
 //
@@ -399,6 +738,9 @@ func (c *ChimeSDKMessaging) CreateChannelMembershipRequest(input *CreateChannelM
 // Returned Error Types:
 //   * BadRequestException
 //   The input parameters don't match the service's restrictions.
+//
+//   * NotFoundException
+//   One or more of the resources in the request does not exist in the system.
 //
 //   * ForbiddenException
 //   The client is permanently forbidden from making the request.
@@ -750,6 +1092,110 @@ func (c *ChimeSDKMessaging) DeleteChannelBan(input *DeleteChannelBanInput) (*Del
 // for more information on using Contexts.
 func (c *ChimeSDKMessaging) DeleteChannelBanWithContext(ctx aws.Context, input *DeleteChannelBanInput, opts ...request.Option) (*DeleteChannelBanOutput, error) {
 	req, out := c.DeleteChannelBanRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteChannelFlow = "DeleteChannelFlow"
+
+// DeleteChannelFlowRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteChannelFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteChannelFlow for more information on using the DeleteChannelFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteChannelFlowRequest method.
+//    req, resp := client.DeleteChannelFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DeleteChannelFlow
+func (c *ChimeSDKMessaging) DeleteChannelFlowRequest(input *DeleteChannelFlowInput) (req *request.Request, output *DeleteChannelFlowOutput) {
+	op := &request.Operation{
+		Name:       opDeleteChannelFlow,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/channel-flows/{channelFlowArn}",
+	}
+
+	if input == nil {
+		input = &DeleteChannelFlowInput{}
+	}
+
+	output = &DeleteChannelFlowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteChannelFlow API operation for Amazon Chime SDK Messaging.
+//
+// Deletes a channel flow, an irreversible process. This is a developer API.
+//
+// This API works only when the channel flow is not associated with any channel.
+// To get a list of all channels that a channel flow is associated with, use
+// the ListChannelsAssociatedWithChannelFlow API. Use the DisassociateChannelFlow
+// API to disassociate a channel flow from all channels.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation DeleteChannelFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DeleteChannelFlow
+func (c *ChimeSDKMessaging) DeleteChannelFlow(input *DeleteChannelFlowInput) (*DeleteChannelFlowOutput, error) {
+	req, out := c.DeleteChannelFlowRequest(input)
+	return out, req.Send()
+}
+
+// DeleteChannelFlowWithContext is the same as DeleteChannelFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteChannelFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) DeleteChannelFlowWithContext(ctx aws.Context, input *DeleteChannelFlowInput, opts ...request.Option) (*DeleteChannelFlowOutput, error) {
+	req, out := c.DeleteChannelFlowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1252,6 +1698,101 @@ func (c *ChimeSDKMessaging) DescribeChannelBanWithContext(ctx aws.Context, input
 	return out, req.Send()
 }
 
+const opDescribeChannelFlow = "DescribeChannelFlow"
+
+// DescribeChannelFlowRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeChannelFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeChannelFlow for more information on using the DescribeChannelFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeChannelFlowRequest method.
+//    req, resp := client.DescribeChannelFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DescribeChannelFlow
+func (c *ChimeSDKMessaging) DescribeChannelFlowRequest(input *DescribeChannelFlowInput) (req *request.Request, output *DescribeChannelFlowOutput) {
+	op := &request.Operation{
+		Name:       opDescribeChannelFlow,
+		HTTPMethod: "GET",
+		HTTPPath:   "/channel-flows/{channelFlowArn}",
+	}
+
+	if input == nil {
+		input = &DescribeChannelFlowInput{}
+	}
+
+	output = &DescribeChannelFlowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeChannelFlow API operation for Amazon Chime SDK Messaging.
+//
+// Returns the full details of a channel flow in an Amazon Chime AppInstance.
+// This is a developer API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation DescribeChannelFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DescribeChannelFlow
+func (c *ChimeSDKMessaging) DescribeChannelFlow(input *DescribeChannelFlowInput) (*DescribeChannelFlowOutput, error) {
+	req, out := c.DescribeChannelFlowRequest(input)
+	return out, req.Send()
+}
+
+// DescribeChannelFlowWithContext is the same as DescribeChannelFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeChannelFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) DescribeChannelFlowWithContext(ctx aws.Context, input *DescribeChannelFlowInput, opts ...request.Option) (*DescribeChannelFlowOutput, error) {
+	req, out := c.DescribeChannelFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeChannelMembership = "DescribeChannelMembership"
 
 // DescribeChannelMembershipRequest generates a "aws/request.Request" representing the
@@ -1647,6 +2188,212 @@ func (c *ChimeSDKMessaging) DescribeChannelModeratorWithContext(ctx aws.Context,
 	return out, req.Send()
 }
 
+const opDisassociateChannelFlow = "DisassociateChannelFlow"
+
+// DisassociateChannelFlowRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateChannelFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateChannelFlow for more information on using the DisassociateChannelFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateChannelFlowRequest method.
+//    req, resp := client.DisassociateChannelFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DisassociateChannelFlow
+func (c *ChimeSDKMessaging) DisassociateChannelFlowRequest(input *DisassociateChannelFlowInput) (req *request.Request, output *DisassociateChannelFlowOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateChannelFlow,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/channels/{channelArn}/channel-flow/{channelFlowArn}",
+	}
+
+	if input == nil {
+		input = &DisassociateChannelFlowInput{}
+	}
+
+	output = &DisassociateChannelFlowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisassociateChannelFlow API operation for Amazon Chime SDK Messaging.
+//
+// Disassociates a channel flow from all its channels. Once disassociated, all
+// messages to that channel stop going through the channel flow processor.
+//
+// Only administrators or channel moderators can disassociate a channel flow.
+// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
+// of the user that makes the API call as the value in the header.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation DisassociateChannelFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * NotFoundException
+//   One or more of the resources in the request does not exist in the system.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DisassociateChannelFlow
+func (c *ChimeSDKMessaging) DisassociateChannelFlow(input *DisassociateChannelFlowInput) (*DisassociateChannelFlowOutput, error) {
+	req, out := c.DisassociateChannelFlowRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateChannelFlowWithContext is the same as DisassociateChannelFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateChannelFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) DisassociateChannelFlowWithContext(ctx aws.Context, input *DisassociateChannelFlowInput, opts ...request.Option) (*DisassociateChannelFlowOutput, error) {
+	req, out := c.DisassociateChannelFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetChannelMembershipPreferences = "GetChannelMembershipPreferences"
+
+// GetChannelMembershipPreferencesRequest generates a "aws/request.Request" representing the
+// client's request for the GetChannelMembershipPreferences operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetChannelMembershipPreferences for more information on using the GetChannelMembershipPreferences
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetChannelMembershipPreferencesRequest method.
+//    req, resp := client.GetChannelMembershipPreferencesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/GetChannelMembershipPreferences
+func (c *ChimeSDKMessaging) GetChannelMembershipPreferencesRequest(input *GetChannelMembershipPreferencesInput) (req *request.Request, output *GetChannelMembershipPreferencesOutput) {
+	op := &request.Operation{
+		Name:       opGetChannelMembershipPreferences,
+		HTTPMethod: "GET",
+		HTTPPath:   "/channels/{channelArn}/memberships/{memberArn}/preferences",
+	}
+
+	if input == nil {
+		input = &GetChannelMembershipPreferencesInput{}
+	}
+
+	output = &GetChannelMembershipPreferencesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetChannelMembershipPreferences API operation for Amazon Chime SDK Messaging.
+//
+// Gets the membership preferences of an AppInstanceUser for the specified channel.
+// The AppInstanceUser must be a member of the channel. Only the AppInstanceUser
+// who owns the membership can retrieve preferences. Users in the AppInstanceAdmin
+// and channel moderator roles can't retrieve preferences for other users. Banned
+// users can't retrieve membership preferences for the channel from which they
+// are banned.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation GetChannelMembershipPreferences for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/GetChannelMembershipPreferences
+func (c *ChimeSDKMessaging) GetChannelMembershipPreferences(input *GetChannelMembershipPreferencesInput) (*GetChannelMembershipPreferencesOutput, error) {
+	req, out := c.GetChannelMembershipPreferencesRequest(input)
+	return out, req.Send()
+}
+
+// GetChannelMembershipPreferencesWithContext is the same as GetChannelMembershipPreferences with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetChannelMembershipPreferences for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) GetChannelMembershipPreferencesWithContext(ctx aws.Context, input *GetChannelMembershipPreferencesInput, opts ...request.Option) (*GetChannelMembershipPreferencesOutput, error) {
+	req, out := c.GetChannelMembershipPreferencesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetChannelMessage = "GetChannelMessage"
 
 // GetChannelMessageRequest generates a "aws/request.Request" representing the
@@ -1742,6 +2489,129 @@ func (c *ChimeSDKMessaging) GetChannelMessage(input *GetChannelMessageInput) (*G
 // for more information on using Contexts.
 func (c *ChimeSDKMessaging) GetChannelMessageWithContext(ctx aws.Context, input *GetChannelMessageInput, opts ...request.Option) (*GetChannelMessageOutput, error) {
 	req, out := c.GetChannelMessageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetChannelMessageStatus = "GetChannelMessageStatus"
+
+// GetChannelMessageStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetChannelMessageStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetChannelMessageStatus for more information on using the GetChannelMessageStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetChannelMessageStatusRequest method.
+//    req, resp := client.GetChannelMessageStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/GetChannelMessageStatus
+func (c *ChimeSDKMessaging) GetChannelMessageStatusRequest(input *GetChannelMessageStatusInput) (req *request.Request, output *GetChannelMessageStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetChannelMessageStatus,
+		HTTPMethod: "GET",
+		HTTPPath:   "/channels/{channelArn}/messages/{messageId}?scope=message-status",
+	}
+
+	if input == nil {
+		input = &GetChannelMessageStatusInput{}
+	}
+
+	output = &GetChannelMessageStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetChannelMessageStatus API operation for Amazon Chime SDK Messaging.
+//
+// Gets message status for a specified messageId. Use this API to determine
+// the intermediate status of messages going through channel flow processing.
+// The API provides an alternative to retrieving message status if the event
+// was not received because a client wasn't connected to a websocket.
+//
+// Messages can have any one of these statuses.
+//
+// SENT
+//
+// Message processed successfully
+//
+// PENDING
+//
+// Ongoing processing
+//
+// FAILED
+//
+// Processing failed
+//
+// DENIED
+//
+// Messasge denied by the processor
+//
+//    * This API does not return statuses for denied messages, because we don't
+//    store them once the processor denies them.
+//
+//    * Only the message sender can invoke this API.
+//
+//    * The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
+//    of the user that makes the API call as the value in the header
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation GetChannelMessageStatus for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/GetChannelMessageStatus
+func (c *ChimeSDKMessaging) GetChannelMessageStatus(input *GetChannelMessageStatusInput) (*GetChannelMessageStatusOutput, error) {
+	req, out := c.GetChannelMessageStatusRequest(input)
+	return out, req.Send()
+}
+
+// GetChannelMessageStatusWithContext is the same as GetChannelMessageStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetChannelMessageStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) GetChannelMessageStatusWithContext(ctx aws.Context, input *GetChannelMessageStatusInput, opts ...request.Option) (*GetChannelMessageStatusOutput, error) {
+	req, out := c.GetChannelMessageStatusRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1993,6 +2863,159 @@ func (c *ChimeSDKMessaging) ListChannelBansPagesWithContext(ctx aws.Context, inp
 	return p.Err()
 }
 
+const opListChannelFlows = "ListChannelFlows"
+
+// ListChannelFlowsRequest generates a "aws/request.Request" representing the
+// client's request for the ListChannelFlows operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListChannelFlows for more information on using the ListChannelFlows
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListChannelFlowsRequest method.
+//    req, resp := client.ListChannelFlowsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListChannelFlows
+func (c *ChimeSDKMessaging) ListChannelFlowsRequest(input *ListChannelFlowsInput) (req *request.Request, output *ListChannelFlowsOutput) {
+	op := &request.Operation{
+		Name:       opListChannelFlows,
+		HTTPMethod: "GET",
+		HTTPPath:   "/channel-flows",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListChannelFlowsInput{}
+	}
+
+	output = &ListChannelFlowsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListChannelFlows API operation for Amazon Chime SDK Messaging.
+//
+// Returns a paginated lists of all the channel flows created under a single
+// Chime. This is a developer API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation ListChannelFlows for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListChannelFlows
+func (c *ChimeSDKMessaging) ListChannelFlows(input *ListChannelFlowsInput) (*ListChannelFlowsOutput, error) {
+	req, out := c.ListChannelFlowsRequest(input)
+	return out, req.Send()
+}
+
+// ListChannelFlowsWithContext is the same as ListChannelFlows with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListChannelFlows for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ListChannelFlowsWithContext(ctx aws.Context, input *ListChannelFlowsInput, opts ...request.Option) (*ListChannelFlowsOutput, error) {
+	req, out := c.ListChannelFlowsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListChannelFlowsPages iterates over the pages of a ListChannelFlows operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListChannelFlows method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListChannelFlows operation.
+//    pageNum := 0
+//    err := client.ListChannelFlowsPages(params,
+//        func(page *chimesdkmessaging.ListChannelFlowsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ChimeSDKMessaging) ListChannelFlowsPages(input *ListChannelFlowsInput, fn func(*ListChannelFlowsOutput, bool) bool) error {
+	return c.ListChannelFlowsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListChannelFlowsPagesWithContext same as ListChannelFlowsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ListChannelFlowsPagesWithContext(ctx aws.Context, input *ListChannelFlowsInput, fn func(*ListChannelFlowsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListChannelFlowsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListChannelFlowsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListChannelFlowsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListChannelMemberships = "ListChannelMemberships"
 
 // ListChannelMembershipsRequest generates a "aws/request.Request" representing the
@@ -2047,6 +3070,10 @@ func (c *ChimeSDKMessaging) ListChannelMembershipsRequest(input *ListChannelMemb
 //
 // The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
 // of the user that makes the API call as the value in the header.
+//
+// If you want to list the channels to which a specific app instance user belongs,
+// see the ListChannelMembershipsForAppInstanceUser (https://docs.aws.amazon.com/chime/latest/APIReference/API_messaging-chime_ListChannelMembershipsForAppInstanceUser.html)
+// API.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2782,6 +3809,160 @@ func (c *ChimeSDKMessaging) ListChannelsPagesWithContext(ctx aws.Context, input 
 	return p.Err()
 }
 
+const opListChannelsAssociatedWithChannelFlow = "ListChannelsAssociatedWithChannelFlow"
+
+// ListChannelsAssociatedWithChannelFlowRequest generates a "aws/request.Request" representing the
+// client's request for the ListChannelsAssociatedWithChannelFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListChannelsAssociatedWithChannelFlow for more information on using the ListChannelsAssociatedWithChannelFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListChannelsAssociatedWithChannelFlowRequest method.
+//    req, resp := client.ListChannelsAssociatedWithChannelFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListChannelsAssociatedWithChannelFlow
+func (c *ChimeSDKMessaging) ListChannelsAssociatedWithChannelFlowRequest(input *ListChannelsAssociatedWithChannelFlowInput) (req *request.Request, output *ListChannelsAssociatedWithChannelFlowOutput) {
+	op := &request.Operation{
+		Name:       opListChannelsAssociatedWithChannelFlow,
+		HTTPMethod: "GET",
+		HTTPPath:   "/channels?scope=channel-flow-associations",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListChannelsAssociatedWithChannelFlowInput{}
+	}
+
+	output = &ListChannelsAssociatedWithChannelFlowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListChannelsAssociatedWithChannelFlow API operation for Amazon Chime SDK Messaging.
+//
+// Lists all channels associated with a specified channel flow. You can associate
+// a channel flow with multiple channels, but you can only associate a channel
+// with one channel flow. This is a developer API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation ListChannelsAssociatedWithChannelFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListChannelsAssociatedWithChannelFlow
+func (c *ChimeSDKMessaging) ListChannelsAssociatedWithChannelFlow(input *ListChannelsAssociatedWithChannelFlowInput) (*ListChannelsAssociatedWithChannelFlowOutput, error) {
+	req, out := c.ListChannelsAssociatedWithChannelFlowRequest(input)
+	return out, req.Send()
+}
+
+// ListChannelsAssociatedWithChannelFlowWithContext is the same as ListChannelsAssociatedWithChannelFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListChannelsAssociatedWithChannelFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ListChannelsAssociatedWithChannelFlowWithContext(ctx aws.Context, input *ListChannelsAssociatedWithChannelFlowInput, opts ...request.Option) (*ListChannelsAssociatedWithChannelFlowOutput, error) {
+	req, out := c.ListChannelsAssociatedWithChannelFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListChannelsAssociatedWithChannelFlowPages iterates over the pages of a ListChannelsAssociatedWithChannelFlow operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListChannelsAssociatedWithChannelFlow method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListChannelsAssociatedWithChannelFlow operation.
+//    pageNum := 0
+//    err := client.ListChannelsAssociatedWithChannelFlowPages(params,
+//        func(page *chimesdkmessaging.ListChannelsAssociatedWithChannelFlowOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ChimeSDKMessaging) ListChannelsAssociatedWithChannelFlowPages(input *ListChannelsAssociatedWithChannelFlowInput, fn func(*ListChannelsAssociatedWithChannelFlowOutput, bool) bool) error {
+	return c.ListChannelsAssociatedWithChannelFlowPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListChannelsAssociatedWithChannelFlowPagesWithContext same as ListChannelsAssociatedWithChannelFlowPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ListChannelsAssociatedWithChannelFlowPagesWithContext(ctx aws.Context, input *ListChannelsAssociatedWithChannelFlowInput, fn func(*ListChannelsAssociatedWithChannelFlowOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListChannelsAssociatedWithChannelFlowInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListChannelsAssociatedWithChannelFlowRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListChannelsAssociatedWithChannelFlowOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListChannelsModeratedByAppInstanceUser = "ListChannelsModeratedByAppInstanceUser"
 
 // ListChannelsModeratedByAppInstanceUserRequest generates a "aws/request.Request" representing the
@@ -2937,6 +4118,357 @@ func (c *ChimeSDKMessaging) ListChannelsModeratedByAppInstanceUserPagesWithConte
 	return p.Err()
 }
 
+const opListSubChannels = "ListSubChannels"
+
+// ListSubChannelsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSubChannels operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSubChannels for more information on using the ListSubChannels
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSubChannelsRequest method.
+//    req, resp := client.ListSubChannelsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListSubChannels
+func (c *ChimeSDKMessaging) ListSubChannelsRequest(input *ListSubChannelsInput) (req *request.Request, output *ListSubChannelsOutput) {
+	op := &request.Operation{
+		Name:       opListSubChannels,
+		HTTPMethod: "GET",
+		HTTPPath:   "/channels/{channelArn}/subchannels",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSubChannelsInput{}
+	}
+
+	output = &ListSubChannelsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSubChannels API operation for Amazon Chime SDK Messaging.
+//
+// Lists all the SubChannels in an elastic channel when given a channel ID.
+// Available only to the app instance admins and channel moderators of elastic
+// channels.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation ListSubChannels for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListSubChannels
+func (c *ChimeSDKMessaging) ListSubChannels(input *ListSubChannelsInput) (*ListSubChannelsOutput, error) {
+	req, out := c.ListSubChannelsRequest(input)
+	return out, req.Send()
+}
+
+// ListSubChannelsWithContext is the same as ListSubChannels with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSubChannels for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ListSubChannelsWithContext(ctx aws.Context, input *ListSubChannelsInput, opts ...request.Option) (*ListSubChannelsOutput, error) {
+	req, out := c.ListSubChannelsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSubChannelsPages iterates over the pages of a ListSubChannels operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSubChannels method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSubChannels operation.
+//    pageNum := 0
+//    err := client.ListSubChannelsPages(params,
+//        func(page *chimesdkmessaging.ListSubChannelsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ChimeSDKMessaging) ListSubChannelsPages(input *ListSubChannelsInput, fn func(*ListSubChannelsOutput, bool) bool) error {
+	return c.ListSubChannelsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSubChannelsPagesWithContext same as ListSubChannelsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ListSubChannelsPagesWithContext(ctx aws.Context, input *ListSubChannelsInput, fn func(*ListSubChannelsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSubChannelsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSubChannelsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSubChannelsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListTagsForResource
+func (c *ChimeSDKMessaging) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/tags",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for Amazon Chime SDK Messaging.
+//
+// Lists the tags applied to an Amazon Chime SDK messaging resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/ListTagsForResource
+func (c *ChimeSDKMessaging) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutChannelMembershipPreferences = "PutChannelMembershipPreferences"
+
+// PutChannelMembershipPreferencesRequest generates a "aws/request.Request" representing the
+// client's request for the PutChannelMembershipPreferences operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutChannelMembershipPreferences for more information on using the PutChannelMembershipPreferences
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutChannelMembershipPreferencesRequest method.
+//    req, resp := client.PutChannelMembershipPreferencesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/PutChannelMembershipPreferences
+func (c *ChimeSDKMessaging) PutChannelMembershipPreferencesRequest(input *PutChannelMembershipPreferencesInput) (req *request.Request, output *PutChannelMembershipPreferencesOutput) {
+	op := &request.Operation{
+		Name:       opPutChannelMembershipPreferences,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/channels/{channelArn}/memberships/{memberArn}/preferences",
+	}
+
+	if input == nil {
+		input = &PutChannelMembershipPreferencesInput{}
+	}
+
+	output = &PutChannelMembershipPreferencesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutChannelMembershipPreferences API operation for Amazon Chime SDK Messaging.
+//
+// Sets the membership preferences of an AppInstanceUser for the specified channel.
+// The AppInstanceUser must be a member of the channel. Only the AppInstanceUser
+// who owns the membership can set preferences. Users in the AppInstanceAdmin
+// and channel moderator roles can't set preferences for other users. Banned
+// users can't set membership preferences for the channel from which they are
+// banned.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation PutChannelMembershipPreferences for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/PutChannelMembershipPreferences
+func (c *ChimeSDKMessaging) PutChannelMembershipPreferences(input *PutChannelMembershipPreferencesInput) (*PutChannelMembershipPreferencesOutput, error) {
+	req, out := c.PutChannelMembershipPreferencesRequest(input)
+	return out, req.Send()
+}
+
+// PutChannelMembershipPreferencesWithContext is the same as PutChannelMembershipPreferences with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutChannelMembershipPreferences for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) PutChannelMembershipPreferencesWithContext(ctx aws.Context, input *PutChannelMembershipPreferencesInput, opts ...request.Option) (*PutChannelMembershipPreferencesOutput, error) {
+	req, out := c.PutChannelMembershipPreferencesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRedactChannelMessage = "RedactChannelMessage"
 
 // RedactChannelMessageRequest generates a "aws/request.Request" representing the
@@ -3001,6 +4533,10 @@ func (c *ChimeSDKMessaging) RedactChannelMessageRequest(input *RedactChannelMess
 //   * ForbiddenException
 //   The client is permanently forbidden from making the request.
 //
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
 //   * UnauthorizedClientException
 //   The client is not currently authorized to make the request.
 //
@@ -3033,6 +4569,160 @@ func (c *ChimeSDKMessaging) RedactChannelMessageWithContext(ctx aws.Context, inp
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opSearchChannels = "SearchChannels"
+
+// SearchChannelsRequest generates a "aws/request.Request" representing the
+// client's request for the SearchChannels operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SearchChannels for more information on using the SearchChannels
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SearchChannelsRequest method.
+//    req, resp := client.SearchChannelsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/SearchChannels
+func (c *ChimeSDKMessaging) SearchChannelsRequest(input *SearchChannelsInput) (req *request.Request, output *SearchChannelsOutput) {
+	op := &request.Operation{
+		Name:       opSearchChannels,
+		HTTPMethod: "POST",
+		HTTPPath:   "/channels?operation=search",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &SearchChannelsInput{}
+	}
+
+	output = &SearchChannelsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SearchChannels API operation for Amazon Chime SDK Messaging.
+//
+// Allows an AppInstanceUser to search the channels that they belong to. The
+// AppInstanceUser can search by membership or external ID. An AppInstanceAdmin
+// can search across all channels within the AppInstance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation SearchChannels for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/SearchChannels
+func (c *ChimeSDKMessaging) SearchChannels(input *SearchChannelsInput) (*SearchChannelsOutput, error) {
+	req, out := c.SearchChannelsRequest(input)
+	return out, req.Send()
+}
+
+// SearchChannelsWithContext is the same as SearchChannels with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SearchChannels for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) SearchChannelsWithContext(ctx aws.Context, input *SearchChannelsInput, opts ...request.Option) (*SearchChannelsOutput, error) {
+	req, out := c.SearchChannelsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// SearchChannelsPages iterates over the pages of a SearchChannels operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See SearchChannels method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a SearchChannels operation.
+//    pageNum := 0
+//    err := client.SearchChannelsPages(params,
+//        func(page *chimesdkmessaging.SearchChannelsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ChimeSDKMessaging) SearchChannelsPages(input *SearchChannelsInput, fn func(*SearchChannelsOutput, bool) bool) error {
+	return c.SearchChannelsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// SearchChannelsPagesWithContext same as SearchChannelsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) SearchChannelsPagesWithContext(ctx aws.Context, input *SearchChannelsInput, fn func(*SearchChannelsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *SearchChannelsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.SearchChannelsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*SearchChannelsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opSendChannelMessage = "SendChannelMessage"
@@ -3139,6 +4829,200 @@ func (c *ChimeSDKMessaging) SendChannelMessageWithContext(ctx aws.Context, input
 	return out, req.Send()
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/TagResource
+func (c *ChimeSDKMessaging) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags?operation=tag-resource",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for Amazon Chime SDK Messaging.
+//
+// Applies the specified tags to the specified Amazon Chime SDK messaging resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ResourceLimitExceededException
+//   The request exceeds the resource limit.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/TagResource
+func (c *ChimeSDKMessaging) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/UntagResource
+func (c *ChimeSDKMessaging) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags?operation=untag-resource",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for Amazon Chime SDK Messaging.
+//
+// Removes the specified tags from the specified Amazon Chime SDK messaging
+// resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/UntagResource
+func (c *ChimeSDKMessaging) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateChannel = "UpdateChannel"
 
 // UpdateChannelRequest generates a "aws/request.Request" representing the
@@ -3237,6 +5121,104 @@ func (c *ChimeSDKMessaging) UpdateChannel(input *UpdateChannelInput) (*UpdateCha
 // for more information on using Contexts.
 func (c *ChimeSDKMessaging) UpdateChannelWithContext(ctx aws.Context, input *UpdateChannelInput, opts ...request.Option) (*UpdateChannelOutput, error) {
 	req, out := c.UpdateChannelRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateChannelFlow = "UpdateChannelFlow"
+
+// UpdateChannelFlowRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateChannelFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateChannelFlow for more information on using the UpdateChannelFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateChannelFlowRequest method.
+//    req, resp := client.UpdateChannelFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/UpdateChannelFlow
+func (c *ChimeSDKMessaging) UpdateChannelFlowRequest(input *UpdateChannelFlowInput) (req *request.Request, output *UpdateChannelFlowOutput) {
+	op := &request.Operation{
+		Name:       opUpdateChannelFlow,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/channel-flows/{channelFlowArn}",
+	}
+
+	if input == nil {
+		input = &UpdateChannelFlowInput{}
+	}
+
+	output = &UpdateChannelFlowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateChannelFlow API operation for Amazon Chime SDK Messaging.
+//
+// Updates channel flow attributes. This is a developer API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation UpdateChannelFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/UpdateChannelFlow
+func (c *ChimeSDKMessaging) UpdateChannelFlow(input *UpdateChannelFlowInput) (*UpdateChannelFlowOutput, error) {
+	req, out := c.UpdateChannelFlowRequest(input)
+	return out, req.Send()
+}
+
+// UpdateChannelFlowWithContext is the same as UpdateChannelFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateChannelFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) UpdateChannelFlowWithContext(ctx aws.Context, input *UpdateChannelFlowInput, opts ...request.Option) (*UpdateChannelFlowOutput, error) {
+	req, out := c.UpdateChannelFlowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3448,8 +5430,11 @@ func (c *ChimeSDKMessaging) UpdateChannelReadMarkerWithContext(ctx aws.Context, 
 type AppInstanceUserMembershipSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The time at which a message was last read.
+	// The time at which an AppInstanceUser last marked a channel as read.
 	ReadMarkerTimestamp *time.Time `type:"timestamp"`
+
+	// The ID of the SubChannel that the AppInstanceUser is a member of.
+	SubChannelId *string `min:"1" type:"string"`
 
 	// The type of ChannelMembership.
 	Type *string `type:"string" enum:"ChannelMembershipType"`
@@ -3479,10 +5464,121 @@ func (s *AppInstanceUserMembershipSummary) SetReadMarkerTimestamp(v time.Time) *
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *AppInstanceUserMembershipSummary) SetSubChannelId(v string) *AppInstanceUserMembershipSummary {
+	s.SubChannelId = &v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *AppInstanceUserMembershipSummary) SetType(v string) *AppInstanceUserMembershipSummary {
 	s.Type = &v
 	return s
+}
+
+type AssociateChannelFlowInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// The ARN of the channel flow.
+	//
+	// ChannelFlowArn is a required field
+	ChannelFlowArn *string `min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserArn of the user making the API call.
+	//
+	// ChimeBearer is a required field
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateChannelFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateChannelFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateChannelFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateChannelFlowInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChannelFlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelFlowArn"))
+	}
+	if s.ChannelFlowArn != nil && len(*s.ChannelFlowArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelFlowArn", 5))
+	}
+	if s.ChimeBearer == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChimeBearer"))
+	}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *AssociateChannelFlowInput) SetChannelArn(v string) *AssociateChannelFlowInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *AssociateChannelFlowInput) SetChannelFlowArn(v string) *AssociateChannelFlowInput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *AssociateChannelFlowInput) SetChimeBearer(v string) *AssociateChannelFlowInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+type AssociateChannelFlowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateChannelFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateChannelFlowOutput) GoString() string {
+	return s.String()
 }
 
 // The input parameters don't match the service's restrictions.
@@ -3565,6 +5661,9 @@ type BatchChannelMemberships struct {
 	// The users successfully added to the request.
 	Members []*Identity `type:"list"`
 
+	// The ID of the SubChannel.
+	SubChannelId *string `min:"1" type:"string"`
+
 	// The membership types set for the channel users.
 	Type *string `type:"string" enum:"ChannelMembershipType"`
 }
@@ -3605,6 +5704,12 @@ func (s *BatchChannelMemberships) SetMembers(v []*Identity) *BatchChannelMembers
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *BatchChannelMemberships) SetSubChannelId(v string) *BatchChannelMemberships {
+	s.SubChannelId = &v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *BatchChannelMemberships) SetType(v string) *BatchChannelMemberships {
 	s.Type = &v
@@ -3621,7 +5726,7 @@ type BatchCreateChannelMembershipError struct {
 	// The error message.
 	ErrorMessage *string `type:"string"`
 
-	// The ARN of the member that the service couldn't add.
+	// The AppInstanceUserArn of the member that the service couldn't add.
 	MemberArn *string `min:"5" type:"string"`
 }
 
@@ -3674,10 +5779,16 @@ type BatchCreateChannelMembershipInput struct {
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The ARNs of the members you want to add to the channel.
+	// The AppInstanceUserArns of the members you want to add to the channel.
 	//
 	// MemberArns is a required field
 	MemberArns []*string `min:"1" type:"list" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when creating membership in a SubChannel for a moderator in
+	// an elastic channel.
+	SubChannelId *string `min:"1" type:"string"`
 
 	// The membership type of a user, DEFAULT or HIDDEN. Default members are always
 	// returned as part of ListChannelMemberships. Hidden members are only returned
@@ -3725,6 +5836,9 @@ func (s *BatchCreateChannelMembershipInput) Validate() error {
 	if s.MemberArns != nil && len(s.MemberArns) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberArns", 1))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3747,6 +5861,12 @@ func (s *BatchCreateChannelMembershipInput) SetChimeBearer(v string) *BatchCreat
 // SetMemberArns sets the MemberArns field's value.
 func (s *BatchCreateChannelMembershipInput) SetMemberArns(v []*string) *BatchCreateChannelMembershipInput {
 	s.MemberArns = v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *BatchCreateChannelMembershipInput) SetSubChannelId(v string) *BatchCreateChannelMembershipInput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -3804,11 +5924,18 @@ type Channel struct {
 	// The ARN of a channel.
 	ChannelArn *string `min:"5" type:"string"`
 
+	// The ARN of the channel flow.
+	ChannelFlowArn *string `min:"5" type:"string"`
+
 	// The AppInstanceUser who created the channel.
 	CreatedBy *Identity `type:"structure"`
 
 	// The time at which the AppInstanceUser created the channel.
 	CreatedTimestamp *time.Time `type:"timestamp"`
+
+	// The attributes required to configure and create an elastic channel. An elastic
+	// channel can support a maximum of 1-million members.
+	ElasticChannelConfiguration *ElasticChannelConfiguration `type:"structure"`
 
 	// The time at which a member sent the last message in the channel.
 	LastMessageTimestamp *time.Time `type:"timestamp"`
@@ -3861,6 +5988,12 @@ func (s *Channel) SetChannelArn(v string) *Channel {
 	return s
 }
 
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *Channel) SetChannelFlowArn(v string) *Channel {
+	s.ChannelFlowArn = &v
+	return s
+}
+
 // SetCreatedBy sets the CreatedBy field's value.
 func (s *Channel) SetCreatedBy(v *Identity) *Channel {
 	s.CreatedBy = v
@@ -3870,6 +6003,12 @@ func (s *Channel) SetCreatedBy(v *Identity) *Channel {
 // SetCreatedTimestamp sets the CreatedTimestamp field's value.
 func (s *Channel) SetCreatedTimestamp(v time.Time) *Channel {
 	s.CreatedTimestamp = &v
+	return s
+}
+
+// SetElasticChannelConfiguration sets the ElasticChannelConfiguration field's value.
+func (s *Channel) SetElasticChannelConfiguration(v *ElasticChannelConfiguration) *Channel {
+	s.ElasticChannelConfiguration = v
 	return s
 }
 
@@ -3905,6 +6044,82 @@ func (s *Channel) SetName(v string) *Channel {
 
 // SetPrivacy sets the Privacy field's value.
 func (s *Channel) SetPrivacy(v string) *Channel {
+	s.Privacy = &v
+	return s
+}
+
+// Summary of details of a channel associated with channel flow.
+type ChannelAssociatedWithFlowSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel.
+	ChannelArn *string `min:"5" type:"string"`
+
+	// The channel's metadata.
+	//
+	// Metadata is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelAssociatedWithFlowSummary's
+	// String and GoString methods.
+	Metadata *string `type:"string" sensitive:"true"`
+
+	// The mode of the channel.
+	Mode *string `type:"string" enum:"ChannelMode"`
+
+	// The name of the channel flow.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelAssociatedWithFlowSummary's
+	// String and GoString methods.
+	Name *string `min:"1" type:"string" sensitive:"true"`
+
+	// The channel's privacy setting.
+	Privacy *string `type:"string" enum:"ChannelPrivacy"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelAssociatedWithFlowSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelAssociatedWithFlowSummary) GoString() string {
+	return s.String()
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *ChannelAssociatedWithFlowSummary) SetChannelArn(v string) *ChannelAssociatedWithFlowSummary {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetMetadata sets the Metadata field's value.
+func (s *ChannelAssociatedWithFlowSummary) SetMetadata(v string) *ChannelAssociatedWithFlowSummary {
+	s.Metadata = &v
+	return s
+}
+
+// SetMode sets the Mode field's value.
+func (s *ChannelAssociatedWithFlowSummary) SetMode(v string) *ChannelAssociatedWithFlowSummary {
+	s.Mode = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ChannelAssociatedWithFlowSummary) SetName(v string) *ChannelAssociatedWithFlowSummary {
+	s.Name = &v
+	return s
+}
+
+// SetPrivacy sets the Privacy field's value.
+func (s *ChannelAssociatedWithFlowSummary) SetPrivacy(v string) *ChannelAssociatedWithFlowSummary {
 	s.Privacy = &v
 	return s
 }
@@ -4000,6 +6215,263 @@ func (s *ChannelBanSummary) SetMember(v *Identity) *ChannelBanSummary {
 	return s
 }
 
+// The details of a channel flow.
+type ChannelFlow struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel flow.
+	ChannelFlowArn *string `min:"5" type:"string"`
+
+	// The time at which the channel flow was created.
+	CreatedTimestamp *time.Time `type:"timestamp"`
+
+	// The time at which a channel flow was updated.
+	LastUpdatedTimestamp *time.Time `type:"timestamp"`
+
+	// The name of the channel flow.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelFlow's
+	// String and GoString methods.
+	Name *string `min:"1" type:"string" sensitive:"true"`
+
+	// Information about the processor Lambda functions.
+	Processors []*Processor `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlow) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlow) GoString() string {
+	return s.String()
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *ChannelFlow) SetChannelFlowArn(v string) *ChannelFlow {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+// SetCreatedTimestamp sets the CreatedTimestamp field's value.
+func (s *ChannelFlow) SetCreatedTimestamp(v time.Time) *ChannelFlow {
+	s.CreatedTimestamp = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *ChannelFlow) SetLastUpdatedTimestamp(v time.Time) *ChannelFlow {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ChannelFlow) SetName(v string) *ChannelFlow {
+	s.Name = &v
+	return s
+}
+
+// SetProcessors sets the Processors field's value.
+func (s *ChannelFlow) SetProcessors(v []*Processor) *ChannelFlow {
+	s.Processors = v
+	return s
+}
+
+type ChannelFlowCallbackInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier passed to the processor by the service when invoked. Use the
+	// identifier to call back the service.
+	CallbackId *string `min:"32" type:"string" idempotencyToken:"true"`
+
+	// The ARN of the channel.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// Stores information about the processed message.
+	//
+	// ChannelMessage is a required field
+	ChannelMessage *ChannelMessageCallback `type:"structure" required:"true"`
+
+	// When a processor determines that a message needs to be DENIED, pass this
+	// parameter with a value of true.
+	DeleteResource *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlowCallbackInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlowCallbackInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ChannelFlowCallbackInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ChannelFlowCallbackInput"}
+	if s.CallbackId != nil && len(*s.CallbackId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("CallbackId", 32))
+	}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChannelMessage == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelMessage"))
+	}
+	if s.ChannelMessage != nil {
+		if err := s.ChannelMessage.Validate(); err != nil {
+			invalidParams.AddNested("ChannelMessage", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCallbackId sets the CallbackId field's value.
+func (s *ChannelFlowCallbackInput) SetCallbackId(v string) *ChannelFlowCallbackInput {
+	s.CallbackId = &v
+	return s
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *ChannelFlowCallbackInput) SetChannelArn(v string) *ChannelFlowCallbackInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChannelMessage sets the ChannelMessage field's value.
+func (s *ChannelFlowCallbackInput) SetChannelMessage(v *ChannelMessageCallback) *ChannelFlowCallbackInput {
+	s.ChannelMessage = v
+	return s
+}
+
+// SetDeleteResource sets the DeleteResource field's value.
+func (s *ChannelFlowCallbackInput) SetDeleteResource(v bool) *ChannelFlowCallbackInput {
+	s.DeleteResource = &v
+	return s
+}
+
+type ChannelFlowCallbackOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The call back ID passed in the request.
+	CallbackId *string `min:"32" type:"string"`
+
+	// The ARN of the channel.
+	ChannelArn *string `min:"5" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlowCallbackOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlowCallbackOutput) GoString() string {
+	return s.String()
+}
+
+// SetCallbackId sets the CallbackId field's value.
+func (s *ChannelFlowCallbackOutput) SetCallbackId(v string) *ChannelFlowCallbackOutput {
+	s.CallbackId = &v
+	return s
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *ChannelFlowCallbackOutput) SetChannelArn(v string) *ChannelFlowCallbackOutput {
+	s.ChannelArn = &v
+	return s
+}
+
+// Summary of details of a channel flow.
+type ChannelFlowSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel flow.
+	ChannelFlowArn *string `min:"5" type:"string"`
+
+	// The name of the channel flow.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelFlowSummary's
+	// String and GoString methods.
+	Name *string `min:"1" type:"string" sensitive:"true"`
+
+	// Information about the processor Lambda functions.
+	Processors []*Processor `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlowSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelFlowSummary) GoString() string {
+	return s.String()
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *ChannelFlowSummary) SetChannelFlowArn(v string) *ChannelFlowSummary {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ChannelFlowSummary) SetName(v string) *ChannelFlowSummary {
+	s.Name = &v
+	return s
+}
+
+// SetProcessors sets the Processors field's value.
+func (s *ChannelFlowSummary) SetProcessors(v []*Processor) *ChannelFlowSummary {
+	s.Processors = v
+	return s
+}
+
 // The details of a channel member.
 type ChannelMembership struct {
 	_ struct{} `type:"structure"`
@@ -4018,6 +6490,9 @@ type ChannelMembership struct {
 
 	// The data of the channel member.
 	Member *Identity `type:"structure"`
+
+	// The ID of the SubChannel that a user belongs to.
+	SubChannelId *string `min:"1" type:"string"`
 
 	// The membership type set for the channel member.
 	Type *string `type:"string" enum:"ChannelMembershipType"`
@@ -4071,6 +6546,12 @@ func (s *ChannelMembership) SetMember(v *Identity) *ChannelMembership {
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *ChannelMembership) SetSubChannelId(v string) *ChannelMembership {
+	s.SubChannelId = &v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *ChannelMembership) SetType(v string) *ChannelMembership {
 	s.Type = &v
@@ -4115,6 +6596,53 @@ func (s *ChannelMembershipForAppInstanceUserSummary) SetAppInstanceUserMembershi
 // SetChannelSummary sets the ChannelSummary field's value.
 func (s *ChannelMembershipForAppInstanceUserSummary) SetChannelSummary(v *ChannelSummary) *ChannelMembershipForAppInstanceUserSummary {
 	s.ChannelSummary = v
+	return s
+}
+
+// The channel membership preferences for an AppInstanceUser.
+type ChannelMembershipPreferences struct {
+	_ struct{} `type:"structure"`
+
+	// The push notification configuration of a message.
+	PushNotifications *PushNotificationPreferences `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelMembershipPreferences) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelMembershipPreferences) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ChannelMembershipPreferences) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ChannelMembershipPreferences"}
+	if s.PushNotifications != nil {
+		if err := s.PushNotifications.Validate(); err != nil {
+			invalidParams.AddNested("PushNotifications", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPushNotifications sets the PushNotifications field's value.
+func (s *ChannelMembershipPreferences) SetPushNotifications(v *PushNotificationPreferences) *ChannelMembershipPreferences {
+	s.PushNotifications = v
 	return s
 }
 
@@ -4173,6 +6701,10 @@ type ChannelMessage struct {
 	// The time at which a message was updated.
 	LastUpdatedTimestamp *time.Time `type:"timestamp"`
 
+	// The attributes for the message, used for message filtering along with a FilterRule
+	// defined in the PushNotificationPreferences.
+	MessageAttributes map[string]*MessageAttributeValue `type:"map"`
+
 	// The ID of a message.
 	MessageId *string `min:"1" type:"string"`
 
@@ -4191,6 +6723,12 @@ type ChannelMessage struct {
 
 	// The message sender.
 	Sender *Identity `type:"structure"`
+
+	// The status of the channel message.
+	Status *ChannelMessageStatusStructure `type:"structure"`
+
+	// The ID of the SubChannel.
+	SubChannelId *string `min:"1" type:"string"`
 
 	// The message type.
 	Type *string `type:"string" enum:"ChannelMessageType"`
@@ -4244,6 +6782,12 @@ func (s *ChannelMessage) SetLastUpdatedTimestamp(v time.Time) *ChannelMessage {
 	return s
 }
 
+// SetMessageAttributes sets the MessageAttributes field's value.
+func (s *ChannelMessage) SetMessageAttributes(v map[string]*MessageAttributeValue) *ChannelMessage {
+	s.MessageAttributes = v
+	return s
+}
+
 // SetMessageId sets the MessageId field's value.
 func (s *ChannelMessage) SetMessageId(v string) *ChannelMessage {
 	s.MessageId = &v
@@ -4274,9 +6818,172 @@ func (s *ChannelMessage) SetSender(v *Identity) *ChannelMessage {
 	return s
 }
 
+// SetStatus sets the Status field's value.
+func (s *ChannelMessage) SetStatus(v *ChannelMessageStatusStructure) *ChannelMessage {
+	s.Status = v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *ChannelMessage) SetSubChannelId(v string) *ChannelMessage {
+	s.SubChannelId = &v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *ChannelMessage) SetType(v string) *ChannelMessage {
 	s.Type = &v
+	return s
+}
+
+// Stores information about a callback.
+type ChannelMessageCallback struct {
+	_ struct{} `type:"structure"`
+
+	// The message content.
+	//
+	// Content is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelMessageCallback's
+	// String and GoString methods.
+	Content *string `min:"1" type:"string" sensitive:"true"`
+
+	// The attributes for the message, used for message filtering along with a FilterRule
+	// defined in the PushNotificationPreferences.
+	MessageAttributes map[string]*MessageAttributeValue `type:"map"`
+
+	// The message ID.
+	//
+	// MessageId is a required field
+	MessageId *string `min:"1" type:"string" required:"true"`
+
+	// The message metadata.
+	//
+	// Metadata is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelMessageCallback's
+	// String and GoString methods.
+	Metadata *string `type:"string" sensitive:"true"`
+
+	// The push notification configuration of the message.
+	PushNotification *PushNotificationConfiguration `type:"structure"`
+
+	// The ID of the SubChannel.
+	SubChannelId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelMessageCallback) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelMessageCallback) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ChannelMessageCallback) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ChannelMessageCallback"}
+	if s.Content != nil && len(*s.Content) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
+	}
+	if s.MessageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MessageId"))
+	}
+	if s.MessageId != nil && len(*s.MessageId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MessageId", 1))
+	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContent sets the Content field's value.
+func (s *ChannelMessageCallback) SetContent(v string) *ChannelMessageCallback {
+	s.Content = &v
+	return s
+}
+
+// SetMessageAttributes sets the MessageAttributes field's value.
+func (s *ChannelMessageCallback) SetMessageAttributes(v map[string]*MessageAttributeValue) *ChannelMessageCallback {
+	s.MessageAttributes = v
+	return s
+}
+
+// SetMessageId sets the MessageId field's value.
+func (s *ChannelMessageCallback) SetMessageId(v string) *ChannelMessageCallback {
+	s.MessageId = &v
+	return s
+}
+
+// SetMetadata sets the Metadata field's value.
+func (s *ChannelMessageCallback) SetMetadata(v string) *ChannelMessageCallback {
+	s.Metadata = &v
+	return s
+}
+
+// SetPushNotification sets the PushNotification field's value.
+func (s *ChannelMessageCallback) SetPushNotification(v *PushNotificationConfiguration) *ChannelMessageCallback {
+	s.PushNotification = v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *ChannelMessageCallback) SetSubChannelId(v string) *ChannelMessageCallback {
+	s.SubChannelId = &v
+	return s
+}
+
+// Stores information about a message status.
+type ChannelMessageStatusStructure struct {
+	_ struct{} `type:"structure"`
+
+	// Contains more details about the messasge status.
+	Detail *string `type:"string"`
+
+	// The message status value.
+	Value *string `type:"string" enum:"ChannelMessageStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelMessageStatusStructure) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ChannelMessageStatusStructure) GoString() string {
+	return s.String()
+}
+
+// SetDetail sets the Detail field's value.
+func (s *ChannelMessageStatusStructure) SetDetail(v string) *ChannelMessageStatusStructure {
+	s.Detail = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *ChannelMessageStatusStructure) SetValue(v string) *ChannelMessageStatusStructure {
+	s.Value = &v
 	return s
 }
 
@@ -4300,6 +7007,9 @@ type ChannelMessageSummary struct {
 	// The time at which a message was last updated.
 	LastUpdatedTimestamp *time.Time `type:"timestamp"`
 
+	// The message attribues listed in a the summary of a channel message.
+	MessageAttributes map[string]*MessageAttributeValue `type:"map"`
+
 	// The ID of the message.
 	MessageId *string `min:"1" type:"string"`
 
@@ -4315,6 +7025,11 @@ type ChannelMessageSummary struct {
 
 	// The message sender.
 	Sender *Identity `type:"structure"`
+
+	// The message status. The status value is SENT for messages sent to a channel
+	// without a channel flow. For channels associated with channel flow, the value
+	// determines the processing stage.
+	Status *ChannelMessageStatusStructure `type:"structure"`
 
 	// The type of message.
 	Type *string `type:"string" enum:"ChannelMessageType"`
@@ -4362,6 +7077,12 @@ func (s *ChannelMessageSummary) SetLastUpdatedTimestamp(v time.Time) *ChannelMes
 	return s
 }
 
+// SetMessageAttributes sets the MessageAttributes field's value.
+func (s *ChannelMessageSummary) SetMessageAttributes(v map[string]*MessageAttributeValue) *ChannelMessageSummary {
+	s.MessageAttributes = v
+	return s
+}
+
 // SetMessageId sets the MessageId field's value.
 func (s *ChannelMessageSummary) SetMessageId(v string) *ChannelMessageSummary {
 	s.MessageId = &v
@@ -4383,6 +7104,12 @@ func (s *ChannelMessageSummary) SetRedacted(v bool) *ChannelMessageSummary {
 // SetSender sets the Sender field's value.
 func (s *ChannelMessageSummary) SetSender(v *Identity) *ChannelMessageSummary {
 	s.Sender = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ChannelMessageSummary) SetStatus(v *ChannelMessageStatusStructure) *ChannelMessageSummary {
+	s.Status = v
 	return s
 }
 
@@ -4680,7 +7407,7 @@ type CreateChannelBanInput struct {
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The ARN of the member being banned.
+	// The AppInstanceUserArn of the member being banned.
 	//
 	// MemberArn is a required field
 	MemberArn *string `min:"5" type:"string" required:"true"`
@@ -4790,6 +7517,177 @@ func (s *CreateChannelBanOutput) SetMember(v *Identity) *CreateChannelBanOutput 
 	return s
 }
 
+type CreateChannelFlowInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel flow request.
+	//
+	// AppInstanceArn is a required field
+	AppInstanceArn *string `min:"5" type:"string" required:"true"`
+
+	// The client token for the request. An Idempotency token.
+	//
+	// ClientRequestToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateChannelFlowInput's
+	// String and GoString methods.
+	//
+	// ClientRequestToken is a required field
+	ClientRequestToken *string `min:"2" type:"string" required:"true" sensitive:"true"`
+
+	// The name of the channel flow.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateChannelFlowInput's
+	// String and GoString methods.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// Information about the processor Lambda functions.
+	//
+	// Processors is a required field
+	Processors []*Processor `min:"1" type:"list" required:"true"`
+
+	// The tags for the creation request.
+	Tags []*Tag `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateChannelFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateChannelFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateChannelFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateChannelFlowInput"}
+	if s.AppInstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AppInstanceArn"))
+	}
+	if s.AppInstanceArn != nil && len(*s.AppInstanceArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("AppInstanceArn", 5))
+	}
+	if s.ClientRequestToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientRequestToken"))
+	}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 2))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Processors == nil {
+		invalidParams.Add(request.NewErrParamRequired("Processors"))
+	}
+	if s.Processors != nil && len(s.Processors) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Processors", 1))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Processors != nil {
+		for i, v := range s.Processors {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Processors", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAppInstanceArn sets the AppInstanceArn field's value.
+func (s *CreateChannelFlowInput) SetAppInstanceArn(v string) *CreateChannelFlowInput {
+	s.AppInstanceArn = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateChannelFlowInput) SetClientRequestToken(v string) *CreateChannelFlowInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateChannelFlowInput) SetName(v string) *CreateChannelFlowInput {
+	s.Name = &v
+	return s
+}
+
+// SetProcessors sets the Processors field's value.
+func (s *CreateChannelFlowInput) SetProcessors(v []*Processor) *CreateChannelFlowInput {
+	s.Processors = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateChannelFlowInput) SetTags(v []*Tag) *CreateChannelFlowInput {
+	s.Tags = v
+	return s
+}
+
+type CreateChannelFlowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel flow.
+	ChannelFlowArn *string `min:"5" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateChannelFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateChannelFlowOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *CreateChannelFlowOutput) SetChannelFlowArn(v string) *CreateChannelFlowOutput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
 type CreateChannelInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4797,6 +7695,13 @@ type CreateChannelInput struct {
 	//
 	// AppInstanceArn is a required field
 	AppInstanceArn *string `min:"5" type:"string" required:"true"`
+
+	// The ID of the channel in the request.
+	//
+	// ChannelId is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateChannelInput's
+	// String and GoString methods.
+	ChannelId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The AppInstanceUserArn of the user that makes the API call.
 	//
@@ -4810,6 +7715,13 @@ type CreateChannelInput struct {
 	// String and GoString methods.
 	ClientRequestToken *string `min:"2" type:"string" idempotencyToken:"true" sensitive:"true"`
 
+	// The attributes required to configure and create an elastic channel. An elastic
+	// channel can support a maximum of 1-million users, excluding moderators.
+	ElasticChannelConfiguration *ElasticChannelConfiguration `type:"structure"`
+
+	// The ARNs of the channel members in the request.
+	MemberArns []*string `min:"1" type:"list"`
+
 	// The metadata of the creation request. Limited to 1KB and UTF-8.
 	//
 	// Metadata is a sensitive parameter and its value will be
@@ -4822,6 +7734,9 @@ type CreateChannelInput struct {
 	// channels. Only administrators and moderators can add members to restricted
 	// channels.
 	Mode *string `type:"string" enum:"ChannelMode"`
+
+	// The ARNs of the channel moderators in the request.
+	ModeratorArns []*string `min:"1" type:"list"`
 
 	// The name of the channel.
 	//
@@ -4868,6 +7783,9 @@ func (s *CreateChannelInput) Validate() error {
 	if s.AppInstanceArn != nil && len(*s.AppInstanceArn) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("AppInstanceArn", 5))
 	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
+	}
 	if s.ChimeBearer == nil {
 		invalidParams.Add(request.NewErrParamRequired("ChimeBearer"))
 	}
@@ -4877,6 +7795,12 @@ func (s *CreateChannelInput) Validate() error {
 	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 2 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 2))
 	}
+	if s.MemberArns != nil && len(s.MemberArns) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MemberArns", 1))
+	}
+	if s.ModeratorArns != nil && len(s.ModeratorArns) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ModeratorArns", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -4885,6 +7809,11 @@ func (s *CreateChannelInput) Validate() error {
 	}
 	if s.Tags != nil && len(s.Tags) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.ElasticChannelConfiguration != nil {
+		if err := s.ElasticChannelConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ElasticChannelConfiguration", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
@@ -4909,6 +7838,12 @@ func (s *CreateChannelInput) SetAppInstanceArn(v string) *CreateChannelInput {
 	return s
 }
 
+// SetChannelId sets the ChannelId field's value.
+func (s *CreateChannelInput) SetChannelId(v string) *CreateChannelInput {
+	s.ChannelId = &v
+	return s
+}
+
 // SetChimeBearer sets the ChimeBearer field's value.
 func (s *CreateChannelInput) SetChimeBearer(v string) *CreateChannelInput {
 	s.ChimeBearer = &v
@@ -4921,6 +7856,18 @@ func (s *CreateChannelInput) SetClientRequestToken(v string) *CreateChannelInput
 	return s
 }
 
+// SetElasticChannelConfiguration sets the ElasticChannelConfiguration field's value.
+func (s *CreateChannelInput) SetElasticChannelConfiguration(v *ElasticChannelConfiguration) *CreateChannelInput {
+	s.ElasticChannelConfiguration = v
+	return s
+}
+
+// SetMemberArns sets the MemberArns field's value.
+func (s *CreateChannelInput) SetMemberArns(v []*string) *CreateChannelInput {
+	s.MemberArns = v
+	return s
+}
+
 // SetMetadata sets the Metadata field's value.
 func (s *CreateChannelInput) SetMetadata(v string) *CreateChannelInput {
 	s.Metadata = &v
@@ -4930,6 +7877,12 @@ func (s *CreateChannelInput) SetMetadata(v string) *CreateChannelInput {
 // SetMode sets the Mode field's value.
 func (s *CreateChannelInput) SetMode(v string) *CreateChannelInput {
 	s.Mode = &v
+	return s
+}
+
+// SetModeratorArns sets the ModeratorArns field's value.
+func (s *CreateChannelInput) SetModeratorArns(v []*string) *CreateChannelInput {
+	s.ModeratorArns = v
 	return s
 }
 
@@ -4964,10 +7917,16 @@ type CreateChannelMembershipInput struct {
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The ARN of the member you want to add to the channel.
+	// The AppInstanceUserArn of the member you want to add to the channel.
 	//
 	// MemberArn is a required field
 	MemberArn *string `min:"5" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when creating membership in a SubChannel for a moderator in
+	// an elastic channel.
+	SubChannelId *string `min:"1" type:"string"`
 
 	// The membership type of a user, DEFAULT or HIDDEN. Default members are always
 	// returned as part of ListChannelMemberships. Hidden members are only returned
@@ -5017,6 +7976,9 @@ func (s *CreateChannelMembershipInput) Validate() error {
 	if s.MemberArn != nil && len(*s.MemberArn) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberArn", 5))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 	if s.Type == nil {
 		invalidParams.Add(request.NewErrParamRequired("Type"))
 	}
@@ -5045,6 +8007,12 @@ func (s *CreateChannelMembershipInput) SetMemberArn(v string) *CreateChannelMemb
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *CreateChannelMembershipInput) SetSubChannelId(v string) *CreateChannelMembershipInput {
+	s.SubChannelId = &v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *CreateChannelMembershipInput) SetType(v string) *CreateChannelMembershipInput {
 	s.Type = &v
@@ -5059,6 +8027,9 @@ type CreateChannelMembershipOutput struct {
 
 	// The ARN and metadata of the member being added.
 	Member *Identity `type:"structure"`
+
+	// The ID of the SubChannel in the response.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5091,6 +8062,12 @@ func (s *CreateChannelMembershipOutput) SetMember(v *Identity) *CreateChannelMem
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *CreateChannelMembershipOutput) SetSubChannelId(v string) *CreateChannelMembershipOutput {
+	s.SubChannelId = &v
+	return s
+}
+
 type CreateChannelModeratorInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5099,7 +8076,7 @@ type CreateChannelModeratorInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The ARN of the moderator.
+	// The AppInstanceUserArn of the moderator.
 	//
 	// ChannelModeratorArn is a required field
 	ChannelModeratorArn *string `min:"5" type:"string" required:"true"`
@@ -5329,7 +8306,7 @@ func (s *DeleteChannelBanInput) SetMemberArn(v string) *DeleteChannelBanInput {
 }
 
 type DeleteChannelBanOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5350,6 +8327,77 @@ func (s DeleteChannelBanOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteChannelFlowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the channel flow.
+	//
+	// ChannelFlowArn is a required field
+	ChannelFlowArn *string `location:"uri" locationName:"channelFlowArn" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteChannelFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteChannelFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteChannelFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteChannelFlowInput"}
+	if s.ChannelFlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelFlowArn"))
+	}
+	if s.ChannelFlowArn != nil && len(*s.ChannelFlowArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelFlowArn", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *DeleteChannelFlowInput) SetChannelFlowArn(v string) *DeleteChannelFlowInput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+type DeleteChannelFlowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteChannelFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteChannelFlowOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteChannelInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -5362,6 +8410,9 @@ type DeleteChannelInput struct {
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5397,6 +8448,9 @@ func (s *DeleteChannelInput) Validate() error {
 	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5416,6 +8470,12 @@ func (s *DeleteChannelInput) SetChimeBearer(v string) *DeleteChannelInput {
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *DeleteChannelInput) SetSubChannelId(v string) *DeleteChannelInput {
+	s.SubChannelId = &v
+	return s
+}
+
 type DeleteChannelMembershipInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -5429,10 +8489,15 @@ type DeleteChannelMembershipInput struct {
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The ARN of the member that you're removing from the channel.
+	// The AppInstanceUserArn of the member that you're removing from the channel.
 	//
 	// MemberArn is a required field
 	MemberArn *string `location:"uri" locationName:"memberArn" min:"5" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only for use by moderators.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5474,6 +8539,9 @@ func (s *DeleteChannelMembershipInput) Validate() error {
 	if s.MemberArn != nil && len(*s.MemberArn) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberArn", 5))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5499,8 +8567,14 @@ func (s *DeleteChannelMembershipInput) SetMemberArn(v string) *DeleteChannelMemb
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *DeleteChannelMembershipInput) SetSubChannelId(v string) *DeleteChannelMembershipInput {
+	s.SubChannelId = &v
+	return s
+}
+
 type DeleteChannelMembershipOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5538,6 +8612,12 @@ type DeleteChannelMessageInput struct {
 	//
 	// MessageId is a required field
 	MessageId *string `location:"uri" locationName:"messageId" min:"1" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when deleting messages in a SubChannel that the user belongs
+	// to.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5579,6 +8659,9 @@ func (s *DeleteChannelMessageInput) Validate() error {
 	if s.MessageId != nil && len(*s.MessageId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MessageId", 1))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5604,8 +8687,14 @@ func (s *DeleteChannelMessageInput) SetMessageId(v string) *DeleteChannelMessage
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *DeleteChannelMessageInput) SetSubChannelId(v string) *DeleteChannelMessageInput {
+	s.SubChannelId = &v
+	return s
+}
+
 type DeleteChannelMessageOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5634,7 +8723,7 @@ type DeleteChannelModeratorInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The ARN of the moderator being deleted.
+	// The AppInstanceUserArn of the moderator being deleted.
 	//
 	// ChannelModeratorArn is a required field
 	ChannelModeratorArn *string `location:"uri" locationName:"channelModeratorArn" min:"5" type:"string" required:"true"`
@@ -5710,7 +8799,7 @@ func (s *DeleteChannelModeratorInput) SetChimeBearer(v string) *DeleteChannelMod
 }
 
 type DeleteChannelModeratorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5732,7 +8821,7 @@ func (s DeleteChannelModeratorOutput) GoString() string {
 }
 
 type DeleteChannelOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5766,7 +8855,7 @@ type DescribeChannelBanInput struct {
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The ARN of the member being banned.
+	// The AppInstanceUserArn of the member being banned.
 	//
 	// MemberArn is a required field
 	MemberArn *string `location:"uri" locationName:"memberArn" min:"5" type:"string" required:"true"`
@@ -5864,6 +8953,86 @@ func (s DescribeChannelBanOutput) GoString() string {
 // SetChannelBan sets the ChannelBan field's value.
 func (s *DescribeChannelBanOutput) SetChannelBan(v *ChannelBan) *DescribeChannelBanOutput {
 	s.ChannelBan = v
+	return s
+}
+
+type DescribeChannelFlowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the channel flow.
+	//
+	// ChannelFlowArn is a required field
+	ChannelFlowArn *string `location:"uri" locationName:"channelFlowArn" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeChannelFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeChannelFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeChannelFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeChannelFlowInput"}
+	if s.ChannelFlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelFlowArn"))
+	}
+	if s.ChannelFlowArn != nil && len(*s.ChannelFlowArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelFlowArn", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *DescribeChannelFlowInput) SetChannelFlowArn(v string) *DescribeChannelFlowInput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+type DescribeChannelFlowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The channel flow details.
+	ChannelFlow *ChannelFlow `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeChannelFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeChannelFlowOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelFlow sets the ChannelFlow field's value.
+func (s *DescribeChannelFlowOutput) SetChannelFlow(v *ChannelFlow) *DescribeChannelFlowOutput {
+	s.ChannelFlow = v
 	return s
 }
 
@@ -6060,10 +9229,16 @@ type DescribeChannelMembershipInput struct {
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The ARN of the member.
+	// The AppInstanceUserArn of the member.
 	//
 	// MemberArn is a required field
 	MemberArn *string `location:"uri" locationName:"memberArn" min:"5" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request. The response contains an ElasticChannelConfiguration
+	// object.
+	//
+	// Only required to get a user’s SubChannel membership details.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -6105,6 +9280,9 @@ func (s *DescribeChannelMembershipInput) Validate() error {
 	if s.MemberArn != nil && len(*s.MemberArn) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("MemberArn", 5))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6127,6 +9305,12 @@ func (s *DescribeChannelMembershipInput) SetChimeBearer(v string) *DescribeChann
 // SetMemberArn sets the MemberArn field's value.
 func (s *DescribeChannelMembershipInput) SetMemberArn(v string) *DescribeChannelMembershipInput {
 	s.MemberArn = &v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *DescribeChannelMembershipInput) SetSubChannelId(v string) *DescribeChannelMembershipInput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -6283,7 +9467,7 @@ type DescribeChannelModeratorInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The ARN of the channel moderator.
+	// The AppInstanceUserArn of the channel moderator.
 	//
 	// ChannelModeratorArn is a required field
 	ChannelModeratorArn *string `location:"uri" locationName:"channelModeratorArn" min:"5" type:"string" required:"true"`
@@ -6420,6 +9604,198 @@ func (s *DescribeChannelOutput) SetChannel(v *Channel) *DescribeChannelOutput {
 	return s
 }
 
+type DisassociateChannelFlowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the channel.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// The ARN of the channel flow.
+	//
+	// ChannelFlowArn is a required field
+	ChannelFlowArn *string `location:"uri" locationName:"channelFlowArn" min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserArn of the user making the API call.
+	//
+	// ChimeBearer is a required field
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateChannelFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateChannelFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateChannelFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateChannelFlowInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChannelFlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelFlowArn"))
+	}
+	if s.ChannelFlowArn != nil && len(*s.ChannelFlowArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelFlowArn", 5))
+	}
+	if s.ChimeBearer == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChimeBearer"))
+	}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *DisassociateChannelFlowInput) SetChannelArn(v string) *DisassociateChannelFlowInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *DisassociateChannelFlowInput) SetChannelFlowArn(v string) *DisassociateChannelFlowInput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *DisassociateChannelFlowInput) SetChimeBearer(v string) *DisassociateChannelFlowInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+type DisassociateChannelFlowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateChannelFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateChannelFlowOutput) GoString() string {
+	return s.String()
+}
+
+// The attributes required to configure and create an elastic channel. An elastic
+// channel can support a maximum of 1-million members.
+type ElasticChannelConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of SubChannels that you want to allow in the elastic channel.
+	//
+	// MaximumSubChannels is a required field
+	MaximumSubChannels *int64 `min:"2" type:"integer" required:"true"`
+
+	// The minimum allowed percentage of TargetMembershipsPerSubChannel users. Ceil
+	// of the calculated value is used in balancing members among SubChannels of
+	// the elastic channel.
+	//
+	// MinimumMembershipPercentage is a required field
+	MinimumMembershipPercentage *int64 `min:"1" type:"integer" required:"true"`
+
+	// The maximum number of members allowed in a SubChannel.
+	//
+	// TargetMembershipsPerSubChannel is a required field
+	TargetMembershipsPerSubChannel *int64 `min:"2" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ElasticChannelConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ElasticChannelConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ElasticChannelConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ElasticChannelConfiguration"}
+	if s.MaximumSubChannels == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaximumSubChannels"))
+	}
+	if s.MaximumSubChannels != nil && *s.MaximumSubChannels < 2 {
+		invalidParams.Add(request.NewErrParamMinValue("MaximumSubChannels", 2))
+	}
+	if s.MinimumMembershipPercentage == nil {
+		invalidParams.Add(request.NewErrParamRequired("MinimumMembershipPercentage"))
+	}
+	if s.MinimumMembershipPercentage != nil && *s.MinimumMembershipPercentage < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MinimumMembershipPercentage", 1))
+	}
+	if s.TargetMembershipsPerSubChannel == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetMembershipsPerSubChannel"))
+	}
+	if s.TargetMembershipsPerSubChannel != nil && *s.TargetMembershipsPerSubChannel < 2 {
+		invalidParams.Add(request.NewErrParamMinValue("TargetMembershipsPerSubChannel", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaximumSubChannels sets the MaximumSubChannels field's value.
+func (s *ElasticChannelConfiguration) SetMaximumSubChannels(v int64) *ElasticChannelConfiguration {
+	s.MaximumSubChannels = &v
+	return s
+}
+
+// SetMinimumMembershipPercentage sets the MinimumMembershipPercentage field's value.
+func (s *ElasticChannelConfiguration) SetMinimumMembershipPercentage(v int64) *ElasticChannelConfiguration {
+	s.MinimumMembershipPercentage = &v
+	return s
+}
+
+// SetTargetMembershipsPerSubChannel sets the TargetMembershipsPerSubChannel field's value.
+func (s *ElasticChannelConfiguration) SetTargetMembershipsPerSubChannel(v int64) *ElasticChannelConfiguration {
+	s.TargetMembershipsPerSubChannel = &v
+	return s
+}
+
 // The client is permanently forbidden from making the request.
 type ForbiddenException struct {
 	_            struct{}                  `type:"structure"`
@@ -6486,6 +9862,138 @@ func (s *ForbiddenException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type GetChannelMembershipPreferencesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the channel.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserARN of the user making the API call.
+	//
+	// ChimeBearer is a required field
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserArn of the member retrieving the preferences.
+	//
+	// MemberArn is a required field
+	MemberArn *string `location:"uri" locationName:"memberArn" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMembershipPreferencesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMembershipPreferencesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetChannelMembershipPreferencesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetChannelMembershipPreferencesInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChimeBearer == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChimeBearer"))
+	}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+	if s.MemberArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("MemberArn"))
+	}
+	if s.MemberArn != nil && len(*s.MemberArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("MemberArn", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *GetChannelMembershipPreferencesInput) SetChannelArn(v string) *GetChannelMembershipPreferencesInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *GetChannelMembershipPreferencesInput) SetChimeBearer(v string) *GetChannelMembershipPreferencesInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+// SetMemberArn sets the MemberArn field's value.
+func (s *GetChannelMembershipPreferencesInput) SetMemberArn(v string) *GetChannelMembershipPreferencesInput {
+	s.MemberArn = &v
+	return s
+}
+
+type GetChannelMembershipPreferencesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel.
+	ChannelArn *string `min:"5" type:"string"`
+
+	// The details of a user.
+	Member *Identity `type:"structure"`
+
+	// The channel membership preferences for an AppInstanceUser .
+	Preferences *ChannelMembershipPreferences `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMembershipPreferencesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMembershipPreferencesOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *GetChannelMembershipPreferencesOutput) SetChannelArn(v string) *GetChannelMembershipPreferencesOutput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetMember sets the Member field's value.
+func (s *GetChannelMembershipPreferencesOutput) SetMember(v *Identity) *GetChannelMembershipPreferencesOutput {
+	s.Member = v
+	return s
+}
+
+// SetPreferences sets the Preferences field's value.
+func (s *GetChannelMembershipPreferencesOutput) SetPreferences(v *ChannelMembershipPreferences) *GetChannelMembershipPreferencesOutput {
+	s.Preferences = v
+	return s
+}
+
 type GetChannelMessageInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -6503,6 +10011,12 @@ type GetChannelMessageInput struct {
 	//
 	// MessageId is a required field
 	MessageId *string `location:"uri" locationName:"messageId" min:"1" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when getting messages in a SubChannel that the user belongs
+	// to.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -6544,6 +10058,9 @@ func (s *GetChannelMessageInput) Validate() error {
 	if s.MessageId != nil && len(*s.MessageId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MessageId", 1))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6566,6 +10083,12 @@ func (s *GetChannelMessageInput) SetChimeBearer(v string) *GetChannelMessageInpu
 // SetMessageId sets the MessageId field's value.
 func (s *GetChannelMessageInput) SetMessageId(v string) *GetChannelMessageInput {
 	s.MessageId = &v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *GetChannelMessageInput) SetSubChannelId(v string) *GetChannelMessageInput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -6597,6 +10120,135 @@ func (s GetChannelMessageOutput) GoString() string {
 // SetChannelMessage sets the ChannelMessage field's value.
 func (s *GetChannelMessageOutput) SetChannelMessage(v *ChannelMessage) *GetChannelMessageOutput {
 	s.ChannelMessage = v
+	return s
+}
+
+type GetChannelMessageStatusInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the channel
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserArn of the user making the API call.
+	//
+	// ChimeBearer is a required field
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+
+	// The ID of the message.
+	//
+	// MessageId is a required field
+	MessageId *string `location:"uri" locationName:"messageId" min:"1" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when getting message status in a SubChannel that the user belongs
+	// to.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMessageStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMessageStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetChannelMessageStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetChannelMessageStatusInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChimeBearer == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChimeBearer"))
+	}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+	if s.MessageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MessageId"))
+	}
+	if s.MessageId != nil && len(*s.MessageId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MessageId", 1))
+	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *GetChannelMessageStatusInput) SetChannelArn(v string) *GetChannelMessageStatusInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *GetChannelMessageStatusInput) SetChimeBearer(v string) *GetChannelMessageStatusInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+// SetMessageId sets the MessageId field's value.
+func (s *GetChannelMessageStatusInput) SetMessageId(v string) *GetChannelMessageStatusInput {
+	s.MessageId = &v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *GetChannelMessageStatusInput) SetSubChannelId(v string) *GetChannelMessageStatusInput {
+	s.SubChannelId = &v
+	return s
+}
+
+type GetChannelMessageStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The message status and details.
+	Status *ChannelMessageStatusStructure `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMessageStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetChannelMessageStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetChannelMessageStatusOutput) SetStatus(v *ChannelMessageStatusStructure) *GetChannelMessageStatusOutput {
+	s.Status = v
 	return s
 }
 
@@ -6695,6 +10347,70 @@ func (s *Identity) SetArn(v string) *Identity {
 // SetName sets the Name field's value.
 func (s *Identity) SetName(v string) *Identity {
 	s.Name = &v
+	return s
+}
+
+// Stores metadata about a Lambda processor.
+type LambdaConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Controls how the Lambda function is invoked.
+	//
+	// InvocationType is a required field
+	InvocationType *string `type:"string" required:"true" enum:"InvocationType"`
+
+	// The ARN of the Lambda message processing function.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `min:"15" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LambdaConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LambdaConfiguration"}
+	if s.InvocationType == nil {
+		invalidParams.Add(request.NewErrParamRequired("InvocationType"))
+	}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 15 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 15))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInvocationType sets the InvocationType field's value.
+func (s *LambdaConfiguration) SetInvocationType(v string) *LambdaConfiguration {
+	s.InvocationType = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *LambdaConfiguration) SetResourceArn(v string) *LambdaConfiguration {
+	s.ResourceArn = &v
 	return s
 }
 
@@ -6842,6 +10558,125 @@ func (s *ListChannelBansOutput) SetNextToken(v string) *ListChannelBansOutput {
 	return s
 }
 
+type ListChannelFlowsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the app instance.
+	//
+	// AppInstanceArn is a required field
+	AppInstanceArn *string `location:"querystring" locationName:"app-instance-arn" min:"5" type:"string" required:"true"`
+
+	// The maximum number of channel flows that you want to return.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token passed by previous API calls until all requested channel flows
+	// are returned.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListChannelFlowsInput's
+	// String and GoString methods.
+	NextToken *string `location:"querystring" locationName:"next-token" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelFlowsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelFlowsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListChannelFlowsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListChannelFlowsInput"}
+	if s.AppInstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AppInstanceArn"))
+	}
+	if s.AppInstanceArn != nil && len(*s.AppInstanceArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("AppInstanceArn", 5))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAppInstanceArn sets the AppInstanceArn field's value.
+func (s *ListChannelFlowsInput) SetAppInstanceArn(v string) *ListChannelFlowsInput {
+	s.AppInstanceArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListChannelFlowsInput) SetMaxResults(v int64) *ListChannelFlowsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListChannelFlowsInput) SetNextToken(v string) *ListChannelFlowsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListChannelFlowsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The information about each channel flow.
+	ChannelFlows []*ChannelFlowSummary `type:"list"`
+
+	// The token passed by previous API calls until all requested channels are returned.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListChannelFlowsOutput's
+	// String and GoString methods.
+	NextToken *string `type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelFlowsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelFlowsOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelFlows sets the ChannelFlows field's value.
+func (s *ListChannelFlowsOutput) SetChannelFlows(v []*ChannelFlowSummary) *ListChannelFlowsOutput {
+	s.ChannelFlows = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListChannelFlowsOutput) SetNextToken(v string) *ListChannelFlowsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListChannelMembershipsForAppInstanceUserInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -6932,7 +10767,7 @@ func (s *ListChannelMembershipsForAppInstanceUserInput) SetNextToken(v string) *
 type ListChannelMembershipsForAppInstanceUserOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The token passed by previous API calls until all requested users are returned.
+	// The information for the requested channel memberships.
 	ChannelMemberships []*ChannelMembershipForAppInstanceUserSummary `type:"list"`
 
 	// The token passed by previous API calls until all requested users are returned.
@@ -6997,10 +10832,15 @@ type ListChannelMembershipsInput struct {
 	// String and GoString methods.
 	NextToken *string `location:"querystring" locationName:"next-token" type:"string" sensitive:"true"`
 
-	// The membership type of a user, DEFAULT or HIDDEN. Default members are always
-	// returned as part of ListChannelMemberships. Hidden members are only returned
-	// if the type filter in ListChannelMemberships equals HIDDEN. Otherwise hidden
-	// members are not returned.
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when listing a user's memberships in a particular sub-channel
+	// of an elastic channel.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
+
+	// The membership type of a user, DEFAULT or HIDDEN. Default members are returned
+	// as part of ListChannelMemberships if no type is specified. Hidden members
+	// are only returned if the type filter in ListChannelMemberships equals HIDDEN.
 	Type *string `location:"querystring" locationName:"type" type:"string" enum:"ChannelMembershipType"`
 }
 
@@ -7040,6 +10880,9 @@ func (s *ListChannelMembershipsInput) Validate() error {
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -7068,6 +10911,12 @@ func (s *ListChannelMembershipsInput) SetMaxResults(v int64) *ListChannelMembers
 // SetNextToken sets the NextToken field's value.
 func (s *ListChannelMembershipsInput) SetNextToken(v string) *ListChannelMembershipsInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *ListChannelMembershipsInput) SetSubChannelId(v string) *ListChannelMembershipsInput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -7163,6 +11012,12 @@ type ListChannelMessagesInput struct {
 	// The order in which you want messages sorted. Default is Descending, based
 	// on time created.
 	SortOrder *string `location:"querystring" locationName:"sort-order" type:"string" enum:"SortOrder"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when listing the messages in a SubChannel that the user belongs
+	// to.
+	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7200,6 +11055,9 @@ func (s *ListChannelMessagesInput) Validate() error {
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7250,6 +11108,12 @@ func (s *ListChannelMessagesInput) SetSortOrder(v string) *ListChannelMessagesIn
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *ListChannelMessagesInput) SetSubChannelId(v string) *ListChannelMessagesInput {
+	s.SubChannelId = &v
+	return s
+}
+
 type ListChannelMessagesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -7265,6 +11129,9 @@ type ListChannelMessagesOutput struct {
 	// replaced with "sensitive" in string returned by ListChannelMessagesOutput's
 	// String and GoString methods.
 	NextToken *string `type:"string" sensitive:"true"`
+
+	// The ID of the SubChannel in the response.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7300,6 +11167,12 @@ func (s *ListChannelMessagesOutput) SetChannelMessages(v []*ChannelMessageSummar
 // SetNextToken sets the NextToken field's value.
 func (s *ListChannelMessagesOutput) SetNextToken(v string) *ListChannelMessagesOutput {
 	s.NextToken = &v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *ListChannelMessagesOutput) SetSubChannelId(v string) *ListChannelMessagesOutput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -7445,6 +11318,124 @@ func (s *ListChannelModeratorsOutput) SetChannelModerators(v []*ChannelModerator
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListChannelModeratorsOutput) SetNextToken(v string) *ListChannelModeratorsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListChannelsAssociatedWithChannelFlowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the channel flow.
+	//
+	// ChannelFlowArn is a required field
+	ChannelFlowArn *string `location:"querystring" locationName:"channel-flow-arn" min:"5" type:"string" required:"true"`
+
+	// The maximum number of channels that you want to return.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token passed by previous API calls until all requested channels are returned.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListChannelsAssociatedWithChannelFlowInput's
+	// String and GoString methods.
+	NextToken *string `location:"querystring" locationName:"next-token" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelsAssociatedWithChannelFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelsAssociatedWithChannelFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListChannelsAssociatedWithChannelFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListChannelsAssociatedWithChannelFlowInput"}
+	if s.ChannelFlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelFlowArn"))
+	}
+	if s.ChannelFlowArn != nil && len(*s.ChannelFlowArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelFlowArn", 5))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *ListChannelsAssociatedWithChannelFlowInput) SetChannelFlowArn(v string) *ListChannelsAssociatedWithChannelFlowInput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListChannelsAssociatedWithChannelFlowInput) SetMaxResults(v int64) *ListChannelsAssociatedWithChannelFlowInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListChannelsAssociatedWithChannelFlowInput) SetNextToken(v string) *ListChannelsAssociatedWithChannelFlowInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListChannelsAssociatedWithChannelFlowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The information about each channel.
+	Channels []*ChannelAssociatedWithFlowSummary `type:"list"`
+
+	// The token passed by previous API calls until all requested channels are returned.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListChannelsAssociatedWithChannelFlowOutput's
+	// String and GoString methods.
+	NextToken *string `type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelsAssociatedWithChannelFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListChannelsAssociatedWithChannelFlowOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannels sets the Channels field's value.
+func (s *ListChannelsAssociatedWithChannelFlowOutput) SetChannels(v []*ChannelAssociatedWithFlowSummary) *ListChannelsAssociatedWithChannelFlowOutput {
+	s.Channels = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListChannelsAssociatedWithChannelFlowOutput) SetNextToken(v string) *ListChannelsAssociatedWithChannelFlowOutput {
 	s.NextToken = &v
 	return s
 }
@@ -7727,6 +11718,264 @@ func (s *ListChannelsOutput) SetNextToken(v string) *ListChannelsOutput {
 	return s
 }
 
+type ListSubChannelsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of elastic channel.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserArn of the user making the API call.
+	//
+	// ChimeBearer is a required field
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+
+	// The maximum number of sub-channels that you want to return.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token passed by previous API calls until all requested sub-channels are
+	// returned.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListSubChannelsInput's
+	// String and GoString methods.
+	NextToken *string `location:"querystring" locationName:"next-token" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubChannelsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubChannelsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSubChannelsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSubChannelsInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChimeBearer == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChimeBearer"))
+	}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *ListSubChannelsInput) SetChannelArn(v string) *ListSubChannelsInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *ListSubChannelsInput) SetChimeBearer(v string) *ListSubChannelsInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSubChannelsInput) SetMaxResults(v int64) *ListSubChannelsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSubChannelsInput) SetNextToken(v string) *ListSubChannelsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSubChannelsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of elastic channel.
+	ChannelArn *string `min:"5" type:"string"`
+
+	// The token passed by previous API calls until all requested sub-channels are
+	// returned.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListSubChannelsOutput's
+	// String and GoString methods.
+	NextToken *string `type:"string" sensitive:"true"`
+
+	// The information about each sub-channel.
+	SubChannels []*SubChannelSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubChannelsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubChannelsOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *ListSubChannelsOutput) SetChannelArn(v string) *ListSubChannelsOutput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSubChannelsOutput) SetNextToken(v string) *ListSubChannelsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSubChannels sets the SubChannels field's value.
+func (s *ListSubChannelsOutput) SetSubChannels(v []*SubChannelSummary) *ListSubChannelsOutput {
+	s.SubChannels = v
+	return s
+}
+
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the resource.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `location:"querystring" locationName:"arn" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *ListTagsForResourceInput) SetResourceARN(v string) *ListTagsForResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tag key-value pairs.
+	Tags []*Tag `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
+// A list of message attribute values.
+type MessageAttributeValue struct {
+	_ struct{} `type:"structure"`
+
+	// The strings in a message attribute value.
+	StringValues []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MessageAttributeValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MessageAttributeValue) GoString() string {
+	return s.String()
+}
+
+// SetStringValues sets the StringValues field's value.
+func (s *MessageAttributeValue) SetStringValues(v []*string) *MessageAttributeValue {
+	s.StringValues = v
+	return s
+}
+
 // The websocket endpoint used to connect to Amazon Chime SDK messaging.
 type MessagingSessionEndpoint struct {
 	_ struct{} `type:"structure"`
@@ -7825,8 +12074,449 @@ func (s *NotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The information about a processor in a channel flow.
+type Processor struct {
+	_ struct{} `type:"structure"`
+
+	// The information about the type of processor and its identifier.
+	//
+	// Configuration is a required field
+	Configuration *ProcessorConfiguration `type:"structure" required:"true"`
+
+	// The sequence in which processors run. If you have multiple processors in
+	// a channel flow, message processing goes through each processor in the sequence.
+	// The value determines the sequence. At this point, we support only 1 processor
+	// within a flow.
+	//
+	// ExecutionOrder is a required field
+	ExecutionOrder *int64 `min:"1" type:"integer" required:"true"`
+
+	// Determines whether to continue with message processing or stop it in cases
+	// where communication with a processor fails. If a processor has a fallback
+	// action of ABORT and communication with it fails, the processor sets the message
+	// status to FAILED and does not send the message to any recipients. Note that
+	// if the last processor in the channel flow sequence has a fallback action
+	// of CONTINUE and communication with the processor fails, then the message
+	// is considered processed and sent to recipients of the channel.
+	//
+	// FallbackAction is a required field
+	FallbackAction *string `type:"string" required:"true" enum:"FallbackAction"`
+
+	// The name of the channel flow.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Processor's
+	// String and GoString methods.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Processor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Processor) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Processor) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Processor"}
+	if s.Configuration == nil {
+		invalidParams.Add(request.NewErrParamRequired("Configuration"))
+	}
+	if s.ExecutionOrder == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExecutionOrder"))
+	}
+	if s.ExecutionOrder != nil && *s.ExecutionOrder < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("ExecutionOrder", 1))
+	}
+	if s.FallbackAction == nil {
+		invalidParams.Add(request.NewErrParamRequired("FallbackAction"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Configuration != nil {
+		if err := s.Configuration.Validate(); err != nil {
+			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *Processor) SetConfiguration(v *ProcessorConfiguration) *Processor {
+	s.Configuration = v
+	return s
+}
+
+// SetExecutionOrder sets the ExecutionOrder field's value.
+func (s *Processor) SetExecutionOrder(v int64) *Processor {
+	s.ExecutionOrder = &v
+	return s
+}
+
+// SetFallbackAction sets the FallbackAction field's value.
+func (s *Processor) SetFallbackAction(v string) *Processor {
+	s.FallbackAction = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Processor) SetName(v string) *Processor {
+	s.Name = &v
+	return s
+}
+
+// A processor's metadata.
+type ProcessorConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates that the processor is of type Lambda.
+	//
+	// Lambda is a required field
+	Lambda *LambdaConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProcessorConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProcessorConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ProcessorConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ProcessorConfiguration"}
+	if s.Lambda == nil {
+		invalidParams.Add(request.NewErrParamRequired("Lambda"))
+	}
+	if s.Lambda != nil {
+		if err := s.Lambda.Validate(); err != nil {
+			invalidParams.AddNested("Lambda", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLambda sets the Lambda field's value.
+func (s *ProcessorConfiguration) SetLambda(v *LambdaConfiguration) *ProcessorConfiguration {
+	s.Lambda = v
+	return s
+}
+
+// The push notification configuration of the message.
+type PushNotificationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The body of the push notification.
+	//
+	// Body is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PushNotificationConfiguration's
+	// String and GoString methods.
+	Body *string `type:"string" sensitive:"true"`
+
+	// The title of the push notification.
+	//
+	// Title is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PushNotificationConfiguration's
+	// String and GoString methods.
+	Title *string `type:"string" sensitive:"true"`
+
+	// Enum value that indicates the type of the push notification for a message.
+	// DEFAULT: Normal mobile push notification. VOIP: VOIP mobile push notification.
+	Type *string `type:"string" enum:"PushNotificationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PushNotificationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PushNotificationConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetBody sets the Body field's value.
+func (s *PushNotificationConfiguration) SetBody(v string) *PushNotificationConfiguration {
+	s.Body = &v
+	return s
+}
+
+// SetTitle sets the Title field's value.
+func (s *PushNotificationConfiguration) SetTitle(v string) *PushNotificationConfiguration {
+	s.Title = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *PushNotificationConfiguration) SetType(v string) *PushNotificationConfiguration {
+	s.Type = &v
+	return s
+}
+
+// The channel membership preferences for push notification.
+type PushNotificationPreferences struct {
+	_ struct{} `type:"structure"`
+
+	// Enum value that indicates which push notifications to send to the requested
+	// member of a channel. ALL sends all push notifications, NONE sends no push
+	// notifications, FILTERED sends only filtered push notifications.
+	//
+	// AllowNotifications is a required field
+	AllowNotifications *string `type:"string" required:"true" enum:"AllowNotifications"`
+
+	// The simple JSON object used to send a subset of a push notification to the
+	// requested member.
+	//
+	// FilterRule is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PushNotificationPreferences's
+	// String and GoString methods.
+	FilterRule *string `min:"1" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PushNotificationPreferences) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PushNotificationPreferences) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PushNotificationPreferences) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PushNotificationPreferences"}
+	if s.AllowNotifications == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowNotifications"))
+	}
+	if s.FilterRule != nil && len(*s.FilterRule) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FilterRule", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowNotifications sets the AllowNotifications field's value.
+func (s *PushNotificationPreferences) SetAllowNotifications(v string) *PushNotificationPreferences {
+	s.AllowNotifications = &v
+	return s
+}
+
+// SetFilterRule sets the FilterRule field's value.
+func (s *PushNotificationPreferences) SetFilterRule(v string) *PushNotificationPreferences {
+	s.FilterRule = &v
+	return s
+}
+
+type PutChannelMembershipPreferencesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserARN of the user making the API call.
+	//
+	// ChimeBearer is a required field
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+
+	// The AppInstanceUserArn of the member setting the preferences.
+	//
+	// MemberArn is a required field
+	MemberArn *string `location:"uri" locationName:"memberArn" min:"5" type:"string" required:"true"`
+
+	// The channel membership preferences of an AppInstanceUser .
+	//
+	// Preferences is a required field
+	Preferences *ChannelMembershipPreferences `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelMembershipPreferencesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelMembershipPreferencesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutChannelMembershipPreferencesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutChannelMembershipPreferencesInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChimeBearer == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChimeBearer"))
+	}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+	if s.MemberArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("MemberArn"))
+	}
+	if s.MemberArn != nil && len(*s.MemberArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("MemberArn", 5))
+	}
+	if s.Preferences == nil {
+		invalidParams.Add(request.NewErrParamRequired("Preferences"))
+	}
+	if s.Preferences != nil {
+		if err := s.Preferences.Validate(); err != nil {
+			invalidParams.AddNested("Preferences", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *PutChannelMembershipPreferencesInput) SetChannelArn(v string) *PutChannelMembershipPreferencesInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *PutChannelMembershipPreferencesInput) SetChimeBearer(v string) *PutChannelMembershipPreferencesInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+// SetMemberArn sets the MemberArn field's value.
+func (s *PutChannelMembershipPreferencesInput) SetMemberArn(v string) *PutChannelMembershipPreferencesInput {
+	s.MemberArn = &v
+	return s
+}
+
+// SetPreferences sets the Preferences field's value.
+func (s *PutChannelMembershipPreferencesInput) SetPreferences(v *ChannelMembershipPreferences) *PutChannelMembershipPreferencesInput {
+	s.Preferences = v
+	return s
+}
+
+type PutChannelMembershipPreferencesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel.
+	ChannelArn *string `min:"5" type:"string"`
+
+	// The details of a user.
+	Member *Identity `type:"structure"`
+
+	// The ARN and metadata of the member being added.
+	Preferences *ChannelMembershipPreferences `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelMembershipPreferencesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelMembershipPreferencesOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *PutChannelMembershipPreferencesOutput) SetChannelArn(v string) *PutChannelMembershipPreferencesOutput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetMember sets the Member field's value.
+func (s *PutChannelMembershipPreferencesOutput) SetMember(v *Identity) *PutChannelMembershipPreferencesOutput {
+	s.Member = v
+	return s
+}
+
+// SetPreferences sets the Preferences field's value.
+func (s *PutChannelMembershipPreferencesOutput) SetPreferences(v *ChannelMembershipPreferences) *PutChannelMembershipPreferencesOutput {
+	s.Preferences = v
+	return s
+}
+
 type RedactChannelMessageInput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 
 	// The ARN of the channel containing the messages that you want to redact.
 	//
@@ -7842,6 +12532,9 @@ type RedactChannelMessageInput struct {
 	//
 	// MessageId is a required field
 	MessageId *string `location:"uri" locationName:"messageId" min:"1" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7883,6 +12576,9 @@ func (s *RedactChannelMessageInput) Validate() error {
 	if s.MessageId != nil && len(*s.MessageId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MessageId", 1))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -7908,6 +12604,12 @@ func (s *RedactChannelMessageInput) SetMessageId(v string) *RedactChannelMessage
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *RedactChannelMessageInput) SetSubChannelId(v string) *RedactChannelMessageInput {
+	s.SubChannelId = &v
+	return s
+}
+
 type RedactChannelMessageOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -7916,6 +12618,12 @@ type RedactChannelMessageOutput struct {
 
 	// The ID of the message being redacted.
 	MessageId *string `min:"1" type:"string"`
+
+	// The ID of the SubChannel in the response.
+	//
+	// Only required when redacting messages in a SubChannel that the user belongs
+	// to.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7945,6 +12653,12 @@ func (s *RedactChannelMessageOutput) SetChannelArn(v string) *RedactChannelMessa
 // SetMessageId sets the MessageId field's value.
 func (s *RedactChannelMessageOutput) SetMessageId(v string) *RedactChannelMessageOutput {
 	s.MessageId = &v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *RedactChannelMessageOutput) SetSubChannelId(v string) *RedactChannelMessageOutput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -8014,6 +12728,237 @@ func (s *ResourceLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type SearchChannelsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The AppInstanceUserArn of the user making the API call.
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string"`
+
+	// A list of the Field objects in the channel being searched.
+	//
+	// Fields is a required field
+	Fields []*SearchField `min:"1" type:"list" required:"true"`
+
+	// The maximum number of channels that you want returned.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token returned from previous API requests until the number of channels
+	// is reached.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SearchChannelsInput's
+	// String and GoString methods.
+	NextToken *string `location:"querystring" locationName:"next-token" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchChannelsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchChannelsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchChannelsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchChannelsInput"}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+	if s.Fields == nil {
+		invalidParams.Add(request.NewErrParamRequired("Fields"))
+	}
+	if s.Fields != nil && len(s.Fields) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Fields", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Fields != nil {
+		for i, v := range s.Fields {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Fields", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *SearchChannelsInput) SetChimeBearer(v string) *SearchChannelsInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+// SetFields sets the Fields field's value.
+func (s *SearchChannelsInput) SetFields(v []*SearchField) *SearchChannelsInput {
+	s.Fields = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *SearchChannelsInput) SetMaxResults(v int64) *SearchChannelsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchChannelsInput) SetNextToken(v string) *SearchChannelsInput {
+	s.NextToken = &v
+	return s
+}
+
+type SearchChannelsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the channels in the request.
+	Channels []*ChannelSummary `type:"list"`
+
+	// The token returned from previous API responses until the number of channels
+	// is reached.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SearchChannelsOutput's
+	// String and GoString methods.
+	NextToken *string `type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchChannelsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchChannelsOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannels sets the Channels field's value.
+func (s *SearchChannelsOutput) SetChannels(v []*ChannelSummary) *SearchChannelsOutput {
+	s.Channels = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *SearchChannelsOutput) SetNextToken(v string) *SearchChannelsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// A Field of the channel that you want to search.
+type SearchField struct {
+	_ struct{} `type:"structure"`
+
+	// An enum value that indicates the key to search the channel on. MEMBERS allows
+	// you to search channels based on memberships. You can use it with the EQUALS
+	// operator to get channels whose memberships are equal to the specified values,
+	// and with the INCLUDES operator to get channels whose memberships include
+	// the specified values.
+	//
+	// Key is a required field
+	Key *string `type:"string" required:"true" enum:"SearchFieldKey"`
+
+	// The operator used to compare field values, currently EQUALS or INCLUDES.
+	// Use the EQUALS operator to find channels whose memberships equal the specified
+	// values. Use the INCLUDES operator to find channels whose memberships include
+	// the specified values.
+	//
+	// Operator is a required field
+	Operator *string `type:"string" required:"true" enum:"SearchFieldOperator"`
+
+	// The values that you want to search for, a list of strings. The values must
+	// be AppInstanceUserArns specified as a list of strings.
+	//
+	// This operation isn't supported for AppInstanceUsers with large number of
+	// memberships.
+	//
+	// Values is a required field
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchField) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchField) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchField"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Operator == nil {
+		invalidParams.Add(request.NewErrParamRequired("Operator"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *SearchField) SetKey(v string) *SearchField {
+	s.Key = &v
+	return s
+}
+
+// SetOperator sets the Operator field's value.
+func (s *SearchField) SetOperator(v string) *SearchField {
+	s.Operator = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *SearchField) SetValues(v []*string) *SearchField {
+	s.Values = v
+	return s
+}
+
 type SendChannelMessageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8043,6 +12988,10 @@ type SendChannelMessageInput struct {
 	// Content is a required field
 	Content *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
+	// The attributes for the message, used for message filtering along with a FilterRule
+	// defined in the PushNotificationPreferences.
+	MessageAttributes map[string]*MessageAttributeValue `type:"map"`
+
 	// The optional metadata for each message.
 	//
 	// Metadata is a sensitive parameter and its value will be
@@ -8054,6 +13003,12 @@ type SendChannelMessageInput struct {
 	//
 	// Persistence is a required field
 	Persistence *string `type:"string" required:"true" enum:"ChannelMessagePersistenceType"`
+
+	// The push notification configuration of the message.
+	PushNotification *PushNotificationConfiguration `type:"structure"`
+
+	// The ID of the SubChannel in the request.
+	SubChannelId *string `min:"1" type:"string"`
 
 	// The type of message, STANDARD or CONTROL.
 	//
@@ -8106,6 +13061,9 @@ func (s *SendChannelMessageInput) Validate() error {
 	if s.Persistence == nil {
 		invalidParams.Add(request.NewErrParamRequired("Persistence"))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 	if s.Type == nil {
 		invalidParams.Add(request.NewErrParamRequired("Type"))
 	}
@@ -8140,6 +13098,12 @@ func (s *SendChannelMessageInput) SetContent(v string) *SendChannelMessageInput 
 	return s
 }
 
+// SetMessageAttributes sets the MessageAttributes field's value.
+func (s *SendChannelMessageInput) SetMessageAttributes(v map[string]*MessageAttributeValue) *SendChannelMessageInput {
+	s.MessageAttributes = v
+	return s
+}
+
 // SetMetadata sets the Metadata field's value.
 func (s *SendChannelMessageInput) SetMetadata(v string) *SendChannelMessageInput {
 	s.Metadata = &v
@@ -8149,6 +13113,18 @@ func (s *SendChannelMessageInput) SetMetadata(v string) *SendChannelMessageInput
 // SetPersistence sets the Persistence field's value.
 func (s *SendChannelMessageInput) SetPersistence(v string) *SendChannelMessageInput {
 	s.Persistence = &v
+	return s
+}
+
+// SetPushNotification sets the PushNotification field's value.
+func (s *SendChannelMessageInput) SetPushNotification(v *PushNotificationConfiguration) *SendChannelMessageInput {
+	s.PushNotification = v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *SendChannelMessageInput) SetSubChannelId(v string) *SendChannelMessageInput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -8166,6 +13142,12 @@ type SendChannelMessageOutput struct {
 
 	// The ID string assigned to each message.
 	MessageId *string `min:"1" type:"string"`
+
+	// The status of the channel message.
+	Status *ChannelMessageStatusStructure `type:"structure"`
+
+	// The ID of the SubChannel in the response.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8195,6 +13177,18 @@ func (s *SendChannelMessageOutput) SetChannelArn(v string) *SendChannelMessageOu
 // SetMessageId sets the MessageId field's value.
 func (s *SendChannelMessageOutput) SetMessageId(v string) *SendChannelMessageOutput {
 	s.MessageId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SendChannelMessageOutput) SetStatus(v *ChannelMessageStatusStructure) *SendChannelMessageOutput {
+	s.Status = v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *SendChannelMessageOutput) SetSubChannelId(v string) *SendChannelMessageOutput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -8330,11 +13324,52 @@ func (s *ServiceUnavailableException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Describes a tag applied to a resource.
+// Summary of the sub-channels associated with the elastic channel.
+type SubChannelSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The number of members in a SubChannel.
+	MembershipCount *int64 `type:"integer"`
+
+	// The unique ID of a SubChannel.
+	SubChannelId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubChannelSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubChannelSummary) GoString() string {
+	return s.String()
+}
+
+// SetMembershipCount sets the MembershipCount field's value.
+func (s *SubChannelSummary) SetMembershipCount(v int64) *SubChannelSummary {
+	s.MembershipCount = &v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *SubChannelSummary) SetSubChannelId(v string) *SubChannelSummary {
+	s.SubChannelId = &v
+	return s
+}
+
+// A tag object containing a key-value pair.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
-	// The key of the tag.
+	// The key in a tag.
 	//
 	// Key is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by Tag's
@@ -8343,7 +13378,7 @@ type Tag struct {
 	// Key is a required field
 	Key *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
-	// The value of the tag.
+	// The value in a tag.
 	//
 	// Value is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by Tag's
@@ -8403,6 +13438,104 @@ func (s *Tag) SetKey(v string) *Tag {
 func (s *Tag) SetValue(v string) *Tag {
 	s.Value = &v
 	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The resource ARN.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"5" type:"string" required:"true"`
+
+	// The tag key-value pairs.
+	//
+	// Tags is a required field
+	Tags []*Tag `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 5))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *TagResourceInput) SetResourceARN(v string) *TagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) GoString() string {
+	return s.String()
 }
 
 // The client exceeded its request rate limit.
@@ -8537,6 +13670,222 @@ func (s *UnauthorizedClientException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The resource ARN.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"5" type:"string" required:"true"`
+
+	// The tag keys.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 5))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+	if s.TagKeys != nil && len(s.TagKeys) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeys", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *UntagResourceInput) SetResourceARN(v string) *UntagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateChannelFlowInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel flow.
+	//
+	// ChannelFlowArn is a required field
+	ChannelFlowArn *string `location:"uri" locationName:"channelFlowArn" min:"5" type:"string" required:"true"`
+
+	// The name of the channel flow.
+	//
+	// Name is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateChannelFlowInput's
+	// String and GoString methods.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// Information about the processor Lambda functions
+	//
+	// Processors is a required field
+	Processors []*Processor `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateChannelFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateChannelFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateChannelFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateChannelFlowInput"}
+	if s.ChannelFlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelFlowArn"))
+	}
+	if s.ChannelFlowArn != nil && len(*s.ChannelFlowArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelFlowArn", 5))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Processors == nil {
+		invalidParams.Add(request.NewErrParamRequired("Processors"))
+	}
+	if s.Processors != nil && len(s.Processors) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Processors", 1))
+	}
+	if s.Processors != nil {
+		for i, v := range s.Processors {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Processors", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *UpdateChannelFlowInput) SetChannelFlowArn(v string) *UpdateChannelFlowInput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateChannelFlowInput) SetName(v string) *UpdateChannelFlowInput {
+	s.Name = &v
+	return s
+}
+
+// SetProcessors sets the Processors field's value.
+func (s *UpdateChannelFlowInput) SetProcessors(v []*Processor) *UpdateChannelFlowInput {
+	s.Processors = v
+	return s
+}
+
+type UpdateChannelFlowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel flow.
+	ChannelFlowArn *string `min:"5" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateChannelFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateChannelFlowOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelFlowArn sets the ChannelFlowArn field's value.
+func (s *UpdateChannelFlowOutput) SetChannelFlowArn(v string) *UpdateChannelFlowOutput {
+	s.ChannelFlowArn = &v
+	return s
+}
+
 type UpdateChannelInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8558,18 +13907,14 @@ type UpdateChannelInput struct {
 	Metadata *string `type:"string" sensitive:"true"`
 
 	// The mode of the update request.
-	//
-	// Mode is a required field
-	Mode *string `type:"string" required:"true" enum:"ChannelMode"`
+	Mode *string `type:"string" enum:"ChannelMode"`
 
 	// The name of the channel.
 	//
 	// Name is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by UpdateChannelInput's
 	// String and GoString methods.
-	//
-	// Name is a required field
-	Name *string `min:"1" type:"string" required:"true" sensitive:"true"`
+	Name *string `min:"1" type:"string" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -8604,12 +13949,6 @@ func (s *UpdateChannelInput) Validate() error {
 	}
 	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
-	}
-	if s.Mode == nil {
-		invalidParams.Add(request.NewErrParamRequired("Mode"))
-	}
-	if s.Name == nil {
-		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
@@ -8682,6 +14021,12 @@ type UpdateChannelMessageInput struct {
 	// replaced with "sensitive" in string returned by UpdateChannelMessageInput's
 	// String and GoString methods.
 	Metadata *string `type:"string" sensitive:"true"`
+
+	// The ID of the SubChannel in the request.
+	//
+	// Only required when updating messages in a SubChannel that the user belongs
+	// to.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8723,6 +14068,9 @@ func (s *UpdateChannelMessageInput) Validate() error {
 	if s.MessageId != nil && len(*s.MessageId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MessageId", 1))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8760,6 +14108,12 @@ func (s *UpdateChannelMessageInput) SetMetadata(v string) *UpdateChannelMessageI
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *UpdateChannelMessageInput) SetSubChannelId(v string) *UpdateChannelMessageInput {
+	s.SubChannelId = &v
+	return s
+}
+
 type UpdateChannelMessageOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -8768,6 +14122,12 @@ type UpdateChannelMessageOutput struct {
 
 	// The ID string of the message being updated.
 	MessageId *string `min:"1" type:"string"`
+
+	// The status of the message update.
+	Status *ChannelMessageStatusStructure `type:"structure"`
+
+	// The ID of the SubChannel in the response.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8797,6 +14157,18 @@ func (s *UpdateChannelMessageOutput) SetChannelArn(v string) *UpdateChannelMessa
 // SetMessageId sets the MessageId field's value.
 func (s *UpdateChannelMessageOutput) SetMessageId(v string) *UpdateChannelMessageOutput {
 	s.MessageId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateChannelMessageOutput) SetStatus(v *ChannelMessageStatusStructure) *UpdateChannelMessageOutput {
+	s.Status = v
+	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *UpdateChannelMessageOutput) SetSubChannelId(v string) *UpdateChannelMessageOutput {
+	s.SubChannelId = &v
 	return s
 }
 
@@ -8832,7 +14204,7 @@ func (s *UpdateChannelOutput) SetChannelArn(v string) *UpdateChannelOutput {
 }
 
 type UpdateChannelReadMarkerInput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 
 	// The ARN of the channel.
 	//
@@ -8843,6 +14215,9 @@ type UpdateChannelReadMarkerInput struct {
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
+
+	// The ID of the SubChannel in the request.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8878,6 +14253,9 @@ func (s *UpdateChannelReadMarkerInput) Validate() error {
 	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
 	}
+	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8897,11 +14275,20 @@ func (s *UpdateChannelReadMarkerInput) SetChimeBearer(v string) *UpdateChannelRe
 	return s
 }
 
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *UpdateChannelReadMarkerInput) SetSubChannelId(v string) *UpdateChannelReadMarkerInput {
+	s.SubChannelId = &v
+	return s
+}
+
 type UpdateChannelReadMarkerOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the channel.
 	ChannelArn *string `min:"5" type:"string"`
+
+	// The ID of the SubChannel in the response.
+	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8926,6 +14313,32 @@ func (s UpdateChannelReadMarkerOutput) GoString() string {
 func (s *UpdateChannelReadMarkerOutput) SetChannelArn(v string) *UpdateChannelReadMarkerOutput {
 	s.ChannelArn = &v
 	return s
+}
+
+// SetSubChannelId sets the SubChannelId field's value.
+func (s *UpdateChannelReadMarkerOutput) SetSubChannelId(v string) *UpdateChannelReadMarkerOutput {
+	s.SubChannelId = &v
+	return s
+}
+
+const (
+	// AllowNotificationsAll is a AllowNotifications enum value
+	AllowNotificationsAll = "ALL"
+
+	// AllowNotificationsNone is a AllowNotifications enum value
+	AllowNotificationsNone = "NONE"
+
+	// AllowNotificationsFiltered is a AllowNotifications enum value
+	AllowNotificationsFiltered = "FILTERED"
+)
+
+// AllowNotifications_Values returns all elements of the AllowNotifications enum
+func AllowNotifications_Values() []string {
+	return []string{
+		AllowNotificationsAll,
+		AllowNotificationsNone,
+		AllowNotificationsFiltered,
+	}
 }
 
 const (
@@ -8957,6 +14370,30 @@ func ChannelMessagePersistenceType_Values() []string {
 	return []string{
 		ChannelMessagePersistenceTypePersistent,
 		ChannelMessagePersistenceTypeNonPersistent,
+	}
+}
+
+const (
+	// ChannelMessageStatusSent is a ChannelMessageStatus enum value
+	ChannelMessageStatusSent = "SENT"
+
+	// ChannelMessageStatusPending is a ChannelMessageStatus enum value
+	ChannelMessageStatusPending = "PENDING"
+
+	// ChannelMessageStatusFailed is a ChannelMessageStatus enum value
+	ChannelMessageStatusFailed = "FAILED"
+
+	// ChannelMessageStatusDenied is a ChannelMessageStatus enum value
+	ChannelMessageStatusDenied = "DENIED"
+)
+
+// ChannelMessageStatus_Values returns all elements of the ChannelMessageStatus enum
+func ChannelMessageStatus_Values() []string {
+	return []string{
+		ChannelMessageStatusSent,
+		ChannelMessageStatusPending,
+		ChannelMessageStatusFailed,
+		ChannelMessageStatusDenied,
 	}
 }
 
@@ -9073,6 +14510,78 @@ func ErrorCode_Values() []string {
 		ErrorCodeUnprocessable,
 		ErrorCodeVoiceConnectorGroupAssociationsExist,
 		ErrorCodePhoneNumberAssociationsExist,
+	}
+}
+
+const (
+	// FallbackActionContinue is a FallbackAction enum value
+	FallbackActionContinue = "CONTINUE"
+
+	// FallbackActionAbort is a FallbackAction enum value
+	FallbackActionAbort = "ABORT"
+)
+
+// FallbackAction_Values returns all elements of the FallbackAction enum
+func FallbackAction_Values() []string {
+	return []string{
+		FallbackActionContinue,
+		FallbackActionAbort,
+	}
+}
+
+const (
+	// InvocationTypeAsync is a InvocationType enum value
+	InvocationTypeAsync = "ASYNC"
+)
+
+// InvocationType_Values returns all elements of the InvocationType enum
+func InvocationType_Values() []string {
+	return []string{
+		InvocationTypeAsync,
+	}
+}
+
+const (
+	// PushNotificationTypeDefault is a PushNotificationType enum value
+	PushNotificationTypeDefault = "DEFAULT"
+
+	// PushNotificationTypeVoip is a PushNotificationType enum value
+	PushNotificationTypeVoip = "VOIP"
+)
+
+// PushNotificationType_Values returns all elements of the PushNotificationType enum
+func PushNotificationType_Values() []string {
+	return []string{
+		PushNotificationTypeDefault,
+		PushNotificationTypeVoip,
+	}
+}
+
+const (
+	// SearchFieldKeyMembers is a SearchFieldKey enum value
+	SearchFieldKeyMembers = "MEMBERS"
+)
+
+// SearchFieldKey_Values returns all elements of the SearchFieldKey enum
+func SearchFieldKey_Values() []string {
+	return []string{
+		SearchFieldKeyMembers,
+	}
+}
+
+const (
+	// SearchFieldOperatorEquals is a SearchFieldOperator enum value
+	SearchFieldOperatorEquals = "EQUALS"
+
+	// SearchFieldOperatorIncludes is a SearchFieldOperator enum value
+	SearchFieldOperatorIncludes = "INCLUDES"
+)
+
+// SearchFieldOperator_Values returns all elements of the SearchFieldOperator enum
+func SearchFieldOperator_Values() []string {
+	return []string{
+		SearchFieldOperatorEquals,
+		SearchFieldOperatorIncludes,
 	}
 }
 

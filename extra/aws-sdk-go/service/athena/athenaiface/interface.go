@@ -64,6 +64,10 @@ type AthenaAPI interface {
 	BatchGetNamedQueryWithContext(aws.Context, *athena.BatchGetNamedQueryInput, ...request.Option) (*athena.BatchGetNamedQueryOutput, error)
 	BatchGetNamedQueryRequest(*athena.BatchGetNamedQueryInput) (*request.Request, *athena.BatchGetNamedQueryOutput)
 
+	BatchGetPreparedStatement(*athena.BatchGetPreparedStatementInput) (*athena.BatchGetPreparedStatementOutput, error)
+	BatchGetPreparedStatementWithContext(aws.Context, *athena.BatchGetPreparedStatementInput, ...request.Option) (*athena.BatchGetPreparedStatementOutput, error)
+	BatchGetPreparedStatementRequest(*athena.BatchGetPreparedStatementInput) (*request.Request, *athena.BatchGetPreparedStatementOutput)
+
 	BatchGetQueryExecution(*athena.BatchGetQueryExecutionInput) (*athena.BatchGetQueryExecutionOutput, error)
 	BatchGetQueryExecutionWithContext(aws.Context, *athena.BatchGetQueryExecutionInput, ...request.Option) (*athena.BatchGetQueryExecutionOutput, error)
 	BatchGetQueryExecutionRequest(*athena.BatchGetQueryExecutionInput) (*request.Request, *athena.BatchGetQueryExecutionOutput)
@@ -127,6 +131,10 @@ type AthenaAPI interface {
 	GetQueryResultsPages(*athena.GetQueryResultsInput, func(*athena.GetQueryResultsOutput, bool) bool) error
 	GetQueryResultsPagesWithContext(aws.Context, *athena.GetQueryResultsInput, func(*athena.GetQueryResultsOutput, bool) bool, ...request.Option) error
 
+	GetQueryRuntimeStatistics(*athena.GetQueryRuntimeStatisticsInput) (*athena.GetQueryRuntimeStatisticsOutput, error)
+	GetQueryRuntimeStatisticsWithContext(aws.Context, *athena.GetQueryRuntimeStatisticsInput, ...request.Option) (*athena.GetQueryRuntimeStatisticsOutput, error)
+	GetQueryRuntimeStatisticsRequest(*athena.GetQueryRuntimeStatisticsInput) (*request.Request, *athena.GetQueryRuntimeStatisticsOutput)
+
 	GetTableMetadata(*athena.GetTableMetadataInput) (*athena.GetTableMetadataOutput, error)
 	GetTableMetadataWithContext(aws.Context, *athena.GetTableMetadataInput, ...request.Option) (*athena.GetTableMetadataOutput, error)
 	GetTableMetadataRequest(*athena.GetTableMetadataInput) (*request.Request, *athena.GetTableMetadataOutput)
@@ -152,6 +160,9 @@ type AthenaAPI interface {
 	ListEngineVersions(*athena.ListEngineVersionsInput) (*athena.ListEngineVersionsOutput, error)
 	ListEngineVersionsWithContext(aws.Context, *athena.ListEngineVersionsInput, ...request.Option) (*athena.ListEngineVersionsOutput, error)
 	ListEngineVersionsRequest(*athena.ListEngineVersionsInput) (*request.Request, *athena.ListEngineVersionsOutput)
+
+	ListEngineVersionsPages(*athena.ListEngineVersionsInput, func(*athena.ListEngineVersionsOutput, bool) bool) error
+	ListEngineVersionsPagesWithContext(aws.Context, *athena.ListEngineVersionsInput, func(*athena.ListEngineVersionsOutput, bool) bool, ...request.Option) error
 
 	ListNamedQueries(*athena.ListNamedQueriesInput) (*athena.ListNamedQueriesOutput, error)
 	ListNamedQueriesWithContext(aws.Context, *athena.ListNamedQueriesInput, ...request.Option) (*athena.ListNamedQueriesOutput, error)
@@ -214,6 +225,10 @@ type AthenaAPI interface {
 	UpdateDataCatalog(*athena.UpdateDataCatalogInput) (*athena.UpdateDataCatalogOutput, error)
 	UpdateDataCatalogWithContext(aws.Context, *athena.UpdateDataCatalogInput, ...request.Option) (*athena.UpdateDataCatalogOutput, error)
 	UpdateDataCatalogRequest(*athena.UpdateDataCatalogInput) (*request.Request, *athena.UpdateDataCatalogOutput)
+
+	UpdateNamedQuery(*athena.UpdateNamedQueryInput) (*athena.UpdateNamedQueryOutput, error)
+	UpdateNamedQueryWithContext(aws.Context, *athena.UpdateNamedQueryInput, ...request.Option) (*athena.UpdateNamedQueryOutput, error)
+	UpdateNamedQueryRequest(*athena.UpdateNamedQueryInput) (*request.Request, *athena.UpdateNamedQueryOutput)
 
 	UpdatePreparedStatement(*athena.UpdatePreparedStatementInput) (*athena.UpdatePreparedStatementOutput, error)
 	UpdatePreparedStatementWithContext(aws.Context, *athena.UpdatePreparedStatementInput, ...request.Option) (*athena.UpdatePreparedStatementOutput, error)

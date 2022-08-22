@@ -164,6 +164,10 @@ func (c *CustomerProfiles) CreateDomainRequest(input *CreateDomainInput) (req *r
 // to enable identity resolution (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html):
 // set Matching to true.
 //
+// To prevent cross-service impersonation when you call this API, see Cross-service
+// confused deputy prevention (https://docs.aws.amazon.com/connect/latest/adminguide/cross-service-confused-deputy-prevention.html)
+// for sample policies that you should apply.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -204,6 +208,99 @@ func (c *CustomerProfiles) CreateDomain(input *CreateDomainInput) (*CreateDomain
 // for more information on using Contexts.
 func (c *CustomerProfiles) CreateDomainWithContext(ctx aws.Context, input *CreateDomainInput, opts ...request.Option) (*CreateDomainOutput, error) {
 	req, out := c.CreateDomainRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateIntegrationWorkflow = "CreateIntegrationWorkflow"
+
+// CreateIntegrationWorkflowRequest generates a "aws/request.Request" representing the
+// client's request for the CreateIntegrationWorkflow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateIntegrationWorkflow for more information on using the CreateIntegrationWorkflow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateIntegrationWorkflowRequest method.
+//    req, resp := client.CreateIntegrationWorkflowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/CreateIntegrationWorkflow
+func (c *CustomerProfiles) CreateIntegrationWorkflowRequest(input *CreateIntegrationWorkflowInput) (req *request.Request, output *CreateIntegrationWorkflowOutput) {
+	op := &request.Operation{
+		Name:       opCreateIntegrationWorkflow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/domains/{DomainName}/workflows/integrations",
+	}
+
+	if input == nil {
+		input = &CreateIntegrationWorkflowInput{}
+	}
+
+	output = &CreateIntegrationWorkflowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateIntegrationWorkflow API operation for Amazon Connect Customer Profiles.
+//
+// Creates an integration workflow. An integration workflow is an async process
+// which ingests historic data and sets up an integration for ongoing updates.
+// The supported Amazon AppFlow sources are Salesforce, ServiceNow, and Marketo.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation CreateIntegrationWorkflow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/CreateIntegrationWorkflow
+func (c *CustomerProfiles) CreateIntegrationWorkflow(input *CreateIntegrationWorkflowInput) (*CreateIntegrationWorkflowOutput, error) {
+	req, out := c.CreateIntegrationWorkflowRequest(input)
+	return out, req.Send()
+}
+
+// CreateIntegrationWorkflowWithContext is the same as CreateIntegrationWorkflow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateIntegrationWorkflow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) CreateIntegrationWorkflowWithContext(ctx aws.Context, input *CreateIntegrationWorkflowInput, opts ...request.Option) (*CreateIntegrationWorkflowOutput, error) {
+	req, out := c.CreateIntegrationWorkflowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -853,6 +950,203 @@ func (c *CustomerProfiles) DeleteProfileObjectTypeWithContext(ctx aws.Context, i
 	return out, req.Send()
 }
 
+const opDeleteWorkflow = "DeleteWorkflow"
+
+// DeleteWorkflowRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteWorkflow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteWorkflow for more information on using the DeleteWorkflow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteWorkflowRequest method.
+//    req, resp := client.DeleteWorkflowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/DeleteWorkflow
+func (c *CustomerProfiles) DeleteWorkflowRequest(input *DeleteWorkflowInput) (req *request.Request, output *DeleteWorkflowOutput) {
+	op := &request.Operation{
+		Name:       opDeleteWorkflow,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/domains/{DomainName}/workflows/{WorkflowId}",
+	}
+
+	if input == nil {
+		input = &DeleteWorkflowInput{}
+	}
+
+	output = &DeleteWorkflowOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteWorkflow API operation for Amazon Connect Customer Profiles.
+//
+// Deletes the specified workflow and all its corresponding resources. This
+// is an async process.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation DeleteWorkflow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/DeleteWorkflow
+func (c *CustomerProfiles) DeleteWorkflow(input *DeleteWorkflowInput) (*DeleteWorkflowOutput, error) {
+	req, out := c.DeleteWorkflowRequest(input)
+	return out, req.Send()
+}
+
+// DeleteWorkflowWithContext is the same as DeleteWorkflow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteWorkflow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) DeleteWorkflowWithContext(ctx aws.Context, input *DeleteWorkflowInput, opts ...request.Option) (*DeleteWorkflowOutput, error) {
+	req, out := c.DeleteWorkflowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetAutoMergingPreview = "GetAutoMergingPreview"
+
+// GetAutoMergingPreviewRequest generates a "aws/request.Request" representing the
+// client's request for the GetAutoMergingPreview operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAutoMergingPreview for more information on using the GetAutoMergingPreview
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetAutoMergingPreviewRequest method.
+//    req, resp := client.GetAutoMergingPreviewRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetAutoMergingPreview
+func (c *CustomerProfiles) GetAutoMergingPreviewRequest(input *GetAutoMergingPreviewInput) (req *request.Request, output *GetAutoMergingPreviewOutput) {
+	op := &request.Operation{
+		Name:       opGetAutoMergingPreview,
+		HTTPMethod: "POST",
+		HTTPPath:   "/domains/{DomainName}/identity-resolution-jobs/auto-merging-preview",
+	}
+
+	if input == nil {
+		input = &GetAutoMergingPreviewInput{}
+	}
+
+	output = &GetAutoMergingPreviewOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAutoMergingPreview API operation for Amazon Connect Customer Profiles.
+//
+// Tests the auto-merging settings of your Identity Resolution Job without merging
+// your data. It randomly selects a sample of matching groups from the existing
+// matching results, and applies the automerging settings that you provided.
+// You can then view the number of profiles in the sample, the number of matches,
+// and the number of profiles identified to be merged. This enables you to evaluate
+// the accuracy of the attributes in your matching list.
+//
+// You can't view which profiles are matched and would be merged.
+//
+// We strongly recommend you use this API to do a dry run of the automerging
+// process before running the Identity Resolution Job. Include at least two
+// matching attributes. If your matching list includes too few attributes (such
+// as only FirstName or only LastName), there may be a large number of matches.
+// This increases the chances of erroneous merges.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation GetAutoMergingPreview for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetAutoMergingPreview
+func (c *CustomerProfiles) GetAutoMergingPreview(input *GetAutoMergingPreviewInput) (*GetAutoMergingPreviewOutput, error) {
+	req, out := c.GetAutoMergingPreviewRequest(input)
+	return out, req.Send()
+}
+
+// GetAutoMergingPreviewWithContext is the same as GetAutoMergingPreview with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAutoMergingPreview for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) GetAutoMergingPreviewWithContext(ctx aws.Context, input *GetAutoMergingPreviewInput, opts ...request.Option) (*GetAutoMergingPreviewOutput, error) {
+	req, out := c.GetAutoMergingPreviewRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetDomain = "GetDomain"
 
 // GetDomainRequest generates a "aws/request.Request" representing the
@@ -939,6 +1233,101 @@ func (c *CustomerProfiles) GetDomain(input *GetDomainInput) (*GetDomainOutput, e
 // for more information on using Contexts.
 func (c *CustomerProfiles) GetDomainWithContext(ctx aws.Context, input *GetDomainInput, opts ...request.Option) (*GetDomainOutput, error) {
 	req, out := c.GetDomainRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetIdentityResolutionJob = "GetIdentityResolutionJob"
+
+// GetIdentityResolutionJobRequest generates a "aws/request.Request" representing the
+// client's request for the GetIdentityResolutionJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetIdentityResolutionJob for more information on using the GetIdentityResolutionJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetIdentityResolutionJobRequest method.
+//    req, resp := client.GetIdentityResolutionJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetIdentityResolutionJob
+func (c *CustomerProfiles) GetIdentityResolutionJobRequest(input *GetIdentityResolutionJobInput) (req *request.Request, output *GetIdentityResolutionJobOutput) {
+	op := &request.Operation{
+		Name:       opGetIdentityResolutionJob,
+		HTTPMethod: "GET",
+		HTTPPath:   "/domains/{DomainName}/identity-resolution-jobs/{JobId}",
+	}
+
+	if input == nil {
+		input = &GetIdentityResolutionJobInput{}
+	}
+
+	output = &GetIdentityResolutionJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetIdentityResolutionJob API operation for Amazon Connect Customer Profiles.
+//
+// Returns information about an Identity Resolution Job in a specific domain.
+//
+// Identity Resolution Jobs are set up using the Amazon Connect admin console.
+// For more information, see Use Identity Resolution to consolidate similar
+// profiles (https://docs.aws.amazon.com/connect/latest/adminguide/use-identity-resolution.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation GetIdentityResolutionJob for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetIdentityResolutionJob
+func (c *CustomerProfiles) GetIdentityResolutionJob(input *GetIdentityResolutionJobInput) (*GetIdentityResolutionJobOutput, error) {
+	req, out := c.GetIdentityResolutionJobRequest(input)
+	return out, req.Send()
+}
+
+// GetIdentityResolutionJobWithContext is the same as GetIdentityResolutionJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetIdentityResolutionJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) GetIdentityResolutionJobWithContext(ctx aws.Context, input *GetIdentityResolutionJobInput, opts ...request.Option) (*GetIdentityResolutionJobOutput, error) {
+	req, out := c.GetIdentityResolutionJobRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1079,8 +1468,6 @@ func (c *CustomerProfiles) GetMatchesRequest(input *GetMatchesInput) (req *reque
 
 // GetMatches API operation for Amazon Connect Customer Profiles.
 //
-// This API is in preview release for Amazon Connect and subject to change.
-//
 // Before calling this API, use CreateDomain (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_CreateDomain.html)
 // or UpdateDomain (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_UpdateDomain.html)
 // to enable identity resolution: set Matching to true.
@@ -1088,9 +1475,15 @@ func (c *CustomerProfiles) GetMatchesRequest(input *GetMatchesInput) (req *reque
 // GetMatches returns potentially matching profiles, based on the results of
 // the latest run of a machine learning process.
 //
-// Amazon Connect starts a batch process every Saturday at 12AM UTC to identify
-// matching profiles. The results are returned up to seven days after the Saturday
-// run.
+// The process of matching duplicate profiles. If Matching = true, Amazon Connect
+// Customer Profiles starts a weekly batch process called Identity Resolution
+// Job. If you do not specify a date and time for Identity Resolution Job to
+// run, by default it runs every Saturday at 12AM UTC to detect duplicate profiles
+// in your domains.
+//
+// After the Identity Resolution Job completes, use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
+// API to return and review the results. Or, if you have configured ExportingConfig
+// in the MatchingRequest, you can download the results from S3.
 //
 // Amazon Connect uses the following profile attributes to identify matches:
 //
@@ -1109,8 +1502,6 @@ func (c *CustomerProfiles) GetMatchesRequest(input *GetMatchesInput) (req *reque
 //    * BusinessEmailAddress
 //
 //    * FullName
-//
-//    * BusinessName
 //
 // For example, two or more profiles—with spelling mistakes such as John Doe
 // and Jhn Doe, or different casing email addresses such as JOHN_DOE@ANYCOMPANY.COM
@@ -1350,6 +1741,188 @@ func (c *CustomerProfiles) GetProfileObjectTypeTemplateWithContext(ctx aws.Conte
 	return out, req.Send()
 }
 
+const opGetWorkflow = "GetWorkflow"
+
+// GetWorkflowRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorkflow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorkflow for more information on using the GetWorkflow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorkflowRequest method.
+//    req, resp := client.GetWorkflowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetWorkflow
+func (c *CustomerProfiles) GetWorkflowRequest(input *GetWorkflowInput) (req *request.Request, output *GetWorkflowOutput) {
+	op := &request.Operation{
+		Name:       opGetWorkflow,
+		HTTPMethod: "GET",
+		HTTPPath:   "/domains/{DomainName}/workflows/{WorkflowId}",
+	}
+
+	if input == nil {
+		input = &GetWorkflowInput{}
+	}
+
+	output = &GetWorkflowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorkflow API operation for Amazon Connect Customer Profiles.
+//
+// Get details of specified workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation GetWorkflow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetWorkflow
+func (c *CustomerProfiles) GetWorkflow(input *GetWorkflowInput) (*GetWorkflowOutput, error) {
+	req, out := c.GetWorkflowRequest(input)
+	return out, req.Send()
+}
+
+// GetWorkflowWithContext is the same as GetWorkflow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorkflow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) GetWorkflowWithContext(ctx aws.Context, input *GetWorkflowInput, opts ...request.Option) (*GetWorkflowOutput, error) {
+	req, out := c.GetWorkflowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetWorkflowSteps = "GetWorkflowSteps"
+
+// GetWorkflowStepsRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorkflowSteps operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorkflowSteps for more information on using the GetWorkflowSteps
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorkflowStepsRequest method.
+//    req, resp := client.GetWorkflowStepsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetWorkflowSteps
+func (c *CustomerProfiles) GetWorkflowStepsRequest(input *GetWorkflowStepsInput) (req *request.Request, output *GetWorkflowStepsOutput) {
+	op := &request.Operation{
+		Name:       opGetWorkflowSteps,
+		HTTPMethod: "GET",
+		HTTPPath:   "/domains/{DomainName}/workflows/{WorkflowId}/steps",
+	}
+
+	if input == nil {
+		input = &GetWorkflowStepsInput{}
+	}
+
+	output = &GetWorkflowStepsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorkflowSteps API operation for Amazon Connect Customer Profiles.
+//
+// Get granular list of steps in workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation GetWorkflowSteps for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/GetWorkflowSteps
+func (c *CustomerProfiles) GetWorkflowSteps(input *GetWorkflowStepsInput) (*GetWorkflowStepsOutput, error) {
+	req, out := c.GetWorkflowStepsRequest(input)
+	return out, req.Send()
+}
+
+// GetWorkflowStepsWithContext is the same as GetWorkflowSteps with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorkflowSteps for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) GetWorkflowStepsWithContext(ctx aws.Context, input *GetWorkflowStepsInput, opts ...request.Option) (*GetWorkflowStepsOutput, error) {
+	req, out := c.GetWorkflowStepsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListAccountIntegrations = "ListAccountIntegrations"
 
 // ListAccountIntegrationsRequest generates a "aws/request.Request" representing the
@@ -1527,6 +2100,98 @@ func (c *CustomerProfiles) ListDomains(input *ListDomainsInput) (*ListDomainsOut
 // for more information on using Contexts.
 func (c *CustomerProfiles) ListDomainsWithContext(ctx aws.Context, input *ListDomainsInput, opts ...request.Option) (*ListDomainsOutput, error) {
 	req, out := c.ListDomainsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListIdentityResolutionJobs = "ListIdentityResolutionJobs"
+
+// ListIdentityResolutionJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListIdentityResolutionJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListIdentityResolutionJobs for more information on using the ListIdentityResolutionJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListIdentityResolutionJobsRequest method.
+//    req, resp := client.ListIdentityResolutionJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/ListIdentityResolutionJobs
+func (c *CustomerProfiles) ListIdentityResolutionJobsRequest(input *ListIdentityResolutionJobsInput) (req *request.Request, output *ListIdentityResolutionJobsOutput) {
+	op := &request.Operation{
+		Name:       opListIdentityResolutionJobs,
+		HTTPMethod: "GET",
+		HTTPPath:   "/domains/{DomainName}/identity-resolution-jobs",
+	}
+
+	if input == nil {
+		input = &ListIdentityResolutionJobsInput{}
+	}
+
+	output = &ListIdentityResolutionJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListIdentityResolutionJobs API operation for Amazon Connect Customer Profiles.
+//
+// Lists all of the Identity Resolution Jobs in your domain. The response sorts
+// the list by JobStartTime.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation ListIdentityResolutionJobs for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/ListIdentityResolutionJobs
+func (c *CustomerProfiles) ListIdentityResolutionJobs(input *ListIdentityResolutionJobsInput) (*ListIdentityResolutionJobsOutput, error) {
+	req, out := c.ListIdentityResolutionJobsRequest(input)
+	return out, req.Send()
+}
+
+// ListIdentityResolutionJobsWithContext is the same as ListIdentityResolutionJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListIdentityResolutionJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) ListIdentityResolutionJobsWithContext(ctx aws.Context, input *ListIdentityResolutionJobsInput, opts ...request.Option) (*ListIdentityResolutionJobsOutput, error) {
+	req, out := c.ListIdentityResolutionJobsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1983,6 +2648,97 @@ func (c *CustomerProfiles) ListTagsForResourceWithContext(ctx aws.Context, input
 	return out, req.Send()
 }
 
+const opListWorkflows = "ListWorkflows"
+
+// ListWorkflowsRequest generates a "aws/request.Request" representing the
+// client's request for the ListWorkflows operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListWorkflows for more information on using the ListWorkflows
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListWorkflowsRequest method.
+//    req, resp := client.ListWorkflowsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/ListWorkflows
+func (c *CustomerProfiles) ListWorkflowsRequest(input *ListWorkflowsInput) (req *request.Request, output *ListWorkflowsOutput) {
+	op := &request.Operation{
+		Name:       opListWorkflows,
+		HTTPMethod: "POST",
+		HTTPPath:   "/domains/{DomainName}/workflows",
+	}
+
+	if input == nil {
+		input = &ListWorkflowsInput{}
+	}
+
+	output = &ListWorkflowsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListWorkflows API operation for Amazon Connect Customer Profiles.
+//
+// Query to list all workflows.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Customer Profiles's
+// API operation ListWorkflows for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ResourceNotFoundException
+//   The requested resource does not exist, or access was denied.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   You exceeded the maximum number of requests.
+//
+//   * InternalServerException
+//   An internal service error occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/customer-profiles-2020-08-15/ListWorkflows
+func (c *CustomerProfiles) ListWorkflows(input *ListWorkflowsInput) (*ListWorkflowsOutput, error) {
+	req, out := c.ListWorkflowsRequest(input)
+	return out, req.Send()
+}
+
+// ListWorkflowsWithContext is the same as ListWorkflows with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListWorkflows for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CustomerProfiles) ListWorkflowsWithContext(ctx aws.Context, input *ListWorkflowsInput, opts ...request.Option) (*ListWorkflowsOutput, error) {
+	req, out := c.ListWorkflowsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opMergeProfiles = "MergeProfiles"
 
 // MergeProfilesRequest generates a "aws/request.Request" representing the
@@ -2026,8 +2782,6 @@ func (c *CustomerProfiles) MergeProfilesRequest(input *MergeProfilesInput) (req 
 }
 
 // MergeProfiles API operation for Amazon Connect Customer Profiles.
-//
-// This API is in preview release for Amazon Connect and subject to change.
 //
 // Runs an AWS Lambda job that does the following:
 //
@@ -2723,6 +3477,10 @@ func (c *CustomerProfiles) UpdateDomainRequest(input *UpdateDomainInput) (req *r
 // to enable identity resolution (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html):
 // set Matching to true.
 //
+// To prevent cross-service impersonation when you call this API, see Cross-service
+// confused deputy prevention (https://docs.aws.amazon.com/connect/latest/adminguide/cross-service-confused-deputy-prevention.html)
+// for sample policies that you should apply.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2936,7 +3694,12 @@ type AddProfileKeyInput struct {
 	// DomainName is a required field
 	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
 
-	// A searchable identifier of a customer profile.
+	// A searchable identifier of a customer profile. The predefined keys you can
+	// use include: _account, _profileId, _assetId, _caseId, _orderId, _fullName,
+	// _phone, _email, _ctrContactId, _marketoLeadId, _salesforceAccountId, _salesforceContactId,
+	// _salesforceAssetId, _zendeskUserId, _zendeskExternalId, _zendeskTicketId,
+	// _serviceNowSystemId, _serviceNowIncidentId, _segmentUserId, _shopifyCustomerId,
+	// _shopifyOrderId.
 	//
 	// KeyName is a required field
 	KeyName *string `min:"1" type:"string" required:"true"`
@@ -3216,6 +3979,397 @@ func (s *Address) SetState(v string) *Address {
 	return s
 }
 
+// Details for workflow of type APPFLOW_INTEGRATION.
+type AppflowIntegration struct {
+	_ struct{} `type:"structure"`
+
+	// Batches in workflow of type APPFLOW_INTEGRATION.
+	Batches []*Batch `type:"list"`
+
+	// The configurations that control how Customer Profiles retrieves data from
+	// the source, Amazon AppFlow. Customer Profiles uses this information to create
+	// an AppFlow flow on behalf of customers.
+	//
+	// FlowDefinition is a required field
+	FlowDefinition *FlowDefinition `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AppflowIntegration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AppflowIntegration"}
+	if s.FlowDefinition == nil {
+		invalidParams.Add(request.NewErrParamRequired("FlowDefinition"))
+	}
+	if s.Batches != nil {
+		for i, v := range s.Batches {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Batches", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.FlowDefinition != nil {
+		if err := s.FlowDefinition.Validate(); err != nil {
+			invalidParams.AddNested("FlowDefinition", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBatches sets the Batches field's value.
+func (s *AppflowIntegration) SetBatches(v []*Batch) *AppflowIntegration {
+	s.Batches = v
+	return s
+}
+
+// SetFlowDefinition sets the FlowDefinition field's value.
+func (s *AppflowIntegration) SetFlowDefinition(v *FlowDefinition) *AppflowIntegration {
+	s.FlowDefinition = v
+	return s
+}
+
+// Structure holding all APPFLOW_INTEGRATION specific workflow attributes.
+type AppflowIntegrationWorkflowAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the AppFlow connector profile used for ingestion.
+	//
+	// ConnectorProfileName is a required field
+	ConnectorProfileName *string `type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the IAM role. Customer Profiles assumes
+	// this role to create resources on your behalf as part of workflow execution.
+	RoleArn *string `min:"1" type:"string"`
+
+	// Specifies the source connector type, such as Salesforce, ServiceNow, and
+	// Marketo. Indicates source of ingestion.
+	//
+	// SourceConnectorType is a required field
+	SourceConnectorType *string `type:"string" required:"true" enum:"SourceConnectorType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegrationWorkflowAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegrationWorkflowAttributes) GoString() string {
+	return s.String()
+}
+
+// SetConnectorProfileName sets the ConnectorProfileName field's value.
+func (s *AppflowIntegrationWorkflowAttributes) SetConnectorProfileName(v string) *AppflowIntegrationWorkflowAttributes {
+	s.ConnectorProfileName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *AppflowIntegrationWorkflowAttributes) SetRoleArn(v string) *AppflowIntegrationWorkflowAttributes {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceConnectorType sets the SourceConnectorType field's value.
+func (s *AppflowIntegrationWorkflowAttributes) SetSourceConnectorType(v string) *AppflowIntegrationWorkflowAttributes {
+	s.SourceConnectorType = &v
+	return s
+}
+
+// Workflow specific execution metrics for APPFLOW_INTEGRATION workflow.
+type AppflowIntegrationWorkflowMetrics struct {
+	_ struct{} `type:"structure"`
+
+	// Number of records processed in APPFLOW_INTEGRATION workflow.
+	//
+	// RecordsProcessed is a required field
+	RecordsProcessed *int64 `type:"long" required:"true"`
+
+	// Total steps completed in APPFLOW_INTEGRATION workflow.
+	//
+	// StepsCompleted is a required field
+	StepsCompleted *int64 `type:"long" required:"true"`
+
+	// Total steps in APPFLOW_INTEGRATION workflow.
+	//
+	// TotalSteps is a required field
+	TotalSteps *int64 `type:"long" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegrationWorkflowMetrics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegrationWorkflowMetrics) GoString() string {
+	return s.String()
+}
+
+// SetRecordsProcessed sets the RecordsProcessed field's value.
+func (s *AppflowIntegrationWorkflowMetrics) SetRecordsProcessed(v int64) *AppflowIntegrationWorkflowMetrics {
+	s.RecordsProcessed = &v
+	return s
+}
+
+// SetStepsCompleted sets the StepsCompleted field's value.
+func (s *AppflowIntegrationWorkflowMetrics) SetStepsCompleted(v int64) *AppflowIntegrationWorkflowMetrics {
+	s.StepsCompleted = &v
+	return s
+}
+
+// SetTotalSteps sets the TotalSteps field's value.
+func (s *AppflowIntegrationWorkflowMetrics) SetTotalSteps(v int64) *AppflowIntegrationWorkflowMetrics {
+	s.TotalSteps = &v
+	return s
+}
+
+// Workflow step details for APPFLOW_INTEGRATION workflow.
+type AppflowIntegrationWorkflowStep struct {
+	_ struct{} `type:"structure"`
+
+	// End datetime of records pulled in batch during execution of workflow step
+	// for APPFLOW_INTEGRATION workflow.
+	//
+	// BatchRecordsEndTime is a required field
+	BatchRecordsEndTime *string `min:"1" type:"string" required:"true"`
+
+	// Start datetime of records pulled in batch during execution of workflow step
+	// for APPFLOW_INTEGRATION workflow.
+	//
+	// BatchRecordsStartTime is a required field
+	BatchRecordsStartTime *string `min:"1" type:"string" required:"true"`
+
+	// Creation timestamp of workflow step for APPFLOW_INTEGRATION workflow.
+	//
+	// CreatedAt is a required field
+	CreatedAt *time.Time `type:"timestamp" required:"true"`
+
+	// Message indicating execution of workflow step for APPFLOW_INTEGRATION workflow.
+	//
+	// ExecutionMessage is a required field
+	ExecutionMessage *string `min:"1" type:"string" required:"true"`
+
+	// Name of the flow created during execution of workflow step. APPFLOW_INTEGRATION
+	// workflow type creates an appflow flow during workflow step execution on the
+	// customers behalf.
+	//
+	// FlowName is a required field
+	FlowName *string `type:"string" required:"true"`
+
+	// Last updated timestamp for workflow step for APPFLOW_INTEGRATION workflow.
+	//
+	// LastUpdatedAt is a required field
+	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
+
+	// Total number of records processed during execution of workflow step for APPFLOW_INTEGRATION
+	// workflow.
+	//
+	// RecordsProcessed is a required field
+	RecordsProcessed *int64 `type:"long" required:"true"`
+
+	// Workflow step status for APPFLOW_INTEGRATION workflow.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"Status"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegrationWorkflowStep) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AppflowIntegrationWorkflowStep) GoString() string {
+	return s.String()
+}
+
+// SetBatchRecordsEndTime sets the BatchRecordsEndTime field's value.
+func (s *AppflowIntegrationWorkflowStep) SetBatchRecordsEndTime(v string) *AppflowIntegrationWorkflowStep {
+	s.BatchRecordsEndTime = &v
+	return s
+}
+
+// SetBatchRecordsStartTime sets the BatchRecordsStartTime field's value.
+func (s *AppflowIntegrationWorkflowStep) SetBatchRecordsStartTime(v string) *AppflowIntegrationWorkflowStep {
+	s.BatchRecordsStartTime = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *AppflowIntegrationWorkflowStep) SetCreatedAt(v time.Time) *AppflowIntegrationWorkflowStep {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetExecutionMessage sets the ExecutionMessage field's value.
+func (s *AppflowIntegrationWorkflowStep) SetExecutionMessage(v string) *AppflowIntegrationWorkflowStep {
+	s.ExecutionMessage = &v
+	return s
+}
+
+// SetFlowName sets the FlowName field's value.
+func (s *AppflowIntegrationWorkflowStep) SetFlowName(v string) *AppflowIntegrationWorkflowStep {
+	s.FlowName = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *AppflowIntegrationWorkflowStep) SetLastUpdatedAt(v time.Time) *AppflowIntegrationWorkflowStep {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetRecordsProcessed sets the RecordsProcessed field's value.
+func (s *AppflowIntegrationWorkflowStep) SetRecordsProcessed(v int64) *AppflowIntegrationWorkflowStep {
+	s.RecordsProcessed = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AppflowIntegrationWorkflowStep) SetStatus(v string) *AppflowIntegrationWorkflowStep {
+	s.Status = &v
+	return s
+}
+
+// Configuration settings for how to perform the auto-merging of profiles.
+type AutoMerging struct {
+	_ struct{} `type:"structure"`
+
+	// How the auto-merging process should resolve conflicts between different profiles.
+	// For example, if Profile A and Profile B have the same FirstName and LastName
+	// (and that is the matching criteria), which EmailAddress should be used?
+	ConflictResolution *ConflictResolution `type:"structure"`
+
+	// A list of matching attributes that represent matching criteria. If two profiles
+	// meet at least one of the requirements in the matching attributes list, they
+	// will be merged.
+	Consolidation *Consolidation `type:"structure"`
+
+	// The flag that enables the auto-merging of duplicate profiles.
+	//
+	// Enabled is a required field
+	Enabled *bool `type:"boolean" required:"true"`
+
+	// A number between 0 and 1 that represents the minimum confidence score required
+	// for profiles within a matching group to be merged during the auto-merge process.
+	// A higher score means higher similarity required to merge profiles.
+	MinAllowedConfidenceScoreForMerging *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoMerging) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoMerging) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AutoMerging) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AutoMerging"}
+	if s.Enabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("Enabled"))
+	}
+	if s.ConflictResolution != nil {
+		if err := s.ConflictResolution.Validate(); err != nil {
+			invalidParams.AddNested("ConflictResolution", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Consolidation != nil {
+		if err := s.Consolidation.Validate(); err != nil {
+			invalidParams.AddNested("Consolidation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConflictResolution sets the ConflictResolution field's value.
+func (s *AutoMerging) SetConflictResolution(v *ConflictResolution) *AutoMerging {
+	s.ConflictResolution = v
+	return s
+}
+
+// SetConsolidation sets the Consolidation field's value.
+func (s *AutoMerging) SetConsolidation(v *Consolidation) *AutoMerging {
+	s.Consolidation = v
+	return s
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *AutoMerging) SetEnabled(v bool) *AutoMerging {
+	s.Enabled = &v
+	return s
+}
+
+// SetMinAllowedConfidenceScoreForMerging sets the MinAllowedConfidenceScoreForMerging field's value.
+func (s *AutoMerging) SetMinAllowedConfidenceScoreForMerging(v float64) *AutoMerging {
+	s.MinAllowedConfidenceScoreForMerging = &v
+	return s
+}
+
 // The input you provided is invalid.
 type BadRequestException struct {
 	_            struct{}                  `type:"structure"`
@@ -3278,6 +4432,135 @@ func (s *BadRequestException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *BadRequestException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Batch defines the boundaries for ingestion for each step in APPFLOW_INTEGRATION
+// workflow. APPFLOW_INTEGRATION workflow splits ingestion based on these boundaries.
+type Batch struct {
+	_ struct{} `type:"structure"`
+
+	// End time of batch to split ingestion.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `type:"timestamp" required:"true"`
+
+	// Start time of batch to split ingestion.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Batch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Batch) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Batch) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Batch"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *Batch) SetEndTime(v time.Time) *Batch {
+	s.EndTime = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *Batch) SetStartTime(v time.Time) *Batch {
+	s.StartTime = &v
+	return s
+}
+
+// How the auto-merging process should resolve conflicts between different profiles.
+type ConflictResolution struct {
+	_ struct{} `type:"structure"`
+
+	// How the auto-merging process should resolve conflicts between different profiles.
+	//
+	//    * RECENCY: Uses the data that was most recently updated.
+	//
+	//    * SOURCE: Uses the data from a specific source. For example, if a company
+	//    has been aquired or two departments have merged, data from the specified
+	//    source is used. If two duplicate profiles are from the same source, then
+	//    RECENCY is used again.
+	//
+	// ConflictResolvingModel is a required field
+	ConflictResolvingModel *string `type:"string" required:"true" enum:"ConflictResolvingModel"`
+
+	// The ObjectType name that is used to resolve profile merging conflicts when
+	// choosing SOURCE as the ConflictResolvingModel.
+	SourceName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictResolution) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictResolution) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConflictResolution) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConflictResolution"}
+	if s.ConflictResolvingModel == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConflictResolvingModel"))
+	}
+	if s.SourceName != nil && len(*s.SourceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConflictResolvingModel sets the ConflictResolvingModel field's value.
+func (s *ConflictResolution) SetConflictResolvingModel(v string) *ConflictResolution {
+	s.ConflictResolvingModel = &v
+	return s
+}
+
+// SetSourceName sets the SourceName field's value.
+func (s *ConflictResolution) SetSourceName(v string) *ConflictResolution {
+	s.SourceName = &v
+	return s
 }
 
 // The operation to be performed on the provided source fields.
@@ -3348,6 +4631,56 @@ func (s *ConnectorOperator) SetZendesk(v string) *ConnectorOperator {
 	return s
 }
 
+// The matching criteria to be used during the auto-merging process.
+type Consolidation struct {
+	_ struct{} `type:"structure"`
+
+	// A list of matching criteria.
+	//
+	// MatchingAttributesList is a required field
+	MatchingAttributesList [][]*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Consolidation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Consolidation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Consolidation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Consolidation"}
+	if s.MatchingAttributesList == nil {
+		invalidParams.Add(request.NewErrParamRequired("MatchingAttributesList"))
+	}
+	if s.MatchingAttributesList != nil && len(s.MatchingAttributesList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MatchingAttributesList", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMatchingAttributesList sets the MatchingAttributesList field's value.
+func (s *Consolidation) SetMatchingAttributesList(v [][]*string) *Consolidation {
+	s.MatchingAttributesList = v
+	return s
+}
+
 type CreateDomainInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3373,10 +4706,14 @@ type CreateDomainInput struct {
 	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
 
 	// The process of matching duplicate profiles. If Matching = true, Amazon Connect
-	// Customer Profiles starts a weekly batch process every Saturday at 12AM UTC
-	// to detect duplicate profiles in your domains. After that batch process completes,
-	// use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
-	// API to return and review the results.
+	// Customer Profiles starts a weekly batch process called Identity Resolution
+	// Job. If you do not specify a date and time for Identity Resolution Job to
+	// run, by default it runs every Saturday at 12AM UTC to detect duplicate profiles
+	// in your domains.
+	//
+	// After the Identity Resolution Job completes, use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
+	// API to return and review the results. Or, if you have configured ExportingConfig
+	// in the MatchingRequest, you can download the results from S3.
 	Matching *MatchingRequest `type:"structure"`
 
 	// The tags used to organize, track, or control access for this resource.
@@ -3500,10 +4837,14 @@ type CreateDomainOutput struct {
 	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
 
 	// The process of matching duplicate profiles. If Matching = true, Amazon Connect
-	// Customer Profiles starts a weekly batch process every Saturday at 12AM UTC
-	// to detect duplicate profiles in your domains. After that batch process completes,
-	// use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
-	// API to return and review the results.
+	// Customer Profiles starts a weekly batch process called Identity Resolution
+	// Job. If you do not specify a date and time for Identity Resolution Job to
+	// run, by default it runs every Saturday at 12AM UTC to detect duplicate profiles
+	// in your domains.
+	//
+	// After the Identity Resolution Job completes, use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
+	// API to return and review the results. Or, if you have configured ExportingConfig
+	// in the MatchingRequest, you can download the results from S3.
 	Matching *MatchingResponse `type:"structure"`
 
 	// The tags used to organize, track, or control access for this resource.
@@ -3573,6 +4914,176 @@ func (s *CreateDomainOutput) SetMatching(v *MatchingResponse) *CreateDomainOutpu
 // SetTags sets the Tags field's value.
 func (s *CreateDomainOutput) SetTags(v map[string]*string) *CreateDomainOutput {
 	s.Tags = v
+	return s
+}
+
+type CreateIntegrationWorkflowInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// Configuration data for integration workflow.
+	//
+	// IntegrationConfig is a required field
+	IntegrationConfig *IntegrationConfig `type:"structure" required:"true"`
+
+	// The name of the profile object type.
+	//
+	// ObjectTypeName is a required field
+	ObjectTypeName *string `min:"1" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the IAM role. Customer Profiles assumes
+	// this role to create resources on your behalf as part of workflow execution.
+	//
+	// RoleArn is a required field
+	RoleArn *string `type:"string" required:"true"`
+
+	// The tags used to organize, track, or control access for this resource.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// The type of workflow. The only supported value is APPFLOW_INTEGRATION.
+	//
+	// WorkflowType is a required field
+	WorkflowType *string `type:"string" required:"true" enum:"WorkflowType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationWorkflowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationWorkflowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateIntegrationWorkflowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateIntegrationWorkflowInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.IntegrationConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("IntegrationConfig"))
+	}
+	if s.ObjectTypeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ObjectTypeName"))
+	}
+	if s.ObjectTypeName != nil && len(*s.ObjectTypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ObjectTypeName", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.WorkflowType == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkflowType"))
+	}
+	if s.IntegrationConfig != nil {
+		if err := s.IntegrationConfig.Validate(); err != nil {
+			invalidParams.AddNested("IntegrationConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *CreateIntegrationWorkflowInput) SetDomainName(v string) *CreateIntegrationWorkflowInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetIntegrationConfig sets the IntegrationConfig field's value.
+func (s *CreateIntegrationWorkflowInput) SetIntegrationConfig(v *IntegrationConfig) *CreateIntegrationWorkflowInput {
+	s.IntegrationConfig = v
+	return s
+}
+
+// SetObjectTypeName sets the ObjectTypeName field's value.
+func (s *CreateIntegrationWorkflowInput) SetObjectTypeName(v string) *CreateIntegrationWorkflowInput {
+	s.ObjectTypeName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CreateIntegrationWorkflowInput) SetRoleArn(v string) *CreateIntegrationWorkflowInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateIntegrationWorkflowInput) SetTags(v map[string]*string) *CreateIntegrationWorkflowInput {
+	s.Tags = v
+	return s
+}
+
+// SetWorkflowType sets the WorkflowType field's value.
+func (s *CreateIntegrationWorkflowInput) SetWorkflowType(v string) *CreateIntegrationWorkflowInput {
+	s.WorkflowType = &v
+	return s
+}
+
+type CreateIntegrationWorkflowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A message indicating create request was received.
+	//
+	// Message is a required field
+	Message *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for the workflow.
+	//
+	// WorkflowId is a required field
+	WorkflowId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationWorkflowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationWorkflowOutput) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *CreateIntegrationWorkflowOutput) SetMessage(v string) *CreateIntegrationWorkflowOutput {
+	s.Message = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *CreateIntegrationWorkflowOutput) SetWorkflowId(v string) *CreateIntegrationWorkflowOutput {
+	s.WorkflowId = &v
 	return s
 }
 
@@ -4539,6 +6050,94 @@ func (s *DeleteProfileOutput) SetMessage(v string) *DeleteProfileOutput {
 	return s
 }
 
+type DeleteWorkflowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// Unique identifier for the workflow.
+	//
+	// WorkflowId is a required field
+	WorkflowId *string `location:"uri" locationName:"WorkflowId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteWorkflowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteWorkflowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteWorkflowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteWorkflowInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.WorkflowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkflowId"))
+	}
+	if s.WorkflowId != nil && len(*s.WorkflowId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *DeleteWorkflowInput) SetDomainName(v string) *DeleteWorkflowInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *DeleteWorkflowInput) SetWorkflowId(v string) *DeleteWorkflowInput {
+	s.WorkflowId = &v
+	return s
+}
+
+type DeleteWorkflowOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteWorkflowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteWorkflowOutput) GoString() string {
+	return s.String()
+}
+
 // Usage-specific statistics about the domain.
 type DomainStats struct {
 	_ struct{} `type:"structure"`
@@ -4598,6 +6197,92 @@ func (s *DomainStats) SetProfileCount(v int64) *DomainStats {
 // SetTotalSize sets the TotalSize field's value.
 func (s *DomainStats) SetTotalSize(v int64) *DomainStats {
 	s.TotalSize = &v
+	return s
+}
+
+// Configuration information about the S3 bucket where Identity Resolution Jobs
+// writes result files.
+//
+// You need to give Customer Profiles service principal write permission to
+// your S3 bucket. Otherwise, you'll get an exception in the API response. For
+// an example policy, see Amazon Connect Customer Profiles cross-service confused
+// deputy prevention (https://docs.aws.amazon.com/connect/latest/adminguide/cross-service-confused-deputy-prevention.html#customer-profiles-cross-service).
+type ExportingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 location where Identity Resolution Jobs write result files.
+	S3Exporting *S3ExportingConfig `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExportingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExportingConfig"}
+	if s.S3Exporting != nil {
+		if err := s.S3Exporting.Validate(); err != nil {
+			invalidParams.AddNested("S3Exporting", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Exporting sets the S3Exporting field's value.
+func (s *ExportingConfig) SetS3Exporting(v *S3ExportingConfig) *ExportingConfig {
+	s.S3Exporting = v
+	return s
+}
+
+// The S3 location where Identity Resolution Jobs write result files.
+type ExportingLocation struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the S3 location where Identity Resolution Jobs write result
+	// files.
+	S3Exporting *S3ExportingLocation `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportingLocation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExportingLocation) GoString() string {
+	return s.String()
+}
+
+// SetS3Exporting sets the S3Exporting field's value.
+func (s *ExportingLocation) SetS3Exporting(v *S3ExportingLocation) *ExportingLocation {
+	s.S3Exporting = v
 	return s
 }
 
@@ -4954,6 +6639,165 @@ func (s *FlowDefinition) SetTriggerConfig(v *TriggerConfig) *FlowDefinition {
 	return s
 }
 
+type GetAutoMergingPreviewInput struct {
+	_ struct{} `type:"structure"`
+
+	// How the auto-merging process should resolve conflicts between different profiles.
+	//
+	// ConflictResolution is a required field
+	ConflictResolution *ConflictResolution `type:"structure" required:"true"`
+
+	// A list of matching attributes that represent matching criteria.
+	//
+	// Consolidation is a required field
+	Consolidation *Consolidation `type:"structure" required:"true"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// Minimum confidence score required for profiles within a matching group to
+	// be merged during the auto-merge process.
+	MinAllowedConfidenceScoreForMerging *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAutoMergingPreviewInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAutoMergingPreviewInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAutoMergingPreviewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAutoMergingPreviewInput"}
+	if s.ConflictResolution == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConflictResolution"))
+	}
+	if s.Consolidation == nil {
+		invalidParams.Add(request.NewErrParamRequired("Consolidation"))
+	}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.ConflictResolution != nil {
+		if err := s.ConflictResolution.Validate(); err != nil {
+			invalidParams.AddNested("ConflictResolution", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Consolidation != nil {
+		if err := s.Consolidation.Validate(); err != nil {
+			invalidParams.AddNested("Consolidation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConflictResolution sets the ConflictResolution field's value.
+func (s *GetAutoMergingPreviewInput) SetConflictResolution(v *ConflictResolution) *GetAutoMergingPreviewInput {
+	s.ConflictResolution = v
+	return s
+}
+
+// SetConsolidation sets the Consolidation field's value.
+func (s *GetAutoMergingPreviewInput) SetConsolidation(v *Consolidation) *GetAutoMergingPreviewInput {
+	s.Consolidation = v
+	return s
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *GetAutoMergingPreviewInput) SetDomainName(v string) *GetAutoMergingPreviewInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetMinAllowedConfidenceScoreForMerging sets the MinAllowedConfidenceScoreForMerging field's value.
+func (s *GetAutoMergingPreviewInput) SetMinAllowedConfidenceScoreForMerging(v float64) *GetAutoMergingPreviewInput {
+	s.MinAllowedConfidenceScoreForMerging = &v
+	return s
+}
+
+type GetAutoMergingPreviewOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `min:"1" type:"string" required:"true"`
+
+	// The number of match groups in the domain that have been reviewed in this
+	// preview dry run.
+	NumberOfMatchesInSample *int64 `type:"long"`
+
+	// The number of profiles found in this preview dry run.
+	NumberOfProfilesInSample *int64 `type:"long"`
+
+	// The number of profiles that would be merged if this wasn't a preview dry
+	// run.
+	NumberOfProfilesWillBeMerged *int64 `type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAutoMergingPreviewOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAutoMergingPreviewOutput) GoString() string {
+	return s.String()
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *GetAutoMergingPreviewOutput) SetDomainName(v string) *GetAutoMergingPreviewOutput {
+	s.DomainName = &v
+	return s
+}
+
+// SetNumberOfMatchesInSample sets the NumberOfMatchesInSample field's value.
+func (s *GetAutoMergingPreviewOutput) SetNumberOfMatchesInSample(v int64) *GetAutoMergingPreviewOutput {
+	s.NumberOfMatchesInSample = &v
+	return s
+}
+
+// SetNumberOfProfilesInSample sets the NumberOfProfilesInSample field's value.
+func (s *GetAutoMergingPreviewOutput) SetNumberOfProfilesInSample(v int64) *GetAutoMergingPreviewOutput {
+	s.NumberOfProfilesInSample = &v
+	return s
+}
+
+// SetNumberOfProfilesWillBeMerged sets the NumberOfProfilesWillBeMerged field's value.
+func (s *GetAutoMergingPreviewOutput) SetNumberOfProfilesWillBeMerged(v int64) *GetAutoMergingPreviewOutput {
+	s.NumberOfProfilesWillBeMerged = &v
+	return s
+}
+
 type GetDomainInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -5034,10 +6878,14 @@ type GetDomainOutput struct {
 	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
 
 	// The process of matching duplicate profiles. If Matching = true, Amazon Connect
-	// Customer Profiles starts a weekly batch process every Saturday at 12AM UTC
-	// to detect duplicate profiles in your domains. After that batch process completes,
-	// use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
-	// API to return and review the results.
+	// Customer Profiles starts a weekly batch process called Identity Resolution
+	// Job. If you do not specify a date and time for Identity Resolution Job to
+	// run, by default it runs every Saturday at 12AM UTC to detect duplicate profiles
+	// in your domains.
+	//
+	// After the Identity Resolution Job completes, use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
+	// API to return and review the results. Or, if you have configured ExportingConfig
+	// in the MatchingRequest, you can download the results from S3.
 	Matching *MatchingResponse `type:"structure"`
 
 	// Usage-specific statistics about the domain.
@@ -5116,6 +6964,214 @@ func (s *GetDomainOutput) SetStats(v *DomainStats) *GetDomainOutput {
 // SetTags sets the Tags field's value.
 func (s *GetDomainOutput) SetTags(v map[string]*string) *GetDomainOutput {
 	s.Tags = v
+	return s
+}
+
+type GetIdentityResolutionJobInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// The unique identifier of the Identity Resolution Job.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"JobId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetIdentityResolutionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetIdentityResolutionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetIdentityResolutionJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetIdentityResolutionJobInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *GetIdentityResolutionJobInput) SetDomainName(v string) *GetIdentityResolutionJobInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetIdentityResolutionJobInput) SetJobId(v string) *GetIdentityResolutionJobInput {
+	s.JobId = &v
+	return s
+}
+
+type GetIdentityResolutionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration settings for how to perform the auto-merging of profiles.
+	AutoMerging *AutoMerging `type:"structure"`
+
+	// The unique name of the domain.
+	DomainName *string `min:"1" type:"string"`
+
+	// The S3 location where the Identity Resolution Job writes result files.
+	ExportingLocation *ExportingLocation `type:"structure"`
+
+	// The timestamp of when the Identity Resolution Job was completed.
+	JobEndTime *time.Time `type:"timestamp"`
+
+	// The timestamp of when the Identity Resolution Job will expire.
+	JobExpirationTime *time.Time `type:"timestamp"`
+
+	// The unique identifier of the Identity Resolution Job.
+	JobId *string `type:"string"`
+
+	// The timestamp of when the Identity Resolution Job was started or will be
+	// started.
+	JobStartTime *time.Time `type:"timestamp"`
+
+	// Statistics about the Identity Resolution Job.
+	JobStats *JobStats `type:"structure"`
+
+	// The timestamp of when the Identity Resolution Job was most recently edited.
+	LastUpdatedAt *time.Time `type:"timestamp"`
+
+	// The error messages that are generated when the Identity Resolution Job runs.
+	Message *string `type:"string"`
+
+	// The status of the Identity Resolution Job.
+	//
+	//    * PENDING: The Identity Resolution Job is scheduled but has not started
+	//    yet. If you turn off the Identity Resolution feature in your domain, jobs
+	//    in the PENDING state are deleted.
+	//
+	//    * PREPROCESSING: The Identity Resolution Job is loading your data.
+	//
+	//    * FIND_MATCHING: The Identity Resolution Job is using the machine learning
+	//    model to identify profiles that belong to the same matching group.
+	//
+	//    * MERGING: The Identity Resolution Job is merging duplicate profiles.
+	//
+	//    * COMPLETED: The Identity Resolution Job completed successfully.
+	//
+	//    * PARTIAL_SUCCESS: There's a system error and not all of the data is merged.
+	//    The Identity Resolution Job writes a message indicating the source of
+	//    the problem.
+	//
+	//    * FAILED: The Identity Resolution Job did not merge any data. It writes
+	//    a message indicating the source of the problem.
+	Status *string `type:"string" enum:"IdentityResolutionJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetIdentityResolutionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetIdentityResolutionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetAutoMerging sets the AutoMerging field's value.
+func (s *GetIdentityResolutionJobOutput) SetAutoMerging(v *AutoMerging) *GetIdentityResolutionJobOutput {
+	s.AutoMerging = v
+	return s
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *GetIdentityResolutionJobOutput) SetDomainName(v string) *GetIdentityResolutionJobOutput {
+	s.DomainName = &v
+	return s
+}
+
+// SetExportingLocation sets the ExportingLocation field's value.
+func (s *GetIdentityResolutionJobOutput) SetExportingLocation(v *ExportingLocation) *GetIdentityResolutionJobOutput {
+	s.ExportingLocation = v
+	return s
+}
+
+// SetJobEndTime sets the JobEndTime field's value.
+func (s *GetIdentityResolutionJobOutput) SetJobEndTime(v time.Time) *GetIdentityResolutionJobOutput {
+	s.JobEndTime = &v
+	return s
+}
+
+// SetJobExpirationTime sets the JobExpirationTime field's value.
+func (s *GetIdentityResolutionJobOutput) SetJobExpirationTime(v time.Time) *GetIdentityResolutionJobOutput {
+	s.JobExpirationTime = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetIdentityResolutionJobOutput) SetJobId(v string) *GetIdentityResolutionJobOutput {
+	s.JobId = &v
+	return s
+}
+
+// SetJobStartTime sets the JobStartTime field's value.
+func (s *GetIdentityResolutionJobOutput) SetJobStartTime(v time.Time) *GetIdentityResolutionJobOutput {
+	s.JobStartTime = &v
+	return s
+}
+
+// SetJobStats sets the JobStats field's value.
+func (s *GetIdentityResolutionJobOutput) SetJobStats(v *JobStats) *GetIdentityResolutionJobOutput {
+	s.JobStats = v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *GetIdentityResolutionJobOutput) SetLastUpdatedAt(v time.Time) *GetIdentityResolutionJobOutput {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *GetIdentityResolutionJobOutput) SetMessage(v string) *GetIdentityResolutionJobOutput {
+	s.Message = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetIdentityResolutionJobOutput) SetStatus(v string) *GetIdentityResolutionJobOutput {
+	s.Status = &v
 	return s
 }
 
@@ -5204,9 +7260,14 @@ type GetIntegrationOutput struct {
 	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
 
 	// The name of the profile object type.
-	//
-	// ObjectTypeName is a required field
-	ObjectTypeName *string `min:"1" type:"string" required:"true"`
+	ObjectTypeName *string `min:"1" type:"string"`
+
+	// A map in which each key is an event type from an external application such
+	// as Segment or Shopify, and each value is an ObjectTypeName (template) used
+	// to ingest the event. It supports the following event types: SegmentIdentify,
+	// ShopifyCreateCustomers, ShopifyUpdateCustomers, ShopifyCreateDraftOrders,
+	// ShopifyUpdateDraftOrders, ShopifyCreateOrders, and ShopifyUpdatedOrders.
+	ObjectTypeNames map[string]*string `type:"map"`
 
 	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
@@ -5215,6 +7276,9 @@ type GetIntegrationOutput struct {
 	//
 	// Uri is a required field
 	Uri *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for the workflow.
+	WorkflowId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5259,6 +7323,12 @@ func (s *GetIntegrationOutput) SetObjectTypeName(v string) *GetIntegrationOutput
 	return s
 }
 
+// SetObjectTypeNames sets the ObjectTypeNames field's value.
+func (s *GetIntegrationOutput) SetObjectTypeNames(v map[string]*string) *GetIntegrationOutput {
+	s.ObjectTypeNames = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *GetIntegrationOutput) SetTags(v map[string]*string) *GetIntegrationOutput {
 	s.Tags = v
@@ -5268,6 +7338,12 @@ func (s *GetIntegrationOutput) SetTags(v map[string]*string) *GetIntegrationOutp
 // SetUri sets the Uri field's value.
 func (s *GetIntegrationOutput) SetUri(v string) *GetIntegrationOutput {
 	s.Uri = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *GetIntegrationOutput) SetWorkflowId(v string) *GetIntegrationOutput {
+	s.WorkflowId = &v
 	return s
 }
 
@@ -5509,6 +7585,9 @@ type GetProfileObjectTypeOutput struct {
 	// ObjectTypeName is a required field
 	ObjectTypeName *string `min:"1" type:"string" required:"true"`
 
+	// The format of your sourceLastUpdatedTimestamp that was previously set up.
+	SourceLastUpdatedTimestampFormat *string `min:"1" type:"string"`
+
 	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 
@@ -5585,6 +7664,12 @@ func (s *GetProfileObjectTypeOutput) SetLastUpdatedAt(v time.Time) *GetProfileOb
 // SetObjectTypeName sets the ObjectTypeName field's value.
 func (s *GetProfileObjectTypeOutput) SetObjectTypeName(v string) *GetProfileObjectTypeOutput {
 	s.ObjectTypeName = &v
+	return s
+}
+
+// SetSourceLastUpdatedTimestampFormat sets the SourceLastUpdatedTimestampFormat field's value.
+func (s *GetProfileObjectTypeOutput) SetSourceLastUpdatedTimestampFormat(v string) *GetProfileObjectTypeOutput {
+	s.SourceLastUpdatedTimestampFormat = &v
 	return s
 }
 
@@ -5666,6 +7751,9 @@ type GetProfileObjectTypeTemplateOutput struct {
 	// A list of unique keys that can be used to map data to the profile.
 	Keys map[string][]*ObjectTypeKey `type:"map"`
 
+	// The format of your sourceLastUpdatedTimestamp that was previously set up.
+	SourceLastUpdatedTimestampFormat *string `min:"1" type:"string"`
+
 	// The name of the source of the object template.
 	SourceName *string `min:"1" type:"string"`
 
@@ -5712,6 +7800,12 @@ func (s *GetProfileObjectTypeTemplateOutput) SetKeys(v map[string][]*ObjectTypeK
 	return s
 }
 
+// SetSourceLastUpdatedTimestampFormat sets the SourceLastUpdatedTimestampFormat field's value.
+func (s *GetProfileObjectTypeTemplateOutput) SetSourceLastUpdatedTimestampFormat(v string) *GetProfileObjectTypeTemplateOutput {
+	s.SourceLastUpdatedTimestampFormat = &v
+	return s
+}
+
 // SetSourceName sets the SourceName field's value.
 func (s *GetProfileObjectTypeTemplateOutput) SetSourceName(v string) *GetProfileObjectTypeTemplateOutput {
 	s.SourceName = &v
@@ -5727,6 +7821,430 @@ func (s *GetProfileObjectTypeTemplateOutput) SetSourceObject(v string) *GetProfi
 // SetTemplateId sets the TemplateId field's value.
 func (s *GetProfileObjectTypeTemplateOutput) SetTemplateId(v string) *GetProfileObjectTypeTemplateOutput {
 	s.TemplateId = &v
+	return s
+}
+
+type GetWorkflowInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// Unique identifier for the workflow.
+	//
+	// WorkflowId is a required field
+	WorkflowId *string `location:"uri" locationName:"WorkflowId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorkflowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorkflowInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.WorkflowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkflowId"))
+	}
+	if s.WorkflowId != nil && len(*s.WorkflowId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *GetWorkflowInput) SetDomainName(v string) *GetWorkflowInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *GetWorkflowInput) SetWorkflowId(v string) *GetWorkflowInput {
+	s.WorkflowId = &v
+	return s
+}
+
+type GetWorkflowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Attributes provided for workflow execution.
+	Attributes *WorkflowAttributes `type:"structure"`
+
+	// Workflow error messages during execution (if any).
+	ErrorDescription *string `min:"1" type:"string"`
+
+	// The timestamp that represents when workflow execution last updated.
+	LastUpdatedAt *time.Time `type:"timestamp"`
+
+	// Workflow specific execution metrics.
+	Metrics *WorkflowMetrics `type:"structure"`
+
+	// The timestamp that represents when workflow execution started.
+	StartDate *time.Time `type:"timestamp"`
+
+	// Status of workflow execution.
+	Status *string `type:"string" enum:"Status"`
+
+	// Unique identifier for the workflow.
+	WorkflowId *string `type:"string"`
+
+	// The type of workflow. The only supported value is APPFLOW_INTEGRATION.
+	WorkflowType *string `type:"string" enum:"WorkflowType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowOutput) GoString() string {
+	return s.String()
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *GetWorkflowOutput) SetAttributes(v *WorkflowAttributes) *GetWorkflowOutput {
+	s.Attributes = v
+	return s
+}
+
+// SetErrorDescription sets the ErrorDescription field's value.
+func (s *GetWorkflowOutput) SetErrorDescription(v string) *GetWorkflowOutput {
+	s.ErrorDescription = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *GetWorkflowOutput) SetLastUpdatedAt(v time.Time) *GetWorkflowOutput {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetMetrics sets the Metrics field's value.
+func (s *GetWorkflowOutput) SetMetrics(v *WorkflowMetrics) *GetWorkflowOutput {
+	s.Metrics = v
+	return s
+}
+
+// SetStartDate sets the StartDate field's value.
+func (s *GetWorkflowOutput) SetStartDate(v time.Time) *GetWorkflowOutput {
+	s.StartDate = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetWorkflowOutput) SetStatus(v string) *GetWorkflowOutput {
+	s.Status = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *GetWorkflowOutput) SetWorkflowId(v string) *GetWorkflowOutput {
+	s.WorkflowId = &v
+	return s
+}
+
+// SetWorkflowType sets the WorkflowType field's value.
+func (s *GetWorkflowOutput) SetWorkflowType(v string) *GetWorkflowOutput {
+	s.WorkflowType = &v
+	return s
+}
+
+type GetWorkflowStepsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
+
+	// Unique identifier for the workflow.
+	//
+	// WorkflowId is a required field
+	WorkflowId *string `location:"uri" locationName:"WorkflowId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowStepsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowStepsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorkflowStepsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorkflowStepsInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.WorkflowId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkflowId"))
+	}
+	if s.WorkflowId != nil && len(*s.WorkflowId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *GetWorkflowStepsInput) SetDomainName(v string) *GetWorkflowStepsInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetWorkflowStepsInput) SetMaxResults(v int64) *GetWorkflowStepsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetWorkflowStepsInput) SetNextToken(v string) *GetWorkflowStepsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *GetWorkflowStepsInput) SetWorkflowId(v string) *GetWorkflowStepsInput {
+	s.WorkflowId = &v
+	return s
+}
+
+type GetWorkflowStepsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List containing workflow step details.
+	Items []*WorkflowStepItem `type:"list"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// Unique identifier for the workflow.
+	WorkflowId *string `type:"string"`
+
+	// The type of workflow. The only supported value is APPFLOW_INTEGRATION.
+	WorkflowType *string `type:"string" enum:"WorkflowType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowStepsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetWorkflowStepsOutput) GoString() string {
+	return s.String()
+}
+
+// SetItems sets the Items field's value.
+func (s *GetWorkflowStepsOutput) SetItems(v []*WorkflowStepItem) *GetWorkflowStepsOutput {
+	s.Items = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetWorkflowStepsOutput) SetNextToken(v string) *GetWorkflowStepsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *GetWorkflowStepsOutput) SetWorkflowId(v string) *GetWorkflowStepsOutput {
+	s.WorkflowId = &v
+	return s
+}
+
+// SetWorkflowType sets the WorkflowType field's value.
+func (s *GetWorkflowStepsOutput) SetWorkflowType(v string) *GetWorkflowStepsOutput {
+	s.WorkflowType = &v
+	return s
+}
+
+// Information about the Identity Resolution Job.
+type IdentityResolutionJob struct {
+	_ struct{} `type:"structure"`
+
+	// The unique name of the domain.
+	DomainName *string `min:"1" type:"string"`
+
+	// The S3 location where the Identity Resolution Job writes result files.
+	ExportingLocation *ExportingLocation `type:"structure"`
+
+	// The timestamp of when the job was completed.
+	JobEndTime *time.Time `type:"timestamp"`
+
+	// The unique identifier of the Identity Resolution Job.
+	JobId *string `type:"string"`
+
+	// The timestamp of when the job was started or will be started.
+	JobStartTime *time.Time `type:"timestamp"`
+
+	// Statistics about an Identity Resolution Job.
+	JobStats *JobStats `type:"structure"`
+
+	// The error messages that are generated when the Identity Resolution Job runs.
+	Message *string `type:"string"`
+
+	// The status of the Identity Resolution Job.
+	//
+	//    * PENDING: The Identity Resolution Job is scheduled but has not started
+	//    yet. If you turn off the Identity Resolution feature in your domain, jobs
+	//    in the PENDING state are deleted.
+	//
+	//    * PREPROCESSING: The Identity Resolution Job is loading your data.
+	//
+	//    * FIND_MATCHING: The Identity Resolution Job is using the machine learning
+	//    model to identify profiles that belong to the same matching group.
+	//
+	//    * MERGING: The Identity Resolution Job is merging duplicate profiles.
+	//
+	//    * COMPLETED: The Identity Resolution Job completed successfully.
+	//
+	//    * PARTIAL_SUCCESS: There's a system error and not all of the data is merged.
+	//    The Identity Resolution Job writes a message indicating the source of
+	//    the problem.
+	//
+	//    * FAILED: The Identity Resolution Job did not merge any data. It writes
+	//    a message indicating the source of the problem.
+	Status *string `type:"string" enum:"IdentityResolutionJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IdentityResolutionJob) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IdentityResolutionJob) GoString() string {
+	return s.String()
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *IdentityResolutionJob) SetDomainName(v string) *IdentityResolutionJob {
+	s.DomainName = &v
+	return s
+}
+
+// SetExportingLocation sets the ExportingLocation field's value.
+func (s *IdentityResolutionJob) SetExportingLocation(v *ExportingLocation) *IdentityResolutionJob {
+	s.ExportingLocation = v
+	return s
+}
+
+// SetJobEndTime sets the JobEndTime field's value.
+func (s *IdentityResolutionJob) SetJobEndTime(v time.Time) *IdentityResolutionJob {
+	s.JobEndTime = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *IdentityResolutionJob) SetJobId(v string) *IdentityResolutionJob {
+	s.JobId = &v
+	return s
+}
+
+// SetJobStartTime sets the JobStartTime field's value.
+func (s *IdentityResolutionJob) SetJobStartTime(v time.Time) *IdentityResolutionJob {
+	s.JobStartTime = &v
+	return s
+}
+
+// SetJobStats sets the JobStats field's value.
+func (s *IdentityResolutionJob) SetJobStats(v *JobStats) *IdentityResolutionJob {
+	s.JobStats = v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *IdentityResolutionJob) SetMessage(v string) *IdentityResolutionJob {
+	s.Message = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *IdentityResolutionJob) SetStatus(v string) *IdentityResolutionJob {
+	s.Status = &v
 	return s
 }
 
@@ -5761,6 +8279,53 @@ func (s IncrementalPullConfig) GoString() string {
 // SetDatetimeTypeFieldName sets the DatetimeTypeFieldName field's value.
 func (s *IncrementalPullConfig) SetDatetimeTypeFieldName(v string) *IncrementalPullConfig {
 	s.DatetimeTypeFieldName = &v
+	return s
+}
+
+// Configuration data for integration workflow.
+type IntegrationConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration data for APPFLOW_INTEGRATION workflow type.
+	AppflowIntegration *AppflowIntegration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntegrationConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntegrationConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IntegrationConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IntegrationConfig"}
+	if s.AppflowIntegration != nil {
+		if err := s.AppflowIntegration.Validate(); err != nil {
+			invalidParams.AddNested("AppflowIntegration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAppflowIntegration sets the AppflowIntegration field's value.
+func (s *IntegrationConfig) SetAppflowIntegration(v *AppflowIntegration) *IntegrationConfig {
+	s.AppflowIntegration = v
 	return s
 }
 
@@ -5828,8 +8393,127 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The day and time when do you want to start the Identity Resolution Job every
+// week.
+type JobSchedule struct {
+	_ struct{} `type:"structure"`
+
+	// The day when the Identity Resolution Job should run every week.
+	//
+	// DayOfTheWeek is a required field
+	DayOfTheWeek *string `type:"string" required:"true" enum:"JobScheduleDayOfTheWeek"`
+
+	// The time when the Identity Resolution Job should run every week.
+	//
+	// Time is a required field
+	Time *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobSchedule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobSchedule) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JobSchedule) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JobSchedule"}
+	if s.DayOfTheWeek == nil {
+		invalidParams.Add(request.NewErrParamRequired("DayOfTheWeek"))
+	}
+	if s.Time == nil {
+		invalidParams.Add(request.NewErrParamRequired("Time"))
+	}
+	if s.Time != nil && len(*s.Time) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Time", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDayOfTheWeek sets the DayOfTheWeek field's value.
+func (s *JobSchedule) SetDayOfTheWeek(v string) *JobSchedule {
+	s.DayOfTheWeek = &v
+	return s
+}
+
+// SetTime sets the Time field's value.
+func (s *JobSchedule) SetTime(v string) *JobSchedule {
+	s.Time = &v
+	return s
+}
+
+// Statistics about the Identity Resolution Job.
+type JobStats struct {
+	_ struct{} `type:"structure"`
+
+	// The number of matches found.
+	NumberOfMatchesFound *int64 `type:"long"`
+
+	// The number of merges completed.
+	NumberOfMergesDone *int64 `type:"long"`
+
+	// The number of profiles reviewed.
+	NumberOfProfilesReviewed *int64 `type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobStats) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobStats) GoString() string {
+	return s.String()
+}
+
+// SetNumberOfMatchesFound sets the NumberOfMatchesFound field's value.
+func (s *JobStats) SetNumberOfMatchesFound(v int64) *JobStats {
+	s.NumberOfMatchesFound = &v
+	return s
+}
+
+// SetNumberOfMergesDone sets the NumberOfMergesDone field's value.
+func (s *JobStats) SetNumberOfMergesDone(v int64) *JobStats {
+	s.NumberOfMergesDone = &v
+	return s
+}
+
+// SetNumberOfProfilesReviewed sets the NumberOfProfilesReviewed field's value.
+func (s *JobStats) SetNumberOfProfilesReviewed(v int64) *JobStats {
+	s.NumberOfProfilesReviewed = &v
+	return s
+}
+
 type ListAccountIntegrationsInput struct {
 	_ struct{} `type:"structure"`
+
+	// Boolean to indicate if hidden integration should be returned. Defaults to
+	// False.
+	IncludeHidden *bool `location:"querystring" locationName:"include-hidden" type:"boolean"`
 
 	// The maximum number of objects returned per page.
 	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
@@ -5881,6 +8565,12 @@ func (s *ListAccountIntegrationsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetIncludeHidden sets the IncludeHidden field's value.
+func (s *ListAccountIntegrationsInput) SetIncludeHidden(v bool) *ListAccountIntegrationsInput {
+	s.IncludeHidden = &v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -6102,6 +8792,120 @@ func (s *ListDomainsOutput) SetNextToken(v string) *ListDomainsOutput {
 	return s
 }
 
+type ListIdentityResolutionJobsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListIdentityResolutionJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListIdentityResolutionJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListIdentityResolutionJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListIdentityResolutionJobsInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *ListIdentityResolutionJobsInput) SetDomainName(v string) *ListIdentityResolutionJobsInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListIdentityResolutionJobsInput) SetMaxResults(v int64) *ListIdentityResolutionJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListIdentityResolutionJobsInput) SetNextToken(v string) *ListIdentityResolutionJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListIdentityResolutionJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of Identity Resolution Jobs.
+	IdentityResolutionJobsList []*IdentityResolutionJob `type:"list"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListIdentityResolutionJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListIdentityResolutionJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetIdentityResolutionJobsList sets the IdentityResolutionJobsList field's value.
+func (s *ListIdentityResolutionJobsOutput) SetIdentityResolutionJobsList(v []*IdentityResolutionJob) *ListIdentityResolutionJobsOutput {
+	s.IdentityResolutionJobsList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListIdentityResolutionJobsOutput) SetNextToken(v string) *ListIdentityResolutionJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
 // An integration in list of integrations.
 type ListIntegrationItem struct {
 	_ struct{} `type:"structure"`
@@ -6122,9 +8926,14 @@ type ListIntegrationItem struct {
 	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
 
 	// The name of the profile object type.
-	//
-	// ObjectTypeName is a required field
-	ObjectTypeName *string `min:"1" type:"string" required:"true"`
+	ObjectTypeName *string `min:"1" type:"string"`
+
+	// A map in which each key is an event type from an external application such
+	// as Segment or Shopify, and each value is an ObjectTypeName (template) used
+	// to ingest the event. It supports the following event types: SegmentIdentify,
+	// ShopifyCreateCustomers, ShopifyUpdateCustomers, ShopifyCreateDraftOrders,
+	// ShopifyUpdateDraftOrders, ShopifyCreateOrders, and ShopifyUpdatedOrders.
+	ObjectTypeNames map[string]*string `type:"map"`
 
 	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
@@ -6133,6 +8942,9 @@ type ListIntegrationItem struct {
 	//
 	// Uri is a required field
 	Uri *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for the workflow.
+	WorkflowId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -6177,6 +8989,12 @@ func (s *ListIntegrationItem) SetObjectTypeName(v string) *ListIntegrationItem {
 	return s
 }
 
+// SetObjectTypeNames sets the ObjectTypeNames field's value.
+func (s *ListIntegrationItem) SetObjectTypeNames(v map[string]*string) *ListIntegrationItem {
+	s.ObjectTypeNames = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *ListIntegrationItem) SetTags(v map[string]*string) *ListIntegrationItem {
 	s.Tags = v
@@ -6189,6 +9007,12 @@ func (s *ListIntegrationItem) SetUri(v string) *ListIntegrationItem {
 	return s
 }
 
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *ListIntegrationItem) SetWorkflowId(v string) *ListIntegrationItem {
+	s.WorkflowId = &v
+	return s
+}
+
 type ListIntegrationsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -6196,6 +9020,10 @@ type ListIntegrationsInput struct {
 	//
 	// DomainName is a required field
 	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// Boolean to indicate if hidden integration should be returned. Defaults to
+	// False.
+	IncludeHidden *bool `location:"querystring" locationName:"include-hidden" type:"boolean"`
 
 	// The maximum number of objects returned per page.
 	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
@@ -6247,6 +9075,12 @@ func (s *ListIntegrationsInput) Validate() error {
 // SetDomainName sets the DomainName field's value.
 func (s *ListIntegrationsInput) SetDomainName(v string) *ListIntegrationsInput {
 	s.DomainName = &v
+	return s
+}
+
+// SetIncludeHidden sets the IncludeHidden field's value.
+func (s *ListIntegrationsInput) SetIncludeHidden(v bool) *ListIntegrationsInput {
+	s.IncludeHidden = &v
 	return s
 }
 
@@ -6648,8 +9482,8 @@ type ListProfileObjectsInput struct {
 	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
 
 	// Applies a filter to the response to include profile objects with the specified
-	// index values. This filter is only supported for ObjectTypeName _asset and
-	// _case.
+	// index values. This filter is only supported for ObjectTypeName _asset, _case
+	// and _order.
 	ObjectFilter *ObjectFilter `type:"structure"`
 
 	// The name of the profile object type.
@@ -6923,6 +9757,245 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
+type ListWorkflowsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique name of the domain.
+	//
+	// DomainName is a required field
+	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
+
+	// Retrieve workflows ended after timestamp.
+	QueryEndDate *time.Time `type:"timestamp"`
+
+	// Retrieve workflows started after timestamp.
+	QueryStartDate *time.Time `type:"timestamp"`
+
+	// Status of workflow execution.
+	Status *string `type:"string" enum:"Status"`
+
+	// The type of workflow. The only supported value is APPFLOW_INTEGRATION.
+	WorkflowType *string `type:"string" enum:"WorkflowType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListWorkflowsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListWorkflowsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListWorkflowsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListWorkflowsInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *ListWorkflowsInput) SetDomainName(v string) *ListWorkflowsInput {
+	s.DomainName = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListWorkflowsInput) SetMaxResults(v int64) *ListWorkflowsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorkflowsInput) SetNextToken(v string) *ListWorkflowsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetQueryEndDate sets the QueryEndDate field's value.
+func (s *ListWorkflowsInput) SetQueryEndDate(v time.Time) *ListWorkflowsInput {
+	s.QueryEndDate = &v
+	return s
+}
+
+// SetQueryStartDate sets the QueryStartDate field's value.
+func (s *ListWorkflowsInput) SetQueryStartDate(v time.Time) *ListWorkflowsInput {
+	s.QueryStartDate = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListWorkflowsInput) SetStatus(v string) *ListWorkflowsInput {
+	s.Status = &v
+	return s
+}
+
+// SetWorkflowType sets the WorkflowType field's value.
+func (s *ListWorkflowsInput) SetWorkflowType(v string) *ListWorkflowsInput {
+	s.WorkflowType = &v
+	return s
+}
+
+// A workflow in list of workflows.
+type ListWorkflowsItem struct {
+	_ struct{} `type:"structure"`
+
+	// Creation timestamp for workflow.
+	//
+	// CreatedAt is a required field
+	CreatedAt *time.Time `type:"timestamp" required:"true"`
+
+	// Last updated timestamp for workflow.
+	//
+	// LastUpdatedAt is a required field
+	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
+
+	// Status of workflow execution.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"Status"`
+
+	// Description for workflow execution status.
+	//
+	// StatusDescription is a required field
+	StatusDescription *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for the workflow.
+	//
+	// WorkflowId is a required field
+	WorkflowId *string `min:"1" type:"string" required:"true"`
+
+	// The type of workflow. The only supported value is APPFLOW_INTEGRATION.
+	//
+	// WorkflowType is a required field
+	WorkflowType *string `type:"string" required:"true" enum:"WorkflowType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListWorkflowsItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListWorkflowsItem) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ListWorkflowsItem) SetCreatedAt(v time.Time) *ListWorkflowsItem {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *ListWorkflowsItem) SetLastUpdatedAt(v time.Time) *ListWorkflowsItem {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListWorkflowsItem) SetStatus(v string) *ListWorkflowsItem {
+	s.Status = &v
+	return s
+}
+
+// SetStatusDescription sets the StatusDescription field's value.
+func (s *ListWorkflowsItem) SetStatusDescription(v string) *ListWorkflowsItem {
+	s.StatusDescription = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *ListWorkflowsItem) SetWorkflowId(v string) *ListWorkflowsItem {
+	s.WorkflowId = &v
+	return s
+}
+
+// SetWorkflowType sets the WorkflowType field's value.
+func (s *ListWorkflowsItem) SetWorkflowType(v string) *ListWorkflowsItem {
+	s.WorkflowType = &v
+	return s
+}
+
+type ListWorkflowsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List containing workflow details.
+	Items []*ListWorkflowsItem `type:"list"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListWorkflowsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListWorkflowsOutput) GoString() string {
+	return s.String()
+}
+
+// SetItems sets the Items field's value.
+func (s *ListWorkflowsOutput) SetItems(v []*ListWorkflowsItem) *ListWorkflowsOutput {
+	s.Items = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorkflowsOutput) SetNextToken(v string) *ListWorkflowsOutput {
+	s.NextToken = &v
+	return s
+}
+
 // The properties that are applied when Marketo is being used as a source.
 type MarketoSourceProperties struct {
 	_ struct{} `type:"structure"`
@@ -6974,6 +10047,16 @@ func (s *MarketoSourceProperties) SetObject(v string) *MarketoSourceProperties {
 type MatchItem struct {
 	_ struct{} `type:"structure"`
 
+	// A number between 0 and 1, where a higher score means higher similarity. Examining
+	// match confidence scores lets you distinguish between groups of similar records
+	// in which the system is highly confident (which you may decide to merge),
+	// groups of similar records about which the system is uncertain (which you
+	// may decide to have reviewed by a human), and groups of similar records that
+	// the system deems to be unlikely (which you may decide to reject). Given confidence
+	// scores vary as per the data input, it should not be used an absolute measure
+	// of matching quality.
+	ConfidenceScore *float64 `type:"double"`
+
 	// The unique identifiers for this group of profiles that match.
 	MatchId *string `min:"1" type:"string"`
 
@@ -6999,6 +10082,12 @@ func (s MatchItem) GoString() string {
 	return s.String()
 }
 
+// SetConfidenceScore sets the ConfidenceScore field's value.
+func (s *MatchItem) SetConfidenceScore(v float64) *MatchItem {
+	s.ConfidenceScore = &v
+	return s
+}
+
 // SetMatchId sets the MatchId field's value.
 func (s *MatchItem) SetMatchId(v string) *MatchItem {
 	s.MatchId = &v
@@ -7015,10 +10104,21 @@ func (s *MatchItem) SetProfileIds(v []*string) *MatchItem {
 type MatchingRequest struct {
 	_ struct{} `type:"structure"`
 
+	// Configuration information about the auto-merging process.
+	AutoMerging *AutoMerging `type:"structure"`
+
 	// The flag that enables the matching process of duplicate profiles.
 	//
 	// Enabled is a required field
 	Enabled *bool `type:"boolean" required:"true"`
+
+	// Configuration information for exporting Identity Resolution results, for
+	// example, to an S3 bucket.
+	ExportingConfig *ExportingConfig `type:"structure"`
+
+	// The day and time when do you want to start the Identity Resolution Job every
+	// week.
+	JobSchedule *JobSchedule `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7045,11 +10145,32 @@ func (s *MatchingRequest) Validate() error {
 	if s.Enabled == nil {
 		invalidParams.Add(request.NewErrParamRequired("Enabled"))
 	}
+	if s.AutoMerging != nil {
+		if err := s.AutoMerging.Validate(); err != nil {
+			invalidParams.AddNested("AutoMerging", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ExportingConfig != nil {
+		if err := s.ExportingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ExportingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.JobSchedule != nil {
+		if err := s.JobSchedule.Validate(); err != nil {
+			invalidParams.AddNested("JobSchedule", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAutoMerging sets the AutoMerging field's value.
+func (s *MatchingRequest) SetAutoMerging(v *AutoMerging) *MatchingRequest {
+	s.AutoMerging = v
+	return s
 }
 
 // SetEnabled sets the Enabled field's value.
@@ -7058,12 +10179,35 @@ func (s *MatchingRequest) SetEnabled(v bool) *MatchingRequest {
 	return s
 }
 
+// SetExportingConfig sets the ExportingConfig field's value.
+func (s *MatchingRequest) SetExportingConfig(v *ExportingConfig) *MatchingRequest {
+	s.ExportingConfig = v
+	return s
+}
+
+// SetJobSchedule sets the JobSchedule field's value.
+func (s *MatchingRequest) SetJobSchedule(v *JobSchedule) *MatchingRequest {
+	s.JobSchedule = v
+	return s
+}
+
 // The flag that enables the matching process of duplicate profiles.
 type MatchingResponse struct {
 	_ struct{} `type:"structure"`
 
+	// Configuration information about the auto-merging process.
+	AutoMerging *AutoMerging `type:"structure"`
+
 	// The flag that enables the matching process of duplicate profiles.
 	Enabled *bool `type:"boolean"`
+
+	// Configuration information for exporting Identity Resolution results, for
+	// example, to an S3 bucket.
+	ExportingConfig *ExportingConfig `type:"structure"`
+
+	// The day and time when do you want to start the Identity Resolution Job every
+	// week.
+	JobSchedule *JobSchedule `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7084,9 +10228,27 @@ func (s MatchingResponse) GoString() string {
 	return s.String()
 }
 
+// SetAutoMerging sets the AutoMerging field's value.
+func (s *MatchingResponse) SetAutoMerging(v *AutoMerging) *MatchingResponse {
+	s.AutoMerging = v
+	return s
+}
+
 // SetEnabled sets the Enabled field's value.
 func (s *MatchingResponse) SetEnabled(v bool) *MatchingResponse {
 	s.Enabled = &v
+	return s
+}
+
+// SetExportingConfig sets the ExportingConfig field's value.
+func (s *MatchingResponse) SetExportingConfig(v *ExportingConfig) *MatchingResponse {
+	s.ExportingConfig = v
+	return s
+}
+
+// SetJobSchedule sets the JobSchedule field's value.
+func (s *MatchingResponse) SetJobSchedule(v *JobSchedule) *MatchingResponse {
+	s.JobSchedule = v
 	return s
 }
 
@@ -7215,13 +10377,14 @@ func (s *MergeProfilesOutput) SetMessage(v string) *MergeProfilesOutput {
 
 // The filter applied to ListProfileObjects response to include profile objects
 // with the specified index values. This filter is only supported for ObjectTypeName
-// _asset and _case.
+// _asset, _case and _order.
 type ObjectFilter struct {
 	_ struct{} `type:"structure"`
 
 	// A searchable identifier of a standard profile object. The predefined keys
 	// you can use to search for _asset include: _assetId, _assetName, _serialNumber.
-	// The predefined keys you can use to search for _case include: _caseId.
+	// The predefined keys you can use to search for _case include: _caseId. The
+	// predefined keys you can use to search for _order include: _orderId.
 	//
 	// KeyName is a required field
 	KeyName *string `min:"1" type:"string" required:"true"`
@@ -7359,16 +10522,16 @@ type ObjectTypeKey struct {
 	FieldNames []*string `type:"list"`
 
 	// The types of keys that a ProfileObject can have. Each ProfileObject can have
-	// only 1 UNIQUE key but multiple PROFILE keys. PROFILE, ASSET or CASE means
-	// that this key can be used to tie an object to a PROFILE, ASSET or CASE respectively.
-	// UNIQUE means that it can be used to uniquely identify an object. If a key
-	// a is marked as SECONDARY, it will be used to search for profiles after all
-	// other PROFILE keys have been searched. A LOOKUP_ONLY key is only used to
-	// match a profile but is not persisted to be used for searching of the profile.
-	// A NEW_ONLY key is only used if the profile does not already exist before
-	// the object is ingested, otherwise it is only used for matching objects to
-	// profiles.
-	StandardIdentifiers []*string `type:"list"`
+	// only 1 UNIQUE key but multiple PROFILE keys. PROFILE, ASSET, CASE, or ORDER
+	// means that this key can be used to tie an object to a PROFILE, ASSET, CASE,
+	// or ORDER respectively. UNIQUE means that it can be used to uniquely identify
+	// an object. If a key a is marked as SECONDARY, it will be used to search for
+	// profiles after all other PROFILE keys have been searched. A LOOKUP_ONLY key
+	// is only used to match a profile but is not persisted to be used for searching
+	// of the profile. A NEW_ONLY key is only used if the profile does not already
+	// exist before the object is ingested, otherwise it is only used for matching
+	// objects to profiles.
+	StandardIdentifiers []*string `type:"list" enum:"StandardIdentifier"`
 }
 
 // String returns the string representation.
@@ -7638,9 +10801,14 @@ type PutIntegrationInput struct {
 	FlowDefinition *FlowDefinition `type:"structure"`
 
 	// The name of the profile object type.
-	//
-	// ObjectTypeName is a required field
-	ObjectTypeName *string `min:"1" type:"string" required:"true"`
+	ObjectTypeName *string `min:"1" type:"string"`
+
+	// A map in which each key is an event type from an external application such
+	// as Segment or Shopify, and each value is an ObjectTypeName (template) used
+	// to ingest the event. It supports the following event types: SegmentIdentify,
+	// ShopifyCreateCustomers, ShopifyUpdateCustomers, ShopifyCreateDraftOrders,
+	// ShopifyUpdateDraftOrders, ShopifyCreateOrders, and ShopifyUpdatedOrders.
+	ObjectTypeNames map[string]*string `type:"map"`
 
 	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
@@ -7675,9 +10843,6 @@ func (s *PutIntegrationInput) Validate() error {
 	}
 	if s.DomainName != nil && len(*s.DomainName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
-	}
-	if s.ObjectTypeName == nil {
-		invalidParams.Add(request.NewErrParamRequired("ObjectTypeName"))
 	}
 	if s.ObjectTypeName != nil && len(*s.ObjectTypeName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ObjectTypeName", 1))
@@ -7718,6 +10883,12 @@ func (s *PutIntegrationInput) SetObjectTypeName(v string) *PutIntegrationInput {
 	return s
 }
 
+// SetObjectTypeNames sets the ObjectTypeNames field's value.
+func (s *PutIntegrationInput) SetObjectTypeNames(v map[string]*string) *PutIntegrationInput {
+	s.ObjectTypeNames = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *PutIntegrationInput) SetTags(v map[string]*string) *PutIntegrationInput {
 	s.Tags = v
@@ -7749,9 +10920,14 @@ type PutIntegrationOutput struct {
 	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
 
 	// The name of the profile object type.
-	//
-	// ObjectTypeName is a required field
-	ObjectTypeName *string `min:"1" type:"string" required:"true"`
+	ObjectTypeName *string `min:"1" type:"string"`
+
+	// A map in which each key is an event type from an external application such
+	// as Segment or Shopify, and each value is an ObjectTypeName (template) used
+	// to ingest the event. It supports the following event types: SegmentIdentify,
+	// ShopifyCreateCustomers, ShopifyUpdateCustomers, ShopifyCreateDraftOrders,
+	// ShopifyUpdateDraftOrders, ShopifyCreateOrders, and ShopifyUpdatedOrders.
+	ObjectTypeNames map[string]*string `type:"map"`
 
 	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
@@ -7760,6 +10936,9 @@ type PutIntegrationOutput struct {
 	//
 	// Uri is a required field
 	Uri *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for the workflow.
+	WorkflowId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7804,6 +10983,12 @@ func (s *PutIntegrationOutput) SetObjectTypeName(v string) *PutIntegrationOutput
 	return s
 }
 
+// SetObjectTypeNames sets the ObjectTypeNames field's value.
+func (s *PutIntegrationOutput) SetObjectTypeNames(v map[string]*string) *PutIntegrationOutput {
+	s.ObjectTypeNames = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *PutIntegrationOutput) SetTags(v map[string]*string) *PutIntegrationOutput {
 	s.Tags = v
@@ -7813,6 +10998,12 @@ func (s *PutIntegrationOutput) SetTags(v map[string]*string) *PutIntegrationOutp
 // SetUri sets the Uri field's value.
 func (s *PutIntegrationOutput) SetUri(v string) *PutIntegrationOutput {
 	s.Uri = &v
+	return s
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *PutIntegrationOutput) SetWorkflowId(v string) *PutIntegrationOutput {
+	s.WorkflowId = &v
 	return s
 }
 
@@ -7969,10 +11160,18 @@ type PutProfileObjectTypeInput struct {
 	// ObjectTypeName is a required field
 	ObjectTypeName *string `location:"uri" locationName:"ObjectTypeName" min:"1" type:"string" required:"true"`
 
+	// The format of your sourceLastUpdatedTimestamp that was previously set up.
+	SourceLastUpdatedTimestampFormat *string `min:"1" type:"string"`
+
 	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
 
-	// A unique identifier for the object template.
+	// A unique identifier for the object template. For some attributes in the request,
+	// the service will use the default value from the object template when TemplateId
+	// is present. If these attributes are present in the request, the service may
+	// return a BadRequestException. These attributes include: AllowProfileCreation,
+	// SourceLastUpdatedTimestampFormat, Fields, and Keys. For example, if AllowProfileCreation
+	// is set to true when TemplateId is set, the service may return a BadRequestException.
 	TemplateId *string `min:"1" type:"string"`
 }
 
@@ -8017,6 +11216,9 @@ func (s *PutProfileObjectTypeInput) Validate() error {
 	}
 	if s.ObjectTypeName != nil && len(*s.ObjectTypeName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ObjectTypeName", 1))
+	}
+	if s.SourceLastUpdatedTimestampFormat != nil && len(*s.SourceLastUpdatedTimestampFormat) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceLastUpdatedTimestampFormat", 1))
 	}
 	if s.Tags != nil && len(s.Tags) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
@@ -8089,6 +11291,12 @@ func (s *PutProfileObjectTypeInput) SetObjectTypeName(v string) *PutProfileObjec
 	return s
 }
 
+// SetSourceLastUpdatedTimestampFormat sets the SourceLastUpdatedTimestampFormat field's value.
+func (s *PutProfileObjectTypeInput) SetSourceLastUpdatedTimestampFormat(v string) *PutProfileObjectTypeInput {
+	s.SourceLastUpdatedTimestampFormat = &v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *PutProfileObjectTypeInput) SetTags(v map[string]*string) *PutProfileObjectTypeInput {
 	s.Tags = v
@@ -8140,6 +11348,11 @@ type PutProfileObjectTypeOutput struct {
 	//
 	// ObjectTypeName is a required field
 	ObjectTypeName *string `min:"1" type:"string" required:"true"`
+
+	// The format of your sourceLastUpdatedTimestamp that was previously set up
+	// in fields that were parsed using SimpleDateFormat (https://docs.oracle.com/javase/10/docs/api/java/text/SimpleDateFormat.html).
+	// If you have sourceLastUpdatedTimestamp in your field, you must set up sourceLastUpdatedTimestampFormat.
+	SourceLastUpdatedTimestampFormat *string `min:"1" type:"string"`
 
 	// The tags used to organize, track, or control access for this resource.
 	Tags map[string]*string `min:"1" type:"map"`
@@ -8220,6 +11433,12 @@ func (s *PutProfileObjectTypeOutput) SetObjectTypeName(v string) *PutProfileObje
 	return s
 }
 
+// SetSourceLastUpdatedTimestampFormat sets the SourceLastUpdatedTimestampFormat field's value.
+func (s *PutProfileObjectTypeOutput) SetSourceLastUpdatedTimestampFormat(v string) *PutProfileObjectTypeOutput {
+	s.SourceLastUpdatedTimestampFormat = &v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *PutProfileObjectTypeOutput) SetTags(v map[string]*string) *PutProfileObjectTypeOutput {
 	s.Tags = v
@@ -8294,6 +11513,113 @@ func (s *ResourceNotFoundException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Configuration information about the S3 bucket where Identity Resolution Jobs
+// write result files.
+type S3ExportingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the S3 bucket where Identity Resolution Jobs write result files.
+	//
+	// S3BucketName is a required field
+	S3BucketName *string `min:"3" type:"string" required:"true"`
+
+	// The S3 key name of the location where Identity Resolution Jobs write result
+	// files.
+	S3KeyName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3ExportingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3ExportingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3ExportingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3ExportingConfig"}
+	if s.S3BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3BucketName"))
+	}
+	if s.S3BucketName != nil && len(*s.S3BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3BucketName", 3))
+	}
+	if s.S3KeyName != nil && len(*s.S3KeyName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("S3KeyName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *S3ExportingConfig) SetS3BucketName(v string) *S3ExportingConfig {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3KeyName sets the S3KeyName field's value.
+func (s *S3ExportingConfig) SetS3KeyName(v string) *S3ExportingConfig {
+	s.S3KeyName = &v
+	return s
+}
+
+// The S3 location where Identity Resolution Jobs write result files.
+type S3ExportingLocation struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the S3 bucket name where Identity Resolution Jobs write result
+	// files.
+	S3BucketName *string `min:"3" type:"string"`
+
+	// The S3 key name of the location where Identity Resolution Jobs write result
+	// files.
+	S3KeyName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3ExportingLocation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3ExportingLocation) GoString() string {
+	return s.String()
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *S3ExportingLocation) SetS3BucketName(v string) *S3ExportingLocation {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3KeyName sets the S3KeyName field's value.
+func (s *S3ExportingLocation) SetS3KeyName(v string) *S3ExportingLocation {
+	s.S3KeyName = &v
+	return s
 }
 
 // The properties that are applied when Amazon S3 is being used as the flow
@@ -8538,9 +11864,11 @@ type SearchProfilesInput struct {
 	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
 
 	// A searchable identifier of a customer profile. The predefined keys you can
-	// use to search include: _account, _profileId, _fullName, _phone, _email, _ctrContactId,
-	// _marketoLeadId, _salesforceAccountId, _salesforceContactId, _zendeskUserId,
-	// _zendeskExternalId, _serviceNowSystemId.
+	// use to search include: _account, _profileId, _assetId, _caseId, _orderId,
+	// _fullName, _phone, _email, _ctrContactId, _marketoLeadId, _salesforceAccountId,
+	// _salesforceContactId, _salesforceAssetId, _zendeskUserId, _zendeskExternalId,
+	// _zendeskTicketId, _serviceNowSystemId, _serviceNowIncidentId, _segmentUserId,
+	// _shopifyCustomerId, _shopifyOrderId.
 	//
 	// KeyName is a required field
 	KeyName *string `min:"1" type:"string" required:"true"`
@@ -8984,7 +12312,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9339,7 +12667,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9498,10 +12826,14 @@ type UpdateDomainInput struct {
 	DomainName *string `location:"uri" locationName:"DomainName" min:"1" type:"string" required:"true"`
 
 	// The process of matching duplicate profiles. If Matching = true, Amazon Connect
-	// Customer Profiles starts a weekly batch process every Saturday at 12AM UTC
-	// to detect duplicate profiles in your domains. After that batch process completes,
-	// use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
-	// API to return and review the results.
+	// Customer Profiles starts a weekly batch process called Identity Resolution
+	// Job. If you do not specify a date and time for Identity Resolution Job to
+	// run, by default it runs every Saturday at 12AM UTC to detect duplicate profiles
+	// in your domains.
+	//
+	// After the Identity Resolution Job completes, use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
+	// API to return and review the results. Or, if you have configured ExportingConfig
+	// in the MatchingRequest, you can download the results from S3.
 	Matching *MatchingRequest `type:"structure"`
 
 	// The tags used to organize, track, or control access for this resource.
@@ -9620,10 +12952,14 @@ type UpdateDomainOutput struct {
 	LastUpdatedAt *time.Time `type:"timestamp" required:"true"`
 
 	// The process of matching duplicate profiles. If Matching = true, Amazon Connect
-	// Customer Profiles starts a weekly batch process every Saturday at 12AM UTC
-	// to detect duplicate profiles in your domains. After that batch process completes,
-	// use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
-	// API to return and review the results.
+	// Customer Profiles starts a weekly batch process called Identity Resolution
+	// Job. If you do not specify a date and time for Identity Resolution Job to
+	// run, by default it runs every Saturday at 12AM UTC to detect duplicate profiles
+	// in your domains.
+	//
+	// After the Identity Resolution Job completes, use the GetMatches (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_GetMatches.html)
+	// API to return and review the results. Or, if you have configured ExportingConfig
+	// in the MatchingRequest, you can download the results from S3.
 	Matching *MatchingResponse `type:"structure"`
 
 	// The tags used to organize, track, or control access for this resource.
@@ -9984,6 +13320,102 @@ func (s *UpdateProfileOutput) SetProfileId(v string) *UpdateProfileOutput {
 	return s
 }
 
+// Structure to hold workflow attributes.
+type WorkflowAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// Workflow attributes specific to APPFLOW_INTEGRATION workflow.
+	AppflowIntegration *AppflowIntegrationWorkflowAttributes `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkflowAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkflowAttributes) GoString() string {
+	return s.String()
+}
+
+// SetAppflowIntegration sets the AppflowIntegration field's value.
+func (s *WorkflowAttributes) SetAppflowIntegration(v *AppflowIntegrationWorkflowAttributes) *WorkflowAttributes {
+	s.AppflowIntegration = v
+	return s
+}
+
+// Generic object containing workflow execution metrics.
+type WorkflowMetrics struct {
+	_ struct{} `type:"structure"`
+
+	// Workflow execution metrics for APPFLOW_INTEGRATION workflow.
+	AppflowIntegration *AppflowIntegrationWorkflowMetrics `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkflowMetrics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkflowMetrics) GoString() string {
+	return s.String()
+}
+
+// SetAppflowIntegration sets the AppflowIntegration field's value.
+func (s *WorkflowMetrics) SetAppflowIntegration(v *AppflowIntegrationWorkflowMetrics) *WorkflowMetrics {
+	s.AppflowIntegration = v
+	return s
+}
+
+// List containing steps in workflow.
+type WorkflowStepItem struct {
+	_ struct{} `type:"structure"`
+
+	// Workflow step information specific to APPFLOW_INTEGRATION workflow.
+	AppflowIntegration *AppflowIntegrationWorkflowStep `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkflowStepItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkflowStepItem) GoString() string {
+	return s.String()
+}
+
+// SetAppflowIntegration sets the AppflowIntegration field's value.
+func (s *WorkflowStepItem) SetAppflowIntegration(v *AppflowIntegrationWorkflowStep) *WorkflowStepItem {
+	s.AppflowIntegration = v
+	return s
+}
+
 // The properties that are applied when using Zendesk as a flow source.
 type ZendeskSourceProperties struct {
 	_ struct{} `type:"structure"`
@@ -10029,6 +13461,22 @@ func (s *ZendeskSourceProperties) Validate() error {
 func (s *ZendeskSourceProperties) SetObject(v string) *ZendeskSourceProperties {
 	s.Object = &v
 	return s
+}
+
+const (
+	// ConflictResolvingModelRecency is a ConflictResolvingModel enum value
+	ConflictResolvingModelRecency = "RECENCY"
+
+	// ConflictResolvingModelSource is a ConflictResolvingModel enum value
+	ConflictResolvingModelSource = "SOURCE"
+)
+
+// ConflictResolvingModel_Values returns all elements of the ConflictResolvingModel enum
+func ConflictResolvingModel_Values() []string {
+	return []string{
+		ConflictResolvingModelRecency,
+		ConflictResolvingModelSource,
+	}
 }
 
 const (
@@ -10092,6 +13540,78 @@ func Gender_Values() []string {
 		GenderMale,
 		GenderFemale,
 		GenderUnspecified,
+	}
+}
+
+const (
+	// IdentityResolutionJobStatusPending is a IdentityResolutionJobStatus enum value
+	IdentityResolutionJobStatusPending = "PENDING"
+
+	// IdentityResolutionJobStatusPreprocessing is a IdentityResolutionJobStatus enum value
+	IdentityResolutionJobStatusPreprocessing = "PREPROCESSING"
+
+	// IdentityResolutionJobStatusFindMatching is a IdentityResolutionJobStatus enum value
+	IdentityResolutionJobStatusFindMatching = "FIND_MATCHING"
+
+	// IdentityResolutionJobStatusMerging is a IdentityResolutionJobStatus enum value
+	IdentityResolutionJobStatusMerging = "MERGING"
+
+	// IdentityResolutionJobStatusCompleted is a IdentityResolutionJobStatus enum value
+	IdentityResolutionJobStatusCompleted = "COMPLETED"
+
+	// IdentityResolutionJobStatusPartialSuccess is a IdentityResolutionJobStatus enum value
+	IdentityResolutionJobStatusPartialSuccess = "PARTIAL_SUCCESS"
+
+	// IdentityResolutionJobStatusFailed is a IdentityResolutionJobStatus enum value
+	IdentityResolutionJobStatusFailed = "FAILED"
+)
+
+// IdentityResolutionJobStatus_Values returns all elements of the IdentityResolutionJobStatus enum
+func IdentityResolutionJobStatus_Values() []string {
+	return []string{
+		IdentityResolutionJobStatusPending,
+		IdentityResolutionJobStatusPreprocessing,
+		IdentityResolutionJobStatusFindMatching,
+		IdentityResolutionJobStatusMerging,
+		IdentityResolutionJobStatusCompleted,
+		IdentityResolutionJobStatusPartialSuccess,
+		IdentityResolutionJobStatusFailed,
+	}
+}
+
+const (
+	// JobScheduleDayOfTheWeekSunday is a JobScheduleDayOfTheWeek enum value
+	JobScheduleDayOfTheWeekSunday = "SUNDAY"
+
+	// JobScheduleDayOfTheWeekMonday is a JobScheduleDayOfTheWeek enum value
+	JobScheduleDayOfTheWeekMonday = "MONDAY"
+
+	// JobScheduleDayOfTheWeekTuesday is a JobScheduleDayOfTheWeek enum value
+	JobScheduleDayOfTheWeekTuesday = "TUESDAY"
+
+	// JobScheduleDayOfTheWeekWednesday is a JobScheduleDayOfTheWeek enum value
+	JobScheduleDayOfTheWeekWednesday = "WEDNESDAY"
+
+	// JobScheduleDayOfTheWeekThursday is a JobScheduleDayOfTheWeek enum value
+	JobScheduleDayOfTheWeekThursday = "THURSDAY"
+
+	// JobScheduleDayOfTheWeekFriday is a JobScheduleDayOfTheWeek enum value
+	JobScheduleDayOfTheWeekFriday = "FRIDAY"
+
+	// JobScheduleDayOfTheWeekSaturday is a JobScheduleDayOfTheWeek enum value
+	JobScheduleDayOfTheWeekSaturday = "SATURDAY"
+)
+
+// JobScheduleDayOfTheWeek_Values returns all elements of the JobScheduleDayOfTheWeek enum
+func JobScheduleDayOfTheWeek_Values() []string {
+	return []string{
+		JobScheduleDayOfTheWeekSunday,
+		JobScheduleDayOfTheWeekMonday,
+		JobScheduleDayOfTheWeekTuesday,
+		JobScheduleDayOfTheWeekWednesday,
+		JobScheduleDayOfTheWeekThursday,
+		JobScheduleDayOfTheWeekFriday,
+		JobScheduleDayOfTheWeekSaturday,
 	}
 }
 
@@ -10572,6 +14092,9 @@ const (
 
 	// StandardIdentifierNewOnly is a StandardIdentifier enum value
 	StandardIdentifierNewOnly = "NEW_ONLY"
+
+	// StandardIdentifierOrder is a StandardIdentifier enum value
+	StandardIdentifierOrder = "ORDER"
 )
 
 // StandardIdentifier_Values returns all elements of the StandardIdentifier enum
@@ -10584,6 +14107,43 @@ func StandardIdentifier_Values() []string {
 		StandardIdentifierSecondary,
 		StandardIdentifierLookupOnly,
 		StandardIdentifierNewOnly,
+		StandardIdentifierOrder,
+	}
+}
+
+const (
+	// StatusNotStarted is a Status enum value
+	StatusNotStarted = "NOT_STARTED"
+
+	// StatusInProgress is a Status enum value
+	StatusInProgress = "IN_PROGRESS"
+
+	// StatusComplete is a Status enum value
+	StatusComplete = "COMPLETE"
+
+	// StatusFailed is a Status enum value
+	StatusFailed = "FAILED"
+
+	// StatusSplit is a Status enum value
+	StatusSplit = "SPLIT"
+
+	// StatusRetry is a Status enum value
+	StatusRetry = "RETRY"
+
+	// StatusCancelled is a Status enum value
+	StatusCancelled = "CANCELLED"
+)
+
+// Status_Values returns all elements of the Status enum
+func Status_Values() []string {
+	return []string{
+		StatusNotStarted,
+		StatusInProgress,
+		StatusComplete,
+		StatusFailed,
+		StatusSplit,
+		StatusRetry,
+		StatusCancelled,
 	}
 }
 
@@ -10640,6 +14200,18 @@ func TriggerType_Values() []string {
 		TriggerTypeScheduled,
 		TriggerTypeEvent,
 		TriggerTypeOnDemand,
+	}
+}
+
+const (
+	// WorkflowTypeAppflowIntegration is a WorkflowType enum value
+	WorkflowTypeAppflowIntegration = "APPFLOW_INTEGRATION"
+)
+
+// WorkflowType_Values returns all elements of the WorkflowType enum
+func WorkflowType_Values() []string {
+	return []string{
+		WorkflowTypeAppflowIntegration,
 	}
 }
 

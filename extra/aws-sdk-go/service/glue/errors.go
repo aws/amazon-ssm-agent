@@ -82,7 +82,15 @@ const (
 
 	// ErrCodeIllegalBlueprintStateException for service response error code
 	// "IllegalBlueprintStateException".
+	//
+	// The blueprint is in an invalid state to perform a requested operation.
 	ErrCodeIllegalBlueprintStateException = "IllegalBlueprintStateException"
+
+	// ErrCodeIllegalSessionStateException for service response error code
+	// "IllegalSessionStateException".
+	//
+	// The session is in an invalid state to perform a requested operation.
+	ErrCodeIllegalSessionStateException = "IllegalSessionStateException"
 
 	// ErrCodeIllegalWorkflowStateException for service response error code
 	// "IllegalWorkflowStateException".
@@ -102,6 +110,12 @@ const (
 	// The input provided was not valid.
 	ErrCodeInvalidInputException = "InvalidInputException"
 
+	// ErrCodeInvalidStateException for service response error code
+	// "InvalidStateException".
+	//
+	// An error that indicates your data is in an invalid state.
+	ErrCodeInvalidStateException = "InvalidStateException"
+
 	// ErrCodeMLTransformNotReadyException for service response error code
 	// "MLTransformNotReadyException".
 	//
@@ -119,6 +133,16 @@ const (
 	//
 	// The operation timed out.
 	ErrCodeOperationTimeoutException = "OperationTimeoutException"
+
+	// ErrCodePermissionTypeMismatchException for service response error code
+	// "PermissionTypeMismatchException".
+	ErrCodePermissionTypeMismatchException = "PermissionTypeMismatchException"
+
+	// ErrCodeResourceNotReadyException for service response error code
+	// "ResourceNotReadyException".
+	//
+	// A resource was not ready for a transaction.
+	ErrCodeResourceNotReadyException = "ResourceNotReadyException"
 
 	// ErrCodeResourceNumberLimitExceededException for service response error code
 	// "ResourceNumberLimitExceededException".
@@ -171,12 +195,16 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"EntityNotFoundException":              newErrorEntityNotFoundException,
 	"IdempotentParameterMismatchException": newErrorIdempotentParameterMismatchException,
 	"IllegalBlueprintStateException":       newErrorIllegalBlueprintStateException,
+	"IllegalSessionStateException":         newErrorIllegalSessionStateException,
 	"IllegalWorkflowStateException":        newErrorIllegalWorkflowStateException,
 	"InternalServiceException":             newErrorInternalServiceException,
 	"InvalidInputException":                newErrorInvalidInputException,
+	"InvalidStateException":                newErrorInvalidStateException,
 	"MLTransformNotReadyException":         newErrorMLTransformNotReadyException,
 	"NoScheduleException":                  newErrorNoScheduleException,
 	"OperationTimeoutException":            newErrorOperationTimeoutException,
+	"PermissionTypeMismatchException":      newErrorPermissionTypeMismatchException,
+	"ResourceNotReadyException":            newErrorResourceNotReadyException,
 	"ResourceNumberLimitExceededException": newErrorResourceNumberLimitExceededException,
 	"SchedulerNotRunningException":         newErrorSchedulerNotRunningException,
 	"SchedulerRunningException":            newErrorSchedulerRunningException,

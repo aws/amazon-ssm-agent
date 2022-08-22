@@ -92,6 +92,10 @@ type LocationServiceAPI interface {
 	CalculateRouteWithContext(aws.Context, *locationservice.CalculateRouteInput, ...request.Option) (*locationservice.CalculateRouteOutput, error)
 	CalculateRouteRequest(*locationservice.CalculateRouteInput) (*request.Request, *locationservice.CalculateRouteOutput)
 
+	CalculateRouteMatrix(*locationservice.CalculateRouteMatrixInput) (*locationservice.CalculateRouteMatrixOutput, error)
+	CalculateRouteMatrixWithContext(aws.Context, *locationservice.CalculateRouteMatrixInput, ...request.Option) (*locationservice.CalculateRouteMatrixOutput, error)
+	CalculateRouteMatrixRequest(*locationservice.CalculateRouteMatrixInput) (*request.Request, *locationservice.CalculateRouteMatrixOutput)
+
 	CreateGeofenceCollection(*locationservice.CreateGeofenceCollectionInput) (*locationservice.CreateGeofenceCollectionOutput, error)
 	CreateGeofenceCollectionWithContext(aws.Context, *locationservice.CreateGeofenceCollectionInput, ...request.Option) (*locationservice.CreateGeofenceCollectionOutput, error)
 	CreateGeofenceCollectionRequest(*locationservice.CreateGeofenceCollectionInput) (*request.Request, *locationservice.CreateGeofenceCollectionOutput)
@@ -254,6 +258,10 @@ type LocationServiceAPI interface {
 	SearchPlaceIndexForPosition(*locationservice.SearchPlaceIndexForPositionInput) (*locationservice.SearchPlaceIndexForPositionOutput, error)
 	SearchPlaceIndexForPositionWithContext(aws.Context, *locationservice.SearchPlaceIndexForPositionInput, ...request.Option) (*locationservice.SearchPlaceIndexForPositionOutput, error)
 	SearchPlaceIndexForPositionRequest(*locationservice.SearchPlaceIndexForPositionInput) (*request.Request, *locationservice.SearchPlaceIndexForPositionOutput)
+
+	SearchPlaceIndexForSuggestions(*locationservice.SearchPlaceIndexForSuggestionsInput) (*locationservice.SearchPlaceIndexForSuggestionsOutput, error)
+	SearchPlaceIndexForSuggestionsWithContext(aws.Context, *locationservice.SearchPlaceIndexForSuggestionsInput, ...request.Option) (*locationservice.SearchPlaceIndexForSuggestionsOutput, error)
+	SearchPlaceIndexForSuggestionsRequest(*locationservice.SearchPlaceIndexForSuggestionsInput) (*request.Request, *locationservice.SearchPlaceIndexForSuggestionsOutput)
 
 	SearchPlaceIndexForText(*locationservice.SearchPlaceIndexForTextInput) (*locationservice.SearchPlaceIndexForTextOutput, error)
 	SearchPlaceIndexForTextWithContext(aws.Context, *locationservice.SearchPlaceIndexForTextInput, ...request.Option) (*locationservice.SearchPlaceIndexForTextOutput, error)

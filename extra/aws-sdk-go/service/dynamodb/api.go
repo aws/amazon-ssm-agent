@@ -60,8 +60,18 @@ func (c *DynamoDB) BatchExecuteStatementRequest(input *BatchExecuteStatementInpu
 
 // BatchExecuteStatement API operation for Amazon DynamoDB.
 //
-// This operation allows you to perform batch reads and writes on data stored
-// in DynamoDB, using PartiQL.
+// This operation allows you to perform batch reads or writes on data stored
+// in DynamoDB, using PartiQL. Each read statement in a BatchExecuteStatement
+// must specify an equality condition on all key attributes. This enforces that
+// each SELECT statement in a batch returns at most a single item.
+//
+// The entire batch must consist of either read statements or write statements,
+// you cannot mix both in one batch.
+//
+// A HTTP 200 response does not mean that all statements in the BatchExecuteStatement
+// succeeded. Error details for individual statements can be found under the
+// Error (https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchStatementResponse.html#DDB-Type-BatchStatementResponse-Error)
+// field of the BatchStatementResponse for each statement.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -73,7 +83,7 @@ func (c *DynamoDB) BatchExecuteStatementRequest(input *BatchExecuteStatementInpu
 // Returned Error Types:
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -235,11 +245,11 @@ func (c *DynamoDB) BatchGetItemRequest(input *BatchGetItemInput) (req *request.R
 //
 // Returned Error Types:
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -248,7 +258,7 @@ func (c *DynamoDB) BatchGetItemRequest(input *BatchGetItemInput) (req *request.R
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -398,9 +408,12 @@ func (c *DynamoDB) BatchWriteItemRequest(input *BatchWriteItemInput) (req *reque
 // BatchWriteItem API operation for Amazon DynamoDB.
 //
 // The BatchWriteItem operation puts or deletes multiple items in one or more
-// tables. A single call to BatchWriteItem can write up to 16 MB of data, which
-// can comprise as many as 25 put or delete requests. Individual items to be
-// written can be as large as 400 KB.
+// tables. A single call to BatchWriteItem can transmit up to 16MB of data over
+// the network, consisting of up to 25 item put or delete operations. While
+// individual items can be up to 400 KB once stored, it's important to note
+// that an item's representation might be greater than 400KB while being sent
+// in DynamoDB's JSON format for the API call. For more details on this distinction,
+// see Naming Rules and Data Types (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html).
 //
 // BatchWriteItem cannot update items. To update items, use the UpdateItem action.
 //
@@ -477,11 +490,11 @@ func (c *DynamoDB) BatchWriteItemRequest(input *BatchWriteItemInput) (req *reque
 //
 // Returned Error Types:
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -494,7 +507,7 @@ func (c *DynamoDB) BatchWriteItemRequest(input *BatchWriteItemInput) (req *reque
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -631,7 +644,8 @@ func (c *DynamoDB) CreateBackupRequest(input *CreateBackupInput) (req *request.R
 // Returned Error Types:
 //   * TableNotFoundException
 //   A source table with the name TableName does not currently exist within the
-//   subscriber's account.
+//   subscriber's account or the subscriber is operating in the wrong Amazon Web
+//   Services Region.
 //
 //   * TableInUseException
 //   A target table with the specified name is either being created or deleted.
@@ -646,16 +660,16 @@ func (c *DynamoDB) CreateBackupRequest(input *CreateBackupInput) (req *request.R
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -807,16 +821,16 @@ func (c *DynamoDB) CreateGlobalTableRequest(input *CreateGlobalTableInput) (req 
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -826,7 +840,8 @@ func (c *DynamoDB) CreateGlobalTableRequest(input *CreateGlobalTableInput) (req 
 //
 //   * TableNotFoundException
 //   A source table with the name TableName does not currently exist within the
-//   subscriber's account.
+//   subscriber's account or the subscriber is operating in the wrong Amazon Web
+//   Services Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/CreateGlobalTable
 func (c *DynamoDB) CreateGlobalTable(input *CreateGlobalTableInput) (*CreateGlobalTableOutput, error) {
@@ -919,9 +934,10 @@ func (c *DynamoDB) CreateTableRequest(input *CreateTableInput) (req *request.Req
 
 // CreateTable API operation for Amazon DynamoDB.
 //
-// The CreateTable operation adds a new table to your account. In an AWS account,
-// table names must be unique within each Region. That is, you can have two
-// tables with same name if you create the tables in different Regions.
+// The CreateTable operation adds a new table to your account. In an Amazon
+// Web Services account, table names must be unique within each Region. That
+// is, you can have two tables with same name if you create the tables in different
+// Regions.
 //
 // CreateTable is an asynchronous operation. Upon receiving a CreateTable request,
 // DynamoDB immediately returns a response with a TableStatus of CREATING. After
@@ -951,16 +967,16 @@ func (c *DynamoDB) CreateTableRequest(input *CreateTableInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -1078,16 +1094,16 @@ func (c *DynamoDB) DeleteBackupRequest(input *DeleteBackupInput) (req *request.R
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -1210,11 +1226,11 @@ func (c *DynamoDB) DeleteItemRequest(input *DeleteItemInput) (req *request.Reque
 //   A condition specified in the operation could not be evaluated.
 //
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -1230,7 +1246,7 @@ func (c *DynamoDB) DeleteItemRequest(input *DeleteItemInput) (req *request.Reque
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -1366,16 +1382,16 @@ func (c *DynamoDB) DeleteTableRequest(input *DeleteTableInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -1604,7 +1620,8 @@ func (c *DynamoDB) DescribeContinuousBackupsRequest(input *DescribeContinuousBac
 // Returned Error Types:
 //   * TableNotFoundException
 //   A source table with the name TableName does not currently exist within the
-//   subscriber's account.
+//   subscriber's account or the subscriber is operating in the wrong Amazon Web
+//   Services Region.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -1921,16 +1938,16 @@ func (c *DynamoDB) DescribeExportRequest(input *DescribeExportInput) (req *reque
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -2356,24 +2373,26 @@ func (c *DynamoDB) DescribeLimitsRequest(input *DescribeLimitsInput) (req *reque
 
 // DescribeLimits API operation for Amazon DynamoDB.
 //
-// Returns the current provisioned-capacity quotas for your AWS account in a
-// Region, both for the Region as a whole and for any one DynamoDB table that
-// you create there.
+// Returns the current provisioned-capacity quotas for your Amazon Web Services
+// account in a Region, both for the Region as a whole and for any one DynamoDB
+// table that you create there.
 //
-// When you establish an AWS account, the account has initial quotas on the
-// maximum read capacity units and write capacity units that you can provision
-// across all of your DynamoDB tables in a given Region. Also, there are per-table
-// quotas that apply when you create a table there. For more information, see
-// Service, Account, and Table Quotas (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html)
+// When you establish an Amazon Web Services account, the account has initial
+// quotas on the maximum read capacity units and write capacity units that you
+// can provision across all of your DynamoDB tables in a given Region. Also,
+// there are per-table quotas that apply when you create a table there. For
+// more information, see Service, Account, and Table Quotas (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html)
 // page in the Amazon DynamoDB Developer Guide.
 //
-// Although you can increase these quotas by filing a case at AWS Support Center
-// (https://console.aws.amazon.com/support/home#/), obtaining the increase is
-// not instantaneous. The DescribeLimits action lets you write code to compare
-// the capacity you are currently using to those quotas imposed by your account
-// so that you have enough time to apply for an increase before you hit a quota.
+// Although you can increase these quotas by filing a case at Amazon Web Services
+// Support Center (https://console.aws.amazon.com/support/home#/), obtaining
+// the increase is not instantaneous. The DescribeLimits action lets you write
+// code to compare the capacity you are currently using to those quotas imposed
+// by your account so that you have enough time to apply for an increase before
+// you hit a quota.
 //
-// For example, you could use one of the AWS SDKs to do the following:
+// For example, you could use one of the Amazon Web Services SDKs to do the
+// following:
 //
 // Call DescribeLimits for a particular Region to obtain your current account
 // quotas on provisioned capacity there.
@@ -2844,16 +2863,16 @@ func (c *DynamoDB) DisableKinesisStreamingDestinationRequest(input *DisableKines
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * ResourceInUseException
 //   The operation conflicts with the resource's availability. For example, you
@@ -2974,16 +2993,16 @@ func (c *DynamoDB) EnableKinesisStreamingDestinationRequest(input *EnableKinesis
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * ResourceInUseException
 //   The operation conflicts with the resource's availability. For example, you
@@ -3063,6 +3082,17 @@ func (c *DynamoDB) ExecuteStatementRequest(input *ExecuteStatementInput) (req *r
 // This operation allows you to perform reads and singleton writes on data stored
 // in DynamoDB, using PartiQL.
 //
+// For PartiQL reads (SELECT statement), if the total number of processed items
+// exceeds the maximum dataset size limit of 1 MB, the read stops and results
+// are returned to the user as a LastEvaluatedKey value to continue the read
+// in a subsequent operation. If the filter criteria in WHERE clause does not
+// match any data, the read will return an empty result set.
+//
+// A single SELECT statement response can return up to the maximum number of
+// items (if using the Limit parameter) or a maximum of 1 MB of data (and then
+// apply any filtering to the results using WHERE clause). If LastEvaluatedKey
+// is present in the response, you need to paginate the result set.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3075,11 +3105,11 @@ func (c *DynamoDB) ExecuteStatementRequest(input *ExecuteStatementInput) (req *r
 //   A condition specified in the operation could not be evaluated.
 //
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -3095,7 +3125,7 @@ func (c *DynamoDB) ExecuteStatementRequest(input *ExecuteStatementInput) (req *r
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -3174,6 +3204,12 @@ func (c *DynamoDB) ExecuteTransactionRequest(input *ExecuteTransactionInput) (re
 // This operation allows you to perform transactional reads or writes on data
 // stored in DynamoDB, using PartiQL.
 //
+// The entire transaction must consist of either read statements or write statements,
+// you cannot mix both in one transaction. The EXISTS function is an exception
+// and can be used to check the condition of specific attributes of the item
+// in a similar manner to ConditionCheck in the TransactWriteItems (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html#transaction-apis-txwriteitems)
+// API.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3225,11 +3261,11 @@ func (c *DynamoDB) ExecuteTransactionRequest(input *ExecuteTransactionInput) (re
 //   If using Java, DynamoDB lists the cancellation reasons on the CancellationReasons
 //   property. This property is not set for other languages. Transaction cancellation
 //   reasons are ordered in the order of requested items, if an item has no error
-//   it will have NONE code and Null message.
+//   it will have None code and Null message.
 //
 //   Cancellation reason codes and possible error messages:
 //
-//      * No Errors: Code: NONE Message: null
+//      * No Errors: Code: None Message: null
 //
 //      * Conditional Check Failed: Code: ConditionalCheckFailed Message: The
 //      conditional request failed.
@@ -3281,16 +3317,16 @@ func (c *DynamoDB) ExecuteTransactionRequest(input *ExecuteTransactionInput) (re
 //   payload but with an idempotent token that was already used.
 //
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -3376,7 +3412,8 @@ func (c *DynamoDB) ExportTableToPointInTimeRequest(input *ExportTableToPointInTi
 // Returned Error Types:
 //   * TableNotFoundException
 //   A source table with the name TableName does not currently exist within the
-//   subscriber's account.
+//   subscriber's account or the subscriber is operating in the wrong Amazon Web
+//   Services Region.
 //
 //   * PointInTimeRecoveryUnavailableException
 //   Point in time recovery has not yet been enabled for this source table.
@@ -3384,16 +3421,16 @@ func (c *DynamoDB) ExportTableToPointInTimeRequest(input *ExportTableToPointInTi
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InvalidExportTimeException
 //   The specified ExportTime is outside of the point in time recovery window.
@@ -3513,11 +3550,11 @@ func (c *DynamoDB) GetItemRequest(input *GetItemInput) (req *request.Request, ou
 //
 // Returned Error Types:
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -3526,7 +3563,7 @@ func (c *DynamoDB) GetItemRequest(input *GetItemInput) (req *request.Request, ou
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -3623,10 +3660,10 @@ func (c *DynamoDB) ListBackupsRequest(input *ListBackupsInput) (req *request.Req
 
 // ListBackups API operation for Amazon DynamoDB.
 //
-// List backups associated with an AWS account. To list backups for a given
-// table, specify TableName. ListBackups returns a paginated list of results
-// with at most 1 MB worth of items in a page. You can also specify a maximum
-// number of entries to be returned in a page.
+// List backups associated with an Amazon Web Services account. To list backups
+// for a given table, specify TableName. ListBackups returns a paginated list
+// of results with at most 1 MB worth of items in a page. You can also specify
+// a maximum number of entries to be returned in a page.
 //
 // In the request, start time is inclusive, but end time is exclusive. Note
 // that these boundaries are for the time at which the original backup was requested.
@@ -3871,16 +3908,16 @@ func (c *DynamoDB) ListExportsRequest(input *ListExportsInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -4419,29 +4456,6 @@ func (c *DynamoDB) PutItemRequest(input *PutItemInput) (req *request.Request, ou
 // values. You can return the item's attribute values in the same operation,
 // using the ReturnValues parameter.
 //
-// This topic provides general information about the PutItem API.
-//
-// For information on how to call the PutItem API using the AWS SDK in specific
-// languages, see the following:
-//
-//    * PutItem in the AWS Command Line Interface (http://docs.aws.amazon.com/goto/aws-cli/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for .NET (http://docs.aws.amazon.com/goto/DotNetSDKV3/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for C++ (http://docs.aws.amazon.com/goto/SdkForCpp/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for Go (http://docs.aws.amazon.com/goto/SdkForGoV1/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for Java (http://docs.aws.amazon.com/goto/SdkForJava/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for JavaScript (http://docs.aws.amazon.com/goto/AWSJavaScriptSDK/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for PHP V3 (http://docs.aws.amazon.com/goto/SdkForPHPV3/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for Python (http://docs.aws.amazon.com/goto/boto3/dynamodb-2012-08-10/PutItem)
-//
-//    * PutItem in the AWS SDK for Ruby V2 (http://docs.aws.amazon.com/goto/SdkForRubyV2/dynamodb-2012-08-10/PutItem)
-//
 // When you add an item, the primary key attributes are the only required attributes.
 // Attribute values cannot be null.
 //
@@ -4474,11 +4488,11 @@ func (c *DynamoDB) PutItemRequest(input *PutItemInput) (req *request.Request, ou
 //   A condition specified in the operation could not be evaluated.
 //
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -4494,7 +4508,7 @@ func (c *DynamoDB) PutItemRequest(input *PutItemInput) (req *request.Request, ou
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -4597,9 +4611,10 @@ func (c *DynamoDB) QueryRequest(input *QueryInput) (req *request.Request, output
 
 // Query API operation for Amazon DynamoDB.
 //
-// The Query operation finds items based on primary key values. You can query
-// any table or secondary index that has a composite primary key (a partition
-// key and a sort key).
+// You must provide the name of the partition key attribute and a single value
+// for that attribute. Query returns all items with that partition key value.
+// Optionally, you can provide a sort key attribute and use a comparison operator
+// to refine the search results.
 //
 // Use the KeyConditionExpression parameter to provide a specific value for
 // the partition key. The Query operation will return all of the items from
@@ -4655,11 +4670,11 @@ func (c *DynamoDB) QueryRequest(input *QueryInput) (req *request.Request, output
 //
 // Returned Error Types:
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -4668,7 +4683,7 @@ func (c *DynamoDB) QueryRequest(input *QueryInput) (req *request.Request, output
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -4860,16 +4875,16 @@ func (c *DynamoDB) RestoreTableFromBackupRequest(input *RestoreTableFromBackupIn
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -5015,7 +5030,8 @@ func (c *DynamoDB) RestoreTableToPointInTimeRequest(input *RestoreTableToPointIn
 //
 //   * TableNotFoundException
 //   A source table with the name TableName does not currently exist within the
-//   subscriber's account.
+//   subscriber's account or the subscriber is operating in the wrong Amazon Web
+//   Services Region.
 //
 //   * TableInUseException
 //   A target table with the specified name is either being created or deleted.
@@ -5023,16 +5039,16 @@ func (c *DynamoDB) RestoreTableToPointInTimeRequest(input *RestoreTableToPointIn
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InvalidRestoreTimeException
 //   An invalid restore time was specified. RestoreDateTime must be between EarliestRestorableDateTime
@@ -5179,11 +5195,11 @@ func (c *DynamoDB) ScanRequest(input *ScanInput) (req *request.Request, output *
 //
 // Returned Error Types:
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -5192,7 +5208,7 @@ func (c *DynamoDB) ScanRequest(input *ScanInput) (req *request.Request, output *
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -5361,16 +5377,16 @@ func (c *DynamoDB) TagResourceRequest(input *TagResourceInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * ResourceNotFoundException
 //   The operation tried to access a nonexistent table or index. The resource
@@ -5480,8 +5496,9 @@ func (c *DynamoDB) TransactGetItemsRequest(input *TransactGetItemsInput) (req *r
 // and Region. A TransactGetItems call can contain up to 25 TransactGetItem
 // objects, each of which contains a Get structure that specifies an item to
 // retrieve from a table in the account and Region. A call to TransactGetItems
-// cannot retrieve items from tables in more than one AWS account or Region.
-// The aggregate size of the items in the transaction cannot exceed 4 MB.
+// cannot retrieve items from tables in more than one Amazon Web Services account
+// or Region. The aggregate size of the items in the transaction cannot exceed
+// 4 MB.
 //
 // DynamoDB rejects the entire TransactGetItems request if any of the following
 // is true:
@@ -5547,11 +5564,11 @@ func (c *DynamoDB) TransactGetItemsRequest(input *TransactGetItemsInput) (req *r
 //   If using Java, DynamoDB lists the cancellation reasons on the CancellationReasons
 //   property. This property is not set for other languages. Transaction cancellation
 //   reasons are ordered in the order of requested items, if an item has no error
-//   it will have NONE code and Null message.
+//   it will have None code and Null message.
 //
 //   Cancellation reason codes and possible error messages:
 //
-//      * No Errors: Code: NONE Message: null
+//      * No Errors: Code: None Message: null
 //
 //      * Conditional Check Failed: Code: ConditionalCheckFailed Message: The
 //      conditional request failed.
@@ -5596,16 +5613,16 @@ func (c *DynamoDB) TransactGetItemsRequest(input *TransactGetItemsInput) (req *r
 //      the item.
 //
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -5704,10 +5721,10 @@ func (c *DynamoDB) TransactWriteItemsRequest(input *TransactWriteItemsInput) (re
 //
 // TransactWriteItems is a synchronous write operation that groups up to 25
 // action requests. These actions can target items in different tables, but
-// not in different AWS accounts or Regions, and no two actions can target the
-// same item. For example, you cannot both ConditionCheck and Update the same
-// item. The aggregate size of the items in the transaction cannot exceed 4
-// MB.
+// not in different Amazon Web Services accounts or Regions, and no two actions
+// can target the same item. For example, you cannot both ConditionCheck and
+// Update the same item. The aggregate size of the items in the transaction
+// cannot exceed 4 MB.
 //
 // The actions are completed atomically so that either all of them succeed,
 // or all of them fail. They are defined by the following objects:
@@ -5808,11 +5825,11 @@ func (c *DynamoDB) TransactWriteItemsRequest(input *TransactWriteItemsInput) (re
 //   If using Java, DynamoDB lists the cancellation reasons on the CancellationReasons
 //   property. This property is not set for other languages. Transaction cancellation
 //   reasons are ordered in the order of requested items, if an item has no error
-//   it will have NONE code and Null message.
+//   it will have None code and Null message.
 //
 //   Cancellation reason codes and possible error messages:
 //
-//      * No Errors: Code: NONE Message: null
+//      * No Errors: Code: None Message: null
 //
 //      * Conditional Check Failed: Code: ConditionalCheckFailed Message: The
 //      conditional request failed.
@@ -5864,16 +5881,16 @@ func (c *DynamoDB) TransactWriteItemsRequest(input *TransactWriteItemsInput) (re
 //   payload but with an idempotent token that was already used.
 //
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -5988,16 +6005,16 @@ func (c *DynamoDB) UntagResourceRequest(input *UntagResourceInput) (req *request
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * ResourceNotFoundException
 //   The operation tried to access a nonexistent table or index. The resource
@@ -6124,7 +6141,8 @@ func (c *DynamoDB) UpdateContinuousBackupsRequest(input *UpdateContinuousBackups
 // Returned Error Types:
 //   * TableNotFoundException
 //   A source table with the name TableName does not currently exist within the
-//   subscriber's account.
+//   subscriber's account or the subscriber is operating in the wrong Amazon Web
+//   Services Region.
 //
 //   * ContinuousBackupsUnavailableException
 //   Backups have not yet been enabled for this table.
@@ -6199,6 +6217,13 @@ func (c *DynamoDB) UpdateContributorInsightsRequest(input *UpdateContributorInsi
 // UpdateContributorInsights API operation for Amazon DynamoDB.
 //
 // Updates the status for contributor insights for a specific table or index.
+// CloudWatch Contributor Insights for DynamoDB graphs display the partition
+// key and (if applicable) sort key of frequently accessed items and frequently
+// throttled items in plaintext. If you require the use of Amazon Web Services
+// Key Management Service (KMS) to encrypt this table’s partition key and
+// sort key data with an Amazon Web Services managed key or customer managed
+// key, you should not enable CloudWatch Contributor Insights for DynamoDB for
+// this table.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6349,7 +6374,8 @@ func (c *DynamoDB) UpdateGlobalTableRequest(input *UpdateGlobalTableInput) (req 
 //
 //   * TableNotFoundException
 //   A source table with the name TableName does not currently exist within the
-//   subscriber's account.
+//   subscriber's account or the subscriber is operating in the wrong Amazon Web
+//   Services Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/UpdateGlobalTable
 func (c *DynamoDB) UpdateGlobalTable(input *UpdateGlobalTableInput) (*UpdateGlobalTableOutput, error) {
@@ -6464,16 +6490,16 @@ func (c *DynamoDB) UpdateGlobalTableSettingsRequest(input *UpdateGlobalTableSett
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * ResourceInUseException
 //   The operation conflicts with the resource's availability. For example, you
@@ -6595,11 +6621,11 @@ func (c *DynamoDB) UpdateItemRequest(input *UpdateItemInput) (req *request.Reque
 //   A condition specified in the operation could not be evaluated.
 //
 //   * ProvisionedThroughputExceededException
-//   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-//   requests that receive this exception. Your request is eventually successful,
-//   unless your retry queue is too large to finish. Reduce the frequency of requests
-//   and use exponential backoff. For more information, go to Error Retries and
-//   Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+//   Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+//   automatically retry requests that receive this exception. Your request is
+//   eventually successful, unless your retry queue is too large to finish. Reduce
+//   the frequency of requests and use exponential backoff. For more information,
+//   go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 //   in the Amazon DynamoDB Developer Guide.
 //
 //   * ResourceNotFoundException
@@ -6615,7 +6641,7 @@ func (c *DynamoDB) UpdateItemRequest(input *UpdateItemInput) (req *request.Reque
 //
 //   * RequestLimitExceeded
 //   Throughput exceeds the current throughput quota for your account. Please
-//   contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+//   contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 //   a quota increase.
 //
 //   * InternalServerError
@@ -6719,8 +6745,6 @@ func (c *DynamoDB) UpdateTableRequest(input *UpdateTableInput) (req *request.Req
 //
 //    * Modify the provisioned throughput settings of the table.
 //
-//    * Enable or disable DynamoDB Streams on the table.
-//
 //    * Remove a global secondary index from the table.
 //
 //    * Create a new global secondary index on the table. After the index begins
@@ -6751,16 +6775,16 @@ func (c *DynamoDB) UpdateTableRequest(input *UpdateTableInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -6856,16 +6880,16 @@ func (c *DynamoDB) UpdateTableReplicaAutoScalingRequest(input *UpdateTableReplic
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -7010,16 +7034,16 @@ func (c *DynamoDB) UpdateTimeToLiveRequest(input *UpdateTimeToLiveInput) (req *r
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 50 simultaneous table operations are allowed per account. These operations
+//   Up to 500 simultaneous table operations are allowed per account. These operations
 //   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 //   and RestoreTableToPointInTime.
 //
 //   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 25 such requests running at a time; however,
+//   indexes. You can have up to 250 such requests running at a time; however,
 //   if the table or index specifications are complex, DynamoDB might temporarily
 //   reduce the number of concurrent operations.
 //
-//   There is a soft account quota of 256 tables.
+//   There is a soft account quota of 2,500 tables.
 //
 //   * InternalServerError
 //   An error occurred on the server side.
@@ -7063,8 +7087,8 @@ type ArchivalSummary struct {
 	// is:
 	//
 	//    * INACCESSIBLE_ENCRYPTION_CREDENTIALS - The table was archived due to
-	//    the table's AWS KMS key being inaccessible for more than seven days. An
-	//    On-Demand backup was created at the archival time.
+	//    the table's KMS key being inaccessible for more than seven days. An On-Demand
+	//    backup was created at the archival time.
 	ArchivalReason *string `type:"string"`
 }
 
@@ -7202,7 +7226,7 @@ type AttributeValue struct {
 
 	// An attribute of type List. For example:
 	//
-	// "L": [ {"S": "Cookies"} , {"S": "Coffee"}, {"N", "3.14159"}]
+	// "L": [ {"S": "Cookies"} , {"S": "Coffee"}, {"N": "3.14159"}]
 	L []*AttributeValue `type:"list"`
 
 	// An attribute of type Map. For example:
@@ -7386,9 +7410,9 @@ type AttributeValueUpdate struct {
 	//
 	//    * DELETE - Nothing happens; there is no attribute to delete.
 	//
-	//    * ADD - DynamoDB creates an item with the supplied primary key and number
-	//    (or set of numbers) for the attribute value. The only data types allowed
-	//    are number and number set; no other data types can be specified.
+	//    * ADD - DynamoDB creates a new item with the supplied primary key and
+	//    number (or set) for the attribute value. The only data types allowed are
+	//    number, number set, string set or binary set.
 	Action *string `type:"string" enum:"AttributeAction"`
 
 	// Represents the data for an attribute.
@@ -7941,7 +7965,8 @@ type BackupDetails struct {
 	// BackupName is a required field
 	BackupName *string `min:"3" type:"string" required:"true"`
 
-	// Size of the backup in bytes.
+	// Size of the backup in bytes. DynamoDB updates this value approximately every
+	// six hours. Recent changes might not be reflected in this value.
 	BackupSizeBytes *int64 `type:"long"`
 
 	// Backup can be in one of the following states: CREATING, ACTIVE, DELETED.
@@ -7958,7 +7983,7 @@ type BackupDetails struct {
 	//    no additional cost). System backups allow you to restore the deleted table
 	//    to the state it was in just before the point of deletion.
 	//
-	//    * AWS_BACKUP - On-demand backup created by you from AWS Backup service.
+	//    * AWS_BACKUP - On-demand backup created by you from Backup service.
 	//
 	// BackupType is a required field
 	BackupType *string `type:"string" required:"true" enum:"BackupType"`
@@ -8185,7 +8210,7 @@ type BackupSummary struct {
 	//    no additional cost). System backups allow you to restore the deleted table
 	//    to the state it was in just before the point of deletion.
 	//
-	//    * AWS_BACKUP - On-demand backup created by you from AWS Backup service.
+	//    * AWS_BACKUP - On-demand backup created by you from Backup service.
 	BackupType *string `type:"string" enum:"BackupType"`
 
 	// ARN associated with the table.
@@ -8279,6 +8304,21 @@ func (s *BackupSummary) SetTableName(v string) *BackupSummary {
 type BatchExecuteStatementInput struct {
 	_ struct{} `type:"structure"`
 
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
+	//
+	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
+	//    operation, together with ConsumedCapacity for each table and secondary
+	//    index that was accessed. Note that some operations, such as GetItem and
+	//    BatchGetItem, do not access any indexes at all. In these cases, specifying
+	//    INDEXES will only return ConsumedCapacity information for table(s).
+	//
+	//    * TOTAL - The response includes only the aggregate ConsumedCapacity for
+	//    the operation.
+	//
+	//    * NONE - No ConsumedCapacity details are included in the response.
+	ReturnConsumedCapacity *string `type:"string" enum:"ReturnConsumedCapacity"`
+
 	// The list of PartiQL statements representing the batch to run.
 	//
 	// Statements is a required field
@@ -8329,6 +8369,12 @@ func (s *BatchExecuteStatementInput) Validate() error {
 	return nil
 }
 
+// SetReturnConsumedCapacity sets the ReturnConsumedCapacity field's value.
+func (s *BatchExecuteStatementInput) SetReturnConsumedCapacity(v string) *BatchExecuteStatementInput {
+	s.ReturnConsumedCapacity = &v
+	return s
+}
+
 // SetStatements sets the Statements field's value.
 func (s *BatchExecuteStatementInput) SetStatements(v []*BatchStatementRequest) *BatchExecuteStatementInput {
 	s.Statements = v
@@ -8337,6 +8383,10 @@ func (s *BatchExecuteStatementInput) SetStatements(v []*BatchStatementRequest) *
 
 type BatchExecuteStatementOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The capacity units consumed by the entire operation. The values of the list
+	// are ordered according to the ordering of the statements.
+	ConsumedCapacity []*ConsumedCapacity `type:"list"`
 
 	// The response to each PartiQL statement in the batch.
 	Responses []*BatchStatementResponse `type:"list"`
@@ -8358,6 +8408,12 @@ func (s BatchExecuteStatementOutput) String() string {
 // value will be replaced with "sensitive".
 func (s BatchExecuteStatementOutput) GoString() string {
 	return s.String()
+}
+
+// SetConsumedCapacity sets the ConsumedCapacity field's value.
+func (s *BatchExecuteStatementOutput) SetConsumedCapacity(v []*ConsumedCapacity) *BatchExecuteStatementOutput {
+	s.ConsumedCapacity = v
+	return s
 }
 
 // SetResponses sets the Responses field's value.
@@ -8421,8 +8477,8 @@ type BatchGetItemInput struct {
 	// RequestItems is a required field
 	RequestItems map[string]*KeysAndAttributes `min:"1" type:"map" required:"true"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -8762,8 +8818,8 @@ type BatchWriteItemInput struct {
 	// RequestItems is a required field
 	RequestItems map[string][]*WriteRequest `min:"1" type:"map" required:"true"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -10060,10 +10116,10 @@ type CreateReplicationGroupMemberAction struct {
 	// Replica-specific global secondary index settings.
 	GlobalSecondaryIndexes []*ReplicaGlobalSecondaryIndex `min:"1" type:"list"`
 
-	// The AWS KMS customer master key (CMK) that should be used for AWS KMS encryption
-	// in the new replica. To specify a CMK, use its key ID, Amazon Resource Name
-	// (ARN), alias name, or alias ARN. Note that you should only provide this parameter
-	// if the key is different from the default DynamoDB KMS master key alias/aws/dynamodb.
+	// The KMS key that should be used for KMS encryption in the new replica. To
+	// specify a key, use its key ID, Amazon Resource Name (ARN), alias name, or
+	// alias ARN. Note that you should only provide this parameter if the key is
+	// different from the default DynamoDB KMS key alias/aws/dynamodb.
 	KMSMasterKeyId *string `type:"string"`
 
 	// Replica-specific provisioned throughput. If not specified, uses the source
@@ -10074,6 +10130,10 @@ type CreateReplicationGroupMemberAction struct {
 	//
 	// RegionName is a required field
 	RegionName *string `type:"string" required:"true"`
+
+	// Replica-specific table class. If not specified, uses the source table's table
+	// class.
+	TableClassOverride *string `type:"string" enum:"TableClass"`
 }
 
 // String returns the string representation.
@@ -10146,6 +10206,12 @@ func (s *CreateReplicationGroupMemberAction) SetProvisionedThroughputOverride(v 
 // SetRegionName sets the RegionName field's value.
 func (s *CreateReplicationGroupMemberAction) SetRegionName(v string) *CreateReplicationGroupMemberAction {
 	s.RegionName = &v
+	return s
+}
+
+// SetTableClassOverride sets the TableClassOverride field's value.
+func (s *CreateReplicationGroupMemberAction) SetTableClassOverride(v string) *CreateReplicationGroupMemberAction {
+	s.TableClassOverride = &v
 	return s
 }
 
@@ -10284,6 +10350,9 @@ type CreateTableInput struct {
 	//    NEW_AND_OLD_IMAGES - Both the new and the old item images of the item
 	//    are written to the stream.
 	StreamSpecification *StreamSpecification `type:"structure"`
+
+	// The table class of the new table. Valid values are STANDARD and STANDARD_INFREQUENT_ACCESS.
+	TableClass *string `type:"string" enum:"TableClass"`
 
 	// The name of the table to create.
 	//
@@ -10443,6 +10512,12 @@ func (s *CreateTableInput) SetSSESpecification(v *SSESpecification) *CreateTable
 // SetStreamSpecification sets the StreamSpecification field's value.
 func (s *CreateTableInput) SetStreamSpecification(v *StreamSpecification) *CreateTableInput {
 	s.StreamSpecification = v
+	return s
+}
+
+// SetTableClass sets the TableClass field's value.
+func (s *CreateTableInput) SetTableClass(v string) *CreateTableInput {
+	s.TableClass = &v
 	return s
 }
 
@@ -10824,8 +10899,8 @@ type DeleteItemInput struct {
 	// Key is a required field
 	Key map[string]*AttributeValue `type:"map" required:"true"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -10852,6 +10927,10 @@ type DeleteItemInput struct {
 	//    nothing is returned. (This setting is the default for ReturnValues.)
 	//
 	//    * ALL_OLD - The content of the old item is returned.
+	//
+	// There is no additional cost associated with requesting a return value aside
+	// from the small network and processing overhead of receiving a larger response.
+	// No read capacity units are consumed.
 	//
 	// The ReturnValues parameter is used by several DynamoDB operations; however,
 	// DeleteItem does not recognize any values other than NONE or ALL_OLD.
@@ -11472,13 +11551,13 @@ func (s *DescribeContributorInsightsInput) SetTableName(v string) *DescribeContr
 type DescribeContributorInsightsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// List of names of the associated Alpine rules.
+	// List of names of the associated contributor insights rules.
 	ContributorInsightsRuleList []*string `type:"list"`
 
-	// Current Status contributor insights.
+	// Current status of contributor insights.
 	ContributorInsightsStatus *string `type:"string" enum:"ContributorInsightsStatus"`
 
-	// Returns information about the last failure that encountered.
+	// Returns information about the last failure that was encountered.
 	//
 	// The most common exceptions for a FAILED status are:
 	//
@@ -12630,12 +12709,37 @@ type ExecuteStatementInput struct {
 	// read is used; otherwise, an eventually consistent read is used.
 	ConsistentRead *bool `type:"boolean"`
 
+	// The maximum number of items to evaluate (not necessarily the number of matching
+	// items). If DynamoDB processes the number of items up to the limit while processing
+	// the results, it stops the operation and returns the matching values up to
+	// that point, along with a key in LastEvaluatedKey to apply in a subsequent
+	// operation so you can pick up where you left off. Also, if the processed dataset
+	// size exceeds 1 MB before DynamoDB reaches this limit, it stops the operation
+	// and returns the matching values up to the limit, and a key in LastEvaluatedKey
+	// to apply in a subsequent operation to continue the operation.
+	Limit *int64 `min:"1" type:"integer"`
+
 	// Set this value to get remaining results, if NextToken was returned in the
 	// statement response.
 	NextToken *string `min:"1" type:"string"`
 
 	// The parameters for the PartiQL statement, if any.
 	Parameters []*AttributeValue `min:"1" type:"list"`
+
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
+	//
+	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
+	//    operation, together with ConsumedCapacity for each table and secondary
+	//    index that was accessed. Note that some operations, such as GetItem and
+	//    BatchGetItem, do not access any indexes at all. In these cases, specifying
+	//    INDEXES will only return ConsumedCapacity information for table(s).
+	//
+	//    * TOTAL - The response includes only the aggregate ConsumedCapacity for
+	//    the operation.
+	//
+	//    * NONE - No ConsumedCapacity details are included in the response.
+	ReturnConsumedCapacity *string `type:"string" enum:"ReturnConsumedCapacity"`
 
 	// The PartiQL statement representing the operation to run.
 	//
@@ -12664,6 +12768,9 @@ func (s ExecuteStatementInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ExecuteStatementInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ExecuteStatementInput"}
+	if s.Limit != nil && *s.Limit < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Limit", 1))
+	}
 	if s.NextToken != nil && len(*s.NextToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
 	}
@@ -12689,6 +12796,12 @@ func (s *ExecuteStatementInput) SetConsistentRead(v bool) *ExecuteStatementInput
 	return s
 }
 
+// SetLimit sets the Limit field's value.
+func (s *ExecuteStatementInput) SetLimit(v int64) *ExecuteStatementInput {
+	s.Limit = &v
+	return s
+}
+
 // SetNextToken sets the NextToken field's value.
 func (s *ExecuteStatementInput) SetNextToken(v string) *ExecuteStatementInput {
 	s.NextToken = &v
@@ -12701,6 +12814,12 @@ func (s *ExecuteStatementInput) SetParameters(v []*AttributeValue) *ExecuteState
 	return s
 }
 
+// SetReturnConsumedCapacity sets the ReturnConsumedCapacity field's value.
+func (s *ExecuteStatementInput) SetReturnConsumedCapacity(v string) *ExecuteStatementInput {
+	s.ReturnConsumedCapacity = &v
+	return s
+}
+
 // SetStatement sets the Statement field's value.
 func (s *ExecuteStatementInput) SetStatement(v string) *ExecuteStatementInput {
 	s.Statement = &v
@@ -12710,10 +12829,27 @@ func (s *ExecuteStatementInput) SetStatement(v string) *ExecuteStatementInput {
 type ExecuteStatementOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The capacity units consumed by an operation. The data returned includes the
+	// total provisioned throughput consumed, along with statistics for the table
+	// and any indexes involved in the operation. ConsumedCapacity is only returned
+	// if the request asked for it. For more information, see Provisioned Throughput
+	// (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
+	// in the Amazon DynamoDB Developer Guide.
+	ConsumedCapacity *ConsumedCapacity `type:"structure"`
+
 	// If a read operation was used, this property will contain the result of the
-	// reade operation; a map of attribute names and their values. For the write
+	// read operation; a map of attribute names and their values. For the write
 	// operations this value will be empty.
 	Items []map[string]*AttributeValue `type:"list"`
+
+	// The primary key of the item where the operation stopped, inclusive of the
+	// previous result set. Use this value to start a new operation, excluding this
+	// value in the new request. If LastEvaluatedKey is empty, then the "last page"
+	// of results has been processed and there is no more data to be retrieved.
+	// If LastEvaluatedKey is not empty, it does not necessarily mean that there
+	// is more data in the result set. The only way to know when you have reached
+	// the end of the result set is when LastEvaluatedKey is empty.
+	LastEvaluatedKey map[string]*AttributeValue `type:"map"`
 
 	// If the response of a read request exceeds the response payload limit DynamoDB
 	// will set this value in the response. If set, you can use that this value
@@ -12739,9 +12875,21 @@ func (s ExecuteStatementOutput) GoString() string {
 	return s.String()
 }
 
+// SetConsumedCapacity sets the ConsumedCapacity field's value.
+func (s *ExecuteStatementOutput) SetConsumedCapacity(v *ConsumedCapacity) *ExecuteStatementOutput {
+	s.ConsumedCapacity = v
+	return s
+}
+
 // SetItems sets the Items field's value.
 func (s *ExecuteStatementOutput) SetItems(v []map[string]*AttributeValue) *ExecuteStatementOutput {
 	s.Items = v
+	return s
+}
+
+// SetLastEvaluatedKey sets the LastEvaluatedKey field's value.
+func (s *ExecuteStatementOutput) SetLastEvaluatedKey(v map[string]*AttributeValue) *ExecuteStatementOutput {
+	s.LastEvaluatedKey = v
 	return s
 }
 
@@ -12757,6 +12905,12 @@ type ExecuteTransactionInput struct {
 	// Set this value to get remaining results, if NextToken was returned in the
 	// statement response.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response. For more information, see TransactGetItems
+	// (https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html)
+	// and TransactWriteItems (https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html).
+	ReturnConsumedCapacity *string `type:"string" enum:"ReturnConsumedCapacity"`
 
 	// The list of PartiQL statements representing the transaction to run.
 	//
@@ -12817,6 +12971,12 @@ func (s *ExecuteTransactionInput) SetClientRequestToken(v string) *ExecuteTransa
 	return s
 }
 
+// SetReturnConsumedCapacity sets the ReturnConsumedCapacity field's value.
+func (s *ExecuteTransactionInput) SetReturnConsumedCapacity(v string) *ExecuteTransactionInput {
+	s.ReturnConsumedCapacity = &v
+	return s
+}
+
 // SetTransactStatements sets the TransactStatements field's value.
 func (s *ExecuteTransactionInput) SetTransactStatements(v []*ParameterizedStatement) *ExecuteTransactionInput {
 	s.TransactStatements = v
@@ -12825,6 +12985,10 @@ func (s *ExecuteTransactionInput) SetTransactStatements(v []*ParameterizedStatem
 
 type ExecuteTransactionOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The capacity units consumed by the entire operation. The values of the list
+	// are ordered according to the ordering of the statements.
+	ConsumedCapacity []*ConsumedCapacity `type:"list"`
 
 	// The response to a PartiQL transaction.
 	Responses []*ItemResponse `min:"1" type:"list"`
@@ -12846,6 +13010,12 @@ func (s ExecuteTransactionOutput) String() string {
 // value will be replaced with "sensitive".
 func (s ExecuteTransactionOutput) GoString() string {
 	return s.String()
+}
+
+// SetConsumedCapacity sets the ConsumedCapacity field's value.
+func (s *ExecuteTransactionOutput) SetConsumedCapacity(v []*ConsumedCapacity) *ExecuteTransactionOutput {
+	s.ConsumedCapacity = v
+	return s
 }
 
 // SetResponses sets the Responses field's value.
@@ -13190,7 +13360,8 @@ type ExportDescription struct {
 	// The name of the Amazon S3 bucket containing the export.
 	S3Bucket *string `type:"string"`
 
-	// The ID of the AWS account that owns the bucket containing the export.
+	// The ID of the Amazon Web Services account that owns the bucket containing
+	// the export.
 	S3BucketOwner *string `type:"string"`
 
 	// The Amazon S3 bucket prefix used as the file name and path of the exported
@@ -13202,10 +13373,10 @@ type ExportDescription struct {
 	//
 	//    * AES256 - server-side encryption with Amazon S3 managed keys
 	//
-	//    * KMS - server-side encryption with AWS KMS managed keys
+	//    * KMS - server-side encryption with KMS managed keys
 	S3SseAlgorithm *string `type:"string" enum:"S3SseAlgorithm"`
 
-	// The ID of the AWS KMS managed key used to encrypt the S3 bucket where export
+	// The ID of the KMS managed key used to encrypt the S3 bucket where export
 	// data is stored (if applicable).
 	S3SseKmsKeyId *string `min:"1" type:"string"`
 
@@ -13478,8 +13649,9 @@ type ExportTableToPointInTimeInput struct {
 	// or ION.
 	ExportFormat *string `type:"string" enum:"ExportFormat"`
 
-	// Time in the past from which to export table data. The table export will be
-	// a snapshot of the table's state at this point in time.
+	// Time in the past from which to export table data, counted in seconds from
+	// the start of the Unix epoch. The table export will be a snapshot of the table's
+	// state at this point in time.
 	ExportTime *time.Time `type:"timestamp"`
 
 	// The name of the Amazon S3 bucket to export the snapshot to.
@@ -13487,8 +13659,8 @@ type ExportTableToPointInTimeInput struct {
 	// S3Bucket is a required field
 	S3Bucket *string `type:"string" required:"true"`
 
-	// The ID of the AWS account that owns the bucket the export will be stored
-	// in.
+	// The ID of the Amazon Web Services account that owns the bucket the export
+	// will be stored in.
 	S3BucketOwner *string `type:"string"`
 
 	// The Amazon S3 bucket prefix to use as the file name and path of the exported
@@ -13500,10 +13672,10 @@ type ExportTableToPointInTimeInput struct {
 	//
 	//    * AES256 - server-side encryption with Amazon S3 managed keys
 	//
-	//    * KMS - server-side encryption with AWS KMS managed keys
+	//    * KMS - server-side encryption with KMS managed keys
 	S3SseAlgorithm *string `type:"string" enum:"S3SseAlgorithm"`
 
-	// The ID of the AWS KMS managed key used to encrypt the S3 bucket where export
+	// The ID of the KMS managed key used to encrypt the S3 bucket where export
 	// data will be stored (if applicable).
 	S3SseKmsKeyId *string `min:"1" type:"string"`
 
@@ -13839,8 +14011,8 @@ type GetItemInput struct {
 	// in the Amazon DynamoDB Developer Guide.
 	ProjectionExpression *string `type:"string"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -15582,16 +15754,16 @@ func (s *KinesisDataStreamDestination) SetStreamArn(v string) *KinesisDataStream
 
 // There is no limit to the number of daily on-demand backups that can be taken.
 //
-// Up to 50 simultaneous table operations are allowed per account. These operations
+// Up to 500 simultaneous table operations are allowed per account. These operations
 // include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 // and RestoreTableToPointInTime.
 //
 // The only exception is when you are creating a table with one or more secondary
-// indexes. You can have up to 25 such requests running at a time; however,
+// indexes. You can have up to 250 such requests running at a time; however,
 // if the table or index specifications are complex, DynamoDB might temporarily
 // reduce the number of concurrent operations.
 //
-// There is a soft account quota of 256 tables.
+// There is a soft account quota of 2,500 tables.
 type LimitExceededException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -15663,7 +15835,8 @@ type ListBackupsInput struct {
 	//
 	// Where BackupType can be:
 	//
-	//    * USER - On-demand backup created by you.
+	//    * USER - On-demand backup created by you. (The default setting if no other
+	//    backup types are specified.)
 	//
 	//    * SYSTEM - On-demand backup automatically created by DynamoDB.
 	//
@@ -16696,8 +16869,6 @@ type PointInTimeRecoveryDescription struct {
 
 	// The current state of point in time recovery:
 	//
-	//    * ENABLING - Point in time recovery is being enabled.
-	//
 	//    * ENABLED - Point in time recovery is enabled.
 	//
 	//    * DISABLED - Point in time recovery is disabled.
@@ -16861,7 +17032,7 @@ type Projection struct {
 	// Represents the non-key attribute names which will be projected into the index.
 	//
 	// For local secondary indexes, the total count of NonKeyAttributes summed across
-	// all of the local secondary indexes, must not exceed 20. If you project the
+	// all of the local secondary indexes, must not exceed 100. If you project the
 	// same attribute into two different indexes, this counts as two distinct attributes
 	// when determining the total.
 	NonKeyAttributes []*string `min:"1" type:"list"`
@@ -17078,11 +17249,11 @@ func (s *ProvisionedThroughputDescription) SetWriteCapacityUnits(v int64) *Provi
 	return s
 }
 
-// Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-// requests that receive this exception. Your request is eventually successful,
-// unless your retry queue is too large to finish. Reduce the frequency of requests
-// and use exponential backoff. For more information, go to Error Retries and
-// Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+// Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+// automatically retry requests that receive this exception. Your request is
+// eventually successful, unless your retry queue is too large to finish. Reduce
+// the frequency of requests and use exponential backoff. For more information,
+// go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 // in the Amazon DynamoDB Developer Guide.
 type ProvisionedThroughputExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -17416,8 +17587,8 @@ type PutItemInput struct {
 	// Item is a required field
 	Item map[string]*AttributeValue `type:"map" required:"true"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -17446,6 +17617,12 @@ type PutItemInput struct {
 	//
 	//    * ALL_OLD - If PutItem overwrote an attribute name-value pair, then the
 	//    content of the old item is returned.
+	//
+	// The values returned are strongly consistent.
+	//
+	// There is no additional cost associated with requesting a return value aside
+	// from the small network and processing overhead of receiving a larger response.
+	// No read capacity units are consumed.
 	//
 	// The ReturnValues parameter is used by several DynamoDB operations; however,
 	// PutItem does not recognize any values other than NONE or ALL_OLD.
@@ -17765,7 +17942,7 @@ type QueryInput struct {
 	// A FilterExpression is applied after the items have already been read; the
 	// process of filtering does not consume any additional read capacity units.
 	//
-	// For more information, see Filter Expressions (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#FilteringResults)
+	// For more information, see Filter Expressions (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 	// in the Amazon DynamoDB Developer Guide.
 	FilterExpression *string `type:"string"`
 
@@ -17878,8 +18055,8 @@ type QueryInput struct {
 	// in the Amazon DynamoDB Developer Guide.
 	QueryFilter map[string]*Condition `type:"map"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -17927,8 +18104,8 @@ type QueryInput struct {
 	//    * COUNT - Returns the number of matching items, rather than the matching
 	//    items themselves.
 	//
-	//    * SPECIFIC_ATTRIBUTES - Returns only the attributes listed in AttributesToGet.
-	//    This return value is equivalent to specifying AttributesToGet without
+	//    * SPECIFIC_ATTRIBUTES - Returns only the attributes listed in ProjectionExpression.
+	//    This return value is equivalent to specifying ProjectionExpression without
 	//    specifying any value for Select. If you query or scan a local secondary
 	//    index and request only attributes that are projected into that index,
 	//    the operation will read only the index and not the table. If any of the
@@ -17939,12 +18116,12 @@ type QueryInput struct {
 	//    are projected into the index. Global secondary index queries cannot fetch
 	//    attributes from the parent table.
 	//
-	// If neither Select nor AttributesToGet are specified, DynamoDB defaults to
-	// ALL_ATTRIBUTES when accessing a table, and ALL_PROJECTED_ATTRIBUTES when
-	// accessing an index. You cannot use both Select and AttributesToGet together
+	// If neither Select nor ProjectionExpression are specified, DynamoDB defaults
+	// to ALL_ATTRIBUTES when accessing a table, and ALL_PROJECTED_ATTRIBUTES when
+	// accessing an index. You cannot use both Select and ProjectionExpression together
 	// in a single request, unless the value for Select is SPECIFIC_ATTRIBUTES.
-	// (This usage is equivalent to specifying AttributesToGet without any value
-	// for Select.)
+	// (This usage is equivalent to specifying ProjectionExpression without any
+	// value for Select.)
 	//
 	// If you use the ProjectionExpression parameter, then the value for Select
 	// can only be SPECIFIC_ATTRIBUTES. Any other value for Select will return an
@@ -18481,8 +18658,7 @@ type ReplicaDescription struct {
 	// Replica-specific global secondary index settings.
 	GlobalSecondaryIndexes []*ReplicaGlobalSecondaryIndexDescription `type:"list"`
 
-	// The AWS KMS customer master key (CMK) of the replica that will be used for
-	// AWS KMS encryption.
+	// The KMS key of the replica that will be used for KMS encryption.
 	KMSMasterKeyId *string `type:"string"`
 
 	// Replica-specific provisioned throughput. If not described, uses the source
@@ -18506,17 +18682,17 @@ type ReplicaDescription struct {
 	//
 	//    * ACTIVE - The replica is ready for use.
 	//
-	//    * REGION_DISABLED - The replica is inaccessible because the AWS Region
-	//    has been disabled. If the AWS Region remains inaccessible for more than
+	//    * REGION_DISABLED - The replica is inaccessible because the Amazon Web
+	//    Services Region has been disabled. If the Amazon Web Services Region remains
+	//    inaccessible for more than 20 hours, DynamoDB will remove this replica
+	//    from the replication group. The replica will not be deleted and replication
+	//    will stop from and to this region.
+	//
+	//    * INACCESSIBLE_ENCRYPTION_CREDENTIALS - The KMS key used to encrypt the
+	//    table is inaccessible. If the KMS key remains inaccessible for more than
 	//    20 hours, DynamoDB will remove this replica from the replication group.
 	//    The replica will not be deleted and replication will stop from and to
 	//    this region.
-	//
-	//    * INACCESSIBLE_ENCRYPTION_CREDENTIALS - The AWS KMS key used to encrypt
-	//    the table is inaccessible. If the AWS KMS key remains inaccessible for
-	//    more than 20 hours, DynamoDB will remove this replica from the replication
-	//    group. The replica will not be deleted and replication will stop from
-	//    and to this region.
 	ReplicaStatus *string `type:"string" enum:"ReplicaStatus"`
 
 	// Detailed information about the replica status.
@@ -18525,6 +18701,9 @@ type ReplicaDescription struct {
 	// Specifies the progress of a Create, Update, or Delete action on the replica
 	// as a percentage.
 	ReplicaStatusPercentProgress *string `type:"string"`
+
+	// Contains details of the table class.
+	ReplicaTableClassSummary *TableClassSummary `type:"structure"`
 }
 
 // String returns the string representation.
@@ -18590,6 +18769,12 @@ func (s *ReplicaDescription) SetReplicaStatusDescription(v string) *ReplicaDescr
 // SetReplicaStatusPercentProgress sets the ReplicaStatusPercentProgress field's value.
 func (s *ReplicaDescription) SetReplicaStatusPercentProgress(v string) *ReplicaDescription {
 	s.ReplicaStatusPercentProgress = &v
+	return s
+}
+
+// SetReplicaTableClassSummary sets the ReplicaTableClassSummary field's value.
+func (s *ReplicaDescription) SetReplicaTableClassSummary(v *TableClassSummary) *ReplicaDescription {
+	s.ReplicaTableClassSummary = v
 	return s
 }
 
@@ -19109,6 +19294,9 @@ type ReplicaSettingsDescription struct {
 	//
 	//    * ACTIVE - The Region is ready for use.
 	ReplicaStatus *string `type:"string" enum:"ReplicaStatus"`
+
+	// Contains details of the table class.
+	ReplicaTableClassSummary *TableClassSummary `type:"structure"`
 }
 
 // String returns the string representation.
@@ -19177,6 +19365,12 @@ func (s *ReplicaSettingsDescription) SetReplicaStatus(v string) *ReplicaSettings
 	return s
 }
 
+// SetReplicaTableClassSummary sets the ReplicaTableClassSummary field's value.
+func (s *ReplicaSettingsDescription) SetReplicaTableClassSummary(v *TableClassSummary) *ReplicaSettingsDescription {
+	s.ReplicaTableClassSummary = v
+	return s
+}
+
 // Represents the settings for a global table in a Region that will be modified.
 type ReplicaSettingsUpdate struct {
 	_ struct{} `type:"structure"`
@@ -19199,6 +19393,10 @@ type ReplicaSettingsUpdate struct {
 	// Read and Write Requirements (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput)
 	// in the Amazon DynamoDB Developer Guide.
 	ReplicaProvisionedReadCapacityUnits *int64 `min:"1" type:"long"`
+
+	// Replica-specific table class. If not specified, uses the source table's table
+	// class.
+	ReplicaTableClass *string `type:"string" enum:"TableClass"`
 }
 
 // String returns the string representation.
@@ -19274,6 +19472,12 @@ func (s *ReplicaSettingsUpdate) SetReplicaProvisionedReadCapacityAutoScalingSett
 // SetReplicaProvisionedReadCapacityUnits sets the ReplicaProvisionedReadCapacityUnits field's value.
 func (s *ReplicaSettingsUpdate) SetReplicaProvisionedReadCapacityUnits(v int64) *ReplicaSettingsUpdate {
 	s.ReplicaProvisionedReadCapacityUnits = &v
+	return s
+}
+
+// SetReplicaTableClass sets the ReplicaTableClass field's value.
+func (s *ReplicaSettingsUpdate) SetReplicaTableClass(v string) *ReplicaSettingsUpdate {
+	s.ReplicaTableClass = &v
 	return s
 }
 
@@ -19356,6 +19560,9 @@ func (s *ReplicaUpdate) SetDelete(v *DeleteReplicaAction) *ReplicaUpdate {
 //    * An existing replica to be deleted. The request invokes the DeleteTableReplica
 //    action in the destination Region, deleting the replica and all if its
 //    items in the destination Region.
+//
+// When you manually remove a table or global table replica, you do not automatically
+// remove any associated scalable targets, scaling policies, or CloudWatch alarms.
 type ReplicationGroupUpdate struct {
 	_ struct{} `type:"structure"`
 
@@ -19431,7 +19638,7 @@ func (s *ReplicationGroupUpdate) SetUpdate(v *UpdateReplicationGroupMemberAction
 }
 
 // Throughput exceeds the current throughput quota for your account. Please
-// contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+// contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 // a quota increase.
 type RequestLimitExceeded struct {
 	_            struct{}                  `type:"structure"`
@@ -20063,20 +20270,19 @@ type SSEDescription struct {
 	_ struct{} `type:"structure"`
 
 	// Indicates the time, in UNIX epoch date format, when DynamoDB detected that
-	// the table's AWS KMS key was inaccessible. This attribute will automatically
-	// be cleared when DynamoDB detects that the table's AWS KMS key is accessible
-	// again. DynamoDB will initiate the table archival process when table's AWS
-	// KMS key remains inaccessible for more than seven days from this date.
+	// the table's KMS key was inaccessible. This attribute will automatically be
+	// cleared when DynamoDB detects that the table's KMS key is accessible again.
+	// DynamoDB will initiate the table archival process when table's KMS key remains
+	// inaccessible for more than seven days from this date.
 	InaccessibleEncryptionDateTime *time.Time `type:"timestamp"`
 
-	// The AWS KMS customer master key (CMK) ARN used for the AWS KMS encryption.
+	// The KMS key ARN used for the KMS encryption.
 	KMSMasterKeyArn *string `type:"string"`
 
 	// Server-side encryption type. The only supported value is:
 	//
-	//    * KMS - Server-side encryption that uses AWS Key Management Service. The
-	//    key is stored in your account and is managed by AWS KMS (AWS KMS charges
-	//    apply).
+	//    * KMS - Server-side encryption that uses Key Management Service. The key
+	//    is stored in your account and is managed by KMS (KMS charges apply).
 	SSEType *string `type:"string" enum:"SSEType"`
 
 	// Represents the current state of server-side encryption. The only supported
@@ -20134,23 +20340,23 @@ func (s *SSEDescription) SetStatus(v string) *SSEDescription {
 type SSESpecification struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether server-side encryption is done using an AWS managed CMK
-	// or an AWS owned CMK. If enabled (true), server-side encryption type is set
-	// to KMS and an AWS managed CMK is used (AWS KMS charges apply). If disabled
-	// (false) or not specified, server-side encryption is set to AWS owned CMK.
+	// Indicates whether server-side encryption is done using an Amazon Web Services
+	// managed key or an Amazon Web Services owned key. If enabled (true), server-side
+	// encryption type is set to KMS and an Amazon Web Services managed key is used
+	// (KMS charges apply). If disabled (false) or not specified, server-side encryption
+	// is set to Amazon Web Services owned key.
 	Enabled *bool `type:"boolean"`
 
-	// The AWS KMS customer master key (CMK) that should be used for the AWS KMS
-	// encryption. To specify a CMK, use its key ID, Amazon Resource Name (ARN),
-	// alias name, or alias ARN. Note that you should only provide this parameter
-	// if the key is different from the default DynamoDB customer master key alias/aws/dynamodb.
+	// The KMS key that should be used for the KMS encryption. To specify a key,
+	// use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note
+	// that you should only provide this parameter if the key is different from
+	// the default DynamoDB key alias/aws/dynamodb.
 	KMSMasterKeyId *string `type:"string"`
 
 	// Server-side encryption type. The only supported value is:
 	//
-	//    * KMS - Server-side encryption that uses AWS Key Management Service. The
-	//    key is stored in your account and is managed by AWS KMS (AWS KMS charges
-	//    apply).
+	//    * KMS - Server-side encryption that uses Key Management Service. The key
+	//    is stored in your account and is managed by KMS (KMS charges apply).
 	SSEType *string `type:"string" enum:"SSEType"`
 }
 
@@ -20297,7 +20503,7 @@ type ScanInput struct {
 	// A FilterExpression is applied after the items have already been read; the
 	// process of filtering does not consume any additional read capacity units.
 	//
-	// For more information, see Filter Expressions (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#FilteringResults)
+	// For more information, see Filter Expressions (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#Query.FilterExpression)
 	// in the Amazon DynamoDB Developer Guide.
 	FilterExpression *string `type:"string"`
 
@@ -20330,8 +20536,8 @@ type ScanInput struct {
 	// in the Amazon DynamoDB Developer Guide.
 	ProjectionExpression *string `type:"string"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -20387,8 +20593,8 @@ type ScanInput struct {
 	//    * COUNT - Returns the number of matching items, rather than the matching
 	//    items themselves.
 	//
-	//    * SPECIFIC_ATTRIBUTES - Returns only the attributes listed in AttributesToGet.
-	//    This return value is equivalent to specifying AttributesToGet without
+	//    * SPECIFIC_ATTRIBUTES - Returns only the attributes listed in ProjectionExpression.
+	//    This return value is equivalent to specifying ProjectionExpression without
 	//    specifying any value for Select. If you query or scan a local secondary
 	//    index and request only attributes that are projected into that index,
 	//    the operation reads only the index and not the table. If any of the requested
@@ -20399,12 +20605,12 @@ type ScanInput struct {
 	//    into the index. Global secondary index queries cannot fetch attributes
 	//    from the parent table.
 	//
-	// If neither Select nor AttributesToGet are specified, DynamoDB defaults to
-	// ALL_ATTRIBUTES when accessing a table, and ALL_PROJECTED_ATTRIBUTES when
-	// accessing an index. You cannot use both Select and AttributesToGet together
+	// If neither Select nor ProjectionExpression are specified, DynamoDB defaults
+	// to ALL_ATTRIBUTES when accessing a table, and ALL_PROJECTED_ATTRIBUTES when
+	// accessing an index. You cannot use both Select and ProjectionExpression together
 	// in a single request, unless the value for Select is SPECIFIC_ATTRIBUTES.
-	// (This usage is equivalent to specifying AttributesToGet without any value
-	// for Select.)
+	// (This usage is equivalent to specifying ProjectionExpression without any
+	// value for Select.)
 	//
 	// If you use the ProjectionExpression parameter, then the value for Select
 	// can only be SPECIFIC_ATTRIBUTES. Any other value for Select will return an
@@ -21066,6 +21272,47 @@ func (s *TableAutoScalingDescription) SetTableStatus(v string) *TableAutoScaling
 	return s
 }
 
+// Contains details of the table class.
+type TableClassSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time at which the table class was last updated.
+	LastUpdateDateTime *time.Time `type:"timestamp"`
+
+	// The table class of the specified table. Valid values are STANDARD and STANDARD_INFREQUENT_ACCESS.
+	TableClass *string `type:"string" enum:"TableClass"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableClassSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableClassSummary) GoString() string {
+	return s.String()
+}
+
+// SetLastUpdateDateTime sets the LastUpdateDateTime field's value.
+func (s *TableClassSummary) SetLastUpdateDateTime(v time.Time) *TableClassSummary {
+	s.LastUpdateDateTime = &v
+	return s
+}
+
+// SetTableClass sets the TableClass field's value.
+func (s *TableClassSummary) SetTableClass(v string) *TableClassSummary {
+	s.TableClass = &v
+	return s
+}
+
 // Represents the properties of a table.
 type TableDescription struct {
 	_ struct{} `type:"structure"`
@@ -21132,7 +21379,7 @@ type TableDescription struct {
 	//    of the table attributes are projected into the index. NonKeyAttributes
 	//    - A list of one or more non-key attribute names that are projected into
 	//    the secondary index. The total count of attributes provided in NonKeyAttributes,
-	//    summed across all of the secondary indexes, must not exceed 20. If you
+	//    summed across all of the secondary indexes, must not exceed 100. If you
 	//    project the same attribute into two different indexes, this counts as
 	//    two distinct attributes when determining the total.
 	//
@@ -21145,7 +21392,7 @@ type TableDescription struct {
 	GlobalSecondaryIndexes []*GlobalSecondaryIndexDescription `type:"list"`
 
 	// Represents the version of global tables (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
-	// in use, if the table is replicated across AWS Regions.
+	// in use, if the table is replicated across Amazon Web Services Regions.
 	GlobalTableVersion *string `type:"string"`
 
 	// The number of items in the specified table. DynamoDB updates this value approximately
@@ -21180,7 +21427,7 @@ type TableDescription struct {
 	// However, the combination of the following three elements is guaranteed to
 	// be unique:
 	//
-	//    * AWS customer ID
+	//    * Amazon Web Services customer ID
 	//
 	//    * Table name
 	//
@@ -21209,7 +21456,7 @@ type TableDescription struct {
 	//    table attributes are projected into the index. NonKeyAttributes - A list
 	//    of one or more non-key attribute names that are projected into the secondary
 	//    index. The total count of attributes provided in NonKeyAttributes, summed
-	//    across all of the secondary indexes, must not exceed 20. If you project
+	//    across all of the secondary indexes, must not exceed 100. If you project
 	//    the same attribute into two different indexes, this counts as two distinct
 	//    attributes when determining the total.
 	//
@@ -21244,6 +21491,9 @@ type TableDescription struct {
 	// The Amazon Resource Name (ARN) that uniquely identifies the table.
 	TableArn *string `type:"string"`
 
+	// Contains details of the table class.
+	TableClassSummary *TableClassSummary `type:"structure"`
+
 	// Unique identifier for the table for which the backup was created.
 	TableId *string `type:"string"`
 
@@ -21265,10 +21515,10 @@ type TableDescription struct {
 	//
 	//    * ACTIVE - The table is ready for use.
 	//
-	//    * INACCESSIBLE_ENCRYPTION_CREDENTIALS - The AWS KMS key used to encrypt
-	//    the table in inaccessible. Table operations may fail due to failure to
-	//    use the AWS KMS key. DynamoDB will initiate the table archival process
-	//    when a table's AWS KMS key remains inaccessible for more than seven days.
+	//    * INACCESSIBLE_ENCRYPTION_CREDENTIALS - The KMS key used to encrypt the
+	//    table in inaccessible. Table operations may fail due to failure to use
+	//    the KMS key. DynamoDB will initiate the table archival process when a
+	//    table's KMS key remains inaccessible for more than seven days.
 	//
 	//    * ARCHIVING - The table is being archived. Operations are not allowed
 	//    until archival is complete.
@@ -21398,6 +21648,12 @@ func (s *TableDescription) SetTableArn(v string) *TableDescription {
 	return s
 }
 
+// SetTableClassSummary sets the TableClassSummary field's value.
+func (s *TableDescription) SetTableClassSummary(v *TableClassSummary) *TableDescription {
+	s.TableClassSummary = v
+	return s
+}
+
 // SetTableId sets the TableId field's value.
 func (s *TableDescription) SetTableId(v string) *TableDescription {
 	s.TableId = &v
@@ -21487,7 +21743,8 @@ func (s *TableInUseException) RequestID() string {
 }
 
 // A source table with the name TableName does not currently exist within the
-// subscriber's account.
+// subscriber's account or the subscriber is operating in the wrong Amazon Web
+// Services Region.
 type TableNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -21554,10 +21811,11 @@ func (s *TableNotFoundException) RequestID() string {
 // Describes a tag. A tag is a key-value pair. You can add up to 50 tags to
 // a single DynamoDB table.
 //
-// AWS-assigned tag names and values are automatically assigned the aws: prefix,
-// which the user cannot assign. AWS-assigned tag names do not count towards
-// the tag limit of 50. User-assigned tag names have the prefix user: in the
-// Cost Allocation Report. You cannot backdate the application of a tag.
+// Amazon Web Services-assigned tag names and values are automatically assigned
+// the aws: prefix, which the user cannot assign. Amazon Web Services-assigned
+// tag names do not count towards the tag limit of 50. User-assigned tag names
+// have the prefix user: in the Cost Allocation Report. You cannot backdate
+// the application of a tag.
 //
 // For an overview on tagging DynamoDB resources, see Tagging for DynamoDB (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html)
 // in the Amazon DynamoDB Developer Guide.
@@ -22121,8 +22379,8 @@ type TransactWriteItemsInput struct {
 	// exception.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -22144,8 +22402,8 @@ type TransactWriteItemsInput struct {
 
 	// An ordered array of up to 25 TransactWriteItem objects, each of which contains
 	// a ConditionCheck, Put, Update, or Delete object. These can operate on items
-	// in different tables, but the tables must reside in the same AWS account and
-	// Region, and no two of them can operate on the same item.
+	// in different tables, but the tables must reside in the same Amazon Web Services
+	// account and Region, and no two of them can operate on the same item.
 	//
 	// TransactItems is a required field
 	TransactItems []*TransactWriteItem `min:"1" type:"list" required:"true"`
@@ -22304,11 +22562,11 @@ func (s *TransactWriteItemsOutput) SetItemCollectionMetrics(v map[string][]*Item
 // If using Java, DynamoDB lists the cancellation reasons on the CancellationReasons
 // property. This property is not set for other languages. Transaction cancellation
 // reasons are ordered in the order of requested items, if an item has no error
-// it will have NONE code and Null message.
+// it will have None code and Null message.
 //
 // Cancellation reason codes and possible error messages:
 //
-//    * No Errors: Code: NONE Message: null
+//    * No Errors: Code: None Message: null
 //
 //    * Conditional Check Failed: Code: ConditionalCheckFailed Message: The
 //    conditional request failed.
@@ -23436,8 +23694,8 @@ type UpdateItemInput struct {
 	// Key is a required field
 	Key map[string]*AttributeValue `type:"map" required:"true"`
 
-	// Determines the level of detail about provisioned throughput consumption that
-	// is returned in the response:
+	// Determines the level of detail about either provisioned or on-demand throughput
+	// consumption that is returned in the response:
 	//
 	//    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 	//    operation, together with ConsumedCapacity for each table and secondary
@@ -23739,11 +23997,10 @@ type UpdateReplicationGroupMemberAction struct {
 	// Replica-specific global secondary index settings.
 	GlobalSecondaryIndexes []*ReplicaGlobalSecondaryIndex `min:"1" type:"list"`
 
-	// The AWS KMS customer master key (CMK) of the replica that should be used
-	// for AWS KMS encryption. To specify a CMK, use its key ID, Amazon Resource
-	// Name (ARN), alias name, or alias ARN. Note that you should only provide this
-	// parameter if the key is different from the default DynamoDB KMS master key
-	// alias/aws/dynamodb.
+	// The KMS key of the replica that should be used for KMS encryption. To specify
+	// a key, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN.
+	// Note that you should only provide this parameter if the key is different
+	// from the default DynamoDB KMS key alias/aws/dynamodb.
 	KMSMasterKeyId *string `type:"string"`
 
 	// Replica-specific provisioned throughput. If not specified, uses the source
@@ -23754,6 +24011,10 @@ type UpdateReplicationGroupMemberAction struct {
 	//
 	// RegionName is a required field
 	RegionName *string `type:"string" required:"true"`
+
+	// Replica-specific table class. If not specified, uses the source table's table
+	// class.
+	TableClassOverride *string `type:"string" enum:"TableClass"`
 }
 
 // String returns the string representation.
@@ -23829,6 +24090,12 @@ func (s *UpdateReplicationGroupMemberAction) SetRegionName(v string) *UpdateRepl
 	return s
 }
 
+// SetTableClassOverride sets the TableClassOverride field's value.
+func (s *UpdateReplicationGroupMemberAction) SetTableClassOverride(v string) *UpdateReplicationGroupMemberAction {
+	s.TableClassOverride = &v
+	return s
+}
+
 // Represents the input of an UpdateTable operation.
 type UpdateTableInput struct {
 	_ struct{} `type:"structure"`
@@ -23886,6 +24153,10 @@ type UpdateTableInput struct {
 	// that already has a stream, or if you try to disable a stream on a table that
 	// doesn't have a stream.
 	StreamSpecification *StreamSpecification `type:"structure"`
+
+	// The table class of the table to be updated. Valid values are STANDARD and
+	// STANDARD_INFREQUENT_ACCESS.
+	TableClass *string `type:"string" enum:"TableClass"`
 
 	// The name of the table to be updated.
 	//
@@ -24009,6 +24280,12 @@ func (s *UpdateTableInput) SetSSESpecification(v *SSESpecification) *UpdateTable
 // SetStreamSpecification sets the StreamSpecification field's value.
 func (s *UpdateTableInput) SetStreamSpecification(v *StreamSpecification) *UpdateTableInput {
 	s.StreamSpecification = v
+	return s
+}
+
+// SetTableClass sets the TableClass field's value.
+func (s *UpdateTableInput) SetTableClass(v string) *UpdateTableInput {
+	s.TableClass = &v
 	return s
 }
 
@@ -24824,8 +25101,8 @@ func ReplicaStatus_Values() []string {
 	}
 }
 
-// Determines the level of detail about provisioned throughput consumption that
-// is returned in the response:
+// Determines the level of detail about either provisioned or on-demand throughput
+// consumption that is returned in the response:
 //
 //    * INDEXES - The response includes the aggregate ConsumedCapacity for the
 //    operation, together with ConsumedCapacity for each table and secondary
@@ -25042,6 +25319,22 @@ func StreamViewType_Values() []string {
 		StreamViewTypeOldImage,
 		StreamViewTypeNewAndOldImages,
 		StreamViewTypeKeysOnly,
+	}
+}
+
+const (
+	// TableClassStandard is a TableClass enum value
+	TableClassStandard = "STANDARD"
+
+	// TableClassStandardInfrequentAccess is a TableClass enum value
+	TableClassStandardInfrequentAccess = "STANDARD_INFREQUENT_ACCESS"
+)
+
+// TableClass_Values returns all elements of the TableClass enum
+func TableClass_Values() []string {
+	return []string{
+		TableClassStandard,
+		TableClassStandardInfrequentAccess,
 	}
 }
 

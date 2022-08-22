@@ -108,16 +108,16 @@ const (
 	//
 	// There is no limit to the number of daily on-demand backups that can be taken.
 	//
-	// Up to 50 simultaneous table operations are allowed per account. These operations
+	// Up to 500 simultaneous table operations are allowed per account. These operations
 	// include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
 	// and RestoreTableToPointInTime.
 	//
 	// The only exception is when you are creating a table with one or more secondary
-	// indexes. You can have up to 25 such requests running at a time; however,
+	// indexes. You can have up to 250 such requests running at a time; however,
 	// if the table or index specifications are complex, DynamoDB might temporarily
 	// reduce the number of concurrent operations.
 	//
-	// There is a soft account quota of 256 tables.
+	// There is a soft account quota of 2,500 tables.
 	ErrCodeLimitExceededException = "LimitExceededException"
 
 	// ErrCodePointInTimeRecoveryUnavailableException for service response error code
@@ -129,11 +129,11 @@ const (
 	// ErrCodeProvisionedThroughputExceededException for service response error code
 	// "ProvisionedThroughputExceededException".
 	//
-	// Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
-	// requests that receive this exception. Your request is eventually successful,
-	// unless your retry queue is too large to finish. Reduce the frequency of requests
-	// and use exponential backoff. For more information, go to Error Retries and
-	// Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
+	// Your request rate is too high. The Amazon Web Services SDKs for DynamoDB
+	// automatically retry requests that receive this exception. Your request is
+	// eventually successful, unless your retry queue is too large to finish. Reduce
+	// the frequency of requests and use exponential backoff. For more information,
+	// go to Error Retries and Exponential Backoff (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff)
 	// in the Amazon DynamoDB Developer Guide.
 	ErrCodeProvisionedThroughputExceededException = "ProvisionedThroughputExceededException"
 
@@ -153,7 +153,7 @@ const (
 	// "RequestLimitExceeded".
 	//
 	// Throughput exceeds the current throughput quota for your account. Please
-	// contact AWS Support at AWS Support (https://aws.amazon.com/support) to request
+	// contact Amazon Web Services Support (https://aws.amazon.com/support) to request
 	// a quota increase.
 	ErrCodeRequestLimitExceeded = "RequestLimitExceeded"
 
@@ -188,7 +188,8 @@ const (
 	// "TableNotFoundException".
 	//
 	// A source table with the name TableName does not currently exist within the
-	// subscriber's account.
+	// subscriber's account or the subscriber is operating in the wrong Amazon Web
+	// Services Region.
 	ErrCodeTableNotFoundException = "TableNotFoundException"
 
 	// ErrCodeTransactionCanceledException for service response error code
@@ -232,11 +233,11 @@ const (
 	// If using Java, DynamoDB lists the cancellation reasons on the CancellationReasons
 	// property. This property is not set for other languages. Transaction cancellation
 	// reasons are ordered in the order of requested items, if an item has no error
-	// it will have NONE code and Null message.
+	// it will have None code and Null message.
 	//
 	// Cancellation reason codes and possible error messages:
 	//
-	//    * No Errors: Code: NONE Message: null
+	//    * No Errors: Code: None Message: null
 	//
 	//    * Conditional Check Failed: Code: ConditionalCheckFailed Message: The
 	//    conditional request failed.

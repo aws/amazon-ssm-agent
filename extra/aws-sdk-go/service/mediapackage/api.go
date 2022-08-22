@@ -3107,7 +3107,7 @@ type DashPackage struct {
 	// A list of SCTE-35 message types that are treated as ad markers in the output.
 	// If empty, noad markers are output. Specify multiple items to create ad markers
 	// for all of the includedmessage types.
-	AdTriggers []*string `locationName:"adTriggers" type:"list"`
+	AdTriggers []*string `locationName:"adTriggers" type:"list" enum:"__AdTriggersElement"`
 
 	// This setting allows the delivery restriction flags on SCTE-35 segmentation
 	// descriptors todetermine whether a message signals an ad. Choosing "NONE"
@@ -3123,6 +3123,9 @@ type DashPackage struct {
 
 	// A Dynamic Adaptive Streaming over HTTP (DASH) encryption configuration.
 	Encryption *DashEncryption `locationName:"encryption" type:"structure"`
+
+	// When enabled, an I-Frame only stream will be included in the output.
+	IncludeIframeOnlyStream *bool `locationName:"includeIframeOnlyStream" type:"boolean"`
 
 	// Determines the position of some tags in the Media Presentation Description
 	// (MPD). When set to FULL, elements like SegmentTemplate and ContentProtection
@@ -3146,10 +3149,11 @@ type DashPackage struct {
 	// into multiple periods. If empty, the content will notbe partitioned into
 	// more than one period. If the list contains "ADS", new periods will be created
 	// wherethe Channel source contains SCTE-35 ad markers.
-	PeriodTriggers []*string `locationName:"periodTriggers" type:"list"`
+	PeriodTriggers []*string `locationName:"periodTriggers" type:"list" enum:"__PeriodTriggersElement"`
 
 	// The Dynamic Adaptive Streaming over HTTP (DASH) profile type. When set to
-	// "HBBTV_1_5", HbbTV 1.5 compliant output is enabled.
+	// "HBBTV_1_5", HbbTV 1.5 compliant output is enabled. When set to "DVB-DASH_2014",
+	// DVB-DASH 2014 compliant output is enabled.
 	Profile *string `locationName:"profile" type:"string" enum:"Profile"`
 
 	// Duration (in seconds) of each segment. Actual segments will berounded to
@@ -3175,7 +3179,7 @@ type DashPackage struct {
 	UtcTiming *string `locationName:"utcTiming" type:"string" enum:"UtcTiming"`
 
 	// Specifies the value attribute of the UTCTiming field when utcTiming is set
-	// to HTTP-ISO or HTTP-HEAD
+	// to HTTP-ISO, HTTP-HEAD or HTTP-XSDATE
 	UtcTimingUri *string `locationName:"utcTimingUri" type:"string"`
 }
 
@@ -3227,6 +3231,12 @@ func (s *DashPackage) SetAdsOnDeliveryRestrictions(v string) *DashPackage {
 // SetEncryption sets the Encryption field's value.
 func (s *DashPackage) SetEncryption(v *DashEncryption) *DashPackage {
 	s.Encryption = v
+	return s
+}
+
+// SetIncludeIframeOnlyStream sets the IncludeIframeOnlyStream field's value.
+func (s *DashPackage) SetIncludeIframeOnlyStream(v bool) *DashPackage {
+	s.IncludeIframeOnlyStream = &v
 	return s
 }
 
@@ -3350,7 +3360,7 @@ func (s *DeleteChannelInput) SetId(v string) *DeleteChannelInput {
 }
 
 type DeleteChannelOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3419,7 +3429,7 @@ func (s *DeleteOriginEndpointInput) SetId(v string) *DeleteOriginEndpointInput {
 }
 
 type DeleteOriginEndpointOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4441,7 +4451,7 @@ type HlsManifestCreateOrUpdateParameters struct {
 	// A list of SCTE-35 message types that are treated as ad markers in the output.
 	// If empty, noad markers are output. Specify multiple items to create ad markers
 	// for all of the includedmessage types.
-	AdTriggers []*string `locationName:"adTriggers" type:"list"`
+	AdTriggers []*string `locationName:"adTriggers" type:"list" enum:"__AdTriggersElement"`
 
 	// This setting allows the delivery restriction flags on SCTE-35 segmentation
 	// descriptors todetermine whether a message signals an ad. Choosing "NONE"
@@ -4589,7 +4599,7 @@ type HlsPackage struct {
 	// A list of SCTE-35 message types that are treated as ad markers in the output.
 	// If empty, noad markers are output. Specify multiple items to create ad markers
 	// for all of the includedmessage types.
-	AdTriggers []*string `locationName:"adTriggers" type:"list"`
+	AdTriggers []*string `locationName:"adTriggers" type:"list" enum:"__AdTriggersElement"`
 
 	// This setting allows the delivery restriction flags on SCTE-35 segmentation
 	// descriptors todetermine whether a message signals an ad. Choosing "NONE"
@@ -4605,6 +4615,10 @@ type HlsPackage struct {
 
 	// An HTTP Live Streaming (HLS) encryption configuration.
 	Encryption *HlsEncryption `locationName:"encryption" type:"structure"`
+
+	// When enabled, MediaPackage passes through digital video broadcasting (DVB)
+	// subtitles into the output.
+	IncludeDvbSubtitles *bool `locationName:"includeDvbSubtitles" type:"boolean"`
 
 	// When enabled, an I-Frame only stream will be included in the output.
 	IncludeIframeOnlyStream *bool `locationName:"includeIframeOnlyStream" type:"boolean"`
@@ -4692,6 +4706,12 @@ func (s *HlsPackage) SetAdsOnDeliveryRestrictions(v string) *HlsPackage {
 // SetEncryption sets the Encryption field's value.
 func (s *HlsPackage) SetEncryption(v *HlsEncryption) *HlsPackage {
 	s.Encryption = v
+	return s
+}
+
+// SetIncludeDvbSubtitles sets the IncludeDvbSubtitles field's value.
+func (s *HlsPackage) SetIncludeDvbSubtitles(v bool) *HlsPackage {
+	s.IncludeDvbSubtitles = &v
 	return s
 }
 
@@ -6270,7 +6290,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6477,7 +6497,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7085,24 +7105,76 @@ func PlaylistType_Values() []string {
 const (
 	// PresetSpeke20AudioPresetAudio1 is a PresetSpeke20Audio enum value
 	PresetSpeke20AudioPresetAudio1 = "PRESET-AUDIO-1"
+
+	// PresetSpeke20AudioPresetAudio2 is a PresetSpeke20Audio enum value
+	PresetSpeke20AudioPresetAudio2 = "PRESET-AUDIO-2"
+
+	// PresetSpeke20AudioPresetAudio3 is a PresetSpeke20Audio enum value
+	PresetSpeke20AudioPresetAudio3 = "PRESET-AUDIO-3"
+
+	// PresetSpeke20AudioShared is a PresetSpeke20Audio enum value
+	PresetSpeke20AudioShared = "SHARED"
+
+	// PresetSpeke20AudioUnencrypted is a PresetSpeke20Audio enum value
+	PresetSpeke20AudioUnencrypted = "UNENCRYPTED"
 )
 
 // PresetSpeke20Audio_Values returns all elements of the PresetSpeke20Audio enum
 func PresetSpeke20Audio_Values() []string {
 	return []string{
 		PresetSpeke20AudioPresetAudio1,
+		PresetSpeke20AudioPresetAudio2,
+		PresetSpeke20AudioPresetAudio3,
+		PresetSpeke20AudioShared,
+		PresetSpeke20AudioUnencrypted,
 	}
 }
 
 const (
 	// PresetSpeke20VideoPresetVideo1 is a PresetSpeke20Video enum value
 	PresetSpeke20VideoPresetVideo1 = "PRESET-VIDEO-1"
+
+	// PresetSpeke20VideoPresetVideo2 is a PresetSpeke20Video enum value
+	PresetSpeke20VideoPresetVideo2 = "PRESET-VIDEO-2"
+
+	// PresetSpeke20VideoPresetVideo3 is a PresetSpeke20Video enum value
+	PresetSpeke20VideoPresetVideo3 = "PRESET-VIDEO-3"
+
+	// PresetSpeke20VideoPresetVideo4 is a PresetSpeke20Video enum value
+	PresetSpeke20VideoPresetVideo4 = "PRESET-VIDEO-4"
+
+	// PresetSpeke20VideoPresetVideo5 is a PresetSpeke20Video enum value
+	PresetSpeke20VideoPresetVideo5 = "PRESET-VIDEO-5"
+
+	// PresetSpeke20VideoPresetVideo6 is a PresetSpeke20Video enum value
+	PresetSpeke20VideoPresetVideo6 = "PRESET-VIDEO-6"
+
+	// PresetSpeke20VideoPresetVideo7 is a PresetSpeke20Video enum value
+	PresetSpeke20VideoPresetVideo7 = "PRESET-VIDEO-7"
+
+	// PresetSpeke20VideoPresetVideo8 is a PresetSpeke20Video enum value
+	PresetSpeke20VideoPresetVideo8 = "PRESET-VIDEO-8"
+
+	// PresetSpeke20VideoShared is a PresetSpeke20Video enum value
+	PresetSpeke20VideoShared = "SHARED"
+
+	// PresetSpeke20VideoUnencrypted is a PresetSpeke20Video enum value
+	PresetSpeke20VideoUnencrypted = "UNENCRYPTED"
 )
 
 // PresetSpeke20Video_Values returns all elements of the PresetSpeke20Video enum
 func PresetSpeke20Video_Values() []string {
 	return []string{
 		PresetSpeke20VideoPresetVideo1,
+		PresetSpeke20VideoPresetVideo2,
+		PresetSpeke20VideoPresetVideo3,
+		PresetSpeke20VideoPresetVideo4,
+		PresetSpeke20VideoPresetVideo5,
+		PresetSpeke20VideoPresetVideo6,
+		PresetSpeke20VideoPresetVideo7,
+		PresetSpeke20VideoPresetVideo8,
+		PresetSpeke20VideoShared,
+		PresetSpeke20VideoUnencrypted,
 	}
 }
 
@@ -7112,6 +7184,12 @@ const (
 
 	// ProfileHbbtv15 is a Profile enum value
 	ProfileHbbtv15 = "HBBTV_1_5"
+
+	// ProfileHybridcast is a Profile enum value
+	ProfileHybridcast = "HYBRIDCAST"
+
+	// ProfileDvbDash2014 is a Profile enum value
+	ProfileDvbDash2014 = "DVB_DASH_2014"
 )
 
 // Profile_Values returns all elements of the Profile enum
@@ -7119,6 +7197,8 @@ func Profile_Values() []string {
 	return []string{
 		ProfileNone,
 		ProfileHbbtv15,
+		ProfileHybridcast,
+		ProfileDvbDash2014,
 	}
 }
 
@@ -7191,6 +7271,9 @@ const (
 
 	// UtcTimingHttpIso is a UtcTiming enum value
 	UtcTimingHttpIso = "HTTP-ISO"
+
+	// UtcTimingHttpXsdate is a UtcTiming enum value
+	UtcTimingHttpXsdate = "HTTP-XSDATE"
 )
 
 // UtcTiming_Values returns all elements of the UtcTiming enum
@@ -7199,6 +7282,7 @@ func UtcTiming_Values() []string {
 		UtcTimingNone,
 		UtcTimingHttpHead,
 		UtcTimingHttpIso,
+		UtcTimingHttpXsdate,
 	}
 }
 

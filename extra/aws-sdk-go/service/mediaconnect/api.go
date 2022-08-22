@@ -3894,6 +3894,68 @@ func (s *AddFlowVpcInterfacesOutput) SetVpcInterfaces(v []*VpcInterface) *AddFlo
 	return s
 }
 
+// Create maintenance setting for a flow
+type AddMaintenance struct {
+	_ struct{} `type:"structure"`
+
+	// A day of a week when the maintenance will happen. Use Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday.
+	//
+	// MaintenanceDay is a required field
+	MaintenanceDay *string `locationName:"maintenanceDay" type:"string" required:"true" enum:"MaintenanceDay"`
+
+	// UTC time when the maintenance will happen. Use 24-hour HH:MM format. Minutes
+	// must be 00. Example: 13:00. The default value is 02:00.
+	//
+	// MaintenanceStartHour is a required field
+	MaintenanceStartHour *string `locationName:"maintenanceStartHour" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AddMaintenance) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AddMaintenance) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddMaintenance) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddMaintenance"}
+	if s.MaintenanceDay == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaintenanceDay"))
+	}
+	if s.MaintenanceStartHour == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaintenanceStartHour"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaintenanceDay sets the MaintenanceDay field's value.
+func (s *AddMaintenance) SetMaintenanceDay(v string) *AddMaintenance {
+	s.MaintenanceDay = &v
+	return s
+}
+
+// SetMaintenanceStartHour sets the MaintenanceStartHour field's value.
+func (s *AddMaintenance) SetMaintenanceStartHour(v string) *AddMaintenance {
+	s.MaintenanceStartHour = &v
+	return s
+}
+
 // The media stream that you want to add to the flow.
 type AddMediaStreamRequest struct {
 	_ struct{} `type:"structure"`
@@ -4025,10 +4087,11 @@ type AddOutputRequest struct {
 	Destination *string `locationName:"destination" type:"string"`
 
 	// The type of key used for the encryption. If no keyType is provided, the service
-	// will use the default setting (static-key).
+	// will use the default setting (static-key). Allowable encryption types: static-key.
 	Encryption *Encryption `locationName:"encryption" type:"structure"`
 
-	// The maximum latency in milliseconds for Zixi-based streams.
+	// The maximum latency in milliseconds. This parameter applies only to RIST-based,
+	// Zixi-based, and Fujitsu-based streams.
 	MaxLatency *int64 `locationName:"maxLatency" type:"integer"`
 
 	// The media streams that are associated with the output, and the parameters
@@ -4055,6 +4118,10 @@ type AddOutputRequest struct {
 
 	// The remote ID for the Zixi-pull output stream.
 	RemoteId *string `locationName:"remoteId" type:"string"`
+
+	// The port that the flow uses to send outbound requests to initiate connection
+	// with the sender.
+	SenderControlPort *int64 `locationName:"senderControlPort" type:"integer"`
 
 	// The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.
 	SmoothingLatency *int64 `locationName:"smoothingLatency" type:"integer"`
@@ -4176,6 +4243,12 @@ func (s *AddOutputRequest) SetProtocol(v string) *AddOutputRequest {
 // SetRemoteId sets the RemoteId field's value.
 func (s *AddOutputRequest) SetRemoteId(v string) *AddOutputRequest {
 	s.RemoteId = &v
+	return s
+}
+
+// SetSenderControlPort sets the SenderControlPort field's value.
+func (s *AddOutputRequest) SetSenderControlPort(v int64) *AddOutputRequest {
+	s.SenderControlPort = &v
 	return s
 }
 
@@ -4341,6 +4414,9 @@ type CreateFlowInput struct {
 	// The entitlements that you want to grant on a flow.
 	Entitlements []*GrantEntitlementRequest `locationName:"entitlements" type:"list"`
 
+	// Create maintenance setting for a flow
+	Maintenance *AddMaintenance `locationName:"maintenance" type:"structure"`
+
 	// The media streams that you want to add to the flow. You can associate these
 	// media streams with sources and outputs on the flow.
 	MediaStreams []*AddMediaStreamRequest `locationName:"mediaStreams" type:"list"`
@@ -4356,7 +4432,7 @@ type CreateFlowInput struct {
 	// The settings for the source of the flow.
 	Source *SetSourceRequest `locationName:"source" type:"structure"`
 
-	// The settings for source failover
+	// The settings for source failover.
 	SourceFailoverConfig *FailoverConfig `locationName:"sourceFailoverConfig" type:"structure"`
 
 	Sources []*SetSourceRequest `locationName:"sources" type:"list"`
@@ -4397,6 +4473,11 @@ func (s *CreateFlowInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entitlements", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.Maintenance != nil {
+		if err := s.Maintenance.Validate(); err != nil {
+			invalidParams.AddNested("Maintenance", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.MediaStreams != nil {
@@ -4460,6 +4541,12 @@ func (s *CreateFlowInput) SetAvailabilityZone(v string) *CreateFlowInput {
 // SetEntitlements sets the Entitlements field's value.
 func (s *CreateFlowInput) SetEntitlements(v []*GrantEntitlementRequest) *CreateFlowInput {
 	s.Entitlements = v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *CreateFlowInput) SetMaintenance(v *AddMaintenance) *CreateFlowInput {
+	s.Maintenance = v
 	return s
 }
 
@@ -5382,7 +5469,7 @@ func (s *Entitlement) SetSubscribers(v []*string) *Entitlement {
 	return s
 }
 
-// The settings for source failover
+// The settings for source failover.
 type FailoverConfig struct {
 	_ struct{} `type:"structure"`
 
@@ -5471,6 +5558,9 @@ type Flow struct {
 	// FlowArn is a required field
 	FlowArn *string `locationName:"flowArn" type:"string" required:"true"`
 
+	// The maintenance setting of a flow
+	Maintenance *Maintenance `locationName:"maintenance" type:"structure"`
+
 	// The media streams that are associated with the flow. After you associate
 	// a media stream with a source, you can also associate it with outputs on the
 	// flow.
@@ -5491,7 +5581,7 @@ type Flow struct {
 	// Source is a required field
 	Source *Source `locationName:"source" type:"structure" required:"true"`
 
-	// The settings for source failover
+	// The settings for source failover.
 	SourceFailoverConfig *FailoverConfig `locationName:"sourceFailoverConfig" type:"structure"`
 
 	Sources []*Source `locationName:"sources" type:"list"`
@@ -5550,6 +5640,12 @@ func (s *Flow) SetEntitlements(v []*Entitlement) *Flow {
 // SetFlowArn sets the FlowArn field's value.
 func (s *Flow) SetFlowArn(v string) *Flow {
 	s.FlowArn = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *Flow) SetMaintenance(v *Maintenance) *Flow {
+	s.Maintenance = v
 	return s
 }
 
@@ -5856,7 +5952,7 @@ type GrantEntitlementRequest struct {
 	Description *string `locationName:"description" type:"string"`
 
 	// The type of encryption that will be used on the output that is associated
-	// with this entitlement.
+	// with this entitlement. Allowable encryption types: static-key, speke.
 	Encryption *Encryption `locationName:"encryption" type:"structure"`
 
 	// An indication of whether the new entitlement should be enabled or disabled
@@ -6951,6 +7047,9 @@ type ListedFlow struct {
 	// FlowArn is a required field
 	FlowArn *string `locationName:"flowArn" type:"string" required:"true"`
 
+	// The maintenance setting of a flow
+	Maintenance *Maintenance `locationName:"maintenance" type:"structure"`
+
 	// The name of the flow.
 	//
 	// Name is a required field
@@ -7006,6 +7105,12 @@ func (s *ListedFlow) SetFlowArn(v string) *ListedFlow {
 	return s
 }
 
+// SetMaintenance sets the Maintenance field's value.
+func (s *ListedFlow) SetMaintenance(v *Maintenance) *ListedFlow {
+	s.Maintenance = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *ListedFlow) SetName(v string) *ListedFlow {
 	s.Name = &v
@@ -7021,6 +7126,68 @@ func (s *ListedFlow) SetSourceType(v string) *ListedFlow {
 // SetStatus sets the Status field's value.
 func (s *ListedFlow) SetStatus(v string) *ListedFlow {
 	s.Status = &v
+	return s
+}
+
+// The maintenance setting of a flow
+type Maintenance struct {
+	_ struct{} `type:"structure"`
+
+	// A day of a week when the maintenance will happen. Use Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday.
+	MaintenanceDay *string `locationName:"maintenanceDay" type:"string" enum:"MaintenanceDay"`
+
+	// The Maintenance has to be performed before this deadline in ISO UTC format.
+	// Example: 2021-01-30T08:30:00Z.
+	MaintenanceDeadline *string `locationName:"maintenanceDeadline" type:"string"`
+
+	// A scheduled date in ISO UTC format when the maintenance will happen. Use
+	// YYYY-MM-DD format. Example: 2021-01-30.
+	MaintenanceScheduledDate *string `locationName:"maintenanceScheduledDate" type:"string"`
+
+	// UTC time when the maintenance will happen. Use 24-hour HH:MM format. Minutes
+	// must be 00. Example: 13:00. The default value is 02:00.
+	MaintenanceStartHour *string `locationName:"maintenanceStartHour" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Maintenance) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Maintenance) GoString() string {
+	return s.String()
+}
+
+// SetMaintenanceDay sets the MaintenanceDay field's value.
+func (s *Maintenance) SetMaintenanceDay(v string) *Maintenance {
+	s.MaintenanceDay = &v
+	return s
+}
+
+// SetMaintenanceDeadline sets the MaintenanceDeadline field's value.
+func (s *Maintenance) SetMaintenanceDeadline(v string) *Maintenance {
+	s.MaintenanceDeadline = &v
+	return s
+}
+
+// SetMaintenanceScheduledDate sets the MaintenanceScheduledDate field's value.
+func (s *Maintenance) SetMaintenanceScheduledDate(v string) *Maintenance {
+	s.MaintenanceScheduledDate = &v
+	return s
+}
+
+// SetMaintenanceStartHour sets the MaintenanceStartHour field's value.
+func (s *Maintenance) SetMaintenanceStartHour(v string) *Maintenance {
+	s.MaintenanceStartHour = &v
 	return s
 }
 
@@ -8838,6 +9005,7 @@ type SetSourceRequest struct {
 	_ struct{} `type:"structure"`
 
 	// The type of encryption that is used on the content ingested from this source.
+	// Allowable encryption types: static-key.
 	Decryption *Encryption `locationName:"decryption" type:"structure"`
 
 	// A description for the source. This value is not used or seen outside of the
@@ -8855,8 +9023,8 @@ type SetSourceRequest struct {
 	// The smoothing max bitrate for RIST, RTP, and RTP-FEC streams.
 	MaxBitrate *int64 `locationName:"maxBitrate" type:"integer"`
 
-	// The maximum latency in milliseconds. This parameter applies only to RIST-based
-	// and Zixi-based streams.
+	// The maximum latency in milliseconds. This parameter applies only to RIST-based,
+	// Zixi-based, and Fujitsu-based streams.
 	MaxLatency *int64 `locationName:"maxLatency" type:"integer"`
 
 	// The size of the buffer (in milliseconds) to use to sync incoming source data.
@@ -8878,6 +9046,14 @@ type SetSourceRequest struct {
 
 	// The protocol that is used by the source.
 	Protocol *string `locationName:"protocol" type:"string" enum:"Protocol"`
+
+	// The port that the flow uses to send outbound requests to initiate connection
+	// with the sender.
+	SenderControlPort *int64 `locationName:"senderControlPort" type:"integer"`
+
+	// The IP address that the flow communicates with to initiate connection with
+	// the sender.
+	SenderIpAddress *string `locationName:"senderIpAddress" type:"string"`
 
 	// The stream ID that you want to use for this transport. This parameter applies
 	// only to Zixi-based streams.
@@ -9001,6 +9177,18 @@ func (s *SetSourceRequest) SetProtocol(v string) *SetSourceRequest {
 	return s
 }
 
+// SetSenderControlPort sets the SenderControlPort field's value.
+func (s *SetSourceRequest) SetSenderControlPort(v int64) *SetSourceRequest {
+	s.SenderControlPort = &v
+	return s
+}
+
+// SetSenderIpAddress sets the SenderIpAddress field's value.
+func (s *SetSourceRequest) SetSenderIpAddress(v string) *SetSourceRequest {
+	s.SenderIpAddress = &v
+	return s
+}
+
 // SetStreamId sets the StreamId field's value.
 func (s *SetSourceRequest) SetStreamId(v string) *SetSourceRequest {
 	s.StreamId = &v
@@ -9052,6 +9240,14 @@ type Source struct {
 	//
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The port that the flow uses to send outbound requests to initiate connection
+	// with the sender.
+	SenderControlPort *int64 `locationName:"senderControlPort" type:"integer"`
+
+	// The IP address that the flow communicates with to initiate connection with
+	// the sender.
+	SenderIpAddress *string `locationName:"senderIpAddress" type:"string"`
 
 	// The ARN of the source.
 	//
@@ -9133,6 +9329,18 @@ func (s *Source) SetMediaStreamSourceConfigurations(v []*MediaStreamSourceConfig
 // SetName sets the Name field's value.
 func (s *Source) SetName(v string) *Source {
 	s.Name = &v
+	return s
+}
+
+// SetSenderControlPort sets the SenderControlPort field's value.
+func (s *Source) SetSenderControlPort(v int64) *Source {
+	s.SenderControlPort = &v
+	return s
+}
+
+// SetSenderIpAddress sets the SenderIpAddress field's value.
+func (s *Source) SetSenderIpAddress(v string) *Source {
+	s.SenderIpAddress = &v
 	return s
 }
 
@@ -9434,7 +9642,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9533,8 +9741,8 @@ type Transport struct {
 	// The smoothing max bitrate for RIST, RTP, and RTP-FEC streams.
 	MaxBitrate *int64 `locationName:"maxBitrate" type:"integer"`
 
-	// The maximum latency in milliseconds. This parameter applies only to RIST-based
-	// and Zixi-based streams.
+	// The maximum latency in milliseconds. This parameter applies only to RIST-based,
+	// Zixi-based, and Fujitsu-based streams.
 	MaxLatency *int64 `locationName:"maxLatency" type:"integer"`
 
 	// The size of the buffer (in milliseconds) to use to sync incoming source data.
@@ -9554,6 +9762,14 @@ type Transport struct {
 
 	// The remote ID for the Zixi-pull stream.
 	RemoteId *string `locationName:"remoteId" type:"string"`
+
+	// The port that the flow uses to send outbound requests to initiate connection
+	// with the sender.
+	SenderControlPort *int64 `locationName:"senderControlPort" type:"integer"`
+
+	// The IP address that the flow communicates with to initiate connection with
+	// the sender.
+	SenderIpAddress *string `locationName:"senderIpAddress" type:"string"`
 
 	// The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.
 	SmoothingLatency *int64 `locationName:"smoothingLatency" type:"integer"`
@@ -9620,6 +9836,18 @@ func (s *Transport) SetProtocol(v string) *Transport {
 // SetRemoteId sets the RemoteId field's value.
 func (s *Transport) SetRemoteId(v string) *Transport {
 	s.RemoteId = &v
+	return s
+}
+
+// SetSenderControlPort sets the SenderControlPort field's value.
+func (s *Transport) SetSenderControlPort(v int64) *Transport {
+	s.SenderControlPort = &v
+	return s
+}
+
+// SetSenderIpAddress sets the SenderIpAddress field's value.
+func (s *Transport) SetSenderIpAddress(v string) *Transport {
+	s.SenderIpAddress = &v
 	return s
 }
 
@@ -9695,7 +9923,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9835,7 +10063,7 @@ func (s *UpdateEncryption) SetUrl(v string) *UpdateEncryption {
 	return s
 }
 
-// The settings for source failover
+// The settings for source failover.
 type UpdateFailoverConfig struct {
 	_ struct{} `type:"structure"`
 
@@ -9906,7 +10134,7 @@ type UpdateFlowEntitlementInput struct {
 	Description *string `locationName:"description" type:"string"`
 
 	// The type of encryption that will be used on the output associated with this
-	// entitlement.
+	// entitlement. Allowable encryption types: static-key, speke.
 	Encryption *UpdateEncryption `locationName:"encryption" type:"structure"`
 
 	// EntitlementArn is a required field
@@ -10052,7 +10280,10 @@ type UpdateFlowInput struct {
 	// FlowArn is a required field
 	FlowArn *string `location:"uri" locationName:"flowArn" type:"string" required:"true"`
 
-	// The settings for source failover
+	// Update maintenance setting for a flow
+	Maintenance *UpdateMaintenance `locationName:"maintenance" type:"structure"`
+
+	// The settings for source failover.
 	SourceFailoverConfig *UpdateFailoverConfig `locationName:"sourceFailoverConfig" type:"structure"`
 }
 
@@ -10093,6 +10324,12 @@ func (s *UpdateFlowInput) Validate() error {
 // SetFlowArn sets the FlowArn field's value.
 func (s *UpdateFlowInput) SetFlowArn(v string) *UpdateFlowInput {
 	s.FlowArn = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *UpdateFlowInput) SetMaintenance(v *UpdateMaintenance) *UpdateFlowInput {
+	s.Maintenance = v
 	return s
 }
 
@@ -10302,7 +10539,7 @@ type UpdateFlowOutputInput struct {
 	Destination *string `locationName:"destination" type:"string"`
 
 	// The type of key used for the encryption. If no keyType is provided, the service
-	// will use the default setting (static-key).
+	// will use the default setting (static-key). Allowable encryption types: static-key.
 	Encryption *UpdateEncryption `locationName:"encryption" type:"structure"`
 
 	// FlowArn is a required field
@@ -10333,6 +10570,14 @@ type UpdateFlowOutputInput struct {
 
 	// The remote ID for the Zixi-pull stream.
 	RemoteId *string `locationName:"remoteId" type:"string"`
+
+	// The port that the flow uses to send outbound requests to initiate connection
+	// with the sender.
+	SenderControlPort *int64 `locationName:"senderControlPort" type:"integer"`
+
+	// The IP address that the flow communicates with to initiate connection with
+	// the sender.
+	SenderIpAddress *string `locationName:"senderIpAddress" type:"string"`
 
 	// The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.
 	SmoothingLatency *int64 `locationName:"smoothingLatency" type:"integer"`
@@ -10467,6 +10712,18 @@ func (s *UpdateFlowOutputInput) SetRemoteId(v string) *UpdateFlowOutputInput {
 	return s
 }
 
+// SetSenderControlPort sets the SenderControlPort field's value.
+func (s *UpdateFlowOutputInput) SetSenderControlPort(v int64) *UpdateFlowOutputInput {
+	s.SenderControlPort = &v
+	return s
+}
+
+// SetSenderIpAddress sets the SenderIpAddress field's value.
+func (s *UpdateFlowOutputInput) SetSenderIpAddress(v string) *UpdateFlowOutputInput {
+	s.SenderIpAddress = &v
+	return s
+}
+
 // SetSmoothingLatency sets the SmoothingLatency field's value.
 func (s *UpdateFlowOutputInput) SetSmoothingLatency(v int64) *UpdateFlowOutputInput {
 	s.SmoothingLatency = &v
@@ -10531,7 +10788,8 @@ func (s *UpdateFlowOutputOutput) SetOutput(v *Output) *UpdateFlowOutputOutput {
 type UpdateFlowSourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The type of encryption used on the content ingested from this source.
+	// The type of encryption used on the content ingested from this source. Allowable
+	// encryption types: static-key.
 	Decryption *UpdateEncryption `locationName:"decryption" type:"structure"`
 
 	// A description for the source. This value is not used or seen outside of the
@@ -10552,8 +10810,8 @@ type UpdateFlowSourceInput struct {
 	// The smoothing max bitrate for RIST, RTP, and RTP-FEC streams.
 	MaxBitrate *int64 `locationName:"maxBitrate" type:"integer"`
 
-	// The maximum latency in milliseconds. This parameter applies only to RIST-based
-	// and Zixi-based streams.
+	// The maximum latency in milliseconds. This parameter applies only to RIST-based,
+	// Zixi-based, and Fujitsu-based streams.
 	MaxLatency *int64 `locationName:"maxLatency" type:"integer"`
 
 	// The size of the buffer (in milliseconds) to use to sync incoming source data.
@@ -10572,6 +10830,12 @@ type UpdateFlowSourceInput struct {
 
 	// The protocol that is used by the source.
 	Protocol *string `locationName:"protocol" type:"string" enum:"Protocol"`
+
+	SenderControlPort *int64 `locationName:"senderControlPort" type:"integer"`
+
+	// The IP address that the flow communicates with to initiate connection with
+	// the sender.
+	SenderIpAddress *string `locationName:"senderIpAddress" type:"string"`
 
 	// SourceArn is a required field
 	SourceArn *string `location:"uri" locationName:"sourceArn" type:"string" required:"true"`
@@ -10705,6 +10969,18 @@ func (s *UpdateFlowSourceInput) SetProtocol(v string) *UpdateFlowSourceInput {
 	return s
 }
 
+// SetSenderControlPort sets the SenderControlPort field's value.
+func (s *UpdateFlowSourceInput) SetSenderControlPort(v int64) *UpdateFlowSourceInput {
+	s.SenderControlPort = &v
+	return s
+}
+
+// SetSenderIpAddress sets the SenderIpAddress field's value.
+func (s *UpdateFlowSourceInput) SetSenderIpAddress(v string) *UpdateFlowSourceInput {
+	s.SenderIpAddress = &v
+	return s
+}
+
 // SetSourceArn sets the SourceArn field's value.
 func (s *UpdateFlowSourceInput) SetSourceArn(v string) *UpdateFlowSourceInput {
 	s.SourceArn = &v
@@ -10771,11 +11047,63 @@ func (s *UpdateFlowSourceOutput) SetSource(v *Source) *UpdateFlowSourceOutput {
 	return s
 }
 
+// Update maintenance setting for a flow
+type UpdateMaintenance struct {
+	_ struct{} `type:"structure"`
+
+	// A day of a week when the maintenance will happen. use Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday.
+	MaintenanceDay *string `locationName:"maintenanceDay" type:"string" enum:"MaintenanceDay"`
+
+	// A scheduled date in ISO UTC format when the maintenance will happen. Use
+	// YYYY-MM-DD format. Example: 2021-01-30.
+	MaintenanceScheduledDate *string `locationName:"maintenanceScheduledDate" type:"string"`
+
+	// UTC time when the maintenance will happen. Use 24-hour HH:MM format. Minutes
+	// must be 00. Example: 13:00. The default value is 02:00.
+	MaintenanceStartHour *string `locationName:"maintenanceStartHour" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateMaintenance) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateMaintenance) GoString() string {
+	return s.String()
+}
+
+// SetMaintenanceDay sets the MaintenanceDay field's value.
+func (s *UpdateMaintenance) SetMaintenanceDay(v string) *UpdateMaintenance {
+	s.MaintenanceDay = &v
+	return s
+}
+
+// SetMaintenanceScheduledDate sets the MaintenanceScheduledDate field's value.
+func (s *UpdateMaintenance) SetMaintenanceScheduledDate(v string) *UpdateMaintenance {
+	s.MaintenanceScheduledDate = &v
+	return s
+}
+
+// SetMaintenanceStartHour sets the MaintenanceStartHour field's value.
+func (s *UpdateMaintenance) SetMaintenanceStartHour(v string) *UpdateMaintenance {
+	s.MaintenanceStartHour = &v
+	return s
+}
+
 // The settings for a VPC Source.
 type VpcInterface struct {
 	_ struct{} `type:"structure"`
 
-	// Immutable and has to be a unique against other VpcInterfaces in this Flow
+	// Immutable and has to be a unique against other VpcInterfaces in this Flow.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
@@ -11153,6 +11481,42 @@ func KeyType_Values() []string {
 }
 
 const (
+	// MaintenanceDayMonday is a MaintenanceDay enum value
+	MaintenanceDayMonday = "Monday"
+
+	// MaintenanceDayTuesday is a MaintenanceDay enum value
+	MaintenanceDayTuesday = "Tuesday"
+
+	// MaintenanceDayWednesday is a MaintenanceDay enum value
+	MaintenanceDayWednesday = "Wednesday"
+
+	// MaintenanceDayThursday is a MaintenanceDay enum value
+	MaintenanceDayThursday = "Thursday"
+
+	// MaintenanceDayFriday is a MaintenanceDay enum value
+	MaintenanceDayFriday = "Friday"
+
+	// MaintenanceDaySaturday is a MaintenanceDay enum value
+	MaintenanceDaySaturday = "Saturday"
+
+	// MaintenanceDaySunday is a MaintenanceDay enum value
+	MaintenanceDaySunday = "Sunday"
+)
+
+// MaintenanceDay_Values returns all elements of the MaintenanceDay enum
+func MaintenanceDay_Values() []string {
+	return []string{
+		MaintenanceDayMonday,
+		MaintenanceDayTuesday,
+		MaintenanceDayWednesday,
+		MaintenanceDayThursday,
+		MaintenanceDayFriday,
+		MaintenanceDaySaturday,
+		MaintenanceDaySunday,
+	}
+}
+
+const (
 	// MediaStreamTypeVideo is a MediaStreamType enum value
 	MediaStreamTypeVideo = "video"
 
@@ -11224,6 +11588,9 @@ const (
 
 	// ProtocolSrtListener is a Protocol enum value
 	ProtocolSrtListener = "srt-listener"
+
+	// ProtocolFujitsuQos is a Protocol enum value
+	ProtocolFujitsuQos = "fujitsu-qos"
 )
 
 // Protocol_Values returns all elements of the Protocol enum
@@ -11237,6 +11604,7 @@ func Protocol_Values() []string {
 		ProtocolSt2110Jpegxs,
 		ProtocolCdi,
 		ProtocolSrtListener,
+		ProtocolFujitsuQos,
 	}
 }
 
