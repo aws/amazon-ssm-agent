@@ -36,7 +36,7 @@ func (suite *EventLogTestSuite) SetupTest() {
 	suite.EventLog = GetEventLog(path, "testEventLog")
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestEventLogTestSuite(t *testing.T) {
 	suite.Run(t, new(EventLogTestSuite))
 }

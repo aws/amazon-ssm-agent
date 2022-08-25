@@ -33,7 +33,7 @@ type AgentRunCommandReplyTestSuite struct {
 	suite.Suite
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestAgentRunCommandReplyTestSuite(t *testing.T) {
 	suite.Run(t, new(AgentRunCommandReplyTestSuite))
 }

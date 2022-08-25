@@ -27,10 +27,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//mock log for testing
+// mock log for testing
 var logger = log.NewMockLog()
 
-//TestGenerateUpdateCmd tests the function generateUpdateCmd
+// TestGenerateUpdateCmd tests the function generateUpdateCmd
 func TestGenerateUpdateCmd(t *testing.T) {
 	manager := updateManager{
 		context: context.NewMockDefault(),
@@ -43,7 +43,7 @@ func TestGenerateUpdateCmd(t *testing.T) {
 	assert.Contains(t, result, "history")
 }
 
-//TestValidateUpdate tests the function validateUpdate
+// TestValidateUpdate tests the function validateUpdate
 func TestValidateUpdate(t *testing.T) {
 	plugin := createStubPluginInput()
 	info := &updateinfomocks.T{}
@@ -59,7 +59,7 @@ func TestValidateUpdate(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-//TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty tests negative case
+// TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty tests negative case
 func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testing.T) {
 	plugin := createStubPluginInput()
 	info := &updateinfomocks.T{}
@@ -77,7 +77,7 @@ func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testin
 	assert.NoError(t, err)
 }
 
-//TestValidateUpdate_DowngradeVersion tests negative case
+// TestValidateUpdate_DowngradeVersion tests negative case
 func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.AllowDowngrade = "false"
@@ -96,7 +96,7 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	assert.Contains(t, err.Error(), "please enable allow downgrade to proceed")
 }
 
-//TestValidateUpdate_UnsupportedTargetVersion tests negative case
+// TestValidateUpdate_UnsupportedTargetVersion tests negative case
 func TestValidateUpdate_UnsupportedTargetVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.TargetVersion = "1.2.3"
@@ -114,7 +114,7 @@ func TestValidateUpdate_UnsupportedTargetVersion(t *testing.T) {
 	assert.Contains(t, err.Error(), "is unsupported")
 }
 
-//TestValidateUpdate_TargetVersionSameAsCurrentVersion tests invalid case
+// TestValidateUpdate_TargetVersionSameAsCurrentVersion tests invalid case
 func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	//plugin.TargetVersion = fakeAgentVersion
@@ -131,7 +131,7 @@ func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	assert.Contains(t, out.GetStdout(), "already been installed, update skipped")
 }
 
-//TestValidateUpdate_UnsupportedCurrentVersion tests negative case
+// TestValidateUpdate_UnsupportedCurrentVersion tests negative case
 func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	info := &updateinfomocks.T{}
@@ -146,7 +146,7 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	assert.Contains(t, err.Error(), "is unsupported on current platform")
 }
 
-//createStubPluginInput is a helper function to create a stub plugin for testing
+// createStubPluginInput is a helper function to create a stub plugin for testing
 func createStubPluginInput() *UpdatePluginInput {
 	input := new(UpdatePluginInput)
 
@@ -157,7 +157,7 @@ func createStubPluginInput() *UpdatePluginInput {
 	return input
 }
 
-//createStubManifest is a helper function to create a stub manifest for testing
+// createStubManifest is a helper function to create a stub manifest for testing
 func createStubManifest() *Manifest {
 	manifest := &Manifest{}
 	manifest, _ = ParseManifest(logger, "testData/testManifest.json")

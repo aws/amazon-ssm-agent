@@ -14,7 +14,7 @@
 //go:build windows
 // +build windows
 
-//Package model contains data objects for long running container
+// Package model contains data objects for long running container
 package model
 
 var SSMAgentBinaryName = SSMAgentName + ".exe"

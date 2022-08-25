@@ -227,8 +227,9 @@ func (m *bucketRegionMap) Remove(bucketName string) {
 //
 // The handler should be added to the handler list for the Validate step.  For
 // example:
-//   sess := session.New(config)
-//   sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler())
+//
+//	sess := session.New(config)
+//	sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler())
 //
 // This will ensure that this handler runs before the standard S3 client's Build
 // handlers (which make their own modifications to the URL), and before the Sign
@@ -254,9 +255,9 @@ func makeS3RegionCorrectingValidateHandler(log log.T) request.NamedHandler {
 // a different region.
 //
 // This handler should be added to the Retry handler chain, as follows:
-//   sess = session.New(config)
-//   sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(log))
 //
+//	sess = session.New(config)
+//	sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(log))
 func makeS3RegionCorrectingRetryHandler(log log.T) request.NamedHandler {
 	return request.NamedHandler{
 		Name: "S3RegionCorrectingRetryHandler",
@@ -284,8 +285,9 @@ func makeS3RegionCorrectingRetryHandler(log log.T) request.NamedHandler {
 // Indicates whether the HTTP response code indicates that the response
 // may contain information about the bucket region.
 // References:
-//  https://docs.aws.amazon.com/AmazonS3/latest/dev/Redirects.html
-//  https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
+//
+//	https://docs.aws.amazon.com/AmazonS3/latest/dev/Redirects.html
+//	https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
 func isRedirectResponseCode(responseCode int) bool {
 	return responseCode == 301 || responseCode == 307 || responseCode == 400
 }
@@ -486,9 +488,9 @@ type xmlResponseError struct {
 // returns "".
 //
 // The following paths are checked:
-//  * Error/Region - if present, contains the region name (e.g. "us-east-1")
-//  * Error/Endpoint - if present, contains an endpoint url from which the
-//        region can be determined (e.g. "bucket-1.eu-west-1.amazonaws.com")
+//   - Error/Region - if present, contains the region name (e.g. "us-east-1")
+//   - Error/Endpoint - if present, contains an endpoint url from which the
+//     region can be determined (e.g. "bucket-1.eu-west-1.amazonaws.com")
 func (t *s3BucketRegionHeaderCapturingTransport) extractRegionFromBody(bodyContents []byte) (region string) {
 	resp := xmlResponseError{}
 	err := xml.Unmarshal(bodyContents, &resp)

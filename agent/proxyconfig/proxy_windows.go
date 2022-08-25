@@ -27,10 +27,11 @@ import (
 )
 
 // WinHttpIEProxyConfig represents the Internet Explorer proxy configuration information
-// 	fAutoDetect: If TRUE, indicates that the Internet Explorer proxy configuration for the current user specifies "automatically detect settings".
-// 	lpszAutoConfigUrl: Pointer to a null-terminated Unicode string that contains the auto-configuration URL if the Internet Explorer proxy configuration for the current user specifies "Use automatic proxy configuration".
-// 	lpszProxy: Pointer to a null-terminated Unicode string that contains the proxy URL if the Internet Explorer proxy configuration for the current user specifies "use a proxy server".
-// 	lpszProxyBypass: Pointer to a null-terminated Unicode string that contains the optional proxy by-pass server list.
+//
+//	fAutoDetect: If TRUE, indicates that the Internet Explorer proxy configuration for the current user specifies "automatically detect settings".
+//	lpszAutoConfigUrl: Pointer to a null-terminated Unicode string that contains the auto-configuration URL if the Internet Explorer proxy configuration for the current user specifies "Use automatic proxy configuration".
+//	lpszProxy: Pointer to a null-terminated Unicode string that contains the proxy URL if the Internet Explorer proxy configuration for the current user specifies "use a proxy server".
+//	lpszProxyBypass: Pointer to a null-terminated Unicode string that contains the optional proxy by-pass server list.
 type WinHttpIEProxyConfig struct {
 	fAutoDetect       bool
 	lpszAutoConfigUrl *uint16
@@ -39,8 +40,9 @@ type WinHttpIEProxyConfig struct {
 }
 
 // WinHttpProxyInfo represents the WinHTTP machine proxy configuration.
-// 	lpszProxy: Pointer to a string value that contains the proxy server list.
-// 	lpszProxyBypass: Pointer to a string value that contains the proxy bypass list.
+//
+//	lpszProxy: Pointer to a string value that contains the proxy server list.
+//	lpszProxyBypass: Pointer to a string value that contains the proxy bypass list.
 type WinHttpProxyInfo struct {
 	dwAccessType    uint32
 	lpszProxy       *uint16
@@ -48,9 +50,10 @@ type WinHttpProxyInfo struct {
 }
 
 // HttpIEProxyConfig represents the Internet Explorer proxy configuration.
-// 	auto: indicates if the 'Automatically detect settings' option in IE is enabled
-// 	enabled: indicates if the 'Use proxy settings for your LAN' option in IE is enabled
-// 	proxy: specifies the proxy addresses to use.
+//
+//	auto: indicates if the 'Automatically detect settings' option in IE is enabled
+//	enabled: indicates if the 'Use proxy settings for your LAN' option in IE is enabled
+//	proxy: specifies the proxy addresses to use.
 //	bypass: specifies addresses that should be excluded from proxy
 type HttpIEProxyConfig struct {
 	proxy   string
@@ -61,7 +64,8 @@ type HttpIEProxyConfig struct {
 }
 
 // HttpDefaultProxyConfig represents the WinHTTP machine proxy configuration.
-// 	proxy: specifies the proxy addresses to use.
+//
+//	proxy: specifies the proxy addresses to use.
 //	bypass: specifies addresses that should be excluded from proxy
 type HttpDefaultProxyConfig struct {
 	proxy  string

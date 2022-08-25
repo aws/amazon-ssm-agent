@@ -34,7 +34,7 @@ var (
 	runtimeConfigIdentitySelectorCreator = identity.NewRuntimeConfigIdentitySelector
 )
 
-//OSProcess is an abstracted interface of os.Process
+// OSProcess is an abstracted interface of os.Process
 type OSProcess interface {
 	//generic ssm visible fields
 	Pid() int
@@ -48,7 +48,7 @@ type OSProcess interface {
 	Wait() error
 }
 
-//impl of OSProcess with os.Process embed
+// impl of OSProcess with os.Process embed
 type WorkerProcess struct {
 	*exec.Cmd
 	startTime time.Time
@@ -62,7 +62,7 @@ func (p *WorkerProcess) StartTime() time.Time {
 	return p.startTime
 }
 
-//TODO use the kill functions provided in executes package
+// TODO use the kill functions provided in executes package
 func (p *WorkerProcess) Kill() error {
 	return p.Cmd.Process.Kill()
 }
@@ -71,7 +71,7 @@ func (p *WorkerProcess) Wait() error {
 	return p.Cmd.Wait()
 }
 
-//start a child process, with the resources attached to its parent
+// start a child process, with the resources attached to its parent
 func StartProcess(name string, argv []string) (OSProcess, error) {
 	//TODO connect stdin and stdout to avoid seelog error
 	cmd := exec.Command(name, argv...)
@@ -85,7 +85,7 @@ func StartProcess(name string, argv []string) (OSProcess, error) {
 	return &p, err
 }
 
-//TODO figure out why sometimes argv does not contain program name
+// TODO figure out why sometimes argv does not contain program name
 func parseArgv(argv []string) (channelName string, err error) {
 	if len(argv) == 1 {
 		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {

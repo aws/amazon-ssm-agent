@@ -45,7 +45,7 @@ const (
 	updateDelayBase   = 1800  // 1800 seconds
 )
 
-//UpdatePluginResult represents Agent update plugin result
+// UpdatePluginResult represents Agent update plugin result
 type UpdateResult struct {
 	StandOut      string    `json:"StandOut"`
 	StartDateTime time.Time `json:"StartDateTime"`
@@ -73,7 +73,7 @@ var (
 	updateExecuteSelfUpdate func(log logger.T, region string) (pid int, err error)
 )
 
-//IUpdateProvider is the interface to start/stop selfupdate component
+// IUpdateProvider is the interface to start/stop selfupdate component
 type ISelfUpdate interface {
 	Start()
 	Stop()

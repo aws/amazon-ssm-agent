@@ -56,7 +56,7 @@ func (suite *NonInteractiveCommandsTestSuite) SetupTest() {
 	suite.plugin = &NonInteractiveCommandsPlugin{}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestInteractiveCommandsTestSuite(t *testing.T) {
 	suite.Run(t, new(NonInteractiveCommandsTestSuite))
 }

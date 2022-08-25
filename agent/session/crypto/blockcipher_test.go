@@ -52,7 +52,7 @@ func (suite *BlockCipherTestSuite) SetupTest() {
 	suite.instanceId = "some-instance-id"
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestBlockCipherTestSuite(t *testing.T) {
 	suite.Run(t, new(BlockCipherTestSuite))
 }

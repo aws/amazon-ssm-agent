@@ -25,7 +25,9 @@ import (
 
 const defaultGlobalEndpoint = "s3.amazonaws.com"
 
-/* This function returns the s3 endpoint specified by the user in appconfig.
+/*
+	This function returns the s3 endpoint specified by the user in appconfig.
+
 If the user didn't specify one, it will return the Amazon S3 endpoint in a certain region
 */
 func GetS3Endpoint(context context.T, region string) (s3Endpoint string) {

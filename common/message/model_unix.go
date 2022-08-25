@@ -14,7 +14,7 @@
 //go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
-//Package message contains information for the IPC messages
+// Package message contains information for the IPC messages
 package message
 
 import (

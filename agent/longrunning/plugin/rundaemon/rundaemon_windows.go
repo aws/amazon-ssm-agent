@@ -14,7 +14,6 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
-//
 // Package rundaemon implements rundaemon plugin and its configuration
 package rundaemon
 
@@ -40,7 +39,7 @@ var StopDaemonExecutor = StopDaemon
 var IsDaemonRunningExecutor = IsDaemonRunning
 var StartDaemonHelperExecutor = StartDaemonHelper
 
-//  RequestedDaemonStateType represents whether the user has explicitly requested to start/stop the daemon
+// RequestedDaemonStateType represents whether the user has explicitly requested to start/stop the daemon
 type RequestedDaemonStateType uint
 
 const (
@@ -48,7 +47,7 @@ const (
 	RequestedEnabled
 )
 
-//  CurrentDaemonStateType represents whether the daemon is currently running or not.
+// CurrentDaemonStateType represents whether the daemon is currently running or not.
 type CurrentDaemonStateType uint
 
 const (

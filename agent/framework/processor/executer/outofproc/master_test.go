@@ -328,7 +328,7 @@ func TestInitializeConnectOldOrphan(t *testing.T) {
 
 //TODO add Run() unittest
 
-//this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
+// this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
 func assertValueEqual(t *testing.T, a map[string]*contracts.PluginResult, b map[string]*contracts.PluginResult) {
 	assert.Equal(t, len(a), len(b))
 	for key, val := range a {

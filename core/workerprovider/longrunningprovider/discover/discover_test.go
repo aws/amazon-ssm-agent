@@ -35,7 +35,7 @@ func (suite *DiscoveryTestSuite) SetupTest() {
 	suite.discover = &WorkerDiscover{}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestDiscoveryTestSuite(t *testing.T) {
 	suite.Run(t, new(DiscoveryTestSuite))
 }

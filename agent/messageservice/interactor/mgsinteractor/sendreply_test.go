@@ -27,7 +27,7 @@ type SendReplyTestSuite struct {
 	suite.Suite
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSendReplyTestSuite(t *testing.T) {
 	suite.Run(t, new(SendReplyTestSuite))
 }

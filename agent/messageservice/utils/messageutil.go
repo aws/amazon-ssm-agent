@@ -147,7 +147,7 @@ func ParseCancelCommandMessage(context context.T, msg model.InstanceMessage, ups
 	return &docState, nil
 }
 
-//generateCloudWatchLogStreamPrefix creates the LogStreamPrefix for cloudWatch output. LogStreamPrefix = <CommandID>/<InstanceID>
+// generateCloudWatchLogStreamPrefix creates the LogStreamPrefix for cloudWatch output. LogStreamPrefix = <CommandID>/<InstanceID>
 func generateCloudWatchLogStreamPrefix(context context.T, commandID string) (string, error) {
 
 	instanceID, err := context.Identity().ShortInstanceID()

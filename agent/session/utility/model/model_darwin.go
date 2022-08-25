@@ -14,7 +14,7 @@
 //go:build darwin
 // +build darwin
 
-//Package model contains data objects for session utility
+// Package model contains data objects for session utility
 package model
 
 const (

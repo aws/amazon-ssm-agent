@@ -236,7 +236,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 
 }
 
-//TODO cancelFlag should not fail subsequent plugins
+// TODO cancelFlag should not fail subsequent plugins
 func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	setIsSupportedMock()
 	defer restoreIsSupported()

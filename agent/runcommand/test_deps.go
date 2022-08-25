@@ -15,7 +15,7 @@ package runcommand
 
 type systemStub struct{}
 
-//InstanceID mocks implementation for InstanceID
+// InstanceID mocks implementation for InstanceID
 func (m *systemStub) InstanceID() (string, error) {
 	return "i-12345", nil
 }

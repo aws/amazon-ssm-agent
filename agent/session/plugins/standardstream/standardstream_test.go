@@ -72,7 +72,7 @@ func (suite *StandardStreamTestSuite) SetupTest() {
 	suite.shellProps = shellProps
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestInteractiveCommandsTestSuite(t *testing.T) {
 	suite.Run(t, new(StandardStreamTestSuite))
 }

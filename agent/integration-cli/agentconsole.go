@@ -299,7 +299,7 @@ func prettyPrint(input interface{}, indentLevel int) (res string) {
 	}
 }
 
-//Colors In Terminal
+// Colors In Terminal
 const (
 	//Clr0 Colors In Terminal
 	Clr0 = "\x1b[30;1m"

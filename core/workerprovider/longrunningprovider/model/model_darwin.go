@@ -14,7 +14,7 @@
 //go:build darwin
 // +build darwin
 
-//Package model contains data objects for long running container
+// Package model contains data objects for long running container
 package model
 
 import "github.com/aws/amazon-ssm-agent/agent/appconfig"

@@ -208,7 +208,7 @@ func StartCommandExecutor(
 	return nil
 }
 
-//stop closes pty file.
+// stop closes pty file.
 func (p *ShellPlugin) stop(log log.T) (err error) {
 	if ptyFile == nil {
 		return nil
@@ -222,7 +222,7 @@ func (p *ShellPlugin) stop(log log.T) (err error) {
 	return nil
 }
 
-//SetSize sets size of console terminal window.
+// SetSize sets size of console terminal window.
 func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 	if ptyFile == nil {
 		return nil
@@ -413,7 +413,7 @@ var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *Shel
 	}
 }
 
-//cleanupLogFile prepares temporary files for the cleanup
+// cleanupLogFile prepares temporary files for the cleanup
 func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
 	// remove file property so deletion of the file can be done successfully
 	u := &utility.SessionUtil{}

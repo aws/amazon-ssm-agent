@@ -14,7 +14,7 @@
 //go:build darwin
 // +build darwin
 
-//Package message contains information for the IPC messages
+// Package message contains information for the IPC messages
 package message
 
 import (

@@ -39,7 +39,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-//TODO unittest the parser functions
+// TODO unittest the parser functions
 var testMessageId = "03f44d19-90fe-44d4-bd4c-298b966a1e1a"
 var testDestination = "i-1679test"
 var testTopicSend = "aws.ssm.sendCommand.test"
@@ -222,7 +222,7 @@ func prepareTestProcessMessage(testTopic string) (svc RunCommandService, testCas
 	return
 }
 
-//TODO keep the following functions temporarily before we have processor's integ_test
+// TODO keep the following functions temporarily before we have processor's integ_test
 var sampleMessageFiles = []string{
 	"../service/runcommand/testdata/sampleMsg.json",
 	"../service/runcommand/testdata/sampleMsgVersion2_0.json",

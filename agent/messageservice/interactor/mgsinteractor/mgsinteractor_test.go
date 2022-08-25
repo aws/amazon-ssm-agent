@@ -178,7 +178,7 @@ func (suite *MGSInteractorTestSuite) TestToISO8601() {
 	assert.Equal(suite.T(), "2017-08-22T20:37:54.948Z", isoTime)
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSessionTestSuite(t *testing.T) {
 	suite.Run(t, new(MGSInteractorTestSuite))
 }

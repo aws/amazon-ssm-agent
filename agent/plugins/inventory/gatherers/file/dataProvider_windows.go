@@ -104,7 +104,7 @@ func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
 }
 
-//expand function expands windows environment variables
+// expand function expands windows environment variables
 func expand(s string, mapping func(string) string) (newStr string, err error) {
 	newStr, err = pluginutil.ReplaceMarkedFields(s, "%", "%", mapping)
 	if err != nil {
@@ -196,7 +196,7 @@ func getPowershellCmd(log log.T, paths []string) (cmd string, err error) {
 	return
 }
 
-//getMetaData creates powershell script for getting file metadata and executes the script
+// getMetaData creates powershell script for getting file metadata and executes the script
 func getMetaDataForFiles(log log.T, paths []string) (fileInfo []model.FileData, err error) {
 	var cmd string
 	cmd, err = getPowershellCmd(log, paths)

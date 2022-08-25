@@ -76,7 +76,7 @@ var (
 	winptyDllFilePath = filepath.Join(winptyDllDir, winptyDllName)
 )
 
-//StartCommandExecutor starts winpty agent and provides handles to stdin and stdout.
+// StartCommandExecutor starts winpty agent and provides handles to stdin and stdout.
 // isSessionLogger determines whether its a customer shell or shell used for logging.
 func StartCommandExecutor(
 	log log.T,
@@ -207,7 +207,7 @@ func (p *ShellPlugin) startExecCmd(finalCmd string, log log.T, config agentContr
 	return nil
 }
 
-//stop closes winpty process handle and stdin/stdout.
+// stop closes winpty process handle and stdin/stdout.
 func (p *ShellPlugin) stop(log log.T) (err error) {
 	if pty != nil {
 		log.Info("Stopping winpty")
@@ -226,7 +226,7 @@ func (p *ShellPlugin) stop(log log.T) (err error) {
 	return nil
 }
 
-//SetSize sets size of console terminal window.
+// SetSize sets size of console terminal window.
 func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 	if pty == nil {
 		return nil
@@ -238,7 +238,7 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 	return nil
 }
 
-//startPtyAsUser starts a winpty process in runas user context.
+// startPtyAsUser starts a winpty process in runas user context.
 func (p *ShellPlugin) startPtyAsUser(log log.T, config agentContracts.Configuration, user string, pass string, shellCmd string) (transcriptDirPath string, err error) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
@@ -542,7 +542,7 @@ func (p *ShellPlugin) isCleanupOfControlCharactersRequired() bool {
 	return false
 }
 
-//cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
+// cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
 func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
 	if p.logger.transcriptDirPath != "" {
 		log.Debugf("Deleting transcript directory: %s", p.logger.transcriptDirPath)

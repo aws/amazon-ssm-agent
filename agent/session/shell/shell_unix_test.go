@@ -886,7 +886,7 @@ func (suite *ShellTestSuite) TestGetUserCredentials() {
 	assert.Equal(suite.T(), 1002, result)
 }
 
-//Test StartCommandExecutor for NonInteractiveCommand session with separate output stream enabled
+// Test StartCommandExecutor for NonInteractiveCommand session with separate output stream enabled
 func (suite *ShellTestSuite) TestStartCommandExecutorWithNonInteractiveCommand() {
 	config := contracts.Configuration{PluginName: appconfig.PluginNameNonInteractiveCommands, RunAsEnabled: false}
 

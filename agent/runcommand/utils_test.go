@@ -100,7 +100,7 @@ func TestGenerateCloudWatchConfigWithoutEmptyValuesInParsedMessage(t *testing.T)
 	assert.NotNil(t, err)
 }
 
-//getSampleParsedMessage returns a mocked SendCommandPayload
+// getSampleParsedMessage returns a mocked SendCommandPayload
 func getSampleParsedMessage(logGroupName string, outputEnabled string) messageContracts.SendCommandPayload {
 
 	return messageContracts.SendCommandPayload{

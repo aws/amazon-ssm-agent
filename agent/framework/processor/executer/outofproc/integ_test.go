@@ -159,7 +159,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	teardown(t)
 }
 
-//TODO test Zombie and Orphan child separately
+// TODO test Zombie and Orphan child separately
 func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	testCase := setup(t)
 
@@ -368,7 +368,7 @@ func NewFakeProcess(t *testing.T) *FakeProcess {
 	}
 }
 
-//replicate the same procedure as the worker main function
+// replicate the same procedure as the worker main function
 func (p *FakeProcess) fakeWorker(t *testing.T, handle string) {
 	ctx := context.NewMockDefaultWithContext([]string{"FAKE-DOCUMENT-WORKER"})
 	log := ctx.Log()
@@ -389,8 +389,8 @@ func (p *FakeProcess) fakeWorker(t *testing.T, handle string) {
 	p.exitChan <- true
 }
 
-//Make the process to become an orphan when parent dies
-//In reality, Wait() is transferred to OS daemon. In our test cases, Wait() is held by the old Executer so we need to fail the new Executer's Wait() call
+// Make the process to become an orphan when parent dies
+// In reality, Wait() is transferred to OS daemon. In our test cases, Wait() is held by the old Executer so we need to fail the new Executer's Wait() call
 func (p *FakeProcess) detach() {
 	p.attached = false
 }

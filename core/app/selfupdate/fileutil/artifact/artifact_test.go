@@ -54,7 +54,7 @@ func (suite *ArtifactTestSuite) TestSha256HashValue() {
 	assert.NotEqual(suite.T(), len(content), 0)
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSelfUpdateTestSuite(t *testing.T) {
 	suite.Run(t, new(ArtifactTestSuite))
 }

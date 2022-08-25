@@ -30,7 +30,7 @@ type RebooterTestSuite struct {
 	logMock  *log.Mock
 }
 
-//Initialize the rebooter test suite struct
+// Initialize the rebooter test suite struct
 func (suite *RebooterTestSuite) SetupTest() {
 	logMock := log.NewMockLog()
 	suite.logMock = logMock

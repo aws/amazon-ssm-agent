@@ -69,7 +69,7 @@ const (
 	ItemPropertyName = "Environment"
 )
 
-//PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
+// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 var PowerShellPluginCommandName = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
 
 // Program Folder
@@ -78,16 +78,16 @@ var DefaultProgramFolder string
 // SSM Agent executable path
 var DefaultSSMAgentBinaryPath string
 
-//SSM Agent worker executable path
+// SSM Agent worker executable path
 var DefaultSSMAgentWorker string
 
-//Document executable path
+// Document executable path
 var DefaultDocumentWorker string
 
-//Session executable path
+// Session executable path
 var DefaultSessionWorker string
 
-//Session logger executable path
+// Session logger executable path
 var DefaultSessionLogger string
 
 // AppConfig Path

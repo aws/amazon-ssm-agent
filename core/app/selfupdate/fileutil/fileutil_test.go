@@ -135,7 +135,7 @@ func (suite *FileUtilTestSuite) TestUnderDir() {
 	assert.True(suite.T(), suite.fileutil.isUnderDir(`~/../../foo`, `../foo`))
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestFileUtilTestSuite(t *testing.T) {
 	suite.Run(t, new(FileUtilTestSuite))
 }

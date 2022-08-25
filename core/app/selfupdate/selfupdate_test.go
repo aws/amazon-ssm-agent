@@ -240,7 +240,7 @@ func (suite *SelfUpdateTestSuite) TestLockWithMultipleUpdates() {
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSelfUpdateTestSuite(t *testing.T) {
 	suite.Run(t, new(SelfUpdateTestSuite))
 }

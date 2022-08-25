@@ -175,7 +175,7 @@ const (
 	Downgrade = "downgrade_"
 )
 
-//ErrorCode is types of Error Codes
+// ErrorCode is types of Error Codes
 type ErrorCode string
 
 const (

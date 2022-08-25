@@ -29,7 +29,7 @@ import (
 
 var logger = log.NewMockLog()
 
-//TODO add process start time
+// TODO add process start time
 func TestIsProcessPsExists(t *testing.T) {
 	cmdString := "sleep"
 	cmd := exec.Command(cmdString, "5")

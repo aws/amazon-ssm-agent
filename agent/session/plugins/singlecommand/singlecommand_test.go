@@ -76,7 +76,7 @@ func (suite *SingleCommandTestSuite) SetupTest() {
 	suite.plugin = &SingleCommand{context: suite.mockContext}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSingleCommandTestSuite(t *testing.T) {
 	suite.Run(t, new(SingleCommandTestSuite))
 }

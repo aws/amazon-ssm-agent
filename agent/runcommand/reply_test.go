@@ -27,7 +27,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//TODO once service is moved out, merge all the reply tests here
+// TODO once service is moved out, merge all the reply tests here
 var sampleMessageReplyFiles = []string{
 	"./testdata/sampleReply.json",
 	"./testdata/sampleReplyVersion2_0.json",

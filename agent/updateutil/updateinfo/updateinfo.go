@@ -64,22 +64,22 @@ func (i *updateInfoImpl) IsPlatformUsingSystemD() (result bool, err error) {
 	return false, nil
 }
 
-//IsPlatformDarwin returns true for Mac OS
+// IsPlatformDarwin returns true for Mac OS
 func (i *updateInfoImpl) IsPlatformDarwin() (result bool) {
 	return 0 == strings.Compare(i.platform, updateconstants.PlatformMacOsX)
 }
 
-//GetInstallScriptName returns the name of the install script
+// GetInstallScriptName returns the name of the install script
 func (i *updateInfoImpl) GetInstallScriptName() string {
 	return i.installScriptName
 }
 
-//GetUninstallScriptName returns the name of the uninstall script
+// GetUninstallScriptName returns the name of the uninstall script
 func (i *updateInfoImpl) GetUninstallScriptName() string {
 	return i.uninstallScriptName
 }
 
-//GetPlatform returns the name of the current platform
+// GetPlatform returns the name of the current platform
 func (i *updateInfoImpl) GetPlatform() string {
 	return i.platform
 }

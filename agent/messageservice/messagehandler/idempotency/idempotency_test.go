@@ -83,7 +83,7 @@ func (suite *IdeopotencyTestSuite) TestIdempotency_CleanupOldIdempotencyEntries(
 	assert.Equal(suite.T(), 0, len(files))
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestMessageHandlerTestSuite(t *testing.T) {
 	suite.Run(t, new(IdeopotencyTestSuite))
 }

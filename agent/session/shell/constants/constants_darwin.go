@@ -46,12 +46,12 @@ func GetSeparateOutputStream(shellProps mgsContracts.ShellProperties) (bool, err
 	return separateOutPutStream, err
 }
 
-//GetStdOutSeparatorPrefix return the prefix used for StdOut partition
+// GetStdOutSeparatorPrefix return the prefix used for StdOut partition
 func GetStdOutSeparatorPrefix(shellProps mgsContracts.ShellProperties) string {
 	return shellProps.MacOS.StdOutSeparatorPrefix
 }
 
-//GetStdErrSeparatorPrefix return the prefix used for StdErr partition
+// GetStdErrSeparatorPrefix return the prefix used for StdErr partition
 func GetStdErrSeparatorPrefix(shellProps mgsContracts.ShellProperties) string {
 	return shellProps.MacOS.StdErrSeparatorPrefix
 }

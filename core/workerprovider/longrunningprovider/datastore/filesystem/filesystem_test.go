@@ -37,7 +37,7 @@ func (suite *FileSystemTestSuite) SetupTest() {
 	suite.fileSys = fileSys
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestFileSystemTestSuite(t *testing.T) {
 	suite.Run(t, new(FileSystemTestSuite))
 }

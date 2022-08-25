@@ -39,7 +39,7 @@ type MessageServiceTestSuite struct {
 	suite.Suite
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestMessageServiceTestSuite(t *testing.T) {
 	suite.Run(t, new(MessageServiceTestSuite))
 }

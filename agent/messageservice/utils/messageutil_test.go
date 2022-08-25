@@ -137,7 +137,7 @@ func TestCloudLogGroupNameCleanup(t *testing.T) {
 	}
 }
 
-//getSampleParsedMessage returns a mocked SendCommandPayload
+// getSampleParsedMessage returns a mocked SendCommandPayload
 func getSampleParsedMessage(logGroupName string, outputEnabled string) messageContracts.SendCommandPayload {
 
 	return messageContracts.SendCommandPayload{

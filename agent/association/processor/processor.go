@@ -655,8 +655,8 @@ func filterByStatus(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, p
 	return result
 }
 
-//This operation is locked by runScheduledAssociation
-//lazy update, update only when the document is ready to run, update will validate and invalidate current attached association
+// This operation is locked by runScheduledAssociation
+// lazy update, update only when the document is ready to run, update will validate and invalidate current attached association
 func updatePluginAssociationInstances(associationID string, docState *contracts.DocumentState) {
 	currentPluginAssociations := getPluginAssociationInstances()
 	for i := 0; i < len(docState.InstancePluginsInformation); i++ {

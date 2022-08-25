@@ -44,7 +44,7 @@ var (
 	status      = contracts.ResultStatusInProgress
 )
 
-//Execute the test suite
+// Execute the test suite
 func TestSessionCompleteReplyTestSuite(t *testing.T) {
 	suite.Run(t, new(SessionCompleteReplyTestSuite))
 }

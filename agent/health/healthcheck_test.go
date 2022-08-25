@@ -92,7 +92,7 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName)
 }
 
-//Testing the ModuleStop method with healthjob define
+// Testing the ModuleStop method with healthjob define
 func (suite *HealthCheckTestSuite) TestModuleStopWithHealthJob() {
 	suite.healthCheck = &HealthCheck{
 		context:               suite.contextMock,
@@ -146,7 +146,7 @@ func (suite *HealthCheckTestSuite) TestGetAgentStatePassive() {
 	assert.NotNil(suite.T(), err, "GetAgentStatePassive should return error message UpdatesWithError")
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestHealthCheckTestSuite(t *testing.T) {
 	suite.Run(t, new(HealthCheckTestSuite))
 }

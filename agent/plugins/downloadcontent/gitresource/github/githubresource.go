@@ -113,7 +113,7 @@ func parseSourceInfo(sourceInfo string) (gitInfo GitHubInfo, err error) {
 	return gitInfo, nil
 }
 
-//download pulls down either the file or directory specified and stores it on disk
+// download pulls down either the file or directory specified and stores it on disk
 func (git *GitHubResource) download(filesys filemanager.FileSystem, info GitHubInfo, destinationDir string, isDirTypeDownload bool, result *remoteresource.DownloadResult) (err error) {
 	log := git.context.Log()
 	opt, err := git.client.ParseGetOptions(log, info.GetOptions)

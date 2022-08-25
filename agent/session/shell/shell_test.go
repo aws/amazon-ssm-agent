@@ -105,7 +105,7 @@ func (suite *ShellTestSuite) TearDownTest() {
 	suite.stdout.Close()
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestShellTestSuite(t *testing.T) {
 	suite.Run(t, new(ShellTestSuite))
 }

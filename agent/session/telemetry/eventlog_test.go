@@ -40,7 +40,7 @@ type TelemetrySchedulerTestSuite struct {
 	FileSystem         filesystem.IFileSystem
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestTelemetrySchedulerTestSuite(t *testing.T) {
 	suite.Run(t, new(TelemetrySchedulerTestSuite))
 }

@@ -88,7 +88,7 @@ type DocumentInfo struct {
 	SessionOwner    string
 }
 
-//CloudWatchConfiguration represents information relevant to command output in cloudWatch
+// CloudWatchConfiguration represents information relevant to command output in cloudWatch
 type CloudWatchConfiguration struct {
 	LogGroupName              string
 	LogStreamPrefix           string

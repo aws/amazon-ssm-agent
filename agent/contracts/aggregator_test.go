@@ -58,7 +58,7 @@ func TestPrepareRuntimeStatus(t *testing.T) {
 	return
 }
 
-//TODO add test for DocumentStatusAggregator
+// TODO add test for DocumentStatusAggregator
 func TestDocumentStatus(t *testing.T) {
 	type testCase struct {
 		Input  map[string]*PluginResult

@@ -23,13 +23,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-//UpdatePluginResult represents Agent update plugin result
+// UpdatePluginResult represents Agent update plugin result
 type UpdatePluginResult struct {
 	StandOut      string    `json:"StandOut"`
 	StartDateTime time.Time `json:"StartDateTime"`
 }
 
-//LoadUpdatePluginResult loads UpdatePluginResult from local storage
+// LoadUpdatePluginResult loads UpdatePluginResult from local storage
 func LoadUpdatePluginResult(
 	log log.T, updateRoot string) (updateResult *UpdatePluginResult, err error) {
 
@@ -47,7 +47,7 @@ func LoadUpdatePluginResult(
 	return updateResult, nil
 }
 
-//SaveUpdatePluginResult saves UpdatePluginResult to the local storage
+// SaveUpdatePluginResult saves UpdatePluginResult to the local storage
 func (util *Utility) SaveUpdatePluginResult(
 	log log.T, updateRoot string, updateResult *UpdatePluginResult) (err error) {
 	var jsonData = []byte{}

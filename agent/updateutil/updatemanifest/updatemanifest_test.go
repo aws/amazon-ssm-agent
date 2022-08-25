@@ -23,13 +23,13 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-//Valid manifest files
+// Valid manifest files
 var sampleManifests = "testdata/sampleManifest.json"
 
-//Invalid manifest files
+// Invalid manifest files
 var errorManifests = "testdata/errorManifest.json"
 
-//Valid manifest file with Status field
+// Valid manifest file with Status field
 var sampleManifestWithStatus = "testdata/sampleManifestWithStatus.json"
 
 func TestParseSimpleManifest_HasVersion(t *testing.T) {
@@ -101,7 +101,7 @@ func TestParseSimpleManifest_GetDownloadURLHash(t *testing.T) {
 	assert.Equal(t, "", hash)
 }
 
-//Test ParseManifest with invalid manifest files
+// Test ParseManifest with invalid manifest files
 func TestParseManifestWithError(t *testing.T) {
 	context := context.NewMockDefault()
 	updateInfo := &updateinfomocks.T{}
@@ -115,7 +115,7 @@ func TestParseManifestWithError(t *testing.T) {
 	assert.NotNil(t, manifest)
 }
 
-//Test parsing manifest file with version Status field
+// Test parsing manifest file with version Status field
 func TestParseManifestWithStatusUpdater(t *testing.T) {
 	packageName := "amazon-ssm-agent-updater"
 
@@ -167,7 +167,7 @@ func TestParseManifestWithStatusUpdater(t *testing.T) {
 	assert.Equal(t, "3127c6c149711c3a3ea53aed7d2167bfc9049d9388e36d19f2f400a6fdeac213", hash)
 }
 
-//Test parsing manifest file with version Status field
+// Test parsing manifest file with version Status field
 func TestParseManifestWithStatusAgent(t *testing.T) {
 	packageName := "amazon-ssm-agent"
 	arch := "amd64"

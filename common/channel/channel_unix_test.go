@@ -14,7 +14,6 @@
 //go:build darwin || freebsd || linux || netbsd || openbsd
 // +build darwin freebsd linux netbsd openbsd
 
-//
 // Package channel captures IPC implementation.
 package channel
 

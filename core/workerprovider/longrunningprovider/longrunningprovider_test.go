@@ -77,7 +77,7 @@ func (suite *LongRunningProviderTestSuite) SetupTest() {
 	sleep = func(duration time.Duration) {}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestLongRunningProviderTestSuite(t *testing.T) {
 	suite.Run(t, new(LongRunningProviderTestSuite))
 }

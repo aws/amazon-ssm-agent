@@ -61,9 +61,9 @@ func IsFileWatcherChannelPresent(identity identity.IAgentIdentity, channelName s
 	return true, err
 }
 
-//find the folder named as "documentID" under the default root dir
-//if not found, create a new filechannel under the default root dir
-//return the channel and the found flag
+// find the folder named as "documentID" under the default root dir
+// if not found, create a new filechannel under the default root dir
+// return the channel and the found flag
 // shouldReadRetry - is this flag is set to true, it will use fileReadWithRetry function to read
 func CreateFileWatcherChannel(log log.T, identity identity.IAgentIdentity, mode Mode, filename string, shouldReadRetry bool) (IPCChannel, error, bool) {
 	rootChannelDir, err := utils.GetDefaultChannelPath(identity, "")

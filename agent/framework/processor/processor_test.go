@@ -106,7 +106,7 @@ func TestEngineProcessor_Stop(t *testing.T) {
 	cancelCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
 }
 
-//TODO add shutdown and reboot test once we encapsulate docmanager
+// TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand(t *testing.T) {
 	ctx := context.NewMockDefault()
 	docState := contracts.DocumentState{}
@@ -289,7 +289,7 @@ func TestDocCancellation_Panic(t *testing.T) {
 	assert.Equal(t, errorCode, SubmissionPanic)
 }
 
-//TODO add shutdown and reboot test once we encapsulate docmanager
+// TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand_Shutdown(t *testing.T) {
 	ctx := context.NewMockDefault()
 	docState := contracts.DocumentState{}

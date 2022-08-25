@@ -65,7 +65,7 @@ func (suite *WorkerProviderTestSuite) SetupTest() {
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestWorkerProviderTestSuite(t *testing.T) {
 	suite.Run(t, new(WorkerProviderTestSuite))
 }

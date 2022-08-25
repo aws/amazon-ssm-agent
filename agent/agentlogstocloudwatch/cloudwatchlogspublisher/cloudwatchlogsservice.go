@@ -321,7 +321,7 @@ func (service *CloudWatchLogsService) DescribeLogStreams(logGroup, logStreamPref
 
 }
 
-//getLogGroupDetails Calls the DescribeLogGroups API to get the details of the loggroup specified. Returns nil if not found
+// getLogGroupDetails Calls the DescribeLogGroups API to get the details of the loggroup specified. Returns nil if not found
 func (service *CloudWatchLogsService) getLogGroupDetails(logGroup string) (logGroupDetails *cloudwatchlogs.LogGroup, err error) {
 	log := service.context.Log()
 	// Keeping the nextToken as empty in the beginning. Might get filled from response for subsequent calls
@@ -481,7 +481,7 @@ func (service *CloudWatchLogsService) retryPutWithNewSequenceToken(messages []*c
 	return service.PutLogEvents(messages, logGroupName, logStreamName, sequenceToken)
 }
 
-//IsLogGroupEncryptedWithKMS return true if the log group is encrypted with KMS key.
+// IsLogGroupEncryptedWithKMS return true if the log group is encrypted with KMS key.
 func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(logGroup *cloudwatchlogs.LogGroup) (bool, error) {
 	if logGroup == nil {
 		return false, nil
@@ -495,7 +495,7 @@ func (service *CloudWatchLogsService) IsLogGroupEncryptedWithKMS(logGroup *cloud
 	return false, nil
 }
 
-//StreamData streams data from the absoluteFilePath file to cloudwatch logs.
+// StreamData streams data from the absoluteFilePath file to cloudwatch logs.
 func (service *CloudWatchLogsService) StreamData(
 	logGroupName string,
 	logStreamName string,
@@ -608,7 +608,7 @@ func (service *CloudWatchLogsService) StreamData(
 	return success
 }
 
-//getNextMessage gets the next message to be uploaded to cloudwatch.
+// getNextMessage gets the next message to be uploaded to cloudwatch.
 func (service *CloudWatchLogsService) getNextMessage(
 	absoluteFilePath string,
 	lastKnownLineUploadedToCWL *int64,

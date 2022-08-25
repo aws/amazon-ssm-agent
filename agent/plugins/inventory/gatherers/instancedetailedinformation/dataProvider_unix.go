@@ -84,12 +84,13 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 }
 
 // parseLscpuOutput collects relevant fields from lscpu output, which has the following format (some lines omitted):
-//   CPU(s):                2
-//   Thread(s) per core:    1
-//   Core(s) per socket:    2
-//   Socket(s):             1
-//   Model name:            Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
-//   CPU MHz:               2400.072
+//
+//	CPU(s):                2
+//	Thread(s) per core:    1
+//	Core(s) per socket:    2
+//	Socket(s):             1
+//	Model name:            Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
+//	CPU MHz:               2400.072
 func parseLscpuOutput(output string) model.InstanceDetailedInformation {
 	cpuSpeedMHzStr := getFieldValue(output, cpuSpeedMHzKey)
 	if cpuSpeedMHzStr != "" {

@@ -22,7 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 )
 
-//TODO deprecate this functionality once we update the windows update document
+// TODO deprecate this functionality once we update the windows update document
 type managedInstanceDocumentProperties struct {
 	RunCommand []string
 	ID         string

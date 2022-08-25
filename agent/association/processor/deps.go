@@ -29,7 +29,7 @@ type AssocList []string
 var assocParser parserService = &assocParserService{}
 var assocBookkeeping bookkeepingService = &assocBookkeepingService{}
 
-//PluginAssociationInstances cached the number of associations attached to a specific type of plugin
+// PluginAssociationInstances cached the number of associations attached to a specific type of plugin
 var pluginAssociationInstances = make(map[string]AssocList)
 
 func getPluginAssociationInstances() map[string]AssocList {

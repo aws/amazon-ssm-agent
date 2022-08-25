@@ -57,7 +57,7 @@ func (suite *SessionPluginTestSuite) SetupTest() {
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestShellTestSuite(t *testing.T) {
 	suite.Run(t, new(SessionPluginTestSuite))
 }

@@ -57,7 +57,7 @@ func (suite *AgentTestSuite) SetupTest() {
 	suite.context.On("Log").Return(mockLog)
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestAgentTestSuite(t *testing.T) {
 	suite.Run(t, new(AgentTestSuite))
 }

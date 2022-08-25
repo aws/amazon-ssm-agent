@@ -106,7 +106,7 @@ func (f *FakeChannel) GetMessage() <-chan string {
 	return f.recvChan
 }
 
-//close stops the receiving channel
+// close stops the receiving channel
 func (f *FakeChannel) Close() {
 	if f.closed {
 		return

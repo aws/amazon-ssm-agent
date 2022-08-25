@@ -180,7 +180,7 @@ func (SendOfflineCommand) loadContent(agentIdentity identity.IAgentIdentity, raw
 	}
 }
 
-//validateContent checks to see that content has at least one runtimeConfig for 1.2 or mainSteps for 2.0 and no unbound parameters
+// validateContent checks to see that content has at least one runtimeConfig for 1.2 or mainSteps for 2.0 and no unbound parameters
 func (SendOfflineCommand) validateContent(content contracts.DocumentContent) error {
 	switch content.SchemaVersion {
 	case "1.2":

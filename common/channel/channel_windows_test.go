@@ -14,7 +14,6 @@
 //go:build windows
 // +build windows
 
-//
 // Package channel captures IPC implementation.
 package channel
 

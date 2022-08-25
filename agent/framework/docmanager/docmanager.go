@@ -46,9 +46,9 @@ type DocumentMgr interface {
 	RemoveDocumentState(fileName, locationFolder string)
 }
 
-//TODO use class lock instead of global lock?
-//TODO decouple the DocState model to better fit the service-processor-executer architecture
-//DocumentFileMgr encapsulate the file access and perform bookkeeping operations at the specified file location
+// TODO use class lock instead of global lock?
+// TODO decouple the DocState model to better fit the service-processor-executer architecture
+// DocumentFileMgr encapsulate the file access and perform bookkeeping operations at the specified file location
 type DocumentFileMgr struct {
 	context       context.T
 	dataStorePath string
@@ -196,7 +196,7 @@ func (d *DocumentFileMgr) RemoveDocumentState(commandID, locationFolder string) 
 	}
 }
 
-//TODO rework this part
+// TODO rework this part
 // DocumentStateDir returns absolute filename where command states are persisted
 func DocumentStateDir(instanceID, locationFolder string) string {
 	return filepath.Join(appconfig.DefaultDataStorePath,

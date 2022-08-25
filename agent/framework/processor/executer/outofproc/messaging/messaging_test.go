@@ -40,7 +40,7 @@ func TestMessagingTerminate(t *testing.T) {
 	backendMock.AssertExpectations(t)
 }
 
-//soft stop, messaging will return only when the connection to data backend is closed and also the ipc is closed
+// soft stop, messaging will return only when the connection to data backend is closed and also the ipc is closed
 func TestMessagingShutdown(t *testing.T) {
 	testInputDatagram := "testinput"
 	testOutputDatagram := "testoutput"

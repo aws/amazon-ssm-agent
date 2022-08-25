@@ -75,7 +75,7 @@ type updateManager struct {
 	context context.T
 }
 
-//TODO move the interface and structs into a separate file to reduce the size of this main file
+// TODO move the interface and structs into a separate file to reduce the size of this main file
 // pluginHelper is a interface that has helper functions for update manager
 type pluginHelper interface {
 	generateSetupUpdateCmd(log log.T,

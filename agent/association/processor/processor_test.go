@@ -223,7 +223,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	assert.True(t, complianceUploader.AssertNumberOfCalls(t, "UpdateAssociationCompliance", 0))
 }
 
-//make sure this operation is thread safe
+// make sure this operation is thread safe
 func TestUpdatePluginAssociationInstances(t *testing.T) {
 	testAssociationID := "testAssociationID"
 	testName := "testName"

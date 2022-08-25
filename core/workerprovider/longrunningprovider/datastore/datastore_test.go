@@ -57,7 +57,7 @@ func (suite *StoreTestSuite) SetupTest() {
 		log:        log.NewMockLog()}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestDataStoreTestSuite(t *testing.T) {
 	suite.Run(t, new(StoreTestSuite))
 }

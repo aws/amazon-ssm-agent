@@ -117,7 +117,7 @@ func makeAwsStrings(strings []string) []*string {
 	return out
 }
 
-//ListAssociations calls the ListAssociations SSM API.
+// ListAssociations calls the ListAssociations SSM API.
 func (svc *sdkService) ListAssociations(log log.T, instanceID string) (response *ssm.ListAssociationsOutput, err error) {
 	params := ssm.ListAssociationsInput{
 		AssociationFilterList: []*ssm.AssociationFilter{
@@ -137,7 +137,7 @@ func (svc *sdkService) ListAssociations(log log.T, instanceID string) (response 
 	return
 }
 
-//ListInstanceAssociations calls the ListAssociations SSM API.
+// ListInstanceAssociations calls the ListAssociations SSM API.
 func (svc *sdkService) ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error) {
 	params := ssm.ListInstanceAssociationsInput{
 		InstanceId: &instanceID,
@@ -193,7 +193,7 @@ func (svc *sdkService) PutComplianceItems(
 	return
 }
 
-//UpdateInstanceAssociationStatus calls the ListAssociations SSM API.
+// UpdateInstanceAssociationStatus calls the ListAssociations SSM API.
 func (svc *sdkService) UpdateInstanceAssociationStatus(log log.T, associationID string, instanceID string, executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
 	params := ssm.UpdateInstanceAssociationStatusInput{
 		InstanceId:      &instanceID,
@@ -210,7 +210,7 @@ func (svc *sdkService) UpdateInstanceAssociationStatus(log log.T, associationID 
 	return
 }
 
-//UpdateAssociationStatus calls the UpdateAssociationStatus SSM API.
+// UpdateAssociationStatus calls the UpdateAssociationStatus SSM API.
 func (svc *sdkService) UpdateAssociationStatus(
 	log log.T,
 	instanceID string,
@@ -231,7 +231,7 @@ func (svc *sdkService) UpdateAssociationStatus(
 	return
 }
 
-//UpdateInstanceInformation calls the UpdateInstanceInformation SSM API.
+// UpdateInstanceInformation calls the UpdateInstanceInformation SSM API.
 func (svc *sdkService) UpdateInstanceInformation(
 	log log.T,
 	agentVersion,
@@ -296,7 +296,7 @@ func (svc *sdkService) UpdateInstanceInformation(
 	return
 }
 
-//UpdateEmptyInstanceInformation calls the UpdateInstanceInformation SSM API with an empty ping.
+// UpdateEmptyInstanceInformation calls the UpdateInstanceInformation SSM API with an empty ping.
 func (svc *sdkService) UpdateEmptyInstanceInformation(
 	log log.T,
 	agentVersion,
@@ -347,7 +347,7 @@ func (svc *sdkService) CreateDocument(log log.T, docName string, docContent stri
 	return
 }
 
-//GetDocument calls the GetDocument SSM API to retrieve document with given document name
+// GetDocument calls the GetDocument SSM API to retrieve document with given document name
 func (svc *sdkService) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
 	params := ssm.GetDocumentInput{
 		Name: aws.String(docName),
@@ -366,7 +366,7 @@ func (svc *sdkService) GetDocument(log log.T, docName string, docVersion string)
 	return
 }
 
-//DescribeAssociation calls the DescribeAssociation SSM API to retrieve parameters information
+// DescribeAssociation calls the DescribeAssociation SSM API to retrieve parameters information
 func (svc *sdkService) DescribeAssociation(log log.T, instanceID string, docName string) (response *ssm.DescribeAssociationOutput, err error) {
 	params := ssm.DescribeAssociationInput{
 		InstanceId: aws.String(instanceID),

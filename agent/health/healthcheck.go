@@ -174,7 +174,7 @@ func (h *HealthCheck) ModuleStop() (err error) {
 	return nil
 }
 
-//ping sends an empty ping to the health service to identify if the service exists
+// ping sends an empty ping to the health service to identify if the service exists
 func (h *HealthCheck) ping() (err error) {
 	if h.healthCheckStopPolicy.HasError() {
 		h.service = ssm.NewService(h.context)

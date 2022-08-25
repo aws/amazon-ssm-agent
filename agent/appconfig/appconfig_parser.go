@@ -20,7 +20,7 @@ import (
 	"runtime"
 )
 
-//func parser(config *T) {
+// func parser(config *T) {
 func parser(config *SsmagentConfig) {
 	log.Printf("processing appconfig overrides")
 

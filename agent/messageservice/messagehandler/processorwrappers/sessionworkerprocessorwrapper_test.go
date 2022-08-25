@@ -160,7 +160,7 @@ func (suite *SessionWorkerProcessorWrapperTestSuite) TestListenSessionReply_Shou
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSessionWorkerProcessorWrapperTestSuite(t *testing.T) {
 	suite.Run(t, new(SessionWorkerProcessorWrapperTestSuite))
 }

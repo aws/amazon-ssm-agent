@@ -113,7 +113,7 @@ func (util *updateS3UtilImpl) DownloadManifest(manifest updatemanifest.T, manife
 	return nil
 }
 
-//DownloadUpdater downloads updater from the s3 bucket
+// DownloadUpdater downloads updater from the s3 bucket
 func (util *updateS3UtilImpl) DownloadUpdater(
 	manifest updatemanifest.T,
 	updaterPackageName string,

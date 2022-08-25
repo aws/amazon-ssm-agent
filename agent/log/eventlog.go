@@ -34,7 +34,7 @@ var (
 	singleSpacePattern = regexp.MustCompile(`\s+`)
 )
 
-//GetEventLog returns the Event log instance and is called by the SSM Logger during app startup
+// GetEventLog returns the Event log instance and is called by the SSM Logger during app startup
 func GetEventLog(logFilePath string, logFileName string) (eventLog *EventLog) {
 	if eventLogInst != nil {
 		return eventLogInst
@@ -76,7 +76,7 @@ type EventLog struct {
 	fileDelimiter   string
 }
 
-//Init sets the Default value for instance
+// Init sets the Default value for instance
 func (e *EventLog) init() {
 	e.currentFileName = ""
 	e.fileDelimiter = "-"
@@ -99,17 +99,17 @@ func (e *EventLog) GetAuditFileName() string {
 	return e.eventLogName
 }
 
-//GetAuditFilePath will return the audit file path
+// GetAuditFilePath will return the audit file path
 func (e *EventLog) GetAuditFilePath() string {
 	return e.eventLogPath
 }
 
-//GetAuditFilePath will return the file system instance
+// GetAuditFilePath will return the file system instance
 func (e *EventLog) GetFileSystem() filesystem.IFileSystem {
 	return e.fileSystem
 }
 
-//loadEvent loads the event to the channel to be passed to the write file go routine
+// loadEvent loads the event to the channel to be passed to the write file go routine
 func (e *EventLog) loadEvent(eventType string, agentVersion string, eventContent string) {
 	// Time appended to the message in the format HH:MM:SS
 	if agentVersion == "" {
@@ -119,12 +119,12 @@ func (e *EventLog) loadEvent(eventType string, agentVersion string, eventContent
 	e.eventChannel <- eventContent
 }
 
-//close closes the buffered channel
+// close closes the buffered channel
 func (e *EventLog) close() {
 	close(e.eventChannel)
 }
 
-//rotateEventLog checks for the deletion of files and deleted it
+// rotateEventLog checks for the deletion of files and deleted it
 func (e *EventLog) rotateEventLog() {
 	validFileNames := e.getFilesWithMatchDatePattern()
 	deleteFileCount := len(validFileNames) - e.noOfHistoryFiles
@@ -134,7 +134,7 @@ func (e *EventLog) rotateEventLog() {
 	}
 }
 
-//eventWriter triggers the go routine once and then waits for data from buffer channel
+// eventWriter triggers the go routine once and then waits for data from buffer channel
 func (e *EventLog) eventWriter() {
 	go func() {
 		defer func() {
@@ -151,7 +151,7 @@ func (e *EventLog) eventWriter() {
 	}()
 }
 
-//getFilesWithMatchDatePattern gets the files matching with the date pattern
+// getFilesWithMatchDatePattern gets the files matching with the date pattern
 func (e *EventLog) getFilesWithMatchDatePattern() []string {
 	var validFileNames []string
 	if allFiles, err := e.fileSystem.ReadDir(e.eventLogPath); err == nil {
@@ -165,7 +165,7 @@ func (e *EventLog) getFilesWithMatchDatePattern() []string {
 	return validFileNames
 }
 
-//isValidFileName checks whether the file matches the Date pattern
+// isValidFileName checks whether the file matches the Date pattern
 func (e *EventLog) isValidFileName(fileName string) bool {
 	logFileWithDelim := e.eventLogName + e.fileDelimiter
 	if !strings.HasPrefix(fileName, logFileWithDelim) {

@@ -100,7 +100,7 @@ func CreateTestCase() *TestCase {
 	}
 }
 
-//TODO test cancel message
+// TODO test cancel message
 func TestExecuterBackendStart_Shutdown(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
@@ -130,7 +130,7 @@ func TestExecuterBackendStart_Shutdown(t *testing.T) {
 	<-closed
 }
 
-//test the datagram mashalling v1
+// test the datagram mashalling v1
 func TestExecuterBackend_ProcessV1(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
@@ -171,7 +171,7 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	cancel.AssertExpectations(t)
 }
 
-//test the datagram mashalling v1
+// test the datagram mashalling v1
 func TestExecuterBackend_ProcessUnsupportedVersion(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
@@ -259,7 +259,7 @@ func TestWorkerBackendPluginListener(t *testing.T) {
 
 }
 
-//this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
+// this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
 func assertValueEqual(t *testing.T, a map[string]*contracts.PluginResult, b map[string]*contracts.PluginResult) {
 	assert.Equal(t, len(a), len(b))
 	for key, val := range a {

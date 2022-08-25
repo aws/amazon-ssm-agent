@@ -271,7 +271,7 @@ func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) 
 	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
 }
 
-//using long-running testcases for this test
+// using long-running testcases for this test
 func testCommandInvokerShutdown(t *testing.T, invoke CommandInvoker, cancelFlag task.CancelFlag, testCase TestCase) {
 	go func() {
 		time.Sleep(100 * time.Millisecond)
