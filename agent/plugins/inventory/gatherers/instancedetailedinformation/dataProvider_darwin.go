@@ -27,13 +27,14 @@ import (
 )
 
 const (
-	sysctlCmd        = "sysctl"
-	cpuModelNameKey  = "machdep.cpu.brand_string"
-	cpuCoreKey       = "hw.physicalcpu"
-	cpusKey          = "hw.logicalcpu"
-	cpuFreqKey       = "hw.cpufrequency"
-	threadTypeKey    = "hw.cputhreadtype"
-	kernelVersionKey = "kern.osrelease"
+	sysctlCmd                  = "sysctl"
+	sysctlCmdIgnoreUnknownFlag = "-i"
+	cpuModelNameKey            = "machdep.cpu.brand_string"
+	cpuCoreKey                 = "hw.physicalcpu"
+	cpusKey                    = "hw.logicalcpu"
+	cpuFreqKey                 = "hw.cpufrequency"
+	threadTypeKey              = "hw.cputhreadtype"
+	kernelVersionKey           = "kern.osrelease"
 )
 
 // cmdExecutor decouples exec.Command for easy testability
@@ -50,7 +51,7 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 	var output []byte
 	var err error
 	cmd := sysctlCmd
-	args := []string{cpuModelNameKey, cpuCoreKey, cpusKey, cpuFreqKey, threadTypeKey}
+	args := []string{sysctlCmdIgnoreUnknownFlag, cpuModelNameKey, cpuCoreKey, cpusKey, cpuFreqKey, threadTypeKey}
 
 	log.Infof("Executing command: %v", cmd)
 	if output, err = cmdExecutor(cmd, args...); err != nil {
