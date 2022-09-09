@@ -1,5 +1,11 @@
 Latest
 ===============
+- Ran gofmt and goimports with golang version 1.19
+- Report AvailabilityZone and AvailabilityZoneId in health pings
+- Update AWS Go SDK to v1.44.78
+
+3.1.1767.0
+===============
 - Fix samba configuration for sub-domains
 
 3.1.1732.0
