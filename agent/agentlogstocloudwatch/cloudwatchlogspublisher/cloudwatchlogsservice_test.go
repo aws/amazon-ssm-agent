@@ -372,11 +372,8 @@ func TestCloudWatchLogsService_getNextMessage_largeline(t *testing.T) {
 	file, err := os.Create(fileName)
 	assert.Nil(t, err, "Failed to create test file")
 	// writing more than 200K bytes
-	var largeLine string
-	for i := 0; i < 50; i++ {
-		largeLine += strings.Join(input, " ")
-	}
-	file.Write([]byte(largeLine))
+	message := make([]byte, MessageLengthThresholdInBytes+10000, MessageLengthThresholdInBytes+10000)
+	file.Write(message)
 	file.Close()
 
 	// Deleting file
@@ -389,13 +386,41 @@ func TestCloudWatchLogsService_getNextMessage_largeline(t *testing.T) {
 	var actualLastKnownLineUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
 	events, eof := service.getNextMessage(fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
-
 	// Compare results
 	// Since length of line exceeds max limit of 200K, messages will be sent in 2 separate events
 	assert.Equal(t, 2, len(events))
 	assert.False(t, eof)
-	assert.Equal(t, largeLine[:200000], *events[0].Message)
-	assert.Equal(t, largeLine[200000:], *events[1].Message)
+	assert.Equal(t, string(message[:200000]), *events[0].Message)
+	assert.Equal(t, string(message[200000:]), *events[1].Message)
+}
+
+func TestCloudWatchLogsService_buildEventInfo_stream_threshold_should_match(t *testing.T) {
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+		isFileComplete:       true,
+	}
+
+	message := make([]byte, StreamMessageLengthThresholdInBytes, StreamMessageLengthThresholdInBytes)
+	event := service.buildEventInfo(message, true)
+	// Result event size should be less than cloudwatch event quota
+	eventBytes, err := json.Marshal(event)
+	assert.Nil(t, err)
+	assert.Less(t, len(eventBytes)+64, 262144)
+}
+
+func TestCloudWatchLogsService_buildEventInfo_threshold_should_match(t *testing.T) {
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+		isFileComplete:       true,
+	}
+
+	message := make([]byte, MessageLengthThresholdInBytes, MessageLengthThresholdInBytes)
+	event := service.buildEventInfo(message, false)
+	assert.Less(t, len([]byte(*event.Message))+64, 262144)
 }
 
 func TestCloudWatchLogsService_getNextMessage_ending_with_newlinecharacter(t *testing.T) {

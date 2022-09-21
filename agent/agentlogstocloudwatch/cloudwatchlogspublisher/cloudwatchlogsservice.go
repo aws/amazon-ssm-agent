@@ -48,6 +48,10 @@ const (
 
 	// Event size - https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cloudwatch_limits_cwl.html
 	MessageLengthThresholdInBytes = 200 * 1000
+	// json.Marshal can inflate streamed event message by up to ~6 times the size of the message, depending on message contents.
+	// Threshold is reduced here to 1/6 size to account for this.
+	// https://go.dev/play/p/G3RalE_BUEL
+	StreamMessageLengthThresholdInBytes = 33000
 )
 
 // CloudWatchLogsService encapsulates the client and stop policy as a wrapper to call the cloudwatchlogs API
@@ -589,7 +593,7 @@ func (service *CloudWatchLogsService) StreamData(
 		if err == nil {
 			// Set the last known line to current since the upload was successful.
 			lastKnownLineUploadedToCWL = currentLineNumber
-			log.Trace("Successfully uploaded message line %d to CloudWatch", currentLineNumber)
+			log.Tracef("Successfully uploaded message line %v to CloudWatch", currentLineNumber)
 		} else {
 			if errCode := sdkutil.GetAwsErrorCode(err); errCode == resourceNotFoundException {
 				// Log group or log stream not found due to resource change outside of client. Stop log streaming for session
@@ -624,8 +628,15 @@ func (service *CloudWatchLogsService) getNextMessage(
 	}
 	defer file.Close()
 
-	// Initialize reader.
-	reader := bufio.NewReaderSize(file, MessageLengthThresholdInBytes)
+	var messageThreshold int
+
+	if structuredLogs {
+		messageThreshold = StreamMessageLengthThresholdInBytes
+	} else {
+		messageThreshold = MessageLengthThresholdInBytes
+	}
+
+	reader := bufio.NewReaderSize(file, messageThreshold)
 
 	// Skip to the last uploaded line.
 	if *lastKnownLineUploadedToCWL > 0 {
@@ -638,7 +649,7 @@ func (service *CloudWatchLogsService) getNextMessage(
 			}
 			_, err = reader.ReadSlice(NewLineCharacter)
 		}
-		if err != nil && err != io.EOF {
+		if err != nil && err != io.EOF && err != bufio.ErrBufferFull {
 			log.Warnf("Error skipping to last uploaded Cloudwatch line: %v", err)
 			return
 		}
@@ -654,17 +665,15 @@ func (service *CloudWatchLogsService) getNextMessage(
 				break
 			}
 		}
-
 		// Process message if needed before uploading to CW
 		line = processMessage(log, line, cleanupControlCharacters)
-
 		// Check if message length threshold for the event has reached.
 		// If true, then construct event with existing message so that new line will get added to the next event.
 		// If false, then continue to append new line to existing message.
-		if (len(message) + len(line)) > MessageLengthThresholdInBytes {
+		if (len(message) + len(line)) > messageThreshold {
 			log.Tracef("Appending line to current Cloudwatch event message"+
-				" exceeds length limit %v bytes. [Line: %v]",
-				MessageLengthThresholdInBytes, *currentLineNumber)
+				" exceeds length limit %v bytes. [Line: %v] [Length: %v]",
+				messageThreshold, *currentLineNumber, len(message)+len(line))
 
 			event := service.buildEventInfo(message, structuredLogs)
 
