@@ -1,5 +1,6 @@
 Latest
 ===============
+- Lower message length threshold for cloudwatch log streaming
 - Ran gofmt and goimports with golang version 1.19
 - Report AvailabilityZone and AvailabilityZoneId in health pings
 - Update AWS Go SDK to v1.44.78
