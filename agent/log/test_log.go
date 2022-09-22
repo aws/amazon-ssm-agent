@@ -45,6 +45,7 @@ func NewMockLog() *Mock {
 	log.On("Infof", mock.Anything, mock.Anything).Return()
 	log.On("Closed").Return(false)
 	log.On("WithContext", mock.Anything).Return(log)
+	log.On("Log", mock.Anything).Return()
 	return log
 }
 
@@ -72,6 +73,7 @@ func NewMockLogWithContext(ctx string) *Mock {
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
 	log.On("Closed").Return(false)
+	log.On("Log", mock.Anything).Return()
 	return log
 }
 
@@ -237,4 +239,13 @@ func (_m *Mock) Close() {
 func (_m *Mock) Closed() bool {
 	_m.Called()
 	return false
+}
+
+func (_m *Mock) Log(i ...interface{}) {
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Print("Info: ")
+		fmt.Println(i...)
+	}
+	_m.Called(i)
 }

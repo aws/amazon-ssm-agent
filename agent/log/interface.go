@@ -77,6 +77,7 @@ type BasicT interface {
 // T represents structs capable of logging messages, and context management.
 type T interface {
 	BasicT
+	Log(i ...interface{})
 	WithContext(context ...string) (contextLogger T)
 	WriteEvent(eventType string, agentVersion string, event string)
 }

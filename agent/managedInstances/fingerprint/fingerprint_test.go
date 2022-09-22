@@ -418,6 +418,10 @@ func (f *fakeLog) Info(v ...interface{}) {
 	f.infoMessages = append(f.infoMessages, message)
 }
 
+func (f fakeLog) Log(v ...interface{}) {
+	f.Info(v)
+}
+
 func (f *fakeLog) Infof(format string, params ...interface{}) {
 	message := fmt.Sprintf(format, params...)
 	f.infoMessages = append(f.infoMessages, message)

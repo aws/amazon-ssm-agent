@@ -200,6 +200,10 @@ func (w *Wrapper) Closed() bool {
 	return w.Delegate.BaseLoggerInstance.Closed()
 }
 
+func (w *Wrapper) Log(i ...interface{}) {
+	w.Info(i)
+}
+
 // ReplaceDelegate replaces the delegate logger with a new logger
 func (w *Wrapper) ReplaceDelegate(newLogger BasicT) {
 	w.M.Lock()
