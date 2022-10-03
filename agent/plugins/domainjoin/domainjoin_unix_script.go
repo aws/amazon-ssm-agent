@@ -738,6 +738,12 @@ do_domainjoin() {
     if [ $STATUS -ne 0 ]; then
         echo "***Failed: realm join failed" && exit 1
     fi
+
+    id "$DOMAIN_USERNAME"
+    if [ $? -ne 0 ]; then
+       fix_idmap_ranges
+    fi
+
     echo "########## SUCCESS: realm join successful $LOG_MSG ##########"
 }
 
@@ -793,6 +799,22 @@ reconfigure_samba() {
         if [ $? -ne 0 ]; then
             service winbind restart
         fi
+    fi
+}
+
+#############################################
+## Fix id-mappings in Samba                ##
+## Make sure range is wide enough          ##
+#############################################
+fix_idmap_ranges() {
+    echo "Fix samba idmap ranges since AD-user look-up did not work"
+
+    sed -i "s/\(idmap config .*: range = \)\([0-9]*-[0-9]*\)/\165536-99999999/g" /etc/samba/smb.conf
+
+    # Restarting Winbind daemon
+    service winbind restart
+    if [ $? -ne 0 ]; then
+        systemctl restart winbind
     fi
 }
 
