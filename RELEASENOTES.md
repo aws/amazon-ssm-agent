@@ -1,5 +1,9 @@
 Latest
 ===============
+- Update shell for Session Manager on MacOS
+
+3.1.1856.0
+===============
 - Lower message length threshold for cloudwatch log streaming
 - Ran gofmt and goimports with golang version 1.19
 - Report AvailabilityZone and AvailabilityZoneId in health pings
