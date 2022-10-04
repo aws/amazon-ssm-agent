@@ -18,7 +18,11 @@
 package main
 
 import (
+	"runtime"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
@@ -39,4 +43,18 @@ func resolveUpdateRoot(sourceVersion string) (string, error) {
 	}
 
 	return legacyUpdaterArtifactsRoot, nil
+}
+
+func updateSSMUserShellProperties(log logger.T) {
+	if runtime.GOOS == "darwin" {
+		var ssmSessionUtil utility.SessionUtil
+		if ok, _ := ssmSessionUtil.DoesUserExist(appconfig.DefaultRunAsUserName); ok {
+			if err := ssmSessionUtil.ChangeUserShell(); err != nil {
+				log.Warnf("UserShell Update Failed: %v", err)
+				return
+			}
+			log.Infof("Successfully updated ssm-user shell properties")
+		}
+	}
+	return
 }

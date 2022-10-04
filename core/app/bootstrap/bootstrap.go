@@ -86,6 +86,7 @@ func (bs *Bootstrap) Init() (context.ICoreAgentContext, error) {
 		return nil, logger.Errorf("failed to create IPC folder, %v", err)
 	}
 
+	bs.updateSSMUserShellProperties(logger)
 	for i := 0; i < 3; i++ {
 		ctx, err := context.NewCoreAgentContext(logger, &config, agentIdentity)
 		if err == nil {

@@ -18,5 +18,5 @@
 package model
 
 const (
-	AddUserCommand = "sysadminctl -addUser %s"
+	AddUserCommand = "sysadminctl -addUser %s -shell /usr/bin/false"
 )

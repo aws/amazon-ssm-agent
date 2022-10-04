@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"syscall"
 	"unsafe"
 
@@ -33,8 +34,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/utility/model"
 )
 
-var ShellPluginCommandName = "sh"
-var ShellPluginCommandArgs = []string{"-c"}
+var (
+	ShellPluginCommandName = "sh"
+	ShellPluginCommandArgs = []string{"-c"}
+	execCommand            = exec.Command
+	osStat                 = os.Stat
+	osOpenFile             = os.OpenFile
+	osChMod                = os.Chmod
+)
 
 const (
 	sudoersFile                = "/etc/sudoers.d/ssm-agent-users"
@@ -44,6 +51,8 @@ const (
 	fs_ioc_setflags            = uintptr(0x40086602)
 	FS_APPEND_FL               = 0x00000020 /* writes to file may only append */
 	FS_RESET_FL                = 0x00000000 /* reset file property */
+
+	dsclCreateCommand = "/usr/bin/dscl . -create /Users/%s %s %s"
 )
 
 // ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists
@@ -55,7 +64,7 @@ func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err e
 // DoesUserExist checks if given user already exists
 func (u *SessionUtil) DoesUserExist(username string) (bool, error) {
 	shellCmdArgs := append(ShellPluginCommandArgs, fmt.Sprintf("id %s", username))
-	cmd := exec.Command(ShellPluginCommandName, shellCmdArgs...)
+	cmd := execCommand(ShellPluginCommandName, shellCmdArgs...)
 	if err := cmd.Run(); err != nil {
 		if exitErr, ok := err.(*exec.ExitError); ok {
 			// The program has exited with an exit code != 0
@@ -66,13 +75,19 @@ func (u *SessionUtil) DoesUserExist(username string) (bool, error) {
 	return true, nil
 }
 
-// createLocalAdminUser creates a local OS user on the instance with admin permissions. The password will alway be empty
+// CreateLocalAdminUser creates a local OS user on the instance with admin permissions. The password will alway be empty
 func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err error) {
 
 	userExists, _ := u.DoesUserExist(appconfig.DefaultRunAsUserName)
-
 	if userExists {
-		log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
+		if runtime.GOOS == "darwin" {
+			if err = u.ChangeUserShell(); err != nil {
+				log.Warnf("Failed to change %s UserShell: %v", appconfig.DefaultRunAsUserName, err)
+				return
+			}
+		} else {
+			log.Infof("%s already exists.", appconfig.DefaultRunAsUserName)
+		}
 	} else {
 		if err = u.createLocalUser(log); err != nil {
 			return
@@ -80,15 +95,26 @@ func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err e
 		// only create sudoers file when user does not exist
 		err = u.createSudoersFileIfNotPresent(log)
 	}
-
 	return
+}
+
+// ChangeUserShell changes userShell for DefaultRunAsUser.
+func (u *SessionUtil) ChangeUserShell() (err error) {
+	// update user shell value
+	userShellKey := "UserShell"
+	userShellNewValue := "/usr/bin/false"
+	commandArgs := append(ShellPluginCommandArgs, fmt.Sprintf(dsclCreateCommand, appconfig.DefaultRunAsUserName, userShellKey, userShellNewValue))
+	if err = execCommand(ShellPluginCommandName, commandArgs...).Run(); err != nil {
+		return err
+	}
+	return nil
 }
 
 // createLocalUser creates an OS local user.
 func (u *SessionUtil) createLocalUser(log log.T) error {
 
 	commandArgs := append(ShellPluginCommandArgs, fmt.Sprintf(model.AddUserCommand, appconfig.DefaultRunAsUserName))
-	cmd := exec.Command(ShellPluginCommandName, commandArgs...)
+	cmd := execCommand(ShellPluginCommandName, commandArgs...)
 	if err := cmd.Run(); err != nil {
 		log.Errorf("Failed to create %s: %v", appconfig.DefaultRunAsUserName, err)
 		return err
@@ -101,14 +127,14 @@ func (u *SessionUtil) createLocalUser(log log.T) error {
 func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 
 	// Return if the file exists
-	if _, err := os.Stat(sudoersFile); err == nil {
+	if _, err := osStat(sudoersFile); err == nil {
 		log.Infof("File %s already exists", sudoersFile)
 		_ = u.changeModeOfSudoersFile(log)
 		return err
 	}
 
 	// Create a sudoers file for ssm-user with read/write access
-	file, err := os.OpenFile(sudoersFile, os.O_WRONLY|os.O_CREATE, sudoersFileCreateWriteMode)
+	file, err := osOpenFile(sudoersFile, os.O_WRONLY|os.O_CREATE, sudoersFileCreateWriteMode)
 	if err != nil {
 		log.Errorf("Failed to add %s to sudoers file: %v", appconfig.DefaultRunAsUserName, err)
 		return err
@@ -134,7 +160,7 @@ func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 // This file is created with mode 0640 using os.Create() so needs to be updated to read only with chmod.
 func (u *SessionUtil) changeModeOfSudoersFile(log log.T) error {
 	fileMode := os.FileMode(sudoersFileReadOnlyMode)
-	if err := os.Chmod(sudoersFile, fileMode); err != nil {
+	if err := osChMod(sudoersFile, fileMode); err != nil {
 		log.Errorf("Failed to change mode of %s to %d: %v", sudoersFile, sudoersFileReadOnlyMode, err)
 		return err
 	}

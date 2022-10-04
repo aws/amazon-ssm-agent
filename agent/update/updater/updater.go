@@ -124,7 +124,7 @@ func updateAgent() int {
 	}
 
 	agentContext = context.Default(log, appConfig, agentIdentity)
-
+	updateSSMUserShellProperties(log)
 	// Create update info
 	updateInfo, err := updateinfo.New(agentContext)
 	if err != nil {

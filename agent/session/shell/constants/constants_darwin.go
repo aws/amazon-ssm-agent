@@ -25,7 +25,8 @@ import (
 )
 
 const (
-	HomeEnvVariable     = "HOME=/Users/"
+	UserDirectory       = "/Users/"
+	HomeEnvVariable     = "HOME=" + UserDirectory
 	RootHomeEnvVariable = "HOME=/var/root"
 )
 

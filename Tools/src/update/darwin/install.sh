@@ -41,5 +41,3 @@ echo "Starting agent"
 launchctl load -w /Library/LaunchDaemons/com.amazon.aws.ssm.plist
 launchctl start com.amazon.aws.ssm
 echo "$(launchctl list com.amazon.aws.ssm)"
-
-
