@@ -189,7 +189,7 @@ func assumeAgentServiceEnvironmentProxy(proxyEnv map[string]string) {
 }
 
 func assumeInternetExplorerProxySettings(proxyEnv map[string]string) {
-	silentLog := logger.NewSilentMockLog()
+	silentLog := logger.SilentLogger()
 
 	commandFormatStr := `(Get-Item -Path 'Registry::HKEY_USERS\.DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings').GetValue('%s')`
 
@@ -220,7 +220,7 @@ func assumeInternetExplorerProxySettings(proxyEnv map[string]string) {
 }
 
 func assumeWinHTTPProxySettings(proxyEnv map[string]string) {
-	silentLog := logger.NewSilentMockLog()
+	silentLog := logger.SilentLogger()
 	if isHttpOrHttpsProxyConfigured(proxyEnv) && isBypassProxyConfigured(proxyEnv) {
 		// both proxy and bypass are set, ignore winhttp
 		return

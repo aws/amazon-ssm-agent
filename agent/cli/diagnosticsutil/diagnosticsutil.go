@@ -58,7 +58,7 @@ func RegisterDiagnosticQuery(diagnosticQuery DiagnosticQuery) {
 
 // GetAwsSession create a single session and shares the session cross diagnostics queries
 func GetAwsSession(agentIdentity identity.IAgentIdentity, service string) (*session.Session, error) {
-	awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.NewSilentMockLog(), appconfig.DefaultConfig(), agentIdentity), service)
+	awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.SilentLogger(), appconfig.DefaultConfig(), agentIdentity), service)
 	return session.NewSession(awsConfig)
 }
 
@@ -115,7 +115,7 @@ func IsAgentInstalledSnap() bool {
 }
 
 func getRunningAgentPid() (int, error) {
-	processQuerier := executor.NewProcessExecutor(logger.NewSilentMockLog())
+	processQuerier := executor.NewProcessExecutor(logger.SilentLogger())
 
 	procs, err := processQuerier.Processes()
 

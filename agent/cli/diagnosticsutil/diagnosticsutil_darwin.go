@@ -50,7 +50,7 @@ func IsRunningElevatedPermissions() error {
 
 // AssumeAgentEnvironmentProxy is a noop on darwin because there is no other special proxy configuration
 func AssumeAgentEnvironmentProxy() {
-	proxyconfig.SetProxyConfig(log.NewSilentMockLog())
+	proxyconfig.SetProxyConfig(log.SilentLogger())
 }
 
 func GetUserRunningAgentProcess() (string, error) {

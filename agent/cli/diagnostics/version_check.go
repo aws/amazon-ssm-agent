@@ -57,7 +57,7 @@ func (versionQuery) GetPriority() int {
 }
 
 func (versionQuery) getLatestVersion(resChan chan versionRegionResponse) {
-	log := log.NewSilentMockLog()
+	log := log.SilentLogger()
 	config := appconfig.DefaultConfig()
 
 	agentIdentity, err := cliutil.GetAgentIdentity()

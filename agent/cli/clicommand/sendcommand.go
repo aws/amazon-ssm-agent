@@ -169,7 +169,7 @@ func (SendOfflineCommand) loadContent(agentIdentity identity.IAgentIdentity, raw
 		url = url[7:]
 	}
 
-	context := context.Default(log.NewSilentMockLog(), appconfig.DefaultConfig(), agentIdentity)
+	context := context.Default(log.SilentLogger(), appconfig.DefaultConfig(), agentIdentity)
 	input := &artifact.DownloadInput{SourceURL: url}
 	if output, err := artifact.Download(context, *input); err != nil {
 		return err, content

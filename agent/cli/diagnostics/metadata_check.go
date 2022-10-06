@@ -64,7 +64,7 @@ func (metadataCheckQuery) GetPriority() int {
 }
 
 func (metadataCheckQuery) getRegionAndInstanceId(resChan chan stringStringErrorTuple) {
-	log := logger.NewSilentMockLog()
+	log := logger.SilentLogger()
 	config := appconfig.DefaultConfig()
 
 	tr := network.GetDefaultTransport(log, config)

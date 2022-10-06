@@ -114,7 +114,7 @@ func ValidUrl(s string) bool {
 // GetAgentIdentity returns the agent identity and only initializes it once
 func GetAgentIdentity() (identity.IAgentIdentity, error) {
 	agentIdentityOnce.Do(func() {
-		log := logger.NewSilentMockLog()
+		log := logger.SilentLogger()
 		config := appconfig.DefaultConfig()
 
 		selector := identity.NewRuntimeConfigIdentitySelector(log)

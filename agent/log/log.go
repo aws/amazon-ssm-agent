@@ -46,6 +46,18 @@ func DefaultLogger() T {
 	return loadedLogger
 }
 
+// SilentLogger is a logger that discards messages sent to it. Use this in situations where a
+// function requires a log.T but messages the function sends to it need not be visible to users.
+func SilentLogger() T {
+	seelogger, _ := seelog.LoggerFromConfigAsString(`<seelog levels="off"/>`)
+
+	loggerInstance := &DelegateLogger{}
+	loggerInstance.BaseLoggerInstance = seelogger
+
+	formatFilter := &ContextFormatFilter{Context: []string{}}
+	return &Wrapper{Format: formatFilter, M: new(sync.RWMutex), Delegate: loggerInstance}
+}
+
 // ContextFormatFilter is a filter that can add a context to the parameters of a log message.
 type ContextFormatFilter struct {
 	Context []string
