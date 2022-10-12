@@ -52,6 +52,9 @@ func (e *Identity) Credentials() *credentials.Credentials {
 // IsIdentityEnvironment returns if instance has managed instance registration
 func (e *Identity) IsIdentityEnvironment() bool {
 	_, err := taskMetadataResponse()
+	if err != nil {
+		e.Log.Infof("Agent not taking ECS identity: %v", err)
+	}
 	return err == nil
 }
 

@@ -52,7 +52,7 @@ var metadataResponseOnce = func(client *http.Client, endpoint string, respType s
 		defer resp.Body.Close()
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%s: incorrect status code  %d", respType, resp.StatusCode)
+		return nil, fmt.Errorf("%s: incorrect status code %d", respType, resp.StatusCode)
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

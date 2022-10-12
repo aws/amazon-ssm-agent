@@ -27,7 +27,7 @@ var lock sync.RWMutex
 const (
 	containerMetadataEnvVarV3 = "ECS_CONTAINER_METADATA_URI"
 	containerMetadataEnvVarV4 = "ECS_CONTAINER_METADATA_URI_V4"
-	maxRetries                = 2
+	maxRetries                = 4
 	ecsInstanceType           = "Container"
 
 	// IdentityType is the identity type for ECS

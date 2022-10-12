@@ -82,6 +82,7 @@ func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector
 		}
 
 		// Testing if identity can be assumed
+		log.Infof("Checking if agent identity type %s can be assumed", identityKey)
 		agentIdentity = selector.selectAgentIdentity(selectedIdentityFunc(log, config), identityKey)
 		if agentIdentity != nil {
 			log.Infof("Agent will take identity from %s", identityKey)
