@@ -2,6 +2,7 @@ COPY := cp -p
 GO_BUILD_NOPIE := CGO_ENABLED=0 go build -ldflags "-s -w" -trimpath
 GO_BUILD_PIE := go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -trimpath
 GO_BUILD_STATIC_PIE := go build -ldflags '-linkmode external -s -w -extldflags "-static-pie -Wl,-z,relro,-z,defs"' -buildmode=pie -trimpath  -tags 'osusergo netgo static_build'
+GO_BUILD_DEBUG := go build -gcflags "all=-N -l"
 
 # Default build configuration, can be overridden at build time.
 GOARCH?=$(shell go env GOARCH)
@@ -144,6 +145,13 @@ build-linux: GOARCH=amd64
 build-linux: GOOS=linux
 build-linux: GO_BUILD=$(GO_BUILD_PIE)
 build-linux: build-any-amd64-linux
+
+.PHONY: build-linux-debug
+build-linux-debug: clean pre-release
+build-linux-debug: GOARCH=amd64
+build-linux-debug: GOOS=linux
+build-linux-debug: GO_BUILD=$(GO_BUILD_DEBUG)
+build-linux-debug: build-any-amd64-linux
 
 .PHONY: build-freebsd
 build-freebsd: GOARCH=amd64
