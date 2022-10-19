@@ -296,8 +296,17 @@ func (p *PortPlugin) validateParameters(portParameters PortParameters, config ag
 			// Port forwarding to IMDS, VPC DNS, and local IP address is not allowed
 			hostIPAddress := net.ParseIP(host)
 			for _, address := range append(appConfig.Mgs.DeniedPortForwardingRemoteIPs, dnsAddress...) {
-				if hostIPAddress.Equal(net.ParseIP(address)) {
-					return errors.New(fmt.Sprintf("Forwarding to IP address %s is forbidden.", portParameters.Host))
+				_, network, err := net.ParseCIDR(address)
+				if err != nil {
+					// Not a CIDR
+					if hostIPAddress.Equal(net.ParseIP(address)) {
+						return errors.New(fmt.Sprintf("Forwarding to IP address %s is forbidden.", portParameters.Host))
+					}
+				} else {
+					// CIDR
+					if network.Contains(hostIPAddress) {
+						return errors.New(fmt.Sprintf("Forwarding to IP address %s is forbidden.", portParameters.Host))
+					}
 				}
 			}
 		}
