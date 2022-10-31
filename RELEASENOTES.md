@@ -1,5 +1,14 @@
 Latest
 ===============
+- Added logging when assuming identity
+- Increased retries to ECS metadata endpoint
+- Added linux debug build to makefile
+- Implemented aws sdk logging interface
+- Updated agent minor version to 3.2
+- Added functionality to retrieve agent credentials from Systems Manager on EC2
+
+3.1.1927.0
+===============
 - Update shell for Session Manager on MacOS
 
 3.1.1856.0
