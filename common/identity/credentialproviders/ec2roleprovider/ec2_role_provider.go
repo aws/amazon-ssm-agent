@@ -16,8 +16,13 @@ package ec2roleprovider
 
 import (
 	"fmt"
+	"math/rand"
 	"runtime"
+	"strings"
+	"sync"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -32,15 +37,17 @@ import (
 
 // EC2RoleProvider provides credentials for the agent when on an EC2 instance
 type EC2RoleProvider struct {
-	InnerProviders         *EC2InnerProviders
-	Log                    log.T
-	Config                 *appconfig.SsmagentConfig
-	InstanceInfo           *ssmec2roleprovider.InstanceInfo
-	credentialSource       string
-	SsmEndpoint            string
-	ShareFileLocation      string
-	CredentialProfile      string
-	ShouldShareCredentials bool
+	InnerProviders              *EC2InnerProviders
+	Log                         log.T
+	Config                      *appconfig.SsmagentConfig
+	InstanceInfo                *ssmec2roleprovider.InstanceInfo
+	credentialSource            string
+	SsmEndpoint                 string
+	ShareFileLocation           string
+	CredentialProfile           string
+	ShouldShareCredentials      bool
+	expirationUpdateLock        sync.Mutex
+	currentCredentialExpiration time.Time
 }
 
 // GetInnerProvider gets the role provider that is currently being used for credentials
@@ -65,7 +72,7 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 
 	p.Log.Debug("attempting to retrieve role from Systems Manager")
 	if ssmCredentials, err := p.ssmEc2Credentials(p.SsmEndpoint); err != nil {
-		p.Log.Debugf("failed to connect to Systems Manager with SSM role credentials. v%", err)
+		p.Log.Debugf("failed to connect to Systems Manager with SSM role credentials. %v", err)
 		p.credentialSource = CredentialSourceEC2
 	} else {
 		p.credentialSource = CredentialSourceSSM
@@ -137,16 +144,6 @@ func (p *EC2RoleProvider) ssmEc2Credentials(ssmEndpoint string) (*credentials.Cr
 	return ssmEc2Credentials, nil
 }
 
-// IsExpired wraps the IsExpired method of the current provider
-func (p *EC2RoleProvider) IsExpired() bool {
-	return p.GetInnerProvider().IsExpired()
-}
-
-// ExpiresAt wraps the ExpiresAt method of the current provider
-func (p *EC2RoleProvider) ExpiresAt() time.Time {
-	return p.GetInnerProvider().ExpiresAt()
-}
-
 // ShareFile is the credentials file where the agent should write shared credentials
 func (p *EC2RoleProvider) ShareFile() string {
 	return p.ShareFileLocation
@@ -159,5 +156,42 @@ func (p *EC2RoleProvider) ShareProfile() string {
 
 // SharesCredentials returns true if credentials refresher in core agent should save returned credentials to disk
 func (p *EC2RoleProvider) SharesCredentials() bool {
+
+	// this condition is to make newer workers compatible with older agent
+	// Older core agent does not populate ShareFile and ShareProfile for EC2.
+	runtimeConfigClient := runtimeconfig.NewIdentityRuntimeConfigClient()
+	if configVal, err := runtimeConfigClient.GetConfig(); err == nil {
+		if strings.TrimSpace(configVal.ShareProfile) == "" || strings.TrimSpace(configVal.ShareFile) == "" {
+			p.CredentialProfile = ""
+			p.ShareFileLocation = ""
+			return false
+		}
+	}
+
 	return p.ShouldShareCredentials
+}
+
+// IsExpired wraps the IsExpired method of the current provider
+func (p *EC2RoleProvider) IsExpired() bool {
+	if p.credentialSource == CredentialSourceEC2 {
+		if p.currentCredentialExpiration.Before(time.Now()) {
+			return true
+		}
+		return false
+	}
+	return p.GetInnerProvider().IsExpired()
+}
+
+// ExpiresAt wraps the ExpiresAt method of the current provider
+func (p *EC2RoleProvider) ExpiresAt() time.Time {
+	switch p.credentialSource {
+	case CredentialSourceEC2:
+		// Credential refresher retries every 30 minutes after this change.
+		// Even though credential refresher tries refreshing credential every 30 minutes,
+		// new credentials will be updated only when EC2RoleProvider's window closes and EC2 refreshes HOSM credentials
+		p.currentCredentialExpiration = time.Now().Add(1*time.Hour + time.Duration(rand.Intn(maxCredentialExpiryJitterSeconds))*time.Second)
+	case CredentialSourceSSM:
+		p.currentCredentialExpiration = p.GetInnerProvider().ExpiresAt()
+	}
+	return p.currentCredentialExpiration
 }

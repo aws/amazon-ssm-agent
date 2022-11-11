@@ -23,9 +23,10 @@ import (
 )
 
 const (
-	agentName           = "amazon-ssm-agent"
-	CredentialSourceSSM = "Systems Manager"
-	CredentialSourceEC2 = "EC2"
+	agentName                        = "amazon-ssm-agent"
+	CredentialSourceSSM              = "Systems Manager"
+	CredentialSourceEC2              = "EC2"
+	maxCredentialExpiryJitterSeconds = 300
 )
 
 var (

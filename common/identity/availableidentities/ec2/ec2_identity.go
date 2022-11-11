@@ -19,6 +19,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/service/ssm"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -29,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/sharedprovider"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -97,8 +101,17 @@ func (i *Identity) Credentials() *credentials.Credentials {
 		return i.credentials
 	}
 
-	i.initSharedCreds()
+	// this condition is to make newer workers compatible with older agent
+	// Older core agent does not populate ShareFile and ShareProfile for EC2.
+	// Hence, we use IPR provider instead of Shared Provider when these values are blank
+	if configVal, err := i.runtimeConfigClient.GetConfig(); err == nil {
+		if strings.TrimSpace(configVal.ShareProfile) == "" || strings.TrimSpace(configVal.ShareFile) == "" {
+			// in this case, inner provider will always return IPR
+			return credentials.NewCredentials(i.credentialsProvider.GetInnerProvider())
+		}
+	}
 
+	i.initSharedCreds()
 	return i.credentials
 }
 
@@ -161,7 +174,7 @@ func (i *Identity) Register() error {
 	}
 
 	i.Log.Debug("checking write access before registering")
-	err = updateServerInfo("", "", privateKey, keyType, registration.EC2RegistrationVaultKey)
+	err = updateServerInfo("", "", privateKey, keyType, IdentityType, registration.EC2RegistrationVaultKey)
 	if err != nil {
 		return fmt.Errorf("unable to save registration information. %w\nTry running as sudo/administrator.", err)
 	}
@@ -173,12 +186,21 @@ func (i *Identity) Register() error {
 
 	_, err = i.authRegisterService.RegisterManagedInstance(publicKey, keyType, instanceId, "", "")
 	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			if aerr.Code() == ssm.ErrCodeInstanceAlreadyRegistered {
+				i.Log.Errorf("Instance appears to already be registered. Err: %v", aerr)
+				close(i.registrationReadyChan)
+				return nil
+			}
+
+		}
+
 		return fmt.Errorf("error calling RegisterManagedInstance API: %w", err)
 	}
 
 	backoffConfig.Reset()
 	err = backoffRetry(func() (err error) {
-		return updateServerInfo(instanceId, region, privateKey, keyType, registration.EC2RegistrationVaultKey)
+		return updateServerInfo(instanceId, region, privateKey, keyType, IdentityType, registration.EC2RegistrationVaultKey)
 	}, backoffConfig)
 
 	if err != nil {
@@ -196,9 +218,9 @@ func (i *Identity) Register() error {
 }
 
 func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
-	instanceId := getStoredInstanceId(i.Log, registration.EC2RegistrationVaultKey)
-	privateKey := getStoredPrivateKey(i.Log, registration.EC2RegistrationVaultKey)
-	keyType := getStoredPrivateKeyType(i.Log, registration.EC2RegistrationVaultKey)
+	instanceId := getStoredInstanceId(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
+	privateKey := getStoredPrivateKey(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
+	keyType := getStoredPrivateKeyType(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
 
 	if instanceId == "" || privateKey == "" || keyType == "" {
 		return nil
@@ -214,10 +236,15 @@ func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
 func NewEC2Identity(log log.T) *Identity {
 	awsConfig := &aws.Config{}
 	awsConfig = awsConfig.WithMaxRetries(3)
-	sess, _ := session.NewSession(awsConfig)
+	sess, err := session.NewSession(awsConfig)
+	if err != nil {
+		log.Errorf("Failed to create session with aws config. Err: %v", err)
+		return nil
+	}
+
 	config, err := loadAppConfig(true)
 	if err != nil {
-		log.Errorf("failed to load app config for ec2 identity. Err: %v", err)
+		log.Errorf("Failed to load app config for ec2 identity. Err: %v", err)
 		return nil
 	}
 
@@ -227,6 +254,7 @@ func NewEC2Identity(log log.T) *Identity {
 		Config:                &config,
 		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 		shareLock:             &sync.RWMutex{},
+		runtimeConfigClient:   runtimeconfig.NewIdentityRuntimeConfigClient(),
 	}
 
 	// Ensure IMDS client is initialized before attempting to get instance info
@@ -315,7 +343,6 @@ func (i *Identity) initSharedCreds() {
 	} else {
 		i.credentials = credentials.NewCredentials(shareCredsProvider)
 	}
-
 }
 
 // initNonSharedCreds initializes credentials provider and credentials that do not share credentials via aws credentials file

@@ -20,11 +20,15 @@ import "github.com/aws/amazon-ssm-agent/agent/managedInstances/vault/fsvault"
 var vault fpVault = &fpFsVault{}
 
 type fpVault interface {
-	Retrieve(key string) (data []byte, err error)
-	Store(key string, data []byte) (err error)
+	Retrieve(manifestFileNamePrefix string, key string) (data []byte, err error)
+	Store(manifestFileNamePrefix string, key string, data []byte) (err error)
 }
 
 type fpFsVault struct{}
 
-func (fpFsVault) Retrieve(key string) ([]byte, error) { return fsvault.Retrieve(key) }
-func (fpFsVault) Store(key string, data []byte) error { return fsvault.Store(key, data) }
+func (fpFsVault) Retrieve(manifestFileNamePrefix string, key string) ([]byte, error) {
+	return fsvault.Retrieve(manifestFileNamePrefix, key)
+}
+func (fpFsVault) Store(manifestFileNamePrefix string, key string, data []byte) error {
+	return fsvault.Store(manifestFileNamePrefix, key, data)
+}

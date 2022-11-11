@@ -59,7 +59,10 @@ var ssmSvcOnce sync.Once
 
 var newSsmSvc = ssm.NewService
 var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
-	return ec2.NewEC2Identity(log)
+	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
 }
 
 // UpdateHealthCheck sends the health check information back to the service
@@ -72,7 +75,7 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 	ec2Identity := newEC2Identity(log)
 	var availabilityZone = ""
 	var availabilityZoneId = ""
-	if ec2Identity.IsIdentityEnvironment() {
+	if ec2Identity != nil && ec2Identity.IsIdentityEnvironment() {
 		availabilityZone, _ = ec2Identity.AvailabilityZone()
 		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
 	}

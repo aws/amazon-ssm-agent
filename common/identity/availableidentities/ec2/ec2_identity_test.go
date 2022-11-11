@@ -17,6 +17,9 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	authregistermocks "github.com/aws/amazon-ssm-agent/agent/ssm/authregister/mocks"
@@ -28,6 +31,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
+	"github.com/aws/aws-sdk-go/service/ssm"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -126,21 +130,75 @@ func TestEC2IdentityType_InstanceType(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestEC2IdentityType_Credentials(t *testing.T) {
+func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Success(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeRegion", nil).Once()
 	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
 	client.On("GetMetadata", ec2ServiceDomainResource).Return("SomeServiceDomain", nil).Once()
 	client.On("Region").Return("SomeRegion", nil).Once()
 
+	runtimeConfigClientMocks := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
+	runtimeConfigClientMocks.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, nil)
+
+	ec2RoleProviderMocks := &ec2roleprovidermocks.IEC2RoleProvider{}
+	ec2RoleProviderMocks.On("GetInnerProvider").Return(ec2roleprovidermocks.NewIInnerProvider(t), nil)
+
 	identity := Identity{
 		Log:                 log.NewMockLog(),
 		Client:              client,
-		credentialsProvider: &ec2roleprovidermocks.IEC2RoleProvider{},
+		credentialsProvider: ec2RoleProviderMocks,
 		shareLock:           &sync.RWMutex{},
+		runtimeConfigClient: runtimeConfigClientMocks,
 	}
-
 	assert.NotNil(t, identity.Credentials())
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
+
+	// Shared File is null and Shared File is not null
+	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
+	runtimeConfigVal := runtimeconfig.IdentityRuntimeConfig{ShareFile: "test"}
+	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
+	identity.runtimeConfigClient = runtimeConfigClientMocks
+	assert.NotNil(t, identity.Credentials())
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 2)
+
+	// Shared Profile is not null and Shared File is null
+	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
+	runtimeConfigVal = runtimeconfig.IdentityRuntimeConfig{ShareProfile: "test"}
+	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
+	identity.runtimeConfigClient = runtimeConfigClientMocks
+	assert.NotNil(t, identity.Credentials())
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 3)
+
+	// Shared Profile and Shared File both not null
+	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
+	runtimeConfigVal = runtimeconfig.IdentityRuntimeConfig{ShareProfile: "test", ShareFile: "test"}
+	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
+	identity.runtimeConfigClient = runtimeConfigClientMocks
+	assert.NotNil(t, identity.Credentials())
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 3)
+}
+
+func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigNotPresent_Success(t *testing.T) {
+	client := &mocks.IEC2MdsSdkClientMock{}
+	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeRegion", nil).Once()
+	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
+	client.On("GetMetadata", ec2ServiceDomainResource).Return("SomeServiceDomain", nil).Once()
+	client.On("Region").Return("SomeRegion", nil).Once()
+
+	runtimeConfigClientMocks := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
+	runtimeConfigClientMocks.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, fmt.Errorf("no config found"))
+
+	ec2RoleProviderMocks := &ec2roleprovidermocks.IEC2RoleProvider{}
+	ec2RoleProviderMocks.On("GetInnerProvider").Return(ec2roleprovidermocks.NewIInnerProvider(t), nil)
+	identity := Identity{
+		Log:                 log.NewMockLog(),
+		Client:              client,
+		credentialsProvider: ec2RoleProviderMocks,
+		shareLock:           &sync.RWMutex{},
+		runtimeConfigClient: runtimeConfigClientMocks,
+	}
+	assert.NotNil(t, identity.Credentials())
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 0)
 }
 
 func TestEC2IdentityType_IsIdentityEnvironment(t *testing.T) {
@@ -312,15 +370,18 @@ func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *t
 	client.On("GetMetadata", ec2InstanceIDResource).Return(instanceId, nil).Once()
 	authRegisterService.On("RegisterManagedInstance",
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(instanceId, nil)
-	getStoredPrivateKey = func(log log.T, vaultKey string) string {
+	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return ""
 	}
 
-	getStoredPrivateKeyType = func(log log.T, vaultKey string) string {
+	getStoredPrivateKeyType = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return ""
 	}
 
-	updateServerInfo = func(instanceID, region, privateKey, privateKeyType, vaultKey string) (err error) {
+	updateServerInfo = func(instanceID, region, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return nil
 	}
 
@@ -349,15 +410,18 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 	client := &mocks.IEC2MdsSdkClientMock{}
 	client.On("Region").Return(testRegion, nil).Once()
 	client.On("GetMetadata", ec2InstanceIDResource).Return(testInstanceId, nil).Once()
-	getStoredPrivateKey = func(log log.T, vaultKey string) string {
+	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testPrivateKey
 	}
 
-	getStoredPrivateKeyType = func(log log.T, vaultKey string) string {
+	getStoredPrivateKeyType = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testPrivateKeyType
 	}
 
-	getStoredInstanceId = func(log log.T, vaultKey string) string {
+	getStoredInstanceId = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testInstanceId
 	}
 
@@ -374,4 +438,64 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 	registrationInfo := <-identity.registrationReadyChan
 	assert.Equal(t, testPrivateKey, registrationInfo.PrivateKey)
 	assert.Equal(t, testPrivateKeyType, registrationInfo.KeyType)
+}
+
+// Mock aws error struct
+type awsTestError struct {
+	errCode string
+}
+
+func (a awsTestError) Error() string   { return "" }
+func (a awsTestError) Message() string { return "" }
+func (a awsTestError) OrigErr() error  { return fmt.Errorf("SomeErr") }
+func (a awsTestError) Code() string    { return a.errCode }
+
+func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testing.T) {
+	// Arrange
+	testPrivateKey := "SomePrivateKey"
+	testPrivateKeyType := "SomePrivateKeyType"
+	testInstanceId := ""
+	testRegion := "SomeRegion"
+	client := &mocks.IEC2MdsSdkClientMock{}
+	client.On("Region").Return(testRegion, nil).Once()
+	authRegisterService := &authregistermocks.IClient{}
+	client.On("GetMetadata", ec2InstanceIDResource).Return(testInstanceId, nil).Once()
+
+	authRegisterService.On("RegisterManagedInstance",
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("", &awsTestError{errCode: ssm.ErrCodeInstanceAlreadyRegistered})
+	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
+		return testPrivateKey
+	}
+
+	getStoredPrivateKeyType = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
+		return testPrivateKeyType
+	}
+
+	getStoredInstanceId = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
+		return testInstanceId
+	}
+
+	updateServerInfo = func(instanceID, region, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
+		assert.Equal(t, IdentityType, manifestFileNamePrefix)
+		return nil
+	}
+
+	identity := &Identity{
+		Log:                   log.NewMockLog(),
+		Client:                client,
+		authRegisterService:   authRegisterService,
+		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
+	}
+
+	// Act
+	err := identity.Register()
+
+	// Assert
+	assert.NoError(t, err)
+	registrationInfo, ok := <-identity.registrationReadyChan
+	assert.Nil(t, registrationInfo)
+	assert.False(t, ok)
 }

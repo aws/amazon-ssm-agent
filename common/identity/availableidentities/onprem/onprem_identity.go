@@ -29,12 +29,12 @@ import (
 
 // InstanceID returns the managed instance ID
 func (i *Identity) InstanceID() (string, error) {
-	return i.registrationInfo.InstanceID(i.Log, registration.RegVaultKey), nil
+	return i.registrationInfo.InstanceID(i.Log, "", registration.RegVaultKey), nil
 }
 
 // Region returns the region of the managed instance
 func (i *Identity) Region() (string, error) {
-	return i.registrationInfo.Region(i.Log, registration.RegVaultKey), nil
+	return i.registrationInfo.Region(i.Log, "", registration.RegVaultKey), nil
 }
 
 // AvailabilityZone returns the managed instance availabilityZone
@@ -104,7 +104,7 @@ func (i *Identity) CredentialProvider() credentialproviders.IRemoteProvider {
 
 // IsIdentityEnvironment returns if instance has managed instance registration
 func (i *Identity) IsIdentityEnvironment() bool {
-	return i.registrationInfo.HasManagedInstancesCredentials(i.Log, registration.RegVaultKey)
+	return i.registrationInfo.HasManagedInstancesCredentials(i.Log, "", registration.RegVaultKey)
 }
 
 // IdentityType returns the identity type of the managed instance

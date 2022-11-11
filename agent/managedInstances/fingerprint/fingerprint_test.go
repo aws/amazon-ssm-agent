@@ -378,11 +378,11 @@ type vaultStub struct {
 	retrieveErr error
 }
 
-func (v vaultStub) Store(key string, data []byte) error {
+func (v vaultStub) Store(manifestFileNamePrefix string, key string, data []byte) error {
 	return v.storeErr
 }
 
-func (v vaultStub) Retrieve(key string) ([]byte, error) {
+func (v vaultStub) Retrieve(manifestFileNamePrefix string, key string) ([]byte, error) {
 	return v.data, v.retrieveErr
 }
 

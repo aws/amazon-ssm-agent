@@ -483,7 +483,7 @@ func TestMain_Register_AgentNotInstalled_OverrideNotSet_StartAgentFailed(t *test
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
 
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("SomeInstanceId")
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
 		return registrationMock
 	}
 
@@ -527,7 +527,7 @@ func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideNotSet_StartAge
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
 
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("SomeInstanceId")
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
 		return registrationMock
 	}
 
@@ -565,7 +565,7 @@ func TestMain_Register_AgentNotInstalled_AgentNotRegistered_OverrideNotSet_Faile
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
 
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("")
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("")
 		return registrationMock
 	}
 
@@ -612,7 +612,7 @@ func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_FailedRegis
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
 
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("SomeInstanceId")
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
 		return registrationMock
 	}
 
@@ -667,7 +667,7 @@ func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_FailedToSta
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
 
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("SomeInstanceId")
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
 		return registrationMock
 	}
 
@@ -723,9 +723,9 @@ func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_FailedToGet
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
 
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("SomeInstanceId").Once()
-		registrationMock.On("ReloadInstanceInfo", mock.Anything, mock.Anything).Return()
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("").Once()
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId").Once()
+		registrationMock.On("ReloadInstanceInfo", mock.Anything, "", mock.Anything).Return()
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("").Once()
 		return registrationMock
 	}
 
@@ -780,9 +780,9 @@ func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_Success(t *
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
 
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("SomeInstanceId").Once()
-		registrationMock.On("ReloadInstanceInfo", mock.Anything, mock.Anything).Return()
-		registrationMock.On("InstanceID", mock.Anything, mock.Anything).Return("NewInstanceId").Once()
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId").Once()
+		registrationMock.On("ReloadInstanceInfo", mock.Anything, "", mock.Anything).Return()
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("NewInstanceId").Once()
 		return registrationMock
 	}
 

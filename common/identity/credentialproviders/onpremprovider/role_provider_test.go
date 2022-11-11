@@ -295,9 +295,13 @@ func (r *registrationStub) getErr() error {
 	return err
 }
 
-func (r *registrationStub) InstanceID(log log.T, vaultKey string) string { return r.instanceID }
+func (r *registrationStub) InstanceID(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	return r.instanceID
+}
 
-func (r *registrationStub) Region(log log.T, vaultKey string) string { return r.region }
+func (r *registrationStub) Region(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	return r.region
+}
 
 func (r *registrationStub) InstanceType(log log.T) string { return r.instanceType }
 
@@ -307,9 +311,11 @@ func (r *registrationStub) Fingerprint(log log.T) (string, error) {
 	return r.fingerprint, r.getErr()
 }
 
-func (r *registrationStub) PrivateKey(log log.T, vaultKey string) string { return r.privateKey }
+func (r *registrationStub) PrivateKey(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	return r.privateKey
+}
 
-func (r *registrationStub) PrivateKeyType(log log.T, vaultKey string) string {
+func (r *registrationStub) PrivateKeyType(log log.T, manifestFileNamePrefix, vaultKey string) string {
 	return r.keyType
 }
 
@@ -317,11 +323,11 @@ func (r *registrationStub) GenerateKeyPair() (publicKey, privateKey, keyType str
 	return r.publicKey, r.privateKey, r.keyType, r.getErr()
 }
 
-func (r *registrationStub) UpdatePrivateKey(log log.T, privateKey, privateKeyType, vaultKey string) (err error) {
+func (r *registrationStub) UpdatePrivateKey(log log.T, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
 	return r.getErr()
 }
 
-func (r *registrationStub) ShouldRotatePrivateKey(log.T, string, int, bool, string) (bool, error) {
+func (r *registrationStub) ShouldRotatePrivateKey(log.T, string, int, bool, string, string) (bool, error) {
 	return r.shouldRotate, r.getErr()
 }
 
@@ -329,8 +335,8 @@ func (r *registrationStub) GeneratePublicKey(string) (string, error) {
 	return r.publicKey, r.getErr()
 }
 
-func (r *registrationStub) HasManagedInstancesCredentials(log log.T, vaultKey string) bool {
+func (r *registrationStub) HasManagedInstancesCredentials(log log.T, manifestFileNamePrefix, vaultKey string) bool {
 	return r.hasCreds
 }
 
-func (r *registrationStub) ReloadInstanceInfo(log log.T, vaultKey string) {}
+func (r *registrationStub) ReloadInstanceInfo(log log.T, manifestFileNamePrefix, vaultKey string) {}

@@ -70,11 +70,17 @@ var lookupHost = net.LookupHost
 var getMetadataIdentity = identity.GetMetadataIdentity
 
 var newEC2Identity = func(log log.T, appConfig *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
-	return ec2.NewEC2Identity(log)
+	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
 }
 
 var newECSIdentity = func(log log.T, _ *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
-	return ecs.NewECSIdentity(log)
+	if identityRef := ecs.NewECSIdentity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
 }
 
 // GetSession initializes session based on the type of the port session
@@ -312,11 +318,11 @@ func dnsRoutingAddress(log log.T, appConfig *appconfig.SsmagentConfig) ([]string
 
 	ec2I := newEC2Identity(log, appConfig)
 	ecsI := newECSIdentity(log, nil)
-	if ecsI.IsIdentityEnvironment() {
+	if ecsI != nil && ecsI.IsIdentityEnvironment() {
 		if metadataI, ok := getMetadataIdentity(ecsI); ok {
 			ipaddress, err = metadataI.VpcPrimaryCIDRBlock()
 		}
-	} else if ec2I.IsIdentityEnvironment() {
+	} else if ec2I != nil && ec2I.IsIdentityEnvironment() {
 		if metadataI, ok := getMetadataIdentity(ec2I); ok {
 			ipaddress, err = metadataI.VpcPrimaryCIDRBlock()
 		}

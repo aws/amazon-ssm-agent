@@ -15,7 +15,7 @@
 package vault
 
 type Vault interface {
-	Store(key string, data []byte) (err error)
-	Retrieve(key string) (data []byte, err error)
+	Store(manifestFileNamePrefix string, key string, data []byte) (err error)
+	Retrieve(manifestFileNamePrefix string, key string) (data []byte, err error)
 	Remove(key string) (err error)
 }

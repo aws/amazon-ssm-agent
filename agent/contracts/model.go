@@ -308,3 +308,10 @@ const (
 	// SessionResult represents result sent by session worker to service
 	SessionResult ResultType = "SessionResult"
 )
+
+// StatusComm is a struct that holds channels to pass status
+// between ssmAgentCore go routine and agent's main go routine
+type StatusComm struct {
+	TerminationChan chan struct{}
+	DoneChan        chan struct{}
+}

@@ -17,6 +17,7 @@ package ec2roleprovider
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -24,11 +25,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
-
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -71,6 +70,34 @@ func TestEC2RoleProvider_UpdateEmptyInstanceInformation_Success(t *testing.T) {
 
 	// Assert
 	assert.NoError(t, err)
+}
+
+func TestEC2RoleProvider_IsExpired_DefaultExpirationDate_True(t *testing.T) {
+	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
+	ec2RoleProvider.credentialSource = CredentialSourceEC2
+	isExpired := ec2RoleProvider.IsExpired()
+	assert.True(t, isExpired)
+	assert.Equal(t, ec2RoleProvider.currentCredentialExpiration, time.Time{})
+}
+
+func TestEC2RoleProvider_IsExpired_OldExpirationDate_True(t *testing.T) {
+	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
+	ec2RoleProvider.credentialSource = CredentialSourceEC2
+	oldExpirationDate := time.Now().Add(-2 * time.Hour)
+	ec2RoleProvider.currentCredentialExpiration = oldExpirationDate
+	isExpired := ec2RoleProvider.IsExpired()
+	assert.True(t, isExpired)
+	assert.Equal(t, ec2RoleProvider.currentCredentialExpiration, oldExpirationDate)
+}
+
+func TestEC2RoleProvider_IsExpired_ExpirationDate_False(t *testing.T) {
+	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
+	ec2RoleProvider.credentialSource = CredentialSourceEC2
+	expirationDate := time.Now().Add(5 * time.Second)
+	ec2RoleProvider.currentCredentialExpiration = expirationDate
+	isExpired := ec2RoleProvider.IsExpired()
+	assert.False(t, isExpired)
+	assert.Equal(t, ec2RoleProvider.currentCredentialExpiration, expirationDate)
 }
 
 func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials(t *testing.T) {

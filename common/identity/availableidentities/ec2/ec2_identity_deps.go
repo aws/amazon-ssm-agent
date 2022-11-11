@@ -21,7 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
-
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 )
@@ -70,4 +70,5 @@ type Identity struct {
 	shareLock             *sync.RWMutex
 	registrationReadyChan chan *authregister.RegistrationInfo
 	endpointHelper        endpoint.IEndpointHelper
+	runtimeConfigClient   runtimeconfig.IIdentityRuntimeConfigClient
 }

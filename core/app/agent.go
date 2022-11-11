@@ -16,20 +16,21 @@ package app
 
 import (
 	"runtime"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/core/app/registrar"
-
+	agentcontracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/app/credentialrefresher"
 	reboot "github.com/aws/amazon-ssm-agent/core/app/reboot/model"
+	"github.com/aws/amazon-ssm-agent/core/app/registrar"
 	"github.com/aws/amazon-ssm-agent/core/app/selfupdate"
 	"github.com/aws/amazon-ssm-agent/core/ipc/messagebus"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider"
 )
 
 type CoreAgent interface {
-	Start() error
+	Start(statusChan *agentcontracts.StatusComm) error
 	Stop()
 }
 
@@ -59,11 +60,13 @@ func NewSSMCoreAgent(context context.ICoreAgentContext, messageBus messagebus.IM
 }
 
 // Start the core manager
-func (agent *SSMCoreAgent) Start() error {
+func (agent *SSMCoreAgent) Start(statusChan *agentcontracts.StatusComm) error {
 	log := agent.context.Log()
 
 	log.Infof("amazon-ssm-agent - %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
+	log.Info("Starting Core Agent")
+
 	if agent.registrar != nil {
 		log.Info("registrar detected. Attempting registration")
 		if err := agent.registrar.Start(); err != nil {
@@ -75,10 +78,23 @@ func (agent *SSMCoreAgent) Start() error {
 		return err
 	}
 
-	agent.container.Start()
-	go agent.container.Monitor()
-	agent.selfupdate.Start()
-
+	credentialsReadyChan := agent.credsRefresher.GetCredentialsReadyChan()
+	select {
+	case <-credentialsReadyChan:
+		log.Debug("Agent core module started after receiving credentials")
+		close(credentialsReadyChan)
+		agent.container.Start()
+		go agent.container.Monitor()
+		agent.selfupdate.Start()
+		// removing the below wait time will cause the agent worker to run orphaned when
+		// agent is stopped immediately after start
+		time.Sleep(3 * time.Second)
+		break
+	case <-statusChan.TerminationChan:
+		log.Info("Received stop/termination signal from main routine")
+		break
+	}
+	statusChan.DoneChan <- struct{}{}
 	return nil
 }
 

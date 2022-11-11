@@ -39,9 +39,10 @@ type instanceInfo struct {
 }
 
 var (
-	lock                = &sync.RWMutex{}
-	loadedServerInfo    instanceInfo
-	loadedServerInfoKey string
+	lock                       = sync.RWMutex{}
+	loadedServerInfo           instanceInfo
+	loadedServerInfoKey        string
+	loadedServerManifestPrefix string
 )
 
 const (
@@ -54,26 +55,26 @@ const (
 )
 
 // InstanceID of the managed instance.
-func InstanceID(log log.T, vaultKey string) string {
-	instance := getInstanceInfo(log, vaultKey)
+func InstanceID(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	instance := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 	return instance.InstanceID
 }
 
 // Region of the managed instance.
-func Region(log log.T, vaultKey string) string {
-	instance := getInstanceInfo(log, vaultKey)
+func Region(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	instance := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 	return instance.Region
 }
 
 // PrivateKey of the managed instance.
-func PrivateKey(log log.T, vaultKey string) string {
-	instance := getInstanceInfo(log, vaultKey)
+func PrivateKey(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	instance := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 	return instance.PrivateKey
 }
 
 // PrivateKeyType of the managed instance.
-func PrivateKeyType(log log.T, vaultKey string) string {
-	instance := getInstanceInfo(log, vaultKey)
+func PrivateKeyType(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	instance := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 	return instance.PrivateKeyType
 }
 
@@ -83,24 +84,24 @@ func Fingerprint(log log.T) (string, error) {
 }
 
 // HasManagedInstancesCredentials returns true when the valid registration information is present
-func HasManagedInstancesCredentials(log log.T, vaultKey string) bool {
-	info := getInstanceInfo(log, vaultKey)
+func HasManagedInstancesCredentials(log log.T, manifestFileNamePrefix, vaultKey string) bool {
+	info := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 
 	// check if we need to activate instance
 	return info.PrivateKey != "" && info.Region != "" && info.InstanceID != ""
 }
 
 // UpdatePrivateKey saves the private key into the registration persistence store
-func UpdatePrivateKey(log log.T, privateKey, privateKeyType string, vaultKey string) (err error) {
-	info := getInstanceInfo(log, vaultKey)
+func UpdatePrivateKey(log log.T, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
+	info := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 	info.PrivateKey = privateKey
 	info.PrivateKeyType = privateKeyType
 	info.PrivateKeyCreatedDate = time.Now().Format(defaultDateStringFormat)
-	return updateServerInfo(info, vaultKey)
+	return updateServerInfo(info, "", vaultKey)
 }
 
 // ShouldRotatePrivateKey returns true if serviceSaysRotate or private key has surpassed privateKeyMaxDaysAge
-func ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool, vaultKey string) (bool, error) {
+func ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool, manifestFileNamePrefix, vaultKey string) (bool, error) {
 	// only one executable should rotate private key to reduce chances of race condition
 	if !strings.HasPrefix(filepath.Base(os.Args[0]), executableToRotateKey) {
 		return false, nil
@@ -115,7 +116,7 @@ func ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyM
 	if privateKeyMaxDaysAge <= 0 {
 		return false, nil
 	}
-	info := getInstanceInfo(log, vaultKey)
+	info := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 
 	keyAgeInDays := defaultPrivateKeyAgeInDays
 	if info.PrivateKeyCreatedDate != "" {
@@ -142,7 +143,7 @@ func GeneratePublicKey(privateKey string) (publicKey string, err error) {
 }
 
 // UpdateServerInfo saves the instance info into the registration persistence store
-func UpdateServerInfo(instanceID, region, privateKey, privateKeyType, vaultKey string) (err error) {
+func UpdateServerInfo(instanceID, region, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
 	info := instanceInfo{
 		InstanceID:            instanceID,
 		Region:                region,
@@ -151,7 +152,7 @@ func UpdateServerInfo(instanceID, region, privateKey, privateKeyType, vaultKey s
 		PrivateKeyCreatedDate: time.Now().Format(defaultDateStringFormat),
 	}
 
-	return updateServerInfo(info, vaultKey)
+	return updateServerInfo(info, manifestFileNamePrefix, vaultKey)
 }
 
 // GenerateKeyPair generate a new keypair
@@ -177,37 +178,38 @@ func GenerateKeyPair() (publicKey, privateKey, keyType string, err error) {
 	return
 }
 
-func updateServerInfo(info instanceInfo, vaultKey string) (err error) {
+func updateServerInfo(info instanceInfo, manifestFileNamePrefix, vaultKey string) (err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
 	var data []byte
 	if data, err = json.Marshal(info); err != nil {
-		return fmt.Errorf("Failed to marshal instance info. %v", err)
+		return fmt.Errorf("failed to marshal instance info. %v", err)
 	}
 
 	//call vault apis here and update the refId
-	if err = vault.Store(vaultKey, data); err != nil {
-		return fmt.Errorf("Failed to store instance info in vault. %v", err)
+	if err = vault.Store(manifestFileNamePrefix, vaultKey, data); err != nil {
+		return fmt.Errorf("failed to store instance info in vault. %v", err)
 	}
 
 	loadedServerInfo = info
 	loadedServerInfoKey = vaultKey
+	loadedServerManifestPrefix = manifestFileNamePrefix
 	return
 }
 
-func loadServerInfo(vaultKey string) (loadErr error) {
+func loadServerInfo(manifestFileNamePrefix, vaultKey string) (loadErr error) {
 	lock.RLock()
 	defer lock.RUnlock()
 
 	var info instanceInfo = instanceInfo{}
 
-	if !vault.IsManifestExists() {
+	if !vault.IsManifestExists(manifestFileNamePrefix) {
 		loadedServerInfo = info
 		return nil
 	}
 
-	if d, err := vault.Retrieve(vaultKey); err != nil {
+	if d, err := vault.Retrieve(manifestFileNamePrefix, vaultKey); err != nil {
 		return fmt.Errorf("Failed to load instance info from vault. %v", err)
 	} else {
 		if err = json.Unmarshal(d, &info); err != nil {
@@ -217,22 +219,23 @@ func loadServerInfo(vaultKey string) (loadErr error) {
 
 	loadedServerInfo = info
 	loadedServerInfoKey = vaultKey
+	loadedServerManifestPrefix = manifestFileNamePrefix
 	return nil
 }
 
-func getInstanceInfo(log log.T, vaultKey string) instanceInfo {
-	if loadedServerInfo.InstanceID == "" || loadedServerInfoKey != vaultKey {
-		if err := loadServerInfo(vaultKey); err != nil {
-			log.Warnf("error while loading server info", err)
+func getInstanceInfo(log log.T, manifestFileNamePrefix, vaultKey string) instanceInfo {
+	if loadedServerInfo.InstanceID == "" || loadedServerManifestPrefix != manifestFileNamePrefix || loadedServerInfoKey != vaultKey {
+		if err := loadServerInfo(manifestFileNamePrefix, vaultKey); err != nil {
+			log.Warnf("Error while loading server info %v", err)
 		}
 	}
 
 	return loadedServerInfo
 }
 
-func ReloadInstanceInfo(log log.T, vaultKey string) {
-	if err := loadServerInfo(vaultKey); err != nil {
-		log.Warnf("error while loading server info", err)
+func ReloadInstanceInfo(log log.T, manifestFileNamePrefix, vaultKey string) {
+	if err := loadServerInfo(manifestFileNamePrefix, vaultKey); err != nil {
+		log.Warnf("Error while loading server info %v", err)
 	}
 }
 
@@ -242,39 +245,39 @@ func NewOnpremRegistrationInfo() IOnpremRegistrationInfo {
 }
 
 type IOnpremRegistrationInfo interface {
-	InstanceID(log.T, string) string
-	Region(log.T, string) string
-	PrivateKey(log.T, string) string
-	PrivateKeyType(log.T, string) string
+	InstanceID(log.T, string, string) string
+	Region(log.T, string, string) string
+	PrivateKey(log.T, string, string) string
+	PrivateKeyType(log.T, string, string) string
 	Fingerprint(log.T) (string, error)
 	GenerateKeyPair() (string, string, string, error)
-	UpdatePrivateKey(log.T, string, string, string) error
-	HasManagedInstancesCredentials(log.T, string) bool
+	UpdatePrivateKey(log.T, string, string, string, string) error
+	HasManagedInstancesCredentials(log.T, string, string) bool
 	GeneratePublicKey(string) (string, error)
-	ShouldRotatePrivateKey(log.T, string, int, bool, string) (bool, error)
-	ReloadInstanceInfo(log log.T, string2 string)
+	ShouldRotatePrivateKey(log.T, string, int, bool, string, string) (bool, error)
+	ReloadInstanceInfo(log.T, string, string)
 }
 
 type onpremRegistation struct{}
 
 // InstanceID returns the managed instance ID
-func (onpremRegistation) InstanceID(log log.T, vaultKey string) string {
-	return InstanceID(log, vaultKey)
+func (onpremRegistation) InstanceID(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	return InstanceID(log, manifestFileNamePrefix, vaultKey)
 }
 
 // Region returns the managed instance region
-func (onpremRegistation) Region(log log.T, vaultKey string) string {
-	return Region(log, vaultKey)
+func (onpremRegistation) Region(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	return Region(log, manifestFileNamePrefix, vaultKey)
 }
 
 // PrivateKey returns the managed instance PrivateKey
-func (onpremRegistation) PrivateKey(log log.T, vaultKey string) string {
-	return PrivateKey(log, vaultKey)
+func (onpremRegistation) PrivateKey(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	return PrivateKey(log, manifestFileNamePrefix, vaultKey)
 }
 
 // PrivateKeyType returns the managed instance PrivateKey
-func (onpremRegistation) PrivateKeyType(log log.T, vaultKey string) string {
-	return PrivateKeyType(log, vaultKey)
+func (onpremRegistation) PrivateKeyType(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	return PrivateKeyType(log, manifestFileNamePrefix, vaultKey)
 }
 
 // Fingerprint returns the managed instance fingerprint
@@ -286,18 +289,18 @@ func (onpremRegistation) GenerateKeyPair() (publicKey, privateKey, keyType strin
 }
 
 // UpdatePrivateKey saves the private key into the registration persistence store
-func (onpremRegistation) UpdatePrivateKey(log log.T, privateKey, privateKeyType string, vaultKey string) (err error) {
-	return UpdatePrivateKey(log, privateKey, privateKeyType, vaultKey)
+func (onpremRegistation) UpdatePrivateKey(log log.T, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
+	return UpdatePrivateKey(log, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey)
 }
 
 // HasManagedInstancesCredentials returns if the instance has registration
-func (onpremRegistation) HasManagedInstancesCredentials(log log.T, vaultKey string) bool {
-	return HasManagedInstancesCredentials(log, vaultKey)
+func (onpremRegistation) HasManagedInstancesCredentials(log log.T, manifestFileNamePrefix, vaultKey string) bool {
+	return HasManagedInstancesCredentials(log, manifestFileNamePrefix, vaultKey)
 }
 
 // ShouldRotatePrivateKey returns true of the age of the private key is greater or equal than argument.
-func (onpremRegistation) ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool, vaultKey string) (bool, error) {
-	return ShouldRotatePrivateKey(log, executableToRotateKey, privateKeyMaxDaysAge, serviceSaysRotate, vaultKey)
+func (onpremRegistation) ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool, manifestFileNamePrefix, vaultKey string) (bool, error) {
+	return ShouldRotatePrivateKey(log, executableToRotateKey, privateKeyMaxDaysAge, serviceSaysRotate, manifestFileNamePrefix, vaultKey)
 }
 
 // GeneratePublicKey generate the public key of a provided private key
@@ -306,6 +309,6 @@ func (onpremRegistation) GeneratePublicKey(privateKey string) (string, error) {
 }
 
 // ReloadInstanceInfo reloads instance info from disk
-func (onpremRegistation) ReloadInstanceInfo(log log.T, vaultKey string) {
-	ReloadInstanceInfo(log, vaultKey)
+func (onpremRegistation) ReloadInstanceInfo(log log.T, manifestFileNamePrefix string, vaultKey string) {
+	ReloadInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 }

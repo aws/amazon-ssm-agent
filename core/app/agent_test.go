@@ -19,6 +19,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	contextmocks "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
 	refresherMocks "github.com/aws/amazon-ssm-agent/core/app/credentialrefresher/mocks"
@@ -50,7 +51,6 @@ func (suite *AgentTestSuite) SetupTest() {
 	suite.mockCredentialRefresher = &refresherMocks.ICredentialRefresher{}
 	suite.mockIdentity = &MockIdentity{}
 	suite.mockInnerIdentity = &MockInnerIdentityRegistrar{}
-
 	suite.coreAgent = &SSMCoreAgent{
 		context:        suite.context,
 		container:      suite.mockconatiner,
@@ -69,6 +69,7 @@ func TestAgentTestSuite(t *testing.T) {
 
 // TestAgentStart tests that agent starts the core manager when it starts
 func (suite *AgentTestSuite) TestAgentStart() {
+	credentialsReadyChan := make(chan struct{}, 1)
 	suite.mockconatiner.On("Monitor").Return()
 	suite.mockconatiner.On("Start").Return([]error{})
 	suite.mockselfupdate.On("Start").Return()
@@ -77,13 +78,24 @@ func (suite *AgentTestSuite) TestAgentStart() {
 	suite.mockIdentity.On("GetInner").Return(suite.mockInnerIdentity)
 	suite.mockInnerIdentity.On("Register").Return()
 
-	suite.coreAgent.Start()
-	time.Sleep(10 * time.Millisecond)
+	credentialsReadyChan <- struct{}{}
+	suite.mockCredentialRefresher.On("GetCredentialsReadyChan").Return(credentialsReadyChan)
 
+	statusComm := &contracts.StatusComm{
+		TerminationChan: make(chan struct{}, 1),
+		DoneChan:        make(chan struct{}, 1),
+	}
+	suite.coreAgent.Start(statusComm)
+	time.Sleep(10 * time.Millisecond)
+	suite.Equal(len(statusComm.DoneChan), 1)
+	suite.NotNil(<-statusComm.DoneChan)
+	time.Sleep(10 * time.Millisecond)
+	suite.Equal(len(statusComm.DoneChan), 0)
 	suite.mockconatiner.AssertExpectations(suite.T())
 }
 
 func (suite *AgentTestSuite) TestAgentStart_WithStartWorkerError() {
+	credentialsReadyChan := make(chan struct{}, 1)
 	suite.mockconatiner.On("Monitor").Return()
 	suite.mockconatiner.On("Start").Return(
 		[]error{fmt.Errorf("test1"), fmt.Errorf("test2")})
@@ -93,9 +105,19 @@ func (suite *AgentTestSuite) TestAgentStart_WithStartWorkerError() {
 	suite.mockIdentity.On("GetInner").Return(suite.mockInnerIdentity)
 	suite.mockInnerIdentity.On("Register").Return()
 
-	suite.coreAgent.Start()
-	time.Sleep(10 * time.Millisecond)
+	credentialsReadyChan <- struct{}{}
+	suite.mockCredentialRefresher.On("GetCredentialsReadyChan").Return(credentialsReadyChan)
 
+	statusComm := &contracts.StatusComm{
+		TerminationChan: make(chan struct{}, 1),
+		DoneChan:        make(chan struct{}, 1),
+	}
+	suite.coreAgent.Start(statusComm)
+	time.Sleep(10 * time.Millisecond)
+	suite.Equal(len(statusComm.DoneChan), 1)
+	suite.NotNil(<-statusComm.DoneChan)
+	time.Sleep(10 * time.Millisecond)
+	suite.Equal(len(statusComm.DoneChan), 0)
 	suite.mockconatiner.AssertExpectations(suite.T())
 }
 
@@ -107,9 +129,31 @@ func (suite *AgentTestSuite) TestAgentStart_WithCredentialRefresherError() {
 	suite.context.On("Identity").Return(suite.mockIdentity)
 	suite.mockIdentity.On("GetInner").Return(suite.mockInnerIdentity)
 	suite.mockInnerIdentity.On("Register").Return()
-
-	suite.coreAgent.Start()
+	statusComm := &contracts.StatusComm{
+		TerminationChan: make(chan struct{}, 1),
+		DoneChan:        make(chan struct{}, 1),
+	}
+	suite.coreAgent.Start(statusComm)
 	time.Sleep(10 * time.Millisecond)
+	suite.Equal(len(statusComm.DoneChan), 0)
+	suite.mockCredentialRefresher.AssertExpectations(suite.T())
+}
 
+func (suite *AgentTestSuite) TestAgentStart_StopsModules_WhenSignalledToTerminate() {
+	credentialsReadyChan := make(chan struct{}, 1)
+	suite.mockCredentialRefresher.On("Start").Return(nil)
+	suite.context.On("Identity").Return(suite.mockIdentity)
+	suite.mockIdentity.On("GetInner").Return(suite.mockInnerIdentity)
+	suite.mockInnerIdentity.On("Register").Return()
+	suite.mockCredentialRefresher.On("GetCredentialsReadyChan").Return(credentialsReadyChan)
+	statusComm := &contracts.StatusComm{
+		TerminationChan: make(chan struct{}, 1),
+		DoneChan:        make(chan struct{}, 1),
+	}
+	go suite.coreAgent.Start(statusComm)
+	statusComm.TerminationChan <- struct{}{}
+	time.Sleep(10 * time.Millisecond)
+	suite.Equal(len(statusComm.DoneChan), 1)
+	suite.NotNil(<-statusComm.DoneChan)
 	suite.mockCredentialRefresher.AssertExpectations(suite.T())
 }

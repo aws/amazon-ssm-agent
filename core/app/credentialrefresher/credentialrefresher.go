@@ -59,6 +59,7 @@ var statusCodes = map[int]bool{
 type ICredentialRefresher interface {
 	Start() error
 	Stop()
+	GetCredentialsReadyChan() chan struct{}
 }
 
 type credentialsRefresher struct {
@@ -122,20 +123,23 @@ func (c *credentialsRefresher) durationUntilRefresh() time.Duration {
 	rotateBeforeExpiryDuration := credentialsDuration / 2
 
 	rotateAtTime := expiresAt.Add(-rotateBeforeExpiryDuration)
-
-	return rotateAtTime.Sub(timeNow)
+	rotateDuration := rotateAtTime.Sub(timeNow)
+	c.log.Infof("Next credential rotation will be in %v minutes", rotateDuration.Minutes())
+	return rotateDuration
 }
 
 func (c *credentialsRefresher) Start() error {
 	var err error
 	credentialProvider, ok := identity.GetRemoteProvider(c.agentIdentity)
 	if !ok {
-		c.log.Infof("identity does not require credential refresher")
+		c.log.Info("Identity does not require credential refresher")
+		c.sendCredentialsReadyMessage()
 		return nil
 	}
 
 	if !credentialProvider.SharesCredentials() {
-		c.log.Infof("identity does not want core agent to rotate credentials")
+		c.log.Info("Identity does not want core agent to rotate credentials")
+		c.sendCredentialsReadyMessage()
 		return nil
 	}
 
@@ -161,9 +165,6 @@ func (c *credentialsRefresher) Start() error {
 
 	go c.credentialRefresherRoutine()
 
-	// Block until credentials are ready
-	<-c.credentialsReadyChan
-
 	c.isCredentialRefresherRunning = true
 	c.log.Infof("credentialRefresher has started")
 
@@ -175,14 +176,19 @@ func (c *credentialsRefresher) Stop() {
 		return
 	}
 
+	c.log.Info("Sending credential refresher stop signal")
 	c.stopCredentialRefresherChan <- struct{}{}
 	c.isCredentialRefresherRunning = false
 }
 
+func (c *credentialsRefresher) GetCredentialsReadyChan() chan struct{} {
+	return c.credentialsReadyChan
+}
+
 func (c *credentialsRefresher) sendCredentialsReadyMessage() {
 	c.credsReadyOnce.Do(func() {
-		c.log.Flush()
 		c.credentialsReadyChan <- struct{}{}
+		c.log.Flush()
 	})
 }
 
@@ -272,22 +278,24 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 	}
 
 	if c.identityRuntimeConfig.CredentialsExpiresAt.After(c.getCurrentTimeFunc()) {
-		c.log.Infof("Credentials exist and have not expired, sending ready message")
+		c.log.Info("Credentials exist and have not expired, sending ready message")
 		c.sendCredentialsReadyMessage()
 	}
 
-	c.log.Infof("Starting credentials refresher loop")
+	c.log.Info("Starting credentials refresher loop")
 	for {
 		select {
 		case <-c.stopCredentialRefresherChan:
-			c.log.Infof("Stopping credentials refresher")
+			c.log.Info("Stopping credentials refresher")
+			c.log.Flush()
 			return
 		case <-c.timeAfterFunc(c.durationUntilRefresh()):
-			c.log.Debugf("Calling Retrieve on credentials provider")
+			c.log.Debug("Calling Retrieve on credentials provider")
 			creds, stopped := c.retrieveCredsWithRetry()
 			credentialsRetrievedAt := c.getCurrentTimeFunc()
 			if stopped {
-				c.log.Infof("Stopping credentials refresher")
+				c.log.Info("Stopping credentials refresher")
+				c.log.Flush()
 				return
 			}
 
@@ -297,7 +305,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 
 			// If failed, try once more with force
 			if err != nil {
-				c.log.Warnf("Failed to write credentials to disk, attempting force write")
+				c.log.Warn("Failed to write credentials to disk, attempting force write")
 				err = storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken, c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile, true)
 			}
 
@@ -307,7 +315,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 				continue
 			}
 
-			c.log.Debugf("Successfully stored credentials, writing runtime configuration with updated expiration time")
+			c.log.Debug("Successfully stored credentials, writing runtime configuration with updated expiration time")
 			configCopy := c.identityRuntimeConfig
 			configCopy.CredentialsRetrievedAt = credentialsRetrievedAt
 			configCopy.CredentialsExpiresAt = c.expirer.ExpiresAt()

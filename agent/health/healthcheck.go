@@ -54,7 +54,10 @@ const (
 var healthModule *HealthCheck
 
 var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
-	return ec2.NewEC2Identity(log)
+	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
 }
 
 // AgentState enumerates active and passive agentMode
@@ -110,7 +113,7 @@ func (h *HealthCheck) updateHealth() {
 
 	var availabilityZone = ""
 	var availabilityZoneId = ""
-	if ec2Identity.IsIdentityEnvironment() {
+	if ec2Identity != nil && ec2Identity.IsIdentityEnvironment() {
 		availabilityZone, _ = ec2Identity.AvailabilityZone()
 		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
 	}

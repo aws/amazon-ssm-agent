@@ -117,7 +117,7 @@ func main() {
 		log.Info("Verified agent is installed")
 
 		registrationInfo := getRegistrationInfo()
-		instanceId := registrationInfo.InstanceID(log, registration.RegVaultKey)
+		instanceId := registrationInfo.InstanceID(log, "", registration.RegVaultKey)
 
 		if instanceId != "" {
 			log.Infof("Agent already registered with instance id %s", instanceId)
@@ -149,8 +149,8 @@ func main() {
 		}
 
 		log.Infof("Successfully started agent, reloading registration info")
-		registrationInfo.ReloadInstanceInfo(log, registration.RegVaultKey)
-		instanceId = registrationInfo.InstanceID(log, registration.RegVaultKey)
+		registrationInfo.ReloadInstanceInfo(log, "", registration.RegVaultKey)
+		instanceId = registrationInfo.InstanceID(log, "", registration.RegVaultKey)
 		if instanceId == "" {
 			osExit(1, log, "Failed to get new instance id from registration info after registration")
 		} else {

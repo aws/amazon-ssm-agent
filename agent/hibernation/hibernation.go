@@ -58,7 +58,7 @@ const (
 
 // NewHibernateMode creates an object of type NewHibernateMode
 func NewHibernateMode(healthModule health.IHealthCheck, context context.T) *Hibernate {
-	context.Log().Debug("Starting agent hibernate mode. Switching log to minimal logging...")
+	context.Log().Debug("Initializing agent hibernate mode. Switching log to minimal logging...")
 	return &Hibernate{
 		healthModule:        healthModule,
 		currentMode:         health.Passive,

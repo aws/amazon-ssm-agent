@@ -76,6 +76,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
+				log: log.NewMockLog(),
 			},
 			time.Duration(0),
 		},
@@ -88,6 +89,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
+				log: log.NewMockLog(),
 			},
 			time.Duration(0),
 		},
@@ -101,6 +103,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
+				log: log.NewMockLog(),
 			},
 			time.Duration(0),
 		},
@@ -114,6 +117,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
+				log: log.NewMockLog(),
 			},
 			time.Minute*2 + time.Second*30,
 		},

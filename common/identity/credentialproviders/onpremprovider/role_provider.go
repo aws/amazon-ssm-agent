@@ -65,7 +65,7 @@ func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info re
 		}
 	}
 
-	provider.initializeClient(info.PrivateKey(log, registration.RegVaultKey))
+	provider.initializeClient(info.PrivateKey(log, "", registration.RegVaultKey))
 	return provider
 }
 
@@ -124,7 +124,7 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 		return emptyCredential, err
 	}
 
-	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.executableToRotateKey, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair, registration.RegVaultKey)
+	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.executableToRotateKey, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair, "", registration.RegVaultKey)
 	if err != nil {
 		m.log.Warnf("Failed to check if private key should be rotated: %v", err)
 	} else if shouldRotate {
@@ -160,8 +160,8 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponentialBackoff *backoff.ExponentialBackOff) error {
 	m.log.Infof("Attempting to rotate private key")
 
-	oldPrivateKey := m.registrationInfo.PrivateKey(m.log, registration.RegVaultKey)
-	oldKeyType := m.registrationInfo.PrivateKeyType(m.log, registration.RegVaultKey)
+	oldPrivateKey := m.registrationInfo.PrivateKey(m.log, "", registration.RegVaultKey)
+	oldKeyType := m.registrationInfo.PrivateKeyType(m.log, "", registration.RegVaultKey)
 	oldPublicKey, err := m.registrationInfo.GeneratePublicKey(oldPrivateKey)
 	if err != nil {
 		m.log.Warnf("Failed to generate old public key: %v", err)
@@ -213,7 +213,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 
 		if err != nil {
 			m.log.Warnf("Unable to verify neither new nor old key, rolling back private key change")
-			m.initializeClient(m.registrationInfo.PrivateKey(m.log, registration.RegVaultKey))
+			m.initializeClient(m.registrationInfo.PrivateKey(m.log, "", registration.RegVaultKey))
 			return err
 		}
 
@@ -225,7 +225,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 
 	// New key was successfully updated in service, trying to save new key to disk
 	_ = backoffRetry(func() error {
-		err = m.registrationInfo.UpdatePrivateKey(m.log, newPrivateKey, newKeyType, registration.RegVaultKey)
+		err = m.registrationInfo.UpdatePrivateKey(m.log, newPrivateKey, newKeyType, "", registration.RegVaultKey)
 		return err
 	}, exponentialBackoff)
 
@@ -248,7 +248,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 
 		m.log.Warn("Successfully rolled back remote key, and recovered registration")
 		m.initializeClient(oldPrivateKey)
-		return fmt.Errorf("Failed to save new private key to disk")
+		return fmt.Errorf("failed to save new private key to disk")
 	}
 
 	m.log.Info("Successfully rotated private key")
@@ -276,8 +276,8 @@ func (m *onpremCredentialsProvider) SharesCredentials() bool {
 
 // Assigning function to variable to be able to mock out during tests
 var createNewClient = func(m *onpremCredentialsProvider, privateKey string) authtokenrequest.IClient {
-	instanceID := m.registrationInfo.InstanceID(m.log, registration.RegVaultKey)
-	region := m.registrationInfo.Region(m.log, registration.RegVaultKey)
+	instanceID := m.registrationInfo.InstanceID(m.log, "", registration.RegVaultKey)
+	region := m.registrationInfo.Region(m.log, "", registration.RegVaultKey)
 
 	return rsaauth.NewRsaClient(m.log, m.config, instanceID, region, privateKey)
 }

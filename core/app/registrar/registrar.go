@@ -56,6 +56,7 @@ func NewRetryableRegistrar(context context.ICoreAgentContext) *RetryableRegistra
 }
 
 func (r *RetryableRegistrar) Start() error {
+	r.log.Info("Starting registrar module")
 	go r.RegisterWithRetry()
 	r.isRegistrarRunning = true
 	// Block until registration attempted at least once
@@ -105,7 +106,9 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 
 		select {
 		case <-r.stopRegistrarChan:
+			r.log.Info("Stopping registrar")
 			r.isRegistrarRunning = false
+			r.log.Flush()
 			return
 		case <-r.timeAfterFunc(sleepDuration):
 		}
@@ -114,8 +117,11 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 
 func (r *RetryableRegistrar) Stop() {
 	if !r.isRegistrarRunning {
+		r.log.Info("Registrar is already stopped")
+		r.log.Flush()
 		return
 	}
 
+	r.log.Info("Sending signal to stop registrar")
 	r.stopRegistrarChan <- struct{}{}
 }

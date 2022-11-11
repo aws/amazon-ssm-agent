@@ -70,12 +70,82 @@ func TestSuite(t *testing.T) {
 	removeErrorRemoveDataTest(t)
 }
 
+func TestIsManifestExists(t *testing.T) {
+	testCases := []struct {
+		testName                  string
+		manifestExistsOnFile      bool
+		manifestFileNamePrefix    string
+		initializedManifestPrefix string
+		manifestInMemory          map[string]string
+		expectedResult            bool
+	}{
+		{
+			testName:                  "TestManifestExists_WhenAlternateManifestCached_AndManifestNotOnDisk_ReturnsFalse",
+			manifestExistsOnFile:      false,
+			manifestFileNamePrefix:    "EC2",
+			initializedManifestPrefix: "",
+			manifestInMemory:          map[string]string{"InstanceId": "i-example123"},
+			expectedResult:            false,
+		},
+		{
+			testName:                  "TestManifestExists_WhenAlternateManifestCached_AndManifestIsOnDisk_ReturnsTrue",
+			manifestExistsOnFile:      true,
+			manifestFileNamePrefix:    "EC2",
+			initializedManifestPrefix: "",
+			manifestInMemory:          map[string]string{},
+			expectedResult:            true,
+		},
+		{
+			testName:                  "TestManifestExists_WhenSameManifestIsCached_AndManifestNotOnDisk_ReturnsTrue",
+			manifestExistsOnFile:      false,
+			manifestFileNamePrefix:    "",
+			initializedManifestPrefix: "",
+			manifestInMemory:          map[string]string{"InstanceId": "i-example123"},
+			expectedResult:            true,
+		},
+		{
+			testName:                  "TestManifestExists_WhenSameManifestIsCached_AndManifestOnDisk_ReturnsTrue",
+			manifestExistsOnFile:      true,
+			manifestFileNamePrefix:    "",
+			initializedManifestPrefix: "",
+			manifestInMemory:          map[string]string{"InstanceId": "i-example123"},
+			expectedResult:            true,
+		},
+		{
+			testName:                  "TestManifestExists_WhenNoManifestContentInMemory_AndNoManifestOnDisk_ReturnsFalse",
+			manifestExistsOnFile:      false,
+			manifestFileNamePrefix:    "EC2",
+			initializedManifestPrefix: "EC2",
+			manifestInMemory:          map[string]string{},
+			expectedResult:            false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.testName, func(t *testing.T) {
+			// Arrange
+			initializedManifestPrefix = testCase.initializedManifestPrefix
+			manifest = testCase.manifestInMemory
+			manifestPath := getManifestPath(testCase.manifestFileNamePrefix)
+			fsMock := &fsvFileSystemMock{}
+			fsMock.On("Exists", manifestPath).Return(testCase.manifestExistsOnFile).Repeatability = 0
+			fs = fsMock
+
+			// Act
+			result := IsManifestExists(testCase.manifestFileNamePrefix)
+
+			// Assert
+			assert.Equal(t, testCase.expectedResult, result)
+		})
+	}
+}
+
 func storeErrorEnsureInitTest(t *testing.T) {
 	// arrange
-	ensureInitialized = func() error { return errors.New("err") }
+	ensureInitialized = func(manifestFileNamePrefix string) error { return errors.New("err") }
 
 	// act
-	err := Store(key, data)
+	err := Store("", key, data)
 
 	// assert
 	assert.Error(t, err)
@@ -93,13 +163,13 @@ func store(t *testing.T) {
 	fs = fsMock
 
 	smCalled := false
-	saveManifest = func() error {
+	saveManifest = func(manifestFileNamePrefix string) error {
 		smCalled = true
 		return nil
 	}
 
 	// act
-	err := Store(key, data)
+	err := Store("", key, data)
 
 	// assert
 	assert.NoError(t, err)
@@ -120,7 +190,7 @@ func storeErrorStoreDataTest(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := Store(key, data)
+	err := Store("", key, data)
 
 	// assert
 	assert.Error(t, err)
@@ -139,10 +209,10 @@ func storeErrorSaveManifestTest(t *testing.T) {
 	fsMock.On("HardenedWriteFile", storePath, data).Return(nil)
 	fs = fsMock
 
-	saveManifest = func() error { return errors.New("err") }
+	saveManifest = func(manifestFileNamePrefix string) error { return errors.New("err") }
 
 	// act
-	err := Store(key, data)
+	err := Store("", key, data)
 
 	// assert
 	assert.Error(t, err)
@@ -165,7 +235,7 @@ func retrieve(t *testing.T) {
 	fs = fsMock
 
 	// act
-	d, err := Retrieve(key)
+	d, err := Retrieve("", key)
 
 	// assert
 	assert.NoError(t, err)
@@ -182,7 +252,7 @@ func retrieveErrorNotExists(t *testing.T) {
 	manifest = map[string]string{}
 
 	// act
-	d, err := Retrieve(key)
+	d, err := Retrieve("", key)
 
 	// assert
 	assert.Error(t, err)
@@ -194,10 +264,10 @@ func retrieveErrorNotExists(t *testing.T) {
 
 func retrieveErrorEnsureInitTest(t *testing.T) {
 	// arrange
-	ensureInitialized = func() error { return errors.New("err") }
+	ensureInitialized = func(manifestFileNamePrefix string) error { return errors.New("err") }
 
 	// act
-	_, err := Retrieve(key)
+	_, err := Retrieve("", key)
 
 	// assert
 	assert.Error(t, err)
@@ -216,7 +286,7 @@ func retrieveErrorFileMissingTest(t *testing.T) {
 	fs = fsMock
 
 	// act
-	_, err := Retrieve(key)
+	_, err := Retrieve("", key)
 
 	// assert
 	assert.Error(t, err)
@@ -237,7 +307,7 @@ func retrieveErrorReadDataTest(t *testing.T) {
 	fs = fsMock
 
 	// act
-	_, err := Retrieve(key)
+	_, err := Retrieve("", key)
 
 	// assert
 	assert.Error(t, err)
@@ -253,7 +323,7 @@ func remove(t *testing.T) {
 	manifest = map[string]string{key: storePath}
 
 	smCalled := false
-	saveManifest = func() error {
+	saveManifest = func(manifestFileNamePrefix string) error {
 		smCalled = true
 		return nil
 	}
@@ -263,7 +333,7 @@ func remove(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := Remove(key)
+	err := Remove("", key)
 
 	// assert
 	assert.NoError(t, err)
@@ -282,7 +352,7 @@ func removeNotExists(t *testing.T) {
 	manifest = map[string]string{}
 
 	// act
-	err := Remove(key)
+	err := Remove("", key)
 
 	// assert
 	assert.NoError(t, err)
@@ -293,10 +363,10 @@ func removeNotExists(t *testing.T) {
 
 func removeErrorEnsureInitTest(t *testing.T) {
 	// arrange
-	ensureInitialized = func() error { return errors.New("err") }
+	ensureInitialized = func(manifestFileNamePrefix string) error { return errors.New("err") }
 
 	// act
-	err := Remove(key)
+	err := Remove("", key)
 
 	// assert
 	assert.Error(t, err)
@@ -311,7 +381,7 @@ func removeErrorRemoveDataTest(t *testing.T) {
 	manifest = map[string]string{key: storePath}
 
 	smCalled := false
-	saveManifest = func() error {
+	saveManifest = func(manifestFileNamePrefix string) error {
 		smCalled = true
 		return nil
 	}
@@ -321,7 +391,7 @@ func removeErrorRemoveDataTest(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := Remove(key)
+	err := Remove("", key)
 
 	// assert
 	assert.Error(t, err)
@@ -338,10 +408,10 @@ func removeErrorSaveManifestTest(t *testing.T) {
 	// arrange
 	initialized = true // skip initialization
 	manifest = map[string]string{key: storePath}
-	saveManifest = func() error { return errors.New("err") }
+	saveManifest = func(manifestFileNamePrefix string) error { return errors.New("err") }
 
 	// act
-	err := Remove(key)
+	err := Remove("", key)
 
 	// assert
 	assert.Error(t, err)
@@ -358,7 +428,7 @@ func saveManifestErrorMarshalTest(t *testing.T) {
 	jh = jhMock
 
 	// act
-	err := saveManifest()
+	err := saveManifest("")
 
 	// assert
 	assert.Error(t, err)
@@ -372,11 +442,12 @@ func saveManifestErrorWriteFileTest(t *testing.T) {
 	// arrange
 	mData, _ := json.Marshal(manifest)
 	fsMock := &fsvFileSystemMock{}
+	manifestFilePath := getManifestPath("")
 	fsMock.On("HardenedWriteFile", manifestFilePath, mData).Return(errors.New("err"))
 	fs = fsMock
 
 	// act
-	err := saveManifest()
+	err := saveManifest("")
 
 	// assert
 	assert.Error(t, err)
@@ -393,7 +464,7 @@ func ensureInitErrorMkdir(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := ensureInitialized()
+	err := ensureInitialized("")
 
 	// assert
 	assert.Error(t, err)
@@ -412,7 +483,7 @@ func ensureInitErrorHarden(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := ensureInitialized()
+	err := ensureInitialized("")
 
 	// assert
 	assert.Error(t, err)
@@ -425,6 +496,7 @@ func ensureInitErrorHarden(t *testing.T) {
 
 func ensureInitWithManifestFile(t *testing.T) {
 	// arrange
+	manifestFilePath := getManifestPath("")
 	m := map[string]string{key: filepath.Join(storeFolderPath, key)}
 	mData, _ := json.Marshal(m)
 	fsMock := &fsvFileSystemMock{}
@@ -435,7 +507,7 @@ func ensureInitWithManifestFile(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := ensureInitialized()
+	err := ensureInitialized("")
 
 	// assert
 	assert.NoError(t, err)
@@ -449,6 +521,7 @@ func ensureInitWithManifestFile(t *testing.T) {
 
 func ensureInitErrorReadManifestFile(t *testing.T) {
 	// arrange
+	manifestFilePath := getManifestPath("")
 	fsMock := &fsvFileSystemMock{}
 	fsMock.On("MakeDirs", storeFolderPath).Return(nil)
 	fsMock.On("RecursivelyHarden", vaultFolderPath).Return(nil)
@@ -457,7 +530,7 @@ func ensureInitErrorReadManifestFile(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := ensureInitialized()
+	err := ensureInitialized("")
 
 	// assert
 	assert.Error(t, err)
@@ -470,6 +543,7 @@ func ensureInitErrorReadManifestFile(t *testing.T) {
 
 func ensureInitErrorUnMarshalManifestFile(t *testing.T) {
 	// arrange
+	manifestFilePath := getManifestPath("")
 	mData, _ := json.Marshal(map[string]string{key: filepath.Join(storeFolderPath, key)})
 	fsMock := &fsvFileSystemMock{}
 	fsMock.On("MakeDirs", storeFolderPath).Return(nil)
@@ -483,7 +557,7 @@ func ensureInitErrorUnMarshalManifestFile(t *testing.T) {
 	jh = jhMock
 
 	// act
-	err := ensureInitialized()
+	err := ensureInitialized("")
 
 	// assert
 	assert.Error(t, err)
@@ -496,6 +570,7 @@ func ensureInitErrorUnMarshalManifestFile(t *testing.T) {
 
 func ensureInitWithoutManifestFile(t *testing.T) {
 	// arrange
+	manifestFilePath := getManifestPath("")
 	m := map[string]string{}
 	fsMock := &fsvFileSystemMock{}
 	fsMock.On("MakeDirs", storeFolderPath).Return(nil)
@@ -504,7 +579,7 @@ func ensureInitWithoutManifestFile(t *testing.T) {
 	fs = fsMock
 
 	// act
-	err := ensureInitialized()
+	err := ensureInitialized("")
 
 	// assert
 	assert.NoError(t, err)

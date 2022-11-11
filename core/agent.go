@@ -21,8 +21,10 @@ import (
 	"path/filepath"
 	"runtime/debug"
 	"syscall"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"github.com/aws/amazon-ssm-agent/core/app"
@@ -57,9 +59,10 @@ var (
 	allowLinkDeletions                                   string
 	similarityThreshold                                  int
 	registrationFile                                     = filepath.Join(appconfig.DefaultDataStorePath, "registration")
+	coreAgentStartupErrChan                              = make(chan error, 1)
 )
 
-func start(log logger.T) (app.CoreAgent, logger.T, error) {
+func initializeBasicModules(log logger.T) (app.CoreAgent, logger.T, error) {
 	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentStartEvent)
 
 	proxyConfig := proxyconfig.SetProxyConfig(log)
@@ -88,14 +91,28 @@ func start(log logger.T) (app.CoreAgent, logger.T, error) {
 	}
 
 	ssmAgentCore := app.NewSSMCoreAgent(context, message)
-	if err := ssmAgentCore.Start(); err != nil {
-		return nil, log, fmt.Errorf("failed to start core agent app: %v", err)
-	}
-
 	return ssmAgentCore, context.Log(), nil
 }
 
-func blockUntilSignaled(log logger.T) {
+func startCoreAgent(log logger.T, ssmAgentCore app.CoreAgent, statusChan *contracts.StatusComm) {
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Agent core startup panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+				coreAgentStartupErrChan <- fmt.Errorf("panic while starting core agent")
+			}
+			log.Flush()
+		}()
+
+		if startErr := ssmAgentCore.Start(statusChan); startErr != nil {
+			coreAgentStartupErrChan <- log.Errorf("Failed to start core agent %v", startErr)
+		}
+	}()
+	time.Sleep(200 * time.Millisecond)
+}
+
+func blockUntilSignaled(log logger.T, statusChan *contracts.StatusComm) {
 	// Below channel will handle all machine initiated shutdown/reboot requests.
 
 	// Set up channel on which to receive signal notifications.
@@ -107,9 +124,14 @@ func blockUntilSignaled(log logger.T) {
 	// Only listen to signals that require us to exit.
 	// Otherwise we will continue execution and exit the program.
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
-
-	s := <-c
-	log.Info("amazon-ssm-agent got signal:", s, " value:", s.Signal)
+	select {
+	case s := <-c:
+		statusChan.TerminationChan <- struct{}{}
+		log.Info("amazon-ssm-agent got signal:", s, " value:", s.Signal)
+		<-statusChan.DoneChan
+	case <-coreAgentStartupErrChan:
+		log.Error("Failed to start core agent startup module")
+	}
 }
 
 // Run as a single process. Used by Unix systems and when running agent from console.
@@ -118,17 +140,22 @@ func run(log logger.T) {
 		// recover in case the agent panics
 		// this should handle some kind of seg fault errors.
 		if msg := recover(); msg != nil {
-			log.Errorf("core Agent crashed with message %v!", msg)
+			log.Errorf("Core Agent crashed with message %v!", msg)
 			log.Errorf("%s: %s", msg, debug.Stack())
 		}
 	}()
 
 	// run ssm agent
-	coreAgent, contextLog, err := start(log)
+	coreAgent, contextLog, err := initializeBasicModules(log)
 	if err != nil {
-		contextLog.Errorf("error occurred when starting amazon-ssm-agent: %v", err)
+		contextLog.Errorf("Error occurred when starting amazon-ssm-agent: %v", err)
 		return
 	}
-	blockUntilSignaled(contextLog)
+	statusChannels := &contracts.StatusComm{
+		TerminationChan: make(chan struct{}, 1),
+		DoneChan:        make(chan struct{}, 1),
+	}
+	startCoreAgent(contextLog, coreAgent, statusChannels)
+	blockUntilSignaled(contextLog, statusChannels)
 	coreAgent.Stop()
 }
