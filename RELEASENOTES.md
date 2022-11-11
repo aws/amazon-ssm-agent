@@ -1,5 +1,13 @@
 Latest
 ===============
+- Separated EC2 identity vault manifest from OnPrem identity vault manifest
+- Fix for credential retrieval blocking os termination signals
+- Fix for agent updater using shared credentials on EC2
+- Added guards against panic for agent identity health checks
+- Added logging around agent module start/stop
+
+3.2.183.0
+===============
 - Added logging when assuming identity
 - Increased retries to ECS metadata endpoint
 - Added linux debug build to makefile
