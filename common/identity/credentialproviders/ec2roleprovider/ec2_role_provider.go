@@ -62,19 +62,21 @@ func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 // Retrieve returns instance profile role credentials if it has sufficient systems manager permissions and
 // returns ssm provided credentials otherwise. If neither can be retrieved then empty credentials are returned
 func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
-	p.Log.Debug("attempting to retrieve instance profile role")
+	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(p.SsmEndpoint); err != nil {
-		p.Log.Debugf("failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
+		p.Log.Debugf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
 	} else {
+		p.Log.Info("Successfully connected with instance profile role credentials")
 		p.credentialSource = CredentialSourceEC2
 		return iprCredentials.Get()
 	}
 
-	p.Log.Debug("attempting to retrieve role from Systems Manager")
+	p.Log.Debug("Attempting to retrieve role from Systems Manager")
 	if ssmCredentials, err := p.ssmEc2Credentials(p.SsmEndpoint); err != nil {
-		p.Log.Debugf("failed to connect to Systems Manager with SSM role credentials. %v", err)
+		p.Log.Debugf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
 		p.credentialSource = CredentialSourceEC2
 	} else {
+		p.Log.Info("Successfully connected with Systems Manager role credentials")
 		p.credentialSource = CredentialSourceSSM
 		return ssmCredentials.Get()
 	}
@@ -104,7 +106,7 @@ func (p *EC2RoleProvider) iprCredentials(ssmEndpoint string) (*credentials.Crede
 func (p *EC2RoleProvider) updateEmptyInstanceInformation(ssmEndpoint string, roleCredentials *credentials.Credentials) error {
 	ssmClient := newV4ServiceWithCreds(p.Log.WithContext("SSMService"), p.Config, roleCredentials, p.InstanceInfo.Region, ssmEndpoint)
 
-	p.Log.Debugf("calling UpdateInstanceInformation with agent version %s", p.Config.Agent.Version)
+	p.Log.Debugf("Calling UpdateInstanceInformation with agent version %s", p.Config.Agent.Version)
 	// Call update instance information with instance profile role
 	input := &ssm.UpdateInstanceInformationInput{
 		AgentName:    aws.String(agentName),
