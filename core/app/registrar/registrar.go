@@ -11,9 +11,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 )
 
+const (
+	minSleepSecondsBeforeRetry = 15
+	jitterFactor               = 0.2
+)
+
 func getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
-	expBackoff := math.Pow(2, float64(retryCount))
-	return time.Duration(int(expBackoff)+rand.Intn(int(math.Ceil(expBackoff*0.2)))) * time.Second
+	// sleep for at least 15 seconds
+	expBackoff := math.Max(minSleepSecondsBeforeRetry, math.Pow(2, float64(retryCount)))
+	return time.Duration(int(expBackoff)+rand.Intn(int(math.Ceil(expBackoff*jitterFactor)))) * time.Second
 }
 
 type IRetryableRegistrar interface {
