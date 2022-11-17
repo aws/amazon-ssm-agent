@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/mocks"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/controlchannel"
@@ -54,7 +55,7 @@ type MGSInteractorTestSuite struct {
 // Testing the module execute
 func (suite *MGSInteractorTestSuite) TestInitialize() {
 
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	messageHandlerMock := &mocks.IMessageHandler{}
 	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
 	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
@@ -76,7 +77,7 @@ func (suite *MGSInteractorTestSuite) TestInitialize() {
 }
 
 func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesExist() {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	messageHandlerMock := &mocks.IMessageHandler{}
 	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
 	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
@@ -101,7 +102,7 @@ func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesExist() {
 }
 
 func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesNotExist() {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	messageHandlerMock := &mocks.IMessageHandler{}
 	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
 	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
@@ -131,7 +132,7 @@ func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesNotExist() 
 }
 
 func (suite *MGSInteractorTestSuite) TestModuleStopClosingAlreadyClosedChannel() {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	messageHandlerMock := &mocks.IMessageHandler{}
 	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
 	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
@@ -151,7 +152,7 @@ func (suite *MGSInteractorTestSuite) TestModuleStopClosingAlreadyClosedChannel()
 
 func (suite *MGSInteractorTestSuite) TestGetMgsEndpoint() {
 	// create mock context and log
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 
 	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		if region == "us-east-1" {

@@ -28,12 +28,13 @@ import (
 
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/types"
 	bridgemock "github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver/mock"
 	"github.com/stretchr/testify/assert"
 )
 
-var logMock = log.NewMockLog()
+var logMock = logmocks.NewMockLog()
 
 func getAuthConfig(authMethod, user, password string) HTTPAuthConfig {
 	return HTTPAuthConfig{

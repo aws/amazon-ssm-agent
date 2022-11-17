@@ -24,7 +24,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"golang.org/x/sys/windows/registry"
@@ -82,7 +83,7 @@ func isBypassProxyConfigured(proxyEnv map[string]string) bool {
 	return isBypassSet
 }
 
-func setWindowsBypass(log logger.T, strToParse string, proxyEnv map[string]string) {
+func setWindowsBypass(log log.T, strToParse string, proxyEnv map[string]string) {
 	if len(strToParse) == 0 {
 		return
 	}
@@ -93,7 +94,7 @@ func setWindowsBypass(log logger.T, strToParse string, proxyEnv map[string]strin
 	}
 }
 
-func setWindowsProxy(log logger.T, strToParse string, proxyEnv map[string]string) {
+func setWindowsProxy(log log.T, strToParse string, proxyEnv map[string]string) {
 	if len(strToParse) == 0 {
 		return
 	}
@@ -189,7 +190,7 @@ func assumeAgentServiceEnvironmentProxy(proxyEnv map[string]string) {
 }
 
 func assumeInternetExplorerProxySettings(proxyEnv map[string]string) {
-	silentLog := logger.NewSilentMockLog()
+	silentLog := logger.NewSilentLogger()
 
 	commandFormatStr := `(Get-Item -Path 'Registry::HKEY_USERS\.DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings').GetValue('%s')`
 
@@ -220,7 +221,7 @@ func assumeInternetExplorerProxySettings(proxyEnv map[string]string) {
 }
 
 func assumeWinHTTPProxySettings(proxyEnv map[string]string) {
-	silentLog := logger.NewSilentMockLog()
+	silentLog := logger.NewSilentLogger()
 	if isHttpOrHttpsProxyConfigured(proxyEnv) && isBypassProxyConfigured(proxyEnv) {
 		// both proxy and bypass are set, ignore winhttp
 		return

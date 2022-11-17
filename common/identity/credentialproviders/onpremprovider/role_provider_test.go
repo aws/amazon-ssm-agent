@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest"
 
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -61,7 +62,7 @@ func TestRetrieve_ShouldReturnValidToken(t *testing.T) {
 			},
 		},
 		config: &appconfig.SsmagentConfig{},
-		log:    log.NewMockLog(),
+		log:    logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{
 			shouldRotate: false,
 		},
@@ -88,7 +89,7 @@ func TestRetrieve_ShouldUpdateKeyPair_Error(t *testing.T) {
 	testProvider := onpremCredentialsProvider{
 		client: client,
 		config: &appconfig.SsmagentConfig{},
-		log:    log.NewMockLog(),
+		log:    logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{
 			publicKey:    "publicKey",
 			privateKey:   "privateKey",
@@ -108,7 +109,7 @@ func TestRetrieve_ShouldFailOnError(t *testing.T) {
 	testProvider := onpremCredentialsProvider{
 		client: &RsaSignedServiceStub{},
 		config: &appconfig.SsmagentConfig{},
-		log:    log.NewMockLog(),
+		log:    logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{
 			errList: []error{machineFingerprintError},
 		},
@@ -123,7 +124,7 @@ func TestRetrieve_ShouldFailOnError(t *testing.T) {
 			errList: []error{requestManagedInstanceRoleTokenError},
 		},
 		config:           &appconfig.SsmagentConfig{},
-		log:              log.NewMockLog(),
+		log:              logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{},
 	}
 	_, err = testProvider.Retrieve()
@@ -134,7 +135,7 @@ func TestRotatePrivateKey_FailGenerateOldPublicKey(t *testing.T) {
 	testProvider := onpremCredentialsProvider{
 		client: &RsaSignedServiceStub{},
 		config: &appconfig.SsmagentConfig{},
-		log:    log.NewMockLog(),
+		log:    logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{
 			errList: []error{fmt.Errorf("FailGenerateOldPublicKey")},
 		},
@@ -148,7 +149,7 @@ func TestRotatePrivateKey_FailGenerateKeyPair(t *testing.T) {
 	testProvider := onpremCredentialsProvider{
 		client: &RsaSignedServiceStub{},
 		config: &appconfig.SsmagentConfig{},
-		log:    log.NewMockLog(),
+		log:    logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{
 			errList: []error{nil, fmt.Errorf("FailGenerateKeyPair")},
 		},
@@ -168,7 +169,7 @@ func TestRotatePrivateKey_FailUpdateKey_SuccessVerifyOldKey(t *testing.T) {
 	testProvider := onpremCredentialsProvider{
 		client:           rsaClient,
 		config:           &appconfig.SsmagentConfig{},
-		log:              log.NewMockLog(),
+		log:              logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{},
 	}
 
@@ -188,7 +189,7 @@ func TestRotatePrivateKey_FailUpdateKey_NewKeyWorks_SuccessSaveNewKey(t *testing
 	testProvider := onpremCredentialsProvider{
 		client:           rsaClient,
 		config:           &appconfig.SsmagentConfig{},
-		log:              log.NewMockLog(),
+		log:              logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{},
 	}
 
@@ -208,7 +209,7 @@ func TestRotatePrivateKey_SuccessUpdateKey_FailSaveNewKey_FailUpdateToOldKey(t *
 	testProvider := onpremCredentialsProvider{
 		client: rsaClient,
 		config: &appconfig.SsmagentConfig{},
-		log:    log.NewMockLog(),
+		log:    logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{
 			errList: []error{nil, nil, fmt.Errorf("FailSaveKey")},
 		},
@@ -231,7 +232,7 @@ func TestRotatePrivateKey_SuccessUpdateKey_FailSaveNewKey_SuccessUpdateToOldKey(
 	testProvider := onpremCredentialsProvider{
 		client: rsaClient,
 		config: &appconfig.SsmagentConfig{},
-		log:    log.NewMockLog(),
+		log:    logmocks.NewMockLog(),
 		registrationInfo: &registrationStub{
 			errList: []error{nil, nil, fmt.Errorf("FailSaveKey")},
 		},

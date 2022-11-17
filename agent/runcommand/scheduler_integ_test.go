@@ -26,7 +26,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	mds "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -66,9 +67,9 @@ func verifyWaitGroup(wg *sync.WaitGroup, timeout time.Duration) bool {
 }
 
 // NewMockDefault returns an instance of Mock with default expectations set.
-func MockContext() *context.Mock {
-	ctx := new(context.Mock)
-	log := logger.NewMockLog()
+func MockContext() *contextmocks.Mock {
+	ctx := new(contextmocks.Mock)
+	log := logmocks.NewMockLog()
 	config := appconfig.SsmagentConfig{}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)

@@ -27,15 +27,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	logger2 "github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
 var log logger.T
 
 func init() {
-	log = logger.DefaultLogger()
+	log = logger2.DefaultLogger()
 	defer log.Flush()
 }
 

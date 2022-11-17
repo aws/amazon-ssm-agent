@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	logpkg "github.com/aws/amazon-ssm-agent/agent/log/logger"
 	seelog "github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"
 )
@@ -142,7 +142,7 @@ func TestReplaceLogger(t *testing.T) {
 	assert.False(t, logger.Closed())
 
 	// Check for correct type of logger
-	wrapper, ok := logger.(*log.Wrapper)
+	wrapper, ok := logger.(*logpkg.Wrapper)
 	loggerCopy := wrapper.Delegate.BaseLoggerInstance
 	assert.True(t, ok, "withContext did not create a logger of type *Wrapper. Conversion not ok")
 

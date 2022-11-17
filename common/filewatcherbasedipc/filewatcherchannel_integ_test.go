@@ -18,15 +18,14 @@
 package filewatcherbasedipc
 
 import (
-	"testing"
-	"time"
-
 	"errors"
 	"os"
 	"path"
 	"path/filepath"
+	"testing"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 

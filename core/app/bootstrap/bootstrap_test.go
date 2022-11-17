@@ -18,7 +18,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	fileSystemMock "github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem/mocks"
 	"github.com/stretchr/testify/assert"
@@ -26,18 +28,18 @@ import (
 )
 
 func TestBootstrap(t *testing.T) {
-	logger := log.NewMockLog()
+	logger := logmocks.NewMockLog()
 	fileSystem := &fileSystemMock.FileSystem{}
 
 	agentIdentity := &identityMock.IAgentIdentity{}
 	agentIdentity.On("InstanceID").Return("SomeInstanceId", nil)
 
-	newAgentIdentitySelector = func(log log.T) identity.IAgentIdentitySelector {
+	newAgentIdentitySelector = func(log log.T) identity2.IAgentIdentitySelector {
 		// Selector object does not matter since it is exclusively passed to newAgentIdentity function
 		return nil
 	}
 
-	newAgentIdentity = func(log log.T, config *appconfig.SsmagentConfig, selector identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(log log.T, config *appconfig.SsmagentConfig, selector identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return agentIdentity, nil
 	}
 

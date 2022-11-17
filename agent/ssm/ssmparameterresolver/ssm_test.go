@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -70,7 +71,7 @@ func TestGetParametersFromSsmParameterStoreWithAllResolvedNoPaging(t *testing.T)
 
 	serviceObject := newServiceMockedObjectWithExtraRecords(expectedValues)
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 	t.Log("Testing getParametersFromSsmParameterStore API for all parameters present without paging...")
 	retrievedValues, err := getParametersFromSsmParameterStore(&serviceObject, log, parametersList)
 	assert.Nil(t, err)
@@ -95,7 +96,7 @@ func TestGetParametersFromSsmParameterStoreWithAllResolvedWithPaging(t *testing.
 
 	serviceObject := newServiceMockedObjectWithExtraRecords(expectedValues)
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 
 	t.Log("Testing getParametersFromSsmParameterStore API for all parameters present with paging...")
 	retrievedValues, err := getParametersFromSsmParameterStore(&serviceObject, log, parametersList)
@@ -112,7 +113,7 @@ func TestGetParametersFromSsmParameterStoreWithUnresolvedIgnoreNoPaging(t *testi
 
 	serviceObject := newServiceMockedObjectWithExtraRecords(map[string]SsmParameterInfo{})
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 
 	t.Log("Testing getParametersFromSsmParameterStore API for all unresolved parameters...")
 	_, err := getParametersFromSsmParameterStore(&serviceObject, log, parametersList)

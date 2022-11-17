@@ -17,8 +17,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"

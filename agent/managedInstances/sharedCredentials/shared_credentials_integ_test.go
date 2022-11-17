@@ -22,7 +22,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/stretchr/testify/assert"

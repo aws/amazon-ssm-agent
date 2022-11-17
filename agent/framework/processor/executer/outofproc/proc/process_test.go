@@ -6,7 +6,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
@@ -109,7 +111,7 @@ func TestInitializeWorkerDependencies_GetConfigFailed(t *testing.T) {
 		return appconfig.DefaultConfig(), fmt.Errorf("SomeConfigError")
 	}
 
-	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(log.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
+	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(logmocks.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
 	assert.Nil(t, cfg)
 	assert.Nil(t, agentIdentity)
 	assert.Empty(t, channel)
@@ -127,7 +129,7 @@ func TestInitializeWorkerDependencies_ParseArgsFailedFailed(t *testing.T) {
 		return appconfig.DefaultConfig(), nil
 	}
 
-	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(log.NewMockLog(), []string{"too", "many", "args", "passed"})
+	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(logmocks.NewMockLog(), []string{"too", "many", "args", "passed"})
 	assert.Nil(t, cfg)
 	assert.Nil(t, agentIdentity)
 	assert.Empty(t, channel)
@@ -147,11 +149,11 @@ func TestInitializeWorkerDependencies_GetAgentIdentityFailed(t *testing.T) {
 		return appconfig.DefaultConfig(), nil
 	}
 
-	newAgentIdentity = func(log.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity identity.IAgentIdentity, err error) {
+	newAgentIdentity = func(log.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity identity.IAgentIdentity, err error) {
 		return nil, fmt.Errorf("FailedGetIdentity")
 	}
 
-	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(log.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
+	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(logmocks.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
 	assert.Nil(t, cfg)
 	assert.Nil(t, agentIdentity)
 	assert.Empty(t, channel)
@@ -177,18 +179,18 @@ func TestInitializeWorkerDependencies_RuntimeConfigIdentity_Success(t *testing.T
 		return runtimeConfigClient
 	}
 	runtimeSelectorVisited := false
-	runtimeSelector := runtimeConfigIdentitySelectorCreator(log.NewMockLog())
-	runtimeConfigIdentitySelectorCreator = func(log log.T) identity.IAgentIdentitySelector {
+	runtimeSelector := runtimeConfigIdentitySelectorCreator(logmocks.NewMockLog())
+	runtimeConfigIdentitySelectorCreator = func(log log.T) identity2.IAgentIdentitySelector {
 		runtimeSelectorVisited = true
 		return runtimeSelector
 	}
 
 	expectedAgentIdentity := &mocks.IAgentIdentity{}
-	newAgentIdentity = func(log.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity identity.IAgentIdentity, err error) {
+	newAgentIdentity = func(log.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity identity.IAgentIdentity, err error) {
 		return expectedAgentIdentity, nil
 	}
 
-	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(log.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
+	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(logmocks.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
 	assert.NotNil(t, cfg)
 	assert.Equal(t, appconfig.DefaultConfig(), *cfg)
 	assert.Equal(t, expectedAgentIdentity, agentIdentity)
@@ -216,19 +218,19 @@ func TestInitializeWorkerDependencies_DefaultIdentity_Success(t *testing.T) {
 	}
 
 	defaultIdentitySelectorVisited := false
-	defaultIdentitySelector := defaultAgentIdentitySelectorCreator(log.NewMockLog())
+	defaultIdentitySelector := defaultAgentIdentitySelectorCreator(logmocks.NewMockLog())
 
-	defaultAgentIdentitySelectorCreator = func(log log.T) identity.IAgentIdentitySelector {
+	defaultAgentIdentitySelectorCreator = func(log log.T) identity2.IAgentIdentitySelector {
 		defaultIdentitySelectorVisited = true
 		return defaultIdentitySelector
 	}
 
 	expectedAgentIdentity := &mocks.IAgentIdentity{}
-	newAgentIdentity = func(log.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity identity.IAgentIdentity, err error) {
+	newAgentIdentity = func(log.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity identity.IAgentIdentity, err error) {
 		return expectedAgentIdentity, nil
 	}
 
-	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(log.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
+	cfg, agentIdentity, channel, err := InitializeWorkerDependencies(logmocks.NewMockLog(), []string{appconfig.DefaultSessionWorker, "documentID"})
 	assert.NotNil(t, cfg)
 	assert.Equal(t, appconfig.DefaultConfig(), *cfg)
 	assert.Equal(t, expectedAgentIdentity, agentIdentity)

@@ -17,17 +17,18 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/executers"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	credentialprovidermocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
@@ -46,7 +47,7 @@ type TestCase struct {
 	MessageID      string
 }
 
-type CommandTester func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
+type CommandTester func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
 
 const (
 	orchestrationDirectory  = "OrchesDir"
@@ -143,7 +144,7 @@ func TestRunScripts(t *testing.T) {
 func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 	logger.On("Error", mock.Anything).Return(nil)
 	logger.Infof("test run commands %v", testCase)
-	runScriptTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runScriptTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
@@ -268,7 +269,7 @@ func TestBucketsInDifferentRegions(t *testing.T) {
 func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucketsInDifferentRegions bool) {
 	logger.On("Error", mock.Anything).Return(nil)
 	logger.Infof("test run commands %v", testCase)
-	runScriptTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runScriptTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
@@ -339,7 +340,7 @@ func buildOutputs(testCases []TestCase) (out string, err string, combined string
 }
 
 func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
 
 		// set expectations
@@ -373,7 +374,7 @@ func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 
 // testExecute tests the run command plugin's Execute method.
 func testExecute(t *testing.T, testCase TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
 
 		// set expectations
@@ -405,7 +406,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 
 // testExecuteWithEnvironment tests the run command plugin's Execute method with environment variables sent to the executer
 func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
 
 		// set expectations
@@ -441,7 +442,7 @@ func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
 // and assert specific result conditions.
 func testExecution(t *testing.T, commandtester CommandTester) {
 	// create mocked objects
-	mockCancelFlag := new(task.MockCancelFlag)
+	mockCancelFlag := new(taskmocks.MockCancelFlag)
 	mockExecuter := new(executers.MockCommandExecuter)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
@@ -480,7 +481,7 @@ func setIOHandlerExpectations(mockIOHandler *iohandlermocks.MockIOHandler, t Tes
 	}
 }
 
-func setCancelFlagExpectations(mockCancelFlag *task.MockCancelFlag, times int) {
+func setCancelFlagExpectations(mockCancelFlag *taskmocks.MockCancelFlag, times int) {
 	mockCancelFlag.On("Canceled").Return(false).Times(times)
 	mockCancelFlag.On("ShutDown").Return(false).Times(times)
 }

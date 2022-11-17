@@ -27,7 +27,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -54,7 +56,7 @@ var TestCases = []TestCase{
 	generateTestCaseFail(testDirectoryId, testDirectoryName, []string{"10.0.0.2", "10.0.1.2"}),
 }
 
-var logger = log.NewMockLog()
+var logger = logmocks.NewMockLog()
 
 func generateTestCaseOk(id string, name string, ipAddress []string) TestCase {
 
@@ -127,7 +129,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	iohandler.DefaultOutputConfig()
 	mockCancelFlag := new(task.MockCancelFlag)
 	p := &Plugin{
-		context: context.NewMockDefault(),
+		context: contextmocks.NewMockDefault(),
 	}
 	if rawInput {
 		// prepare plugin input
@@ -143,7 +145,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 
 // TestMakeArguments tests the makeArguments methods, which build up the command for domainJoin.exe
 func TestMakeArguments(t *testing.T) {
-	context := context.NewMockDefault()
+	context := contextmocks.NewMockDefault()
 
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
 	commandRes, _ := makeArguments(context, domainJoinInput)

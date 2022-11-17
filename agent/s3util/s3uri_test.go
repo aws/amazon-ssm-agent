@@ -17,6 +17,7 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/s3util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -200,7 +201,7 @@ func runTests(t *testing.T, tests []s3BucketTest) {
 	for _, test := range tests {
 		fileURL, err := url.Parse(test.url)
 		assert.Equal(t, err, nil)
-		output := ParseAmazonS3URL(logger, fileURL)
+		output := ParseAmazonS3URL(s3util.MockLog, fileURL)
 		assert.Equal(t, test.output, output, test.url)
 	}
 }

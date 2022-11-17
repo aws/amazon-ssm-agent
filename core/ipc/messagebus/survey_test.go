@@ -20,6 +20,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/channel"
 	channelmocks "github.com/aws/amazon-ssm-agent/common/channel/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
@@ -45,7 +46,7 @@ type MessageBusTestSuite struct {
 }
 
 func (suite *MessageBusTestSuite) SetupTest() {
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 	suite.mockLog = mockLog
 	suite.mockContext = &contextmocks.ICoreAgentContext{}
 

@@ -31,7 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/twinj/uuid"
 )
@@ -169,7 +169,7 @@ func (SendOfflineCommand) loadContent(agentIdentity identity.IAgentIdentity, raw
 		url = url[7:]
 	}
 
-	context := context.Default(log.NewSilentMockLog(), appconfig.DefaultConfig(), agentIdentity)
+	context := context.Default(logger.NewSilentLogger(), appconfig.DefaultConfig(), agentIdentity)
 	input := &artifact.DownloadInput{SourceURL: url}
 	if output, err := artifact.Download(context, *input); err != nil {
 		return err, content

@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest"
 	authtokenrequestmocks "github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest/mocks"
@@ -37,7 +38,7 @@ import (
 func TestSSMEC2RoleProvider_IsEC2InstanceRegistered_ReturnsFalse_WhenNoRegistrationInfoInChannel(t *testing.T) {
 	// Arrange
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 	}
 
@@ -51,7 +52,7 @@ func TestSSMEC2RoleProvider_IsEC2InstanceRegistered_ReturnsTrue_WhenRegistration
 		KeyType:    "SomeKeyType",
 	}
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 	}
 
@@ -77,7 +78,7 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsCredentials(t *testing.T) {
 	}
 
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 		InstanceInfo:          &InstanceInfo{Region: "SomeRegion"},
 	}
@@ -106,7 +107,7 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsCredentials(t *testing.T) {
 func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_WhenInstanceNotRegistered(t *testing.T) {
 	// Arrange
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 	}
 
@@ -128,7 +129,7 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_NoRetry(t *testing.
 	}
 
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 		InstanceInfo:          &InstanceInfo{Region: "SomeRegion"},
 	}
@@ -160,7 +161,7 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_Retries(t *testing.
 	}
 
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 		InstanceInfo:          &InstanceInfo{Region: "SomeRegion"},
 	}

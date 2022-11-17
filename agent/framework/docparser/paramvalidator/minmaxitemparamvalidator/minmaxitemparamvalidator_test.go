@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/paramvalidator/utils"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -58,7 +59,7 @@ func TestMinMaxItemParamValidatorTestSuite(t *testing.T) {
 }
 
 func (suite *minMaxItemParamValidatorTestSuite) SetupTest() {
-	suite.log = log.NewMockLog()
+	suite.log = logmocks.NewMockLog()
 	suite.testCaseList = make([]*testCases, 0)
 
 	testInputMapOneVal := make(map[string]interface{})
@@ -187,7 +188,7 @@ func (suite *minMaxItemParamValidatorTestSuite) SetupTest() {
 }
 
 func (suite *minMaxItemParamValidatorTestSuite) TestValidate_MultipleTestCases() {
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 	for _, testCase := range suite.testCaseList {
 		for _, input := range testCase.testInput {
 			paramValue := input

@@ -19,6 +19,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	contextmocks "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
@@ -46,7 +47,7 @@ func (suite *WorkerProviderTestSuite) SetupTest() {
 	agentIdentity := &identityMocks.IAgentIdentity{}
 	agentIdentity.On("InstanceID").Return("i-1203030", nil)
 
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 	suite.mockLog = mockLog
 	suite.exec = &executormocks.IExecutor{}
 	suite.config = &model.WorkerConfig{

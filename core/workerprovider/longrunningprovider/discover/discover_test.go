@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -30,7 +31,7 @@ type DiscoveryTestSuite struct {
 }
 
 func (suite *DiscoveryTestSuite) SetupTest() {
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 	suite.mockLog = mockLog
 	suite.discover = &WorkerDiscover{}
 }

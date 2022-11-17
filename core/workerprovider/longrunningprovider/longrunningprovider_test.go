@@ -19,6 +19,7 @@ import (
 	"testing"
 	"time"
 
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	reboot "github.com/aws/amazon-ssm-agent/core/app/reboot/model"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -48,7 +49,7 @@ type LongRunningProviderTestSuite struct {
 }
 
 func (suite *LongRunningProviderTestSuite) SetupTest() {
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 	suite.mockLog = mockLog
 	suite.workerProvider = &providermocks.IProvider{}
 	suite.workerDiscover = &discovermocks.IDiscover{}

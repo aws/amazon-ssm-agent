@@ -24,6 +24,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlerMock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
@@ -35,9 +38,9 @@ import (
 
 type SessionPluginTestSuite struct {
 	suite.Suite
-	mockContext       *context.Mock
+	mockContext       *contextmocks.Mock
 	mockLog           log.T
-	mockCancelFlag    *task.MockCancelFlag
+	mockCancelFlag    *taskmocks.MockCancelFlag
 	mockDataChannel   *dataChannelMock.IDataChannel
 	mockIohandler     *iohandlerMock.MockIOHandler
 	mockSessionPlugin *sessionPluginMock.ISessionPlugin
@@ -45,9 +48,9 @@ type SessionPluginTestSuite struct {
 }
 
 func (suite *SessionPluginTestSuite) SetupTest() {
-	suite.mockContext = context.NewMockDefault()
-	suite.mockCancelFlag = &task.MockCancelFlag{}
-	suite.mockLog = log.NewMockLog()
+	suite.mockContext = contextmocks.NewMockDefault()
+	suite.mockCancelFlag = &taskmocks.MockCancelFlag{}
+	suite.mockLog = logmocks.NewMockLog()
 	suite.mockDataChannel = &dataChannelMock.IDataChannel{}
 	suite.mockIohandler = new(iohandlerMock.MockIOHandler)
 	suite.mockSessionPlugin = new(sessionPluginMock.ISessionPlugin)

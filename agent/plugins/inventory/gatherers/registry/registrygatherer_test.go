@@ -17,6 +17,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -41,7 +42,7 @@ func testCollectRegistryData(context context.T, config model.Config) (data []mod
 }
 
 func TestGatherer(t *testing.T) {
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 	gatherer := Gatherer(contextMock)
 	collectData = testCollectRegistryData
 	item, err := gatherer.Run(contextMock, model.Config{})

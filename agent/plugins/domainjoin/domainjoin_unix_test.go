@@ -27,7 +27,9 @@ import (
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -160,7 +162,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	p := &Plugin{
-		context: context.NewMockDefault(),
+		context: contextmocks.NewMockDefault(),
 	}
 
 	if rawInput {
@@ -185,8 +187,8 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 
 // TestMakeArguments tests the makeArguments methods, which build up the command for aws_domainjoin.sh
 func TestMakeArguments(t *testing.T) {
-	contextMock := &context.Mock{}
-	context := context.NewMockDefault()
+	contextMock := &contextmocks.Mock{}
+	context := contextmocks.NewMockDefault()
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
 	commandRes, _ := makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected := "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240"
@@ -233,7 +235,7 @@ func TestMakeArguments(t *testing.T) {
 	identityMock := &identityMocks.IAgentIdentity{}
 	identityMock.On("Region").Return("", nil) // Remove region setting
 	contextMock.On("Identity").Return(identityMock)
-	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("Log").Return(logmocks.NewMockLog())
 	commandRes, _ = makeArguments(contextMock, "./aws_domainjoin.sh", domainJoinInput)
 	expected = ""
 	assert.Equal(t, expected, commandRes)

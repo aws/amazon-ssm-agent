@@ -16,12 +16,14 @@ package tests
 import (
 	"errors"
 	"fmt"
-	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
-	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"os"
 	"runtime/debug"
 	"testing"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -65,8 +67,8 @@ func (suite *AgentHealthIntegrationTestSuite) SetupTest() {
 	config.Ssm.HealthFrequencyMinutes = 1
 	suite.config = config
 	// Add config into context
-	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
-	agentIdentity, err = identity.NewAgentIdentity(log, &config, identitySelector)
+	identitySelector := identity2.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err = identity2.NewAgentIdentity(log, &config, identitySelector)
 	if err != nil {
 		log.Debugf("unable to assume identity - %v", err)
 		return

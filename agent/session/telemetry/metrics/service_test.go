@@ -18,7 +18,7 @@ package metrics
 import (
 	"testing"
 
-	contextmocks "github.com/aws/amazon-ssm-agent/agent/context"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 )
 

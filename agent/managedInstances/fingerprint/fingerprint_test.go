@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -71,7 +72,7 @@ type isSimilarHashTestData struct {
 
 func TestIsSimilarHardwareHash(t *testing.T) {
 	empty := make(map[string]string)
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 
 	origin := map[string]string{
 		hardwareID:      "hardwareValue",
@@ -185,7 +186,7 @@ func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
 	}
 
 	// Act
-	fingerprint, err := generateFingerprint(log.NewMockLog())
+	fingerprint, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.Error(t, err, "expected no error from the call")
@@ -208,7 +209,7 @@ func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 	}
 
 	// Act
-	actual, err := generateFingerprint(log.NewMockLog())
+	actual, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -241,7 +242,7 @@ func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 	}
 
 	// Act
-	actual, err := generateFingerprint(log.NewMockLog())
+	actual, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -273,7 +274,7 @@ func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testin
 	}
 
 	// Act
-	actual, err := generateFingerprint(log.NewMockLog())
+	actual, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -292,7 +293,7 @@ func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t 
 	vault = vaultMock
 
 	//Act
-	fingerprint, err := generateFingerprint(log.NewMockLog())
+	fingerprint, err := generateFingerprint(logmocks.NewMockLog())
 
 	//Assert
 	assert.Error(t, err)
@@ -318,7 +319,7 @@ func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	vault = vaultMock
 
 	// Act
-	generateFingerprint(log.NewMockLog())
+	generateFingerprint(logmocks.NewMockLog())
 }
 
 func TestSave_SavesNewFingerprint(t *testing.T) {

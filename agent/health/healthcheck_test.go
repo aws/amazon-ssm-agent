@@ -20,8 +20,9 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/version"
@@ -39,7 +40,7 @@ import (
 // Suite is the testify framework struct
 type HealthCheckTestSuite struct {
 	suite.Suite
-	logMock     *log.Mock
+	logMock     *logmocks.Mock
 	contextMock *context.Mock
 	serviceMock *ssmMock.Service
 	healthJob   *scheduler.Job
@@ -49,7 +50,7 @@ type HealthCheckTestSuite struct {
 
 // Setting up the HealthCheckTestSuite variable, initialize logMock and conntextMock struct
 func (suite *HealthCheckTestSuite) SetupTest() {
-	logMock := log.NewMockLog()
+	logMock := logmocks.NewMockLog()
 	contextMock := context.NewMockDefault()
 
 	serviceMock := new(ssmMock.Service)

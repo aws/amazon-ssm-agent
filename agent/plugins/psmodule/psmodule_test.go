@@ -22,13 +22,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/executers"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -42,7 +43,7 @@ type TestCase struct {
 	MessageID      string
 }
 
-type CommandTester func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
+type CommandTester func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
 
 const (
 	orchestrationDirectory  = "OrchesDir"
@@ -100,7 +101,7 @@ func TestRunCommands(t *testing.T) {
 
 // testRunCommands tests the runCommands or the runCommandsRawInput method for one testcase.
 func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
-	runCommandTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runCommandTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
@@ -131,7 +132,7 @@ func TestBucketsInDifferentRegions(t *testing.T) {
 
 // testBucketsInDifferentRegions tests the runCommands with S3 buckets present in IAD and PDX region.
 func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucketsInDifferentRegions bool) {
-	runCommandTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runCommandTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
@@ -153,7 +154,7 @@ func TestExecute(t *testing.T) {
 
 // testExecute tests the run command plugin's Execute method.
 func testExecute(t *testing.T, testCase TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setCancelFlagExpectations(mockCancelFlag, 0)
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
@@ -191,7 +192,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 // and assert specific result conditions.
 func testExecution(t *testing.T, commandtester CommandTester) {
 	// create mocked objects
-	mockCancelFlag := new(task.MockCancelFlag)
+	mockCancelFlag := new(taskmocks.MockCancelFlag)
 	mockExecuter := new(executers.MockCommandExecuter)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
@@ -227,7 +228,7 @@ func setIOHandlerExpectations(mockIOHandler *iohandlermocks.MockIOHandler, t Tes
 	}
 }
 
-func setCancelFlagExpectations(mockCancelFlag *task.MockCancelFlag, times int) {
+func setCancelFlagExpectations(mockCancelFlag *taskmocks.MockCancelFlag, times int) {
 	mockCancelFlag.On("Canceled").Return(false).Times(times)
 	mockCancelFlag.On("ShutDown").Return(false).Times(times)
 }

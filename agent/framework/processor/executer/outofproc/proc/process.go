@@ -23,15 +23,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 var (
 	getAppConfig                         = appconfig.Config
-	newAgentIdentity                     = identity.NewAgentIdentity
+	newAgentIdentity                     = identity2.NewAgentIdentity
 	runtimeConfigClientCreator           = runtimeconfig.NewIdentityRuntimeConfigClient
-	defaultAgentIdentitySelectorCreator  = identity.NewDefaultAgentIdentitySelector
-	runtimeConfigIdentitySelectorCreator = identity.NewRuntimeConfigIdentitySelector
+	defaultAgentIdentitySelectorCreator  = identity2.NewDefaultAgentIdentitySelector
+	runtimeConfigIdentitySelectorCreator = identity2.NewRuntimeConfigIdentitySelector
 )
 
 // OSProcess is an abstracted interface of os.Process
@@ -114,7 +115,7 @@ func InitializeWorkerDependencies(log log.T, args []string) (*appconfig.Ssmagent
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("failed to parse args: %v", err)
 	}
-	var selector identity.IAgentIdentitySelector
+	var selector identity2.IAgentIdentitySelector
 	var agentIdentity identity.IAgentIdentity
 	runtimeConfigClientHandler := runtimeConfigClientCreator()
 	if ok, err := runtimeConfigClientHandler.ConfigExists(); ok && err == nil {

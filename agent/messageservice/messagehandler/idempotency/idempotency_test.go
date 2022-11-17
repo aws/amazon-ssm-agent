@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -24,16 +25,16 @@ var (
 		DocumentInformation: docInfo,
 		DocumentType:        contracts.SendCommand,
 	}
-	mockContext = context.NewMockDefault()
+	mockContext = contextmocks.NewMockDefault()
 )
 
 type IdeopotencyTestSuite struct {
 	suite.Suite
-	mockContext *context.Mock
+	mockContext *contextmocks.Mock
 }
 
 func (suite *IdeopotencyTestSuite) SetupTest() {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	suite.mockContext = mockContext
 	persistenceTimeoutMinutes = 0 //  set to 0 for testing to prevent a longer build time
 }

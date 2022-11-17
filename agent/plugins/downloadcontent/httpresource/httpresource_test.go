@@ -26,8 +26,8 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler"
 	httpMock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/types"

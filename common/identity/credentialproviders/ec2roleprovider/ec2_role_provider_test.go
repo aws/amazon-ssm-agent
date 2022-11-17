@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider/stubs"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient/mocks"
@@ -46,7 +47,7 @@ func arrangeUpdateInstanceInformation(err error) (*mocks.ISSMClient, *EC2RolePro
 	}
 
 	ec2RoleProvider := &EC2RoleProvider{
-		Log: log.NewMockLog(),
+		Log: logmocks.NewMockLog(),
 		InstanceInfo: &ssmec2roleprovider.InstanceInfo{
 			InstanceId: "SomeInstanceId",
 			Region:     "SomeRegion",

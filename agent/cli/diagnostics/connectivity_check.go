@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/cli/diagnosticsutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"golang.org/x/net/proxy"
@@ -166,7 +166,7 @@ func getProxyDialer(proxyMap map[string]string) (proxy.Dialer, error) {
 			return nil, err
 		}
 
-		tlsConfig := network.GetDefaultTLSConfig(logger.NewSilentMockLog(), appconfig.DefaultConfig())
+		tlsConfig := network.GetDefaultTLSConfig(logger.NewSilentLogger(), appconfig.DefaultConfig())
 		return proxy.FromURL(parsedProxyUrl, &httpsDialerWrapper{tlsConfig})
 	}
 

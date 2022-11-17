@@ -8,6 +8,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/twinj/uuid"
@@ -31,14 +32,14 @@ var (
 
 type CommandProcessorWrapperTestSuite struct {
 	suite.Suite
-	contextMock                    *context.Mock
+	contextMock                    *contextmocks.Mock
 	commmandWorkerProcessorWrapper *CommandWorkerProcessorWrapper
 	documentResultChan             chan contracts.DocumentResult
 	outputMap                      map[contracts.UpstreamServiceName]chan contracts.DocumentResult
 }
 
 func (suite *CommandProcessorWrapperTestSuite) SetupTest() {
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 	suite.contextMock = contextMock
 	suite.documentResultChan = make(chan contracts.DocumentResult)
 	suite.outputMap = make(map[contracts.UpstreamServiceName]chan contracts.DocumentResult)

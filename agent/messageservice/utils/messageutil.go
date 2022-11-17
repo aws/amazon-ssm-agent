@@ -30,11 +30,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	model "github.com/aws/amazon-ssm-agent/agent/messageservice/contracts"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
 
@@ -319,7 +320,7 @@ func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, do
 }
 
 // PrepareReplyPayloadFromIntermediatePluginResults parses send reply payload
-func PrepareReplyPayloadFromIntermediatePluginResults(log logger.T, pluginID string, agentInfo contracts.AgentInfo, outputs map[string]*contracts.PluginResult) (payload messageContracts.SendReplyPayload) {
+func PrepareReplyPayloadFromIntermediatePluginResults(log log.T, pluginID string, agentInfo contracts.AgentInfo, outputs map[string]*contracts.PluginResult) (payload messageContracts.SendReplyPayload) {
 	status, statusCount, runtimeStatuses, _ := contracts.DocumentResultAggregator(log, pluginID, outputs)
 	additionalInfo := contracts.AdditionalInfo{
 		Agent:               agentInfo,

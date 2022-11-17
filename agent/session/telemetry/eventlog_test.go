@@ -22,8 +22,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	commMock "github.com/aws/amazon-ssm-agent/agent/session/communicator/mocks"
 	cloudWatchMock "github.com/aws/amazon-ssm-agent/agent/session/telemetry/metrics/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem"

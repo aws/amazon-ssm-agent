@@ -24,7 +24,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	loginterface "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -33,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/nightlyone/lockfile"
 )
 
@@ -45,7 +47,7 @@ const (
 
 var (
 	updater      processor.T
-	log          logger.T
+	log          loginterface.T
 	agentContext context.T
 )
 
@@ -69,7 +71,7 @@ var (
 )
 
 var (
-	newAgentIdentity                 = identity.NewAgentIdentity
+	newAgentIdentity                 = identity2.NewAgentIdentity
 	isIdentityRuntimeConfigSupported = updateutil.IsIdentityRuntimeConfigSupported
 )
 
@@ -228,12 +230,12 @@ func updateAgent() int {
 }
 
 func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentIdentity, error) {
-	var selector identity.IAgentIdentitySelector
+	var selector identity2.IAgentIdentitySelector
 	var agentIdentity identity.IAgentIdentity
 	var err error
 	// To support downgrades and rollbacks, we want to make sure that the source version supports runtime config
 	if isIdentityRuntimeConfigSupported(*sourceVersion) {
-		selector = identity.NewRuntimeConfigIdentitySelector(log)
+		selector = identity2.NewRuntimeConfigIdentitySelector(log)
 		agentIdentity, err = newAgentIdentity(log, &appConfig, selector)
 
 		// If success, return the identity
@@ -245,7 +247,7 @@ func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentId
 
 	// If not able to resolve agent identity with runtime config or source version
 	// does not support runtimeconfig, fallback to default identity selector
-	selector = identity.NewDefaultAgentIdentitySelector(log)
+	selector = identity2.NewDefaultAgentIdentitySelector(log)
 	agentIdentity, err = newAgentIdentity(log, &appConfig, selector)
 	if err != nil {
 		return nil, err

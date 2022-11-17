@@ -28,7 +28,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
@@ -70,7 +71,7 @@ var lockFileName = appconfig.UpdaterPidLockfile
 var (
 	updateInitialize        func(string) error
 	updateDownloadResource  func(string) error
-	updateExecuteSelfUpdate func(log logger.T, region string) (pid int, err error)
+	updateExecuteSelfUpdate func(log log.T, region string) (pid int, err error)
 )
 
 // IUpdateProvider is the interface to start/stop selfupdate component
@@ -126,7 +127,7 @@ func (u *SelfUpdate) loadScheduledFrequency(config appconfig.SsmagentConfig) {
 }
 
 // Generate the schedule job for self update via s3  periodically
-func (u *SelfUpdate) scheduleSelfUpdateS3Job(log logger.T) {
+func (u *SelfUpdate) scheduleSelfUpdateS3Job(log log.T) {
 	var err error
 	if u.updateJob, err = scheduler.Every(u.updateFrequencyHrs).Hours().NotImmediately().Run(u.updateFromS3WithDelay); err != nil {
 		log.Errorf("unable to schedule self update job. %v", err)
@@ -135,7 +136,7 @@ func (u *SelfUpdate) scheduleSelfUpdateS3Job(log logger.T) {
 }
 
 // selfupdate based on S3 manifest file pulling
-func (u *SelfUpdate) selfupdateWithS3(log logger.T) {
+func (u *SelfUpdate) selfupdateWithS3(log log.T) {
 	log.Debugf("Start scheduling job for s3 based self update")
 
 	instanceId, _ := u.context.Identity().InstanceID()
@@ -318,7 +319,7 @@ func (u *SelfUpdate) downloadResourceFromS3(
 	return
 }
 
-func (u *SelfUpdate) executeSelfUpdate(log logger.T, region string) (pid int, err error) {
+func (u *SelfUpdate) executeSelfUpdate(log log.T, region string) (pid int, err error) {
 	var workDic, sourceURL, cmd string
 
 	sourceURL = u.generateDownloadManifestURL(log, region)
@@ -335,7 +336,7 @@ func (u *SelfUpdate) executeSelfUpdate(log logger.T, region string) (pid int, er
 }
 
 // Generate the command to check current version is deprecated or not.
-func (u *SelfUpdate) generateUpdateCmd(log logger.T, sourceURL string) (cmd string) {
+func (u *SelfUpdate) generateUpdateCmd(log log.T, sourceURL string) (cmd string) {
 	log.Debugf("Starting generate command for self update")
 
 	cmd = filepath.Join(appconfig.UpdaterArtifactsRoot, PackageName, PackageVersion, Updater) + " -update" + " -selfupdate"
@@ -355,7 +356,7 @@ func (u *SelfUpdate) buildUpdateCommand(cmd string, arg string, value string) st
 }
 
 func (u *SelfUpdate) exeCommand(
-	log logger.T,
+	log log.T,
 	cmd string,
 	workingDir string) (pid int, err error) {
 
@@ -370,7 +371,7 @@ func (u *SelfUpdate) exeCommand(
 	return
 }
 
-func (u *SelfUpdate) unCompress(log logger.T,
+func (u *SelfUpdate) unCompress(log log.T,
 	downloadOutput artifact.DownloadOutput) (err error) {
 
 	log.Debugf("Starting to uncompress updater")
@@ -388,7 +389,7 @@ func (u *SelfUpdate) unCompress(log logger.T,
 	return
 }
 
-func (u *SelfUpdate) generateDownloadUpdaterURL(log logger.T, region string, fileName string) (url string) {
+func (u *SelfUpdate) generateDownloadUpdaterURL(log log.T, region string, fileName string) (url string) {
 	var urlFormat string
 
 	if dynamicS3Endpoint := u.context.Identity().GetServiceEndpoint("s3"); dynamicS3Endpoint != "" {
@@ -406,7 +407,7 @@ func (u *SelfUpdate) generateDownloadUpdaterURL(log logger.T, region string, fil
 	return urlFormat
 }
 
-func (u *SelfUpdate) generateDownloadManifestURL(log logger.T, region string) (manifestUrl string) {
+func (u *SelfUpdate) generateDownloadManifestURL(log log.T, region string) (manifestUrl string) {
 
 	if dynamicS3Endpoint := u.context.Identity().GetServiceEndpoint("s3"); dynamicS3Endpoint != "" {
 		manifestUrl = "https://" + dynamicS3Endpoint + ManifestPath
@@ -423,7 +424,7 @@ func (u *SelfUpdate) generateDownloadManifestURL(log logger.T, region string) (m
 }
 
 // FileName generates downloadable file name base on agreed convension
-func (u *SelfUpdate) getUpdaterFileName(log logger.T, Arch string, CompressFormat string) (fileName string, err error) {
+func (u *SelfUpdate) getUpdaterFileName(log log.T, Arch string, CompressFormat string) (fileName string, err error) {
 
 	var PlatformName string
 
@@ -443,7 +444,7 @@ func (u *SelfUpdate) getUpdaterFileName(log logger.T, Arch string, CompressForma
 	return
 }
 
-func (u *SelfUpdate) getPlatformName(log logger.T) (platformName string, err error) {
+func (u *SelfUpdate) getPlatformName(log log.T) (platformName string, err error) {
 	var isNano bool
 
 	if platformName, err = platformNameGetter(log); err != nil {
@@ -481,7 +482,7 @@ func (u *SelfUpdate) getPlatformName(log logger.T) (platformName string, err err
 	return platformName, err
 }
 
-func (u *SelfUpdate) isAgentInstalledUsingSnap(log logger.T) (result bool, err error) {
+func (u *SelfUpdate) isAgentInstalledUsingSnap(log log.T) (result bool, err error) {
 	if _, commandErr := exec.Command("snap", "services", "amazon-ssm-agent").Output(); commandErr != nil {
 		log.Debugf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
 		return false, commandErr
@@ -490,7 +491,7 @@ func (u *SelfUpdate) isAgentInstalledUsingSnap(log logger.T) (result bool, err e
 	return true, nil
 }
 
-func (u *SelfUpdate) prepareUpdaterDir(log logger.T, rootDir, orchestDir string, instanceId string) (err error) {
+func (u *SelfUpdate) prepareUpdaterDir(log log.T, rootDir, orchestDir string, instanceId string) (err error) {
 	var fileName [2]string
 
 	fileName[0] = DefaultStandOut
@@ -516,7 +517,7 @@ func (u *SelfUpdate) prepareUpdaterDir(log logger.T, rootDir, orchestDir string,
 	return
 }
 
-func (u *SelfUpdate) createIfNotExist(log logger.T, root, filePath string) (err error) {
+func (u *SelfUpdate) createIfNotExist(log log.T, root, filePath string) (err error) {
 	var FileWriter *os.File
 	var fullFilePath string
 	fullFilePath = filepath.Join(root, filePath)

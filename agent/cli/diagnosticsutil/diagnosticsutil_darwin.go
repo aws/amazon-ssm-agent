@@ -21,7 +21,7 @@ import (
 	"os/user"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 )
@@ -50,7 +50,7 @@ func IsRunningElevatedPermissions() error {
 
 // AssumeAgentEnvironmentProxy is a noop on darwin because there is no other special proxy configuration
 func AssumeAgentEnvironmentProxy() {
-	proxyconfig.SetProxyConfig(log.NewSilentMockLog())
+	proxyconfig.SetProxyConfig(logger.NewSilentLogger())
 }
 
 func GetUserRunningAgentProcess() (string, error) {

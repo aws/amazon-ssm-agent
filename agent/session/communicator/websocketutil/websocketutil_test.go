@@ -22,7 +22,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/gorilla/websocket"

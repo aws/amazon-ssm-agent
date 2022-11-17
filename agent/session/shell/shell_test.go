@@ -22,11 +22,13 @@ import (
 
 	cloudwatchlogspublisher_mock "github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/s3util"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	execcmdMock "github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd/mocks"
@@ -42,7 +44,7 @@ var (
 	messageId          = "dd01e56b-ff48-483e-a508-b5f073f31b16"
 	schemaVersion      = uint32(1)
 	createdDate        = uint64(1503434274948)
-	mockLog            = log.NewMockLog()
+	mockLog            = logmocks.NewMockLog()
 	sessionId          = "sessionId"
 	sessionOwner       = "sessionOwner"
 	testCwLogGroupName = "testCW"
@@ -55,7 +57,7 @@ type ShellTestSuite struct {
 	suite.Suite
 	mockContext     *context.Mock
 	mockLog         log.T
-	mockCancelFlag  *task.MockCancelFlag
+	mockCancelFlag  *taskmocks.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
 	mockCWL         *cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock
@@ -68,7 +70,7 @@ type ShellTestSuite struct {
 
 func (suite *ShellTestSuite) SetupTest() {
 	mockContext := context.NewMockDefault()
-	mockCancelFlag := &task.MockCancelFlag{}
+	mockCancelFlag := &taskmocks.MockCancelFlag{}
 	mockDataChannel := &dataChannelMock.IDataChannel{}
 	mockCWL := new(cloudwatchlogspublisher_mock.CloudWatchLogsServiceMock)
 	mockS3 := new(s3util.MockS3Uploader)

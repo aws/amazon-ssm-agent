@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -27,12 +28,12 @@ import (
 type RebooterTestSuite struct {
 	suite.Suite
 	rebooter IRebootType
-	logMock  *log.Mock
+	logMock  *logmocks.Mock
 }
 
 // Initialize the rebooter test suite struct
 func (suite *RebooterTestSuite) SetupTest() {
-	logMock := log.NewMockLog()
+	logMock := logmocks.NewMockLog()
 	suite.logMock = logMock
 	suite.rebooter = &SSMRebooter{}
 }

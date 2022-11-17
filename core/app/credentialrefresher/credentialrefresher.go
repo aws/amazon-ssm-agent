@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 
@@ -130,7 +131,7 @@ func (c *credentialsRefresher) durationUntilRefresh() time.Duration {
 
 func (c *credentialsRefresher) Start() error {
 	var err error
-	credentialProvider, ok := identity.GetRemoteProvider(c.agentIdentity)
+	credentialProvider, ok := identity2.GetRemoteProvider(c.agentIdentity)
 	if !ok {
 		c.log.Info("Identity does not require credential refresher")
 		c.sendCredentialsReadyMessage()

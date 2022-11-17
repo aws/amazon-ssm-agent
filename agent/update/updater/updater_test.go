@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 )
@@ -67,7 +68,7 @@ func (u *stubUpdater) Failed(
 func TestUpdater(t *testing.T) {
 	// setup
 	updater = &stubUpdater{}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 
@@ -80,7 +81,7 @@ func TestUpdater(t *testing.T) {
 func TestUpdaterFailedStartOrResume(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnUpdateError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 
@@ -93,7 +94,7 @@ func TestUpdaterFailedStartOrResume(t *testing.T) {
 func TestUpdaterWithDowngrade(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnUpdateError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 
@@ -112,7 +113,7 @@ func TestUpdaterWithDowngrade(t *testing.T) {
 func TestUpdaterFailedWithoutSourceTargetCmd(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnUpdateError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 
@@ -132,7 +133,7 @@ func TestUpdaterFailedWithoutSourceTargetCmd(t *testing.T) {
 func TestCleanupFailed(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnCleanupError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 

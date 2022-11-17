@@ -20,9 +20,10 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	contextmocks "github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	channel "github.com/aws/amazon-ssm-agent/common/channel"
 	channelmocks "github.com/aws/amazon-ssm-agent/common/channel/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
@@ -41,7 +42,7 @@ type MessageBusTestSuite struct {
 }
 
 func (suite *MessageBusTestSuite) SetupTest() {
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 	suite.mockLog = mockLog
 	suite.appConfig = appconfig.DefaultConfig()
 	suite.mockContext = contextmocks.NewMockDefault()

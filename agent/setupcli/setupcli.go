@@ -22,6 +22,7 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager"
@@ -294,8 +295,8 @@ func initializeLogger() log.T {
 </seelog>
 `
 	seelogger, _ := seelog.LoggerFromConfigAsBytes([]byte(seelogConfig))
-	loggerInstance := &log.DelegateLogger{}
+	loggerInstance := &logger.DelegateLogger{}
 	loggerInstance.BaseLoggerInstance = seelogger
-	formatFilter := &log.ContextFormatFilter{Context: []string{}}
-	return &log.Wrapper{Format: formatFilter, M: LogMutex, Delegate: loggerInstance}
+	formatFilter := &logger.ContextFormatFilter{Context: []string{}}
+	return &logger.Wrapper{Format: formatFilter, M: LogMutex, Delegate: loggerInstance}
 }

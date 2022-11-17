@@ -39,6 +39,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 )
@@ -63,7 +64,7 @@ type Utility struct {
 }
 
 var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
-var getRemoteProvider = identity.GetRemoteProvider
+var getRemoteProvider = identity2.GetRemoteProvider
 var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command

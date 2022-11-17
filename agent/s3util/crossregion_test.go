@@ -26,6 +26,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/aws-sdk-go/aws"
@@ -70,7 +72,7 @@ func TestGetBucketRegion_NoError_NoRegionInResponse_ReturnsEmptyString(t *testin
 	httpProvider := &MockedHttpProvider{}
 	httpProvider.On("Head", "https://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
 	httpProvider.On("Head", "https://bucket-1.s3.amazonaws.com").Return(resp, err)
-	actual := getBucketRegion(context.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
+	actual := getBucketRegion(contextmocks.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
 	assert.Equal(t, "", actual)
 }
 
@@ -86,7 +88,7 @@ func TestGetBucketRegion_NoError_RegionInResponse_ReturnsRegion(t *testing.T) {
 	var err error = nil
 	httpProvider := &MockedHttpProvider{}
 	httpProvider.On("Head", "https://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
-	actual := getBucketRegion(context.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
+	actual := getBucketRegion(contextmocks.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
 	assert.Equal(t, "eu-west-1", actual)
 }
 
@@ -100,14 +102,14 @@ func TestGetBucketRegion_AllUrlsFail_ReturnsEmptyString(t *testing.T) {
 	httpProvider.On("Head", "https://bucket-1.s3.amazonaws.com").Return(resp, err)
 	httpProvider.On("Head", "http://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
 	httpProvider.On("Head", "http://bucket-1.s3.amazonaws.com").Return(resp, err)
-	actual := getBucketRegion(context.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
+	actual := getBucketRegion(contextmocks.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
 	assert.Equal(t, "", actual)
 	httpProvider.AssertExpectations(t)
 }
 
 func TestGetS3CrossRegionCapableSession_regionFromHead_noConfigOverrides(t *testing.T) {
 	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1")
-	sess, err := GetS3CrossRegionCapableSession(context.NewMockDefault(), "bucket-1")
+	sess, err := GetS3CrossRegionCapableSession(contextmocks.NewMockDefault(), "bucket-1")
 	assert.NotNil(t, sess)
 	assert.Equal(t, *sess.Config.Region, "eu-west-1")
 	assert.Nil(t, sess.Config.Endpoint)
@@ -121,9 +123,9 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_noConfigOverrides(t *te
 	identityMock := &identityMocks.IAgentIdentity{}
 	identityMock.On("Region").Return("cn-north-1", nil)
 
-	contextMock := new(context.Mock)
+	contextMock := new(contextmocks.Mock)
 	contextMock.On("Identity").Return(identityMock)
-	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("Log").Return(logmocks.NewMockLog())
 	contextMock.On("AppConfig").Return(appconfig.DefaultConfig())
 
 	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "")
@@ -144,9 +146,9 @@ func TestGetS3CrossRegionCapableSession_regionFromHead_withConfigOverrides(t *te
 	identityMock := &identityMocks.IAgentIdentity{}
 	identityMock.On("Region").Return("us-east-1", nil)
 
-	contextMock := new(context.Mock)
+	contextMock := new(contextmocks.Mock)
 	contextMock.On("Identity").Return(identityMock)
-	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("Log").Return(logmocks.NewMockLog())
 	contextMock.On("AppConfig").Return(appConfig)
 
 	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1")
@@ -167,9 +169,9 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_withConfigOverrides(t *
 	identityMock := &identityMocks.IAgentIdentity{}
 	identityMock.On("Region").Return("cn-north-1", nil)
 
-	contextMock := new(context.Mock)
+	contextMock := new(contextmocks.Mock)
 	contextMock.On("Identity").Return(identityMock)
-	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("Log").Return(logmocks.NewMockLog())
 	contextMock.On("AppConfig").Return(appConfig)
 
 	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "")
@@ -223,9 +225,9 @@ func TestRedirect_RedirectResponse_RetryWithCorrectRegion(t *testing.T) {
 	identityMock := &identityMocks.IAgentIdentity{}
 	identityMock.On("Region").Return("cn-northwest-1", nil)
 
-	contextMock := new(context.Mock)
+	contextMock := new(contextmocks.Mock)
 	contextMock.On("Identity").Return(identityMock)
-	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("Log").Return(logmocks.NewMockLog())
 	contextMock.On("AppConfig").Return(appConfig)
 
 	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "")
@@ -280,7 +282,7 @@ func TestRedirect_RedirectResponse_RetryWithCorrectRegion(t *testing.T) {
 
 func TestRedirect_BadSigningRegionResponse_RetryWithCorrectRegion(t *testing.T) {
 	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "")
-	sess, err := GetS3CrossRegionCapableSession(context.NewMockDefault(), "bucket-1")
+	sess, err := GetS3CrossRegionCapableSession(contextmocks.NewMockDefault(), "bucket-1")
 	assert.Nil(t, err)
 
 	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
@@ -338,7 +340,7 @@ func TestRedirect_CachedBucketRegion_FirstRequestGoesToCorrectRegion(t *testing.
 	getBucketRegionMap().Put("bucket-1", "cn-north-1")
 
 	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "")
-	sess, err := GetS3CrossRegionCapableSession(context.NewMockDefault(), "bucket-1")
+	sess, err := GetS3CrossRegionCapableSession(contextmocks.NewMockDefault(), "bucket-1")
 	assert.Nil(t, err)
 
 	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
@@ -459,7 +461,7 @@ func validationHandlerTestCase(t *testing.T, bucketName, oldRegion, newRegion st
 	getBucketRegionMap().Put(bucketName, newRegion)
 
 	sess := session.New(config)
-	sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler(log.NewMockLog()))
+	sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler(logmocks.NewMockLog()))
 	svc := s3.New(sess)
 
 	request := svc.NewRequest(op, input, output)
@@ -498,7 +500,7 @@ func retryHandlerTestCase(t *testing.T, bucketName, oldRegion, newRegion string,
 	}
 
 	sess := session.New(config)
-	sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(log.NewMockLog()))
+	sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(logmocks.NewMockLog()))
 	svc := s3.New(sess)
 
 	request := svc.NewRequest(op, input, output)
@@ -561,7 +563,7 @@ func TestValidateHandler_EndpointLookupFailure_NoChangeToRequest(t *testing.T) {
 	svc := s3.New(sess)
 	request := svc.NewRequest(op, input, output)
 
-	handler := makeS3RegionCorrectingValidateHandler(log.NewMockLog())
+	handler := makeS3RegionCorrectingValidateHandler(logmocks.NewMockLog())
 	handler.Fn(request)
 
 	assert.Equal(t, "us-east-1", *request.Config.Region)
@@ -602,7 +604,7 @@ func TestRetryHandler_EndpointLookupFailure_NoChangeToRequest(t *testing.T) {
 		StatusCode: 301,
 	}
 
-	handler := makeS3RegionCorrectingRetryHandler(log.NewMockLog())
+	handler := makeS3RegionCorrectingRetryHandler(logmocks.NewMockLog())
 	handler.Fn(request)
 
 	assert.Equal(t, "us-east-1", *request.Config.Region)
@@ -619,7 +621,7 @@ func TestFixupRequest_NoHttpRequestUrl_NoCustomEndpoint_SetsRegionAndEndpoint(t 
 		ClientInfo:  metadata.ClientInfo{},
 		HTTPRequest: &http.Request{},
 	}
-	fixupRequest(log.NewMockLog(), request, "eu-west-1")
+	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
 	assert.Equal(t, "eu-west-1", *request.Config.Region)
 	assert.Nil(t, request.Config.Endpoint)
 	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com", request.ClientInfo.Endpoint)
@@ -634,7 +636,7 @@ func TestFixupRequest_NoHttpRequestUrl_CustomEndpoint_SetsRegionAndEndpoint(t *t
 		ClientInfo:  metadata.ClientInfo{},
 		HTTPRequest: &http.Request{},
 	}
-	fixupRequest(log.NewMockLog(), request, "eu-west-1")
+	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
 	assert.Equal(t, "eu-west-1", *request.Config.Region)
 	assert.Equal(t, "https://my-custom-endpoint.com", *request.Config.Endpoint)
 	assert.Equal(t, "https://my-custom-endpoint.com", request.ClientInfo.Endpoint)
@@ -656,7 +658,7 @@ func TestFixupRequest_HttpRequestUrl_NoCustomEndpoint_SetsRegionAndHttpRequestUr
 			},
 		},
 	}
-	fixupRequest(log.NewMockLog(), request, "eu-west-1")
+	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
 	assert.Equal(t, "eu-west-1", *request.Config.Region)
 	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com", request.HTTPRequest.URL.String())
 	assert.Nil(t, request.Config.Endpoint)
@@ -680,7 +682,7 @@ func TestFixupRequest_HttpRequestUrlPresent_RespectsCustomEndpoint(t *testing.T)
 			},
 		},
 	}
-	fixupRequest(log.NewMockLog(), request, "eu-west-1")
+	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
 	assert.Equal(t, "eu-west-1", *request.Config.Region)
 	assert.Equal(t, "https://my-custom-endpoint.com", request.HTTPRequest.URL.String())
 	assert.Equal(t, "https://my-custom-endpoint.com", *request.Config.Endpoint)
@@ -704,7 +706,7 @@ func TestFixupRequest_HttpRequestUrlPresent_VirtualHostedUrlWithKey(t *testing.T
 			},
 		},
 	}
-	fixupRequest(log.NewMockLog(), request, "eu-west-1")
+	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
 	assert.Equal(t, "eu-west-1", *request.Config.Region)
 	assert.Equal(t, "https://bucket-1.s3.eu-west-1.amazonaws.com/key", request.HTTPRequest.URL.String())
 	assert.Nil(t, request.Config.Endpoint)
@@ -728,7 +730,7 @@ func TestFixupRequest_HttpRequestUrlPresent_PathStyleUrlWithKey(t *testing.T) {
 			},
 		},
 	}
-	fixupRequest(log.NewMockLog(), request, "eu-west-1")
+	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
 	assert.Equal(t, "eu-west-1", *request.Config.Region)
 	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com/bucket-1/key", request.HTTPRequest.URL.String())
 	assert.Nil(t, request.Config.Endpoint)
@@ -736,7 +738,7 @@ func TestFixupRequest_HttpRequestUrlPresent_PathStyleUrlWithKey(t *testing.T) {
 }
 
 func TestNewS3BucketRegionHeaderCapturingTransport(t *testing.T) {
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
+	transport := newS3BucketRegionHeaderCapturingTransport(logmocks.NewMockLog(), appconfig.SsmagentConfig{})
 	_, goodType := transport.delegate.(*http.Transport)
 	assert.True(t, goodType)
 }
@@ -878,7 +880,7 @@ func TestBucketRegionCache_keepsNMostRecentItems(t *testing.T) {
 func newS3BucketRegionHeaderCapturingTransportForTest(delegate http.RoundTripper) *s3BucketRegionHeaderCapturingTransport {
 	return &s3BucketRegionHeaderCapturingTransport{
 		delegate: delegate,
-		logger:   log.NewMockLog(),
+		logger:   logmocks.NewMockLog(),
 	}
 }
 
@@ -1000,19 +1002,19 @@ func makeAuthorizationHeaderMalformedErrorResponse(wrongRegion, expRegion string
 
 func TestExtractRegionFromBody_ErrorXmlWithRegion(t *testing.T) {
 	bodyContents := makeAuthorizationHeaderMalformedErrorResponse("us-east-1", "eu-west-1")
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
+	transport := newS3BucketRegionHeaderCapturingTransport(logmocks.NewMockLog(), appconfig.SsmagentConfig{})
 	assert.Equal(t, "eu-west-1", transport.extractRegionFromBody([]byte(bodyContents)))
 }
 
 func TestExtractRegionFromBody_ErrorXmlWithEndpoint(t *testing.T) {
 	bodyContents := makeRedirectResponseBodyText("bucket-1.s3.cn-north-1.amazonaws.com.cn", "cn-north-1")
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
+	transport := newS3BucketRegionHeaderCapturingTransport(logmocks.NewMockLog(), appconfig.SsmagentConfig{})
 	assert.Equal(t, "cn-north-1", transport.extractRegionFromBody([]byte(bodyContents)))
 }
 
 func TestExtractRegionFromBody_ErrorXmlWithEndpoint_PathStyleEndpointUrl(t *testing.T) {
 	bodyContents := makeRedirectResponseBodyText("s3.cn-north-1.amazonaws.com.cn/bucket-1", "cn-north-1")
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
+	transport := newS3BucketRegionHeaderCapturingTransport(logmocks.NewMockLog(), appconfig.SsmagentConfig{})
 	assert.Equal(t, "cn-north-1", transport.extractRegionFromBody([]byte(bodyContents)))
 }
 
@@ -1095,7 +1097,7 @@ func doGetResponseBodyTest(t *testing.T, mockResponses []mockReaderResponse, exp
 	response := &http.Response{
 		Body: body,
 	}
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
+	transport := newS3BucketRegionHeaderCapturingTransport(logmocks.NewMockLog(), appconfig.SsmagentConfig{})
 	actualBody, actualErr := transport.getResponseBody(response)
 	assert.Equal(t, expResult, actualBody)
 	assert.Equal(t, expErr, actualErr)

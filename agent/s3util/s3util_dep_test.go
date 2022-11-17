@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +27,7 @@ func TestHttpProviderImpl_Head_Handles301WithNoLocation(t *testing.T) {
 	}
 
 	httpProvider := HttpProviderImpl{
-		logger: log.NewMockLog(),
+		logger: logmocks.NewMockLog(),
 	}
 	actual, err := httpProvider.Head(bucketUrl)
 	assert.Nil(t, err)
@@ -51,7 +52,7 @@ func TestHttpProviderImpl_Head_NoRetryOnCertValidationFailure(t *testing.T) {
 	}
 
 	httpProvider := HttpProviderImpl{
-		logger: log.NewMockLog(),
+		logger: logmocks.NewMockLog(),
 	}
 	actual, err := httpProvider.Head(bucketUrl)
 	assert.Nil(t, actual)

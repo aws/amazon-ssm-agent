@@ -19,14 +19,15 @@ import (
 	"testing"
 	"time"
 
-	complianceUploader "github.com/aws/amazon-ssm-agent/agent/association/compliance/uploader"
+	processor2 "github.com/aws/amazon-ssm-agent/agent/association/mocks/processor"
+	"github.com/aws/amazon-ssm-agent/agent/association/mocks/service"
+	complianceUploader "github.com/aws/amazon-ssm-agent/agent/association/mocks/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
-	"github.com/aws/amazon-ssm-agent/agent/association/service"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -77,7 +78,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	parserMock := parserMock{}
+	parserMock := processor2.ParserMock{}
 
 	complianceUploader := complianceUploader.NewMockDefault()
 
@@ -130,7 +131,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	output := ssm.UpdateInstanceAssociationStatusOutput{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
-	parserMock := parserMock{}
+	parserMock := processor2.ParserMock{}
 
 	// Arrange
 	processor.assocSvc = svcMock
@@ -187,7 +188,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 
 	payload := messageContracts.SendCommandPayload{}
 	docState := contracts.DocumentState{}
-	parserMock := parserMock{}
+	parserMock := processor2.ParserMock{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
 	processorMock := &processormock.MockedProcessor{}
@@ -280,7 +281,7 @@ func TestRemovePluginAssociationInstances(t *testing.T) {
 	assert.Equal(t, resultMap, pluginAssociationInstances)
 }
 
-func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState contracts.DocumentState) {
+func mockParser(parserMock *processor2.ParserMock, payload *messageContracts.SendCommandPayload, docState contracts.DocumentState) {
 	parserMock.On(
 		"InitializeDocumentState",
 		mock.AnythingOfType("*context.Mock"),

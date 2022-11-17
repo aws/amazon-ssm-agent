@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +16,7 @@ import (
 func TestCommandOuput(t *testing.T) {
 
 	// TestInputCases is a list of strings which we test multi-writer on.
-	context := context.NewMockDefault()
+	context := contextmocks.NewMockDefault()
 	var TestInputCases = [...]string{
 		"Test input text.",
 		"A sample \ninput text.",

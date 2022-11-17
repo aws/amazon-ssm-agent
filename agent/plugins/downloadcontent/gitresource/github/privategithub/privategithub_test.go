@@ -21,12 +21,13 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	gitmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient/mock"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
 	"github.com/stretchr/testify/assert"
 )
 
-var logMock = log.NewMockLog()
+var logMock = logmocks.NewMockLog()
 
 func TestTokenInfoImpl_GetOAuthClient_Success(t *testing.T) {
 

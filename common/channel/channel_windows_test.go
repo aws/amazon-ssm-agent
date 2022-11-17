@@ -22,6 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
@@ -43,7 +44,7 @@ func TestChannelSuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *IChannelTestSuite) SetupTest() {
-	suite.log = log.NewMockLog()
+	suite.log = logmocks.NewMockLog()
 	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
 	suite.appconfig = appconfig.DefaultConfig()
 }

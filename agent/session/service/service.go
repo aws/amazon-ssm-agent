@@ -33,7 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go/aws/signer/v4"
 )
 
 const (

@@ -17,10 +17,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
-
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	authregistermocks "github.com/aws/amazon-ssm-agent/agent/ssm/authregister/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2/mocks"
@@ -28,11 +26,11 @@ import (
 	ec2roleprovidermocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	endpointmocks "github.com/aws/amazon-ssm-agent/common/identity/endpoint/mocks"
-
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/service/ssm"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -41,7 +39,7 @@ func TestEC2IdentityType_InstanceId(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeId"
@@ -56,7 +54,7 @@ func TestEC2IdentityType_RegionFirstSuccess(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeRegion"
@@ -71,7 +69,7 @@ func TestEC2IdentityType_RegionFailDocumentSuccess(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeOtherRegion"
@@ -89,7 +87,7 @@ func TestEC2IdentityType_AvailabilityZone(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeAZ"
@@ -104,7 +102,7 @@ func TestEC2IdentityType_AvailabilityZoneId(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeAZ"
@@ -119,7 +117,7 @@ func TestEC2IdentityType_InstanceType(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeInstanceType"
@@ -144,7 +142,7 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 	ec2RoleProviderMocks.On("GetInnerProvider").Return(ec2roleprovidermocks.NewIInnerProvider(t), nil)
 
 	identity := Identity{
-		Log:                 log.NewMockLog(),
+		Log:                 logmocks.NewMockLog(),
 		Client:              client,
 		credentialsProvider: ec2RoleProviderMocks,
 		shareLock:           &sync.RWMutex{},
@@ -191,7 +189,7 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigNotPresent_Su
 	ec2RoleProviderMocks := &ec2roleprovidermocks.IEC2RoleProvider{}
 	ec2RoleProviderMocks.On("GetInnerProvider").Return(ec2roleprovidermocks.NewIInnerProvider(t), nil)
 	identity := Identity{
-		Log:                 log.NewMockLog(),
+		Log:                 logmocks.NewMockLog(),
 		Client:              client,
 		credentialsProvider: ec2RoleProviderMocks,
 		shareLock:           &sync.RWMutex{},
@@ -205,7 +203,7 @@ func TestEC2IdentityType_IsIdentityEnvironment(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 
@@ -222,7 +220,7 @@ func TestEC2IdentityType_IsIdentityEnvironment(t *testing.T) {
 
 func TestEC2IdentityType_IdentityType(t *testing.T) {
 	identity := Identity{
-		Log: log.NewMockLog(),
+		Log: logmocks.NewMockLog(),
 	}
 
 	res := identity.IdentityType()
@@ -238,7 +236,7 @@ func TestEC2Identity_initSharedCreds_InitsSharedCredentials_WhenSharedProviderSu
 	}
 
 	identity := &Identity{
-		Log: log.NewMockLog(),
+		Log: logmocks.NewMockLog(),
 	}
 
 	// Act
@@ -256,7 +254,7 @@ func TestEC2Identity_initSharedCreds_InitsNonSharedCredentials_WhenSharedProvide
 	}
 
 	identity := &Identity{
-		Log: log.NewMockLog(),
+		Log: logmocks.NewMockLog(),
 		credentialsProvider: &stubs.ProviderStub{
 			ProviderName: stubs.NonSharedProviderName,
 		},
@@ -275,7 +273,7 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingInstanceId(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := &Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 
@@ -295,7 +293,7 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingRegion(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := &Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 
@@ -319,7 +317,7 @@ func TestGetInstanceInfo_ReturnsInstanceInfo(t *testing.T) {
 	client := &mocks.IEC2MdsSdkClientMock{}
 
 	identity := &Identity{
-		Log:    log.NewMockLog(),
+		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 
@@ -349,7 +347,7 @@ func TestEC2Identity_InitEC2RoleProvider_InitsCredentialProvider(t *testing.T) {
 	}
 
 	identity := &Identity{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		registrationReadyChan: registrationReadyChan,
 	}
 
@@ -386,7 +384,7 @@ func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *t
 	}
 
 	identity := &Identity{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		Client:                client,
 		authRegisterService:   authRegisterService,
 		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
@@ -426,7 +424,7 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 	}
 
 	identity := &Identity{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
 	}
 
@@ -484,7 +482,7 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 	}
 
 	identity := &Identity{
-		Log:                   log.NewMockLog(),
+		Log:                   logmocks.NewMockLog(),
 		Client:                client,
 		authRegisterService:   authRegisterService,
 		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),

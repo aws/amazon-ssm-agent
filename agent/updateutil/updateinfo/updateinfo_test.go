@@ -19,8 +19,9 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 )
@@ -67,7 +68,7 @@ func TestCreateInstanceContext(t *testing.T) {
 		testInstanceInfo = test
 
 		contextMock := &context.Mock{}
-		contextMock.On("Log").Return(log.NewMockLog())
+		contextMock.On("Log").Return(logmocks.NewMockLog())
 
 		info, err := newInner(contextMock)
 

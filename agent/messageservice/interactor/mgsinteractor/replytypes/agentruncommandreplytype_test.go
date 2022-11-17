@@ -20,9 +20,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	mgsUtils "github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mgsinteractor/utils"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"

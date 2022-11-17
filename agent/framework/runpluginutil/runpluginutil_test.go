@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -70,7 +71,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 	pluginRegistry := PluginRegistry{}
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 	ioConfig := contracts.IOConfiguration{}
@@ -159,7 +160,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -247,7 +248,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	pluginRegistry := PluginRegistry{}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	ioConfig := contracts.IOConfiguration{}
 
@@ -320,7 +321,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 	config := appconfig.SsmagentConfig{}
 	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
-	var ctx = context.NewMockDefaultWithConfig(config)
+	var ctx = contextmocks.NewMockDefaultWithConfig(config)
 	defaultTime := time.Now()
 
 	for index, name := range pluginNames {
@@ -426,7 +427,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 	ioConfig := contracts.IOConfiguration{}
 
 	var cancelFlag task.CancelFlag
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
@@ -512,7 +513,7 @@ func TestRunPluginsWithCompatiblePlatformPrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
@@ -614,7 +615,7 @@ func TestRunPluginsWithCompatiblePlatformPreconditionWithValueFirst(t *testing.T
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
@@ -719,7 +720,7 @@ func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 
 	config := appconfig.SsmagentConfig{}
 	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
-	var ctx = context.NewMockDefaultWithConfig(config)
+	var ctx = contextmocks.NewMockDefaultWithConfig(config)
 
 	defaultTime := time.Now()
 	defaultOutput := ""
@@ -832,7 +833,7 @@ func TestRunPluginsWithFuturePlatformPrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -933,7 +934,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1048,7 +1049,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 
 	config := appconfig.SsmagentConfig{}
 	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
-	var ctx = context.NewMockDefaultWithConfig(config)
+	var ctx = contextmocks.NewMockDefaultWithConfig(config)
 
 	defaultTime := time.Now()
 	defaultOutput := ""
@@ -1174,7 +1175,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1283,7 +1284,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1393,7 +1394,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateParameter(t *testing.T) 
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1503,7 +1504,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateConstant(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1613,7 +1614,7 @@ func TestRunPluginsWithUnrecognizedPreconditionSSMParameter(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1723,7 +1724,7 @@ func TestRunPluginsWithUnrecognizedPreconditionSecureSSMParameter(t *testing.T) 
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1833,7 +1834,7 @@ func TestRunPluginsWithUnrecognizedPreconditionNoDocumentParameters(t *testing.T
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1943,7 +1944,7 @@ func TestRunPluginsWithUnrecognizedPreconditionUnrecognizedParameter(t *testing.
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -2053,7 +2054,7 @@ func TestRunPluginsPlatformPreconditionWithDocumentParameters(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -2163,7 +2164,7 @@ func TestRunPluginsWithCompatibleParamParamPrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
@@ -2269,7 +2270,7 @@ func TestRunPluginsWithIncompatibleParamParamPrecondition(t *testing.T) {
 
 	config := appconfig.SsmagentConfig{}
 	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
-	var ctx = context.NewMockDefaultWithConfig(config)
+	var ctx = contextmocks.NewMockDefaultWithConfig(config)
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -2378,7 +2379,7 @@ func TestRunPluginsWithCompatibleParamValuePrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
@@ -2480,7 +2481,7 @@ func TestRunPluginsWithCompatibleValueParamPrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
@@ -2582,7 +2583,7 @@ func TestRunPluginsWithIncompatibleParamValuePrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -2684,7 +2685,7 @@ func TestRunPluginsWithCompatibleMixedPrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 
@@ -2786,7 +2787,7 @@ func TestRunPluginsWithIncompatibleMixedPrecondition(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -2887,7 +2888,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -3000,7 +3001,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -3116,7 +3117,7 @@ func TestRunPluginSuccessWithNonTruncatedResult(t *testing.T) {
 	pluginRegistry := PluginRegistry{}
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
 	ioConfig := contracts.IOConfiguration{}
@@ -3235,7 +3236,7 @@ func TestGetShouldPluginSkipBasedOnControlFlow(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	testProperties := make([]interface{}, len(pluginNames))
 	config := make([]contracts.Configuration, len(pluginNames))
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultStatus := contracts.ResultStatusSuccess
 	defaultStatus2 := contracts.ResultStatusSuccess
 	pluginCode := []int{0, 0, 1, 168, 169}
@@ -3362,7 +3363,7 @@ func TestRunPluginWithOnFailureProperty168(t *testing.T) {
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
 	var cancelFlag task.CancelFlag
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	ioConfig := contracts.IOConfiguration{}
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -3457,7 +3458,7 @@ func TestRunPluginWithOnFailureProperty169(t *testing.T) {
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
 	var cancelFlag task.CancelFlag
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	ioConfig := contracts.IOConfiguration{}
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -3552,7 +3553,7 @@ func TestRunPluginWithOnFailureProperty1(t *testing.T) {
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
 	var cancelFlag task.CancelFlag
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	defaultTime := time.Now()
 	ioConfig := contracts.IOConfiguration{}
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))

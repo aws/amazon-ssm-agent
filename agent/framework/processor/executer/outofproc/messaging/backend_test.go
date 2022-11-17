@@ -2,18 +2,19 @@ package messaging
 
 import (
 	"testing"
-
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
 
-var contextMock = context.NewMockDefault()
+var contextMock = contextmocks.NewMockDefault()
 var testInstanceID = "i-400e1090"
 var testDocumentID = "13e8e6ad-e195-4ccb-86ee-328153b0dafe"
 var testMessageID = "MessageID"
@@ -31,14 +32,14 @@ var testPluginsRawJSON string
 var testCancelRawJSON string
 
 type TestCase struct {
-	context      *context.Mock
+	context      *contextmocks.Mock
 	docState     contracts.DocumentState
 	results      map[string]*contracts.PluginResult
 	resultStatus contracts.ResultStatus
 }
 
 func CreateTestCase() *TestCase {
-	contextMock := context.NewMockDefaultWithContext([]string{"MASTER"})
+	contextMock := contextmocks.NewMockDefaultWithContext([]string{"MASTER"})
 	docInfo := contracts.DocumentInfo{
 		CreatedDate:     "2017-06-10T01-23-07.853Z",
 		MessageID:       testMessageID,
@@ -135,7 +136,7 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
 	stopChan := make(chan int, 1)
-	cancel := task.NewMockDefault()
+	cancel := taskmocks.NewMockDefault()
 	backend := ExecuterBackend{
 		cancelFlag: cancel,
 		output:     outputChan,
@@ -176,7 +177,7 @@ func TestExecuterBackend_ProcessUnsupportedVersion(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
 	stopChan := make(chan int, 1)
-	cancel := task.NewMockDefault()
+	cancel := taskmocks.NewMockDefault()
 	backend := ExecuterBackend{
 		cancelFlag: cancel,
 		output:     outputChan,
@@ -194,7 +195,7 @@ func TestExecuterBackend_ProcessUnsupportedVersion(t *testing.T) {
 func TestWorkerBackend_ProcessCancelV1(t *testing.T) {
 	_ = CreateTestCase()
 	inputChan := make(chan string, 10)
-	cancelFlag := new(task.MockCancelFlag)
+	cancelFlag := new(taskmocks.MockCancelFlag)
 	cancelFlag.On("Set", task.Canceled).Return(nil)
 	isRunnerCalled := false
 	pluginRunner := func(

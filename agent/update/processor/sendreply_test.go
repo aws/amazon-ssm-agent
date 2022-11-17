@@ -22,6 +22,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/assert"
@@ -75,9 +77,10 @@ func stubNewMsgSvc(context context.T, connectionTimeout time.Duration) messageSe
 }
 
 func TestSendReply(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updateDetail := createUpdateDetail(Installed)
 	service := svcManager{
-		context: context.NewMockDefault(),
+		context: contextmocks.NewMockDefault(),
 	}
 	// setup
 	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {
@@ -95,9 +98,10 @@ func TestSendReply(t *testing.T) {
 }
 
 func TestSendReplyDeleteMessage(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updateDetail := createUpdateDetail(Installed)
 	service := svcManager{
-		context: context.NewMockDefault(),
+		context: contextmocks.NewMockDefault(),
 	}
 	// setup
 	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {

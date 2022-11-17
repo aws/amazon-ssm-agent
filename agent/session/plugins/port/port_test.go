@@ -25,6 +25,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	portSessionMock "github.com/aws/amazon-ssm-agent/agent/session/plugins/port/mocks"
@@ -38,7 +41,7 @@ import (
 )
 
 var (
-	mockLog                     = log.NewMockLog()
+	mockLog                     = logmocks.NewMockLog()
 	configuration               = contracts.Configuration{Properties: map[string]interface{}{"portNumber": port}, SessionId: sessionId}
 	configurationPF             = contracts.Configuration{Properties: map[string]interface{}{"portNumber": port, "type": "LocalPortForwarding"}, SessionId: sessionId}
 	configurationWithRemoteHost = contracts.Configuration{Properties: map[string]interface{}{"portNumber": port, "host": remoteHost, "type": "LocalPortForwarding"}, SessionId: sessionId}
@@ -55,9 +58,9 @@ var (
 
 type PortTestSuite struct {
 	suite.Suite
-	mockContext     *context.Mock
+	mockContext     *contextmocks.Mock
 	mockLog         log.T
-	mockCancelFlag  *task.MockCancelFlag
+	mockCancelFlag  *taskmocks.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
 	mockPortSession *portSessionMock.IPortSession
@@ -70,7 +73,7 @@ func TestInitializeParametersWhenPortTypeIsNil(t *testing.T) {
 	mockDataChannel.On("GetClientVersion").Return(clientVersion)
 
 	portPlugin := &PortPlugin{
-		context:     context.NewMockDefault(),
+		context:     contextmocks.NewMockDefault(),
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
@@ -87,7 +90,7 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwarding(t *testing.T) {
 	mockDataChannel.On("GetClientVersion").Return(clientVersion)
 
 	portPlugin := &PortPlugin{
-		context:     context.NewMockDefault(),
+		context:     contextmocks.NewMockDefault(),
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
@@ -104,7 +107,7 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwardingAndOldClient(t *te
 	mockDataChannel.On("GetClientVersion").Return("1.0.0")
 
 	portPlugin := &PortPlugin{
-		context:     context.NewMockDefault(),
+		context:     contextmocks.NewMockDefault(),
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
@@ -121,7 +124,7 @@ func TestInitializeParametersWhenHostIsProvided(t *testing.T) {
 	mockDataChannel.On("GetClientVersion").Return(clientVersion)
 
 	portPlugin := &PortPlugin{
-		context:     context.NewMockDefault(),
+		context:     contextmocks.NewMockDefault(),
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
@@ -150,8 +153,8 @@ func TestInitializeParametersWhenHostIsProvided(t *testing.T) {
 }
 
 func (suite *PortTestSuite) SetupTest() {
-	mockContext := context.NewMockDefault()
-	mockCancelFlag := &task.MockCancelFlag{}
+	mockContext := contextmocks.NewMockDefault()
+	mockCancelFlag := &taskmocks.MockCancelFlag{}
 	mockDataChannel := &dataChannelMock.IDataChannel{}
 	mockIohandler := new(iohandlermocks.MockIOHandler)
 	mockPortSession := &portSessionMock.IPortSession{}
@@ -316,7 +319,7 @@ func (suite *PortTestSuite) TestValidateParametersWhenInvalidPort() {
 }
 
 func (suite *PortTestSuite) TestValidateParametersWhenVPCHostNotAllowed() {
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 	suite.plugin.context = mockContext
 
 	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "169.254.169.250"}}})
@@ -331,7 +334,7 @@ func (suite *PortTestSuite) TestValidateParametersWhenVPCHostNotAllowed() {
 }
 
 func (suite *PortTestSuite) TestValidateParametersWhenDefaultDenylistHostNotAllowed() {
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 	suite.plugin.context = mockContext
 
 	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "169.254.169.250"}}})
@@ -354,7 +357,7 @@ func (suite *PortTestSuite) TestValidateParametersWhenDefaultDenylistHostNotAllo
 }
 
 func (suite *PortTestSuite) TestValidateParametersWhenValidHostAndPort() {
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 	suite.plugin.context = mockContext
 
 	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})

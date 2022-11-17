@@ -25,7 +25,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"github.com/aws/amazon-ssm-agent/core/app"
 	"github.com/aws/amazon-ssm-agent/core/app/bootstrap"
@@ -62,7 +63,7 @@ var (
 	coreAgentStartupErrChan                              = make(chan error, 1)
 )
 
-func initializeBasicModules(log logger.T) (app.CoreAgent, logger.T, error) {
+func initializeBasicModules(log log.T) (app.CoreAgent, log.T, error) {
 	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentStartEvent)
 
 	proxyConfig := proxyconfig.SetProxyConfig(log)
@@ -94,7 +95,7 @@ func initializeBasicModules(log logger.T) (app.CoreAgent, logger.T, error) {
 	return ssmAgentCore, context.Log(), nil
 }
 
-func startCoreAgent(log logger.T, ssmAgentCore app.CoreAgent, statusChan *contracts.StatusComm) {
+func startCoreAgent(log log.T, ssmAgentCore app.CoreAgent, statusChan *contracts.StatusComm) {
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -112,7 +113,7 @@ func startCoreAgent(log logger.T, ssmAgentCore app.CoreAgent, statusChan *contra
 	time.Sleep(200 * time.Millisecond)
 }
 
-func blockUntilSignaled(log logger.T, statusChan *contracts.StatusComm) {
+func blockUntilSignaled(log log.T, statusChan *contracts.StatusComm) {
 	// Below channel will handle all machine initiated shutdown/reboot requests.
 
 	// Set up channel on which to receive signal notifications.
@@ -135,7 +136,7 @@ func blockUntilSignaled(log logger.T, statusChan *contracts.StatusComm) {
 }
 
 // Run as a single process. Used by Unix systems and when running agent from console.
-func run(log logger.T) {
+func run(log log.T) {
 	defer func() {
 		// recover in case the agent panics
 		// this should handle some kind of seg fault errors.

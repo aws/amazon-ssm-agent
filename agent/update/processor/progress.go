@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	logPkg "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 )
 
@@ -36,7 +37,7 @@ func (u *updateManager) inProgress(updateDetail *UpdateDetail, log logPkg.T, sta
 			}
 			errorCode := u.subStatus + string(state)
 			log.WriteEvent(
-				logPkg.AgentUpdateResultMessage,
+				logger.AgentUpdateResultMessage,
 				failedUpdateDetail.SourceVersion,
 				PrepareHealthStatus(failedUpdateDetail, errorCode, failedUpdateDetail.TargetVersion))
 			if err = u.svc.UpdateHealthCheck(log, failedUpdateDetail, errorCode); err != nil {
@@ -86,7 +87,7 @@ func (u *updateManager) succeeded(updateDetail *UpdateDetail, log logPkg.T) (err
 		updateDetail.TargetVersion)
 
 	log.WriteEvent(
-		logPkg.AgentUpdateResultMessage,
+		logger.AgentUpdateResultMessage,
 		updateDetail.SourceVersion,
 		PrepareHealthStatus(updateDetail, "", updateDetail.TargetVersion))
 	return u.finalize(u, updateDetail, "")
@@ -110,7 +111,7 @@ func (u *updateManager) failed(updateDetail *UpdateDetail, log logPkg.T, code up
 
 	errorCode := u.subStatus + string(code)
 	log.WriteEvent(
-		logPkg.AgentUpdateResultMessage,
+		logger.AgentUpdateResultMessage,
 		updateDetail.SourceVersion,
 		PrepareHealthStatus(updateDetail, errorCode, updateDetail.TargetVersion))
 	return u.finalize(u, updateDetail, errorCode)
@@ -126,7 +127,7 @@ func (u *updateManager) inactive(updateDetail *UpdateDetail, log logPkg.T, error
 		updateDetail.TargetVersion)
 	errorWarnCode = u.subStatus + errorWarnCode
 	log.WriteEvent(
-		logPkg.AgentUpdateResultMessage,
+		logger.AgentUpdateResultMessage,
 		updateDetail.SourceVersion,
 		PrepareHealthStatus(updateDetail, errorWarnCode, updateDetail.TargetVersion))
 	return u.finalize(u, updateDetail, errorWarnCode)

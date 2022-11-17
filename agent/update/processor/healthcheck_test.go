@@ -23,16 +23,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	ssm2 "github.com/aws/amazon-ssm-agent/agent/ssm/mocks/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
-
 	ssmService "github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
-
-var logger = log.NewMockLog()
 
 type healthCheckTestCase struct {
 	InputState   UpdateState
@@ -133,6 +132,7 @@ func TestHealthCheckWithUpdateFailed(t *testing.T) {
 }
 
 func TestUpdateHealthCheck(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updateDetail := createUpdateDetail(Installed)
 	service := &svcManager{}
 
@@ -147,7 +147,7 @@ func TestUpdateHealthCheck(t *testing.T) {
 	mockIdentity.On("AvailabilityZone").Return(availabilityZone, nil)
 	mockIdentity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
 
-	mockObj := ssm.NewMockDefault()
+	mockObj := ssm2.NewMockDefault()
 	mockObj.On(
 		"UpdateInstanceInformation",
 		logger,
@@ -177,6 +177,7 @@ func TestUpdateHealthCheckFailCreatingService(t *testing.T) {
 	updateDetail := createUpdateDetail(Installed)
 	service := &svcManager{}
 	// action
+	var logger = logmocks.NewMockLog()
 	err := service.UpdateHealthCheck(logger, updateDetail, "")
 
 	// assert

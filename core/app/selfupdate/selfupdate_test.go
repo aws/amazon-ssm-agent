@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	context "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
@@ -35,7 +36,7 @@ type SelfUpdateTestSuite struct {
 	suite.Suite
 	contextMock     *context.ICoreAgentContext
 	identityMock    *identityMocks.IAgentIdentity
-	logMock         *log.Mock
+	logMock         *logmocks.Mock
 	appconfigMock   *appconfig.SsmagentConfig
 	selfUpdater     *SelfUpdate
 	platformNameMap map[string]string
@@ -43,7 +44,7 @@ type SelfUpdateTestSuite struct {
 
 // SetupTest will initialized the object for each test case before test function execution
 func (suite *SelfUpdateTestSuite) SetupTest() {
-	suite.logMock = log.NewMockLog()
+	suite.logMock = logmocks.NewMockLog()
 	suite.appconfigMock = &appconfig.SsmagentConfig{}
 	suite.contextMock = &context.ICoreAgentContext{}
 	suite.identityMock = &identityMocks.IAgentIdentity{}

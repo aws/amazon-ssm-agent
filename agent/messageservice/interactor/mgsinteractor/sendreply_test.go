@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	replytypesmock "github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mgsinteractor/replytypes/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	controlChannelMock "github.com/aws/amazon-ssm-agent/agent/session/controlchannel/mocks"
 	"github.com/gorilla/websocket"

@@ -21,9 +21,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/association/compliance/model"
 	associationModel "github.com/aws/amazon-ssm-agent/agent/association/model"
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/datauploader"
-	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/mocks/datauploader"
+	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm/mocks/ssm"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"

@@ -25,11 +25,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/executers"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
@@ -47,7 +48,7 @@ var pluginConfig = iohandler.PluginConfig{
 // TestStartFailFileNotExist tests the Start method, which returns nil when start the executable file successfully.
 func TestStartSuccess(t *testing.T) {
 	context := context.NewMockDefault()
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	execMock := &executers.MockCommandExecuter{}
 	stdout := strings.NewReader("False")
 	stderr := strings.NewReader("")
@@ -113,7 +114,7 @@ func TestStartFailFileNotExist(t *testing.T) {
 	}
 	ioHandler := &iohandlermocks.MockIOHandler{}
 	context := context.NewMockDefault()
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 
 	p, _ := NewPlugin(context, pluginConfig)
 	res := p.Start("", "", cancelFlag, ioHandler)
@@ -122,7 +123,7 @@ func TestStartFailFileNotExist(t *testing.T) {
 }
 
 func TestStopSuccess(t *testing.T) {
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	context := context.NewMockDefault()
 	execMock := &executers.MockCommandExecuter{}
 
@@ -173,7 +174,7 @@ func TestStopSuccess(t *testing.T) {
 }
 
 func TestStopFail_FailedToFindCloudWatchProcess(t *testing.T) {
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	context := context.NewMockDefault()
 	execMock := &executers.MockCommandExecuter{}
 
@@ -224,7 +225,7 @@ func TestStopFail_FailedToFindCloudWatchProcess(t *testing.T) {
 }
 
 func TestStopFail_FailedToKillProcess(t *testing.T) {
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	context := context.NewMockDefault()
 	execMock := &executers.MockCommandExecuter{}
 	expProcessKillError := errors.New("failed to kill process")
@@ -279,7 +280,7 @@ func TestStopFail_FailedToKillProcess(t *testing.T) {
 // TestIsCloudWatchExeRunning tests the IsCloudWatchExeRunning method, which returns true when the cloud watch exe is running.
 func TestIsCloudWatchExeRunningTrue(t *testing.T) {
 	context := context.NewMockDefault()
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	cancelFlag.On("Wait").Return(task.Completed)
 	cancelFlag.On("Canceled").Return(false)
 	execMock := &executers.MockCommandExecuter{}
@@ -308,7 +309,7 @@ func TestIsCloudWatchExeRunningTrue(t *testing.T) {
 
 // TestIsCloudWatchExeRunning tests the IsCloudWatchExeRunning method, which returns false when the cloud watch exe is not running.
 func TestIsCloudWatchExeRunningFalse(t *testing.T) {
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	cancelFlag.On("Wait").Return(task.Completed)
 	cancelFlag.On("Canceled").Return(false)
 	execMock := &executers.MockCommandExecuter{}
@@ -338,7 +339,7 @@ func TestIsCloudWatchExeRunningFalse(t *testing.T) {
 // TestGetPidOfCloudWatchExe tests the GetPidOfCloudWatchExe method, which returns if the said plugin is running or not.
 func TestGetPidOfCloudWatchExeSuccess(t *testing.T) {
 	context := context.NewMockDefault()
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	cancelFlag.On("Wait").Return(task.Completed)
 	cancelFlag.On("Canceled").Return(false)
 	execMock := &executers.MockCommandExecuter{}

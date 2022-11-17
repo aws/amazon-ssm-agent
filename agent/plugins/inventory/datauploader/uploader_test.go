@@ -19,7 +19,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/mocks/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -29,7 +30,7 @@ import (
 func MockInventoryUploader() *InventoryUploader {
 	var uploader InventoryUploader
 
-	optimizer := NewMockDefault()
+	optimizer := datauploader.NewMockDefault()
 	optimizer.On("GetContentHash", mock.AnythingOfType("string")).Return("RandomInventoryItem")
 	optimizer.On("UpdateContentHash", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
 
@@ -212,7 +213,7 @@ func testSendData(t *testing.T, putInventorySucceeds bool) {
 		mockSSM.On("PutInventory", mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, err)
 	}
 
-	mockOptimizer := NewMockDefault()
+	mockOptimizer := datauploader.NewMockDefault()
 	if putInventorySucceeds {
 		for _, item := range inventoryItems {
 			mockOptimizer.On("UpdateContentHash", *item.TypeName, hash).Return(nil)

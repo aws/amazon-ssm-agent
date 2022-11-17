@@ -17,11 +17,11 @@ package agent
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	coremanager "github.com/aws/amazon-ssm-agent/agent/framework/coremanager/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	healthmock "github.com/aws/amazon-ssm-agent/agent/health/mocks"
 	hibernation "github.com/aws/amazon-ssm-agent/agent/hibernation/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )

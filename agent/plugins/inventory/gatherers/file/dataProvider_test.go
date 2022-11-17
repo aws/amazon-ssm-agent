@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -120,7 +121,7 @@ func createMockFullPath(paths []string, errors []error) func(string, func(string
 }
 
 func TestGetAllMeta(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": false}, {"Path": "$HOME","Pattern":["*.txt"],"Recursive": false, "DirScanLimit": 4000}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	getFilesFunc = MockGetFiles
@@ -133,7 +134,7 @@ func TestGetAllMeta(t *testing.T) {
 }
 
 func TestGetAllMetaOtherError(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": false}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	getFilesFunc = MockGetFilesErr
@@ -145,7 +146,7 @@ func TestGetAllMetaOtherError(t *testing.T) {
 }
 
 func TestGetAllMetaFilterErr(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `Invalid`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	getFilesFunc = MockGetFilesErr
@@ -193,7 +194,7 @@ func TestRemoveDuplicates(t *testing.T) {
 }
 
 func TestGetFiles(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -209,7 +210,7 @@ func TestGetFiles(t *testing.T) {
 }
 
 func TestGetFilesLimitError(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": true}, {"Path": "$HOME","Pattern":["*.txt"],"Recursive": false, "DirScanLimit": 4000}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	existsPath = MockExistsPath
@@ -224,7 +225,7 @@ func TestGetFilesLimitError(t *testing.T) {
 }
 
 func TestGetFilesLimitErrorWalkFn(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -235,7 +236,7 @@ func TestGetFilesLimitErrorWalkFn(t *testing.T) {
 }
 
 func TestGetFilesLimitErrorNonRecursive(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -246,7 +247,7 @@ func TestGetFilesLimitErrorNonRecursive(t *testing.T) {
 }
 
 func TestGetFilesDirLimitError(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": true}, {"Path": "$HOME","Pattern":["*.txt"],"Recursive": false, "DirScanLimit": 4000}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	existsPath = MockExistsPath
@@ -261,7 +262,7 @@ func TestGetFilesDirLimitError(t *testing.T) {
 }
 
 func TestGetFilesDirLimitErrorWalkFn(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -272,7 +273,7 @@ func TestGetFilesDirLimitErrorWalkFn(t *testing.T) {
 }
 
 func TestGetFilesPathExists(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, false, false}, []error{nil, nil, errors.New("error")})
 	filepathWalk = MockFilePathWalk

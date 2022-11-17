@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/paramvalidator/utils"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -59,7 +60,7 @@ func TestMinMaxCharParamValidatorTestSuite(t *testing.T) {
 }
 
 func (suite *minMaxCharParamValidatorTestSuite) SetupTest() {
-	suite.log = log.NewMockLog()
+	suite.log = logmocks.NewMockLog()
 	suite.testCaseList = make([]*testCases, 0)
 	minGreaterThanZeroMaxNilCase := &testCases{minChar: "2", maxChar: "",
 		testInput: []interface{}{
@@ -151,7 +152,7 @@ func (suite *minMaxCharParamValidatorTestSuite) SetupTest() {
 }
 
 func (suite *minMaxCharParamValidatorTestSuite) TestValidate_MultipleTestCases() {
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 	for _, testCase := range suite.testCaseList {
 		for _, input := range testCase.testInput {
 			paramValue := input
@@ -171,7 +172,7 @@ func (suite *minMaxCharParamValidatorTestSuite) TestValidate_MultipleTestCases()
 }
 
 func (suite *minMaxCharParamValidatorTestSuite) TestVerifyMinMaxCharAfterMarshall_Success_ValidInputs() {
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 	input := make(map[string]map[string]struct{})
 	input["test"] = make(map[string]struct{})
 	err := suite.maxMinCharValidator.verifyMinMaxCharAfterMarshall(log, input, 2, 11)
@@ -179,7 +180,7 @@ func (suite *minMaxCharParamValidatorTestSuite) TestVerifyMinMaxCharAfterMarshal
 }
 
 func (suite *minMaxCharParamValidatorTestSuite) TestVerifyMinMaxCharAfterMarshall_Failure_InValidInputs() {
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 	input := make(map[string]map[string]struct{})
 	input["test"] = make(map[string]struct{})
 	err := suite.maxMinCharValidator.verifyMinMaxCharAfterMarshall(log, input, 2, 10)

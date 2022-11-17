@@ -20,11 +20,12 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	mocks3 "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
+	credentialmocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-	mocks2 "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
+	runtimeconfigmocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/stretchr/testify/assert"
@@ -41,7 +42,7 @@ var (
 
 func init() {
 	newSharedCredentials = func(_, _ string) *credentials.Credentials {
-		provider := &mocks3.Provider{}
+		provider := &credentialmocks.Provider{}
 		provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
 		return credentials.NewCredentials(provider)
 	}
@@ -76,7 +77,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
-				log: log.NewMockLog(),
+				log: logmocks.NewMockLog(),
 			},
 			time.Duration(0),
 		},
@@ -89,7 +90,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
-				log: log.NewMockLog(),
+				log: logmocks.NewMockLog(),
 			},
 			time.Duration(0),
 		},
@@ -103,7 +104,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
-				log: log.NewMockLog(),
+				log: logmocks.NewMockLog(),
 			},
 			time.Duration(0),
 		},
@@ -117,13 +118,13 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				getCurrentTimeFunc: func() time.Time {
 					return currentTime
 				},
-				log: log.NewMockLog(),
+				log: logmocks.NewMockLog(),
 			},
 			time.Minute*2 + time.Second*30,
 		},
 	}
 	for _, tt := range tests {
-		provider := &mocks3.IRemoteProvider{}
+		provider := &credentialmocks.IRemoteProvider{}
 		provider.On("Retrieve").Return(credentials.Value{}, nil).Repeatability = 0
 		t.Run(tt.name, func(t *testing.T) {
 			c := &credentialsRefresher{
@@ -157,11 +158,11 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		CredentialsRetrievedAt: currentTime,
 	}
 
-	provider := &mocks3.IRemoteProvider{}
+	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("Retrieve").Return(credentials.Value{}, nil).Repeatability = 0
 
 	c := &credentialsRefresher{
-		log:                          log.NewMockLog(),
+		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
 		provider:                     provider,
 		identityRuntimeConfig:        runtimeConfig,
@@ -198,7 +199,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 	oldFun := newSharedCredentials
 	defer func() { newSharedCredentials = oldFun }()
 	newSharedCredentials = func(_, _ string) *credentials.Credentials {
-		provider := &mocks3.Provider{}
+		provider := &credentialmocks.Provider{}
 		provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("SomeShareCredsErr")).Once()
 		return credentials.NewCredentials(provider)
 	}
@@ -208,18 +209,18 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		CredentialsRetrievedAt: fiveMinBeforeTime,
 	}
 
-	provider := &mocks3.IRemoteProvider{}
+	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("Retrieve").Return(func() credentials.Value { return credentials.Value{} }, func() error {
 		// Sleep here because we know that if we reach this point and have not got message in credentialsReadyChan, the time is set correctly
 		time.Sleep(time.Second)
 		return fmt.Errorf("SomeRetrieveErr")
 	})
 
-	expirer := &mocks3.Expirer{}
+	expirer := &credentialmocks.Expirer{}
 	expirer.On("ExpiresAt").Return(tenMinAfterTime)
 
 	c := &credentialsRefresher{
-		log:                          log.NewMockLog(),
+		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
 		provider:                     provider,
 		expirer:                      expirer,
@@ -262,11 +263,11 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallS
 		CredentialsRetrievedAt: currentTime,
 	}
 
-	provider := &mocks3.IRemoteProvider{}
+	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("Retrieve").Return(credentials.Value{}, nil).Repeatability = 0
 
 	c := &credentialsRefresher{
-		log:                          log.NewMockLog(),
+		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
 		provider:                     provider,
 		identityRuntimeConfig:        runtimeConfig,
@@ -315,17 +316,17 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 		CredentialsRetrievedAt: fiveMinBeforeTime,
 	}
 
-	runtimeConfigClient := &mocks2.IIdentityRuntimeConfigClient{}
+	runtimeConfigClient := &runtimeconfigmocks.IIdentityRuntimeConfigClient{}
 	runtimeConfigClient.On("SaveConfig", mock.Anything).Return(nil).Once()
 
-	provider := &mocks3.IRemoteProvider{}
+	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
 
-	expirer := &mocks3.Expirer{}
+	expirer := &credentialmocks.Expirer{}
 	expirer.On("ExpiresAt").Return(tenMinAfterTime).Once()
 
 	c := &credentialsRefresher{
-		log:                          log.NewMockLog(),
+		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
 		provider:                     provider,
 		expirer:                      expirer,
@@ -376,12 +377,12 @@ func (a awsTestError) Code() string    { return a.errCode }
 
 func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testing.T) {
 	for _, awsErr := range []error{awsTestError{"AccessDeniedException"}, awsTestError{"MachineFingerprintDoesNotMatch"}} {
-		provider := &mocks3.IRemoteProvider{}
+		provider := &credentialmocks.IRemoteProvider{}
 		provider.On("Retrieve").Return(credentials.Value{}, awsErr).Once()
 
 		var timeAfterParamVal time.Duration
 		c := &credentialsRefresher{
-			log:                         log.NewMockLog(),
+			log:                         logmocks.NewMockLog(),
 			agentIdentity:               mockAgentIdentity,
 			provider:                    provider,
 			stopCredentialRefresherChan: make(chan struct{}),
@@ -416,14 +417,14 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testin
 }
 
 func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilSuccess(t *testing.T) {
-	provider := &mocks3.IRemoteProvider{}
+	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("Retrieve").Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
 	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
 	provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
 
 	numSleeps := 0
 	c := &credentialsRefresher{
-		log:                         log.NewMockLog(),
+		log:                         logmocks.NewMockLog(),
 		agentIdentity:               mockAgentIdentity,
 		provider:                    provider,
 		stopCredentialRefresherChan: make(chan struct{}),

@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/cli/diagnosticsutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
@@ -57,7 +57,7 @@ func (versionQuery) GetPriority() int {
 }
 
 func (versionQuery) getLatestVersion(resChan chan versionRegionResponse) {
-	log := log.NewSilentMockLog()
+	log := logger.NewSilentLogger()
 	config := appconfig.DefaultConfig()
 
 	agentIdentity, err := cliutil.GetAgentIdentity()

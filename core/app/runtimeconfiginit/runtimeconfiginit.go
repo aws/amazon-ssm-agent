@@ -17,6 +17,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	"github.com/cenkalti/backoff/v4"
 )
@@ -57,7 +58,7 @@ func (r *runtimeConfigInit) getCurrentIdentityRuntimeConfig() (runtimeconfig.Ide
 		return currentConfig, err
 	}
 
-	if credentialsRefresherIdentity, ok := identity.GetRemoteProvider(r.agentIdentity); ok {
+	if credentialsRefresherIdentity, ok := identity2.GetRemoteProvider(r.agentIdentity); ok {
 		currentConfig.ShareFile = credentialsRefresherIdentity.ShareFile()
 		currentConfig.ShareProfile = credentialsRefresherIdentity.ShareProfile()
 	}

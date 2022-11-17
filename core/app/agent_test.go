@@ -20,7 +20,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	contextmocks "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
 	refresherMocks "github.com/aws/amazon-ssm-agent/core/app/credentialrefresher/mocks"
 	selfupdatemocks "github.com/aws/amazon-ssm-agent/core/app/selfupdate/mocks"

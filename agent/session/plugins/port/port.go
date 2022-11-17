@@ -36,6 +36,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 )
 
 const muxSupportedClientVersion = "1.1.70"
@@ -67,7 +68,7 @@ type IPortSession interface {
 
 var lookupHost = net.LookupHost
 
-var getMetadataIdentity = identity.GetMetadataIdentity
+var getMetadataIdentity = identity2.GetMetadataIdentity
 
 var newEC2Identity = func(log log.T, appConfig *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
 	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {

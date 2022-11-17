@@ -24,7 +24,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	lockmocks "github.com/aws/amazon-ssm-agent/agent/mocks/lockfile"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
@@ -39,7 +41,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var mockContext = context.NewMockDefault()
+var mockContext = contextmocks.NewMockDefault()
 
 func TestGenerateUpdateCmd(t *testing.T) {
 	pluginInput := createStubPluginInput()
@@ -359,12 +361,12 @@ func TestExecute(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -416,11 +418,11 @@ func TestExecuteUpdateLocked(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
@@ -448,11 +450,11 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -504,11 +506,11 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 

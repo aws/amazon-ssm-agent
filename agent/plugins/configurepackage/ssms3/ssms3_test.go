@@ -21,9 +21,10 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/mocks/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -145,7 +146,7 @@ func TestDownloadManifestWithLatest(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, nil)
 
 	networkdep = mockObj
@@ -163,7 +164,7 @@ func TestDownloadManifestWithError(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, errors.New("testerror"))
 
 	networkdep = mockObj
@@ -178,7 +179,7 @@ func TestSuccessfulDownloadArtifact(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, nil)
 
 	networkdep = mockObj
@@ -194,7 +195,7 @@ func TestDownloadArtifactWithError(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, errors.New("testerror"))
 
 	networkdep = mockObj
@@ -209,7 +210,7 @@ func TestUseSSMS3Service_True(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(true)
 
 	networkdep = mockObj
@@ -221,7 +222,7 @@ func TestUseSSMS3Service_False(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(false)
 
 	networkdep = mockObj

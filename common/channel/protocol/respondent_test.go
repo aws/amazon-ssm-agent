@@ -19,6 +19,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
@@ -44,7 +45,7 @@ func TestRespondentSuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *IRespondentSuite) SetupTest() {
-	suite.log = log.NewMockLog()
+	suite.log = logmocks.NewMockLog()
 	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
 	suite.respondentInstance = GetRespondentInstance(suite.log, suite.identity)
 }
