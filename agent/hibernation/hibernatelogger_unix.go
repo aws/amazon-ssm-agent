@@ -24,7 +24,7 @@ func getHibernateSeelogConfig() string {
 			<rollingfile type="size" filename="/var/log/amazon/ssm/hibernate.log" maxsize="30000" maxrolls="2"/>
 		</outputs>
 		<formats>
-			<format id="fmtinfo" format="%Date %Time %LEVEL %Msg%n"/>
+			<format id="fmtinfo" format="%Date(2006-01-02T15:04:05Z07:00) %LEVEL %Msg%n"/>
 		</formats>
 	</seelog>`
 	return seelogConfig
