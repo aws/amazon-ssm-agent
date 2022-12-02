@@ -39,4 +39,5 @@ require (
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
