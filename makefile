@@ -273,6 +273,11 @@ prepack-any-%:
 	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/NOTICE.md
 
 # Predefined prepack recipes for various supported builds
+.PHONY: install-yum-rpm
+install-yum-rpm: build-linux package-rpm
+	yum erase amazon-ssm-agent -y
+	yum install -y bin/linux_amd64/amazon-ssm-agent.rpm
+
 .PHONY: prepack-linux
 prepack-linux: GOOS=linux
 prepack-linux: GOARCH=amd64
