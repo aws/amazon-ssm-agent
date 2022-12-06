@@ -1,5 +1,9 @@
 Latest
 ===============
+- Updated yaml.v3 dependency
+
+3.2.286.0
+===============
 - Separated EC2 identity vault manifest from OnPrem identity vault manifest
 - Fix for credential retrieval blocking os termination signals
 - Fix for agent updater using shared credentials on EC2
