@@ -19,6 +19,7 @@ import (
 	"runtime/debug"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -26,6 +27,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
 
 	"github.com/carlescere/scheduler"
 )
@@ -55,6 +58,18 @@ var healthModule *HealthCheck
 
 var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
 	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ecs.NewECSIdentity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+	if identityRef := onprem.NewOnPremIdentity(log, config); identityRef != nil {
 		return identityRef
 	}
 	return nil
@@ -109,11 +124,15 @@ func (h *HealthCheck) updateHealth() {
 
 	log.Infof("%s reporting agent health.", name)
 
+	appConfig := h.context.AppConfig()
 	ec2Identity := newEC2Identity(log)
-
+	ecsIdentity := newECSIdentity(log)
+	onpremIdentity := newOnPremIdentity(log, &appConfig)
 	var availabilityZone = ""
 	var availabilityZoneId = ""
-	if ec2Identity != nil && ec2Identity.IsIdentityEnvironment() {
+	if ec2Identity != nil && ec2Identity.IsIdentityEnvironment() &&
+		ecsIdentity != nil && !ecsIdentity.IsIdentityEnvironment() &&
+		onpremIdentity != nil && !onpremIdentity.IsIdentityEnvironment() {
 		availabilityZone, _ = ec2Identity.AvailabilityZone()
 		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
 	}

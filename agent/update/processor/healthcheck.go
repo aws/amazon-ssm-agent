@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
@@ -27,6 +28,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
 )
 
 const (
@@ -64,6 +67,18 @@ var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
 	}
 	return nil
 }
+var newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ecs.NewECSIdentity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+	if identityRef := onprem.NewOnPremIdentity(log, config); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
 
 // UpdateHealthCheck sends the health check information back to the service
 func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) (err error) {
@@ -72,10 +87,15 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
 	status := PrepareHealthStatus(update, errorCode, update.TargetVersion)
+	appConfig := s.context.AppConfig()
 	ec2Identity := newEC2Identity(log)
+	ecsIdentity := newECSIdentity(log)
+	onpremIdentity := newOnPremIdentity(log, &appConfig)
 	var availabilityZone = ""
 	var availabilityZoneId = ""
-	if ec2Identity != nil && ec2Identity.IsIdentityEnvironment() {
+	if ec2Identity != nil && ec2Identity.IsIdentityEnvironment() &&
+		ecsIdentity != nil && !ecsIdentity.IsIdentityEnvironment() &&
+		onpremIdentity != nil && !onpremIdentity.IsIdentityEnvironment() {
 		availabilityZone, _ = ec2Identity.AvailabilityZone()
 		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
 	}

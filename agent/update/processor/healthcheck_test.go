@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
@@ -134,7 +135,17 @@ func TestHealthCheckWithUpdateFailed(t *testing.T) {
 func TestUpdateHealthCheck(t *testing.T) {
 	var logger = logmocks.NewMockLog()
 	updateDetail := createUpdateDetail(Installed)
-	service := &svcManager{}
+
+	// Initialize the appconfigMock with HealthFrequencyMinutes as every five minute
+	appconfigMock := &appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{
+			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
+		},
+	}
+	mockContext := context.NewMockDefault()
+	mockContext.On("AppConfig").Return(&appconfigMock)
+
+	service := &svcManager{context: mockContext}
 
 	mockIdentity := &identityMock.IAgentIdentityInner{}
 	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
