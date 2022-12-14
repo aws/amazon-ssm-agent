@@ -23,12 +23,12 @@ import (
 
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
 const (
-	PowershellCmd = "powershell"
 	CPUInfoScript = `
 $wmi_proc = Get-WmiObject -Class Win32_Processor
 if (@($wmi_proc)[0].NumberOfCores) #Modern OS
@@ -64,6 +64,8 @@ Write-Host -nonewline @"
 {"KernelVersion":"$KernelVersion"}
 "@`
 )
+
+var PowershellCmd = appconfig.PowerShellPluginCommandName
 
 // decoupling exec.Command for easy testability
 var cmdExecutor = executeCommand

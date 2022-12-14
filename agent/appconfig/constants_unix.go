@@ -138,7 +138,7 @@ var RuntimeConfigFolderPath = AgentData + "runtimeconfig"
 
 func init() {
 	/*
-	   Powershell command used to be poweshell in alpha versions, now it's pwsh in prod versions
+	   Powershell command used to be powershell in alpha versions, now it's pwsh in prod versions
 	*/
 	PowerShellPluginCommandName = "/usr/bin/powershell"
 	if _, err := os.Stat(PowerShellPluginCommandName); err != nil {

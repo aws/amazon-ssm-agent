@@ -24,6 +24,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
@@ -85,7 +86,7 @@ func TestSingleStartStop(t *testing.T) {
 	StartDaemonHelperExecutor = MockStartDaemonHelperExecutor
 	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	t.Logf("Daemon starting")
-	err := p.Start("powershell Sleep 5", "", cancelFlag, ioHandler)
+	err := p.Start(appconfig.PowerShellPluginCommandName+" Sleep 5", "", cancelFlag, ioHandler)
 	assert.NoError(t, err, fmt.Sprintf("Expected no error but got %v", err))
 	time.Sleep(2 * time.Second)
 	t.Logf("Daemon is running")
@@ -119,7 +120,7 @@ func TestSuccessiveStarts(t *testing.T) {
 	StartDaemonHelperExecutor = MockStartDaemonHelperExecutor
 	IsDaemonRunningExecutor = MockIsDaemonRunningExecutor
 	t.Logf("Daemon starting")
-	p.Start("powershell Sleep 5", "", cancelFlag, ioHandler)
+	p.Start(appconfig.PowerShellPluginCommandName+" Sleep 5", "", cancelFlag, ioHandler)
 	time.Sleep(1 * time.Second)
 	t.Logf("Daemon is running")
 	if IsDaemonRunningExecutor(p) {
@@ -159,7 +160,7 @@ func TestMultipleStartStop(t *testing.T) {
 
 	for i := 0; i < 50; i++ {
 		t.Logf("Daemon starting")
-		p.Start("powershell Sleep 5", "", cancelFlag, ioHandler)
+		p.Start(appconfig.PowerShellPluginCommandName+" Sleep 5", "", cancelFlag, ioHandler)
 		time.Sleep(5 * time.Second)
 		if p.Process != nil {
 			proc, err := os.FindProcess(p.Process.Pid)

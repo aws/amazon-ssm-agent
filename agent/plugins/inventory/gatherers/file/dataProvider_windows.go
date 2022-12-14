@@ -34,6 +34,7 @@ import (
 )
 
 var (
+	PowershellCmd     = appconfig.PowerShellPluginCommandName
 	startMarker       = "<start" + randomString(8) + ">"
 	endMarker         = "<end" + randomString(8) + ">"
 	FileInfoBatchSize = 100
@@ -77,7 +78,6 @@ getjson -Paths `
 )
 
 const (
-	PowershellCmd  = "powershell"
 	SleepTimeMs    = 5000
 	ScriptFileName = "getFileInfo.ps1"
 )

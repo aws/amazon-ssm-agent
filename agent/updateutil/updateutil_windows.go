@@ -18,11 +18,10 @@
 package updateutil
 
 import (
-	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"golang.org/x/sys/windows/svc"
@@ -62,6 +61,6 @@ func isAgentServiceRunning(log log.T) (bool, error) {
 }
 
 func setPlatformSpecificCommand(parts []string) []string {
-	cmd := filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe") + " -ExecutionPolicy unrestricted"
+	cmd := appconfig.PowerShellPluginCommandName + " -ExecutionPolicy unrestricted"
 	return append(strings.Split(cmd, " "), parts...)
 }

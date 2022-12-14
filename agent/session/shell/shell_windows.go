@@ -60,7 +60,6 @@ const (
 	defaultConsoleRow                                = 60
 	winptyDllName                                    = "winpty.dll"
 	winptyDllFolderName                              = "SessionManagerShell"
-	winptyCmd                                        = "powershell"
 	startRecordSessionCmd                            = "Start-Transcript"
 	newLineCharacter                                 = "\r\n"
 	shellProfileNewLineCharacter                     = "\r"
@@ -72,6 +71,7 @@ const (
 )
 
 var (
+	winptyCmd         = appconfig.PowerShellPluginCommandName
 	winptyDllDir      = fileutil.BuildPath(appconfig.DefaultPluginPath, winptyDllFolderName)
 	winptyDllFilePath = filepath.Join(winptyDllDir, winptyDllName)
 )
