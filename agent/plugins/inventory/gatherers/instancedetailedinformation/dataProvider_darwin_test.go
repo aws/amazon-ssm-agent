@@ -32,6 +32,11 @@ hw.logicalcpu: 8
 hw.cpufrequency: 2800000000
 hw.cputhreadtype: 1
 kern.osrelease: 20.6.0`,
+		`machdep.cpu.brand_string: Apple M1 Pro
+hw.physicalcpu: 4
+hw.logicalcpu: 8
+hw.cpufrequency: 2800000000
+kern.osrelease: 20.6.0`,
 	}
 )
 
@@ -43,6 +48,16 @@ var sampleDataMacParsed = []model.InstanceDetailedInformation{
 		CPUSockets:            "",
 		CPUCores:              "4",
 		CPUHyperThreadEnabled: "true",
+		KernelVersion:         "20.6.0",
+	},
+
+	{
+		CPUModel:              "Apple M1 Pro",
+		CPUSpeedMHz:           "2800",
+		CPUs:                  "8",
+		CPUSockets:            "",
+		CPUCores:              "4",
+		CPUHyperThreadEnabled: "",
 		KernelVersion:         "20.6.0",
 	},
 }

@@ -50,7 +50,7 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 	var output []byte
 	var err error
 	cmd := sysctlCmd
-	args := []string{cpuModelNameKey, cpuCoreKey, cpusKey, cpuFreqKey, threadTypeKey}
+	args := []string{"-i", cpuModelNameKey, cpuCoreKey, cpusKey, cpuFreqKey, threadTypeKey}
 
 	log.Infof("Executing command: %v", cmd)
 	if output, err = cmdExecutor(cmd, args...); err != nil {
@@ -75,8 +75,14 @@ func parseSysctlOutput(output string) (data []model.InstanceDetailedInformation)
 	var cpuSpeed = parseInt(getFieldValue(output, cpuFreqKey), 0)
 	// convert the frequency to MHz
 	var cpuSpeedMHzStr = strconv.Itoa(cpuSpeed / 1000000)
-	var threadTypeVal = parseInt(getFieldValue(output, threadTypeKey), 0)
-	var hyperThreadEnabledStr = boolToStr(threadTypeVal > 0)
+	var fieldValue = getFieldValue(output, threadTypeKey)
+	var hyperThreadEnabledStr string
+	if fieldValue == "" {
+		hyperThreadEnabledStr = ""
+	} else {
+		var threadTypeVal = parseInt(getFieldValue(output, threadTypeKey), 0)
+		hyperThreadEnabledStr = boolToStr(threadTypeVal > 0)
+	}
 
 	itemContent := model.InstanceDetailedInformation{
 		CPUModel:              getFieldValue(output, cpuModelNameKey),
