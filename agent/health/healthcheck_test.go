@@ -102,7 +102,7 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId).Return(nil, nil)
 	suite.healthCheck.ModuleExecute()
-	// Because ModuleExecute will launch two new go routine, wait five second to make sure the updateHealth() has launched
+	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId)
@@ -138,10 +138,44 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithOnPremIdentity() {
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "").Return(nil, nil)
 	suite.healthCheck.ModuleExecute()
-	// Because ModuleExecute will launch two new go routine, wait five second to make sure the updateHealth() has launched
+	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "")
+}
+
+// Testing the ModuleExecute method
+func (suite *HealthCheckTestSuite) TestModuleExecuteWithNilOnPremIdentity() {
+	// Initialize the appconfigMock with HealthFrequencyMinutes as every five minute
+	appconfigMock := &appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{
+			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
+		},
+	}
+
+	mockEC2Identity := &identityMock.IAgentIdentityInner{}
+	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+		return mockEC2Identity
+	}
+
+	availabilityZone := "us-east-1a"
+	availabilityZoneId := "use1-az2"
+	mockEC2Identity.On("IsIdentityEnvironment").Return(true)
+	mockEC2Identity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockEC2Identity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
+	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+		return nil
+	}
+
+	// Turn on the mock method
+	suite.contextMock.On("AppConfig").Return(*appconfigMock)
+	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId).Return(nil, nil)
+	suite.healthCheck.ModuleExecute()
+	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	time.Sleep(100 * time.Millisecond)
+	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
+	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId)
 }
 
 // Testing the ModuleStop method with healthjob define

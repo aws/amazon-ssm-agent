@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	ssm2 "github.com/aws/amazon-ssm-agent/agent/ssm/mocks/ssm"
@@ -142,7 +143,7 @@ func TestUpdateHealthCheck(t *testing.T) {
 			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
 		},
 	}
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockContext.On("AppConfig").Return(&appconfigMock)
 
 	service := &svcManager{context: mockContext}
