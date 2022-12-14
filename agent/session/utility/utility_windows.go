@@ -23,10 +23,11 @@ import (
 	"syscall"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/mgr"
@@ -98,14 +99,14 @@ type LOCALGROUP_MEMBERS_INFO_3 struct {
 }
 
 var (
-	modNetapi32             = syscall.NewLazyDLL("netapi32.dll")
+	modNetapi32             = windows.NewLazySystemDLL("netapi32.dll")
 	netUserSetInfo          = modNetapi32.NewProc("NetUserSetInfo")
 	netUserGetInfo          = modNetapi32.NewProc("NetUserGetInfo")
 	netUserAdd              = modNetapi32.NewProc("NetUserAdd")
 	netApiBufferFree        = modNetapi32.NewProc("NetApiBufferFree")
 	netLocalGroupAddMembers = modNetapi32.NewProc("NetLocalGroupAddMembers")
-	advapi32                = syscall.NewLazyDLL("advapi32.dll")
-	userenv                 = syscall.NewLazyDLL("userenv.dll")
+	advapi32                = windows.NewLazySystemDLL("advapi32.dll")
+	userenv                 = windows.NewLazySystemDLL("userenv.dll")
 	logonProc               = advapi32.NewProc("LogonUserW")
 	loadUserProfileW        = userenv.NewProc("LoadUserProfileW")
 	unloadUserProfile       = userenv.NewProc("UnloadUserProfile")

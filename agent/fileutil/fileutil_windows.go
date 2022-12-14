@@ -22,6 +22,8 @@ import (
 	"syscall"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -46,7 +48,7 @@ func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
 	}
 
 	// Load kernel32.dll and find GetDiskFreeSpaceEX function
-	getDiskFreeSpace := syscall.MustLoadDLL("kernel32.dll").MustFindProc("GetDiskFreeSpaceExW")
+	getDiskFreeSpace := windows.NewLazySystemDLL("kernel32.dll").NewProc("GetDiskFreeSpaceExW")
 
 	// Get the available bytes (for arguments, GetDiskFreeSpace function takes dir name, avail, total, and free respectively)
 	_, _, err = getDiskFreeSpace.Call(

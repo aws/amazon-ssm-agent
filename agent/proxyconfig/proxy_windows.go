@@ -23,6 +23,8 @@ import (
 	"unicode/utf16"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -193,11 +195,7 @@ func ParseProxyBypass(log log.T, bypass string) []string {
 
 // GetDefaultProxySettings returns the machine WinHTTP proxy configuration
 func GetDefaultProxySettings(log log.T) (p HttpDefaultProxyConfig, err error) {
-	winhttp, err := syscall.LoadLibrary("Winhttp.dll")
-	if err != nil {
-		log.Errorf("Failed to load Winhttp.dll library: %v", err.Error())
-		return p, err
-	}
+	winhttp := syscall.Handle(windows.NewLazySystemDLL("Winhttp.dll").Handle())
 
 	defer syscall.FreeLibrary(winhttp)
 
@@ -235,11 +233,7 @@ func GetDefaultProxySettings(log log.T) (p HttpDefaultProxyConfig, err error) {
 func GetIEProxySettings(log log.T) (p HttpIEProxyConfig, err error) {
 	p.auto = false
 	p.enabled = false
-	winhttp, err := syscall.LoadLibrary("Winhttp.dll")
-	if err != nil {
-		log.Error("Failed to load Winhttp.dll library: ", err.Error())
-		return p, err
-	}
+	winhttp := syscall.Handle(windows.NewLazySystemDLL("Winhttp.dll").Handle())
 
 	defer syscall.FreeLibrary(winhttp)
 
