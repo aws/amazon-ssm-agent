@@ -204,7 +204,11 @@ func (s3 *S3Resource) ValidateLocationInfo() (valid bool, err error) {
 
 // getS3BucketURLString returns the URL up to the bucket name
 func (s3 *S3Resource) getS3BucketURLString() (Url *url.URL, err error) {
-	endpoint := s3util.GetS3Endpoint(s3.context, s3.s3Object.Region)
+	endpoint, err := s3util.GetS3Endpoint(s3.context, s3.s3Object.Region)
+	if err != nil {
+		return nil, err
+	}
+
 	bucketURL := "https://" + endpoint + "/" + s3.s3Object.Bucket
 	return url.Parse(bucketURL)
 }

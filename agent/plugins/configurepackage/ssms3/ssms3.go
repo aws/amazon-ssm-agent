@@ -76,7 +76,7 @@ type PackageService struct {
 }
 
 // UseSSMS3Service checks for existence of the active service indicator file.  If the file has been removed, it indicates that the new package service should be used
-func UseSSMS3Service(context context.T, tracer trace.Tracer, repository string, region string) bool {
+func UseSSMS3Service(context context.T, tracer trace.Tracer, endpoint string, repository string, region string) bool {
 	var checkURL string
 	if repository == "beta" {
 		checkURL = ActiveServiceURLBeta
@@ -85,7 +85,8 @@ func UseSSMS3Service(context context.T, tracer trace.Tracer, repository string, 
 	} else {
 		checkURL = ActiveServiceURL
 	}
-	checkURL = strings.Replace(checkURL, EndpointHolder, s3util.GetS3Endpoint(context, region), -1)
+
+	checkURL = strings.Replace(checkURL, EndpointHolder, endpoint, -1)
 	checkURL = strings.Replace(checkURL, RegionHolder, region, -1)
 
 	parsedURL, _ := url.Parse(checkURL)
@@ -93,7 +94,7 @@ func UseSSMS3Service(context context.T, tracer trace.Tracer, repository string, 
 	return networkdep.CanGetS3Object(context, s3util.ParseAmazonS3URL(logger, parsedURL))
 }
 
-func New(context context.T, repository string, region string) *PackageService {
+func New(context context.T, s3endpoint string, repository string, region string) *PackageService {
 	var packageURL string
 	if repository == "beta" {
 		packageURL = PackageURLBeta
@@ -102,7 +103,7 @@ func New(context context.T, repository string, region string) *PackageService {
 	} else {
 		packageURL = PackageURLStandard
 	}
-	packageURL = strings.Replace(packageURL, EndpointHolder, s3util.GetS3Endpoint(context, region), -1)
+	packageURL = strings.Replace(packageURL, EndpointHolder, s3endpoint, -1)
 	packageURL = strings.Replace(packageURL, RegionHolder, region, -1)
 	packageURL = strings.Replace(packageURL, PlatformHolder, appconfig.PackagePlatform, -1)
 	packageURL = strings.Replace(packageURL, ArchHolder, runtime.GOARCH, -1)

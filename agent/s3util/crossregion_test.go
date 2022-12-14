@@ -50,9 +50,9 @@ func (m *MockedHttpProvider) Head(url string) (*http.Response, error) {
 	return args.Get(0).(*http.Response), args.Error(1)
 }
 
-func setS3Endpoint(region, endpoint string) {
-	getS3Endpoint = func(context context.T, region string) string {
-		return endpoint
+func setS3Endpoint(region, endpoint string, err error) {
+	getS3Endpoint = func(context context.T, region string) (string, error) {
+		return endpoint, err
 	}
 }
 
@@ -62,8 +62,58 @@ func setS3FallbackEndpoint(region, endpoint string) {
 	}
 }
 
+func TestGetBucketRegion_NoError_InvalidS3Endpoint_ReturnsRegionFromFallback(t *testing.T) {
+	setS3Endpoint("us-east-1", "", fmt.Errorf("invalid region"))
+	setS3FallbackEndpoint("us-east-1", "s3.amazonaws.com")
+	resp := &http.Response{
+		StatusCode: 200,
+		Header: http.Header{
+			bucketRegionHeader: []string{"us-east-1"},
+		},
+	}
+	var err error = nil
+	httpProvider := &MockedHttpProvider{}
+	httpProvider.On("Head", "https://bucket-1.s3.amazonaws.com").Return(resp, err)
+	actual := getBucketRegion(contextmocks.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
+	expected := "us-east-1"
+	assert.Equal(t, expected, actual)
+}
+
+func TestGetBucketRegion_NoError_InvalidFallbackS3Endpoint_ReturnsRegionFroms3(t *testing.T) {
+	setS3Endpoint("us-east-1", "s3.us-east-1.amazonaws.com", nil)
+	setS3FallbackEndpoint("us-east-1", "")
+	resp := &http.Response{
+		StatusCode: 200,
+		Header: http.Header{
+			bucketRegionHeader: []string{"us-east-1"},
+		},
+	}
+	var err error = nil
+	httpProvider := &MockedHttpProvider{}
+	httpProvider.On("Head", "https://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
+	actual := getBucketRegion(contextmocks.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
+	expected := "us-east-1"
+	assert.Equal(t, expected, actual)
+}
+
+func TestGetBucketRegion_NoError_InvalidS3Endpoint_Error(t *testing.T) {
+	setS3Endpoint("us-east-1", "", fmt.Errorf("invalid region"))
+	setS3FallbackEndpoint("us-east-1", "")
+	resp := &http.Response{
+		StatusCode: 200,
+		Header: http.Header{
+			bucketRegionHeader: []string{"us-east-1"},
+		},
+	}
+	var err error = nil
+	httpProvider := &MockedHttpProvider{}
+	httpProvider.On("Head", "https://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
+	actual := getBucketRegion(contextmocks.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
+	assert.Equal(t, "", actual)
+}
+
 func TestGetBucketRegion_NoError_NoRegionInResponse_ReturnsEmptyString(t *testing.T) {
-	setS3Endpoint("us-east-1", "s3.us-east-1.amazonaws.com")
+	setS3Endpoint("us-east-1", "s3.us-east-1.amazonaws.com", nil)
 	setS3FallbackEndpoint("us-east-1", "s3.amazonaws.com")
 	resp := &http.Response{
 		StatusCode: 401,
@@ -77,7 +127,7 @@ func TestGetBucketRegion_NoError_NoRegionInResponse_ReturnsEmptyString(t *testin
 }
 
 func TestGetBucketRegion_NoError_RegionInResponse_ReturnsRegion(t *testing.T) {
-	setS3Endpoint("us-east-1", "s3.us-east-1.amazonaws.com")
+	setS3Endpoint("us-east-1", "s3.us-east-1.amazonaws.com", nil)
 	setS3FallbackEndpoint("us-east-1", "s3.amazonaws.com")
 	resp := &http.Response{
 		StatusCode: 301,
@@ -93,7 +143,7 @@ func TestGetBucketRegion_NoError_RegionInResponse_ReturnsRegion(t *testing.T) {
 }
 
 func TestGetBucketRegion_AllUrlsFail_ReturnsEmptyString(t *testing.T) {
-	setS3Endpoint("us-east-1", "s3.us-east-1.amazonaws.com")
+	setS3Endpoint("us-east-1", "s3.us-east-1.amazonaws.com", nil)
 	setS3FallbackEndpoint("us-east-1", "s3.amazonaws.com")
 	var resp *http.Response = nil
 	err := fmt.Errorf("failed")
@@ -202,7 +252,7 @@ func setupMockHeadBucketResponse(bucketName, instanceRegion, headBucketResponse 
 		s3Endpoint += ".cn"
 		s3FallbackEndpoint = "s3.cn-north-1.amazonaws.com.cn"
 	}
-	setS3Endpoint(instanceRegion, s3Endpoint)
+	setS3Endpoint(instanceRegion, s3Endpoint, nil)
 	setS3FallbackEndpoint(instanceRegion, s3FallbackEndpoint)
 
 	getHttpProvider = func(log.T, appconfig.SsmagentConfig) HttpProvider {

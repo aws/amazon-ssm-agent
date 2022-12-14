@@ -35,6 +35,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
+	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -459,8 +460,13 @@ func selectService(context context.T, tracer trace.Tracer, input *ConfigurePacka
 	serviceEndpoint := input.Repository
 	response := &ssm.GetManifestOutput{}
 	var err error
+	var s3Endpoint string
+	if s3Endpoint, err = s3util.GetS3Endpoint(context, region); err != nil {
+		tracer.CurrentTrace().AppendErrorf("Failed to generate s3 endpoint - %v.", err.Error())
+		return nil, err
+	}
 
-	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(context, tracer, serviceEndpoint, region) {
+	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(context, tracer, s3Endpoint, serviceEndpoint, region) {
 		// This indicates that it would be the birdwatcher service.
 		// Before creating an object of type birdwatcher here, check if the name is of document arn. If it is, return with a Document type service
 		if regexp.MustCompile(documentArnPattern).MatchString(input.Name) {
@@ -515,7 +521,7 @@ func selectService(context context.T, tracer trace.Tracer, input *ConfigurePacka
 	}
 
 	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")
-	return ssms3.New(context, serviceEndpoint, region), nil
+	return ssms3.New(context, s3Endpoint, serviceEndpoint, region), nil
 }
 
 // Execute runs the plugin operation and returns output

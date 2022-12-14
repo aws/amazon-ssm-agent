@@ -117,7 +117,7 @@ func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*sess
 // the header.
 func getBucketRegion(context context.T, instanceRegion, bucketName string, httpProvider HttpProvider) (region string) {
 	log := context.Log()
-	regionalEndpoint := getS3Endpoint(context, instanceRegion)
+	regionalEndpoint, _ := getS3Endpoint(context, instanceRegion)
 
 	// When using virtual hosted–style buckets with SSL, the SSL wild-card certificate
 	// only matches buckets that do not contain dots (".").  To work around this, try
@@ -130,9 +130,12 @@ func getBucketRegion(context context.T, instanceRegion, bucketName string, httpP
 	// always try both the regional endpoint for the instance region as well as one other
 	// endpoint.  This should enable the HEAD request to successfully discover the bucket
 	// region in CN regions, and may be helpful in other partitions as well.
-	endpoints := []string{regionalEndpoint}
+	endpoints := []string{}
+	if regionalEndpoint != "" {
+		endpoints = append(endpoints, regionalEndpoint)
+	}
 	fallbackEndpoint := getFallbackS3EndpointFunc(context, instanceRegion)
-	if fallbackEndpoint != regionalEndpoint {
+	if fallbackEndpoint != regionalEndpoint && fallbackEndpoint != "" {
 		endpoints = append(endpoints, fallbackEndpoint)
 	}
 
