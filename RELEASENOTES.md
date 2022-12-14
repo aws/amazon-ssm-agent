@@ -1,5 +1,19 @@
 Latest
 ===============
+- Added minimum retry sleep for Registrar RegisterManagedInstance calls
+- Explicitly skip AZ info check for on-prem and ECS targets
+- Fix for SSM-Agent that is unable to start on Apple Mac M1's (mac2.metal instances)
+- Ensuring powershell path is set to system directory on Windows
+- Load DLLs with using system/absolute paths on Windows
+- Added workaround for Samba limit when loading Active Directory ids
+- Dynamically get network interface name for SeamlessDomainJoin
+- Added install-yum-rpm to makefile to install agent on host from source code
+- Added logging for specifying credential source
+- Refactored tests to remove mocks from production binaries
+- Updated Windows DomainJoin plugin SharpZipLib and Newtonsoft.json dependencies
+
+3.2.345.0
+===============
 - Updated yaml.v3 dependency
 
 3.2.286.0
