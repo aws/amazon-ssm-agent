@@ -148,16 +148,28 @@ func TestUpdateHealthCheck(t *testing.T) {
 
 	service := &svcManager{context: mockContext}
 
-	mockIdentity := &identityMock.IAgentIdentityInner{}
+	mockEC2Identity := &identityMock.IAgentIdentityInner{}
 	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
-		return mockIdentity
+		return mockEC2Identity
 	}
 
 	availabilityZone := "us-east-1a"
 	availabilityZoneId := "use1-az2"
-	mockIdentity.On("IsIdentityEnvironment").Return(true)
-	mockIdentity.On("AvailabilityZone").Return(availabilityZone, nil)
-	mockIdentity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+	mockEC2Identity.On("IsIdentityEnvironment").Return(true)
+	mockEC2Identity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockEC2Identity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
+
+	mockOnPremIdentity := &identityMock.IAgentIdentityInner{}
+	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+		return mockOnPremIdentity
+	}
+	mockOnPremIdentity.On("IsIdentityEnvironment").Return(false)
 
 	mockObj := ssm2.NewMockDefault()
 	mockObj.On(

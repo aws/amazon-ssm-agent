@@ -87,16 +87,27 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 		},
 	}
 
-	mockIdentity := &identityMock.IAgentIdentityInner{}
+	mockEC2Identity := &identityMock.IAgentIdentityInner{}
 	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
-		return mockIdentity
+		return mockEC2Identity
 	}
-
 	availabilityZone := "us-east-1a"
 	availabilityZoneId := "use1-az2"
-	mockIdentity.On("IsIdentityEnvironment").Return(true)
-	mockIdentity.On("AvailabilityZone").Return(availabilityZone, nil)
-	mockIdentity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+	mockEC2Identity.On("IsIdentityEnvironment").Return(true)
+	mockEC2Identity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockEC2Identity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
+
+	mockOnPremIdentity := &identityMock.IAgentIdentityInner{}
+	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+		return mockOnPremIdentity
+	}
+	mockOnPremIdentity.On("IsIdentityEnvironment").Return(false)
 
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
@@ -134,6 +145,12 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithOnPremIdentity() {
 	}
 	mockOnPremIdentity.On("IsIdentityEnvironment").Return(true)
 
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
+
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "").Return(nil, nil)
@@ -167,6 +184,12 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithNilOnPremIdentity() {
 	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
 		return nil
 	}
+
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
 
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
