@@ -127,6 +127,14 @@ func generateDomainJoinPluginInputOptionalParamKeepHostName(id string, name stri
 	}
 }
 
+func generateDomainJoinPluginInputOptionalParamKeepHostNameNoIPs(id string, name string, keepHostName bool) DomainJoinPluginInput {
+	return DomainJoinPluginInput{
+		DirectoryId:   id,
+		DirectoryName: name,
+		KeepHostName:  keepHostName,
+	}
+}
+
 // TestRunCommands tests the runCommands and runCommandsRawInput methods, which run one set of commands.
 func TestRunCommands(t *testing.T) {
 	for _, testCase := range TestCases {
@@ -242,6 +250,11 @@ func TestMakeArguments(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testKeepHostName)
 	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240 --keep-hostname  "
+	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --keep-hostname   --dns-addresses 172.31.4.141,172.31.21.240"
+	assert.Equal(t, expected, commandRes)
+
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostNameNoIPs(testDirectoryId, testDirectoryName, testKeepHostName)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
+	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --keep-hostname  "
 	assert.Equal(t, expected, commandRes)
 }

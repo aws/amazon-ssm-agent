@@ -318,6 +318,11 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		}
 	}
 
+	if pluginInput.KeepHostName {
+		buffer.WriteString(KeepHostNameArgs)
+		buffer.WriteString(" ")
+	}
+
 	if len(pluginInput.DnsIpAddresses) == 0 {
 		log.Debug("Do not provide dns addresses.")
 		return buffer.String(), nil
@@ -338,11 +343,6 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		} else {
 			return "", fmt.Errorf("Invalid DNS IP address " + pluginInput.DnsIpAddresses[index])
 		}
-	}
-
-	if pluginInput.KeepHostName {
-		buffer.WriteString(KeepHostNameArgs)
-		buffer.WriteString(" ")
 	}
 
 	return buffer.String(), nil
