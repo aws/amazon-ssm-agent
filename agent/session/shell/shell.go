@@ -264,6 +264,10 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 		errorString := fmt.Errorf("Unable to start command: %s\n", err)
 		log.Error(errorString)
 		time.Sleep(2 * time.Second)
+		if appconfig.PluginNameNonInteractiveCommands == p.name {
+			// Error started before exec.cmd starts needs to be explicitly propagated to data channel.
+			p.sendErrorToDataChannel(log, errorString.Error())
+		}
 		output.MarkAsFailed(errorString)
 		return
 	}
@@ -401,9 +405,13 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 	p.startStreamingLogs(ipcFile, config)
 
 	if p.separateOutput {
-		p.processCommandsWithOutputStreamSeparate(cancelled, cancelFlag, output, ipcFile)
+		if err := p.processCommandsWithOutputStreamSeparate(cancelled, cancelFlag, output, ipcFile); err != nil {
+			p.sendErrorToDataChannel(log, err.Error())
+		}
 	} else {
-		p.processCommandsWithExec(cancelled, cancelFlag, output, ipcFile)
+		if err := p.processCommandsWithExec(cancelled, cancelFlag, output, ipcFile); err != nil {
+			p.sendErrorToDataChannel(log, err.Error())
+		}
 		p.cleanupOutputFile(log, config)
 	}
 }
@@ -412,7 +420,7 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 func (p *ShellPlugin) processCommandsWithOutputStreamSeparate(cancelled chan bool,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
-	ipcFile *os.File) {
+	ipcFile *os.File) (err error) {
 
 	log := p.context.Log()
 
@@ -423,7 +431,7 @@ func (p *ShellPlugin) processCommandsWithOutputStreamSeparate(cancelled chan boo
 		errorString := fmt.Errorf("Error occurred starting the command: %s\n", err)
 		log.Error(errorString)
 		output.MarkAsFailed(errorString)
-		return
+		return err
 	}
 
 	// Wait for session to be completed/cancelled/interrupted
@@ -501,13 +509,15 @@ func (p *ShellPlugin) processCommandsWithOutputStreamSeparate(cancelled chan boo
 	if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
 		log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
 	}
+
+	return nil
 }
 
 // Handle go routines between session termination and command execution with exec.Cmd
 func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
-	ipcFile *os.File) {
+	ipcFile *os.File) (err error) {
 
 	log := p.context.Log()
 
@@ -515,7 +525,7 @@ func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
 		errorString := fmt.Errorf("Error occurred starting the command: %s\n", err)
 		log.Error(errorString)
 		output.MarkAsFailed(errorString)
-		return
+		return err
 	}
 
 	// Wait for session to be completed/cancelled/interrupted
@@ -583,6 +593,8 @@ func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
 			log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
 		}
 	}
+
+	return nil
 }
 
 // initializeLogger initializes plugin logger to be used for s3/cw logging
@@ -949,5 +961,11 @@ func (p *ShellPlugin) finishLogging(
 func (p *ShellPlugin) cleanupOutputFile(log log.T, config agentContracts.Configuration) {
 	if err := os.Remove(filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)); err != nil {
 		log.Debugf("Unable to clean up output file, %v", err)
+	}
+}
+
+func (p *ShellPlugin) sendErrorToDataChannel(log log.T, errorString string) {
+	if dataChannelError := p.dataChannel.SendStreamDataMessage(log, mgsContracts.StdErr, []byte(errorString)); dataChannelError != nil {
+		log.Errorf("Unable to send error message to data channel: %v", dataChannelError)
 	}
 }

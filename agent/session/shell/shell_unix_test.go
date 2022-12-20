@@ -738,6 +738,8 @@ func (suite *ShellTestSuite) TestExecuteWithExecAndCommandFailedToStart() {
 	suite.mockIohandler.On("MarkAsFailed", mock.Anything)
 	suite.mockCmd.On("Start").Return(errors.New("failed to start command"))
 
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
 	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.execCmd = suite.mockCmd
 		return nil
@@ -811,6 +813,44 @@ func (suite *ShellTestSuite) TestExecuteWithExecFailedToWait() {
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())
 	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
+}
+
+// Testing Execute with exec.Cmd and the command execution failed to complete but writePump succeeds
+func (suite *ShellTestSuite) TestExecuteWithFailureToGetExec() {
+	suite.mockIohandler.On("MarkAsFailed", mock.Anything)
+	suite.mockCmd.On("Start").Return(errors.New("failed to start command"))
+
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		return errors.New("some error")
+	}
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
+
+	cancelled := make(chan bool)
+
+	plugin.executeCommandsWithExec(
+		contracts.Configuration{},
+		cancelled,
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		ipcFile,
+	)
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
 	suite.mockCmd.AssertExpectations(suite.T())
 }
 
