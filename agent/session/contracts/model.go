@@ -367,13 +367,15 @@ const (
 
 // This is sent by the agent to initialize KMS encryption
 type KMSEncryptionRequest struct {
-	KMSKeyID string `json:"KMSKeyId"`
+	KMSKeyID  string `json:"KMSKeyId"`
+	Challenge string `json:"Challenge"`
 }
 
 // This is received by the agent to set up KMS encryption
 type KMSEncryptionResponse struct {
-	KMSCipherTextKey  []byte `json:"KMSCipherTextKey"`
-	KMSCipherTextHash []byte `json:"KMSCipherTextHash"`
+	KMSCipherTextKey         []byte `json:"KMSCipherTextKey"`
+	KMSCipherTextHash        []byte `json:"KMSCipherTextHash"`
+	ChallengeAcknowledgement bool   `json:"ChallengeAcknowledgement"`
 }
 
 type SessionTypeRequest struct {

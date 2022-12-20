@@ -59,6 +59,7 @@
         "LogKey":""
     },
     "Kms": {
-        "Endpoint": ""
+        "Endpoint": "",
+        "RequireKMSChallengeResponse": false
     }
 }

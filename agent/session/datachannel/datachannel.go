@@ -929,8 +929,12 @@ func (dataChannel *DataChannel) finalizeKMSEncryption(log log.T, actionResult js
 		return err
 	}
 
+	if dataChannel.context.AppConfig().Kms.RequireKMSChallengeResponse && !encryptionResponse.ChallengeAcknowledgement {
+		return fmt.Errorf("client does not support required encryption context random challenge")
+	}
+
 	sessionId := dataChannel.ChannelId // ChannelId is SessionId
-	if err := dataChannel.blockCipher.UpdateEncryptionKey(log, encryptionResponse.KMSCipherTextKey, sessionId, dataChannel.InstanceId); err != nil {
+	if err := dataChannel.blockCipher.UpdateEncryptionKey(log, encryptionResponse.KMSCipherTextKey, sessionId, dataChannel.InstanceId, encryptionResponse.ChallengeAcknowledgement); err != nil {
 		return fmt.Errorf("Fetching data key failed: %s", err)
 	}
 	dataChannel.encryptionEnabled = true
@@ -1023,7 +1027,8 @@ func (dataChannel *DataChannel) buildHandshakeRequestPayload(log log.T,
 			mgsContracts.RequestedClientAction{
 				ActionType: mgsContracts.KMSEncryption,
 				ActionParameters: mgsContracts.KMSEncryptionRequest{
-					KMSKeyID: dataChannel.blockCipher.GetKMSKeyId(),
+					KMSKeyID:  dataChannel.blockCipher.GetKMSKeyId(),
+					Challenge: dataChannel.blockCipher.GetRandomChallenge(),
 				}})
 	}
 

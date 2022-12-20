@@ -18,6 +18,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"io"
 
@@ -26,23 +27,27 @@ import (
 )
 
 const nonceSize = 12
+const randomChallengeSize = 16
 
 type IBlockCipher interface {
-	UpdateEncryptionKey(log log.T, cipherTextKey []byte, sessionId string, instanceId string) error
+	UpdateEncryptionKey(log log.T, cipherTextKey []byte, sessionId string, instanceId string, useRandomChallenge bool) error
 	EncryptWithAESGCM(plainText []byte) (cipherText []byte, err error)
 	DecryptWithAESGCM(cipherText []byte) (plainText []byte, err error)
 	GetCipherTextKey() (cipherTextKey []byte)
 	GetKMSKeyId() (kmsKey string)
+	GetRandomChallenge() (randomChallenge string)
 }
 
 type BlockCipher struct {
 	kmsKeyId         string
+	randomChallenge  string
 	kmsService       IKMSService
 	cipherTextKey    []byte
 	encryptionKey    []byte
 	decryptionKey    []byte
 	encryptionCipher cipher.AEAD
 	decryptionCipher cipher.AEAD
+	gcmNonce         NonceGenerator
 }
 
 // NewBlockCipher creates a new block cipher
@@ -56,16 +61,28 @@ func NewBlockCipher(context context.T, kmsKeyId string) (blockCipher *BlockCiphe
 
 // NewBlockCipherKMS creates a new block cipher with a provided IKMService instance
 func NewBlockCipherKMS(kmsKeyId string, kmsService IKMSService) (blockCipher *BlockCipher, err error) {
+	randomChallengeBytes := make([]byte, randomChallengeSize)
+	if _, err := io.ReadFull(rand.Reader, randomChallengeBytes); err != nil {
+		return nil, fmt.Errorf("Error generating random challenge for encryption context, %v", err)
+	}
+	randomChallenge := base64.StdEncoding.EncodeToString(randomChallengeBytes)
+
 	// NewBlockCipher creates a new instance of BlockCipher
 	blockCipher = &BlockCipher{
-		kmsKeyId:   kmsKeyId,
-		kmsService: kmsService,
+		kmsKeyId:        kmsKeyId,
+		randomChallenge: randomChallenge,
+		kmsService:      kmsService,
 	}
+
+	if err = blockCipher.gcmNonce.InitializeNonce(); err != nil {
+		return nil, fmt.Errorf("Error when generating initial nonce for encryption, %v", err)
+	}
+
 	return blockCipher, nil
 }
 
 // UpdateEncryptionKey receives cipherTextBlob and calls kms::Decrypt to receive the encryption data key
-func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []byte, sessionId string, instanceId string) error {
+func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []byte, sessionId string, instanceId string, useRandomChallenge bool) error {
 	// NewBlockCipher creates a new instance of BlockCipher
 	var (
 		plainTextKey []byte
@@ -76,8 +93,12 @@ func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []
 	encryptionContext[encryptionContextSessionIdKey] = &sessionId
 	const encryptionContextTargetIdKey = "aws:ssm:TargetId"
 	encryptionContext[encryptionContextTargetIdKey] = &instanceId
+	if useRandomChallenge {
+		const encryptionContextChallengeKey = "aws:ssm:RandomChallenge"
+		encryptionContext[encryptionContextChallengeKey] = &blockCipher.randomChallenge
+	}
 
-	if plainTextKey, err = blockCipher.kmsService.Decrypt(cipherTextBlob, encryptionContext); err != nil {
+	if plainTextKey, err = blockCipher.kmsService.Decrypt(cipherTextBlob, encryptionContext, blockCipher.kmsKeyId); err != nil {
 		return fmt.Errorf("Unable to retrieve data key, %v", err)
 	}
 	// cryptoKeySizeInBytes is half of PlainTextKey size fetched from KMS. PlainTextKey is split in two two halves of cryptoKeySizeInBytes
@@ -114,9 +135,11 @@ func (blockCipher *BlockCipher) EncryptWithAESGCM(plainText []byte) (cipherText 
 	var aesgcm = blockCipher.encryptionCipher
 
 	cipherText = make([]byte, nonceSize+len(plainText))
-	nonce := make([]byte, nonceSize)
-	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
-		return nil, fmt.Errorf("Error when generating nonce for encryption, %v", err)
+
+	// Generate nonce
+	nonce, err := blockCipher.gcmNonce.GenerateNonce()
+	if err != nil {
+		return nil, err
 	}
 
 	// Encrypt plain text using given key and newly generated nonce
@@ -125,6 +148,7 @@ func (blockCipher *BlockCipher) EncryptWithAESGCM(plainText []byte) (cipherText 
 	// Append nonce to the beginning of the cipher text to be used while decrypting
 	cipherText = append(cipherText[:nonceSize], nonce...)
 	cipherText = append(cipherText[nonceSize:], cipherTextWithoutNonce...)
+
 	return cipherText, nil
 }
 
@@ -151,4 +175,9 @@ func (blockCipher *BlockCipher) GetCipherTextKey() (cipherTextKey []byte) {
 // GetKMSKeyId returns kmsKeyId from BlockCipher
 func (blockCipher *BlockCipher) GetKMSKeyId() (kmsKey string) {
 	return blockCipher.kmsKeyId
+}
+
+// GetRandomChallenge returns randomChallenge from BlockCipher
+func (blockCipher *BlockCipher) GetRandomChallenge() (randomChallenge string) {
+	return blockCipher.randomChallenge
 }

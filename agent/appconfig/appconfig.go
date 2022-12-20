@@ -143,7 +143,9 @@ func DefaultConfig() SsmagentConfig {
 		CustomIdentities: []*CustomIdentity{},
 	}
 	var birdwatcher BirdwatcherCfg
-	var kms KmsConfig
+	var kms = KmsConfig{
+		RequireKMSChallengeResponse: DefaultRequireKMSChallengeResponse,
+	}
 
 	var ssmagentCfg = SsmagentConfig{
 		Profile:     credsProfile,

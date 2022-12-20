@@ -15,6 +15,8 @@
 package crypto
 
 import (
+	"bytes"
+	"encoding/binary"
 	"encoding/hex"
 	"testing"
 
@@ -60,18 +62,21 @@ func TestBlockCipherTestSuite(t *testing.T) {
 
 // Testing Encrypt and Decrypt functions
 func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
-	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId}
-	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext).Return(suite.plainTextKey, nil)
-
 	blockCipher, err := NewBlockCipherKMS(suite.kmsKeyId, &suite.mockKMSService)
 	assert.Nil(suite.T(), err)
-	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId)
+
+	challenge := blockCipher.GetRandomChallenge()
+
+	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId, "aws:ssm:RandomChallenge": &challenge}
+	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext, suite.kmsKeyId).Return(suite.plainTextKey, nil)
+
+	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId, true)
 	assert.Nil(suite.T(), err)
 
 	// Create another cipher with flipped encryption/decryption keys
-	suite.mockKMSService.On("Decrypt", suite.cipherTextKeyFlipped, encryptionContext).Return(suite.plainTextKeyFlipped, nil)
+	suite.mockKMSService.On("Decrypt", suite.cipherTextKeyFlipped, encryptionContext, suite.kmsKeyId).Return(suite.plainTextKeyFlipped, nil)
 	blockCipherReversed := BlockCipher(*blockCipher)
-	err = blockCipherReversed.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKeyFlipped, suite.sessionId, suite.instanceId)
+	err = blockCipherReversed.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKeyFlipped, suite.sessionId, suite.instanceId, true)
 
 	encryptedData, err := blockCipher.EncryptWithAESGCM(suite.plainTextData)
 	assert.Nil(suite.T(), err)
@@ -83,6 +88,53 @@ func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
 	suite.mockKMSService.AssertExpectations(suite.T())
 }
 
+// Testing cipher initialization without random challenge
+func (suite *BlockCipherTestSuite) TestNoRandomChallenge() {
+	blockCipher, err := NewBlockCipherKMS(suite.kmsKeyId, &suite.mockKMSService)
+	assert.Nil(suite.T(), err)
+
+	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId}
+	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext, suite.kmsKeyId).Return(suite.plainTextKey, nil)
+
+	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId, false)
+	assert.Nil(suite.T(), err)
+}
+
+// Test to ensure the nonce changes between two subsequent messages
+func (suite *BlockCipherTestSuite) TestEncryptChangesNonce() {
+	blockCipher, err := NewBlockCipherKMS(suite.kmsKeyId, &suite.mockKMSService)
+	assert.Nil(suite.T(), err)
+
+	challenge := blockCipher.GetRandomChallenge()
+
+	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId, "aws:ssm:RandomChallenge": &challenge}
+	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext, suite.kmsKeyId).Return(suite.plainTextKey, nil)
+
+	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId, true)
+	assert.Nil(suite.T(), err)
+
+	// Translate nonce internal state to bytes
+	nonce1 := new(bytes.Buffer)
+	binary.Write(nonce1, binary.LittleEndian, blockCipher.gcmNonce.state)
+
+	// Encrypt and validate that the expected nonce is there
+	envelope1, err := blockCipher.EncryptWithAESGCM(suite.plainTextData)
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), nonce1.Bytes(), envelope1[:nonceSize])
+
+	// Get next nonce state
+	nonce2 := new(bytes.Buffer)
+	binary.Write(nonce2, binary.LittleEndian, blockCipher.gcmNonce.state)
+
+	// Encrypt again and check that this nonce is now present
+	envelope2, err := blockCipher.EncryptWithAESGCM(suite.plainTextData)
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), nonce2.Bytes(), envelope2[:nonceSize])
+
+	// Final sanity check that the two nonces are not equal
+	assert.NotEqual(suite.T(), nonce1.Bytes(), nonce2.Bytes())
+}
+
 func (suite *BlockCipherTestSuite) TestGetCipherTextKey() {
 	var blockCipher IBlockCipher = &BlockCipher{cipherTextKey: suite.cipherTextKey}
 	assert.Equal(suite.T(), suite.cipherTextKey, blockCipher.GetCipherTextKey())
@@ -91,4 +143,9 @@ func (suite *BlockCipherTestSuite) TestGetCipherTextKey() {
 func (suite *BlockCipherTestSuite) TestGetKMSKeyId() {
 	var blockCipher IBlockCipher = &BlockCipher{kmsKeyId: suite.kmsKeyId}
 	assert.Equal(suite.T(), suite.kmsKeyId, blockCipher.GetKMSKeyId())
+}
+func (suite *BlockCipherTestSuite) TestGetRandomChallenge() {
+	randomChallenge := "aaaabbbbccccdddd"
+	var blockCipher IBlockCipher = &BlockCipher{randomChallenge: randomChallenge}
+	assert.Equal(suite.T(), randomChallenge, blockCipher.GetRandomChallenge())
 }

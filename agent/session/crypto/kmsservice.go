@@ -32,7 +32,7 @@ import (
 const KMSKeySizeInBytes int64 = 64
 
 type IKMSService interface {
-	Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string) (plainText []byte, err error)
+	Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string, keyId string) (plainText []byte, err error)
 }
 
 type KMSService struct {
@@ -69,10 +69,12 @@ func NewKMSService(context context.T) (kmsService *KMSService, err error) {
 }
 
 // Decrypt will get the plaintext key from KMS service
-func (kmsService *KMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string) (plainText []byte, err error) {
+func (kmsService *KMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string, keyId string) (plainText []byte, err error) {
 	output, err := kmsService.client.Decrypt(&kms.DecryptInput{
 		CiphertextBlob:    cipherTextBlob,
-		EncryptionContext: encryptionContext})
+		EncryptionContext: encryptionContext,
+		KeyId:             &keyId,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("Error when decrypting data key %s", err)
 	}

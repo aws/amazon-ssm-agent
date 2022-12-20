@@ -246,6 +246,9 @@ const (
 
 	// Session default RunAs user name
 	DefaultRunAsUserName = "ssm-user"
+
+	// Permit excluding RandomChallenge from KMS encryption context for backward compatibility with older clients
+	DefaultRequireKMSChallengeResponse = false
 )
 
 // Default deny list IP addresses for remote host port forwarding: IMDS (ipv4, ipv6); VPC (ipv4, ipv6); Amazon Time Sync (ipv4, ipv6); Amazon Windows license activation (2x ipv4, ipv6)

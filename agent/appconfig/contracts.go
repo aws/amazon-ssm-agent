@@ -87,7 +87,8 @@ type MgsConfig struct {
 
 // KmsConfig represents configuration for Key Management Service
 type KmsConfig struct {
-	Endpoint string
+	Endpoint                    string
+	RequireKMSChallengeResponse bool
 }
 
 // OsInfo represents os related information

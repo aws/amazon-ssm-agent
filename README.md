@@ -239,6 +239,8 @@ To set up your own custom configuration for the agent:
     * LogKey (string) - Ignored
 * Kms - represents configuration for Key Management Service if encryption is enabled for this session (i.e. kmsKeyId is set or using "Port" plugin) 
     * Endpoint (string)
+    * RequireKMSChallengeResponse (boolean) - if true, enforces that Session Manager clients support enhanced challenge-response authentication
+        * Default: false
 
 ## Release
 
