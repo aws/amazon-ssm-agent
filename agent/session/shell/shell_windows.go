@@ -90,12 +90,13 @@ func StartCommandExecutor(
 		return fmt.Errorf("Missing %s file.", winptyDllFilePath)
 	}
 
-	var finalCmd string
+	var cmdStr string
 	if strings.TrimSpace(shellProps.Windows.Commands) == "" || isSessionLogger {
-		finalCmd = winptyCmd
+		cmdStr = ""
 	} else {
-		finalCmd = winptyCmd + " " + shellProps.Windows.Commands
+		cmdStr = shellProps.Windows.Commands
 	}
+	fullCmdToPty := winptyCmd + " " + cmdStr
 
 	appConfig := plugin.context.AppConfig()
 
@@ -128,7 +129,7 @@ func StartCommandExecutor(
 			if token, profile, err = u.LoadUserProfile(appconfig.DefaultRunAsUserName, newPassword); err != nil {
 				return fmt.Errorf("error loading user profile: %v", err)
 			}
-			return plugin.startExecCmd(finalCmd, log, config)
+			return plugin.startExecCmd(cmdStr, log, config)
 		}
 
 		var wg sync.WaitGroup
@@ -141,13 +142,13 @@ func StartCommandExecutor(
 				}
 			}()
 			defer wg.Done()
-			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, finalCmd)
+			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, fullCmdToPty)
 		}()
 		wg.Wait()
 	} else if !isSessionLogger && appconfig.PluginNameNonInteractiveCommands == plugin.name {
-		return plugin.startExecCmd(finalCmd, log, config)
+		return plugin.startExecCmd(cmdStr, log, config)
 	} else {
-		pty, err = winpty.Start(winptyDllFilePath, finalCmd, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
+		pty, err = winpty.Start(winptyDllFilePath, fullCmdToPty, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
 	}
 
 	if err != nil {
@@ -167,10 +168,10 @@ func (p *ShellPlugin) startExecCmd(finalCmd string, log log.T, config agentContr
 	if err != nil {
 		return fmt.Errorf("Failed to parse commands input: %s\n", err)
 	}
-	if len(commands) > 1 {
-		cmd = exec.Command(commands[0], commands[1:]...)
+	if len(commands) > 0 {
+		cmd = exec.Command(winptyCmd, commands[0:]...)
 	} else {
-		cmd = exec.Command(commands[0])
+		cmd = exec.Command(winptyCmd)
 	}
 
 	if p.separateOutput {
