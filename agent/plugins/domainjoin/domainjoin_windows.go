@@ -57,6 +57,7 @@ const (
 	NoProxy = " --no-proxy "
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
+	SetHostNameArg       = " --set-hostname "
 )
 
 // Makes command as variables, so that we can mock this for unit tests
@@ -76,6 +77,7 @@ type DomainJoinPluginInput struct {
 	DirectoryName  string
 	DirectoryOU    string
 	DnsIpAddresses []string
+	HostName       string
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -225,6 +227,14 @@ func makeArguments(context context.T, pluginInput DomainJoinPluginInput) (comman
 		buffer.WriteString("'")
 		buffer.WriteString(pluginInput.DirectoryOU)
 		buffer.WriteString("'")
+	}
+
+	if len(pluginInput.HostName) != 0 {
+		if isShellInjection(pluginInput.HostName) {
+			return "", fmt.Errorf("shell command injection string: %v" + pluginInput.DirectoryName)
+		}
+		buffer.WriteString(SetHostNameArg)
+		buffer.WriteString(pluginInput.HostName)
 	}
 
 	value, _, err := pluginutil.LocalRegistryKeyGetStringsValue(appconfig.ItemPropertyPath, appconfig.ItemPropertyName)

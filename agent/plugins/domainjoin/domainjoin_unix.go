@@ -222,22 +222,6 @@ func (p *Plugin) runCommands(pluginID string, pluginInput DomainJoinPluginInput,
 	return
 }
 
-func isShellInjection(arg string) bool {
-	var backtick, _ = regexp.Compile("`")
-	matched := backtick.MatchString(arg)
-	if matched == true {
-		return true
-	}
-
-	var shellCmd, _ = regexp.Compile(`\$\(`)
-	matched = shellCmd.MatchString(arg)
-	if matched == true {
-		return true
-	}
-
-	return false
-}
-
 func isMatchingIPAddress(arg string) bool {
 	// Regex from AWS-JoinDirectoryServiceDomain SSM doc
 

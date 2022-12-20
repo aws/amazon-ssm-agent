@@ -49,6 +49,7 @@ const (
 	bucketRegionErrorMsg   = "AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []"
 	testDirectoryName      = "corp.test.com"
 	testDirectoryId        = "d-0123456789"
+	testSetHostName        = "my_hostname"
 )
 
 var TestCases = []TestCase{
@@ -94,6 +95,15 @@ func generateDomainJoinPluginInput(id string, name string, ipAddress []string) D
 		DirectoryId:    id,
 		DirectoryName:  name,
 		DnsIpAddresses: ipAddress,
+	}
+}
+
+func generateDomainJoinPluginInputOptionalParamSetHostName(id string, name string, ipAddress []string, setHostName string) DomainJoinPluginInput {
+	return DomainJoinPluginInput{
+		DirectoryId:    id,
+		DirectoryName:  name,
+		DnsIpAddresses: ipAddress,
+		HostName:       setHostName,
 	}
 }
 
@@ -152,4 +162,18 @@ func TestMakeArguments(t *testing.T) {
 	expected := "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141 172.31.21.240"
 
 	assert.Equal(t, expected, commandRes)
+
+	domainJoinInput := generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName)
+	commandRes, _ := makeArguments(context, domainJoinInput)
+	expected := "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --dns-addresses 172.31.4.141 172.31.21.240"
+	assert.Equal(t, expected, commandRes)
+
+	shellInjectionCheck = isShellInjection("`del /Q *`")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for `del /Q *`")
+	shellInjectionCheck = isShellInjection("echo abc && del /Q *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc && del /Q *")
+	shellInjectionCheck = isShellInjection("echo abc || del /Q *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc || del /Q *")
+	shellInjectionCheck = isShellInjection("echo abc ; del /Q *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc ; del /Q *")
 }

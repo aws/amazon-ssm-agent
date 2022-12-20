@@ -257,4 +257,15 @@ func TestMakeArguments(t *testing.T) {
 	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --keep-hostname  "
 	assert.Equal(t, expected, commandRes)
+
+	var shellInjectionCheck = isShellInjection("$(rm *)")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for $(rm *)")
+	shellInjectionCheck = isShellInjection("`rm *`")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for `rm *`")
+	shellInjectionCheck = isShellInjection("echo abc && rm *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc && rm *")
+	shellInjectionCheck = isShellInjection("echo abc || rm *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc || rm *")
+	shellInjectionCheck = isShellInjection("echo abc ; rm *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc ; rm *")
 }
