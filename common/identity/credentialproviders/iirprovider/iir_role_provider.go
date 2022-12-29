@@ -51,7 +51,6 @@ func (p *IIRRoleProvider) Retrieve() (credentials.Value, error) {
 		p.Log.Errorf("failed to retrieve instance identity role. Error: %v", err)
 		return EmptyCredentials(), err
 	}
-
 	respCreds := Ec2RoleCreds{}
 
 	if err := json.NewDecoder(strings.NewReader(resp)).Decode(&respCreds); err != nil {

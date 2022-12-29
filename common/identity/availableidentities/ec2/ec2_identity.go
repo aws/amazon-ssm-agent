@@ -149,7 +149,7 @@ func (i *Identity) CredentialProvider() credentialproviders.IRemoteProvider {
 func (i *Identity) Register() error {
 	registrationInfo := i.loadRegistrationInfo()
 	if registrationInfo != nil {
-		i.Log.Debugf("registration info found for ec2 instance")
+		i.Log.Info("registration info found for ec2 instance")
 		i.registrationReadyChan <- registrationInfo
 		return nil
 	}
@@ -215,11 +215,19 @@ func (i *Identity) Register() error {
 }
 
 func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
-	instanceId := getStoredInstanceId(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
+	cachedInstanceId := getStoredInstanceId(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
 	privateKey := getStoredPrivateKey(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
 	keyType := getStoredPrivateKeyType(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
 
-	if instanceId == "" || privateKey == "" || keyType == "" {
+	liveInstanceId, err := i.InstanceID()
+	if err != nil {
+		// This should not happen at this point.
+		// If it happens, the liveInstanceId is set to Zero value and Registration call will happen.
+		// Will throw AlreadyRegistered error if already registered
+		i.Log.Errorf("Could not fetch instance Id %v", err)
+	}
+
+	if cachedInstanceId == "" || privateKey == "" || keyType == "" || cachedInstanceId != liveInstanceId {
 		return nil
 	}
 

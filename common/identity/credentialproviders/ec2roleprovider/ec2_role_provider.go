@@ -64,7 +64,7 @@ func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(p.SsmEndpoint); err != nil {
-		p.Log.Debugf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
+		p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
 	} else {
 		p.Log.Info("Successfully connected with instance profile role credentials")
 		p.credentialSource = CredentialSourceEC2
@@ -73,7 +73,7 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 
 	p.Log.Debug("Attempting to retrieve role from Systems Manager")
 	if ssmCredentials, err := p.ssmEc2Credentials(p.SsmEndpoint); err != nil {
-		p.Log.Debugf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
+		p.Log.Warnf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
 		p.credentialSource = CredentialSourceEC2
 	} else {
 		p.Log.Info("Successfully connected with Systems Manager role credentials")
