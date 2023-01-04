@@ -330,7 +330,8 @@ func getApplicationData(context context.T, command string, args []string) (data 
 		log.Debugf("Command Stderr: %v", string(output))
 		err = fmt.Errorf("Command failed with error: %v", string(output))
 	} else {
-		cmdOutput := string(output)
+		cmdOutputRaw := string(output)
+		cmdOutput := handleCtrlChars(cmdOutputRaw)
 		// parse snap result
 		if command == "snap" {
 			cmdOutput = parseSnapOutput(context, cmdOutput)
@@ -346,6 +347,10 @@ func getApplicationData(context context.T, command string, args []string) (data 
 	}
 
 	return
+}
+
+func handleCtrlChars(s string) string {
+	return strings.Replace(s, "\x0D", "", -1)
 }
 
 // convertToApplicationData converts query output into json string so that it can be deserialized easily
