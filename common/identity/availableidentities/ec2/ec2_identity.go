@@ -103,7 +103,7 @@ func (i *Identity) Credentials() *credentials.Credentials {
 	// Older core agent does not populate ShareFile and ShareProfile for EC2.
 	// Hence, we use IPR provider instead of Shared Provider when these values are blank
 	if configVal, err := i.runtimeConfigClient.GetConfig(); err == nil {
-		if strings.TrimSpace(configVal.ShareProfile) == "" || strings.TrimSpace(configVal.ShareFile) == "" {
+		if strings.TrimSpace(configVal.ShareFile) == "" {
 			// in this case, inner provider will always return IPR
 			return credentials.NewCredentials(i.credentialsProvider.GetInnerProvider())
 		}
@@ -319,7 +319,7 @@ func (i *Identity) initEc2RoleProvider(endpointHelper endpoint.IEndpointHelper, 
 		InstanceInfo:           instanceInfo,
 		SsmEndpoint:            endpointHelper.GetServiceEndpoint("ssm", instanceInfo.Region),
 		ShareFileLocation:      appconfig.DefaultEC2SharedCredentialsFilePath,
-		CredentialProfile:      "default",
+		CredentialProfile:      "",
 		ShouldShareCredentials: true,
 	}
 

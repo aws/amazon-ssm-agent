@@ -151,13 +151,13 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 	assert.NotNil(t, identity.Credentials())
 	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 
-	// Shared File is null and Shared File is not null
+	// Shared Profile is null and Shared File is not null
 	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
 	runtimeConfigVal := runtimeconfig.IdentityRuntimeConfig{ShareFile: "test"}
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
 	identity.runtimeConfigClient = runtimeConfigClientMocks
 	assert.NotNil(t, identity.Credentials())
-	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 2)
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 
 	// Shared Profile is not null and Shared File is null
 	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
@@ -165,7 +165,7 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
 	identity.runtimeConfigClient = runtimeConfigClientMocks
 	assert.NotNil(t, identity.Credentials())
-	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 3)
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 
 	// Shared Profile and Shared File both not null
 	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
@@ -173,7 +173,7 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
 	identity.runtimeConfigClient = runtimeConfigClientMocks
 	assert.NotNil(t, identity.Credentials())
-	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 3)
+	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 }
 
 func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigNotPresent_Success(t *testing.T) {

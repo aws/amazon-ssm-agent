@@ -158,12 +158,11 @@ func (p *EC2RoleProvider) ShareProfile() string {
 
 // SharesCredentials returns true if credentials refresher in core agent should save returned credentials to disk
 func (p *EC2RoleProvider) SharesCredentials() bool {
-
 	// this condition is to make newer workers compatible with older agent
 	// Older core agent does not populate ShareFile and ShareProfile for EC2.
 	runtimeConfigClient := runtimeconfig.NewIdentityRuntimeConfigClient()
 	if configVal, err := runtimeConfigClient.GetConfig(); err == nil {
-		if strings.TrimSpace(configVal.ShareProfile) == "" || strings.TrimSpace(configVal.ShareFile) == "" {
+		if strings.TrimSpace(configVal.ShareFile) == "" {
 			p.CredentialProfile = ""
 			p.ShareFileLocation = ""
 			return false
