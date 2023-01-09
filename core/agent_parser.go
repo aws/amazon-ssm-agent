@@ -199,7 +199,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 	}
 
 	// checking write access before registering
-	err = registration.UpdateServerInfo("", "", privateKey, keyType, "", registration.RegVaultKey)
+	err = registration.UpdateServerInfo("", "", "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
 		return "",
 			fmt.Errorf("Unable to save registration information. %v\nTry running as sudo/administrator.", err)
@@ -245,7 +245,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 		return managedInstanceID, fmt.Errorf("error registering the instance with AWS SSM. %v", err)
 	}
 
-	err = registration.UpdateServerInfo(managedInstanceID, region, privateKey, keyType, "", registration.RegVaultKey)
+	err = registration.UpdateServerInfo(managedInstanceID, region, "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error persisting the instance registration information. %v", err)
 	}
@@ -270,7 +270,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 
 // clearRegistration clears any existing registration data
 func clearRegistration(log logger.T) (exitCode int) {
-	err := registration.UpdateServerInfo("", "", "", "", "", registration.RegVaultKey)
+	err := registration.UpdateServerInfo("", "", "", "", "", "", registration.RegVaultKey)
 	if err == nil {
 		log.Info("Registration information has been removed from the instance.")
 		return 0

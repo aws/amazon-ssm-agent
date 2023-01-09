@@ -47,6 +47,7 @@ var (
 	updateServerInfo             = registration.UpdateServerInfo
 	getStoredInstanceId          = registration.InstanceID
 	getStoredPrivateKey          = registration.PrivateKey
+	getStoredPublicKey           = registration.PublicKey
 	getStoredPrivateKeyType      = registration.PrivateKeyType
 	backoffRetry                 = backoff.Retry
 	exponentialBackoffCfg        = backoffconfig.GetDefaultExponentialBackoff
@@ -148,17 +149,13 @@ func (i *Identity) CredentialProvider() credentialproviders.IRemoteProvider {
 // Register registers the EC2 identity with Systems Manager
 func (i *Identity) Register() error {
 	registrationInfo := i.loadRegistrationInfo()
-	if registrationInfo != nil {
+	if registrationInfo.InstanceId != "" {
 		i.Log.Info("registration info found for ec2 instance")
 		i.registrationReadyChan <- registrationInfo
 		return nil
 	}
 
 	i.Log.Infof("no registration info found for ec2 instance, attempting registration")
-	publicKey, privateKey, keyType, err := registration.GenerateKeyPair()
-	if err != nil {
-		return fmt.Errorf("error generating signing keys. %w", err)
-	}
 
 	region, err := i.Region()
 	if err != nil {
@@ -170,8 +167,19 @@ func (i *Identity) Register() error {
 		return fmt.Errorf("unable to get instance id for identity %w", err)
 	}
 
+	var publicKey, privateKey, keyType string
+	if registrationInfo.PrivateKey != "" && registrationInfo.PublicKey != "" {
+		publicKey = registrationInfo.PublicKey
+		privateKey = registrationInfo.PrivateKey
+	} else {
+		publicKey, privateKey, keyType, err = registration.GenerateKeyPair()
+		if err != nil {
+			return fmt.Errorf("error generating signing keys. %w", err)
+		}
+	}
+
 	i.Log.Debug("checking write access before registering")
-	err = updateServerInfo("", "", privateKey, keyType, IdentityType, registration.EC2RegistrationVaultKey)
+	err = updateServerInfo("", "", publicKey, privateKey, keyType, IdentityType, registration.EC2RegistrationVaultKey)
 	if err != nil {
 		return fmt.Errorf("unable to save registration information. %w\nTry running as sudo/administrator.", err)
 	}
@@ -197,7 +205,7 @@ func (i *Identity) Register() error {
 
 	backoffConfig.Reset()
 	err = backoffRetry(func() (err error) {
-		return updateServerInfo(instanceId, region, privateKey, keyType, IdentityType, registration.EC2RegistrationVaultKey)
+		return updateServerInfo(instanceId, region, publicKey, privateKey, keyType, IdentityType, registration.EC2RegistrationVaultKey)
 	}, backoffConfig)
 
 	if err != nil {
@@ -207,6 +215,8 @@ func (i *Identity) Register() error {
 	registrationInfo = &authregister.RegistrationInfo{
 		PrivateKey: privateKey,
 		KeyType:    keyType,
+		PublicKey:  publicKey,
+		InstanceId: instanceId,
 	}
 
 	i.registrationReadyChan <- registrationInfo
@@ -215,9 +225,12 @@ func (i *Identity) Register() error {
 }
 
 func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
-	cachedInstanceId := getStoredInstanceId(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
-	privateKey := getStoredPrivateKey(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
-	keyType := getStoredPrivateKeyType(i.Log, IdentityType, registration.EC2RegistrationVaultKey)
+	registrationInfo := &authregister.RegistrationInfo{
+		InstanceId: getStoredInstanceId(i.Log, IdentityType, registration.EC2RegistrationVaultKey),
+		PrivateKey: getStoredPrivateKey(i.Log, IdentityType, registration.EC2RegistrationVaultKey),
+		KeyType:    getStoredPrivateKeyType(i.Log, IdentityType, registration.EC2RegistrationVaultKey),
+		PublicKey:  getStoredPublicKey(i.Log, IdentityType, registration.EC2RegistrationVaultKey),
+	}
 
 	liveInstanceId, err := i.InstanceID()
 	if err != nil {
@@ -227,14 +240,12 @@ func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
 		i.Log.Errorf("Could not fetch instance Id %v", err)
 	}
 
-	if cachedInstanceId == "" || privateKey == "" || keyType == "" || cachedInstanceId != liveInstanceId {
-		return nil
+	if registrationInfo.InstanceId == "" || registrationInfo.PrivateKey == "" ||
+		registrationInfo.KeyType == "" || registrationInfo.InstanceId != liveInstanceId {
+		registrationInfo.InstanceId = "" // setting it as blank to try registration
 	}
 
-	return &authregister.RegistrationInfo{
-		PrivateKey: privateKey,
-		KeyType:    keyType,
-	}
+	return registrationInfo
 }
 
 // NewEC2Identity initializes the ec2 identity

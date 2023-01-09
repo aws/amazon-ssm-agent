@@ -48,7 +48,9 @@ type Client struct {
 // RegistrationInfo contains information used to register the instance
 type RegistrationInfo struct {
 	PrivateKey string
+	PublicKey  string
 	KeyType    string
+	InstanceId string
 }
 
 // NewClient creates a new SSM client instance

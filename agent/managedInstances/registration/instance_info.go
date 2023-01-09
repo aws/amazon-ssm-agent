@@ -34,6 +34,7 @@ type instanceInfo struct {
 	InstanceType          string `json:"instanceType"`
 	AvailabilityZone      string `json:"availabilityZone"`
 	PrivateKey            string `json:"privateKey"`
+	PublicKey             string `json:"publicKey"`
 	PrivateKeyType        string `json:"privateKeyType"`
 	PrivateKeyCreatedDate string `json:"privateKeyCreatedDate"`
 }
@@ -70,6 +71,12 @@ func Region(log log.T, manifestFileNamePrefix, vaultKey string) string {
 func PrivateKey(log log.T, manifestFileNamePrefix, vaultKey string) string {
 	instance := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
 	return instance.PrivateKey
+}
+
+// PublicKey of the instance.
+func PublicKey(log log.T, manifestFileNamePrefix, vaultKey string) string {
+	instance := getInstanceInfo(log, manifestFileNamePrefix, vaultKey)
+	return instance.PublicKey
 }
 
 // PrivateKeyType of the managed instance.
@@ -143,13 +150,14 @@ func GeneratePublicKey(privateKey string) (publicKey string, err error) {
 }
 
 // UpdateServerInfo saves the instance info into the registration persistence store
-func UpdateServerInfo(instanceID, region, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
+func UpdateServerInfo(instanceID, region, publicKey, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
 	info := instanceInfo{
 		InstanceID:            instanceID,
 		Region:                region,
 		PrivateKey:            privateKey,
 		PrivateKeyType:        privateKeyType,
 		PrivateKeyCreatedDate: time.Now().Format(defaultDateStringFormat),
+		PublicKey:             publicKey, // Value will be present only for EC2
 	}
 
 	return updateServerInfo(info, manifestFileNamePrefix, vaultKey)
