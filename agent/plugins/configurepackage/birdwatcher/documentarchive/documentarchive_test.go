@@ -473,8 +473,8 @@ func createDefaultDocumentDescription(packageName string, hash string, docStatus
 
 }
 
-func createMemCache(hash string, manifest string) cache_mock.ManifestCache {
-	cache := cache_mock.ManifestCache{}
+func createMemCache(hash string, manifest string) *cache_mock.ManifestCache {
+	cache := &cache_mock.ManifestCache{}
 	cache.On("ReadManifestHash", mock.Anything, mock.Anything).Return([]byte(hash), nil)
 	cache.On("ReadManifest", mock.Anything, mock.Anything).Return([]byte(manifest), nil)
 	cache.On("WriteManifestHash", mock.Anything, mock.Anything, mock.Anything).Return(nil)

@@ -226,8 +226,8 @@ func executePlugin(t *testing.T, input *DownloadContentPlugin, destPath string) 
 	conf := createSimpleConfigWithProperties(input)
 	cancelFlag := createMockCancelFlag()
 
-	var copyContentResourceMock = resourcemock.RemoteResourceMock{}
-	var copyContentFileMock = filemock.FileSystemMock{}
+	var copyContentResourceMock = &resourcemock.RemoteResourceMock{}
+	var copyContentFileMock = &filemock.FileSystemMock{}
 
 	mockIOHandler.On("AppendInfof", mock.Anything, mock.Anything).Return()
 	mockIOHandler.On("MarkAsSucceeded").Return()
@@ -314,8 +314,8 @@ func TestPlugin_ExecuteSSMDocError(t *testing.T) {
 	conf := createSimpleConfigWithProperties(&input)
 	cancelFlag := createMockCancelFlag()
 
-	var ssmDoccopyContentResourceMock = resourcemock.RemoteResourceMock{}
-	var ssmDocCopyContentFileMock = filemock.FileSystemMock{}
+	var ssmDoccopyContentResourceMock = &resourcemock.RemoteResourceMock{}
+	var ssmDocCopyContentFileMock = &filemock.FileSystemMock{}
 	mockIOHandler.On("MarkAsFailed", mock.Anything).Return()
 
 	ssmDocMockRemoteResource := func(context context.T, locationtype, locationInfo string) (remoteresource.RemoteResource, error) {
@@ -437,19 +437,19 @@ func fakeRemoteResource(context context.T, locationType string, locationInfo str
 
 	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
 	copyContentResourceMock.On("DownloadRemoteResource", &copyContentFileMock, mock.Anything).Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
-	return copyContentResourceMock, nil
+	return &copyContentResourceMock, nil
 }
 
 func absoluteDestinationDirRemoteResource(context context.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error) {
 	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
 	copyContentResourceMock.On("DownloadRemoteResource", &copyContentFileMock, filepath.Join("orch", "downloads", "var", "temp", "fake-dir")).Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
-	return copyContentResourceMock, nil
+	return &copyContentResourceMock, nil
 }
 
 func relativeDestinationDirRemoteResource(context context.T, locationType string, locationInfo string) (remoteresource.RemoteResource, error) {
 	copyContentResourceMock.On("ValidateLocationInfo").Return(true, nil).Once()
 	copyContentResourceMock.On("DownloadRemoteResource", &copyContentFileMock, filepath.Join("orch", "downloads", "temp", "fake-dir")).Return(nil, resourcemock.NewEmptyDownloadResult()).Once()
-	return copyContentResourceMock, nil
+	return &copyContentResourceMock, nil
 }
 
 func createStubConfiguration(orch, bucket, prefix, message, dir string) contracts.Configuration {
@@ -478,8 +478,7 @@ func (m *MockDefaultPlugin) UploadOutputToS3Bucket(log log.T, pluginID string, o
 func createSimpleConfigWithProperties(info *DownloadContentPlugin) contracts.Configuration {
 	config := contracts.Configuration{}
 
-	var rawPluginInput interface{}
-	rawPluginInput = info
+	var rawPluginInput interface{} = info
 	config.Properties = rawPluginInput
 	config.OrchestrationDirectory = "orch"
 	config.PluginID = "plugin"

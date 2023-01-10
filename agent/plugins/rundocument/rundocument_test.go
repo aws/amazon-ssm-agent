@@ -53,7 +53,7 @@ var contextMock = context.NewMockDefault()
 var plugin = contracts.PluginState{}
 
 func TestReadFileContents(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
+	fileMock := &filemock.FileSystemMock{}
 	destinationDir := "destination"
 
 	fileMock.On("ReadFile", destinationDir).Return("content", nil)
@@ -66,7 +66,7 @@ func TestReadFileContents(t *testing.T) {
 }
 
 func TestReadFileContents_Fail(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
+	fileMock := &filemock.FileSystemMock{}
 	destinationDir := "destination"
 
 	fileMock.On("ReadFile", destinationDir).Return("content", fmt.Errorf("Error"))

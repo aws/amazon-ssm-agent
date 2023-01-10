@@ -26,12 +26,12 @@ type S3DepMock struct {
 	mock.Mock
 }
 
-func (s3 S3DepMock) ListS3Directory(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+func (s3 *S3DepMock) ListS3Directory(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
 	args := s3.Called(context, amazonS3URL)
 	return args.Get(0).([]string), args.Error(1)
 }
 
-func (s3 S3DepMock) Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
+func (s3 *S3DepMock) Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
 	args := s3.Called(context, input)
 	return args.Get(0).(artifact.DownloadOutput), args.Error(1)
 }

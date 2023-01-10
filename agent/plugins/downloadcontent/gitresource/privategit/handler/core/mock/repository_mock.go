@@ -25,7 +25,7 @@ type GitRepositoryMock struct {
 	mock.Mock
 }
 
-func (gitRepository GitRepositoryMock) Worktree() (gitWorktree core.IGitWorktree, err error) {
+func (gitRepository *GitRepositoryMock) Worktree() (gitWorktree core.IGitWorktree, err error) {
 	args := gitRepository.Called()
 	return args.Get(0).(core.IGitWorktree), args.Error(1)
 }

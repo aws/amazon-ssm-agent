@@ -243,7 +243,7 @@ func TestGitResource_DownloadRemoteResource(t *testing.T) {
 		Handler: &gitHandlerMock,
 	}
 
-	err, result := resource.DownloadRemoteResource(fileSysMock, downloadRemoteResourceDestPath)
+	err, result := resource.DownloadRemoteResource(&fileSysMock, downloadRemoteResourceDestPath)
 
 	assert.NoError(t, err)
 	assert.Equal(t, []string{downloadRemoteResourceTestFile}, result.Files)

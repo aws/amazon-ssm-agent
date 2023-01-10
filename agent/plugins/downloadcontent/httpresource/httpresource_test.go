@@ -245,7 +245,7 @@ func TestHTTPResource_adjustDownloadPath(t *testing.T) {
 		fileSystemMock.On("Exists", mock.Anything).Return(test.pathExists)
 		fileSystemMock.On("IsDirectory", mock.Anything).Return(test.isDirectory)
 
-		downloadPath := testResource.adjustDownloadPath(test.givenPath, test.fileSuffix, fileSystemMock)
+		downloadPath := testResource.adjustDownloadPath(test.givenPath, test.fileSuffix, &fileSystemMock)
 		assert.Equal(t, test.downloadPath, filepath.Join(downloadPath), getString(test))
 	}
 }
@@ -266,7 +266,7 @@ func TestHTTPResource_ValidateLocationInfo(t *testing.T) {
 func TestHTTPResource_DownloadRemoteResource(t *testing.T) {
 	destPath := filepath.Join(os.TempDir(), "testFile")
 
-	fileSystemMock := filemock.FileSystemMock{}
+	fileSystemMock := &filemock.FileSystemMock{}
 	fileSystemMock.On("MakeDirs", filepath.Dir(destPath)).Return(nil)
 	fileSystemMock.On("Exists", destPath).Return(true)
 	fileSystemMock.On("IsDirectory", destPath).Return(false)

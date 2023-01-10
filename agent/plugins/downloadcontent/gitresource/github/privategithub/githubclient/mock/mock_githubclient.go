@@ -46,7 +46,7 @@ type OAuthClientMock struct {
 	mock.Mock
 }
 
-func (git_mock OAuthClientMock) GetGithubOauthClient(token string) *http.Client {
+func (git_mock *OAuthClientMock) GetGithubOauthClient(token string) *http.Client {
 	args := git_mock.Called(token)
 	return args.Get(0).(*http.Client)
 }

@@ -28,7 +28,7 @@ import (
 var logMock = log.NewMockLog()
 
 func TestSaveFileContent_MakeDirFail(t *testing.T) {
-	var fileMock filemock.FileSystemMock
+	fileMock := &filemock.FileSystemMock{}
 	destination := "destinationDir/file.ps"
 	contents := "contents"
 	//resourcePath := "resourcePath"
@@ -41,7 +41,7 @@ func TestSaveFileContent_MakeDirFail(t *testing.T) {
 }
 
 func TestSaveFileContent_WriteFileFail(t *testing.T) {
-	var fileMock filemock.FileSystemMock
+	fileMock := &filemock.FileSystemMock{}
 
 	destinationDir := "destinationDir/filepath.ps"
 	contents := "contents"
@@ -56,7 +56,7 @@ func TestSaveFileContent_WriteFileFail(t *testing.T) {
 }
 
 func TestSaveFileContent_Pass(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
+	fileMock := &filemock.FileSystemMock{}
 	destination := "destinationDir/filename.py"
 	contents := "contents"
 	//resourcePath := "resourcePath"
@@ -70,7 +70,7 @@ func TestSaveFileContent_Pass(t *testing.T) {
 }
 
 func TestRenameFile(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
+	fileMock := &filemock.FileSystemMock{}
 	sourceName := "destination/oldFileName.ext"
 	newFileName := "newFileName.ext"
 
@@ -83,7 +83,7 @@ func TestRenameFile(t *testing.T) {
 }
 
 func TestRenameFile_Error(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
+	fileMock := &filemock.FileSystemMock{}
 	sourceName := "destination/oldFileName.ext"
 	newFileName := "newFileName.ext"
 

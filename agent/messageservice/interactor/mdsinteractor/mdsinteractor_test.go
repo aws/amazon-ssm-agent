@@ -52,7 +52,7 @@ type MDSInteractorTestSuite struct {
 	suite.Suite
 	contextMock   *contextmocks.Mock
 	mdsMock       *runcommandmock.MockedMDS
-	mdsInteractor MDSInteractor
+	mdsInteractor *MDSInteractor
 }
 
 func TestMDSInteractorTestSuite(t *testing.T) {
@@ -65,7 +65,7 @@ func (suite *MDSInteractorTestSuite) SetupTest() {
 	newMdsService = func(context context.T) mdsService.Service {
 		return mdsMock
 	}
-	interactor := MDSInteractor{
+	interactor := &MDSInteractor{
 		context:              contextMock,
 		service:              mdsMock,
 		messagePollWaitGroup: &sync.WaitGroup{},

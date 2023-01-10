@@ -426,7 +426,7 @@ func TestHttpHandlerImpl_Download(t *testing.T) {
 
 		handler := getHttpHandler(*testServer.Client(), *testURL, test.allowInsecureDownload, "", "", "")
 
-		downloadedFile, err := handler.Download(logMock, fileSystemMock, destinationFile)
+		downloadedFile, err := handler.Download(logMock, &fileSystemMock, destinationFile)
 
 		if test.err == nil {
 			assert.NoError(t, err, getString(test))

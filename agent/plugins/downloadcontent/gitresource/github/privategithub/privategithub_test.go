@@ -42,7 +42,7 @@ func TestTokenInfoImpl_GetOAuthClient_Success(t *testing.T) {
 	oauthclientmock.On("GetGithubOauthClient", tokenValue).Return(clientVal)
 	tokenInfo := TokenInfoImpl{
 		SsmParameter:   getMockedSecureParam,
-		gitoauthclient: oauthclientmock,
+		gitoauthclient: &oauthclientmock,
 	}
 
 	httpout, err := tokenInfo.GetOAuthClient(logMock, `{{ ssm-secure:dummysecureparam }}`)
@@ -72,7 +72,7 @@ func TestTokenInfoImpl_ValidateTokenParameter_Failure(t *testing.T) {
 	tokenInfoInput := `{ "dummysecureparam" }`
 	oauthclientmock := gitmock.OAuthClientMock{}
 	tokenInfo := TokenInfoImpl{
-		gitoauthclient: oauthclientmock,
+		gitoauthclient: &oauthclientmock,
 	}
 
 	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)
@@ -95,7 +95,7 @@ func TestTokenInfoImpl_ValidateSecureParameter(t *testing.T) {
 	// token info must be a parameter of SecureString type
 	tokenInfo := TokenInfoImpl{
 		SsmParameter:   getMockedParam,
-		gitoauthclient: oauthclientmock,
+		gitoauthclient: &oauthclientmock,
 	}
 
 	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)

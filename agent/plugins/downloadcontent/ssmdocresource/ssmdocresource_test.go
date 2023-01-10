@@ -76,7 +76,7 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -114,7 +114,7 @@ func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -167,7 +167,7 @@ func TestSSMDocResource_Download(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -203,7 +203,7 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(fileMock, "")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "")
 
 	assert.Error(t, err, "Error")
 	depMock.AssertExpectations(t)
@@ -235,7 +235,7 @@ func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -249,7 +249,7 @@ type ssmDocDepMock struct {
 	mock.Mock
 }
 
-func (s ssmDocDepMock) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
+func (s *ssmDocDepMock) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
 	args := s.Called(log, docName, docVersion)
 	return args.Get(0).(*ssm.GetDocumentOutput), args.Error(1)
 }

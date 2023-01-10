@@ -388,7 +388,7 @@ func TestExecute(t *testing.T) {
 	}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
@@ -426,7 +426,7 @@ func TestExecuteUpdateLocked(t *testing.T) {
 	mockIOHandler := iohandler.DefaultIOHandler{}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 
 	// Setup mocks
@@ -472,11 +472,10 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 		downloadFolder string) int {
 		methodCalled = true
 		panic(fmt.Errorf("Some Random Panic"))
-		return 1
 	}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 
 	// Setup mocks
@@ -532,7 +531,7 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)

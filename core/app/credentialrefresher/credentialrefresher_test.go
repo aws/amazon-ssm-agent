@@ -58,7 +58,6 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 		runtimeConfigClient         runtimeconfig.IIdentityRuntimeConfigClient
 		identityRuntimeConfig       runtimeconfig.IdentityRuntimeConfig
 		backoffConfig               *backoff.ExponentialBackOff
-		credsReadyOnce              sync.Once
 		credentialsReadyChan        chan struct{}
 		stopCredentialRefresherChan chan struct{}
 		getCurrentTimeFunc          func() time.Time
@@ -135,7 +134,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				runtimeConfigClient:         tt.fields.runtimeConfigClient,
 				identityRuntimeConfig:       tt.fields.identityRuntimeConfig,
 				backoffConfig:               tt.fields.backoffConfig,
-				credsReadyOnce:              tt.fields.credsReadyOnce,
+				credsReadyOnce:              sync.Once{},
 				credentialsReadyChan:        tt.fields.credentialsReadyChan,
 				stopCredentialRefresherChan: tt.fields.stopCredentialRefresherChan,
 				getCurrentTimeFunc:          tt.fields.getCurrentTimeFunc,
