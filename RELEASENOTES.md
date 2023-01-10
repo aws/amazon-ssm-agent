@@ -1,5 +1,12 @@
 Latest
 ===============
+- Removed explicit setting of EC2 aws credential profile
+- Added public key to registration info
+- Sends non-interactive command errors that occur before command execution to data channel
+- Added instance id verification to registration process
+
+3.2.419.0
+===============
 - Added minimum retry sleep for Registrar RegisterManagedInstance calls
 - Explicitly skip AZ info check for on-prem and ECS targets
 - Fix for SSM-Agent that is unable to start on Apple Mac M1's (mac2.metal instances)
