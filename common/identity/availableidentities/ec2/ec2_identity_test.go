@@ -428,6 +428,8 @@ func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *test
 	}
 
 	updateServerInfo = func(instanceID, region, publicKey, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
+		assert.Equal(t, privateKeyType, testPrivateKeyType)
+		assert.Equal(t, privateKey, testPrivateKey)
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return nil
 	}
@@ -453,7 +455,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	region := "SomeRegion"
 	testPrivateKey := "SomePrivateKey"
 	testPrivateKeyType := "SomePrivateKeyType"
-	testPublicKeyType := "SomePublicKeyType"
+	testPublicKey := "SomePublicKey"
 	liveInstanceId := "i-liveInstanceId"
 	client := &mocks.IEC2MdsSdkClientMock{}
 	client.On("Region").Return(region, nil).Once()
@@ -474,7 +476,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 
 	getStoredPublicKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
-		return testPublicKeyType
+		return testPublicKey
 	}
 
 	getStoredInstanceId = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
@@ -483,6 +485,9 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	}
 
 	updateServerInfo = func(instanceID, region, publicKey, privateKey, privateKeyType, manifestFileNamePrefix, vaultKey string) (err error) {
+		assert.Equal(t, privateKeyType, testPrivateKeyType)
+		assert.Equal(t, privateKey, testPrivateKey)
+		assert.Equal(t, publicKey, testPublicKey)
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return nil
 	}
@@ -501,7 +506,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	assert.NoError(t, err)
 	registrationInfo := <-identity.registrationReadyChan
 	assert.NotNil(t, registrationInfo)
-	assert.NotNil(t, registrationInfo.PublicKey, testPublicKeyType)
+	assert.NotNil(t, registrationInfo.PublicKey, testPublicKey)
 	assert.NotNil(t, registrationInfo.InstanceId, liveInstanceId)
 }
 

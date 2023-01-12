@@ -168,9 +168,10 @@ func (i *Identity) Register() error {
 	}
 
 	var publicKey, privateKey, keyType string
-	if registrationInfo.PrivateKey != "" && registrationInfo.PublicKey != "" {
+	if registrationInfo.PrivateKey != "" && registrationInfo.PublicKey != "" && registrationInfo.KeyType != "" {
 		publicKey = registrationInfo.PublicKey
 		privateKey = registrationInfo.PrivateKey
+		keyType = registrationInfo.KeyType
 	} else {
 		publicKey, privateKey, keyType, err = registration.GenerateKeyPair()
 		if err != nil {
@@ -197,7 +198,6 @@ func (i *Identity) Register() error {
 				close(i.registrationReadyChan)
 				return nil
 			}
-
 		}
 
 		return fmt.Errorf("error calling RegisterManagedInstance API: %w", err)
@@ -220,7 +220,7 @@ func (i *Identity) Register() error {
 	}
 
 	i.registrationReadyChan <- registrationInfo
-
+	i.Log.Info("EC2 registration was successful.")
 	return nil
 }
 
