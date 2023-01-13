@@ -965,6 +965,7 @@ func (p *ShellPlugin) cleanupOutputFile(log log.T, config agentContracts.Configu
 }
 
 func (p *ShellPlugin) sendErrorToDataChannel(log log.T, errorString string) {
+	time.Sleep(1 * time.Second)
 	if dataChannelError := p.dataChannel.SendStreamDataMessage(log, mgsContracts.StdErr, []byte(errorString)); dataChannelError != nil {
 		log.Errorf("Unable to send error message to data channel: %v", dataChannelError)
 	}
