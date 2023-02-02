@@ -1,5 +1,10 @@
 Latest
 ===============
+- Fixed go-vet issues by passing mocks by value
+- Updated domainjoin and cloudwatch executables for windows
+
+3.2.532.0
+===============
 - Removed explicit setting of EC2 aws credential profile
 - Added public key to registration info
 - Sends non-interactive command errors that occur before command execution to data channel
