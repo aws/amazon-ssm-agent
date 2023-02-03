@@ -1,5 +1,9 @@
 Latest
 ===============
+- Modified EC2 credential fallback logic
+
+3.2.574.0
+===============
 - Fixed go-vet issues by passing mocks by value
 - Updated domainjoin and cloudwatch executables for windows
 
