@@ -22,12 +22,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -64,7 +64,13 @@ func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(p.SsmEndpoint); err != nil {
-		p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
+		errCode := sdkutil.GetAwsErrorCode(err)
+		if errCode == ErrCodeAccessDeniedException || errCode == ErrCodeEC2RoleRequestError {
+			p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
+		} else {
+			p.credentialSource = CredentialSourceEC2
+			return iprEmptyCredential, fmt.Errorf("instance profile role could not be checked for ssm permissions. Err: %w", err)
+		}
 	} else {
 		p.Log.Info("Successfully connected with instance profile role credentials")
 		p.credentialSource = CredentialSourceEC2

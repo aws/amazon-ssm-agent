@@ -25,6 +25,8 @@ import (
 const (
 	agentName                        = "amazon-ssm-agent"
 	CredentialSourceSSM              = "Systems Manager"
+	ErrCodeAccessDeniedException     = "AccessDeniedException"
+	ErrCodeEC2RoleRequestError       = "EC2RoleRequestError"
 	CredentialSourceEC2              = "EC2"
 	maxCredentialExpiryJitterSeconds = 300
 )

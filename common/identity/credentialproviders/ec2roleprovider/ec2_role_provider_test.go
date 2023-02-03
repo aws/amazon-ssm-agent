@@ -180,7 +180,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsIPRCredentials(t *testing.T) {
 
 func TestEC2RoleProvider_Retrieve_ReturnsSSMCredentials(t *testing.T) {
 	// Arrange
-	awsErr := awserr.New("400", "Unauthorized", nil)
+	awsErr := awserr.New(ErrCodeAccessDeniedException, "Unauthorized", nil)
 	iprErr := awserr.NewRequestFailure(awsErr, 400, "testRequestId")
 	ssmClient, ec2RoleProvider := arrangeUpdateInstanceInformation(iprErr)
 	ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(&ssm.UpdateInstanceInformationOutput{}, nil)
@@ -200,19 +200,47 @@ func TestEC2RoleProvider_Retrieve_ReturnsSSMCredentials(t *testing.T) {
 	assert.Equal(t, CredentialSourceSSM, ec2RoleProvider.credentialSource)
 }
 
-func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials(t *testing.T) {
+func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_AccessDenied(t *testing.T) {
 	// Arrange
-	awsErr := awserr.New("400", "Unauthorized", nil)
+	errorCodes := []string{ErrCodeAccessDeniedException, ErrCodeEC2RoleRequestError}
+	for _, errorCode := range errorCodes {
+		t.Run(fmt.Sprintf("TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_%s", errorCode), func(t *testing.T) {
+			awsErr := awserr.New(errorCode, "Unauthorized to call UpdateInstanceInformation", nil)
+			updateInstanceInformationErr := awserr.NewRequestFailure(awsErr, 400, "testRequestId")
+			ssmClient, ec2RoleProvider := arrangeUpdateInstanceInformation(updateInstanceInformationErr)
+			ssmClient.On("UpdateInstanceInformation", mock.Anything).
+				Return(nil, updateInstanceInformationErr).
+				Repeatability = 1
+			iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName}
+			ssmRetrieveErr := awserr.New(ErrCodeAccessDeniedException, "Unauthorized to call RequestManagedInstanceRoleToken", nil)
+			ssmProvider := &stubs.InnerProvider{ProviderName: SsmEc2ProviderName, RetrieveErr: ssmRetrieveErr}
+			ec2RoleProvider.InnerProviders = &EC2InnerProviders{
+				IPRProvider:    iprProvider,
+				SsmEc2Provider: ssmProvider,
+			}
+
+			// Act
+			creds, err := ec2RoleProvider.Retrieve()
+
+			//Assert
+			assert.Error(t, err)
+			assert.Equal(t, iprEmptyCredential, creds)
+			assert.Equal(t, CredentialSourceEC2, ec2RoleProvider.credentialSource)
+		})
+	}
+
+}
+
+func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_NotAccessDenied(t *testing.T) {
+	awsErr := awserr.New("RateExceeded", "UpdateInstanceInformation requests throttled", nil)
 	updateInstanceInformationErr := awserr.NewRequestFailure(awsErr, 400, "testRequestId")
 	ssmClient, ec2RoleProvider := arrangeUpdateInstanceInformation(updateInstanceInformationErr)
 	ssmClient.On("UpdateInstanceInformation", mock.Anything).
 		Return(nil, updateInstanceInformationErr).
 		Repeatability = 1
 	iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName}
-	ssmProvider := &stubs.InnerProvider{ProviderName: SsmEc2ProviderName}
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{
-		IPRProvider:    iprProvider,
-		SsmEc2Provider: ssmProvider,
+		IPRProvider: iprProvider,
 	}
 
 	// Act
