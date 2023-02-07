@@ -602,11 +602,15 @@ do_dns_config() {
     if [ $LINUX_DISTRO = "UBUNTU" ]; then
         if [ -d /etc/netplan ]; then
             # Ubuntu 18.04
+            IF_NAME=$(ip route list | grep default | grep -E  'dev (\w+)' -o | awk '{print $2}')
+            if [ -z $IF_NAME ]; then
+                 echo "**Failed: getting interface name on $LINUX_DISTRO" && exit 1
+            fi
             cat << EOF | tee /etc/netplan/99-custom-dns.yaml
 network:
     version: 2
     ethernets:
-        eth0:
+        $IF_NAME:
             nameservers:
                 addresses: [$INPUT_DNS_IP_ADDRESS1, $INPUT_DNS_IP_ADDRESS2]
             dhcp4-overrides:
