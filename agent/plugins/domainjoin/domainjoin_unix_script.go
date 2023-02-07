@@ -44,6 +44,7 @@ REALM=""
 INPUT_DNS_IP_ADDRESS1=""
 INPUT_DNS_IP_ADDRESS2=""
 LINUX_DISTRO=""
+LINUX_DISTRO_VERSION_ID=""
 CURTIME=""
 REGION=""
 # https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
@@ -346,7 +347,11 @@ install_components() {
         # yum -y update
         ## yum update takes too long
         # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/deploying_different_types_of_servers/index
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients NetworkManager >/dev/null
+        yum -y  install samba realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients NetworkManager >/dev/null
+        if [ $? -ne 0 ]; then
+        # Retry without samba package
+           yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients NetworkManager >/dev/null
+        fi
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Red Hat" && return 1; fi
     elif grep -e 'Fedora' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='Fedora'
@@ -359,7 +364,7 @@ install_components() {
          LINUX_DISTRO='AMAZON_LINUX'
          # yum -y update
          ## yum update takes too long
-         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common network-manager >/dev/null
+         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients >/dev/null
          if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Amazon Linux" && return 1; fi
     elif grep 'Ubuntu' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='UBUNTU'
@@ -597,6 +602,40 @@ do_dns_config() {
     setup_resolv_conf_and_dhclient_conf
     if [ $LINUX_DISTRO = 'AMAZON_LINUX' ]; then
         set_peer_dns
+
+        if [ $LINUX_DISTRO_VERSION_ID -eq "2022" -o $LINUX_DISTRO_VERSION_ID -eq "2023" ]; then
+           IF_NAME=$(ip route list | grep default | grep -E  'dev (\w+)' -o | awk '{print $2}')
+           if [ -z $IF_NAME ]; then
+               echo "**Failed: IF_NAME is null"
+               exit 1
+           else
+               mkdir -p /etc/systemd/network/70-${IF_NAME}.network.d
+               if [ $? -ne 0 ]; then
+                   echo "**Failed : mkdir -p /etc/systemd/network/70-${IF_NAME}.network.d"
+                   exit 1
+               fi
+               # https://www.freedesktop.org/software/systemd/man/systemd.network.html#DNS=
+               echo "[Network]" > /etc/systemd/network/70-${IF_NAME}.network.d/dns.conf
+               if [ ! -z ${INPUT_DNS_IP_ADDRESS1} ]; then
+                   echo "DNS=${INPUT_DNS_IP_ADDRESS1}" >> /etc/systemd/network/70-${IF_NAME}.network.d/dns.conf
+               fi
+               if [ ! -z ${INPUT_DNS_IP_ADDRESS2} ]; then
+                   echo "DNS=${INPUT_DNS_IP_ADDRESS2}" >> /etc/systemd/network/70-${IF_NAME}.network.d/dns.conf
+               fi
+               echo "[DHCPv4]" >> /etc/systemd/network/70-${IF_NAME}.network.d/dns.conf
+               if [ $? -ne 0 ]; then
+                   echo "***Failed: modify /etc/systemd/network/70-${IF_NAME}.network.d/dns.conf failed"
+                   exit 1
+               fi
+               echo "UseDns=no" >> /etc/systemd/network/70-${IF_NAME}.network.d/dns.conf
+               echo "UseDomains=no" >> /etc/systemd/network/70-${IF_NAME}.network.d/dns.conf
+               networkctl reload
+               if [ $? -ne 0 ]; then
+                   echo "***Failed: networkctl reload failed"
+                   exit 1
+               fi
+           fi
+        fi
     fi
 
     if [ $LINUX_DISTRO = "UBUNTU" ]; then
@@ -717,6 +756,18 @@ do_domainjoin() {
        echo "do_domainjoin(): Found directory in username as username@directory"
     else
        DOMAIN_USERNAME=${DOMAIN_USERNAME}@${DIRECTORY_NAME}
+    fi
+
+    IS_VERSION_ID_2022="FALSE"
+    if [ ${LINUX_DISTRO_VERSION_ID} == "2022" -o ${LINUX_DISTRO_VERSION_ID} == "2023" ]; then
+        IS_VERSION_ID_2022="TRUE"
+    fi
+    if [ ${LINUX_DISTRO} == "AMAZON_LINUX" -a ${IS_VERSION_ID_2022} == "TRUE" ]; then
+       DIRNAME_UPPER=$(echo "$DIRECTORY_NAME" | tr [:lower:] [:upper:])
+       # Add kinit as a workaround for this issue:
+       #     WARNING: The option -k|--kerberos is deprecated!
+       USERNAME=$(echo ${DOMAIN_USERNAME} | sed 's/@.*$//g')
+       echo ${DOMAIN_PASSWORD} | kinit -V ${USERNAME}@${DIRNAME_UPPER}
     fi
 
     for i in $(seq 1 $MAX_RETRIES)
