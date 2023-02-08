@@ -159,6 +159,7 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithOnPremIdentity() {
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "")
+	suite.serviceMock.AssertNotCalled(suite.T(), "IsIdentityEnvironment", true)
 }
 
 // Testing the ModuleExecute method

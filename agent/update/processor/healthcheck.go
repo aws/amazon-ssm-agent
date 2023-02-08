@@ -88,12 +88,16 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 	}
 	status := PrepareHealthStatus(update, errorCode, update.TargetVersion)
 	appConfig := s.context.AppConfig()
-	ec2Identity := newEC2Identity(log)
-	ecsIdentity := newECSIdentity(log)
+	var isEC2, isECS, isOnPrem bool
+	var ec2Identity, ecsIdentity identity.IAgentIdentityInner
 	onpremIdentity := newOnPremIdentity(log, &appConfig)
-	isEC2 := ec2Identity != nil && ec2Identity.IsIdentityEnvironment()
-	isECS := ecsIdentity != nil && ecsIdentity.IsIdentityEnvironment()
-	isOnPrem := onpremIdentity != nil && onpremIdentity.IsIdentityEnvironment()
+	isOnPrem = onpremIdentity != nil && onpremIdentity.IsIdentityEnvironment()
+	if !isOnPrem {
+		ec2Identity = newEC2Identity(log)
+		ecsIdentity = newECSIdentity(log)
+		isEC2 = ec2Identity != nil && ec2Identity.IsIdentityEnvironment()
+		isECS = ecsIdentity != nil && ecsIdentity.IsIdentityEnvironment()
+	}
 	var availabilityZone = ""
 	var availabilityZoneId = ""
 	if isEC2 && !isECS && !isOnPrem {
