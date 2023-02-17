@@ -25,15 +25,18 @@ import (
 const (
 	agentName                        = "amazon-ssm-agent"
 	CredentialSourceSSM              = "Systems Manager"
-	ErrCodeAccessDeniedException     = "AccessDeniedException"
-	ErrCodeEC2RoleRequestError       = "EC2RoleRequestError"
 	CredentialSourceEC2              = "EC2"
 	maxCredentialExpiryJitterSeconds = 300
 )
 
 var (
-	iprEmptyCredential                          = credentials.Value{ProviderName: ec2rolecreds.ProviderName}
-	newV4ServiceWithCreds ssmclient.Initializer = ssmclient.NewV4ServiceWithCreds
+	iprEmptyCredential                                 = credentials.Value{ProviderName: ec2rolecreds.ProviderName}
+	newV4ServiceWithCreds        ssmclient.Initializer = ssmclient.NewV4ServiceWithCreds
+	exceptionsForDefaultHostMgmt                       = map[string]struct{}{
+		"AccessDeniedException":        {},
+		"EC2RoleRequestError":          {},
+		"AssumeRoleUnauthorizedAccess": {},
+	}
 )
 
 type IInnerProvider interface {

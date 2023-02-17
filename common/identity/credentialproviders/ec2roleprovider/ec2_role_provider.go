@@ -65,7 +65,7 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(p.SsmEndpoint); err != nil {
 		errCode := sdkutil.GetAwsErrorCode(err)
-		if errCode == ErrCodeAccessDeniedException || errCode == ErrCodeEC2RoleRequestError {
+		if _, ok := exceptionsForDefaultHostMgmt[errCode]; ok {
 			p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
 		} else {
 			p.credentialSource = CredentialSourceEC2
