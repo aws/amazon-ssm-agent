@@ -1,6 +1,7 @@
 [Unit]
 Description=amazon-ssm-agent
 After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=simple
