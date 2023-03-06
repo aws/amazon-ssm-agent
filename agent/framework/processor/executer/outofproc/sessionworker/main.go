@@ -17,7 +17,10 @@ package main
 import (
 	"os"
 	"runtime/debug"
+	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
@@ -31,7 +34,7 @@ import (
 )
 
 const (
-	defaultSessionWorkerContextName = "[ssm-session-worker]"
+	defaultSessionWorkerContextName = "[" + appconfig.SSMSessionWorkerName + "]"
 )
 
 var sessionPluginRunner = func(
@@ -74,7 +77,18 @@ func main() {
 	ctx := context.Default(logger, *cfg, agentIdentity).With(defaultSessionWorkerContextName).With("[" + channelName + "]")
 	logger = ctx.Log()
 
+	cloudwatchPublisher := cloudwatchlogspublisher.NewCloudWatchPublisher(ctx)
+	cloudwatchPublisher.Init()
+
+	defer func() {
+		logger.Flush()
+		// Wait few seconds for cw logs to upload
+		time.Sleep(3 * time.Second)
+		cloudwatchPublisher.Stop()
+	}()
+
 	createFileChannelAndExecutePlugin(ctx, channelName)
+
 	logger.Info("Session worker closed")
 }
 
