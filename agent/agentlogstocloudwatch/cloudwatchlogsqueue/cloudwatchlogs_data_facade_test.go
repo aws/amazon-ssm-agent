@@ -22,7 +22,6 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"
@@ -184,34 +183,34 @@ func TestFacadeCWGroupNameTest(t *testing.T) {
 	}
 
 	var args = []string{appconfig.DefaultDocumentWorker}
-	xmlArgs[agentWorkerLogGroupSeelogAttrib] = ""
+	initArgs.XmlCustomAttrs[agentWorkerLogGroupSeelogAttrib] = ""
 	err := verifyLogGroupName(initArgs, args)
 	assert.Error(t, err)
 
 	verifiedLogGroupName = ""
 	args = []string{appconfig.DefaultDocumentWorker}
-	xmlArgs[agentWorkerLogGroupSeelogAttrib] = "test"
+	initArgs.XmlCustomAttrs[agentWorkerLogGroupSeelogAttrib] = "test"
 	err = verifyLogGroupName(initArgs, args)
 	assert.Error(t, err)
 	assert.Equal(t, "", verifiedLogGroupName)
 
 	verifiedLogGroupName = ""
 	args = []string{appconfig.DefaultDocumentWorker}
-	xmlArgs[docWorkerLogGroupSeelogAttrib] = "test"
+	initArgs.XmlCustomAttrs[docWorkerLogGroupSeelogAttrib] = "test1"
 	err = verifyLogGroupName(initArgs, args)
 	assert.NoError(t, err)
-	assert.Equal(t, "test", verifiedLogGroupName)
+	assert.Equal(t, "test1", verifiedLogGroupName)
 
 	verifiedLogGroupName = ""
 	args = []string{appconfig.DefaultSessionWorker}
-	xmlArgs[docWorkerLogGroupSeelogAttrib] = "test"
+	initArgs.XmlCustomAttrs[docWorkerLogGroupSeelogAttrib] = "test2"
 	err = verifyLogGroupName(initArgs, args)
 	assert.Error(t, err)
 	assert.Equal(t, "", verifiedLogGroupName)
 
 	verifiedLogGroupName = ""
-	xmlArgs[sessionWorkerLogGroupSeelogAttrib] = "test"
+	initArgs.XmlCustomAttrs[sessionWorkerLogGroupSeelogAttrib] = "test3"
 	err = verifyLogGroupName(initArgs, args)
 	assert.NoError(t, err)
-	assert.Equal(t, "test", verifiedLogGroupName)
+	assert.Equal(t, "test3", verifiedLogGroupName)
 }

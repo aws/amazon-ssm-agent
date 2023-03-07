@@ -134,8 +134,7 @@ func verifyLogGroupName(xmlConfig seelog.CustomReceiverInitArgs, args []string) 
 			if logGroup == "" || !ok {
 				return fmt.Errorf(invalidLogGroupErrMsg)
 			}
-		}
-		if args[0] == appconfig.DefaultSessionWorker {
+		} else if args[0] == appconfig.DefaultSessionWorker {
 			logGroup, ok = xmlConfig.XmlCustomAttrs[sessionWorkerLogGroupSeelogAttrib]
 			if logGroup == "" || !ok {
 				return fmt.Errorf(invalidLogGroupErrMsg)
