@@ -15,6 +15,8 @@
 package ec2roleprovider
 
 import (
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient"
 
@@ -32,6 +34,8 @@ const (
 var (
 	iprEmptyCredential                                 = credentials.Value{ProviderName: ec2rolecreds.ProviderName}
 	newV4ServiceWithCreds        ssmclient.Initializer = ssmclient.NewV4ServiceWithCreds
+	timeNowFunc                                        = time.Now
+	newCredentials                                     = credentials.NewCredentials
 	exceptionsForDefaultHostMgmt                       = map[string]struct{}{
 		"AccessDeniedException":        {},
 		"EC2RoleRequestError":          {},
@@ -42,12 +46,14 @@ var (
 type IInnerProvider interface {
 	credentials.Provider
 	credentials.Expirer
-	Retrieve() (credentials.Value, error)
+
+	SetExpiration(expiration time.Time, window time.Duration)
 }
 
 type EC2InnerProviders struct {
-	IPRProvider    IInnerProvider
-	SsmEc2Provider IInnerProvider
+	IPRProvider               IInnerProvider
+	SsmEc2Provider            IInnerProvider
+	SharedCredentialsProvider IInnerProvider
 }
 
 type IEC2RoleProvider interface {

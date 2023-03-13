@@ -9,31 +9,40 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeMock "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
+
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRetrieve_ErrGetConfig(t *testing.T) {
-	runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
-	runtimeConfigClient.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, fmt.Errorf("SomeGetConfigError")).Once()
+	expErr := fmt.Errorf("SomeGetConfigError")
+	newRuntimeConfig = func() runtimeconfig.IIdentityRuntimeConfigClient {
+		runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
+		runtimeConfigClient.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, expErr).Once()
+		return runtimeConfigClient
+	}
+
 	var s = sharedCredentialsProvider{
-		log:                 log.NewMockLog(),
-		runtimeConfigClient: runtimeConfigClient,
+		log: log.NewMockLog(),
 	}
 
 	creds, err := s.Retrieve()
-	assert.EqualError(t, err, "SomeGetConfigError")
+	assert.ErrorIs(t, err, expErr)
 	assert.Equal(t, emptyCredential, creds)
 }
 
 func TestRetrieve_ErrCredsExpired(t *testing.T) {
-	config := runtimeconfig.IdentityRuntimeConfig{}
+	config := runtimeconfig.IdentityRuntimeConfig{
+		ShareFile: "SomeShareFile",
+	}
 	config.CredentialsExpiresAt = time.Time{}
+	newRuntimeConfig = func() runtimeconfig.IIdentityRuntimeConfigClient {
+		runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
+		runtimeConfigClient.On("GetConfig").Return(config, nil).Once()
+		return runtimeConfigClient
+	}
 
-	runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
-	runtimeConfigClient.On("GetConfig").Return(config, nil)
 	var s = sharedCredentialsProvider{
-		runtimeConfigClient: runtimeConfigClient,
 		getTimeNow: func() time.Time {
 			return time.Now()
 		},
@@ -46,13 +55,17 @@ func TestRetrieve_ErrCredsExpired(t *testing.T) {
 }
 
 func TestRetrieve_ErrShareCredsGet(t *testing.T) {
-	config := runtimeconfig.IdentityRuntimeConfig{}
+	config := runtimeconfig.IdentityRuntimeConfig{
+		ShareFile: "SomeShareFile",
+	}
 	config.CredentialsExpiresAt = time.Now()
+	newRuntimeConfig = func() runtimeconfig.IIdentityRuntimeConfigClient {
+		runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
+		runtimeConfigClient.On("GetConfig").Return(config, nil).Once()
+		return runtimeConfigClient
+	}
 
-	runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
-	runtimeConfigClient.On("GetConfig").Return(config, nil)
 	var s = sharedCredentialsProvider{
-		runtimeConfigClient: runtimeConfigClient,
 		getTimeNow: func() time.Time {
 			return time.Now().Add(-time.Hour)
 		},
@@ -71,13 +84,17 @@ func TestRetrieve_ErrShareCredsGet(t *testing.T) {
 }
 
 func TestRetrieve_Success_CredsExpireGreaterThanRefreshBeforeExpiry(t *testing.T) {
-	config := runtimeconfig.IdentityRuntimeConfig{}
+	config := runtimeconfig.IdentityRuntimeConfig{
+		ShareFile: "SomeShareFile",
+	}
 	config.CredentialsExpiresAt = time.Now().Add(time.Hour)
+	newRuntimeConfig = func() runtimeconfig.IIdentityRuntimeConfigClient {
+		runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
+		runtimeConfigClient.On("GetConfig").Return(config, nil).Once()
+		return runtimeConfigClient
+	}
 
-	runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
-	runtimeConfigClient.On("GetConfig").Return(config, nil)
 	var s = sharedCredentialsProvider{
-		runtimeConfigClient: runtimeConfigClient,
 		getTimeNow: func() time.Time {
 			return time.Now()
 		},
@@ -97,13 +114,18 @@ func TestRetrieve_Success_CredsExpireGreaterThanRefreshBeforeExpiry(t *testing.T
 }
 
 func TestRetrieve_Success_CredsExpireLessThanRefreshBeforeExpiry(t *testing.T) {
-	config := runtimeconfig.IdentityRuntimeConfig{}
+	config := runtimeconfig.IdentityRuntimeConfig{
+		ShareFile: "SomeShareFile",
+	}
 	config.CredentialsExpiresAt = time.Now().Add(time.Second)
 
-	runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
-	runtimeConfigClient.On("GetConfig").Return(config, nil)
+	newRuntimeConfig = func() runtimeconfig.IIdentityRuntimeConfigClient {
+		runtimeConfigClient := &runtimeMock.IIdentityRuntimeConfigClient{}
+		runtimeConfigClient.On("GetConfig").Return(config, nil).Once()
+		return runtimeConfigClient
+	}
+
 	var s = sharedCredentialsProvider{
-		runtimeConfigClient: runtimeConfigClient,
 		getTimeNow: func() time.Time {
 			return time.Now()
 		},

@@ -300,7 +300,6 @@ func TestIdentityRuntimeConfig_Equal(t *testing.T) {
 			baselineArg,
 			false,
 		},
-
 		{
 			"NotSameShareProfile",
 			fields{

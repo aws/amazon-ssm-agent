@@ -23,13 +23,13 @@ func (p *InnerProvider) Retrieve() (credentials.Value, error) {
 }
 
 func (p *InnerProvider) IsExpired() bool {
-	if p.RetrieveErr != nil {
-		return true
-	}
-
-	return false
+	return p.RetrieveErr != nil
 }
 
 func (p *InnerProvider) ExpiresAt() time.Time {
 	return p.Expiry
+}
+
+func (p *InnerProvider) SetExpiration(expiration time.Time, window time.Duration) {
+	p.Expiry = expiration.Add(-window)
 }

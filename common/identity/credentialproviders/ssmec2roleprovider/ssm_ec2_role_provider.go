@@ -16,6 +16,7 @@ package ssmec2roleprovider
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -31,11 +32,15 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
+const RegistrationType = "EC2"
+
 var (
-	updateServerInfo   = registration.UpdateServerInfo
-	newIirRsaAuth      = rsaauth.NewIirRsaClient
-	loadPrivateKey     = registration.PrivateKey
-	loadPrivateKeyType = registration.PrivateKeyType
+	newIirRsaAuth           = rsaauth.NewIirRsaClient
+	getStoredInstanceId     = registration.InstanceID
+	getStoredPrivateKey     = registration.PrivateKey
+	getStoredPublicKey      = registration.PublicKey
+	getStoredPrivateKeyType = registration.PrivateKeyType
+	loadRegistrationLock    = &sync.Mutex{}
 )
 
 // SSMEC2RoleProvider sends requests for credentials to systems manager signed with AWS SigV4
@@ -58,22 +63,23 @@ type SSMEC2RoleProvider struct {
 	tokenRequestClient authtokenrequest.IClient
 	InstanceInfo       *InstanceInfo
 
-	RegistrationReadyChan chan *authregister.RegistrationInfo
-	registrationInfo      *authregister.RegistrationInfo
+	registrationInfo *authregister.RegistrationInfo
 }
 
 func (p *SSMEC2RoleProvider) isEC2InstanceRegistered() bool {
-	select {
-	case registrationInfo, ok := <-p.RegistrationReadyChan:
-		if ok {
-			p.registrationInfo = registrationInfo
-			close(p.RegistrationReadyChan)
+	if p.registrationInfo == nil {
+		registrationInfo := p.loadRegistrationInfo(p.InstanceInfo.InstanceId)
+		if registrationInfo == nil || registrationInfo.InstanceId == "" {
+			p.Log.Debug("EC2 instance is not yet registered with Systems Manager")
+			return false
 		}
-	default:
-		p.Log.Debugf("EC2 instance is not yet registered with Systems Manager")
+
+		loadRegistrationLock.Lock()
+		defer loadRegistrationLock.Unlock()
+		p.registrationInfo = registrationInfo
 	}
 
-	return p.registrationInfo != nil && p.registrationInfo.PrivateKey != "" && p.registrationInfo.KeyType != ""
+	return p.registrationInfo.PrivateKey != "" && p.registrationInfo.KeyType != ""
 }
 
 // Retrieve retrieves EC2 credentials from Systems Manager
@@ -82,6 +88,7 @@ func (p *SSMEC2RoleProvider) Retrieve() (credentials.Value, error) {
 	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
 
 	if !p.isEC2InstanceRegistered() {
+		p.SetExpiration(time.Time{}, 0)
 		return EmptyCredentials(), fmt.Errorf("ec2 instance not yet registered with Systems Manager")
 	}
 
@@ -96,12 +103,14 @@ func (p *SSMEC2RoleProvider) Retrieve() (credentials.Value, error) {
 	exponentialBackoff, err := backoffconfig.GetDefaultExponentialBackoff()
 	if err != nil {
 		p.Log.Errorf("failed to create backoff Config. Error: %v", exponentialBackoff)
+		p.SetExpiration(time.Time{}, 0)
 		return EmptyCredentials(), err
 	}
 
 	// Get role token
 	roleCreds, err = p.tokenRequestClient.RequestManagedInstanceRoleToken(p.InstanceInfo.InstanceId)
 	if err != nil {
+		p.SetExpiration(time.Time{}, 0)
 		return EmptyCredentials(), fmt.Errorf("error calling RequestManagedInstanceRoleToken: %w", err)
 	}
 
@@ -119,4 +128,20 @@ func (p *SSMEC2RoleProvider) Retrieve() (credentials.Value, error) {
 // EmptyCredentials returns empty SSMEC2RoleProvider credentials
 func EmptyCredentials() credentials.Value {
 	return credentials.Value{ProviderName: ProviderName}
+}
+
+func (p *SSMEC2RoleProvider) loadRegistrationInfo(instanceId string) *authregister.RegistrationInfo {
+	registrationInfo := &authregister.RegistrationInfo{
+		InstanceId: getStoredInstanceId(p.Log, RegistrationType, registration.EC2RegistrationVaultKey),
+		PrivateKey: getStoredPrivateKey(p.Log, RegistrationType, registration.EC2RegistrationVaultKey),
+		KeyType:    getStoredPrivateKeyType(p.Log, RegistrationType, registration.EC2RegistrationVaultKey),
+		PublicKey:  getStoredPublicKey(p.Log, RegistrationType, registration.EC2RegistrationVaultKey),
+	}
+
+	if registrationInfo.InstanceId == "" || registrationInfo.PrivateKey == "" ||
+		registrationInfo.KeyType == "" || registrationInfo.InstanceId != instanceId {
+		registrationInfo.InstanceId = "" // setting it as blank to try registration
+	}
+
+	return registrationInfo
 }

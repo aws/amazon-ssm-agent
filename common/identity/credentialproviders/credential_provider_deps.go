@@ -14,7 +14,11 @@
 
 package credentialproviders
 
-import "github.com/aws/aws-sdk-go/aws/credentials"
+import (
+	"time"
+
+	"github.com/aws/aws-sdk-go/aws/credentials"
+)
 
 // IRemoteProvider defines the interface for credential providers usable by the credential refresher go routine
 type IRemoteProvider interface {
@@ -22,4 +26,6 @@ type IRemoteProvider interface {
 	ShareProfile() string
 	ShareFile() string
 	SharesCredentials() bool
+	RemoteRetrieve() (credentials.Value, error)
+	RemoteExpiresAt() time.Time
 }

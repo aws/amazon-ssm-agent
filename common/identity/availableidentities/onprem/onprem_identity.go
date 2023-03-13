@@ -59,7 +59,8 @@ func (*Identity) ServiceDomain() (string, error) {
 
 // initShareCreds initializes credentials using shared credentials provider that reads credentials from shared location, falls back to non shared credentials provider for any failure
 func (i *Identity) initShareCreds() {
-	shareCredsProvider, err := sharedprovider.NewCredentialsProvider(i.Log)
+	shareCredsProvider := sharedprovider.NewCredentialsProvider(i.Log)
+	_, err := shareCredsProvider.Retrieve()
 	if err != nil {
 		i.Log.Errorf("Failed to initialize shared credentials provider, falling back to remote credentials provider: %v", err)
 		i.initNonShareCreds()

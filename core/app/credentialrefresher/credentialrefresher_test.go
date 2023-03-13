@@ -43,7 +43,10 @@ var (
 func init() {
 	newSharedCredentials = func(_, _ string) *credentials.Credentials {
 		provider := &credentialmocks.Provider{}
-		provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
+		provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Once()
+		provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
+		provider.On("ShareFile").Return("", nil).Times(3)
+		provider.On("CredentialSource").Return("SSM").Times(3)
 		return credentials.NewCredentials(provider)
 	}
 
@@ -54,7 +57,6 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 		log                         log.T
 		agentIdentity               identity.IAgentIdentity
 		provider                    credentials.Provider
-		expirer                     credentials.Expirer
 		runtimeConfigClient         runtimeconfig.IIdentityRuntimeConfigClient
 		identityRuntimeConfig       runtimeconfig.IdentityRuntimeConfig
 		backoffConfig               *backoff.ExponentialBackOff
@@ -123,22 +125,12 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		provider := &credentialmocks.IRemoteProvider{}
-		provider.On("Retrieve").Return(credentials.Value{}, nil).Repeatability = 0
 		t.Run(tt.name, func(t *testing.T) {
 			c := &credentialsRefresher{
-				log:                         tt.fields.log,
-				agentIdentity:               mockAgentIdentity,
-				provider:                    provider,
-				expirer:                     tt.fields.expirer,
-				runtimeConfigClient:         tt.fields.runtimeConfigClient,
-				identityRuntimeConfig:       tt.fields.identityRuntimeConfig,
-				backoffConfig:               tt.fields.backoffConfig,
-				credsReadyOnce:              sync.Once{},
-				credentialsReadyChan:        tt.fields.credentialsReadyChan,
-				stopCredentialRefresherChan: tt.fields.stopCredentialRefresherChan,
-				getCurrentTimeFunc:          tt.fields.getCurrentTimeFunc,
-				timeAfterFunc:               time.After,
+				log:                   tt.fields.log,
+				runtimeConfigClient:   tt.fields.runtimeConfigClient,
+				identityRuntimeConfig: tt.fields.identityRuntimeConfig,
+				getCurrentTimeFunc:    tt.fields.getCurrentTimeFunc,
 			}
 			if got := c.durationUntilRefresh(); got != tt.want {
 				t.Errorf("durationUntilRefresh() = %v, want %v", got, tt.want)
@@ -147,9 +139,17 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 	}
 }
 
-func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_NotCallRefresh(t *testing.T) {
+func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_SharedCreds_NotCallRefresh(t *testing.T) {
 	storeSharedCredentials = func(log.T, string, string, string, string, string, bool) error {
 		return nil
+	}
+
+	oldFun := newSharedCredentials
+	defer func() { newSharedCredentials = oldFun }()
+	newSharedCredentials = func(_, _ string) *credentials.Credentials {
+		provider := &credentialmocks.Provider{}
+		provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
+		return credentials.NewCredentials(provider)
 	}
 
 	runtimeConfig := runtimeconfig.IdentityRuntimeConfig{
@@ -158,14 +158,61 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 	}
 
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("Retrieve").Return(credentials.Value{}, nil).Repeatability = 0
-
+	provider.On("ShareFile").Return("SomeSharedCredentialsFile").Once()
 	c := &credentialsRefresher{
 		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
 		provider:                     provider,
 		identityRuntimeConfig:        runtimeConfig,
 		credsReadyOnce:               sync.Once{},
+		credentialsReadyChan:         make(chan struct{}, 1),
+		stopCredentialRefresherChan:  make(chan struct{}),
+		isCredentialRefresherRunning: true,
+		getCurrentTimeFunc:           func() time.Time { return currentTime },
+		timeAfterFunc:                time.After,
+	}
+
+	go c.credentialRefresherRoutine()
+
+	// verify credentials ready message is sent
+	select {
+	case <-c.credentialsReadyChan:
+	case <-time.After(time.Second):
+		assert.Fail(t, "CredentialsReadyChan never got a message")
+	}
+
+	// Stop goroutine and verify it stops within a second
+	select {
+	case c.stopCredentialRefresherChan <- struct{}{}:
+	case <-time.After(time.Second):
+		assert.Fail(t, "Took more than a second to stop credential refresher")
+	}
+}
+
+func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_NoSharedCreds_NotCallRefresh(t *testing.T) {
+	storeSharedCredentials = func(log.T, string, string, string, string, string, bool) error {
+		return nil
+	}
+
+	oldFun := newSharedCredentials
+	defer func() { newSharedCredentials = oldFun }()
+	newSharedCredentials = func(_, _ string) *credentials.Credentials {
+		provider := &credentialmocks.Provider{}
+		provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
+		return credentials.NewCredentials(provider)
+	}
+
+	runtimeConfig := runtimeconfig.IdentityRuntimeConfig{
+		CredentialsExpiresAt:   tenMinAfterTime,
+		CredentialsRetrievedAt: currentTime,
+	}
+
+	provider := &credentialmocks.IRemoteProvider{}
+	provider.On("ShareFile").Return("").Once()
+	c := &credentialsRefresher{
+		log:                          logmocks.NewMockLog(),
+		provider:                     provider,
+		identityRuntimeConfig:        runtimeConfig,
 		credentialsReadyChan:         make(chan struct{}, 1),
 		stopCredentialRefresherChan:  make(chan struct{}),
 		isCredentialRefresherRunning: true,
@@ -209,20 +256,19 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 	}
 
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("Retrieve").Return(func() credentials.Value { return credentials.Value{} }, func() error {
+	provider.On("RemoteRetrieve").Return(func() credentials.Value { return credentials.Value{} }, func() error {
 		// Sleep here because we know that if we reach this point and have not got message in credentialsReadyChan, the time is set correctly
 		time.Sleep(time.Second)
 		return fmt.Errorf("SomeRetrieveErr")
 	})
-
-	expirer := &credentialmocks.Expirer{}
-	expirer.On("ExpiresAt").Return(tenMinAfterTime)
+	provider.On("ShareFile").Return("SomeShareFile").Repeatability = 0
+	provider.On("CredentialSource").Return("SSM").Repeatability = 0
+	provider.On("RemoteExpiresAt").Return(tenMinAfterTime).Once()
 
 	c := &credentialsRefresher{
 		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
 		provider:                     provider,
-		expirer:                      expirer,
 		identityRuntimeConfig:        runtimeConfig,
 		credsReadyOnce:               sync.Once{},
 		credentialsReadyChan:         make(chan struct{}, 1),
@@ -248,7 +294,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		assert.Fail(t, "Took more than a second to stop credential refresher")
 	}
 
-	assert.True(t, c.identityRuntimeConfig.CredentialsExpiresAt.Equal(time.Time{}))
+	assert.True(t, c.identityRuntimeConfig.CredentialsExpiresAt.Equal(time.Time{}), fmt.Sprintf("CredentialExpiresAt is %v but should be %v", c.identityRuntimeConfig.CredentialsExpiresAt, time.Time{}))
 	assert.True(t, c.identityRuntimeConfig.CredentialsRetrievedAt.Equal(fiveMinBeforeTime))
 }
 
@@ -264,7 +310,13 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallS
 
 	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("Retrieve").Return(credentials.Value{}, nil).Repeatability = 0
-
+	provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Repeatability = 0
+	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Repeatability = 0
+	provider.On("ShareFile").Return("SomeShareFile", nil).Repeatability = 0
+	provider.On("CredentialSource").Return("SSM").Repeatability = 0
+	newSharedCredentials = func(filename, profile string) *credentials.Credentials {
+		return credentials.NewCredentials(provider)
+	}
 	c := &credentialsRefresher{
 		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
@@ -319,16 +371,19 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	runtimeConfigClient.On("SaveConfig", mock.Anything).Return(nil).Once()
 
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
+	provider.On("ShareFile").Return("SomeShareFile", nil).Times(4)
+	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("share file doesn't exist")).Once()
+	provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Once()
+	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
 
-	expirer := &credentialmocks.Expirer{}
-	expirer.On("ExpiresAt").Return(tenMinAfterTime).Once()
+	newSharedCredentials = func(filename, profile string) *credentials.Credentials {
+		return credentials.NewCredentials(provider)
+	}
 
 	c := &credentialsRefresher{
 		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
 		provider:                     provider,
-		expirer:                      expirer,
 		runtimeConfigClient:          runtimeConfigClient,
 		identityRuntimeConfig:        runtimeConfig,
 		credsReadyOnce:               sync.Once{},
@@ -357,7 +412,6 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 
 	runtimeConfigClient.AssertExpectations(t)
 	provider.AssertExpectations(t)
-	expirer.AssertExpectations(t)
 
 	c.identityRuntimeConfig.CredentialsRetrievedAt.Equal(currentTime)
 	c.identityRuntimeConfig.CredentialsExpiresAt.Equal(tenMinAfterTime)
@@ -377,7 +431,7 @@ func (a awsTestError) Code() string    { return a.errCode }
 func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testing.T) {
 	for _, awsErr := range []error{awsTestError{"AccessDeniedException"}, awsTestError{"MachineFingerprintDoesNotMatch"}} {
 		provider := &credentialmocks.IRemoteProvider{}
-		provider.On("Retrieve").Return(credentials.Value{}, awsErr).Once()
+		provider.On("RemoteRetrieve").Return(credentials.Value{}, awsErr).Once()
 
 		var timeAfterParamVal time.Duration
 		c := &credentialsRefresher{
@@ -417,9 +471,9 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testin
 
 func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilSuccess(t *testing.T) {
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("Retrieve").Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
-	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
-	provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
+	provider.On("RemoteRetrieve").Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
+	provider.On("RemoteRetrieve").Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
+	provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Once()
 
 	numSleeps := 0
 	c := &credentialsRefresher{

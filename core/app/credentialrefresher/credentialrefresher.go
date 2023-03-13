@@ -68,7 +68,6 @@ type credentialsRefresher struct {
 	appConfig     *appconfig.SsmagentConfig
 	agentIdentity identity.IAgentIdentity
 	provider      credentialproviders.IRemoteProvider
-	expirer       credentials.Expirer
 
 	runtimeConfigClient   runtimeconfig.IIdentityRuntimeConfigClient
 	identityRuntimeConfig runtimeconfig.IdentityRuntimeConfig
@@ -91,7 +90,6 @@ func NewCredentialRefresher(context context.ICoreAgentContext) ICredentialRefres
 		log:                          context.Log().WithContext("[CredentialRefresher]"),
 		agentIdentity:                context.Identity(),
 		provider:                     nil,
-		expirer:                      nil,
 		runtimeConfigClient:          runtimeconfig.NewIdentityRuntimeConfigClient(),
 		identityRuntimeConfig:        runtimeconfig.IdentityRuntimeConfig{},
 		credsReadyOnce:               sync.Once{},
@@ -146,11 +144,6 @@ func (c *credentialsRefresher) Start() error {
 
 	c.provider = credentialProvider
 
-	// provider should always implement expirer
-	if c.expirer, ok = c.provider.(credentials.Expirer); !ok {
-		return fmt.Errorf("credentials provider for identity %v does not implement Expirer interface", c.agentIdentity.IdentityType())
-	}
-
 	// Initialize the identity runtime config from disk
 	if c.identityRuntimeConfig, err = c.runtimeConfigClient.GetConfig(); err != nil {
 		return err
@@ -187,6 +180,7 @@ func (c *credentialsRefresher) GetCredentialsReadyChan() chan struct{} {
 }
 
 func (c *credentialsRefresher) sendCredentialsReadyMessage() {
+	c.log.Info("Credentials ready")
 	c.credsReadyOnce.Do(func() {
 		c.credentialsReadyChan <- struct{}{}
 		c.log.Flush()
@@ -202,7 +196,7 @@ func getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
 func (c *credentialsRefresher) retrieveCredsWithRetry() (credentials.Value, bool) {
 	retryCount := 0
 	for {
-		creds, err := c.provider.Retrieve()
+		creds, err := c.provider.RemoteRetrieve()
 		if err == nil {
 			return creds, false
 		}
@@ -270,17 +264,18 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 
 	// if credentials are not expired, verify that credentials are available.
 	if c.identityRuntimeConfig.CredentialsExpiresAt.After(c.getCurrentTimeFunc()) {
-		localCredsProvider := newSharedCredentials(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile)
-		if _, err := localCredsProvider.Get(); err != nil {
-			c.log.Warnf("Credentials are not available when they should be: %v", err)
-			// set expiration and retrieved to beginning of time if shared credentials are not available to force credential refresh
-			c.identityRuntimeConfig.CredentialsExpiresAt = time.Time{}
+		if c.provider.ShareFile() == "" {
+			c.sendCredentialsReadyMessage()
+		} else {
+			localCredsProvider := newSharedCredentials(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile)
+			if _, err := localCredsProvider.Get(); err != nil {
+				c.log.Warnf("Credentials are not available when they should be: %v", err)
+				// set expiration and retrieved to beginning of time if shared credentials are not available to force credential refresh
+				c.identityRuntimeConfig.CredentialsExpiresAt = time.Time{}
+			} else {
+				c.sendCredentialsReadyMessage()
+			}
 		}
-	}
-
-	if c.identityRuntimeConfig.CredentialsExpiresAt.After(c.getCurrentTimeFunc()) {
-		c.log.Info("Credentials exist and have not expired, sending ready message")
-		c.sendCredentialsReadyMessage()
 	}
 
 	c.log.Info("Starting credentials refresher loop")
@@ -300,26 +295,33 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 				return
 			}
 
-			err = backoffRetry(func() error {
-				return storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken, c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile, false)
-			}, c.backoffConfig)
+			// ShareFile may be updated after retrieveCredsWithRetry()
+			if c.provider.ShareFile() != "" {
+				newShareFile := c.provider.ShareFile()
+				err = backoffRetry(func() error {
+					return storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken, newShareFile, c.identityRuntimeConfig.ShareProfile, false)
+				}, c.backoffConfig)
 
-			// If failed, try once more with force
-			if err != nil {
-				c.log.Warn("Failed to write credentials to disk, attempting force write")
-				err = storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken, c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile, true)
+				// If failed, try once more with force
+				if err != nil {
+					c.log.Warn("Failed to write credentials to disk, attempting force write")
+					err = storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken, newShareFile, c.identityRuntimeConfig.ShareProfile, true)
+				}
+
+				if err != nil {
+					// Saving credentials has been retried 6 times at this point.
+					c.log.Errorf("Failed to write credentials to disk even with force, retrying: %v", err)
+					continue
+				}
+
+				c.log.Debug("Successfully stored credentials")
 			}
 
-			if err != nil {
-				// Saving credentials has been retried 6 times at this point.
-				c.log.Errorf("Failed to write credentials to disk even with force, retrying: %v", err)
-				continue
-			}
-
-			c.log.Debug("Successfully stored credentials, writing runtime configuration with updated expiration time")
+			c.log.Debug("Writing runtime configuration with updated expiration time")
 			configCopy := c.identityRuntimeConfig
 			configCopy.CredentialsRetrievedAt = credentialsRetrievedAt
-			configCopy.CredentialsExpiresAt = c.expirer.ExpiresAt()
+			configCopy.CredentialsExpiresAt = c.provider.RemoteExpiresAt()
+			configCopy.ShareFile = c.provider.ShareFile()
 
 			err = backoffRetry(func() error {
 				return c.runtimeConfigClient.SaveConfig(configCopy)

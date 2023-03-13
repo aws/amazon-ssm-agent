@@ -66,6 +66,11 @@ func (_m *IInnerProvider) Retrieve() (credentials.Value, error) {
 	return r0, r1
 }
 
+// SetExpiration provides a mock function with given fields: expiration, window
+func (_m *IInnerProvider) SetExpiration(expiration time.Time, window time.Duration) {
+	_m.Called(expiration, window)
+}
+
 // NewIInnerProvider creates a new instance of IInnerProvider. It also registers the testing.TB interface on the mock and a cleanup function to assert the mocks expectations.
 func NewIInnerProvider(t testing.TB) *IInnerProvider {
 	mock := &IInnerProvider{}

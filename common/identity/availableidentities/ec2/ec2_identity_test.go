@@ -19,16 +19,14 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
-	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	authregistermocks "github.com/aws/amazon-ssm-agent/agent/ssm/authregister/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2/mocks"
-	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2/stubs"
 	ec2roleprovidermocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	endpointmocks "github.com/aws/amazon-ssm-agent/common/identity/endpoint/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
-	"github.com/aws/aws-sdk-go/aws/credentials"
+
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -149,7 +147,6 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 		runtimeConfigClient: runtimeConfigClientMocks,
 	}
 	assert.NotNil(t, identity.Credentials())
-	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 
 	// Shared Profile is null and Shared File is not null
 	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
@@ -157,7 +154,6 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
 	identity.runtimeConfigClient = runtimeConfigClientMocks
 	assert.NotNil(t, identity.Credentials())
-	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 
 	// Shared Profile is not null and Shared File is null
 	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
@@ -165,7 +161,6 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
 	identity.runtimeConfigClient = runtimeConfigClientMocks
 	assert.NotNil(t, identity.Credentials())
-	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 
 	// Shared Profile and Shared File both not null
 	runtimeConfigClientMocks = &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
@@ -173,7 +168,6 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeConfigVal, nil)
 	identity.runtimeConfigClient = runtimeConfigClientMocks
 	assert.NotNil(t, identity.Credentials())
-	ec2RoleProviderMocks.AssertNumberOfCalls(t, "GetInnerProvider", 1)
 }
 
 func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigNotPresent_Success(t *testing.T) {
@@ -225,47 +219,6 @@ func TestEC2IdentityType_IdentityType(t *testing.T) {
 
 	res := identity.IdentityType()
 	assert.Equal(t, res, IdentityType)
-}
-
-func TestEC2Identity_initSharedCreds_InitsSharedCredentials_WhenSharedProviderSuccessfullyCreated(t *testing.T) {
-	// Arrange
-	newSharedCredentialsProvider = func(log log.T) (credentials.Provider, error) {
-		return &stubs.ProviderStub{
-			ProviderName: stubs.SharedProviderName,
-		}, nil
-	}
-
-	identity := &Identity{
-		Log: logmocks.NewMockLog(),
-	}
-
-	// Act
-	identity.initSharedCreds()
-	resultingCreds, _ := identity.credentials.Get()
-
-	// Assert
-	assert.Equal(t, stubs.SharedProviderName, resultingCreds.ProviderName)
-}
-
-func TestEC2Identity_initSharedCreds_InitsNonSharedCredentials_WhenSharedProviderFailsInit(t *testing.T) {
-	// Arrange
-	newSharedCredentialsProvider = func(log log.T) (credentials.Provider, error) {
-		return nil, fmt.Errorf("failed to initialize SharedCredentialProvider")
-	}
-
-	identity := &Identity{
-		Log: logmocks.NewMockLog(),
-		credentialsProvider: &stubs.ProviderStub{
-			ProviderName: stubs.NonSharedProviderName,
-		},
-	}
-
-	// Act
-	identity.initSharedCreds()
-	resultingCreds, _ := identity.credentials.Get()
-
-	// Assert
-	assert.Equal(t, stubs.NonSharedProviderName, resultingCreds.ProviderName)
 }
 
 func TestGetInstanceInfo_ReturnsError_WhenErrorGettingInstanceId(t *testing.T) {
@@ -340,15 +293,13 @@ func TestEC2Identity_InitEC2RoleProvider_InitsCredentialProvider(t *testing.T) {
 	endpointHelper := &endpointmocks.IEndpointHelper{}
 	serviceEndpoint := "ssm.amazon.com"
 	endpointHelper.On("GetServiceEndpoint", mock.Anything, mock.Anything).Return(serviceEndpoint)
-	registrationReadyChan := make(chan *authregister.RegistrationInfo, 1)
 	instanceInfo := &ssmec2roleprovider.InstanceInfo{
 		InstanceId: "SomeInstanceId",
 		Region:     "SomeRegion",
 	}
 
 	identity := &Identity{
-		Log:                   logmocks.NewMockLog(),
-		registrationReadyChan: registrationReadyChan,
+		Log: logmocks.NewMockLog(),
 	}
 
 	// Act
@@ -384,10 +335,9 @@ func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *t
 	}
 
 	identity := &Identity{
-		Log:                   logmocks.NewMockLog(),
-		Client:                client,
-		authRegisterService:   authRegisterService,
-		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
+		Log:                 logmocks.NewMockLog(),
+		Client:              client,
+		authRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -395,8 +345,6 @@ func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *t
 
 	//Assert
 	assert.NoError(t, err)
-	registrationInfo := <-identity.registrationReadyChan
-	assert.NotNil(t, registrationInfo)
 }
 
 func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *testing.T) {
@@ -435,10 +383,9 @@ func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *test
 	}
 
 	identity := &Identity{
-		Log:                   logmocks.NewMockLog(),
-		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		Client:                client,
-		authRegisterService:   authRegisterService,
+		Log:                 logmocks.NewMockLog(),
+		Client:              client,
+		authRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -446,8 +393,6 @@ func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *test
 
 	// Assert
 	assert.NoError(t, err)
-	registrationInfo := <-identity.registrationReadyChan
-	assert.NotNil(t, registrationInfo)
 }
 
 func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
@@ -493,10 +438,9 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	}
 
 	identity := &Identity{
-		Log:                   logmocks.NewMockLog(),
-		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		Client:                client,
-		authRegisterService:   authRegisterService,
+		Log:                 logmocks.NewMockLog(),
+		Client:              client,
+		authRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -504,10 +448,6 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 
 	// Assert
 	assert.NoError(t, err)
-	registrationInfo := <-identity.registrationReadyChan
-	assert.NotNil(t, registrationInfo)
-	assert.NotNil(t, registrationInfo.PublicKey, testPublicKey)
-	assert.NotNil(t, registrationInfo.InstanceId, liveInstanceId)
 }
 
 func TestEC2Identity_ReRegister_InfoPublicKey_Blank(t *testing.T) {
@@ -549,10 +489,9 @@ func TestEC2Identity_ReRegister_InfoPublicKey_Blank(t *testing.T) {
 	}
 
 	identity := &Identity{
-		Log:                   logmocks.NewMockLog(),
-		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		Client:                client,
-		authRegisterService:   authRegisterService,
+		Log:                 logmocks.NewMockLog(),
+		Client:              client,
+		authRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -560,10 +499,6 @@ func TestEC2Identity_ReRegister_InfoPublicKey_Blank(t *testing.T) {
 
 	// Assert
 	assert.NoError(t, err)
-	registrationInfo := <-identity.registrationReadyChan
-	assert.NotNil(t, registrationInfo)
-	assert.NotNil(t, registrationInfo.PublicKey)
-	assert.NotNil(t, registrationInfo.InstanceId, liveInstanceId)
 }
 
 func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *testing.T) {
@@ -591,9 +526,8 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 	}
 
 	identity := &Identity{
-		Log:                   logmocks.NewMockLog(),
-		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		Client:                client,
+		Log:    logmocks.NewMockLog(),
+		Client: client,
 	}
 
 	// Act
@@ -601,9 +535,6 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 
 	// Assert
 	assert.NoError(t, err)
-	registrationInfo := <-identity.registrationReadyChan
-	assert.Equal(t, testPrivateKey, registrationInfo.PrivateKey)
-	assert.Equal(t, testPrivateKeyType, registrationInfo.KeyType)
 }
 
 // Mock aws error struct
@@ -625,7 +556,7 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 	client := &mocks.IEC2MdsSdkClientMock{}
 	client.On("Region").Return(testRegion, nil).Once()
 	authRegisterService := &authregistermocks.IClient{}
-	client.On("GetMetadata", ec2InstanceIDResource).Return(testInstanceId, nil).Twice()
+	client.On("GetMetadata", ec2InstanceIDResource).Return(testInstanceId, nil).Times(3)
 
 	authRegisterService.On("RegisterManagedInstance",
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("", &awsTestError{errCode: ssm.ErrCodeInstanceAlreadyRegistered})
@@ -650,10 +581,9 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 	}
 
 	identity := &Identity{
-		Log:                   logmocks.NewMockLog(),
-		Client:                client,
-		authRegisterService:   authRegisterService,
-		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
+		Log:                 logmocks.NewMockLog(),
+		Client:              client,
+		authRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -661,7 +591,4 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 
 	// Assert
 	assert.NoError(t, err)
-	registrationInfo, ok := <-identity.registrationReadyChan
-	assert.Nil(t, registrationInfo)
-	assert.False(t, ok)
 }

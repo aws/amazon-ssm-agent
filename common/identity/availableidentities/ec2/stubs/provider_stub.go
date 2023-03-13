@@ -21,10 +21,18 @@ type ProviderStub struct {
 	Expiry        time.Time
 }
 
+func (p *ProviderStub) SetExpiration(expiration time.Time, window time.Duration) {
+	return
+}
+
 func (p *ProviderStub) Retrieve() (credentials.Value, error) {
 	return credentials.Value{
 		ProviderName: p.ProviderName,
 	}, nil
+}
+
+func (p *ProviderStub) RemoteRetrieve() (credentials.Value, error) {
+	return p.Retrieve()
 }
 
 func (p *ProviderStub) IsExpired() bool {

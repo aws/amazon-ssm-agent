@@ -20,7 +20,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider"
-	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
@@ -61,14 +60,12 @@ type IEC2Identity interface {
 
 // Identity is the struct implementing the IAgentIdentityInner interface for the EC2 identity
 type Identity struct {
-	Log                   log.T
-	Client                iEC2MdsSdkClient
-	Config                *appconfig.SsmagentConfig
-	credentials           *credentials.Credentials
-	credentialsProvider   ec2roleprovider.IEC2RoleProvider
-	authRegisterService   authregister.IClient
-	shareLock             *sync.RWMutex
-	registrationReadyChan chan *authregister.RegistrationInfo
-	endpointHelper        endpoint.IEndpointHelper
-	runtimeConfigClient   runtimeconfig.IIdentityRuntimeConfigClient
+	Log                 log.T
+	Client              iEC2MdsSdkClient
+	Config              *appconfig.SsmagentConfig
+	credentials         *credentials.Credentials
+	credentialsProvider ec2roleprovider.IEC2RoleProvider
+	authRegisterService authregister.IClient
+	shareLock           *sync.RWMutex
+	runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient
 }

@@ -35,28 +35,56 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestSSMEC2RoleProvider_IsEC2InstanceRegistered_ReturnsFalse_WhenNoRegistrationInfoInChannel(t *testing.T) {
+func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_WhenInstanceNotRegistered(t *testing.T) {
 	// Arrange
+	registrationInfo := &authregister.RegistrationInfo{
+		InstanceId: "i-0123456789",
+		PrivateKey: "SomePrivateKey",
+		KeyType:    "SomeKeyType",
+		PublicKey:  "SomePublicKey",
+	}
+	setupRegistrationInfo(registrationInfo)
+
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   logmocks.NewMockLog(),
-		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
+		Log:          logmocks.NewMockLog(),
+		InstanceInfo: &InstanceInfo{InstanceId: "SomeInstanceId"},
 	}
 
 	assert.False(t, roleProvider.isEC2InstanceRegistered())
 }
 
+func setupRegistrationInfo(registrationInfo *authregister.RegistrationInfo) {
+	getStoredInstanceId = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		return registrationInfo.InstanceId
+	}
+
+	getStoredPublicKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		return registrationInfo.PublicKey
+	}
+
+	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		return registrationInfo.PrivateKey
+	}
+
+	getStoredPrivateKeyType = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
+		return registrationInfo.KeyType
+	}
+}
+
 func TestSSMEC2RoleProvider_IsEC2InstanceRegistered_ReturnsTrue_WhenRegistrationInfoExists(t *testing.T) {
 	// Arrange
 	registrationInfo := &authregister.RegistrationInfo{
+		InstanceId: "i-0123456789",
 		PrivateKey: "SomePrivateKey",
 		KeyType:    "SomeKeyType",
-	}
-	roleProvider := &SSMEC2RoleProvider{
-		Log:                   logmocks.NewMockLog(),
-		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
+		PublicKey:  "SomePublicKey",
 	}
 
-	roleProvider.RegistrationReadyChan <- registrationInfo
+	setupRegistrationInfo(registrationInfo)
+	roleProvider := &SSMEC2RoleProvider{
+		Log:              logmocks.NewMockLog(),
+		registrationInfo: registrationInfo,
+	}
 
 	assert.True(t, roleProvider.isEC2InstanceRegistered())
 	assert.True(t, roleProvider.isEC2InstanceRegistered())
@@ -65,6 +93,7 @@ func TestSSMEC2RoleProvider_IsEC2InstanceRegistered_ReturnsTrue_WhenRegistration
 func TestSSMEC2RoleProvider_Retrieve_ReturnsCredentials(t *testing.T) {
 	// Arrange
 	registrationInfo := &authregister.RegistrationInfo{
+		InstanceId: "i-0123456789",
 		PrivateKey: "SomePrivateKey",
 		KeyType:    "SomeKeyType",
 	}
@@ -78,12 +107,10 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsCredentials(t *testing.T) {
 	}
 
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   logmocks.NewMockLog(),
-		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		InstanceInfo:          &InstanceInfo{Region: "SomeRegion"},
+		Log:              logmocks.NewMockLog(),
+		registrationInfo: registrationInfo,
+		InstanceInfo:     &InstanceInfo{InstanceId: registrationInfo.InstanceId, Region: "SomeRegion"},
 	}
-
-	roleProvider.RegistrationReadyChan <- registrationInfo
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
 	tokenRequestService.On("RequestManagedInstanceRoleToken", mock.Anything).Return(roleCreds, nil)
@@ -104,18 +131,6 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsCredentials(t *testing.T) {
 	assert.False(t, roleProvider.IsExpired())
 }
 
-func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_WhenInstanceNotRegistered(t *testing.T) {
-	// Arrange
-	roleProvider := &SSMEC2RoleProvider{
-		Log:                   logmocks.NewMockLog(),
-		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-	}
-
-	creds, err := roleProvider.Retrieve()
-	assert.Error(t, err)
-	assert.Equal(t, EmptyCredentials(), creds)
-}
-
 func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_NoRetry(t *testing.T) {
 	// Arrange
 	statusCode := 400
@@ -129,12 +144,10 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_NoRetry(t *testing.
 	}
 
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   logmocks.NewMockLog(),
-		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		InstanceInfo:          &InstanceInfo{Region: "SomeRegion"},
+		Log:              logmocks.NewMockLog(),
+		InstanceInfo:     &InstanceInfo{Region: "SomeRegion"},
+		registrationInfo: registrationInfo,
 	}
-
-	roleProvider.RegistrationReadyChan <- registrationInfo
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
 
@@ -156,17 +169,16 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_Retries(t *testing.
 	unauthorizedRequestFailure := awserr.NewRequestFailure(unauthorizedErr, statusCode, "testRequestId")
 
 	registrationInfo := &authregister.RegistrationInfo{
+		InstanceId: "i-0123456789",
 		PrivateKey: "SomePrivateKey",
 		KeyType:    "SomeKeyType",
 	}
 
 	roleProvider := &SSMEC2RoleProvider{
-		Log:                   logmocks.NewMockLog(),
-		RegistrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		InstanceInfo:          &InstanceInfo{Region: "SomeRegion"},
+		Log:              logmocks.NewMockLog(),
+		InstanceInfo:     &InstanceInfo{Region: "SomeRegion"},
+		registrationInfo: registrationInfo,
 	}
-
-	roleProvider.RegistrationReadyChan <- registrationInfo
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
 

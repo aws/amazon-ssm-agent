@@ -16,19 +16,19 @@ package ec2roleprovider
 
 import (
 	"fmt"
-	"math/rand"
 	"runtime"
-	"strings"
 	"sync"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
+
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
-	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -37,20 +37,33 @@ import (
 
 // EC2RoleProvider provides credentials for the agent when on an EC2 instance
 type EC2RoleProvider struct {
-	InnerProviders              *EC2InnerProviders
-	Log                         log.T
-	Config                      *appconfig.SsmagentConfig
-	InstanceInfo                *ssmec2roleprovider.InstanceInfo
-	credentialSource            string
-	SsmEndpoint                 string
-	ShareFileLocation           string
-	CredentialProfile           string
-	ShouldShareCredentials      bool
-	expirationUpdateLock        sync.Mutex
-	currentCredentialExpiration time.Time
+	credentials.Expiry
+	InnerProviders         *EC2InnerProviders
+	Log                    log.T
+	Config                 *appconfig.SsmagentConfig
+	InstanceInfo           *ssmec2roleprovider.InstanceInfo
+	expirationUpdateLock   *sync.Mutex
+	credentialSource       string
+	SsmEndpoint            string
+	shouldShareCredentials bool
+	RuntimeConfigClient    runtimeconfig.IIdentityRuntimeConfigClient
 }
 
-// GetInnerProvider gets the role provider that is currently being used for credentials
+func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProviders *EC2InnerProviders, instanceInfo *ssmec2roleprovider.InstanceInfo, ssmEndpoint string, runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient) *EC2RoleProvider {
+	return &EC2RoleProvider{
+		InnerProviders:         innerProviders,
+		Log:                    log.WithContext(ec2rolecreds.ProviderName),
+		Config:                 config,
+		InstanceInfo:           instanceInfo,
+		SsmEndpoint:            ssmEndpoint,
+		RuntimeConfigClient:    runtimeConfigClient,
+		credentialSource:       CredentialSourceEC2,
+		shouldShareCredentials: true,
+		expirationUpdateLock:   &sync.Mutex{},
+	}
+}
+
+// GetInnerProvider gets the remote role provider that is currently being used for credentials
 func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 	if p.credentialSource == CredentialSourceSSM {
 		return p.InnerProviders.SsmEc2Provider
@@ -59,9 +72,37 @@ func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 	return p.InnerProviders.IPRProvider
 }
 
-// Retrieve returns instance profile role credentials if it has sufficient systems manager permissions and
-// returns ssm provided credentials otherwise. If neither can be retrieved then empty credentials are returned
+// Retrieve returns shared credentials if specified in runtime config
+// and returns instance profile role credentials otherwise.
+// If neither can be retrieved then empty credentials are returned
 func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
+	if runtimeConfig, err := p.RuntimeConfigClient.GetConfig(); err != nil {
+		p.Log.Errorf("Failed to read runtime config for ShareFile information")
+	} else if runtimeConfig.ShareFile != "" {
+		sharedCreds, err := p.InnerProviders.SharedCredentialsProvider.Retrieve()
+		if err != nil {
+			err = fmt.Errorf("unable to load shared credentials. Err: %w", err)
+			p.Log.Error(err)
+			return iprEmptyCredential, err
+		}
+
+		p.credentialSource = CredentialSourceSSM
+		return sharedCreds, nil
+	}
+
+	p.credentialSource = CredentialSourceEC2
+	iprCredentials, err := p.InnerProviders.IPRProvider.Retrieve()
+	if err != nil {
+		err = fmt.Errorf("failed to retrieve instance profile role credentials. Err: %w", err)
+		p.Log.Error(err)
+		return iprEmptyCredential, err
+	}
+
+	return iprCredentials, nil
+}
+
+// RemoteRetrieve uses network calls to retrieve credentials for EC2 instances
+func (p *EC2RoleProvider) RemoteRetrieve() (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(p.SsmEndpoint); err != nil {
 		errCode := sdkutil.GetAwsErrorCode(err)
@@ -69,7 +110,7 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 			p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
 		} else {
 			p.credentialSource = CredentialSourceEC2
-			return iprEmptyCredential, fmt.Errorf("instance profile role could not be checked for ssm permissions. Err: %w", err)
+			return iprEmptyCredential, fmt.Errorf("failed to call ssm:UpdateInstanceInformation with instance profile role. Err: %w", err)
 		}
 	} else {
 		p.Log.Info("Successfully connected with instance profile role credentials")
@@ -77,8 +118,8 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 		return iprCredentials.Get()
 	}
 
-	p.Log.Debug("Attempting to retrieve role from Systems Manager")
-	if ssmCredentials, err := p.ssmEc2Credentials(p.SsmEndpoint); err != nil {
+	p.Log.Debug("Attempting to retrieve credentials from Systems Manager")
+	if ssmCredentials, err := p.ssmEc2Credentials(); err != nil {
 		p.Log.Warnf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
 		p.credentialSource = CredentialSourceEC2
 	} else {
@@ -94,7 +135,7 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 // connect to Systems Manager
 func (p *EC2RoleProvider) iprCredentials(ssmEndpoint string) (*credentials.Credentials, error) {
 	// Setup SSM client with instance profile role credentials
-	iprCredentials := credentials.NewCredentials(p.InnerProviders.IPRProvider)
+	iprCredentials := newCredentials(p.InnerProviders.IPRProvider)
 	err := p.updateEmptyInstanceInformation(ssmEndpoint, iprCredentials)
 	if err != nil {
 		if awsErr, ok := err.(awserr.RequestFailure); ok {
@@ -106,9 +147,34 @@ func (p *EC2RoleProvider) iprCredentials(ssmEndpoint string) (*credentials.Crede
 		return nil, err
 	}
 
+	err = p.updateIprExpiry(iprCredentials)
+	if err != nil {
+		p.Log.Errorf("failed to update role provider expiry")
+	}
+
 	return iprCredentials, nil
 }
 
+// updateIprExpiry updates the expiry of the EC2RoleProvider
+// If the token life is greater than 30 minutes then the EC2RoleProvider expiry is set to 30 min
+func (p *EC2RoleProvider) updateIprExpiry(iprCredentials *credentials.Credentials) error {
+	expiresAt, err := iprCredentials.ExpiresAt()
+	if err != nil {
+		return fmt.Errorf("unable to get expiration for instance profile role credentials. Err: %w", err)
+	}
+
+	durationUntilExpiration := expiresAt.Sub(timeNowFunc())
+	if durationUntilExpiration > 30*time.Minute {
+		p.Log.Debugf("Reducing instance profile role session duration to 30 minutes")
+		p.expirationUpdateLock.Lock()
+		defer p.expirationUpdateLock.Unlock()
+		p.InnerProviders.IPRProvider.SetExpiration(expiresAt, durationUntilExpiration-30*time.Minute)
+	}
+
+	return nil
+}
+
+// updateEmptyInstanceInformation calls UpdateInstanceInformation with minimal parameters
 func (p *EC2RoleProvider) updateEmptyInstanceInformation(ssmEndpoint string, roleCredentials *credentials.Credentials) error {
 	ssmClient := newV4ServiceWithCreds(p.Log.WithContext("SSMService"), p.Config, roleCredentials, p.InstanceInfo.Region, ssmEndpoint)
 
@@ -135,7 +201,7 @@ func (p *EC2RoleProvider) updateEmptyInstanceInformation(ssmEndpoint string, rol
 }
 
 // ssmEc2Credentials sends an instance identity role signed request for an instance role token to Systems Manager
-func (p *EC2RoleProvider) ssmEc2Credentials(ssmEndpoint string) (*credentials.Credentials, error) {
+func (p *EC2RoleProvider) ssmEc2Credentials() (*credentials.Credentials, error) {
 	// Return credentials if retrievable
 	ssmEc2Credentials := credentials.NewCredentials(p.InnerProviders.SsmEc2Provider)
 	_, err := p.InnerProviders.SsmEc2Provider.Retrieve()
@@ -144,61 +210,54 @@ func (p *EC2RoleProvider) ssmEc2Credentials(ssmEndpoint string) (*credentials.Cr
 		return nil, err
 	}
 
-	if err = p.updateEmptyInstanceInformation(ssmEndpoint, ssmEc2Credentials); err != nil {
-		err = fmt.Errorf("returned SSM credentials unable to call UpdateInstanceInformation API. %w", err)
-		return nil, err
-	}
-
 	return ssmEc2Credentials, nil
 }
 
 // ShareFile is the credentials file where the agent should write shared credentials
 func (p *EC2RoleProvider) ShareFile() string {
-	return p.ShareFileLocation
+	switch p.credentialSource {
+	case CredentialSourceSSM:
+		return appconfig.DefaultEC2SharedCredentialsFilePath
+	default:
+		return ""
+	}
 }
 
 // ShareProfile is the profile where the agent should write shared credentials
 func (p *EC2RoleProvider) ShareProfile() string {
-	return p.CredentialProfile
+	return ""
 }
 
-// SharesCredentials returns true if credentials refresher in core agent should save returned credentials to disk
+// SharesCredentials returns true if credentials may be saved to disk
 func (p *EC2RoleProvider) SharesCredentials() bool {
-	// this condition is to make newer workers compatible with older agent
-	// Older core agent does not populate ShareFile and ShareProfile for EC2.
-	runtimeConfigClient := runtimeconfig.NewIdentityRuntimeConfigClient()
-	if configVal, err := runtimeConfigClient.GetConfig(); err == nil {
-		if strings.TrimSpace(configVal.ShareFile) == "" {
-			p.CredentialProfile = ""
-			p.ShareFileLocation = ""
-			return false
-		}
-	}
-
-	return p.ShouldShareCredentials
+	return true
 }
 
 // IsExpired wraps the IsExpired method of the current provider
 func (p *EC2RoleProvider) IsExpired() bool {
-	if p.credentialSource == CredentialSourceEC2 {
-		if p.currentCredentialExpiration.Before(time.Now()) {
-			return true
-		}
-		return false
+	if p.credentialSource == CredentialSourceSSM {
+		return p.InnerProviders.SharedCredentialsProvider.IsExpired()
 	}
-	return p.GetInnerProvider().IsExpired()
+
+	return p.InnerProviders.IPRProvider.IsExpired()
 }
 
-// ExpiresAt wraps the ExpiresAt method of the current provider
+// ExpiresAt returns the expiry of shared credentials using shared credentials
+// and returns instance profile role provider expiry otherwise
 func (p *EC2RoleProvider) ExpiresAt() time.Time {
-	switch p.credentialSource {
-	case CredentialSourceEC2:
-		// Credential refresher retries every 30 minutes after this change.
-		// Even though credential refresher tries refreshing credential every 30 minutes,
-		// new credentials will be updated only when EC2RoleProvider's window closes and EC2 refreshes HOSM credentials
-		p.currentCredentialExpiration = time.Now().Add(1*time.Hour + time.Duration(rand.Intn(maxCredentialExpiryJitterSeconds))*time.Second)
-	case CredentialSourceSSM:
-		p.currentCredentialExpiration = p.GetInnerProvider().ExpiresAt()
+	if p.credentialSource == CredentialSourceSSM {
+		return p.InnerProviders.SharedCredentialsProvider.ExpiresAt()
 	}
-	return p.currentCredentialExpiration
+
+	return p.InnerProviders.IPRProvider.ExpiresAt()
+}
+
+// RemoteExpiresAt returns the expiry of the remote inner provider currently in use
+func (p *EC2RoleProvider) RemoteExpiresAt() time.Time {
+	return p.GetInnerProvider().ExpiresAt()
+}
+
+// CredentialSource returns the name of the current provider being used
+func (p *EC2RoleProvider) CredentialSource() string {
+	return p.credentialSource
 }

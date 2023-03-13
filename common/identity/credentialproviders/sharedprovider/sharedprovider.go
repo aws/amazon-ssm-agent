@@ -29,6 +29,18 @@ const (
 	providerName                = "SharedCredentialsProvider"
 )
 
+var (
+	emptyCredential      = credentials.Value{ProviderName: providerName}
+	newSharedCredentials = credentials.NewSharedCredentials
+	newRuntimeConfig     = runtimeconfig.NewIdentityRuntimeConfigClient
+)
+
+type ISharedCredentialsProvider interface {
+	credentials.Provider
+	credentials.Expirer
+	SetExpiration(expiration time.Time, window time.Duration)
+}
+
 // sharedCredentialsProvider implements the AWS SDK credential provider, and is used to create AWS client.
 // It retrieves credentials from the shared credentials on disk, and keeps track if those credentials are expired.
 type sharedCredentialsProvider struct {
@@ -41,40 +53,28 @@ type sharedCredentialsProvider struct {
 }
 
 // NewCredentialsProvider initializes a shared provider that loads credentials that were saved disk
-func NewCredentialsProvider(log log.T) (credentials.Provider, error) {
+func NewCredentialsProvider(log log.T) ISharedCredentialsProvider {
 	log = log.WithContext("[SharedCredentialsProvider]")
-	runtimeConfigClient := runtimeconfig.NewIdentityRuntimeConfigClient()
-
-	// Check if it exists
-	if ok, err := runtimeConfigClient.ConfigExists(); err != nil {
-		return nil, err
-	} else if !ok {
-		return nil, fmt.Errorf("identity runtime config does not exist")
-	}
-
-	// Check if it is readable
-	if _, err := runtimeConfigClient.GetConfig(); err != nil {
-		return nil, fmt.Errorf("failed to get runtime config. %w", err)
-	}
 
 	return &sharedCredentialsProvider{
-		log:                 log,
-		runtimeConfigClient: runtimeConfigClient,
-		getTimeNow:          time.Now,
-	}, nil
+		log:        log,
+		getTimeNow: time.Now,
+	}
 }
-
-var emptyCredential = credentials.Value{ProviderName: providerName}
-var newSharedCredentials = credentials.NewSharedCredentials
 
 // Retrieve retrieves credentials from the shared profile
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 func (s *sharedCredentialsProvider) Retrieve() (credentials.Value, error) {
+	runtimeConfigClient := newRuntimeConfig()
 	// before sharedCredentialsProvider is initialized, we check if the runtime config exists
-	config, err := s.runtimeConfigClient.GetConfig()
+	config, err := runtimeConfigClient.GetConfig()
 	if err != nil {
-		return emptyCredential, err
+		return emptyCredential, fmt.Errorf("unable to read runtime config for ShareFile information. Err: %w", err)
+	}
+
+	if config.ShareFile == "" {
+		return emptyCredential, fmt.Errorf("runtime config has an empty ShareFile")
 	}
 
 	// If credentials are already expired, return error

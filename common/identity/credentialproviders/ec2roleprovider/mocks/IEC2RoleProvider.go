@@ -61,6 +61,41 @@ func (_m *IEC2RoleProvider) IsExpired() bool {
 	return r0
 }
 
+// RemoteExpiresAt provides a mock function with given fields:
+func (_m *IEC2RoleProvider) RemoteExpiresAt() time.Time {
+	ret := _m.Called()
+
+	var r0 time.Time
+	if rf, ok := ret.Get(0).(func() time.Time); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(time.Time)
+	}
+
+	return r0
+}
+
+// RemoteRetrieve provides a mock function with given fields:
+func (_m *IEC2RoleProvider) RemoteRetrieve() (credentials.Value, error) {
+	ret := _m.Called()
+
+	var r0 credentials.Value
+	if rf, ok := ret.Get(0).(func() credentials.Value); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(credentials.Value)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Retrieve provides a mock function with given fields:
 func (_m *IEC2RoleProvider) Retrieve() (credentials.Value, error) {
 	ret := _m.Called()

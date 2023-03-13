@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -95,21 +96,10 @@ func (i *Identity) Credentials() *credentials.Credentials {
 	i.shareLock.Lock()
 	defer i.shareLock.Unlock()
 
-	if i.credentials != nil {
-		return i.credentials
+	if i.credentials == nil {
+		i.credentials = credentials.NewCredentials(i.credentialsProvider)
 	}
 
-	// this condition is to make newer workers compatible with older agent
-	// Older core agent does not populate ShareFile and ShareProfile for EC2.
-	// Hence, we use IPR provider instead of Shared Provider when these values are blank
-	if configVal, err := i.runtimeConfigClient.GetConfig(); err == nil {
-		if strings.TrimSpace(configVal.ShareFile) == "" {
-			// in this case, inner provider will always return IPR
-			return credentials.NewCredentials(i.credentialsProvider.GetInnerProvider())
-		}
-	}
-
-	i.initSharedCreds()
 	return i.credentials
 }
 
@@ -148,15 +138,6 @@ func (i *Identity) CredentialProvider() credentialproviders.IRemoteProvider {
 
 // Register registers the EC2 identity with Systems Manager
 func (i *Identity) Register() error {
-	registrationInfo := i.loadRegistrationInfo()
-	if registrationInfo.InstanceId != "" {
-		i.Log.Info("registration info found for ec2 instance")
-		i.registrationReadyChan <- registrationInfo
-		return nil
-	}
-
-	i.Log.Infof("no registration info found for ec2 instance, attempting registration")
-
 	region, err := i.Region()
 	if err != nil {
 		return fmt.Errorf("unable to get region for identity %w", err)
@@ -166,6 +147,14 @@ func (i *Identity) Register() error {
 	if err != nil {
 		return fmt.Errorf("unable to get instance id for identity %w", err)
 	}
+
+	registrationInfo := i.loadRegistrationInfo(instanceId)
+	if registrationInfo.InstanceId != "" {
+		i.Log.Info("Registration info found for ec2 instance")
+		return nil
+	}
+
+	i.Log.Infof("No registration info found for ec2 instance, attempting registration")
 
 	var publicKey, privateKey, keyType string
 	if registrationInfo.PrivateKey != "" && registrationInfo.PublicKey != "" && registrationInfo.KeyType != "" {
@@ -195,7 +184,6 @@ func (i *Identity) Register() error {
 		if aerr, ok := err.(awserr.Error); ok {
 			if aerr.Code() == ssm.ErrCodeInstanceAlreadyRegistered {
 				i.Log.Errorf("Instance appears to already be registered. Err: %v", aerr)
-				close(i.registrationReadyChan)
 				return nil
 			}
 		}
@@ -219,12 +207,11 @@ func (i *Identity) Register() error {
 		InstanceId: instanceId,
 	}
 
-	i.registrationReadyChan <- registrationInfo
 	i.Log.Info("EC2 registration was successful.")
 	return nil
 }
 
-func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
+func (i *Identity) loadRegistrationInfo(instanceId string) *authregister.RegistrationInfo {
 	registrationInfo := &authregister.RegistrationInfo{
 		InstanceId: getStoredInstanceId(i.Log, IdentityType, registration.EC2RegistrationVaultKey),
 		PrivateKey: getStoredPrivateKey(i.Log, IdentityType, registration.EC2RegistrationVaultKey),
@@ -232,16 +219,8 @@ func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
 		PublicKey:  getStoredPublicKey(i.Log, IdentityType, registration.EC2RegistrationVaultKey),
 	}
 
-	liveInstanceId, err := i.InstanceID()
-	if err != nil {
-		// This should not happen at this point.
-		// If it happens, the liveInstanceId is set to Zero value and Registration call will happen.
-		// Will throw AlreadyRegistered error if already registered
-		i.Log.Errorf("Could not fetch instance Id %v", err)
-	}
-
 	if registrationInfo.InstanceId == "" || registrationInfo.PrivateKey == "" ||
-		registrationInfo.KeyType == "" || registrationInfo.InstanceId != liveInstanceId {
+		registrationInfo.KeyType == "" || registrationInfo.InstanceId != instanceId {
 		registrationInfo.InstanceId = "" // setting it as blank to try registration
 	}
 
@@ -266,11 +245,10 @@ func NewEC2Identity(log log.T) *Identity {
 
 	log = log.WithContext("[EC2Identity]")
 	identity := &Identity{
-		Log:                   log,
-		Config:                &config,
-		registrationReadyChan: make(chan *authregister.RegistrationInfo, 1),
-		shareLock:             &sync.RWMutex{},
-		runtimeConfigClient:   runtimeconfig.NewIdentityRuntimeConfigClient(),
+		Log:                 log,
+		Config:              &config,
+		shareLock:           &sync.RWMutex{},
+		runtimeConfigClient: runtimeconfig.NewIdentityRuntimeConfigClient(),
 	}
 
 	// Ensure IMDS client is initialized before attempting to get instance info
@@ -294,34 +272,28 @@ func (i *Identity) initEc2RoleProvider(endpointHelper endpoint.IEndpointHelper, 
 	}
 
 	ssmEC2RoleProvider := &ssmec2roleprovider.SSMEC2RoleProvider{
-		ExpiryWindow:          time.Duration(0),
-		Config:                i.Config,
-		Log:                   i.Log.WithContext("[SSMEC2RoleProvider]"),
-		IMDSClient:            i.Client,
-		InstanceInfo:          instanceInfo,
-		RegistrationReadyChan: i.registrationReadyChan,
+		ExpiryWindow: time.Duration(0),
+		Config:       i.Config,
+		Log:          i.Log.WithContext("[SSMEC2RoleProvider]"),
+		IMDSClient:   i.Client,
+		InstanceInfo: instanceInfo,
 	}
 
 	iprRoleProvider := &ec2rolecreds.EC2RoleProvider{
-		Client:       ec2metadata.New(session.New()),
-		ExpiryWindow: time.Hour * 5, // Credentials marked as expired 5 hours before token invalid
+		Client: ec2metadata.New(session.New()),
 	}
+
+	sharedCredentialsProvider := sharedprovider.NewCredentialsProvider(i.Log)
 
 	innerProviders := &ec2roleprovider.EC2InnerProviders{
-		IPRProvider:    iprRoleProvider,
-		SsmEc2Provider: ssmEC2RoleProvider,
+		IPRProvider:               iprRoleProvider,
+		SsmEc2Provider:            ssmEC2RoleProvider,
+		SharedCredentialsProvider: sharedCredentialsProvider,
 	}
 
-	ec2RoleProvider := &ec2roleprovider.EC2RoleProvider{
-		InnerProviders:         innerProviders,
-		Log:                    i.Log.WithContext(ec2rolecreds.ProviderName),
-		Config:                 i.Config,
-		InstanceInfo:           instanceInfo,
-		SsmEndpoint:            endpointHelper.GetServiceEndpoint("ssm", instanceInfo.Region),
-		ShareFileLocation:      appconfig.DefaultEC2SharedCredentialsFilePath,
-		CredentialProfile:      "",
-		ShouldShareCredentials: true,
-	}
+	runtimeConfigClient := runtimeconfig.NewIdentityRuntimeConfigClient()
+	ssmEndpoint := endpointHelper.GetServiceEndpoint("ssm", instanceInfo.Region)
+	ec2RoleProvider := ec2roleprovider.NewEC2RoleProvider(i.Log, i.Config, innerProviders, instanceInfo, ssmEndpoint, runtimeConfigClient)
 
 	i.credentialsProvider = ec2RoleProvider
 }
@@ -345,29 +317,6 @@ func getInstanceInfo(identity *Identity) (*ssmec2roleprovider.InstanceInfo, erro
 		Region:     region,
 	}
 	return instanceInfo, nil
-}
-
-// initSharedCreds initializes credentials using shared credentials provider that reads credentials from shared location, falls back to non-shared credentials provider for any failure
-func (i *Identity) initSharedCreds() {
-	if i.credentials != nil {
-		return
-	}
-
-	if shareCredsProvider, err := newSharedCredentialsProvider(i.Log); err != nil {
-		i.Log.Errorf("failed to initialize shared credentials provider, falling back to remote credentials provider: %v", err)
-		i.initNonSharedCreds()
-	} else {
-		i.credentials = credentials.NewCredentials(shareCredsProvider)
-	}
-}
-
-// initNonSharedCreds initializes credentials provider and credentials that do not share credentials via aws credentials file
-func (i *Identity) initNonSharedCreds() {
-	if i.credentials != nil {
-		return
-	}
-
-	i.credentials = credentials.NewCredentials(i.credentialsProvider)
 }
 
 // initIMDSClient initializes the client used to make instance metadata service requests

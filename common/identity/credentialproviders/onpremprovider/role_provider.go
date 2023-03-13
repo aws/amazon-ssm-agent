@@ -156,6 +156,14 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 	}, nil
 }
 
+func (m *onpremCredentialsProvider) RemoteRetrieve() (credentials.Value, error) {
+	return m.Retrieve()
+}
+
+func (m *onpremCredentialsProvider) RemoteExpiresAt() time.Time {
+	return m.ExpiresAt()
+}
+
 // rotatePrivateKey attempts to rotate the instance private key
 func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponentialBackoff *backoff.ExponentialBackOff) error {
 	m.log.Infof("Attempting to rotate private key")
@@ -242,7 +250,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 		}, exponentialBackoff)
 
 		if err != nil {
-			m.log.Error("Failed to roll-back remove public key change, instance most likely needs to be re-registed: %v", err)
+			m.log.Error("Failed to roll-back remove public key change, instance most likely needs to be re-registered: %v", err)
 			return fmt.Errorf("Failed to update remote public key after saving locally failed: %v", err)
 		}
 
