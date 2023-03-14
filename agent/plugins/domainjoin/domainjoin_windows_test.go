@@ -168,7 +168,7 @@ func TestMakeArguments(t *testing.T) {
 	expected := "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --dns-addresses 172.31.4.141 172.31.21.240"
 	assert.Equal(t, expected, commandRes)
 
-	shellInjectionCheck = isShellInjection("`del /Q *`")
+	shellInjectionCheck := isShellInjection("`del /Q *`")
 	assert.Equal(t, shellInjectionCheck, true, "test failed for `del /Q *`")
 	shellInjectionCheck = isShellInjection("echo abc && del /Q *")
 	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc && del /Q *")
