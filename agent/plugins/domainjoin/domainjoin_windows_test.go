@@ -163,9 +163,9 @@ func TestMakeArguments(t *testing.T) {
 
 	assert.Equal(t, expected, commandRes)
 
-	domainJoinInput := generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName)
-	commandRes, _ := makeArguments(context, domainJoinInput)
-	expected := "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --dns-addresses 172.31.4.141 172.31.21.240"
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName)
+	commandRes, _ = makeArguments(context, domainJoinInput)
+	expected = "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --dns-addresses 172.31.4.141 172.31.21.240"
 	assert.Equal(t, expected, commandRes)
 
 	shellInjectionCheck := isShellInjection("`del /Q *`")
