@@ -648,3 +648,11 @@ func (u *fakeUtility) SaveUpdatePluginResult(
 func (u *fakeUtility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
 	return !u.noDiskSpace, u.isDiskSpaceErr
 }
+
+func (u *fakeUtility) LoadUpdateDocumentState(ctx context.T, commandId string) error {
+	return nil
+}
+
+func (u *fakeUtility) UpdateInstallDelayer(ctx context.T, updateRoot string) error {
+	return nil
+}

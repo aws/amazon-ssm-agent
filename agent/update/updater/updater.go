@@ -113,6 +113,8 @@ func updateAgent() int {
 	defer log.Close()
 	defer log.Flush()
 
+	flag.Parse()
+
 	// Initialize agent config for agent identity
 	appConfig, err := appconfig.Config(true)
 	if err != nil {
@@ -126,6 +128,7 @@ func updateAgent() int {
 	}
 
 	agentContext = context.Default(log, appConfig, agentIdentity)
+	updateUtilRef := updateutil.NewUpdaterUtilWithLoadedDocContent(agentContext, *messageID)
 	updateSSMUserShellProperties(log)
 	// Create update info
 	updateInfo, err := updateinfo.New(agentContext)
@@ -137,7 +140,7 @@ func updateAgent() int {
 	// Sleep 3 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
 
-	updater = processor.NewUpdater(agentContext, updateInfo)
+	updater = processor.NewUpdater(agentContext, updateInfo, updateUtilRef)
 
 	// If the updater already owns the lockfile, no harm done
 	// If there is no lockfile, the updater will own it
@@ -155,8 +158,6 @@ func updateAgent() int {
 	}
 
 	defer lock.Unlock()
-
-	flag.Parse()
 
 	// Return if update is not present in the command
 	if !*update {
@@ -200,7 +201,7 @@ func updateAgent() int {
 		AllowDowngrade:     !*disableDowngrade,
 	}
 
-	updateDetail.UpdateRoot, err = resolveUpdateRoot(updateDetail.SourceVersion)
+	updateDetail.UpdateRoot, err = updateutil.ResolveUpdateRoot(updateDetail.SourceVersion)
 	if err != nil {
 		log.Errorf("Failed to resolve update root: %v", err)
 		return nonErrorExitCode

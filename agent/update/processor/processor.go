@@ -60,15 +60,13 @@ const (
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
-func NewUpdater(context context.T, info updateinfo.T) *Updater {
+func NewUpdater(context context.T, info updateinfo.T, updateUtilRef *updateutil.Utility) *Updater {
 	updater := &Updater{
 		mgr: &updateManager{
 			Context: context,
 			Info:    info,
-			util: &updateutil.Utility{
-				Context: context,
-			},
-			S3util: updates3util.New(context),
+			util:    updateUtilRef,
+			S3util:  updates3util.New(context),
 			svc: &svcManager{
 				context: context,
 			},
@@ -458,6 +456,10 @@ func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 	}
 
 	mgr.runTests(mgr.Context, mgr.reportTestResultGenerator(updateDetail, log))
+
+	if err = mgr.util.UpdateInstallDelayer(mgr.Context, updateDetail.UpdateRoot); err != nil {
+		log.Errorf("error while executing install delayer %v", err)
+	}
 
 	if exitCode, err := mgr.install(mgr, log, updateDetail.TargetVersion, updateDetail); err != nil {
 		// Install target failed with err

@@ -1678,7 +1678,7 @@ func createUpdaterWithStubsForSnap(control *stubControl) *Updater {
 	info.On("GetUninstallScriptName").Return("snap_" + updateconstants.UninstallScript)
 	info.On("GetInstallScriptName").Return("snap_" + updateconstants.InstallScript)
 
-	updater := NewUpdater(context, info)
+	updater := NewUpdater(context, info, &updateutil.Utility{})
 	updater.mgr.svc = &serviceStub{}
 	util := &utilityStub{controller: control}
 	util.Context = context
@@ -1799,7 +1799,7 @@ func createUpdaterStubs(control *stubControl) *Updater {
 	info.On("GetUninstallScriptName").Return(updateconstants.UninstallScript)
 	info.On("GetInstallScriptName").Return(updateconstants.InstallScript)
 
-	updater := NewUpdater(context, info)
+	updater := NewUpdater(context, info, &updateutil.Utility{})
 	updater.mgr.svc = &serviceStub{}
 	util := &utilityStub{controller: control}
 	util.Context = context

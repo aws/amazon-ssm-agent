@@ -23,27 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
-	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
-
-const (
-	legacyUpdaterArtifactsRoot   = "/var/log/amazon/ssm/update/"
-	firstAgentWithNewUpdaterPath = "1.1.86.0"
-)
-
-// resolveUpdateRoot returns the platform specific path to update artifacts
-func resolveUpdateRoot(sourceVersion string) (string, error) {
-	compareResult, err := versionutil.VersionCompare(sourceVersion, firstAgentWithNewUpdaterPath)
-	if err != nil {
-		return "", err
-	}
-	// New versions that with new binary locations
-	if compareResult >= 0 {
-		return appconfig.UpdaterArtifactsRoot, nil
-	}
-
-	return legacyUpdaterArtifactsRoot, nil
-}
 
 func updateSSMUserShellProperties(log logger.T) {
 	if runtime.GOOS == "darwin" {

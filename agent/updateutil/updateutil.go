@@ -32,6 +32,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
@@ -54,6 +55,8 @@ type T interface {
 	WaitForServiceToStart(log log.T, i updateinfo.T, targetVersion string) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
+	UpdateInstallDelayer(ctx context.T, updateRoot string) error
+	LoadUpdateDocumentState(ctx context.T, commandId string) error
 }
 
 // Utility implements interface T
@@ -61,6 +64,7 @@ type Utility struct {
 	Context                               context.T
 	CustomUpdateExecutionTimeoutInSeconds int
 	ProcessExecutor                       executor.IExecutor
+	UpdateDocState                        contracts.DocumentState
 }
 
 var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
@@ -70,6 +74,21 @@ var openFile = os.OpenFile
 var execCommand = exec.Command
 var cmdStart = (*exec.Cmd).Start
 var cmdOutput = (*exec.Cmd).Output
+
+const (
+	stateJson = "updatestate.json"
+)
+
+func NewUpdaterUtilWithLoadedDocContent(ctx context.T, commandId string) *Utility {
+	updateUtil := &Utility{
+		Context: ctx,
+	}
+	err := updateUtil.LoadUpdateDocumentState(ctx, commandId)
+	if err != nil {
+		ctx.Log().Warnf("Could not load doc content for commandID /%v/: %v", commandId, err)
+	}
+	return updateUtil
+}
 
 // CreateInstanceInfo create instance related information such as region, platform and arch
 func (util *Utility) CreateInstanceInfo(log log.T) (context updateinfo.T, err error) {
