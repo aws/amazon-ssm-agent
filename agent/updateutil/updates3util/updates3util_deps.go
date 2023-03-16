@@ -16,6 +16,7 @@ package updates3util
 
 import (
 	"io/ioutil"
+	"net/http"
 	"os"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -41,6 +42,8 @@ type T interface {
 		updaterPackageName string,
 		downloadPath string,
 	) (version string, err error)
+
+	GetStableVersion(stableVersionUrl string, client *http.Client) (stableVersion string, err error)
 }
 
 type updateS3UtilImpl struct {

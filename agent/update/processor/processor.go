@@ -19,6 +19,7 @@ import (
 	"bytes"
 	"fmt"
 	"math/rand"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -31,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	testerPkg "github.com/aws/amazon-ssm-agent/agent/update/tester"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
@@ -50,6 +52,7 @@ var (
 	getInstalledVersionRef = getInstalledVersions
 	getDirectoryNames      = fileutil.GetDirectoryNames
 	deleteDirectory        = os.RemoveAll
+	getStableManifestURL   = updateutil.GetStableURLFromManifestURL
 )
 
 const (
@@ -277,6 +280,25 @@ func determineTarget(mgr *updateManager, logger log.T, updateDetail *UpdateDetai
 
 		if err != nil {
 			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetLatestActiveVersionManifest, fmt.Sprintf("Failed to get latest active version from manifest: %v", err), true)
+		}
+	} else if strings.ToLower(updateDetail.TargetVersion) == "stable" {
+		var stableVersionUrl string
+		updateDetail.TargetResolver = updateconstants.TargetVersionStable
+		logger.Info("TargetVersion is 'stable', attempting to get the stable version from s3")
+		stableVersionUrl, err = getStableManifestURL(updateDetail.ManifestURL)
+		if err != nil {
+			// Should never happen because manifest has already been downloaded using the manifest url at this point
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetStableVersionS3, fmt.Sprintf("Failed to generate stable version from manifest url: %v", err), true)
+		}
+		httpTimeout := 15 * time.Second
+		tr := network.GetDefaultTransport(mgr.Context.Log(), mgr.Context.AppConfig())
+		client := &http.Client{
+			Transport: tr,
+			Timeout:   httpTimeout,
+		}
+		updateDetail.TargetVersion, err = mgr.S3util.GetStableVersion(stableVersionUrl, client)
+		if err != nil {
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetStableVersionS3, fmt.Sprintf("Failed to get stable version form s3: %v", err), true)
 		}
 	} else {
 		updateDetail.TargetResolver = updateconstants.TargetVersionCustomerDefined

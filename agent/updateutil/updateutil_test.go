@@ -475,6 +475,33 @@ func TestCompareVersion(t *testing.T) {
 
 }
 
+func TestGetStableURLFromManifestURL(t *testing.T) {
+	// Empty URL
+	url, err := GetStableURLFromManifestURL("")
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Invalid URL
+	url, err = GetStableURLFromManifestURL("InvalidUrl")
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Invalid manifest url - artifact url
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Valid s3 manifest link bucket in Path
+	url, err = GetStableURLFromManifestURL("https://s3.region.amazonaws.com/bucket/ssm-agent-manifest.json")
+	assert.NoError(t, err)
+	assert.Equal(t, "https://s3.region.amazonaws.com/bucket/stable/VERSION", url)
+
+	// Valid s3 manifest link with bucket in url
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json")
+	assert.NoError(t, err)
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com/stable/VERSION", url)
+}
+
 func TestGetManifestURLFromSourceUrl(t *testing.T) {
 	// Empty URL
 	url, err := GetManifestURLFromSourceUrl("")

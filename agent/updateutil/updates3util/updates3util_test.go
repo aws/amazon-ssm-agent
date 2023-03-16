@@ -15,7 +15,11 @@
 package updates3util
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -416,4 +420,109 @@ func TestDownloadUpdater_Success(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, expectedVersion, version)
+}
+
+func TestGetStableVersion_FailedHttpRequest(t *testing.T) {
+	mockContext := contextmocks.NewMockDefault()
+	util := &updateS3UtilImpl{
+		mockContext,
+	}
+
+	version, err := util.GetStableVersion("", nil)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "http client is uninitialized")
+	assert.Empty(t, version)
+
+	httpClient := &http.Client{}
+	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
+		return &http.Response{
+			StatusCode: http.StatusBadRequest,
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte("error"))),
+			Header:     http.Header{},
+		}
+	})
+
+	version, err = util.GetStableVersion("", httpClient)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "unsuccessful request: response code:")
+}
+
+func TestGetStableVersion_FailedReadRequestBody(t *testing.T) {
+	httpClient := &http.Client{}
+	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
+		return &http.Response{
+			StatusCode: http.StatusBadRequest,
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte("error"))),
+			Header:     http.Header{},
+		}
+	})
+	mockContext := contextmocks.NewMockDefault()
+	util := &updateS3UtilImpl{
+		mockContext,
+	}
+
+	version, err := util.GetStableVersion("", httpClient)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "unsuccessful request: response code")
+	assert.Empty(t, version)
+}
+
+func TestGetStableVersion_InvalidVersion(t *testing.T) {
+	mockContext := contextmocks.NewMockDefault()
+	util := &updateS3UtilImpl{
+		mockContext,
+	}
+
+	versionsToTest := []string{
+		"3.1.1.1.1",
+		"3.1.1.a",
+		"3.1.a.1",
+		"3.a.1.1",
+		"a.1.1.1",
+		"3.1.1.1a",
+		"3.1.1",
+	}
+
+	for _, versionResponse := range versionsToTest {
+		httpClient := &http.Client{}
+		httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(bytes.NewReader([]byte(versionResponse))),
+				Header:     http.Header{},
+			}
+		})
+		version, err := util.GetStableVersion("", httpClient)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "invalid version format returned from")
+		if !strings.HasSuffix(err.Error(), versionResponse) {
+			assert.Fail(t, fmt.Sprintf("expected error to end with version %s: %s", versionResponse, err.Error()))
+		}
+		assert.Empty(t, version)
+	}
+}
+
+func TestGetStableVersion_Success(t *testing.T) {
+	httpClient := &http.Client{}
+	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte("3.1.1188.0"))),
+			Header:     http.Header{},
+		}
+	})
+	mockContext := contextmocks.NewMockDefault()
+	util := &updateS3UtilImpl{
+		mockContext,
+	}
+
+	version, err := util.GetStableVersion("", httpClient)
+	assert.NoError(t, err)
+	assert.Equal(t, "3.1.1188.0", version)
+}
+
+type roundTripFunc func(req *http.Request) *http.Response
+
+func (f roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req), nil
 }

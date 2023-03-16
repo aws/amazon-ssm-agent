@@ -248,6 +248,9 @@ const (
 	// ErrorGetLatestActiveVersionManifest represents failure to get latest active version from manifest
 	ErrorGetLatestActiveVersionManifest ErrorCode = "ErrorGetLatestActiveVersionManifest"
 
+	// ErrorGetStableVersionS3 represents failure to get the stable version from s3
+	ErrorGetStableVersionS3 ErrorCode = "ErrorGetStableVersionS3"
+
 	// ErrorInvalidManifest represents Invalid manifest file
 	ErrorInvalidManifest ErrorCode = "ErrorInvalidManifest"
 
@@ -304,6 +307,7 @@ const (
 	TargetVersionCustomerDefined = iota
 	TargetVersionLatest
 	TargetVersionSelfUpdate
+	TargetVersionStable
 )
 
 // NonAlarmingErrors contains error codes which are not important.
