@@ -16,6 +16,8 @@ package controlchannel
 
 import (
 	"encoding/json"
+	"errors"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -83,7 +85,8 @@ func TestSetWebSocket(t *testing.T) {
 		mock.Anything,
 		mock.Anything).Return(nil)
 
-	err := controlChannel.SetWebSocket(mockContext, mockService)
+	ableToOpenMGSConnection := &atomic.Bool{}
+	err := controlChannel.SetWebSocket(mockContext, mockService, ableToOpenMGSConnection)
 
 	assert.Nil(t, err)
 	mockWsChannel.AssertExpectations(t)
@@ -99,11 +102,62 @@ func TestOpen(t *testing.T) {
 	mockEventLog.On("SendAuditMessage")
 
 	// test open (includes SendMessage)
-	err := controlChannel.Open(mockLog)
+	ableToOpenMGSConnection := &atomic.Bool{}
+	err := controlChannel.Open(mockLog, ableToOpenMGSConnection)
 
 	assert.Nil(t, err)
 	assert.Equal(t, token, controlChannel.wsChannel.GetChannelToken())
 	mockWsChannel.AssertExpectations(t)
+}
+
+func TestOpenHandlesNilAbleToOpenMGSConnection(t *testing.T) {
+	controlChannel := getControlChannel()
+
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
+	mockWsChannel.On("GetChannelToken").Return(token)
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockEventLog.On("SendAuditMessage")
+
+	var ableToOpenMGSConnection *atomic.Bool = nil
+	err := controlChannel.Open(mockLog, ableToOpenMGSConnection)
+
+	assert.Nil(t, err)
+	assert.Equal(t, token, controlChannel.wsChannel.GetChannelToken())
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestOpenReportsBadMGSConnectionStatusIfChannelCannotBeOpened(t *testing.T) {
+	mockWsChannelForChannelCannotBeOpenedTest := &communicatorMocks.IWebSocketChannel{}
+	controlChannel := getControlChannel()
+
+	mockWsChannelForChannelCannotBeOpenedTest.On("Open", mock.Anything, mock.Anything).Return(errors.New(""))
+
+	controlChannel.wsChannel = mockWsChannelForChannelCannotBeOpenedTest
+	ableToOpenMGSConnection := &atomic.Bool{}
+	ableToOpenMGSConnection.Store(true)
+	controlChannel.Open(mockLog, ableToOpenMGSConnection)
+
+	mockWsChannel.AssertExpectations(t)
+	assert.False(t, ableToOpenMGSConnection.Load())
+}
+
+func TestGetControlChannelTokenReportsBadMGSConnectionStatusIfCannotGetToken(t *testing.T) {
+	mockServiceForGetControlChannelTest := &serviceMock.Service{}
+	mockServiceForGetControlChannelTest.On("CreateControlChannel", mock.Anything, mock.Anything, mock.Anything).Return(nil, errors.New(""))
+
+	ableToOpenMGSConnection := &atomic.Bool{}
+	ableToOpenMGSConnection.Store(true)
+	getControlChannelToken(mockLog, mockServiceForGetControlChannelTest, mock.Anything, uuid.NewV4().String(), ableToOpenMGSConnection)
+	assert.False(t, ableToOpenMGSConnection.Load())
+}
+
+func TestGetControlChannelTokenHandlesNilAbleToOpenMGSConnection(t *testing.T) {
+	mockServiceForGetControlChannelTest := &serviceMock.Service{}
+	mockServiceForGetControlChannelTest.On("CreateControlChannel", mock.Anything, mock.Anything, mock.Anything).Return(nil, errors.New(""))
+
+	var ableToOpenMGSConnection *atomic.Bool = nil
+	getControlChannelToken(mockLog, mockServiceForGetControlChannelTest, mock.Anything, uuid.NewV4().String(), ableToOpenMGSConnection)
+	mockServiceForGetControlChannelTest.AssertCalled(t, "CreateControlChannel", mock.Anything, mock.Anything, mock.Anything)
 }
 
 func TestReconnect(t *testing.T) {
@@ -115,7 +169,43 @@ func TestReconnect(t *testing.T) {
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
 	// test reconnect
-	err := controlChannel.Reconnect(mockLog)
+	ableToOpenMGSConnection := &atomic.Bool{}
+	err := controlChannel.Reconnect(mockLog, ableToOpenMGSConnection)
+
+	assert.Nil(t, err)
+	assert.Equal(t, token, controlChannel.wsChannel.GetChannelToken())
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestReconnectReportsHealthyMGSConnectionIfSuccessful(t *testing.T) {
+	controlChannel := getControlChannel()
+
+	mockWsChannel.On("Close", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
+	mockWsChannel.On("GetChannelToken").Return(token)
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	// test reconnect
+	ableToOpenMGSConnection := &atomic.Bool{}
+	err := controlChannel.Reconnect(mockLog, ableToOpenMGSConnection)
+
+	assert.Nil(t, err)
+	assert.Equal(t, token, controlChannel.wsChannel.GetChannelToken())
+	assert.True(t, ableToOpenMGSConnection.Load())
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestReconnectHandlesNilAbleToOpenMGSConnection(t *testing.T) {
+	controlChannel := getControlChannel()
+
+	mockWsChannel.On("Close", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
+	mockWsChannel.On("GetChannelToken").Return(token)
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	// test reconnect
+	var ableToOpenMGSConnection *atomic.Bool = nil
+	err := controlChannel.Reconnect(mockLog, ableToOpenMGSConnection)
 
 	assert.Nil(t, err)
 	assert.Equal(t, token, controlChannel.wsChannel.GetChannelToken())

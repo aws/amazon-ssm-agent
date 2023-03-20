@@ -306,11 +306,12 @@ func IsValidReplyRequest(filename string, name contracts.UpstreamServiceName) bo
 }
 
 // PrepareReplyPayloadToUpdateDocumentStatus creates the payload object for SendReply based on document status change.
-func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, documentStatus contracts.ResultStatus, documentTraceOutput string) (payload messageContracts.SendReplyPayload) {
+func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, documentStatus contracts.ResultStatus, documentTraceOutput string, ableToOpenMGSConnection *bool) (payload messageContracts.SendReplyPayload) {
 	payload = messageContracts.SendReplyPayload{
 		AdditionalInfo: contracts.AdditionalInfo{
-			Agent:    agentInfo,
-			DateTime: times.ToIso8601UTC(times.DefaultClock.Now()),
+			Agent:                   agentInfo,
+			DateTime:                times.ToIso8601UTC(times.DefaultClock.Now()),
+			AbleToOpenMGSConnection: ableToOpenMGSConnection,
 		},
 		DocumentStatus:      documentStatus,
 		DocumentTraceOutput: documentTraceOutput,
@@ -320,12 +321,13 @@ func PrepareReplyPayloadToUpdateDocumentStatus(agentInfo contracts.AgentInfo, do
 }
 
 // PrepareReplyPayloadFromIntermediatePluginResults parses send reply payload
-func PrepareReplyPayloadFromIntermediatePluginResults(log log.T, pluginID string, agentInfo contracts.AgentInfo, outputs map[string]*contracts.PluginResult) (payload messageContracts.SendReplyPayload) {
+func PrepareReplyPayloadFromIntermediatePluginResults(log log.T, pluginID string, agentInfo contracts.AgentInfo, outputs map[string]*contracts.PluginResult, ableToOpenMGSConnection *bool) (payload messageContracts.SendReplyPayload) {
 	status, statusCount, runtimeStatuses, _ := contracts.DocumentResultAggregator(log, pluginID, outputs)
 	additionalInfo := contracts.AdditionalInfo{
-		Agent:               agentInfo,
-		DateTime:            times.ToIso8601UTC(time.Now()),
-		RuntimeStatusCounts: statusCount,
+		Agent:                   agentInfo,
+		DateTime:                times.ToIso8601UTC(time.Now()),
+		RuntimeStatusCounts:     statusCount,
+		AbleToOpenMGSConnection: ableToOpenMGSConnection,
 	}
 	payload = messageContracts.SendReplyPayload{
 		AdditionalInfo:      additionalInfo,

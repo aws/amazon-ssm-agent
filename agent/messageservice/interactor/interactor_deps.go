@@ -14,12 +14,16 @@
 // Package interactor contains the logic to communicate with upstream core services MGS & MDS
 package interactor
 
-import "github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
+import (
+	"sync/atomic"
+
+	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
+)
 
 // IInteractor defines the interface for interactors
 type IInteractor interface {
 	// Initialize initializes interactor
-	Initialize() error
+	Initialize(ableToOpenMGSConnection *atomic.Bool) error
 	// PostProcessorInitialization sets values needed post initialization
 	// This should be called after processor initialization call
 	PostProcessorInitialization(name utils.WorkerName)

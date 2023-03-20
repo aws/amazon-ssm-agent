@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	"sync/atomic"
+
 	utils "github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -57,7 +59,7 @@ func (_m *IInteractor) GetSupportedWorkers() []utils.WorkerName {
 }
 
 // Initialize provides a mock function with given fields:
-func (_m *IInteractor) Initialize() error {
+func (_m *IInteractor) Initialize(ableToOpenMGSConnection *atomic.Bool) error {
 	ret := _m.Called()
 
 	var r0 error

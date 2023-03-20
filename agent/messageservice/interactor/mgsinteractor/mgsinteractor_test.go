@@ -16,6 +16,7 @@ package mgsinteractor
 
 import (
 	"encoding/json"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -69,11 +70,56 @@ func (suite *MGSInteractorTestSuite) TestInitialize() {
 	mockControlChannel := &controlChannelMock.IControlChannel{}
 	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
 
-	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage) (controlchannel.IControlChannel, error) {
+	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
 		return mockControlChannel, nil
 	}
-	mgsInteractor.Initialize()
+
+	ableToOpenMGSConnection := &atomic.Bool{}
+	mgsInteractor.Initialize(ableToOpenMGSConnection)
 	assert.True(suite.T(), true, "initialize passed")
+}
+
+func (suite *MGSInteractorTestSuite) TestInitializeHandlesNilAbleToOpenMGSConnection() {
+
+	mockContext := contextmocks.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgsInteractor := mgsInteractorRef.(*MGSInteractor)
+	defer func() {
+		close(mgsInteractor.incomingAgentMessageChan)
+		close(mgsInteractor.replyChan)
+		close(mgsInteractor.sendReplyProp.reply)
+	}()
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+
+	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
+		return mockControlChannel, nil
+	}
+
+	var ableToOpenMGSConnection *atomic.Bool = nil
+	mgsInteractor.Initialize(ableToOpenMGSConnection)
+	assert.True(suite.T(), true, "initialize passed")
+}
+
+func (suite *MGSInteractorTestSuite) TestInitializeReportsHealthyMGSConnectionIfControlChannelOpened() {
+	mockContext := contextmocks.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgsInteractor := mgsInteractorRef.(*MGSInteractor)
+
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
+		return mockControlChannel, nil
+	}
+
+	ableToOpenMGSConnection := &atomic.Bool{}
+	mgsInteractor.Initialize(ableToOpenMGSConnection)
+	assert.True(suite.T(), ableToOpenMGSConnection.Load())
 }
 
 func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesExist() {

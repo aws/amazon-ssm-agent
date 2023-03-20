@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"runtime/debug"
 	"sync"
+	"sync/atomic"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -115,6 +116,7 @@ func (msgSvc *MessageService) ModuleExecute() (err error) {
 	// initialize message handler
 	msgSvc.messageHandler.Initialize()
 
+	ableToOpenMGSConnection := &atomic.Bool{}
 	var wg sync.WaitGroup
 	errArr := make([]error, 0)
 	for _, interactRef := range msgSvc.interactors {
@@ -137,7 +139,7 @@ func (msgSvc *MessageService) ModuleExecute() (err error) {
 			}()
 			// In MGS Interactor, control channel connection may retry indefinitely
 			// This will be blocked during that case
-			if err = interactor.Initialize(); err != nil {
+			if err = interactor.Initialize(ableToOpenMGSConnection); err != nil {
 				errorMsg := fmt.Errorf("error occurred while initializing Interactor %v: %v", interactorName, err)
 				log.Error(errorMsg)
 				errArr = append(errArr, errorMsg)

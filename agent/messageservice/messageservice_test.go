@@ -127,7 +127,7 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleExecute() {
 	// clearing interactor array
 	msgService.interactors = make([]interactor.IInteractor, 0)
 	interactorMockObj := &interactorMock.IInteractor{}
-	interactorMockObj.On("Initialize").Return(nil)
+	interactorMockObj.On("Initialize", mock.Anything).Return(nil)
 	interactorMockObj.On("PostProcessorInitialization", mock.Anything).Return(nil)
 	interactorMockObj.On("GetName").Return(mock.Anything)
 	interactorMockObj.On("GetSupportedWorkers").Return([]utils.WorkerName{utils.DocumentWorkerName, utils.SessionWorkerName})

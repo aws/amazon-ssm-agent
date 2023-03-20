@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"runtime/debug"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -156,7 +157,7 @@ func (mgs *MGSInteractor) GetSupportedWorkers() []utils.WorkerName {
 }
 
 // Initialize initializes interactor properties and starts failed reply job
-func (mgs *MGSInteractor) Initialize() (err error) {
+func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *atomic.Bool) (err error) {
 	log := mgs.context.Log()
 	// initialize ack skip codes
 	mgs.ackSkipCodes = map[messagehandler.ErrorCode]struct{}{
@@ -184,12 +185,15 @@ func (mgs *MGSInteractor) Initialize() (err error) {
 	go mgs.listenReply()
 
 	log.Info("SSM Agent is trying to setup control channel for MGSInteractor")
-	mgs.controlChannel, err = setupControlChannel(mgs.context, mgs.mgsService, mgs.agentConfig.InstanceID, mgs.incomingAgentMessageChan)
+	mgs.controlChannel, err = setupControlChannel(mgs.context, mgs.mgsService, mgs.agentConfig.InstanceID, mgs.incomingAgentMessageChan, ableToOpenMGSConnection)
 	if err != nil {
 		log.Errorf("Error setting up control channel: %v", err)
 		return err
 	}
 	log.Info("Set up control channel successfully")
+	if ableToOpenMGSConnection != nil {
+		ableToOpenMGSConnection.Store(true)
+	}
 	return nil
 }
 
@@ -411,7 +415,7 @@ func (mgs *MGSInteractor) processAgentJobMessage(agentMessage mgsContracts.Agent
 			log.Errorf("could not send ack for message %v because of error: %v", docState.DocumentInformation.DocumentID, err)
 		}
 
-		payloadDoc := utils.PrepareReplyPayloadToUpdateDocumentStatus(mgs.agentConfig.AgentInfo, contracts.ResultStatusInProgress, "")
+		payloadDoc := utils.PrepareReplyPayloadToUpdateDocumentStatus(mgs.agentConfig.AgentInfo, contracts.ResultStatusInProgress, "", nil)
 		// no persisting done for this message as this does not impact the command result
 		mgs.sendDocResponse(payloadDoc, docState)
 		log.Debugf("pushed message %s with document id %s to processor", agentMessage.MessageId.String(), docState.DocumentInformation.DocumentID)
@@ -498,16 +502,16 @@ func (mgs *MGSInteractor) processTaskAcknowledgeMessage(agentMessage mgsContract
 	}
 }
 
-var setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage) (controlchannel.IControlChannel, error) {
+var setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
 	retryer := retry.ExponentialRetryer{
 		CallableFunc: func() (channel interface{}, err error) {
 			controlChannel := &controlchannel.ControlChannel{}
 			controlChannel.Initialize(context, mgsService, instanceId, agentMessageIncomingMessageChan)
-			if err := controlChannel.SetWebSocket(context, mgsService); err != nil {
+			if err := controlChannel.SetWebSocket(context, mgsService, ableToOpenMGSConnection); err != nil {
 				return nil, err
 			}
 
-			if err := controlChannel.Open(context.Log()); err != nil {
+			if err := controlChannel.Open(context.Log(), ableToOpenMGSConnection); err != nil {
 				return nil, err
 			}
 			controlChannel.AuditLogScheduler.ScheduleAuditEvents()
