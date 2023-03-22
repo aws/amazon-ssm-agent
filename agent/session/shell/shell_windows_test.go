@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//go:build windows
-// +build windows
+//go:build windows && e2e
+// +build windows,e2e
 
 // Package shell implements session shell plugin.
 package shell
