@@ -62,7 +62,7 @@ type MGSInteractor struct {
 	messageHandler           messagehandler.IMessageHandler
 	replyChan                chan contracts.DocumentResult
 	channelOpen              bool
-	ackSkipCodes             map[messagehandler.ErrorCode]struct{}
+	ackSkipCodes             map[messagehandler.ErrorCode]string
 	listenReplyThreadEnded   chan struct{}
 	mutex                    sync.Mutex
 }
@@ -160,13 +160,17 @@ func (mgs *MGSInteractor) GetSupportedWorkers() []utils.WorkerName {
 func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *atomic.Bool) (err error) {
 	log := mgs.context.Log()
 	// initialize ack skip codes
-	mgs.ackSkipCodes = map[messagehandler.ErrorCode]struct{}{
-		messagehandler.ClosedProcessor:                     {},
-		messagehandler.ProcessorBufferFull:                 {},
-		messagehandler.UnexpectedDocumentType:              {},
-		messagehandler.ProcessorErrorCodeTranslationFailed: {},
-		messagehandler.DuplicateCommand:                    {},
-		messagehandler.InvalidDocument:                     {},
+	mgs.ackSkipCodes = map[messagehandler.ErrorCode]string{
+		messagehandler.ClosedProcessor:                     "51401",
+		messagehandler.ProcessorBufferFull:                 "51402",
+		messagehandler.UnexpectedDocumentType:              "51403",
+		messagehandler.ProcessorErrorCodeTranslationFailed: "51404",
+		messagehandler.DuplicateCommand:                    "51405",
+		messagehandler.InvalidDocument:                     "51406",
+		messagehandler.ContainerNotSupported:               "51407",
+		messagehandler.AgentJobMessageParseError:           "51408",
+		messagehandler.UnexpectedError:                     "51499",
+		messagehandler.Successful:                          "200",
 	}
 
 	mgs.listenReplyThreadEnded = make(chan struct{}, 1)
@@ -388,10 +392,7 @@ func (mgs *MGSInteractor) processAgentJobMessage(agentMessage mgsContracts.Agent
 		log.Infof("dropping message because the channel is not open: %s", agentMessage.MessageId.String())
 		return
 	}
-	if mgs.context.AppConfig().Agent.ContainerMode {
-		log.Errorf("dropping message because job messages are not supported for containers: %s", agentMessage.MessageId.String())
-		return
-	}
+
 	shortInstanceId, _ := mgs.context.Identity().ShortInstanceID()
 	commandOrchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, shortInstanceId, appconfig.DefaultDocumentRootDirName, appConfig.Agent.OrchestrationRootDir)
 	docState, err := agentMessage.ParseAgentMessage(mgs.context, commandOrchestrationRootDir, mgs.agentConfig.InstanceID)
@@ -399,18 +400,24 @@ func (mgs *MGSInteractor) processAgentJobMessage(agentMessage mgsContracts.Agent
 	// we should handle few errors differently in future
 	if err != nil {
 		log.Errorf("dropping message because cannot parse AgentJob message %s to Document State, err: %v", agentMessage.MessageId.String(), err)
+		mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, agentMessage.MessageId.String(), agentMessage.CreatedDate, messagehandler.AgentJobMessageParseError)
 		return
 	} else {
-
+		if mgs.context.AppConfig().Agent.ContainerMode {
+			log.Errorf("dropping message because job messages are not supported for containers: %s", agentMessage.MessageId.String())
+			mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, docState.DocumentInformation.MessageID, agentMessage.CreatedDate, messagehandler.ContainerNotSupported)
+			return
+		}
 		log.Debugf("pushing AgentJob message %s to MessageHandler incoming message chan", agentMessage.MessageId.String())
 		errorCode := mgs.messageHandler.Submit(docState)
 		if errorCode != "" {
 			if _, ok := mgs.ackSkipCodes[errorCode]; ok {
 				log.Warnf("dropping message %v because of error code %v", docState.DocumentInformation.DocumentID, errorCode)
+				mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, docState.DocumentInformation.MessageID, agentMessage.CreatedDate, errorCode)
 				return
 			}
 		}
-		err = mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, docState.DocumentInformation.MessageID, agentMessage.CreatedDate)
+		err = mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, docState.DocumentInformation.MessageID, agentMessage.CreatedDate, messagehandler.Successful)
 		if err != nil { // proceed without returning during error as the doc would have been already persisted
 			log.Errorf("could not send ack for message %v because of error: %v", docState.DocumentInformation.DocumentID, err)
 		}
@@ -444,13 +451,22 @@ func (mgs *MGSInteractor) sendDocResponse(payloadDoc messageContracts.SendReplyP
 	}
 }
 
-func (mgs *MGSInteractor) buildAgentJobAckMessageAndSend(ackMessageId uuid.UUID, jobId string, createdDate uint64) error {
+func (mgs *MGSInteractor) buildAgentJobAckMessageAndSend(ackMessageId uuid.UUID, jobId string, createdDate uint64, errorCode messagehandler.ErrorCode) error {
 	log := mgs.context.Log()
 
+	statusCode, ok := mgs.ackSkipCodes[errorCode]
+	if !ok {
+		// Should never happen
+		errorCode = messagehandler.UnexpectedError
+		statusCode = mgs.ackSkipCodes[errorCode]
+	}
+
 	ackMsg := &mgsContracts.AgentJobAck{
-		JobId:       jobId,
-		MessageId:   ackMessageId.String(),
-		CreatedDate: toISO8601(createdDate),
+		JobId:        jobId,
+		MessageId:    ackMessageId.String(),
+		CreatedDate:  toISO8601(createdDate),
+		StatusCode:   statusCode,
+		ErrorMessage: string(errorCode),
 	}
 
 	replyBytes, err := json.Marshal(ackMsg)

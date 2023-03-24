@@ -140,9 +140,11 @@ type AgentJobReplyContent struct {
 
 // AgentJobAck is the acknowledge message sent back to MGS for AgentJobs
 type AgentJobAck struct {
-	JobId       string `json:"jobId"`
-	MessageId   string `json:"acknowledgedMessageId"`
-	CreatedDate string `json:"createdDate"`
+	JobId        string `json:"jobId"`
+	MessageId    string `json:"acknowledgedMessageId"`
+	CreatedDate  string `json:"createdDate"`
+	StatusCode   string `json:"statusCode"`
+	ErrorMessage string `json:"errorMessage"`
 }
 
 // AcknowledgeContent is used to inform the sender of an acknowledge message that the message has been received.

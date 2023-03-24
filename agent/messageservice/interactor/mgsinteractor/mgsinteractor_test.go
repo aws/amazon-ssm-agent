@@ -16,6 +16,7 @@ package mgsinteractor
 
 import (
 	"encoding/json"
+	messageHandler "github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -194,6 +195,81 @@ func (suite *MGSInteractorTestSuite) TestModuleStopClosingAlreadyClosedChannel()
 	}()
 	mgsInteractor.Close()
 	assert.True(suite.T(), true, "close connection test passed")
+}
+
+func (suite *MGSInteractorTestSuite) TestAgentJobSendAcknowledgeWhenMessageHandlerError() {
+	mockContext := contextmocks.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	messageHandlerMock.On("Submit", mock.Anything).Return(messageHandler.ClosedProcessor)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgsInteractor := mgsInteractorRef.(*MGSInteractor)
+	mgsInteractor.channelOpen = true
+	mgsInteractor.ackSkipCodes = map[messageHandler.ErrorCode]string{
+		messageHandler.ClosedProcessor: "51401",
+	}
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+	mgsInteractor.controlChannel = mockControlChannel
+	agentJSON := "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.2\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"55b78ece-7a7f-4198-aaf4-d8c8a3e960e6\",\"DocumentName\":\"AWS-RunPowerShellScript\",\"CloudWatchOutputEnabled\":\"true\"}"
+
+	agentJobPayload := mgsContracts.AgentJobPayload{
+		Payload:       agentJSON,
+		JobId:         taskId,
+		Topic:         "aws.ssm.sendCommand",
+		SchemaVersion: 1,
+	}
+	payload, err := json.Marshal(agentJobPayload)
+	assert.Nil(suite.T(), err)
+	agentMessage := mgsContracts.AgentMessage{
+		HeaderLength:   20,
+		MessageType:    mgsContracts.AgentJobMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      uuid.NewV4(),
+		Payload:        payload,
+	}
+	mgsInteractor.processAgentJobMessage(agentMessage)
+	mockControlChannel.AssertNumberOfCalls(suite.T(), "SendMessage", 1)
+}
+
+func (suite *MGSInteractorTestSuite) TestAgentJobSendAcknowledgeWhenMessageParsingError() {
+	mockContext := contextmocks.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	messageHandlerMock.On("Submit", mock.Anything).Return(messageHandler.ClosedProcessor)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgsInteractor := mgsInteractorRef.(*MGSInteractor)
+	mgsInteractor.channelOpen = true
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+	mgsInteractor.controlChannel = mockControlChannel
+	agentJSON := "{}"
+
+	agentJobPayload := mgsContracts.AgentJobPayload{
+		Payload:       agentJSON,
+		JobId:         taskId,
+		Topic:         "aws.ssm.sendCommand",
+		SchemaVersion: 1,
+	}
+	payload, err := json.Marshal(agentJobPayload)
+	assert.Nil(suite.T(), err)
+	agentMessage := mgsContracts.AgentMessage{
+		HeaderLength:   20,
+		MessageType:    mgsContracts.AgentJobMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      uuid.NewV4(),
+		Payload:        payload,
+	}
+	mgsInteractor.processAgentJobMessage(agentMessage)
+	mockControlChannel.AssertNumberOfCalls(suite.T(), "SendMessage", 1)
 }
 
 func (suite *MGSInteractorTestSuite) TestGetMgsEndpoint() {
