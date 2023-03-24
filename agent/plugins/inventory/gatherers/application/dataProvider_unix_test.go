@@ -31,7 +31,7 @@ var (
 		`","Release":"` + mark(`1`) + `","Epoch":"` + mark(`(none)`) +
 		`","Publisher":"` + mark(`Amazon.com, Inc. "<ec2-ssm-feedback@amazon.com>"`) +
 		`","ApplicationType":"` + mark(`admin`) + `","Architecture":"` + mark(`amd64`) + `","Url":"","Summary":"` +
-		mark(`Description with "quotes" 'and' `+"tabs\t"+` and
+		mark(`Description with "quotes" 'and' `+"tabs\t and carriage returns\r"+` and
 		new lines`) + `","PackageId":"` + mark(`amazon-ssm-agent_1.2_amd64.rpm`) + `"},` +
 
 		`{"Name":"` + mark(`adduser`) + `","Version":"` + mark(`3.113+nmu3ubuntu3`) + `","Publisher":"` +
@@ -75,7 +75,7 @@ var sampleDataParsed = []model.ApplicationData{
 		ApplicationType: "admin",
 		Architecture:    "x86_64",
 		URL:             "",
-		Summary:         "Description with \"quotes\" 'and' tabs\t and",
+		Summary:         "Description with \"quotes\" 'and' tabs\t and carriage returns and",
 		PackageId:       "amazon-ssm-agent_1.2_amd64.rpm",
 	},
 	{
