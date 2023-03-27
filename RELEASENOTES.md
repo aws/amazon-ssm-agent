@@ -1,5 +1,19 @@
 Latest
 ===============
+- Add EC2 credential fallback for AssumeRoleUnauthorizedAccess error
+- Add CloudWatch log upload support for document and session worker
+- Add set-hostname support in domainjoin plugin for windows 
+- Add wait time in Agent updater to avoid installation issues caused during reboots initiated by domainjoin plugin
+- Add support for AlmaLinux
+- Fix KeepHostName parameter without DNS IP address parameter in domainJoin plugin
+- Fix issue where carriage returns cause json conversion to fail in aws:softwareInventory plugin
+- Remove IMDS calls in Onprem during health check
+- Remove S3 global endpoint fallback logic
+- Update cli descriptions for registration parameters
+- Update go version to 1.19.6
+
+3.2.582.0
+===============
 - Modified EC2 credential fallback logic
 
 3.2.574.0
