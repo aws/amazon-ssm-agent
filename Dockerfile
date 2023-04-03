@@ -1,4 +1,4 @@
-FROM golang:1.17
+FROM golang:1.19
 
 RUN apt -y update && apt -y upgrade && apt -y install rpm tar gzip wget zip && apt clean all
 
