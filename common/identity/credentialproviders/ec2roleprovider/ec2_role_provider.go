@@ -57,7 +57,7 @@ func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProvid
 	}
 
 	var credentialSource string
-	if runtimeConfig.CredentialSource == CredentialSourceSSM {
+	if runtimeConfig.CredentialSource == CredentialSourceSSM && runtimeConfig.IdentityType == IdentityTypeEC2 {
 		credentialSource = CredentialSourceSSM
 	} else {
 		credentialSource = CredentialSourceEC2

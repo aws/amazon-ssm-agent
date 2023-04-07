@@ -41,6 +41,7 @@ import (
 )
 
 var storeSharedCredentials = sharedCredentials.Store
+var purgeSharedCredentials = sharedCredentials.Purge
 var backoffRetry = backoff.Retry
 var newSharedCredentials = credentials.NewSharedCredentials
 
@@ -209,13 +210,16 @@ func (c *credentialsRefresher) retrieveCredsWithRetry() (credentials.Value, bool
 		}
 
 		// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
-		if awsErr, isAwsErr := err.(awserr.Error); isAwsErr && (awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == "AccessDeniedException") {
+		if awsErr, isAwsErr := err.(awserr.Error); isAwsErr &&
+			(awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == "AccessDeniedException") {
 			sleepDuration = getLongSleepDuration(sleepDuration)
 			c.log.Errorf("Retrieve credentials produced unrecoverable aws error: %v", awsErr)
-
 		} else if awsRequestFailure, isRequestFailure := err.(awserr.RequestFailure); isRequestFailure {
 			// Get error details
-			c.log.Warnf("Status code %s returned from AWS API. RequestId: %s Message: %s", awsRequestFailure.StatusCode(), awsRequestFailure.RequestID(), awsRequestFailure.Message())
+			c.log.Warnf("Status code %s returned from AWS API. RequestId: %s Message: %s",
+				awsRequestFailure.StatusCode(),
+				awsRequestFailure.RequestID(),
+				awsRequestFailure.Message())
 			statusCode := awsRequestFailure.StatusCode()
 
 			if statusCode == http.StatusNotFound {
@@ -242,7 +246,8 @@ func (c *credentialsRefresher) retrieveCredsWithRetry() (credentials.Value, bool
 }
 
 func getLongSleepDuration(sleepDuration time.Duration) time.Duration {
-	// Sleep 24 hours with random jitter of up to 2 hour if error is non-retryable to make sure we spread retries for large de-registered fleets
+	// Sleep 24 hours with random jitter of up to 2 hour if error is
+	// non-retryable to make sure we spread retries for large de-registered fleets
 	jitter := time.Second * time.Duration(rand.Intn(7200))
 	sleepDuration = 24*time.Hour + jitter
 	return sleepDuration
@@ -296,16 +301,18 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 			}
 
 			// ShareFile may be updated after retrieveCredsWithRetry()
-			if c.provider.ShareFile() != "" {
-				newShareFile := c.provider.ShareFile()
+			newShareFile := c.provider.ShareFile()
+			if newShareFile != "" {
 				err = backoffRetry(func() error {
-					return storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken, newShareFile, c.identityRuntimeConfig.ShareProfile, false)
+					return storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken,
+						newShareFile, c.identityRuntimeConfig.ShareProfile, false)
 				}, c.backoffConfig)
 
 				// If failed, try once more with force
 				if err != nil {
 					c.log.Warn("Failed to write credentials to disk, attempting force write")
-					err = storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken, newShareFile, c.identityRuntimeConfig.ShareProfile, true)
+					err = storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken,
+						newShareFile, c.identityRuntimeConfig.ShareProfile, true)
 				}
 
 				if err != nil {
@@ -321,9 +328,8 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 			configCopy := c.identityRuntimeConfig
 			configCopy.CredentialsRetrievedAt = credentialsRetrievedAt
 			configCopy.CredentialsExpiresAt = c.provider.RemoteExpiresAt()
-			configCopy.ShareFile = c.provider.ShareFile()
+			configCopy.ShareFile = newShareFile
 			configCopy.CredentialSource = c.provider.CredentialSource()
-
 			err = backoffRetry(func() error {
 				return c.runtimeConfigClient.SaveConfig(configCopy)
 			}, c.backoffConfig)
@@ -332,8 +338,27 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 				continue
 			}
 
+			c.tryPurgeCreds(&configCopy)
 			c.identityRuntimeConfig = configCopy
 			c.sendCredentialsReadyMessage()
+		}
+	}
+}
+
+func (c *credentialsRefresher) tryPurgeCreds(configCopy *runtimeconfig.IdentityRuntimeConfig) {
+	// Credentials are not purged until agent versions where EC2 agent workers
+	// only consume shared credentials are fully deprecated
+	shouldPurgeCreds := configCopy.ShareFile != c.identityRuntimeConfig.ShareFile && false
+	purgeFileLocation := c.identityRuntimeConfig.ShareFile
+
+	if shouldPurgeCreds && purgeFileLocation != "" {
+		if defaultSharedCredsFilePath, err := sharedCredentials.GetSharedCredsFilePath(""); err != nil {
+			c.log.Warn("Failed to check whether old credential file location is default aws share location." +
+				"Skipping purge of old credentials")
+		} else if purgeFileLocation == defaultSharedCredsFilePath {
+			c.log.Warn("Skipping purge of default aws shared credentials path")
+		} else if err = purgeSharedCredentials(purgeFileLocation); err != nil {
+			c.log.Warnf("Failed to purge old credentials. Err: %v", err)
 		}
 	}
 }

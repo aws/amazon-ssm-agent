@@ -16,20 +16,23 @@ package credentialrefresher
 import (
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/cenkalti/backoff/v4"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	credentialmocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeconfigmocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/cenkalti/backoff/v4"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 var (
@@ -45,11 +48,10 @@ func init() {
 		provider := &credentialmocks.Provider{}
 		provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Once()
 		provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
-		provider.On("ShareFile").Return("", nil).Times(3)
+		provider.On("ShareFile").Return("", nil).Times(2)
 		provider.On("CredentialSource").Return("SSM").Times(3)
 		return credentials.NewCredentials(provider)
 	}
-
 }
 
 func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
@@ -347,6 +349,138 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallS
 	c.Stop()
 }
 
+func Test_credentialsRefresher_credentialRefresherRoutine_Purge(t *testing.T) {
+	defaultShareLocation, _ := sharedCredentials.GetSharedCredsFilePath("")
+	testCases := []struct {
+		testName             string
+		oldShareFileLocation string
+		newShareFileLocation string
+		shouldPurge          bool
+	}{
+		{
+			testName:             "DoesNotPurgeWhenOldShareFileEmpty",
+			oldShareFileLocation: "",
+			newShareFileLocation: "SomeShareFile",
+			shouldPurge:          false,
+		},
+		{
+			testName:             "PurgesWhenOldShareFileNotEmpty",
+			oldShareFileLocation: "SomeShareFile",
+			newShareFileLocation: "",
+			shouldPurge:          false,
+		},
+		{
+			testName:             "DoesNotPurgeWhenShareFileSameAndNotEmpty",
+			oldShareFileLocation: "SomeShareFile",
+			newShareFileLocation: "SomeShareFile",
+			shouldPurge:          false,
+		},
+		{
+			testName:             "DoesNotPurgeWhenShareFileSameAndEmpty",
+			oldShareFileLocation: "",
+			newShareFileLocation: "",
+			shouldPurge:          false,
+		},
+		{
+			testName:             "DoesNotPurgeWhenOldShareFileIsDefaultAndNewIsNotEmpty",
+			oldShareFileLocation: defaultShareLocation,
+			newShareFileLocation: "SomeShareFile",
+			shouldPurge:          false,
+		},
+		{
+			testName:             "DoesNotPurgeWhenOldShareFileIsDefaultAndNewIsEmpty",
+			oldShareFileLocation: defaultShareLocation,
+			newShareFileLocation: "",
+			shouldPurge:          false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.testName, func(t *testing.T) {
+			storeSharedCredentials = func(_ log.T, _ string, _ string, _ string, _ string, _ string, force bool) error {
+				if !force {
+					return fmt.Errorf("someErrorMustForce")
+				}
+
+				return nil
+			}
+
+			// Return error once and success second time
+			backoffRetry = func(o backoff.Operation, _ backoff.BackOff) error {
+				return o()
+			}
+
+			// Should rotate right away
+			runtimeConfig := runtimeconfig.IdentityRuntimeConfig{
+				CredentialsExpiresAt: fiveMinBeforeTime,
+				ShareFile:            tc.oldShareFileLocation,
+			}
+
+			runtimeConfigClient := &runtimeconfigmocks.IIdentityRuntimeConfigClient{}
+			runtimeConfigClient.On("SaveConfig", mock.Anything).Return(nil).Once()
+			provider := &credentialmocks.IRemoteProvider{}
+			provider.On("ShareFile").Return(tc.newShareFileLocation, nil).Once()
+			provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Once()
+			provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
+			provider.On("CredentialSource").Return("").Once()
+
+			purgeCalled := atomic.Value{}
+			purgeCalled.Store(false)
+
+			purgeSharedCredentials = func(shareFilePath string) error {
+				purgeCalled.Store(true)
+				if !tc.shouldPurge {
+					assert.Fail(t, fmt.Sprintf("Purging credentials at path %q when credentials should not be purged", shareFilePath))
+				}
+
+				assert.Equal(t, tc.oldShareFileLocation, shareFilePath)
+				return nil
+			}
+
+			newSharedCredentials = func(filename, profile string) *credentials.Credentials {
+				return credentials.NewCredentials(provider)
+			}
+
+			c := &credentialsRefresher{
+				log:                          logmocks.NewMockLog(),
+				agentIdentity:                mockAgentIdentity,
+				provider:                     provider,
+				runtimeConfigClient:          runtimeConfigClient,
+				identityRuntimeConfig:        runtimeConfig,
+				credsReadyOnce:               sync.Once{},
+				credentialsReadyChan:         make(chan struct{}, 1),
+				stopCredentialRefresherChan:  make(chan struct{}),
+				isCredentialRefresherRunning: true,
+				getCurrentTimeFunc:           func() time.Time { return currentTime },
+				timeAfterFunc:                time.After,
+			}
+
+			go c.credentialRefresherRoutine()
+
+			// verify credentials ready message is sent because there are still 5 minutes left of credential
+			select {
+			case <-c.credentialsReadyChan:
+			case <-time.After(time.Second):
+				assert.Fail(t, "CredentialsReadyChan never got a message")
+			}
+
+			// Give goroutine 1 second to go through retrieval
+			time.Sleep(time.Second)
+
+			// Stop goroutine
+			c.Stop()
+			assert.False(t, c.isCredentialRefresherRunning)
+
+			runtimeConfigClient.AssertExpectations(t)
+			provider.AssertExpectations(t)
+			assert.Equal(t, tc.shouldPurge, purgeCalled.Load())
+
+			c.identityRuntimeConfig.CredentialsRetrievedAt.Equal(currentTime)
+			c.identityRuntimeConfig.CredentialsExpiresAt.Equal(tenMinAfterTime)
+		})
+	}
+}
+
 func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t *testing.T) {
 	storeSharedCredentials = func(_ log.T, _ string, _ string, _ string, _ string, _ string, force bool) error {
 		if !force {
@@ -371,7 +505,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	runtimeConfigClient.On("SaveConfig", mock.Anything).Return(nil).Once()
 
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("ShareFile").Return("SomeShareFile", nil).Times(4)
+	provider.On("ShareFile").Return("SomeShareFile", nil).Times(2)
 	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("share file doesn't exist")).Once()
 	provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Once()
 	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
@@ -416,7 +550,6 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 
 	c.identityRuntimeConfig.CredentialsRetrievedAt.Equal(currentTime)
 	c.identityRuntimeConfig.CredentialsExpiresAt.Equal(tenMinAfterTime)
-
 }
 
 // Mock aws error struct

@@ -28,6 +28,7 @@ const (
 	agentName           = "amazon-ssm-agent"
 	CredentialSourceSSM = "SSM"
 	CredentialSourceEC2 = "EC2"
+	IdentityTypeEC2     = "EC2"
 )
 
 var (

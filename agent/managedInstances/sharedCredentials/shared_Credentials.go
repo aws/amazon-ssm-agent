@@ -107,3 +107,8 @@ func Store(log log.T, accessKeyID, secretAccessKey, sessionToken, shareFilePath,
 
 	return nil
 }
+
+// Purge deletes the shared credentials file at the given path
+func Purge(shareFilePath string) error {
+	return fileutil.DeleteFile(shareFilePath)
+}
