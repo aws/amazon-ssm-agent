@@ -49,7 +49,20 @@ type EC2RoleProvider struct {
 	RuntimeConfigClient    runtimeconfig.IIdentityRuntimeConfigClient
 }
 
+// NewEC2RoleProvider initializes a new EC2RoleProvider using runtime config values
 func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProviders *EC2InnerProviders, instanceInfo *ssmec2roleprovider.InstanceInfo, ssmEndpoint string, runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient) *EC2RoleProvider {
+	runtimeConfig, err := runtimeConfigClient.GetConfig()
+	if err != nil {
+		log.Warnf("Failed to load runtime config. Assuming initial credential source is %s", CredentialSourceEC2)
+	}
+
+	var credentialSource string
+	if runtimeConfig.CredentialSource == CredentialSourceSSM {
+		credentialSource = CredentialSourceSSM
+	} else {
+		credentialSource = CredentialSourceEC2
+	}
+
 	return &EC2RoleProvider{
 		InnerProviders:         innerProviders,
 		Log:                    log.WithContext(ec2rolecreds.ProviderName),
@@ -57,7 +70,7 @@ func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProvid
 		InstanceInfo:           instanceInfo,
 		SsmEndpoint:            ssmEndpoint,
 		RuntimeConfigClient:    runtimeConfigClient,
-		credentialSource:       CredentialSourceEC2,
+		credentialSource:       credentialSource,
 		shouldShareCredentials: true,
 		expirationUpdateLock:   &sync.Mutex{},
 	}

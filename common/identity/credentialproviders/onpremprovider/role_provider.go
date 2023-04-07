@@ -35,7 +35,8 @@ import (
 
 const (
 	// ProviderName provides a name of managed instance Role provider
-	ProviderName = "OnPremRoleProvider"
+	ProviderName           = "OnPremRoleProvider"
+	CredentialSourceOnPrem = "SSM"
 )
 
 // NewCredentialsProvider initializes a new credential provider that retrieves OnPrem credentials from Systems Manager
@@ -280,6 +281,11 @@ func (m *onpremCredentialsProvider) ShareFile() string {
 // SharesCredentials returns true if the role provider requires credentials to be saved to disk
 func (m *onpremCredentialsProvider) SharesCredentials() bool {
 	return m.isSharingCreds
+}
+
+// CredentialSource returns the name of the current provider being used
+func (m *onpremCredentialsProvider) CredentialSource() string {
+	return CredentialSourceOnPrem
 }
 
 // Assigning function to variable to be able to mock out during tests

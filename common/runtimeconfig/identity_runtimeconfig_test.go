@@ -35,6 +35,7 @@ func Test_identityRuntimeConfigClient_GetConfig(t *testing.T) {
 		"ShareProfile",
 		time.Time{},
 		time.Time{},
+		"SSM",
 	}
 	handlerErrorMock := &mocks.IRuntimeConfigHandler{}
 	handlerErrorMock.On("GetConfig").Return(nil, fmt.Errorf("SomeError"))
@@ -105,6 +106,7 @@ func Test_identityRuntimeConfigClient_SaveConfig(t *testing.T) {
 		"ShareProfile",
 		time.Now(),
 		time.Now(),
+		"SSM",
 	}
 	successContent, _ := json.Marshal(successConfig)
 	failContent, _ := json.Marshal(IdentityRuntimeConfig{})
@@ -167,6 +169,7 @@ func Test_identityRuntimeConfigClient_SaveConfig_VerifyFailGetConfig(t *testing.
 		"ShareProfile",
 		time.Now(),
 		time.Now(),
+		"SSM",
 	}
 	byteConfig, _ := json.Marshal(config)
 
@@ -192,6 +195,7 @@ func Test_identityRuntimeConfigClient_SaveConfig_VerifyFailConfigEquals(t *testi
 		"ShareProfile",
 		time.Now(),
 		time.Now(),
+		"SSM",
 	}
 
 	wrongConfig := IdentityRuntimeConfig{
@@ -201,6 +205,7 @@ func Test_identityRuntimeConfigClient_SaveConfig_VerifyFailConfigEquals(t *testi
 		"ShareProfile",
 		time.Now(),
 		time.Now(),
+		"SSM",
 	}
 	wrongByteConfig, _ := json.Marshal(wrongConfig)
 
@@ -240,6 +245,7 @@ func TestIdentityRuntimeConfig_Equal(t *testing.T) {
 			"ShareProfile",
 			time.Now(),
 			time.Now(),
+			"SSM",
 		},
 	}
 	tests := []struct {

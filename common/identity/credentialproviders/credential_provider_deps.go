@@ -26,6 +26,7 @@ type IRemoteProvider interface {
 	ShareProfile() string
 	ShareFile() string
 	SharesCredentials() bool
+	CredentialSource() string
 	RemoteRetrieve() (credentials.Value, error)
 	RemoteExpiresAt() time.Time
 }

@@ -322,6 +322,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 			configCopy.CredentialsRetrievedAt = credentialsRetrievedAt
 			configCopy.CredentialsExpiresAt = c.provider.RemoteExpiresAt()
 			configCopy.ShareFile = c.provider.ShareFile()
+			configCopy.CredentialSource = c.provider.CredentialSource()
 
 			err = backoffRetry(func() error {
 				return c.runtimeConfigClient.SaveConfig(configCopy)

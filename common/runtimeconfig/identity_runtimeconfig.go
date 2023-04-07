@@ -32,6 +32,7 @@ type IdentityRuntimeConfig struct {
 	ShareProfile           string
 	CredentialsExpiresAt   time.Time
 	CredentialsRetrievedAt time.Time
+	CredentialSource       string
 }
 
 func (i IdentityRuntimeConfig) Equal(config IdentityRuntimeConfig) bool {

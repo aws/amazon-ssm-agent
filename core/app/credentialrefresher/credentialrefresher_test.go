@@ -375,6 +375,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("share file doesn't exist")).Once()
 	provider.On("RemoteRetrieve").Return(credentials.Value{}, nil).Once()
 	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
+	provider.On("CredentialSource").Return("SSM").Once()
 
 	newSharedCredentials = func(filename, profile string) *credentials.Credentials {
 		return credentials.NewCredentials(provider)
