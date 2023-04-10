@@ -464,8 +464,7 @@ build-tests-windows: copy-src copy-tests-src pre-build
 # go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/common/...
 
-.PHONY: lint-all
-lint-all: copy-package-dep
+.PHONY: lint
+lint:
 # if you want to configure what linters are run, edit .golangci.yml
-# if you want to restrict to some specific package edit Tools/src/run_golangci-lint.sh
 	$(GO_SPACE)/Tools/src/run_golangci-lint.sh
