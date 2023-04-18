@@ -571,6 +571,13 @@ func TestDetermineTarget_TargetVersionStable_FailedGetStableURL(t *testing.T) {
 	assert.Contains(t, updateDetail.StandardOut, "Failed to generate stable version from manifest url: ")
 	assert.Equal(t, "", updateDetail.StandardError)
 
+	finalizeCalled = false
+	tempCode := ""
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		tempCode = code
+		finalizeCalled = true
+		return nil
+	}
 	getStableManifestURL = func(manifestURL string) (string, error) {
 		return "", fmt.Errorf("err1")
 	}
@@ -578,8 +585,9 @@ func TestDetermineTarget_TargetVersionStable_FailedGetStableURL(t *testing.T) {
 	// action
 	err = determineTarget(updater.mgr, logger, updateDetail)
 	// assert
-	assert.Error(t, err)
+	assert.NoError(t, err)
 	assert.True(t, finalizeCalled)
+	assert.Contains(t, tempCode, string(updateconstants.ErrorGetStableVersionS3))
 	assert.True(t, updateconstants.TargetVersionStable == updateDetail.TargetResolver)
 
 	getStableManifestURL = updateutil.GetManifestURLFromSourceUrl
