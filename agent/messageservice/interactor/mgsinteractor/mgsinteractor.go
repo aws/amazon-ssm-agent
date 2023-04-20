@@ -65,6 +65,8 @@ type MGSInteractor struct {
 	ackSkipCodes             map[messagehandler.ErrorCode]string
 	listenReplyThreadEnded   chan struct{}
 	mutex                    sync.Mutex
+	updateWatcherDone        chan bool
+	handledUpdateReplies     sync.Map
 }
 
 // New initiates and returns MGS Interactor when needed
@@ -175,6 +177,8 @@ func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error
 
 	mgs.listenReplyThreadEnded = make(chan struct{}, 1)
 
+	mgs.updateWatcherDone = make(chan bool, 1)
+
 	// listens incoming channel for agent related messages
 	go mgs.listenIncomingAgentMessages()
 
@@ -207,6 +211,7 @@ func (mgs *MGSInteractor) PostProcessorInitialization(worker utils.WorkerName) {
 	switch worker {
 	case utils.DocumentWorkerName:
 		mgs.setChannelOpenVal(true)
+		go mgs.startUpdateReplyFileWatcher()
 	default:
 	}
 
@@ -237,6 +242,7 @@ func (mgs *MGSInteractor) PreProcessorClose() {
 	mgs.setChannelOpenVal(false) // close the incoming agent job message
 	mgs.closeSendFailedReplyJob()
 	mgs.context.Log().Info("MGS send failed reply job closed")
+	mgs.stopUpdateReplyFileWatcher()
 }
 
 // Close closes the existing MGS connection

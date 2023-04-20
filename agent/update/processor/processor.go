@@ -194,6 +194,15 @@ func validateInactiveVersion(context context.T, info updateinfo.T, detail *Updat
 	return nil
 }
 
+func validateTargetVersionCompatible(detail *UpdateDetail) (err error) {
+	if detail.UpstreamServiceName == string(contracts.MessageGatewayService) {
+		if versionutil.Compare(detail.TargetVersion, updateconstants.DowngradeThroughMGSMinVersion, true) < 0 {
+			return fmt.Errorf("before downgrading to %s, first downgrade to any version from 3.1.821.0 to 3.2.923.0", detail.TargetVersion)
+		}
+	}
+	return nil
+}
+
 // getMinimumVSupportedVersions returns a map of minimum supported version and it's platform
 func getMinimumVSupportedVersions() (versions *map[string]string) {
 	once.Do(func() {
@@ -365,6 +374,11 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 	// Validate target version is not inactive
 	if err = validateInactiveVersion(mgr.Context, mgr.Info, updateDetail); err != nil {
 		return mgr.inactive(updateDetail, logger, updateconstants.WarnInactiveVersion)
+	}
+
+	// Validate target version is compatible with update coming from upstream messaging service
+	if err = validateTargetVersionCompatible(updateDetail); err != nil {
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorIncompatibleTargetVersion, err.Error(), true)
 	}
 
 	// Checking target version update preconditions

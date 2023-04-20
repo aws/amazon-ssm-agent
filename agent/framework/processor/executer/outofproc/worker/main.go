@@ -30,7 +30,7 @@ var pluginRunner = func(
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
 ) {
-	runpluginutil.RunPlugins(context, docState.InstancePluginsInformation, docState.IOConfig, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
+	runpluginutil.RunPlugins(context, docState.InstancePluginsInformation, docState.IOConfig, docState.UpstreamServiceName, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
 	//make sure to signal the client that job complete
 	close(resChan)
 }

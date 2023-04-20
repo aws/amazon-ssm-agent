@@ -124,6 +124,7 @@ func runUpdateAgent(
 		&pluginInput,
 		updaterVersion,
 		config.MessageId,
+		config.UpstreamServiceName,
 		pluginConfig.StdoutFileName,
 		pluginConfig.StderrFileName,
 		fileutil.BuildS3Path(output.GetIOConfig().OutputS3KeyPrefix, config.PluginID),
@@ -305,6 +306,7 @@ func generateUpdateCmd(
 	pluginInput *UpdatePluginInput,
 	updaterVersion string,
 	messageID string,
+	upstreamServiceName contracts.UpstreamServiceName,
 	stdout string,
 	stderr string,
 	keyPrefix string,
@@ -325,6 +327,8 @@ func generateUpdateCmd(
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.OutputBucketNameCmd, bucketName)
 
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.ManifestFileUrlCmd, pluginInput.Source)
+
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.UpstreamServiceName, string(upstreamServiceName))
 
 	allowDowngrade, err := strconv.ParseBool(pluginInput.AllowDowngrade)
 	if err != nil {

@@ -47,11 +47,12 @@ func TestGenerateUpdateCmd(t *testing.T) {
 	pluginInput := createStubPluginInput()
 
 	result, err := generateUpdateCmd(pluginInput,
-		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
+		"3.0.0.0", "messageID", contracts.MessageGatewayService, "stdout", "stderr", "prefix", "bucket")
 
 	assert.NoError(t, err)
 	assert.Contains(t, result, "3.0.0.0")
 	assert.Contains(t, result, "messageID")
+	assert.Contains(t, result, "MessageGatewayService")
 	assert.Contains(t, result, "stdout")
 	assert.Contains(t, result, "stderr")
 	assert.Contains(t, result, "prefix")
@@ -65,11 +66,12 @@ func TestGenerateUpdateCmdNoDowngrade(t *testing.T) {
 	pluginInput.AllowDowngrade = "false"
 
 	result, err := generateUpdateCmd(pluginInput,
-		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
+		"3.0.0.0", "messageID", contracts.MessageGatewayService, "stdout", "stderr", "prefix", "bucket")
 
 	assert.NoError(t, err)
 	assert.Contains(t, result, "3.0.0.0")
 	assert.Contains(t, result, "messageID")
+	assert.Contains(t, result, "MessageGatewayService")
 	assert.Contains(t, result, "stdout")
 	assert.Contains(t, result, "stderr")
 	assert.Contains(t, result, "prefix")
@@ -83,7 +85,7 @@ func TestGenerateUpdateCmdInvalidDowngrade(t *testing.T) {
 	pluginInput.AllowDowngrade = "somerandomstring"
 
 	_, err := generateUpdateCmd(pluginInput,
-		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
+		"3.0.0.0", "messageID", contracts.MessageGatewayService, "stdout", "stderr", "prefix", "bucket")
 
 	assert.Error(t, err)
 }

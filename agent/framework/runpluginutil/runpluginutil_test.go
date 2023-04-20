@@ -83,8 +83,9 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -127,7 +128,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	close(ch)
 
 	// fix the times expectation.
@@ -173,8 +174,9 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -217,7 +219,7 @@ func TestRunPluginsWithMissingPluginHandler(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -255,8 +257,9 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 	for index, name := range pluginNames {
 		plugins[name] = new(PluginMock)
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 		pluginState := contracts.PluginState{
 			Name:          name,
@@ -288,7 +291,7 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 
 	ch := make(chan contracts.PluginResult, 2)
 
-	outputs := RunPlugins(ctx, pluginStates, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginStates, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	close(ch)
 
@@ -327,8 +330,9 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	for index, name := range pluginNames {
 		plugins[name] = new(PluginMock)
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 		pluginState := contracts.PluginState{
 			Name:          name,
@@ -365,7 +369,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 		deleteDirectoryFlag = true
 		return nil
 	}
-	outputs := RunPlugins(ctx, pluginStates, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginStates, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	close(ch)
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -435,8 +439,9 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -478,7 +483,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -542,6 +547,7 @@ func TestRunPluginsWithCompatiblePlatformPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -582,7 +588,7 @@ func TestRunPluginsWithCompatiblePlatformPrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -644,6 +650,7 @@ func TestRunPluginsWithCompatiblePlatformPreconditionWithValueFirst(t *testing.T
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -684,7 +691,7 @@ func TestRunPluginsWithCompatiblePlatformPreconditionWithValueFirst(t *testing.T
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -751,6 +758,7 @@ func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -799,7 +807,7 @@ func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 	}
 
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -863,6 +871,7 @@ func TestRunPluginsWithFuturePlatformPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -903,7 +912,7 @@ func TestRunPluginsWithFuturePlatformPrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -964,6 +973,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1013,7 +1023,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -1090,6 +1100,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1142,7 +1153,7 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		return nil
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -1205,6 +1216,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1251,7 +1263,7 @@ func TestRunPluginsWithUnrecognizedPreconditionOperator(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1314,6 +1326,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1361,7 +1374,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateVariable(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1424,6 +1437,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateParameter(t *testing.T) 
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1471,7 +1485,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateParameter(t *testing.T) 
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1534,6 +1548,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateConstant(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1581,7 +1596,7 @@ func TestRunPluginsWithUnrecognizedPreconditionDuplicateConstant(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1644,6 +1659,7 @@ func TestRunPluginsWithUnrecognizedPreconditionSSMParameter(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1691,7 +1707,7 @@ func TestRunPluginsWithUnrecognizedPreconditionSSMParameter(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1754,6 +1770,7 @@ func TestRunPluginsWithUnrecognizedPreconditionSecureSSMParameter(t *testing.T) 
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1801,7 +1818,7 @@ func TestRunPluginsWithUnrecognizedPreconditionSecureSSMParameter(t *testing.T) 
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1864,6 +1881,7 @@ func TestRunPluginsWithUnrecognizedPreconditionNoDocumentParameters(t *testing.T
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -1911,7 +1929,7 @@ func TestRunPluginsWithUnrecognizedPreconditionNoDocumentParameters(t *testing.T
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -1974,6 +1992,7 @@ func TestRunPluginsWithUnrecognizedPreconditionUnrecognizedParameter(t *testing.
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2021,7 +2040,7 @@ func TestRunPluginsWithUnrecognizedPreconditionUnrecognizedParameter(t *testing.
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -2084,6 +2103,7 @@ func TestRunPluginsPlatformPreconditionWithDocumentParameters(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2131,7 +2151,7 @@ func TestRunPluginsPlatformPreconditionWithDocumentParameters(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -2193,6 +2213,7 @@ func TestRunPluginsWithCompatibleParamParamPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2233,7 +2254,7 @@ func TestRunPluginsWithCompatibleParamParamPrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -2300,6 +2321,7 @@ func TestRunPluginsWithIncompatibleParamParamPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2346,7 +2368,7 @@ func TestRunPluginsWithIncompatibleParamParamPrecondition(t *testing.T) {
 		return nil
 	}
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -2408,6 +2430,7 @@ func TestRunPluginsWithCompatibleParamValuePrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2448,7 +2471,7 @@ func TestRunPluginsWithCompatibleParamValuePrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -2510,6 +2533,7 @@ func TestRunPluginsWithCompatibleValueParamPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2550,7 +2574,7 @@ func TestRunPluginsWithCompatibleValueParamPrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -2613,6 +2637,7 @@ func TestRunPluginsWithIncompatibleParamValuePrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2653,7 +2678,7 @@ func TestRunPluginsWithIncompatibleParamValuePrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -2714,6 +2739,7 @@ func TestRunPluginsWithCompatibleMixedPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2754,7 +2780,7 @@ func TestRunPluginsWithCompatibleMixedPrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -2817,6 +2843,7 @@ func TestRunPluginsWithIncompatibleMixedPrecondition(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2857,7 +2884,7 @@ func TestRunPluginsWithIncompatibleMixedPrecondition(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -2922,6 +2949,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -2969,7 +2997,7 @@ func TestRunPluginsWithMoreThanTwoPreconditionOperands(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -3033,6 +3061,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 			PluginName:            name,
 			IsPreconditionEnabled: true,
 			Preconditions:         parsedPreconditions,
+			UpstreamServiceName:   contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -3087,7 +3116,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -3129,8 +3158,9 @@ func TestRunPluginSuccessWithNonTruncatedResult(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 
 		// setup expectations
@@ -3167,7 +3197,7 @@ func TestRunPluginSuccessWithNonTruncatedResult(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 
 	for _, result := range outputs {
 		result.EndDateTime = defaultTime
@@ -3180,6 +3210,68 @@ func TestRunPluginSuccessWithNonTruncatedResult(t *testing.T) {
 	}
 	for pluginID, output := range outputs {
 		assert.Equal(t, pluginResults[pluginID].StandardOutput, output.StandardOutput)
+	}
+}
+
+func TestRunPluginSetsUpstreamServiceNameInEachPlugin(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1, testPlugin2}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
+
+	ctx := contextmocks.NewMockDefault()
+	defaultTime := time.Now()
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+	ioConfig := contracts.IOConfiguration{}
+
+	for index, name := range pluginNames {
+
+		// create mock plugin instance for testing
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageDeliveryService,
+		}
+
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+
+	ch := make(chan contracts.PluginResult)
+	defer func() {
+		close(ch)
+	}()
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+		}
+	}()
+
+	RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageDeliveryService, pluginRegistry, ch, cancelFlag)
+
+	// assert that the expectations were met
+	// assert that the expectations were met
+	for _, mockPlugin := range pluginInstances {
+		mockPlugin.AssertExpectations(t)
 	}
 }
 
@@ -3374,8 +3466,9 @@ func TestRunPluginWithOnFailureProperty168(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 		// setup expectations
 		pluginConfigs[name] = contracts.PluginState{
@@ -3437,7 +3530,7 @@ func TestRunPluginWithOnFailureProperty168(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	close(ch)
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -3469,8 +3562,9 @@ func TestRunPluginWithOnFailureProperty169(t *testing.T) {
 
 		// create configuration for execution
 		config := contracts.Configuration{
-			PluginID:   name,
-			PluginName: name,
+			PluginID:            name,
+			PluginName:          name,
+			UpstreamServiceName: contracts.MessageGatewayService,
 		}
 		// setup expectations
 		pluginConfigs[name] = contracts.PluginState{
@@ -3532,7 +3626,7 @@ func TestRunPluginWithOnFailureProperty169(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	close(ch)
 	// fix the times expectation.
 	for _, result := range outputs {
@@ -3632,7 +3726,7 @@ func TestRunPluginWithOnFailureProperty1(t *testing.T) {
 		}
 	}()
 	// call the code we are testing
-	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, contracts.MessageGatewayService, pluginRegistry, ch, cancelFlag)
 	close(ch)
 	// fix the times expectation.
 	for _, result := range outputs {

@@ -46,6 +46,7 @@ var sessionPluginRunner = func(
 	runpluginutil.RunPlugins(context,
 		docState.InstancePluginsInformation,
 		docState.IOConfig,
+		docState.UpstreamServiceName,
 		runpluginutil.SSMPluginRegistry,
 		resChan,
 		cancelFlag)

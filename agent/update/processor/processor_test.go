@@ -1111,6 +1111,41 @@ func TestValidateUpdateParam_FailedPrecondition(t *testing.T) {
 	assert.Equal(t, "", updateDetail.StandardError)
 }
 
+func TestValidateUpdateParam_FailedIncompatibleVersion(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.AllowDowngrade = true
+	updateDetail.UpstreamServiceName = string(contracts.MessageGatewayService)
+	updateDetail.TargetVersion = "2.0.0.0"
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
+	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(true)
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+	assert.True(t, updateDetail.RequiresUninstall)
+
+	assert.Contains(t, updateDetail.StandardOut, "before downgrading to 2.0.0.0, first downgrade to any version from 3.1.821.0 to 3.2.923.0")
+}
+
 func TestValidateUpdateParam_SourceVersionV1UpdatePlugin(t *testing.T) {
 	// setup
 	var logger = logmocks.NewMockLog()
@@ -1923,6 +1958,27 @@ func TestDownloadWithError(t *testing.T) {
 
 	// assert
 	assert.Error(t, err)
+}
+
+func TestValidateTargetVersionCompatible_DoesNotBlockMDSUpdates(t *testing.T) {
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "2.0.0.0"
+	updateDetail.UpstreamServiceName = string(contracts.MessageDeliveryService)
+	assert.Nil(t, validateTargetVersionCompatible(updateDetail))
+}
+
+func TestValidateTargetVersionCompatible_DoesNotBlockMGSUpdateToCompatibleVersion(t *testing.T) {
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "3.1.821.0"
+	updateDetail.UpstreamServiceName = string(contracts.MessageDeliveryService)
+	assert.Nil(t, validateTargetVersionCompatible(updateDetail))
+}
+
+func TestValidateTargetVersionCompatible_BlocksMGSUpdatesToIncompatibleVersion(t *testing.T) {
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "2.0.0.0"
+	updateDetail.UpstreamServiceName = string(contracts.MessageGatewayService)
+	assert.NotNil(t, validateTargetVersionCompatible(updateDetail))
 }
 
 // createUpdaterWithStubs creates stubs updater and it's manager, util and service

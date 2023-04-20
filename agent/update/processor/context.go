@@ -17,6 +17,7 @@ package processor
 
 import (
 	"fmt"
+	"os"
 	"path"
 	"regexp"
 	"strings"
@@ -26,12 +27,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/twinj/uuid"
 )
 
 // UpdateState represents the state of update process
@@ -79,31 +82,32 @@ type contextManager struct {
 
 // UpdateDetail Book keeping detail for Agent Update
 type UpdateDetail struct {
-	State              UpdateState
-	Result             contracts.ResultStatus
-	StandardOut        string
-	StandardError      string
-	OutputS3KeyPrefix  string
-	OutputS3BucketName string
-	StdoutFileName     string
-	StderrFileName     string
-	SourceVersion      string
-	SourceLocation     string
-	SourceHash         string
-	TargetVersion      string
-	TargetResolver     updateconstants.TargetVersionResolver
-	TargetLocation     string
-	TargetHash         string
-	PackageName        string
-	StartDateTime      time.Time
-	EndDateTime        time.Time
-	MessageID          string
-	UpdateRoot         string
-	RequiresUninstall  bool
-	ManifestURL        string
-	Manifest           updatemanifest.T
-	SelfUpdate         bool
-	AllowDowngrade     bool
+	State               UpdateState
+	Result              contracts.ResultStatus
+	StandardOut         string
+	StandardError       string
+	OutputS3KeyPrefix   string
+	OutputS3BucketName  string
+	StdoutFileName      string
+	StderrFileName      string
+	SourceVersion       string
+	SourceLocation      string
+	SourceHash          string
+	TargetVersion       string
+	TargetResolver      updateconstants.TargetVersionResolver
+	TargetLocation      string
+	TargetHash          string
+	PackageName         string
+	StartDateTime       time.Time
+	EndDateTime         time.Time
+	MessageID           string
+	UpdateRoot          string
+	RequiresUninstall   bool
+	ManifestURL         string
+	Manifest            updatemanifest.T
+	SelfUpdate          bool
+	AllowDowngrade      bool
+	UpstreamServiceName string
 }
 
 // HasMessageID represents if update is triggered by run command
@@ -243,4 +247,33 @@ func (c *contextManager) uploadOutput(log log.T, updateDetail *UpdateDetail, orc
 	uploadOutputsToS3()
 
 	return nil
+}
+
+// persistPayload saves the MGS reply payload in the MGS replies directory.
+func persistPayload(log log.T, updateDetail *UpdateDetail, identity identity.IAgentIdentity, agentResult contracts.DocumentResult) (err error) {
+	content, err := jsonutil.Marshal(struct {
+		AgentResult contracts.DocumentResult
+		ReplyId     string
+		RetryNumber int
+	}{
+		AgentResult: agentResult,
+		ReplyId:     uuid.NewV4().String(),
+		RetryNumber: 0,
+	})
+
+	if err != nil {
+		log.Errorf("encountered error with message %v while marshalling %v to string", updateDetail.MessageID, err)
+	} else {
+		persistTime := time.Now().UTC()
+		fileName := fmt.Sprintf("%v_%v_update", persistTime.Format("2006-01-02T15-04-05.000000"), updateDetail.MessageID)
+		instanceId, _ := identity.ShortInstanceID()
+		writePath := path.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.RepliesMGSRootDirName, fileName)
+		s, err := fileutil.WriteIntoFileWithPermissions(writePath, jsonutil.Indent(content), os.FileMode(appconfig.ReadWriteAccess))
+		if s && err == nil {
+			log.Debugf("Successfully persisted update response for %v", fileName)
+		} else {
+			return err
+		}
+	}
+	return err
 }

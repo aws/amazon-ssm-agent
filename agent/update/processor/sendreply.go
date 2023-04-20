@@ -149,3 +149,50 @@ func prepareRuntimeStatus(update *UpdateDetail) contracts.PluginRuntimeStatus {
 		EndDateTime:        times.ToIso8601UTC(time.Now()),
 	}
 }
+
+// prepareAgentResult prepares the payload for MGS update replies.
+func prepareAgentResult(context context.T, update *UpdateDetail) contracts.DocumentResult {
+	return contracts.DocumentResult{
+		MessageID:           update.MessageID,
+		Status:              update.Result,
+		NPlugins:            1,
+		PluginResults:       preparePluginResults(context, update),
+		ResultType:          contracts.RunCommandResult,
+		RelatedDocumentType: contracts.SendCommand,
+	}
+}
+
+// prepareRuntimeStatus creates the structure for the pluginResult section of the payload of and MGS update reply.
+func preparePluginResults(context context.T, update *UpdateDetail) map[string]*contracts.PluginResult {
+	code := 0
+	if update.Result == contracts.ResultStatusFailed {
+		code = 1
+	}
+
+	output := iohandler.TruncateOutput(update.StandardOut,
+		update.StandardError,
+		iohandler.MaximumPluginOutputSize)
+
+	pluginResult := &contracts.PluginResult{
+		Status:             update.Result,
+		Code:               code,
+		Output:             output,
+		StartDateTime:      update.StartDateTime,
+		EndDateTime:        time.Now(),
+		OutputS3BucketName: update.OutputS3BucketName,
+		OutputS3KeyPrefix:  update.OutputS3KeyPrefix,
+		StandardOutput:     update.StandardOut,
+		StandardError:      update.StandardError,
+	}
+
+	pluginResults := make(map[string]*contracts.PluginResult)
+
+	if isV22DocUpdate(context.Identity(), context.Log(), update) {
+		pluginResult.PluginName = appconfig.PluginNameAwsAgentUpdate
+		pluginResults[updateconstants.DefaultOutputFolder] = pluginResult
+	} else {
+		pluginResults[appconfig.PluginNameAwsAgentUpdate] = pluginResult
+	}
+
+	return pluginResults
+}

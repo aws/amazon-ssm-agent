@@ -99,6 +99,7 @@ func RunPlugins(
 	context context.T,
 	plugins []contracts.PluginState,
 	ioConfig contracts.IOConfiguration,
+	upstreamServiceName contracts.UpstreamServiceName,
 	registry PluginRegistry,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
@@ -156,8 +157,9 @@ func RunPlugins(
 
 		log.Debugf("Executing plugin - %v", pluginName)
 
-		// populate plugin start time and status
+		// populate plugin start time, status, and upstream service name
 		configuration := pluginState.Configuration
+		configuration.UpstreamServiceName = upstreamServiceName
 
 		if ioConfig.OutputS3BucketName != "" {
 			pluginOutputs[pluginID].OutputS3BucketName = ioConfig.OutputS3BucketName

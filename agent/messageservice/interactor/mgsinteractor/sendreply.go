@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime/debug"
 	"strings"
 	"time"
@@ -31,12 +32,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/carlescere/scheduler"
+	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/websocket"
 	"github.com/twinj/uuid"
 )
 
 const (
 	failedReplyProcessingLimit = 50
+	updateSuffix               = "update"
 )
 
 var (
@@ -57,6 +60,8 @@ func (mgs *MGSInteractor) loadFailedReplies(log log.T) []string {
 
 // deleteFailedReply deletes failed mgs replies from local replies folder on disk
 func (mgs *MGSInteractor) deleteFailedReply(log log.T, fileName string) {
+	mgs.handledUpdateReplies.LoadAndDelete(fileName)
+
 	absoluteFileName := getFailedReplyLocation(mgs.context.Identity(), fileName)
 	if fileutil.Exists(absoluteFileName) {
 		err := fileutil.DeleteFile(absoluteFileName)
@@ -81,7 +86,8 @@ func (mgs *MGSInteractor) sendFailedReplies() {
 	}()
 
 	log.Debug("Checking if there are document replies that failed to reach the service, and retry sending them")
-	replies := mgs.loadFailedReplies(log)
+	unfilteredReplies := mgs.loadFailedReplies(log)
+	replies := mgs.filterReplies(unfilteredReplies)
 
 	// this check denotes that either the list failed replies failed or have no values
 	if len(replies) == 0 {
@@ -148,6 +154,94 @@ func (mgs *MGSInteractor) startSendFailedReplyJob() {
 			log.Errorf("unable to schedule send failed reply job. %v", err)
 		}
 	}
+}
+
+// startUpdateReplyFileWatcher starts up a file watcher that awaits update replies.
+func (mgs *MGSInteractor) startUpdateReplyFileWatcher() {
+	log := mgs.context.Log()
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Errorf("Error initializing the update reply watcher: %v", err)
+		return
+	}
+	defer func() {
+		if err := recover(); err != nil {
+			log.Errorf("Update reply watcher panic: %v", err)
+		}
+		err := watcher.Close()
+		if err != nil {
+			log.Errorf("Error closing the update reply watcher: %v", err)
+		}
+		log.Infof("Update reply watcher closed")
+	}()
+
+	err = watcher.Add(getFailedReplyDirectory(mgs.context.Identity()))
+	if err != nil {
+		log.Errorf("Error adding directory to watcher: %v", err)
+	}
+
+	log.Infof("Starting MGS update reply file watcher")
+	for {
+		select {
+		case event, ok := <-watcher.Events:
+			if !ok {
+				log.Info("Update file watcher closed")
+				return
+			}
+			if mgs.isUpdateWriteEvent(event) {
+				err := mgs.sendUpdateReply(filepath.Base(event.Name))
+				if err != nil {
+					log.Errorf("Error while sending update reply: %v", err)
+				}
+			}
+		case err, ok := <-watcher.Errors:
+			if !ok {
+				log.Info("Update file watcher closed")
+				return
+			}
+			log.Errorf("Error in MGS update reply file watcher: %v", err)
+		case <-mgs.updateWatcherDone:
+			return
+		}
+	}
+}
+
+// stopUpdateReplyFileWatcher initiates update reply file watcher close down.
+func (mgs *MGSInteractor) stopUpdateReplyFileWatcher() {
+	mgs.updateWatcherDone <- true
+}
+
+// sendUpdateReply reads the update reply from the replies directory and pushes it onto the reply channel.
+func (mgs *MGSInteractor) sendUpdateReply(fileName string) (err error) {
+	log := mgs.context.Log()
+	log.Infof("Reading MGS update reply: %v", fileName)
+	if _, ok := mgs.handledUpdateReplies.Load(fileName); ok {
+		return
+	}
+	mgs.handledUpdateReplies.Store(fileName, true)
+
+	docPersistData, err := mgs.getFailedReply(log, fileName)
+	if err != nil {
+		return fmt.Errorf("error while getting stored reply: %v", err)
+	}
+	replyUUID, err := uuid.Parse(docPersistData.ReplyId)
+	if err != nil {
+		return fmt.Errorf("error while parsing UUID: %v", err)
+	}
+
+	replyObject, err := replytypes.GetReplyTypeObject(mgs.context, docPersistData.AgentResult, replyUUID, docPersistData.RetryNumber)
+	if err != nil {
+		return fmt.Errorf("error while getting reply type object: %v", err)
+	}
+	agentReplyContract := &agentReplyLocalContract{
+		documentResult: replyObject,
+		backupFile:     fileName,
+		retryNumber:    docPersistData.RetryNumber,
+	}
+	if mgs.isChannelOpenForAgentJobMsgs() {
+		mgs.sendReplyProp.reply <- agentReplyContract
+	}
+	return err
 }
 
 func (mgs *MGSInteractor) closeSendFailedReplyJob() {
@@ -358,6 +452,24 @@ func (mgs *MGSInteractor) sendReplyToMGS(result replytypes.IReplyType) error {
 		return err
 	}
 	return fmt.Errorf("control channel is not open")
+}
+
+// isUpdateWriteEvent returns if a file event is a write to a file with the suffix "update."
+func (mgs *MGSInteractor) isUpdateWriteEvent(event fsnotify.Event) bool {
+	return event.Op&fsnotify.Write == fsnotify.Write && strings.HasSuffix(event.Name, updateSuffix)
+}
+
+// filterReplies filters out replies that are meant for the update file watcher or already handled.
+func (mgs *MGSInteractor) filterReplies(unfilteredReplies []string) (replies []string) {
+	for i := range unfilteredReplies {
+		if !strings.HasSuffix(unfilteredReplies[i], updateSuffix) {
+			replies = append(replies, unfilteredReplies[i])
+		} else if _, ok := mgs.handledUpdateReplies.Load(unfilteredReplies[i]); !ok {
+			mgs.handledUpdateReplies.Store(unfilteredReplies[i], true)
+			replies = append(replies, unfilteredReplies[i])
+		}
+	}
+	return replies
 }
 
 func (mgs *MGSInteractor) isTempError(err error) bool {

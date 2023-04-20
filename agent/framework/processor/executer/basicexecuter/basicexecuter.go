@@ -37,7 +37,7 @@ var pluginRunner = func(context context.T,
 	docState contracts.DocumentState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return runpluginutil.RunPlugins(context, docState.InstancePluginsInformation, docState.IOConfig, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
+	return runpluginutil.RunPlugins(context, docState.InstancePluginsInformation, docState.IOConfig, docState.UpstreamServiceName, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
 
 }
 

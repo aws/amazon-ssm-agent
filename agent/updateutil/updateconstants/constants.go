@@ -128,6 +128,8 @@ const (
 
 	SSMAgentWorkerMinVersion = "3.0.0.0"
 
+	DowngradeThroughMGSMinVersion = "3.1.821.0"
+
 	MinimumVersion = "0"
 
 	// Lock file expiry minutes
@@ -187,6 +189,9 @@ const (
 
 	// ErrorInvalidTargetVersion represents Target version is not supported
 	ErrorInvalidTargetVersion ErrorCode = "ErrorInvalidTargetVersion"
+
+	// ErrorIncompatibleTargetVersion represents Target version is incompatible
+	ErrorIncompatibleTargetVersion ErrorCode = "ErrorIncompatibleTargetVersion"
 
 	// ErrorSourcePkgDownload represents source version not able to download
 	ErrorSourcePkgDownload ErrorCode = "ErrorSourcePkgDownload"

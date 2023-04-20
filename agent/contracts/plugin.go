@@ -106,6 +106,7 @@ type Configuration struct {
 	RunAsUser                   string
 	ShellProfile                ShellProfileConfig
 	SessionOwner                string
+	UpstreamServiceName         UpstreamServiceName
 }
 
 // Plugin wraps the plugin configuration and plugin result.

@@ -52,22 +52,23 @@ var (
 )
 
 var (
-	update           *bool
-	sourceVersion    *string
-	sourceLocation   *string
-	sourceHash       *string
-	targetVersion    *string
-	targetLocation   *string
-	targetHash       *string
-	packageName      *string
-	messageID        *string
-	stdout           *string
-	stderr           *string
-	outputKeyPrefix  *string
-	outputBucket     *string
-	manifestURL      *string
-	selfUpdate       *bool
-	disableDowngrade *bool
+	update              *bool
+	sourceVersion       *string
+	sourceLocation      *string
+	sourceHash          *string
+	targetVersion       *string
+	targetLocation      *string
+	targetHash          *string
+	packageName         *string
+	messageID           *string
+	stdout              *string
+	stderr              *string
+	outputKeyPrefix     *string
+	outputBucket        *string
+	manifestURL         *string
+	selfUpdate          *bool
+	disableDowngrade    *bool
+	upstreamServiceName *string
 )
 
 var (
@@ -97,6 +98,8 @@ func init() {
 	selfUpdate = flag.Bool(updateconstants.SelfUpdateCmd, false, "SelfUpdate command")
 
 	disableDowngrade = flag.Bool(updateconstants.DisableDowngradeCmd, false, "defines if updater is allowed to downgrade")
+
+	upstreamServiceName = flag.String(updateconstants.UpstreamServiceName, string(contracts.MessageDeliveryService), "defines the upstream messaging service")
 
 	// Legacy flags no longer used, need to be defined or we get this error: flag provided but not defined
 	flag.String(updateconstants.TargetLocationCmd, "", "target Agent installer source")
@@ -182,23 +185,24 @@ func updateAgent() int {
 
 	// Create new UpdateDetail
 	updateDetail := &processor.UpdateDetail{
-		State:              processor.NotStarted,
-		Result:             contracts.ResultStatusInProgress,
-		SourceVersion:      *sourceVersion,
-		SourceLocation:     *sourceLocation,
-		TargetVersion:      *targetVersion,
-		StdoutFileName:     *stdout,
-		StderrFileName:     *stderr,
-		OutputS3KeyPrefix:  *outputKeyPrefix,
-		OutputS3BucketName: *outputBucket,
-		PackageName:        *packageName,
-		MessageID:          *messageID,
-		StartDateTime:      time.Now().UTC(),
-		RequiresUninstall:  false,
-		ManifestURL:        *manifestURL,
-		Manifest:           updatemanifest.New(agentContext, updateInfo),
-		SelfUpdate:         *selfUpdate,
-		AllowDowngrade:     !*disableDowngrade,
+		State:               processor.NotStarted,
+		Result:              contracts.ResultStatusInProgress,
+		SourceVersion:       *sourceVersion,
+		SourceLocation:      *sourceLocation,
+		TargetVersion:       *targetVersion,
+		StdoutFileName:      *stdout,
+		StderrFileName:      *stderr,
+		OutputS3KeyPrefix:   *outputKeyPrefix,
+		OutputS3BucketName:  *outputBucket,
+		PackageName:         *packageName,
+		MessageID:           *messageID,
+		StartDateTime:       time.Now().UTC(),
+		RequiresUninstall:   false,
+		ManifestURL:         *manifestURL,
+		Manifest:            updatemanifest.New(agentContext, updateInfo),
+		SelfUpdate:          *selfUpdate,
+		AllowDowngrade:      !*disableDowngrade,
+		UpstreamServiceName: *upstreamServiceName,
 	}
 
 	updateDetail.UpdateRoot, err = updateutil.ResolveUpdateRoot(updateDetail.SourceVersion)

@@ -49,9 +49,16 @@ func (u *updateManager) inProgress(updateDetail *UpdateDetail, log logPkg.T, sta
 	updateDetail.Result = contracts.ResultStatusInProgress
 
 	if updateDetail.HasMessageID() && !updateDetail.SelfUpdate {
-		err = u.svc.SendReply(log, updateDetail)
-		if err != nil {
-			log.Errorf(err.Error())
+		if updateDetail.UpstreamServiceName == string(contracts.MessageGatewayService) {
+			agentResult := prepareAgentResult(u.Context, updateDetail)
+			if err = persistPayload(log, updateDetail, u.Context.Identity(), agentResult); err != nil {
+				log.Errorf(err.Error())
+			}
+		} else {
+			err = u.svc.SendReply(log, updateDetail)
+			if err != nil {
+				log.Errorf(err.Error())
+			}
 		}
 	}
 
@@ -166,12 +173,19 @@ func finalizeUpdateAndSendReply(u *updateManager, updateDetail *UpdateDetail, er
 		}
 		// send reply except for self update, don't send any response back to service side for self update
 		if updateDetail.HasMessageID() {
-			if err = u.svc.SendReply(log, updateDetail); err != nil {
-				log.Errorf(err.Error())
-			}
+			if updateDetail.UpstreamServiceName == string(contracts.MessageGatewayService) {
+				agentResult := prepareAgentResult(u.Context, updateDetail)
+				if err = persistPayload(log, updateDetail, u.Context.Identity(), agentResult); err != nil {
+					log.Errorf(err.Error())
+				}
+			} else {
+				if err = u.svc.SendReply(log, updateDetail); err != nil {
+					log.Errorf(err.Error())
+				}
 
-			if err = u.svc.DeleteMessage(log, updateDetail); err != nil {
-				log.Errorf(err.Error())
+				if err = u.svc.DeleteMessage(log, updateDetail); err != nil {
+					log.Errorf(err.Error())
+				}
 			}
 		}
 

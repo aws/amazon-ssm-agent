@@ -67,6 +67,7 @@ func (suite *MGSInteractorTestSuite) TestInitialize() {
 		close(mgsInteractor.incomingAgentMessageChan)
 		close(mgsInteractor.replyChan)
 		close(mgsInteractor.sendReplyProp.reply)
+		close(mgsInteractor.updateWatcherDone)
 	}()
 	mockControlChannel := &controlChannelMock.IControlChannel{}
 	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
@@ -92,6 +93,7 @@ func (suite *MGSInteractorTestSuite) TestInitializeHandlesNilAbleToOpenMGSConnec
 		close(mgsInteractor.incomingAgentMessageChan)
 		close(mgsInteractor.replyChan)
 		close(mgsInteractor.sendReplyProp.reply)
+		close(mgsInteractor.updateWatcherDone)
 	}()
 	mockControlChannel := &controlChannelMock.IControlChannel{}
 	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)

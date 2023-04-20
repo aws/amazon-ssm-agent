@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
@@ -115,4 +116,59 @@ func TestSendReplyDeleteMessage(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
+}
+
+func TestPrepareAgentResultCorrectlyPopulatesFields(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	updateDetail := createUpdateDetail(Installed)
+
+	agentResult := prepareAgentResult(context, updateDetail)
+	assert.Equal(t, updateDetail.MessageID, agentResult.MessageID)
+	assert.Equal(t, updateDetail.Result, agentResult.Status)
+	assert.Equal(t, 1, agentResult.NPlugins)
+	assert.Equal(t, contracts.RunCommandResult, agentResult.ResultType)
+	assert.Equal(t, contracts.SendCommand, agentResult.RelatedDocumentType)
+}
+
+func TestPreparePluginResultsPopulatesCodeOneForFailedUpdate(t *testing.T) {
+	mockContext := contextmocks.NewMockDefault()
+	updateDetail := &UpdateDetail{
+		Result: contracts.ResultStatusFailed,
+	}
+
+	pluginResults := preparePluginResults(mockContext, updateDetail)
+	assert.Equal(t, 1, pluginResults[appconfig.PluginNameAwsAgentUpdate].Code)
+}
+
+func TestPreparePluginResultsCorrectlyPopulatesPlugin(t *testing.T) {
+	mockContext := contextmocks.NewMockDefault()
+	startTime := time.Now()
+	endTime := time.Now()
+
+	updateDetail := &UpdateDetail{
+		Result:             contracts.ResultStatusSuccess,
+		StartDateTime:      startTime,
+		EndDateTime:        endTime,
+		StandardOut:        "out",
+		StandardError:      "err",
+		OutputS3BucketName: "bucketName",
+		OutputS3KeyPrefix:  "keyPrefix",
+	}
+
+	pluginResults := preparePluginResults(mockContext, updateDetail)
+
+	expectedPluginResult := &contracts.PluginResult{
+		Status:             contracts.ResultStatusSuccess,
+		Code:               0,
+		Output:             "out\n----------ERROR-------\nerr",
+		StartDateTime:      startTime,
+		EndDateTime:        pluginResults[appconfig.PluginNameAwsAgentUpdate].EndDateTime,
+		OutputS3BucketName: "bucketName",
+		OutputS3KeyPrefix:  "keyPrefix",
+		StandardOutput:     "out",
+		StandardError:      "err",
+	}
+
+	assert.True(t, len(pluginResults) == 1)
+	assert.Equal(t, expectedPluginResult, pluginResults[appconfig.PluginNameAwsAgentUpdate])
 }

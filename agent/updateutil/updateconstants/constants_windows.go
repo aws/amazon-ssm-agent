@@ -65,6 +65,9 @@ const (
 
 	// DisableDowngradeCmd represents the command argument for if updater should not downgrade
 	DisableDowngradeCmd = "disable-downgrade"
+
+	// UpstreamServiceName represents the upstream messaging service the command originated from
+	UpstreamServiceName = "upstream.service.name"
 )
 
 const (

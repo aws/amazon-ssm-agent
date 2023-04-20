@@ -16,6 +16,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	controlChannelMock "github.com/aws/amazon-ssm-agent/agent/session/controlchannel/mocks"
+	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -311,6 +312,124 @@ func (suite *SendReplyTestSuite) TestPersistResult_FilePresentAlready_Successful
 	}
 	mgsInteractor.persistResult(reply)
 	assert.True(suite.T(), writeFileCheck, "reply is saved successfully")
+}
+
+func (suite *SendReplyTestSuite) TestFilterReplies_FiltersOutAlreadyHandledUpdateReply() {
+	mgs := suite.getMGSInteractorRef(nil)
+
+	unfilteredReplies := []string{"reply", "handled_update"}
+	mgs.handledUpdateReplies.Store("handled_update", true)
+	replies := mgs.filterReplies(unfilteredReplies)
+	assert.True(suite.T(), len(replies) == 1)
+	assert.Equal(suite.T(), replies[0], "reply")
+}
+
+func (suite *SendReplyTestSuite) TestFilterReplies_DoesNotFilterOutUnhandledUpdateReply() {
+	mgs := suite.getMGSInteractorRef(nil)
+
+	unfilteredReplies := []string{"unhandled_update"}
+	replies := mgs.filterReplies(unfilteredReplies)
+	assert.True(suite.T(), len(replies) == 1)
+	assert.Equal(suite.T(), replies[0], "unhandled_update")
+	_, handled := mgs.handledUpdateReplies.Load("unhandled_update")
+	assert.True(suite.T(), handled)
+}
+
+func (suite *SendReplyTestSuite) TestSendUpdateReply_DoesNothingIfMessageAlreadyHandled() {
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage)
+	mockContext := context.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	messageHandlerMock.On("GetMessageUUID", mock.Anything, mock.Anything)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgs := mgsInteractorRef.(*MGSInteractor)
+	mgs.controlChannel = mockControlChannel
+
+	updatePath := "updateFile"
+	mgs.handledUpdateReplies.Store(updatePath, true)
+	assert.Nil(suite.T(), mgs.sendUpdateReply(updatePath))
+	mockControlChannel.AssertNumberOfCalls(suite.T(), "SendMessage", 0)
+}
+
+func (suite *SendReplyTestSuite) TestSendUpdateReply_WritesTrueToHandledUpdateRepliesIfMessageNotYetHandled() {
+	mgs := suite.getMGSInteractorRef(nil)
+
+	updatePath := "updateFile"
+	_ = mgs.sendUpdateReply(updatePath)
+	_, handled := mgs.handledUpdateReplies.Load(updatePath)
+	assert.True(suite.T(), handled)
+}
+
+func (suite *SendReplyTestSuite) TestDeleteFailedReply_RemovesMessageFromHandledUpdateReplies() {
+	mockContext := context.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	messageHandlerMock.On("GetMessageUUID", mock.Anything, mock.Anything)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgs := mgsInteractorRef.(*MGSInteractor)
+
+	updateFile := "updateFile"
+	mgs.handledUpdateReplies.Store(updateFile, true)
+	mgs.deleteFailedReply(mockContext.Log(), updateFile)
+	_, handled := mgs.handledUpdateReplies.Load(updateFile)
+	assert.False(suite.T(), handled)
+}
+
+func (suite *SendReplyTestSuite) TestDeleteFailedReply_HandlesFileNotInHandleUpdateReplies() {
+	mockContext := context.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	messageHandlerMock.On("GetMessageUUID", mock.Anything, mock.Anything)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgs := mgsInteractorRef.(*MGSInteractor)
+
+	updateFile := "updateFile"
+	otherFile := "otherFile"
+	mgs.handledUpdateReplies.Store(updateFile, true)
+	mgs.deleteFailedReply(mockContext.Log(), otherFile)
+	_, handled := mgs.handledUpdateReplies.Load(updateFile)
+	assert.True(suite.T(), handled)
+}
+
+func (suite *SendReplyTestSuite) TestIsUpdaterWriteEvent_ReturnsTrueForUpdateWriteEvent() {
+	mgs := suite.getMGSInteractorRef(nil)
+
+	event := fsnotify.Event{
+		Op:   fsnotify.Write,
+		Name: updateSuffix,
+	}
+	assert.True(suite.T(), mgs.isUpdateWriteEvent(event))
+}
+
+func (suite *SendReplyTestSuite) TestIsUpdaterWriteEvent_ReturnsFalseForUpdateNonWriteEvent() {
+	mgs := suite.getMGSInteractorRef(nil)
+
+	event := fsnotify.Event{
+		Op:   fsnotify.Create,
+		Name: updateSuffix,
+	}
+	assert.False(suite.T(), mgs.isUpdateWriteEvent(event))
+}
+
+func (suite *SendReplyTestSuite) TestIsUpdaterWriteEvent_ReturnsFalseForNonUpdateWriteEvent() {
+	mgs := suite.getMGSInteractorRef(nil)
+
+	event := fsnotify.Event{
+		Op:   fsnotify.Write,
+		Name: "notUpdate",
+	}
+	assert.False(suite.T(), mgs.isUpdateWriteEvent(event))
+}
+
+func (suite *SendReplyTestSuite) TestStopUpdateReplyFileWatcher_WritesTrueToUpdateWatcherDoneChannel() {
+	mgs := suite.getMGSInteractorRef(nil)
+	mgs.updateWatcherDone = make(chan bool, 1)
+	mgs.stopUpdateReplyFileWatcher()
+	assert.True(suite.T(), <-mgs.updateWatcherDone)
 }
 
 func (suite *SendReplyTestSuite) getMGSInteractorRef(sendControlChannelErr error) *MGSInteractor {
