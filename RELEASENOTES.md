@@ -1,5 +1,14 @@
 Latest
 ===============
+- Update Dockerfile Go version to 1.19
+- Add reporting of MGS connection status
+- Add support for updating to agent version marked stable
+- Add status code to MGS ack and send on message process failure
+- Update golangci-lint configuration
+- Add e2e tag to session shell tests
+
+3.2.815.0
+===============
 - Add EC2 credential fallback for AssumeRoleUnauthorizedAccess error
 - Add CloudWatch log upload support for document and session worker
 - Add set-hostname support in domainjoin plugin for windows 
