@@ -55,7 +55,7 @@ type MDSInteractor struct {
 	messageHandler          messageHandler.IMessageHandler
 	replyChan               chan contracts.DocumentResult
 	ackSkipCodes            map[messageHandler.ErrorCode]struct{}
-	ableToOpenMGSConnection *atomic.Bool
+	ableToOpenMGSConnection *uint32
 }
 
 const (
@@ -143,7 +143,7 @@ func (mds *MDSInteractor) GetSupportedWorkers() []utils.WorkerName {
 }
 
 // Initialize initializes MDSInteractor properties and starts failed reply job
-func (mds *MDSInteractor) Initialize(ableToOpenMGSConnection *atomic.Bool) (err error) {
+func (mds *MDSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error) {
 	log := mds.context.Log()
 	mds.ableToOpenMGSConnection = ableToOpenMGSConnection
 
@@ -224,7 +224,7 @@ func (mds *MDSInteractor) listenReply() {
 		payloadDoc := messageContracts.SendReplyPayload{}
 
 		if mds.ableToOpenMGSConnection != nil {
-			ableToOpenMGSConnection := mds.ableToOpenMGSConnection.Load()
+			ableToOpenMGSConnection := atomic.LoadUint32(mds.ableToOpenMGSConnection) != 0
 			payloadDoc = utils.PrepareReplyPayloadFromIntermediatePluginResults(mds.context.Log(), pluginID, mds.config.AgentInfo, result.PluginResults, &ableToOpenMGSConnection)
 		} else {
 			payloadDoc = utils.PrepareReplyPayloadFromIntermediatePluginResults(mds.context.Log(), pluginID, mds.config.AgentInfo, result.PluginResults, nil)
@@ -482,7 +482,7 @@ func (mds *MDSInteractor) sendDocLevelResponse(messageID string, resultStatus co
 	payloadDoc := messageContracts.SendReplyPayload{}
 
 	if mds.ableToOpenMGSConnection != nil {
-		ableToOpenMGSConnection := mds.ableToOpenMGSConnection.Load()
+		ableToOpenMGSConnection := atomic.LoadUint32(mds.ableToOpenMGSConnection) != 0
 		payloadDoc = utils.PrepareReplyPayloadToUpdateDocumentStatus(mds.config.AgentInfo, resultStatus, documentTraceOutput, &ableToOpenMGSConnection)
 	} else {
 		payloadDoc = utils.PrepareReplyPayloadToUpdateDocumentStatus(mds.config.AgentInfo, resultStatus, documentTraceOutput, nil)

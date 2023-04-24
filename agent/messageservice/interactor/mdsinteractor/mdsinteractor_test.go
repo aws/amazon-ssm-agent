@@ -66,12 +66,13 @@ func (suite *MDSInteractorTestSuite) SetupTest() {
 	newMdsService = func(context context.T) mdsService.Service {
 		return mdsMock
 	}
+	var ableToOpenMGSConnection uint32
 	interactor := &MDSInteractor{
 		context:                 contextMock,
 		service:                 mdsMock,
 		messagePollWaitGroup:    &sync.WaitGroup{},
 		processorStopPolicy:     sdkutil.NewStopPolicy(Name, testStopPolicyThreshold),
-		ableToOpenMGSConnection: &atomic.Bool{},
+		ableToOpenMGSConnection: &ableToOpenMGSConnection,
 	}
 
 	suite.contextMock = contextMock
@@ -88,14 +89,14 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_Initialize() {
 
 	mdsInteractor := suite.mdsInteractor
 	mdsInteractor.replyChan = make(chan contracts.DocumentResult, 1)
-	ableToOpenMGSConnection := &atomic.Bool{}
-	err := mdsInteractor.Initialize(ableToOpenMGSConnection)
+	var ableToOpenMGSConnection uint32
+	err := mdsInteractor.Initialize(&ableToOpenMGSConnection)
 
 	assert.NoError(suite.T(), err)
 	// message polling should not be loaded during this time
 	assert.Nil(suite.T(), mdsInteractor.messagePollJob)
 	assert.NotNil(suite.T(), mdsInteractor.sendReplyJob)
-	assert.False(suite.T(), mdsInteractor.ableToOpenMGSConnection.Load())
+	assert.False(suite.T(), atomic.LoadUint32(mdsInteractor.ableToOpenMGSConnection) != 0)
 	close(mdsInteractor.replyChan)
 	close(incomingChan)
 }
@@ -109,7 +110,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_InitializeHandlesNilAbleT
 
 	mdsInteractor := suite.mdsInteractor
 	mdsInteractor.replyChan = make(chan contracts.DocumentResult, 1)
-	var ableToOpenMGSConnection *atomic.Bool = nil
+	var ableToOpenMGSConnection *uint32 = nil
 	err := mdsInteractor.Initialize(ableToOpenMGSConnection)
 
 	assert.NoError(suite.T(), err)
@@ -130,14 +131,14 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_PicksUpMGSStatusUpdate() 
 
 	mdsInteractor := suite.mdsInteractor
 	mdsInteractor.replyChan = make(chan contracts.DocumentResult, 1)
-	ableToOpenMGSConnection := &atomic.Bool{}
-	err := mdsInteractor.Initialize(ableToOpenMGSConnection)
+	var ableToOpenMGSConnection uint32
+	err := mdsInteractor.Initialize(&ableToOpenMGSConnection)
 
 	assert.NoError(suite.T(), err)
-	assert.False(suite.T(), mdsInteractor.ableToOpenMGSConnection.Load())
+	assert.False(suite.T(), atomic.LoadUint32(mdsInteractor.ableToOpenMGSConnection) != 0)
 
-	ableToOpenMGSConnection.Store(true)
-	assert.True(suite.T(), mdsInteractor.ableToOpenMGSConnection.Load())
+	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
+	assert.True(suite.T(), atomic.LoadUint32(mdsInteractor.ableToOpenMGSConnection) != 0)
 
 	close(mdsInteractor.replyChan)
 	close(incomingChan)

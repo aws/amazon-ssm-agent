@@ -15,15 +15,13 @@
 package interactor
 
 import (
-	"sync/atomic"
-
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
 )
 
 // IInteractor defines the interface for interactors
 type IInteractor interface {
 	// Initialize initializes interactor
-	Initialize(ableToOpenMGSConnection *atomic.Bool) error
+	Initialize(ableToOpenMGSConnection *uint32) error
 	// PostProcessorInitialization sets values needed post initialization
 	// This should be called after processor initialization call
 	PostProcessorInitialization(name utils.WorkerName)

@@ -157,7 +157,7 @@ func (mgs *MGSInteractor) GetSupportedWorkers() []utils.WorkerName {
 }
 
 // Initialize initializes interactor properties and starts failed reply job
-func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *atomic.Bool) (err error) {
+func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error) {
 	log := mgs.context.Log()
 	// initialize ack skip codes
 	mgs.ackSkipCodes = map[messagehandler.ErrorCode]string{
@@ -196,7 +196,7 @@ func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *atomic.Bool) (err 
 	}
 	log.Info("Set up control channel successfully")
 	if ableToOpenMGSConnection != nil {
-		ableToOpenMGSConnection.Store(true)
+		atomic.StoreUint32(ableToOpenMGSConnection, 1)
 	}
 	return nil
 }
@@ -518,7 +518,7 @@ func (mgs *MGSInteractor) processTaskAcknowledgeMessage(agentMessage mgsContract
 	}
 }
 
-var setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
+var setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *uint32) (controlchannel.IControlChannel, error) {
 	retryer := retry.ExponentialRetryer{
 		CallableFunc: func() (channel interface{}, err error) {
 			controlChannel := &controlchannel.ControlChannel{}

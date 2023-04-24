@@ -71,12 +71,12 @@ func (suite *MGSInteractorTestSuite) TestInitialize() {
 	mockControlChannel := &controlChannelMock.IControlChannel{}
 	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
 
-	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
+	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *uint32) (controlchannel.IControlChannel, error) {
 		return mockControlChannel, nil
 	}
 
-	ableToOpenMGSConnection := &atomic.Bool{}
-	mgsInteractor.Initialize(ableToOpenMGSConnection)
+	var ableToOpenMGSConnection uint32
+	mgsInteractor.Initialize(&ableToOpenMGSConnection)
 	assert.True(suite.T(), true, "initialize passed")
 }
 
@@ -96,11 +96,11 @@ func (suite *MGSInteractorTestSuite) TestInitializeHandlesNilAbleToOpenMGSConnec
 	mockControlChannel := &controlChannelMock.IControlChannel{}
 	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
 
-	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
+	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *uint32) (controlchannel.IControlChannel, error) {
 		return mockControlChannel, nil
 	}
 
-	var ableToOpenMGSConnection *atomic.Bool = nil
+	var ableToOpenMGSConnection *uint32 = nil
 	mgsInteractor.Initialize(ableToOpenMGSConnection)
 	assert.True(suite.T(), true, "initialize passed")
 }
@@ -114,13 +114,13 @@ func (suite *MGSInteractorTestSuite) TestInitializeReportsHealthyMGSConnectionIf
 	mgsInteractor := mgsInteractorRef.(*MGSInteractor)
 
 	mockControlChannel := &controlChannelMock.IControlChannel{}
-	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *atomic.Bool) (controlchannel.IControlChannel, error) {
+	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *uint32) (controlchannel.IControlChannel, error) {
 		return mockControlChannel, nil
 	}
 
-	ableToOpenMGSConnection := &atomic.Bool{}
-	mgsInteractor.Initialize(ableToOpenMGSConnection)
-	assert.True(suite.T(), ableToOpenMGSConnection.Load())
+	var ableToOpenMGSConnection uint32
+	mgsInteractor.Initialize(&ableToOpenMGSConnection)
+	assert.True(suite.T(), atomic.LoadUint32(&ableToOpenMGSConnection) != 0)
 }
 
 func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesExist() {

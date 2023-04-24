@@ -15,8 +15,6 @@
 package mocks
 
 import (
-	"sync/atomic"
-
 	context "github.com/aws/amazon-ssm-agent/agent/context"
 	log "github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -49,7 +47,7 @@ func (_m *IControlChannel) Initialize(_a0 context.T, mgsService service.Service,
 }
 
 // Open provides a mock function with given fields: _a0
-func (_m *IControlChannel) Open(_a0 log.T, ableToOpenMGSConnection *atomic.Bool) error {
+func (_m *IControlChannel) Open(_a0 log.T, ableToOpenMGSConnection *uint32) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
@@ -63,7 +61,7 @@ func (_m *IControlChannel) Open(_a0 log.T, ableToOpenMGSConnection *atomic.Bool)
 }
 
 // Reconnect provides a mock function with given fields: _a0
-func (_m *IControlChannel) Reconnect(_a0 log.T, ableToOpenMGSConnection *atomic.Bool) error {
+func (_m *IControlChannel) Reconnect(_a0 log.T, ableToOpenMGSConnection *uint32) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
@@ -91,7 +89,7 @@ func (_m *IControlChannel) SendMessage(_a0 log.T, input []byte, inputType int) e
 }
 
 // SetWebSocket provides a mock function with given fields: _a0, mgsService, _a2, instanceId
-func (_m *IControlChannel) SetWebSocket(_a0 context.T, mgsService service.Service, ableToOpenMGSConnection *atomic.Bool) error {
+func (_m *IControlChannel) SetWebSocket(_a0 context.T, mgsService service.Service, ableToOpenMGSConnection *uint32) error {
 	ret := _m.Called(_a0, mgsService)
 
 	var r0 error
