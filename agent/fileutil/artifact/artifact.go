@@ -21,6 +21,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -310,6 +311,40 @@ func s3Download(context context.T, amazonS3URL s3util.AmazonS3URL, destFile stri
 		log.Errorf("failed to write destFile %v, %v ", destFile, err)
 	}
 	return
+}
+
+// S3FileRead attempts to read a file content from S3 via s3 client.
+func S3FileRead(context context.T, s3FullPath string) (output []byte, err error) {
+	log := context.Log()
+
+	var fileURL *url.URL
+	fileURL, err = url.Parse(s3FullPath)
+	amazonS3URL := s3util.ParseAmazonS3URL(log, fileURL)
+	params := &s3.GetObjectInput{
+		Bucket: aws.String(amazonS3URL.Bucket),
+		Key:    aws.String(amazonS3URL.Key),
+	}
+
+	sess, err := s3util.GetS3CrossRegionCapableSession(context, amazonS3URL.Bucket)
+	if err != nil {
+		log.Errorf("failed to get S3 session: %v", err)
+		return nil, err
+	}
+
+	s3client := s3.New(sess)
+	resp, err := s3client.GetObject(params)
+	if err != nil {
+		return nil, err
+	}
+	if resp == nil {
+		return nil, fmt.Errorf("response is nil")
+	}
+	defer resp.Body.Close()
+	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
 }
 
 // FileCopy copies the content from reader to destinationPath file

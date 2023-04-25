@@ -422,48 +422,59 @@ func TestDownloadUpdater_Success(t *testing.T) {
 	assert.Equal(t, expectedVersion, version)
 }
 
-func TestGetStableVersion_FailedHttpRequest(t *testing.T) {
+func TestGetStableVersion_s3httpDownload_Success(t *testing.T) {
 	mockContext := contextmocks.NewMockDefault()
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
+	// s3 success
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return []byte("3.1.1.1"), nil
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), nil
+	}
+	version, err := util.GetStableVersion("")
+	assert.Equal(t, "3.1.1.1", version)
+	assert.Nil(t, err)
 
-	version, err := util.GetStableVersion("", nil)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "http client is uninitialized")
-	assert.Empty(t, version)
+	// s3 fail & http success
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return []byte("3.1.1.1"), fmt.Errorf("s3 download failed")
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), nil
+	}
+	version, err = util.GetStableVersion("stableUrl")
+	assert.Equal(t, "3.2.1.1", version)
+	assert.Nil(t, err)
 
-	httpClient := &http.Client{}
-	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
-		return &http.Response{
-			StatusCode: http.StatusBadRequest,
-			Body:       ioutil.NopCloser(bytes.NewReader([]byte("error"))),
-			Header:     http.Header{},
-		}
-	})
-
-	version, err = util.GetStableVersion("", httpClient)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "unsuccessful request: response code:")
+	// s3 fail & http success
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return nil, nil
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), nil
+	}
+	version, err = util.GetStableVersion("stableUrl")
+	assert.Equal(t, "3.2.1.1", version)
+	assert.Nil(t, err)
 }
 
-func TestGetStableVersion_FailedReadRequestBody(t *testing.T) {
-	httpClient := &http.Client{}
-	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
-		return &http.Response{
-			StatusCode: http.StatusBadRequest,
-			Body:       ioutil.NopCloser(bytes.NewReader([]byte("error"))),
-			Header:     http.Header{},
-		}
-	})
+func TestGetStableVersion_s3httpDownload_Failed(t *testing.T) {
 	mockContext := contextmocks.NewMockDefault()
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
-
-	version, err := util.GetStableVersion("", httpClient)
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return []byte("3.1.1.1"), fmt.Errorf("s3 download failed")
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), fmt.Errorf("http download failed")
+	}
+	version, err := util.GetStableVersion("stableUrl")
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "unsuccessful request: response code")
+	assert.Contains(t, err.Error(), "http download failed")
 	assert.Empty(t, version)
 }
 
@@ -482,17 +493,15 @@ func TestGetStableVersion_InvalidVersion(t *testing.T) {
 		"3.1.1.1a",
 		"3.1.1",
 	}
-
 	for _, versionResponse := range versionsToTest {
-		httpClient := &http.Client{}
-		httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Body:       ioutil.NopCloser(bytes.NewReader([]byte(versionResponse))),
-				Header:     http.Header{},
-			}
-		})
-		version, err := util.GetStableVersion("", httpClient)
+
+		s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+			return []byte(versionResponse), nil
+		}
+		https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+			return []byte(versionResponse), nil
+		}
+		version, err := util.GetStableVersion("stableUrl")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "invalid version format returned from")
 		if !strings.HasSuffix(err.Error(), versionResponse) {
@@ -502,7 +511,7 @@ func TestGetStableVersion_InvalidVersion(t *testing.T) {
 	}
 }
 
-func TestGetStableVersion_Success(t *testing.T) {
+func TestHttpDownload_Success(t *testing.T) {
 	httpClient := &http.Client{}
 	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
 		return &http.Response{
@@ -511,14 +520,23 @@ func TestGetStableVersion_Success(t *testing.T) {
 			Header:     http.Header{},
 		}
 	})
-	mockContext := contextmocks.NewMockDefault()
-	util := &updateS3UtilImpl{
-		mockContext,
-	}
-
-	version, err := util.GetStableVersion("", httpClient)
+	version, err := httpDownload("stableUrl", httpClient)
 	assert.NoError(t, err)
-	assert.Equal(t, "3.1.1188.0", version)
+	assert.Equal(t, "3.1.1188.0", string(version))
+}
+
+func TestHttpDownload_Failure(t *testing.T) {
+	httpClient := &http.Client{}
+	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
+		return &http.Response{
+			StatusCode: http.StatusBadRequest,
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte("3.1.1188.0"))),
+			Header:     http.Header{},
+		}
+	})
+	version, err := httpDownload("stableUrl", httpClient)
+	assert.Error(t, err)
+	assert.Equal(t, "", string(version))
 }
 
 type roundTripFunc func(req *http.Request) *http.Response
