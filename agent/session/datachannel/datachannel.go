@@ -731,8 +731,11 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 			dataChannel.AddDataToIncomingMessageBuffer(streamingMessage)
 		}
 	} else {
-		log.Tracef("Discarding already processed message. Received Sequence Number: %d. Expected Sequence Number: %d",
+		log.Debugf("Resending acknowledge for already processed message. Received Sequence Number: %d. Expected Sequence Number: %d",
 			streamDataMessage.SequenceNumber, dataChannel.ExpectedSequenceNumber)
+		if err = dataChannel.SendAcknowledgeMessage(log, streamDataMessage); err != nil {
+			return err
+		}
 	}
 	return nil
 }

@@ -471,6 +471,30 @@ func TestDataChannelIncomingMessageHandlerForUnexpectedInputStreamDataMessage(t 
 	assert.Nil(t, bufferedStreamMessage.Content)
 }
 
+func TestDataChannelIncomingMessageHandlerForAlreadyProcessedInputStreamDataMessage(t *testing.T) {
+	dataChannel := getDataChannel()
+	dataChannel.Pause = true
+	mockChannel := &communicatorMocks.IWebSocketChannel{}
+	dataChannel.wsChannel = mockChannel
+
+	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	// First scenario is to test when incoming message sequence number matches with expected sequence number
+	// and no message found in IncomingMessageBuffer
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), dataChannel.ExpectedSequenceNumber)
+	assert.Equal(t, 0, len(dataChannel.IncomingMessageBuffer.Messages))
+	mockChannel.AssertNumberOfCalls(t, "SendMessage", 1)
+	assert.Equal(t, false, dataChannel.Pause)
+
+	// Second scenario is to test when incoming message sequence number is less with expected sequence number
+	err = dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
+	assert.Nil(t, err)
+	// verify it should resend the ack message
+	mockChannel.AssertNumberOfCalls(t, "SendMessage", 2)
+}
+
 func TestDataChannelIncomingMessageHandlerForExpectedInputStreamDataMessageWhenHandlerNotReady(t *testing.T) {
 	dataChannel := getDataChannel()
 	dataChannel.inputStreamMessageHandler = inputStreamMessageHandlerNotReady
