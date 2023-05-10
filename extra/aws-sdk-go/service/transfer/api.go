@@ -191,6 +191,9 @@ func (c *Transfer) CreateAgreementRequest(input *CreateAgreementInput) (req *req
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
 //
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/CreateAgreement
 func (c *Transfer) CreateAgreement(input *CreateAgreementInput) (*CreateAgreementOutput, error) {
 	req, out := c.CreateAgreementRequest(input)
@@ -258,8 +261,9 @@ func (c *Transfer) CreateConnectorRequest(input *CreateConnectorInput) (req *req
 // CreateConnector API operation for AWS Transfer Family.
 //
 // Creates the connector, which captures the parameters for an outbound connection
-// for the AS2 protocol. The connector is required for sending files from a
-// customer's non Amazon Web Services server.
+// for the AS2 protocol. The connector is required for sending files to an externally
+// hosted AS2 server. For more details about connectors, see Create AS2 connectors
+// (https://docs.aws.amazon.com/transfer/latest/userguide/create-b2b-server.html#configure-as2-connector).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -286,6 +290,9 @@ func (c *Transfer) CreateConnectorRequest(input *CreateConnectorInput) (req *req
 //   * ResourceNotFoundException
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/CreateConnector
 func (c *Transfer) CreateConnector(input *CreateConnectorInput) (*CreateConnectorOutput, error) {
@@ -353,8 +360,7 @@ func (c *Transfer) CreateProfileRequest(input *CreateProfileInput) (req *request
 
 // CreateProfile API operation for AWS Transfer Family.
 //
-// Creates the profile for the AS2 process. The agreement is between the partner
-// and the AS2 process.
+// Creates the local or partner profile to use for AS2 transfers.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -378,6 +384,9 @@ func (c *Transfer) CreateProfileRequest(input *CreateProfileInput) (req *request
 //   * ResourceNotFoundException
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/CreateProfile
 func (c *Transfer) CreateProfile(input *CreateProfileInput) (*CreateProfileOutput, error) {
@@ -1067,6 +1076,101 @@ func (c *Transfer) DeleteConnector(input *DeleteConnectorInput) (*DeleteConnecto
 // for more information on using Contexts.
 func (c *Transfer) DeleteConnectorWithContext(ctx aws.Context, input *DeleteConnectorInput, opts ...request.Option) (*DeleteConnectorOutput, error) {
 	req, out := c.DeleteConnectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteHostKey = "DeleteHostKey"
+
+// DeleteHostKeyRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteHostKey operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteHostKey for more information on using the DeleteHostKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteHostKeyRequest method.
+//    req, resp := client.DeleteHostKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/DeleteHostKey
+func (c *Transfer) DeleteHostKeyRequest(input *DeleteHostKeyInput) (req *request.Request, output *DeleteHostKeyOutput) {
+	op := &request.Operation{
+		Name:       opDeleteHostKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteHostKeyInput{}
+	}
+
+	output = &DeleteHostKeyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteHostKey API operation for AWS Transfer Family.
+//
+// Deletes the host key that's specified in the HoskKeyId parameter.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Transfer Family's
+// API operation DeleteHostKey for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceUnavailableException
+//   The request has failed because the Amazon Web ServicesTransfer Family service
+//   is not available.
+//
+//   * InternalServiceError
+//   This exception is thrown when an error occurs in the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * InvalidRequestException
+//   This exception is thrown when the client submits a malformed request.
+//
+//   * ResourceNotFoundException
+//   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/DeleteHostKey
+func (c *Transfer) DeleteHostKey(input *DeleteHostKeyInput) (*DeleteHostKeyOutput, error) {
+	req, out := c.DeleteHostKeyRequest(input)
+	return out, req.Send()
+}
+
+// DeleteHostKeyWithContext is the same as DeleteHostKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteHostKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Transfer) DeleteHostKeyWithContext(ctx aws.Context, input *DeleteHostKeyInput, opts ...request.Option) (*DeleteHostKeyOutput, error) {
+	req, out := c.DeleteHostKeyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2008,6 +2112,98 @@ func (c *Transfer) DescribeExecutionWithContext(ctx aws.Context, input *Describe
 	return out, req.Send()
 }
 
+const opDescribeHostKey = "DescribeHostKey"
+
+// DescribeHostKeyRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeHostKey operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeHostKey for more information on using the DescribeHostKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeHostKeyRequest method.
+//    req, resp := client.DescribeHostKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/DescribeHostKey
+func (c *Transfer) DescribeHostKeyRequest(input *DescribeHostKeyInput) (req *request.Request, output *DescribeHostKeyOutput) {
+	op := &request.Operation{
+		Name:       opDescribeHostKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeHostKeyInput{}
+	}
+
+	output = &DescribeHostKeyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeHostKey API operation for AWS Transfer Family.
+//
+// Returns the details of the host key that's specified by the HostKeyId and
+// ServerId.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Transfer Family's
+// API operation DescribeHostKey for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceUnavailableException
+//   The request has failed because the Amazon Web ServicesTransfer Family service
+//   is not available.
+//
+//   * InternalServiceError
+//   This exception is thrown when an error occurs in the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * InvalidRequestException
+//   This exception is thrown when the client submits a malformed request.
+//
+//   * ResourceNotFoundException
+//   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
+//   Family service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/DescribeHostKey
+func (c *Transfer) DescribeHostKey(input *DescribeHostKeyInput) (*DescribeHostKeyOutput, error) {
+	req, out := c.DescribeHostKeyRequest(input)
+	return out, req.Send()
+}
+
+// DescribeHostKeyWithContext is the same as DescribeHostKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeHostKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Transfer) DescribeHostKeyWithContext(ctx aws.Context, input *DescribeHostKeyInput, opts ...request.Option) (*DescribeHostKeyOutput, error) {
+	req, out := c.DescribeHostKeyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeProfile = "DescribeProfile"
 
 // DescribeProfileRequest generates a "aws/request.Request" representing the
@@ -2561,6 +2757,103 @@ func (c *Transfer) ImportCertificate(input *ImportCertificateInput) (*ImportCert
 // for more information on using Contexts.
 func (c *Transfer) ImportCertificateWithContext(ctx aws.Context, input *ImportCertificateInput, opts ...request.Option) (*ImportCertificateOutput, error) {
 	req, out := c.ImportCertificateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opImportHostKey = "ImportHostKey"
+
+// ImportHostKeyRequest generates a "aws/request.Request" representing the
+// client's request for the ImportHostKey operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ImportHostKey for more information on using the ImportHostKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ImportHostKeyRequest method.
+//    req, resp := client.ImportHostKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/ImportHostKey
+func (c *Transfer) ImportHostKeyRequest(input *ImportHostKeyInput) (req *request.Request, output *ImportHostKeyOutput) {
+	op := &request.Operation{
+		Name:       opImportHostKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ImportHostKeyInput{}
+	}
+
+	output = &ImportHostKeyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ImportHostKey API operation for AWS Transfer Family.
+//
+// Adds a host key to the server that's specified by the ServerId parameter.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Transfer Family's
+// API operation ImportHostKey for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceUnavailableException
+//   The request has failed because the Amazon Web ServicesTransfer Family service
+//   is not available.
+//
+//   * InternalServiceError
+//   This exception is thrown when an error occurs in the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * InvalidRequestException
+//   This exception is thrown when the client submits a malformed request.
+//
+//   * ResourceExistsException
+//   The requested resource does not exist.
+//
+//   * ResourceNotFoundException
+//   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/ImportHostKey
+func (c *Transfer) ImportHostKey(input *ImportHostKeyInput) (*ImportHostKeyOutput, error) {
+	req, out := c.ImportHostKeyRequest(input)
+	return out, req.Send()
+}
+
+// ImportHostKeyWithContext is the same as ImportHostKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ImportHostKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Transfer) ImportHostKeyWithContext(ctx aws.Context, input *ImportHostKeyInput, opts ...request.Option) (*ImportHostKeyOutput, error) {
+	req, out := c.ImportHostKeyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3434,6 +3727,101 @@ func (c *Transfer) ListExecutionsPagesWithContext(ctx aws.Context, input *ListEx
 	}
 
 	return p.Err()
+}
+
+const opListHostKeys = "ListHostKeys"
+
+// ListHostKeysRequest generates a "aws/request.Request" representing the
+// client's request for the ListHostKeys operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListHostKeys for more information on using the ListHostKeys
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListHostKeysRequest method.
+//    req, resp := client.ListHostKeysRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/ListHostKeys
+func (c *Transfer) ListHostKeysRequest(input *ListHostKeysInput) (req *request.Request, output *ListHostKeysOutput) {
+	op := &request.Operation{
+		Name:       opListHostKeys,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListHostKeysInput{}
+	}
+
+	output = &ListHostKeysOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListHostKeys API operation for AWS Transfer Family.
+//
+// Returns a list of host keys for the server that's specified by the ServerId
+// parameter.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Transfer Family's
+// API operation ListHostKeys for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceUnavailableException
+//   The request has failed because the Amazon Web ServicesTransfer Family service
+//   is not available.
+//
+//   * InternalServiceError
+//   This exception is thrown when an error occurs in the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * InvalidNextTokenException
+//   The NextToken parameter that was passed is invalid.
+//
+//   * InvalidRequestException
+//   This exception is thrown when the client submits a malformed request.
+//
+//   * ResourceNotFoundException
+//   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
+//   Family service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/ListHostKeys
+func (c *Transfer) ListHostKeys(input *ListHostKeysInput) (*ListHostKeysOutput, error) {
+	req, out := c.ListHostKeysRequest(input)
+	return out, req.Send()
+}
+
+// ListHostKeysWithContext is the same as ListHostKeys with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListHostKeys for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Transfer) ListHostKeysWithContext(ctx aws.Context, input *ListHostKeysInput, opts ...request.Option) (*ListHostKeysOutput, error) {
+	req, out := c.ListHostKeysRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
 }
 
 const opListProfiles = "ListProfiles"
@@ -4485,8 +4873,8 @@ func (c *Transfer) StartFileTransferRequest(input *StartFileTransferInput) (req 
 
 // StartFileTransfer API operation for AWS Transfer Family.
 //
-// Begins an outbound file transfer. You specify the ConnectorId and the file
-// paths for where to send the files.
+// Begins an outbound file transfer to a remote AS2 server. You specify the
+// ConnectorId and the file paths for where to send the files.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5124,6 +5512,9 @@ func (c *Transfer) UpdateAccessRequest(input *UpdateAccessInput) (req *request.R
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
 //
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/UpdateAccess
 func (c *Transfer) UpdateAccess(input *UpdateAccessInput) (*UpdateAccessOutput, error) {
 	req, out := c.UpdateAccessRequest(input)
@@ -5220,6 +5611,9 @@ func (c *Transfer) UpdateAgreementRequest(input *UpdateAgreementInput) (req *req
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
 //
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/UpdateAgreement
 func (c *Transfer) UpdateAgreement(input *UpdateAgreementInput) (*UpdateAgreementOutput, error) {
 	req, out := c.UpdateAgreementRequest(input)
@@ -5310,6 +5704,9 @@ func (c *Transfer) UpdateCertificateRequest(input *UpdateCertificateInput) (req 
 //   * ResourceNotFoundException
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/UpdateCertificate
 func (c *Transfer) UpdateCertificate(input *UpdateCertificateInput) (*UpdateCertificateOutput, error) {
@@ -5407,6 +5804,9 @@ func (c *Transfer) UpdateConnectorRequest(input *UpdateConnectorInput) (req *req
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
 //
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/UpdateConnector
 func (c *Transfer) UpdateConnector(input *UpdateConnectorInput) (*UpdateConnectorOutput, error) {
 	req, out := c.UpdateConnectorRequest(input)
@@ -5424,6 +5824,101 @@ func (c *Transfer) UpdateConnector(input *UpdateConnectorInput) (*UpdateConnecto
 // for more information on using Contexts.
 func (c *Transfer) UpdateConnectorWithContext(ctx aws.Context, input *UpdateConnectorInput, opts ...request.Option) (*UpdateConnectorOutput, error) {
 	req, out := c.UpdateConnectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateHostKey = "UpdateHostKey"
+
+// UpdateHostKeyRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateHostKey operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateHostKey for more information on using the UpdateHostKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateHostKeyRequest method.
+//    req, resp := client.UpdateHostKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/UpdateHostKey
+func (c *Transfer) UpdateHostKeyRequest(input *UpdateHostKeyInput) (req *request.Request, output *UpdateHostKeyOutput) {
+	op := &request.Operation{
+		Name:       opUpdateHostKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateHostKeyInput{}
+	}
+
+	output = &UpdateHostKeyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateHostKey API operation for AWS Transfer Family.
+//
+// Updates the description for the host key that's specified by the ServerId
+// and HostKeyId parameters.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Transfer Family's
+// API operation UpdateHostKey for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceUnavailableException
+//   The request has failed because the Amazon Web ServicesTransfer Family service
+//   is not available.
+//
+//   * InternalServiceError
+//   This exception is thrown when an error occurs in the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * InvalidRequestException
+//   This exception is thrown when the client submits a malformed request.
+//
+//   * ResourceNotFoundException
+//   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
+//   Family service.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/UpdateHostKey
+func (c *Transfer) UpdateHostKey(input *UpdateHostKeyInput) (*UpdateHostKeyOutput, error) {
+	req, out := c.UpdateHostKeyRequest(input)
+	return out, req.Send()
+}
+
+// UpdateHostKeyWithContext is the same as UpdateHostKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateHostKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Transfer) UpdateHostKeyWithContext(ctx aws.Context, input *UpdateHostKeyInput, opts ...request.Option) (*UpdateHostKeyOutput, error) {
+	req, out := c.UpdateHostKeyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5499,6 +5994,9 @@ func (c *Transfer) UpdateProfileRequest(input *UpdateProfileInput) (req *request
 //   * ResourceNotFoundException
 //   This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer
 //   Family service.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transfer-2018-11-05/UpdateProfile
 func (c *Transfer) UpdateProfile(input *UpdateProfileInput) (*UpdateProfileOutput, error) {
@@ -5802,9 +6300,12 @@ type As2ConnectorConfig struct {
 	Compression *string `type:"string" enum:"CompressionEnum"`
 
 	// The algorithm that is used to encrypt the file.
+	//
+	// You can only specify NONE if the URL for your connector uses HTTPS. This
+	// ensures that no traffic is sent in clear text.
 	EncryptionAlgorithm *string `type:"string" enum:"EncryptionAlg"`
 
-	// A unique identifier for the AS2 process.
+	// A unique identifier for the AS2 local profile.
 	LocalProfileId *string `min:"19" type:"string"`
 
 	// Used for outbound requests (from an Transfer Family server to a partner AS2
@@ -5818,15 +6319,19 @@ type As2ConnectorConfig struct {
 	MdnResponse *string `type:"string" enum:"MdnResponse"`
 
 	// The signing algorithm for the MDN response.
+	//
+	// If set to DEFAULT (or not set at all), the value for SigningAlgorithm is
+	// used.
 	MdnSigningAlgorithm *string `type:"string" enum:"MdnSigningAlg"`
 
-	// A short description to help identify the connector.
+	// Used as the Subject HTTP header attribute in AS2 messages that are being
+	// sent with the connector.
 	MessageSubject *string `min:"1" type:"string"`
 
-	// A unique identifier for the partner for the connector.
+	// A unique identifier for the partner profile for the connector.
 	PartnerProfileId *string `min:"19" type:"string"`
 
-	// The algorithm that is used to sign the AS2 transfers for this partner profile.
+	// The algorithm that is used to sign the AS2 messages sent with the connector.
 	SigningAlgorithm *string `type:"string" enum:"SigningAlg"`
 }
 
@@ -5985,27 +6490,36 @@ func (s *ConflictException) RequestID() string {
 type CopyStepDetails struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the location for the file being copied. Only applicable for Copy
-	// type workflow steps. Use ${Transfer:username} in this field to parametrize
-	// the destination prefix by username.
+	// Specifies the location for the file being copied. Use ${Transfer:username}
+	// or ${Transfer:UploadDate} in this field to parametrize the destination prefix
+	// by username or uploaded date.
+	//
+	//    * Set the value of DestinationFileLocation to ${Transfer:username} to
+	//    copy uploaded files to an Amazon S3 bucket that is prefixed with the name
+	//    of the Transfer Family user that uploaded the file.
+	//
+	//    * Set the value of DestinationFileLocation to ${Transfer:UploadDate} to
+	//    copy uploaded files to an Amazon S3 bucket that is prefixed with the date
+	//    of the upload. The system resolves UploadDate to a date format of YYYY-MM-DD,
+	//    based on the date the file is uploaded.
 	DestinationFileLocation *InputFileLocation `type:"structure"`
 
 	// The name of the step, used as an identifier.
 	Name *string `type:"string"`
 
-	// A flag that indicates whether or not to overwrite an existing file of the
-	// same name. The default is FALSE.
+	// A flag that indicates whether to overwrite an existing file of the same name.
+	// The default is FALSE.
 	OverwriteExisting *string `type:"string" enum:"OverwriteExisting"`
 
 	// Specifies which file to use as input to the workflow step: either the output
 	// from the previous step, or the originally uploaded file for the workflow.
 	//
-	//    * Enter ${previous.file} to use the previous file as the input. In this
+	//    * To use the previous file as the input, enter ${previous.file}. In this
 	//    case, this workflow step uses the output file from the previous workflow
 	//    step as input. This is the default value.
 	//
-	//    * Enter ${original.file} to use the originally-uploaded file location
-	//    as input for this step.
+	//    * To use the originally uploaded file location as input for this step,
+	//    enter ${original.file}.
 	SourceFileLocation *string `type:"string"`
 }
 
@@ -6282,13 +6796,13 @@ func (s *CreateAccessInput) SetServerId(v string) *CreateAccessInput {
 type CreateAccessOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The external ID of the group whose users have access to your Amazon S3 or
-	// Amazon EFS resources over the enabled protocols using Transfer Family.
+	// The external identifier of the group whose users have access to your Amazon
+	// S3 or Amazon EFS resources over the enabled protocols using Transfer Family.
 	//
 	// ExternalId is a required field
 	ExternalId *string `min:"1" type:"string" required:"true"`
 
-	// The ID of the server that the user is attached to.
+	// The identifier of the server that the user is attached to.
 	//
 	// ServerId is a required field
 	ServerId *string `min:"19" type:"string" required:"true"`
@@ -6327,16 +6841,23 @@ func (s *CreateAccessOutput) SetServerId(v string) *CreateAccessOutput {
 type CreateAgreementInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Identity and Access Management (IAM)
-	// role that grants access to at least the HomeDirectory of your users' Amazon
-	// S3 buckets.
+	// With AS2, you can send files by calling StartFileTransfer and specifying
+	// the file paths in the request parameter, SendFilePaths. We use the file’s
+	// parent directory (for example, for --send-file-paths /bucket/dir/file.txt,
+	// parent directory is /bucket/dir/) to temporarily store a processed AS2 message
+	// file, store the MDN when we receive them from the partner, and write a final
+	// JSON file containing relevant metadata of the transmission. So, the AccessRole
+	// needs to provide read and write access to the parent directory of the file
+	// location used in the StartFileTransfer request. Additionally, you need to
+	// provide read and write access to the parent directory of the files that you
+	// intend to send with StartFileTransfer.
 	//
 	// AccessRole is a required field
 	AccessRole *string `min:"20" type:"string" required:"true"`
 
 	// The landing directory (folder) for files transferred by using the AS2 protocol.
 	//
-	// A BaseDirectory example is /DOC-EXAMPLE-BUCKET/home/mydirectory .
+	// A BaseDirectory example is /DOC-EXAMPLE-BUCKET/home/mydirectory.
 	//
 	// BaseDirectory is a required field
 	BaseDirectory *string `type:"string" required:"true"`
@@ -6685,7 +7206,7 @@ func (s *CreateConnectorOutput) SetConnectorId(v string) *CreateConnectorOutput 
 type CreateProfileInput struct {
 	_ struct{} `type:"structure"`
 
-	// The As2Id is the AS2-name, as defined in the defined in the RFC 4130 (https://datatracker.ietf.org/doc/html/rfc4130).
+	// The As2Id is the AS2-name, as defined in the RFC 4130 (https://datatracker.ietf.org/doc/html/rfc4130).
 	// For inbound transfers, this is the AS2-From header for the AS2 messages sent
 	// from the partner. For outbound connectors, this is the AS2-To header for
 	// the AS2 messages sent to the partner using the StartFileTransfer API operation.
@@ -6698,8 +7219,13 @@ type CreateProfileInput struct {
 	// for working with profiles and partner profiles.
 	CertificateIds []*string `type:"list"`
 
-	// Indicates whether to list only LOCAL type profiles or only PARTNER type profiles.
-	// If not supplied in the request, the command lists all types of profiles.
+	// Determines the type of profile to create:
+	//
+	//    * Specify LOCAL to create a local profile. A local profile represents
+	//    the AS2-enabled Transfer Family server organization or party.
+	//
+	//    * Specify PARTNER to create a partner profile. A partner profile represents
+	//    a remote organization, external to Transfer Family.
 	//
 	// ProfileType is a required field
 	ProfileType *string `type:"string" required:"true" enum:"ProfileType"`
@@ -6885,7 +7411,9 @@ type CreateServerInput struct {
 	// possible with EndpointType set to VPC_ENDPOINT.
 	EndpointType *string `type:"string" enum:"EndpointType"`
 
-	// The RSA, ECDSA, or ED25519 private key to use for your server.
+	// The RSA, ECDSA, or ED25519 private key to use for your SFTP-enabled server.
+	// You can add multiple host keys, in case you want to rotate keys, or have
+	// a set of active keys that use different algorithms.
 	//
 	// Use the following command to generate an RSA 2048 bit key with no passphrase:
 	//
@@ -6911,8 +7439,7 @@ type CreateServerInput struct {
 	// server to a new server, don't update the host key. Accidentally changing
 	// a server's host key can be disruptive.
 	//
-	// For more information, see Change the host key for your SFTP-enabled server
-	// (https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key)
+	// For more information, see Manage host keys for your SFTP-enabled server (https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key)
 	// in the Transfer Family User Guide.
 	//
 	// HostKey is a sensitive parameter and its value will be
@@ -7011,12 +7538,14 @@ type CreateServerInput struct {
 	//    to it over FTPS.
 	//
 	//    * If Protocol includes either FTP or FTPS, then the EndpointType must
-	//    be VPC and the IdentityProviderType must be AWS_DIRECTORY_SERVICE or API_GATEWAY.
+	//    be VPC and the IdentityProviderType must be either AWS_DIRECTORY_SERVICE,
+	//    AWS_LAMBDA, or API_GATEWAY.
 	//
 	//    * If Protocol includes FTP, then AddressAllocationIds cannot be associated.
 	//
 	//    * If Protocol is set only to SFTP, the EndpointType can be set to PUBLIC
-	//    and the IdentityProviderType can be set to SERVICE_MANAGED.
+	//    and the IdentityProviderType can be set any of the supported identity
+	//    types: SERVICE_MANAGED, AWS_DIRECTORY_SERVICE, AWS_LAMBDA, or API_GATEWAY.
 	//
 	//    * If Protocol includes AS2, then the EndpointType must be VPC, and domain
 	//    must be Amazon S3.
@@ -7030,6 +7559,11 @@ type CreateServerInput struct {
 
 	// Specifies the workflow ID for the workflow to assign and the execution role
 	// that's used for executing the workflow.
+	//
+	// In addition to a workflow to execute when a file is uploaded completely,
+	// WorkflowDetails can also contain a workflow ID (and execution role) for a
+	// workflow to execute on partial upload. A partial upload occurs when a file
+	// is open when the session disconnects.
 	WorkflowDetails *WorkflowDetails `type:"structure"`
 }
 
@@ -7193,7 +7727,7 @@ func (s *CreateServerInput) SetWorkflowDetails(v *WorkflowDetails) *CreateServer
 type CreateServerOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The service-assigned ID of the server that is created.
+	// The service-assigned identifier of the server that is created.
 	//
 	// ServerId is a required field
 	ServerId *string `min:"19" type:"string" required:"true"`
@@ -7307,7 +7841,17 @@ type CreateUserInput struct {
 	// The public portion of the Secure Shell (SSH) key used to authenticate the
 	// user to the server.
 	//
+	// The three standard SSH public key format elements are <key type>, <body base64>,
+	// and an optional <comment>, with spaces between each element.
+	//
 	// Transfer Family accepts RSA, ECDSA, and ED25519 keys.
+	//
+	//    * For RSA keys, the key type is ssh-rsa.
+	//
+	//    * For ED25519 keys, the key type is ssh-ed25519.
+	//
+	//    * For ECDSA keys, the key type is either ecdsa-sha2-nistp256, ecdsa-sha2-nistp384,
+	//    or ecdsa-sha2-nistp521, depending on the size of the key you generated.
 	SshPublicKeyBody *string `type:"string"`
 
 	// Key-value pairs that can be used to group and search for users. Tags are
@@ -7464,7 +8008,7 @@ func (s *CreateUserInput) SetUserName(v string) *CreateUserInput {
 type CreateUserOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the server that the user is attached to.
+	// The identifier of the server that the user is attached to.
 	//
 	// ServerId is a required field
 	ServerId *string `min:"19" type:"string" required:"true"`
@@ -7524,18 +8068,20 @@ type CreateWorkflowInput struct {
 	// The TYPE specifies which of the following actions is being taken for this
 	// step.
 	//
-	//    * COPY: Copy the file to another location.
+	//    * COPY - Copy the file to another location.
 	//
-	//    * CUSTOM: Perform a custom step with an Lambda function target.
+	//    * CUSTOM - Perform a custom step with an Lambda function target.
 	//
-	//    * DELETE: Delete the file.
+	//    * DECRYPT - Decrypt a file that was encrypted before it was uploaded.
 	//
-	//    * TAG: Add a tag to the file.
+	//    * DELETE - Delete the file.
+	//
+	//    * TAG - Add a tag to the file.
 	//
 	// Currently, copying and tagging are supported only on S3.
 	//
-	// For file location, you specify either the S3 bucket and key, or the EFS file
-	// system ID and path.
+	// For file location, you specify either the Amazon S3 bucket and key, or the
+	// Amazon EFS file system ID and path.
 	//
 	// Steps is a required field
 	Steps []*WorkflowStep `type:"list" required:"true"`
@@ -7676,12 +8222,12 @@ type CustomStepDetails struct {
 	// Specifies which file to use as input to the workflow step: either the output
 	// from the previous step, or the originally uploaded file for the workflow.
 	//
-	//    * Enter ${previous.file} to use the previous file as the input. In this
+	//    * To use the previous file as the input, enter ${previous.file}. In this
 	//    case, this workflow step uses the output file from the previous workflow
 	//    step as input. This is the default value.
 	//
-	//    * Enter ${original.file} to use the originally-uploaded file location
-	//    as input for this step.
+	//    * To use the originally uploaded file location as input for this step,
+	//    enter ${original.file}.
 	SourceFileLocation *string `type:"string"`
 
 	// The ARN for the lambda function that is being called.
@@ -7743,6 +8289,108 @@ func (s *CustomStepDetails) SetTarget(v string) *CustomStepDetails {
 // SetTimeoutSeconds sets the TimeoutSeconds field's value.
 func (s *CustomStepDetails) SetTimeoutSeconds(v int64) *CustomStepDetails {
 	s.TimeoutSeconds = &v
+	return s
+}
+
+// Each step type has its own StepDetails structure.
+type DecryptStepDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the location for the file that's being processed.
+	//
+	// DestinationFileLocation is a required field
+	DestinationFileLocation *InputFileLocation `type:"structure" required:"true"`
+
+	// The name of the step, used as an identifier.
+	Name *string `type:"string"`
+
+	// A flag that indicates whether to overwrite an existing file of the same name.
+	// The default is FALSE.
+	OverwriteExisting *string `type:"string" enum:"OverwriteExisting"`
+
+	// Specifies which file to use as input to the workflow step: either the output
+	// from the previous step, or the originally uploaded file for the workflow.
+	//
+	//    * To use the previous file as the input, enter ${previous.file}. In this
+	//    case, this workflow step uses the output file from the previous workflow
+	//    step as input. This is the default value.
+	//
+	//    * To use the originally uploaded file location as input for this step,
+	//    enter ${original.file}.
+	SourceFileLocation *string `type:"string"`
+
+	// The type of encryption used. Currently, this value must be PGP.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"EncryptionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DecryptStepDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DecryptStepDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DecryptStepDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DecryptStepDetails"}
+	if s.DestinationFileLocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationFileLocation"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.DestinationFileLocation != nil {
+		if err := s.DestinationFileLocation.Validate(); err != nil {
+			invalidParams.AddNested("DestinationFileLocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestinationFileLocation sets the DestinationFileLocation field's value.
+func (s *DecryptStepDetails) SetDestinationFileLocation(v *InputFileLocation) *DecryptStepDetails {
+	s.DestinationFileLocation = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DecryptStepDetails) SetName(v string) *DecryptStepDetails {
+	s.Name = &v
+	return s
+}
+
+// SetOverwriteExisting sets the OverwriteExisting field's value.
+func (s *DecryptStepDetails) SetOverwriteExisting(v string) *DecryptStepDetails {
+	s.OverwriteExisting = &v
+	return s
+}
+
+// SetSourceFileLocation sets the SourceFileLocation field's value.
+func (s *DecryptStepDetails) SetSourceFileLocation(v string) *DecryptStepDetails {
+	s.SourceFileLocation = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DecryptStepDetails) SetType(v string) *DecryptStepDetails {
+	s.Type = &v
 	return s
 }
 
@@ -7857,7 +8505,7 @@ type DeleteAgreementInput struct {
 	// AgreementId is a required field
 	AgreementId *string `min:"19" type:"string" required:"true"`
 
-	// The server ID associated with the agreement that you are deleting.
+	// The server identifier associated with the agreement that you are deleting.
 	//
 	// ServerId is a required field
 	ServerId *string `min:"19" type:"string" required:"true"`
@@ -7940,7 +8588,7 @@ func (s DeleteAgreementOutput) GoString() string {
 type DeleteCertificateInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate object that you are deleting.
+	// The identifier of the certificate object that you are deleting.
 	//
 	// CertificateId is a required field
 	CertificateId *string `min:"22" type:"string" required:"true"`
@@ -8079,10 +8727,98 @@ func (s DeleteConnectorOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteHostKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the host key that you are deleting.
+	//
+	// HostKeyId is a required field
+	HostKeyId *string `min:"25" type:"string" required:"true"`
+
+	// The identifier of the server that contains the host key that you are deleting.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteHostKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteHostKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteHostKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteHostKeyInput"}
+	if s.HostKeyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("HostKeyId"))
+	}
+	if s.HostKeyId != nil && len(*s.HostKeyId) < 25 {
+		invalidParams.Add(request.NewErrParamMinLen("HostKeyId", 25))
+	}
+	if s.ServerId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerId"))
+	}
+	if s.ServerId != nil && len(*s.ServerId) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerId", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHostKeyId sets the HostKeyId field's value.
+func (s *DeleteHostKeyInput) SetHostKeyId(v string) *DeleteHostKeyInput {
+	s.HostKeyId = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *DeleteHostKeyInput) SetServerId(v string) *DeleteHostKeyInput {
+	s.ServerId = &v
+	return s
+}
+
+type DeleteHostKeyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteHostKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteHostKeyOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteProfileInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the profile that you are deleting.
+	// The identifier of the profile that you are deleting.
 	//
 	// ProfileId is a required field
 	ProfileId *string `min:"19" type:"string" required:"true"`
@@ -8337,12 +9073,12 @@ type DeleteStepDetails struct {
 	// Specifies which file to use as input to the workflow step: either the output
 	// from the previous step, or the originally uploaded file for the workflow.
 	//
-	//    * Enter ${previous.file} to use the previous file as the input. In this
+	//    * To use the previous file as the input, enter ${previous.file}. In this
 	//    case, this workflow step uses the output file from the previous workflow
 	//    step as input. This is the default value.
 	//
-	//    * Enter ${original.file} to use the originally-uploaded file location
-	//    as input for this step.
+	//    * To use the originally uploaded file location as input for this step,
+	//    enter ${original.file}.
 	SourceFileLocation *string `type:"string"`
 }
 
@@ -8619,7 +9355,7 @@ func (s *DescribeAccessInput) SetServerId(v string) *DescribeAccessInput {
 type DescribeAccessOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The external ID of the server that the access is attached to.
+	// The external identifier of the server that the access is attached to.
 	//
 	// Access is a required field
 	Access *DescribedAccess `type:"structure" required:"true"`
@@ -8669,7 +9405,7 @@ type DescribeAgreementInput struct {
 	// AgreementId is a required field
 	AgreementId *string `min:"19" type:"string" required:"true"`
 
-	// The server ID that's associated with the agreement.
+	// The server identifier that's associated with the agreement.
 	//
 	// ServerId is a required field
 	ServerId *string `min:"19" type:"string" required:"true"`
@@ -9033,6 +9769,105 @@ func (s *DescribeExecutionOutput) SetExecution(v *DescribedExecution) *DescribeE
 // SetWorkflowId sets the WorkflowId field's value.
 func (s *DescribeExecutionOutput) SetWorkflowId(v string) *DescribeExecutionOutput {
 	s.WorkflowId = &v
+	return s
+}
+
+type DescribeHostKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the host key that you want described.
+	//
+	// HostKeyId is a required field
+	HostKeyId *string `min:"25" type:"string" required:"true"`
+
+	// The identifier of the server that contains the host key that you want described.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeHostKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeHostKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeHostKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeHostKeyInput"}
+	if s.HostKeyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("HostKeyId"))
+	}
+	if s.HostKeyId != nil && len(*s.HostKeyId) < 25 {
+		invalidParams.Add(request.NewErrParamMinLen("HostKeyId", 25))
+	}
+	if s.ServerId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerId"))
+	}
+	if s.ServerId != nil && len(*s.ServerId) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerId", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHostKeyId sets the HostKeyId field's value.
+func (s *DescribeHostKeyInput) SetHostKeyId(v string) *DescribeHostKeyInput {
+	s.HostKeyId = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *DescribeHostKeyInput) SetServerId(v string) *DescribeHostKeyInput {
+	s.ServerId = &v
+	return s
+}
+
+type DescribeHostKeyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the details for the specified host key.
+	//
+	// HostKey is a required field
+	HostKey *DescribedHostKey `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeHostKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeHostKeyOutput) GoString() string {
+	return s.String()
+}
+
+// SetHostKey sets the HostKey field's value.
+func (s *DescribeHostKeyOutput) SetHostKey(v *DescribedHostKey) *DescribeHostKeyOutput {
+	s.HostKey = v
 	return s
 }
 
@@ -9611,9 +10446,16 @@ func (s *DescribedAccess) SetRole(v string) *DescribedAccess {
 type DescribedAgreement struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Identity and Access Management (IAM)
-	// role that grants access to at least the HomeDirectory of your users' Amazon
-	// S3 buckets.
+	// With AS2, you can send files by calling StartFileTransfer and specifying
+	// the file paths in the request parameter, SendFilePaths. We use the file’s
+	// parent directory (for example, for --send-file-paths /bucket/dir/file.txt,
+	// parent directory is /bucket/dir/) to temporarily store a processed AS2 message
+	// file, store the MDN when we receive them from the partner, and write a final
+	// JSON file containing relevant metadata of the transmission. So, the AccessRole
+	// needs to provide read and write access to the parent directory of the file
+	// location used in the StartFileTransfer request. Additionally, you need to
+	// provide read and write access to the parent directory of the files that you
+	// intend to send with StartFileTransfer.
 	AccessRole *string `min:"20" type:"string"`
 
 	// A unique identifier for the agreement. This identifier is returned when you
@@ -9632,10 +10474,10 @@ type DescribedAgreement struct {
 	// The name or short description that's used to identify the agreement.
 	Description *string `min:"1" type:"string"`
 
-	// A unique identifier for the AS2 process.
+	// A unique identifier for the AS2 local profile.
 	LocalProfileId *string `min:"19" type:"string"`
 
-	// A unique identifier for the partner in the agreement.
+	// A unique identifier for the partner profile used in the agreement.
 	PartnerProfileId *string `min:"19" type:"string"`
 
 	// A system-assigned unique identifier for a server instance. This identifier
@@ -10093,7 +10935,107 @@ func (s *DescribedExecution) SetStatus(v string) *DescribedExecution {
 	return s
 }
 
-// The details for a local or partner AS2 profile. profile.
+// The details for a server host key.
+type DescribedHostKey struct {
+	_ struct{} `type:"structure"`
+
+	// The unique Amazon Resource Name (ARN) for the host key.
+	//
+	// Arn is a required field
+	Arn *string `min:"20" type:"string" required:"true"`
+
+	// The date on which the host key was added to the server.
+	DateImported *time.Time `type:"timestamp"`
+
+	// The text description for this host key.
+	Description *string `type:"string"`
+
+	// The public key fingerprint, which is a short sequence of bytes used to identify
+	// the longer public key.
+	HostKeyFingerprint *string `type:"string"`
+
+	// A unique identifier for the host key.
+	HostKeyId *string `min:"25" type:"string"`
+
+	// Key-value pairs that can be used to group and search for host keys.
+	Tags []*Tag `min:"1" type:"list"`
+
+	// The encryption algorithm that is used for the host key. The Type parameter
+	// is specified by using one of the following values:
+	//
+	//    * ssh-rsa
+	//
+	//    * ssh-ed25519
+	//
+	//    * ecdsa-sha2-nistp256
+	//
+	//    * ecdsa-sha2-nistp384
+	//
+	//    * ecdsa-sha2-nistp521
+	Type *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribedHostKey) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribedHostKey) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *DescribedHostKey) SetArn(v string) *DescribedHostKey {
+	s.Arn = &v
+	return s
+}
+
+// SetDateImported sets the DateImported field's value.
+func (s *DescribedHostKey) SetDateImported(v time.Time) *DescribedHostKey {
+	s.DateImported = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribedHostKey) SetDescription(v string) *DescribedHostKey {
+	s.Description = &v
+	return s
+}
+
+// SetHostKeyFingerprint sets the HostKeyFingerprint field's value.
+func (s *DescribedHostKey) SetHostKeyFingerprint(v string) *DescribedHostKey {
+	s.HostKeyFingerprint = &v
+	return s
+}
+
+// SetHostKeyId sets the HostKeyId field's value.
+func (s *DescribedHostKey) SetHostKeyId(v string) *DescribedHostKey {
+	s.HostKeyId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribedHostKey) SetTags(v []*Tag) *DescribedHostKey {
+	s.Tags = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DescribedHostKey) SetType(v string) *DescribedHostKey {
+	s.Type = &v
+	return s
+}
+
+// The details for a local or partner AS2 profile.
 type DescribedProfile struct {
 	_ struct{} `type:"structure"`
 
@@ -10102,7 +11044,11 @@ type DescribedProfile struct {
 	// Arn is a required field
 	Arn *string `min:"20" type:"string" required:"true"`
 
-	// The unique identifier for the AS2 process.
+	// The As2Id is the AS2-name, as defined in the RFC 4130 (https://datatracker.ietf.org/doc/html/rfc4130).
+	// For inbound transfers, this is the AS2-From header for the AS2 messages sent
+	// from the partner. For outbound connectors, this is the AS2-To header for
+	// the AS2 messages sent to the partner using the StartFileTransfer API operation.
+	// This ID cannot include spaces.
 	As2Id *string `min:"1" type:"string"`
 
 	// An array of identifiers for the imported certificates. You use this identifier
@@ -10343,8 +11289,25 @@ type DescribedServer struct {
 
 	// The protocol settings that are configured for your server.
 	//
-	// Use the PassiveIp parameter to indicate passive mode. Enter a single IPv4
-	// address, such as the public IP address of a firewall, router, or load balancer.
+	//    * To indicate passive mode (for FTP and FTPS protocols), use the PassiveIp
+	//    parameter. Enter a single dotted-quad IPv4 address, such as the external
+	//    IP address of a firewall, router, or load balancer.
+	//
+	//    * To ignore the error that is generated when the client attempts to use
+	//    the SETSTAT command on a file that you are uploading to an Amazon S3 bucket,
+	//    use the SetStatOption parameter. To have the Transfer Family server ignore
+	//    the SETSTAT command and upload files without needing to make any changes
+	//    to your SFTP client, set the value to ENABLE_NO_OP. If you set the SetStatOption
+	//    parameter to ENABLE_NO_OP, Transfer Family generates a log entry to Amazon
+	//    CloudWatch Logs, so that you can determine when the client is making a
+	//    SETSTAT call.
+	//
+	//    * To determine whether your Transfer Family server resumes recent, negotiated
+	//    sessions through a unique session ID, use the TlsSessionResumptionMode
+	//    parameter.
+	//
+	//    * As2Transports indicates the transport method for the AS2 messages. Currently,
+	//    only HTTP is supported.
 	ProtocolDetails *ProtocolDetails `type:"structure"`
 
 	// Specifies the file transfer protocol or protocols over which your file transfer
@@ -10357,6 +11320,26 @@ type DescribedServer struct {
 	//    * FTPS (File Transfer Protocol Secure): File transfer with TLS encryption
 	//
 	//    * FTP (File Transfer Protocol): Unencrypted file transfer
+	//
+	//    * AS2 (Applicability Statement 2): used for transporting structured business-to-business
+	//    data
+	//
+	//    * If you select FTPS, you must choose a certificate stored in Certificate
+	//    Manager (ACM) which is used to identify your server when clients connect
+	//    to it over FTPS.
+	//
+	//    * If Protocol includes either FTP or FTPS, then the EndpointType must
+	//    be VPC and the IdentityProviderType must be either AWS_DIRECTORY_SERVICE,
+	//    AWS_LAMBDA, or API_GATEWAY.
+	//
+	//    * If Protocol includes FTP, then AddressAllocationIds cannot be associated.
+	//
+	//    * If Protocol is set only to SFTP, the EndpointType can be set to PUBLIC
+	//    and the IdentityProviderType can be set any of the supported identity
+	//    types: SERVICE_MANAGED, AWS_DIRECTORY_SERVICE, AWS_LAMBDA, or API_GATEWAY.
+	//
+	//    * If Protocol includes AS2, then the EndpointType must be VPC, and domain
+	//    must be Amazon S3.
 	Protocols []*string `min:"1" type:"list" enum:"Protocol"`
 
 	// Specifies the name of the security policy that is attached to the server.
@@ -10384,6 +11367,11 @@ type DescribedServer struct {
 
 	// Specifies the workflow ID for the workflow to assign and the execution role
 	// that's used for executing the workflow.
+	//
+	// In addition to a workflow to execute when a file is uploaded completely,
+	// WorkflowDetails can also contain a workflow ID (and execution role) for a
+	// workflow to execute on partial upload. A partial upload occurs when a file
+	// is open when the session disconnects.
 	WorkflowDetails *WorkflowDetails `type:"structure"`
 }
 
@@ -10753,11 +11741,13 @@ func (s *DescribedWorkflow) SetWorkflowId(v string) *DescribedWorkflow {
 	return s
 }
 
-// Reserved for future use.
+// Specifies the details for the file location for the file that's being used
+// in the workflow. Only applicable if you are using Amazon Elastic File Systems
+// (Amazon EFS) for storage.
 type EfsFileLocation struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the file system, assigned by Amazon EFS.
+	// The identifier of the file system, assigned by Amazon EFS.
 	FileSystemId *string `type:"string"`
 
 	// The pathname for the folder being used by a workflow.
@@ -10848,14 +11838,14 @@ type EndpointDetails struct {
 	// This property can only be set when EndpointType is set to VPC.
 	SubnetIds []*string `type:"list"`
 
-	// The ID of the VPC endpoint.
+	// The identifier of the VPC endpoint.
 	//
 	// This property can only be set when EndpointType is set to VPC_ENDPOINT.
 	//
 	// For more information, see https://docs.aws.amazon.com/transfer/latest/userguide/create-server-in-vpc.html#deprecate-vpc-endpoint.
 	VpcEndpointId *string `min:"22" type:"string"`
 
-	// The VPC ID of the VPC in which a server's endpoint will be hosted.
+	// The VPC identifier of the VPC in which a server's endpoint will be hosted.
 	//
 	// This property can only be set when EndpointType is set to VPC.
 	VpcId *string `type:"string"`
@@ -11050,13 +12040,15 @@ type ExecutionStepResult struct {
 
 	// One of the available step types.
 	//
-	//    * COPY: Copy the file to another location.
+	//    * COPY - Copy the file to another location.
 	//
-	//    * CUSTOM: Perform a custom step with an Lambda function target.
+	//    * CUSTOM - Perform a custom step with an Lambda function target.
 	//
-	//    * DELETE: Delete the file.
+	//    * DECRYPT - Decrypt a file that was encrypted before it was uploaded.
 	//
-	//    * TAG: Add a tag to the file.
+	//    * DELETE - Delete the file.
+	//
+	//    * TAG - Add a tag to the file.
 	StepType *string `type:"string" enum:"WorkflowStepType"`
 }
 
@@ -11100,7 +12092,7 @@ func (s *ExecutionStepResult) SetStepType(v string) *ExecutionStepResult {
 type FileLocation struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the Amazon EFS ID and the path for the file being used.
+	// Specifies the Amazon EFS identifier and the path for the file being used.
 	EfsFileLocation *EfsFileLocation `type:"structure"`
 
 	// Specifies the S3 details for the file being used, such as bucket, ETag, and
@@ -11289,7 +12281,12 @@ type ImportCertificateInput struct {
 	// An optional date that specifies when the certificate becomes active.
 	ActiveDate *time.Time `type:"timestamp"`
 
-	// The file that contains the certificate to import.
+	//    * For the CLI, provide a file path for a certificate in URI format. For
+	//    example, --certificate file://encryption-cert.pem. Alternatively, you
+	//    can provide the raw content.
+	//
+	//    * For the SDK, specify the raw content of a certificate file. For example,
+	//    --certificate "`cat encryption-cert.pem`".
 	//
 	// Certificate is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by ImportCertificateInput's
@@ -11312,7 +12309,12 @@ type ImportCertificateInput struct {
 	// An optional date that specifies when the certificate becomes inactive.
 	InactiveDate *time.Time `type:"timestamp"`
 
-	// The file that contains the private key for the certificate that's being imported.
+	//    * For the CLI, provide a file path for a private key in URI format.For
+	//    example, --private-key file://encryption-key.pem. Alternatively, you can
+	//    provide the raw content of the private key file.
+	//
+	//    * For the SDK, specify the raw content of a private key file. For example,
+	//    --private-key "`cat encryption-key.pem`"
 	//
 	// PrivateKey is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by ImportCertificateInput's
@@ -11469,6 +12471,150 @@ func (s *ImportCertificateOutput) SetCertificateId(v string) *ImportCertificateO
 	return s
 }
 
+type ImportHostKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The text description that identifies this host key.
+	Description *string `type:"string"`
+
+	// The private key portion of an SSH key pair.
+	//
+	// Transfer Family accepts RSA, ECDSA, and ED25519 keys.
+	//
+	// HostKeyBody is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ImportHostKeyInput's
+	// String and GoString methods.
+	//
+	// HostKeyBody is a required field
+	HostKeyBody *string `type:"string" required:"true" sensitive:"true"`
+
+	// The identifier of the server that contains the host key that you are importing.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+
+	// Key-value pairs that can be used to group and search for host keys.
+	Tags []*Tag `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportHostKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportHostKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ImportHostKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ImportHostKeyInput"}
+	if s.HostKeyBody == nil {
+		invalidParams.Add(request.NewErrParamRequired("HostKeyBody"))
+	}
+	if s.ServerId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerId"))
+	}
+	if s.ServerId != nil && len(*s.ServerId) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerId", 19))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *ImportHostKeyInput) SetDescription(v string) *ImportHostKeyInput {
+	s.Description = &v
+	return s
+}
+
+// SetHostKeyBody sets the HostKeyBody field's value.
+func (s *ImportHostKeyInput) SetHostKeyBody(v string) *ImportHostKeyInput {
+	s.HostKeyBody = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *ImportHostKeyInput) SetServerId(v string) *ImportHostKeyInput {
+	s.ServerId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ImportHostKeyInput) SetTags(v []*Tag) *ImportHostKeyInput {
+	s.Tags = v
+	return s
+}
+
+type ImportHostKeyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the host key identifier for the imported key.
+	//
+	// HostKeyId is a required field
+	HostKeyId *string `min:"25" type:"string" required:"true"`
+
+	// Returns the server identifier that contains the imported key.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportHostKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportHostKeyOutput) GoString() string {
+	return s.String()
+}
+
+// SetHostKeyId sets the HostKeyId field's value.
+func (s *ImportHostKeyOutput) SetHostKeyId(v string) *ImportHostKeyOutput {
+	s.HostKeyId = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *ImportHostKeyOutput) SetServerId(v string) *ImportHostKeyOutput {
+	s.ServerId = &v
+	return s
+}
+
 type ImportSshPublicKeyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11609,15 +12755,15 @@ func (s *ImportSshPublicKeyOutput) SetUserName(v string) *ImportSshPublicKeyOutp
 	return s
 }
 
-// Specifies the location for the file being copied. Only applicable for the
-// Copy type of workflow steps.
+// Specifies the location for the file that's being processed.
 type InputFileLocation struct {
 	_ struct{} `type:"structure"`
 
-	// Reserved for future use.
+	// Specifies the details for the Amazon Elastic File System (Amazon EFS) file
+	// that's being decrypted.
 	EfsFileLocation *EfsFileLocation `type:"structure"`
 
-	// Specifies the details for the S3 file being copied.
+	// Specifies the details for the Amazon S3 file that's being copied or decrypted.
 	S3FileLocation *S3InputFileLocation `type:"structure"`
 }
 
@@ -12474,6 +13620,136 @@ func (s *ListExecutionsOutput) SetWorkflowId(v string) *ListExecutionsOutput {
 	return s
 }
 
+type ListHostKeysInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of host keys to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// When there are additional results that were not returned, a NextToken parameter
+	// is returned. You can use that value for a subsequent call to ListHostKeys
+	// to continue listing results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The identifier of the server that contains the host keys that you want to
+	// view.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListHostKeysInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListHostKeysInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListHostKeysInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListHostKeysInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.ServerId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerId"))
+	}
+	if s.ServerId != nil && len(*s.ServerId) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerId", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListHostKeysInput) SetMaxResults(v int64) *ListHostKeysInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListHostKeysInput) SetNextToken(v string) *ListHostKeysInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *ListHostKeysInput) SetServerId(v string) *ListHostKeysInput {
+	s.ServerId = &v
+	return s
+}
+
+type ListHostKeysOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns an array, where each item contains the details of a host key.
+	//
+	// HostKeys is a required field
+	HostKeys []*ListedHostKey `type:"list" required:"true"`
+
+	// Returns a token that you can use to call ListHostKeys again and receive additional
+	// results, if there are any.
+	NextToken *string `min:"1" type:"string"`
+
+	// Returns the server identifier that contains the listed host keys.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListHostKeysOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListHostKeysOutput) GoString() string {
+	return s.String()
+}
+
+// SetHostKeys sets the HostKeys field's value.
+func (s *ListHostKeysOutput) SetHostKeys(v []*ListedHostKey) *ListHostKeysOutput {
+	s.HostKeys = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListHostKeysOutput) SetNextToken(v string) *ListHostKeysOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *ListHostKeysOutput) SetServerId(v string) *ListHostKeysOutput {
+	s.ServerId = &v
+	return s
+}
+
 type ListProfilesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13259,10 +14535,10 @@ type ListedAgreement struct {
 	// UpdateAgreement operation and providing a new description.
 	Description *string `min:"1" type:"string"`
 
-	// A unique identifier for the AS2 process.
+	// A unique identifier for the AS2 local profile.
 	LocalProfileId *string `min:"19" type:"string"`
 
-	// A unique identifier for the partner process.
+	// A unique identifier for the partner profile.
 	PartnerProfileId *string `min:"19" type:"string"`
 
 	// The unique identifier for the agreement.
@@ -13544,6 +14820,98 @@ func (s *ListedExecution) SetStatus(v string) *ListedExecution {
 	return s
 }
 
+// Returns properties of the host key that's specified.
+type ListedHostKey struct {
+	_ struct{} `type:"structure"`
+
+	// The unique Amazon Resource Name (ARN) of the host key.
+	//
+	// Arn is a required field
+	Arn *string `min:"20" type:"string" required:"true"`
+
+	// The date on which the host key was added to the server.
+	DateImported *time.Time `type:"timestamp"`
+
+	// The current description for the host key. You can change it by calling the
+	// UpdateHostKey operation and providing a new description.
+	Description *string `type:"string"`
+
+	// The public key fingerprint, which is a short sequence of bytes used to identify
+	// the longer public key.
+	Fingerprint *string `type:"string"`
+
+	// A unique identifier for the host key.
+	HostKeyId *string `min:"25" type:"string"`
+
+	// The encryption algorithm that is used for the host key. The Type parameter
+	// is specified by using one of the following values:
+	//
+	//    * ssh-rsa
+	//
+	//    * ssh-ed25519
+	//
+	//    * ecdsa-sha2-nistp256
+	//
+	//    * ecdsa-sha2-nistp384
+	//
+	//    * ecdsa-sha2-nistp521
+	Type *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListedHostKey) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListedHostKey) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ListedHostKey) SetArn(v string) *ListedHostKey {
+	s.Arn = &v
+	return s
+}
+
+// SetDateImported sets the DateImported field's value.
+func (s *ListedHostKey) SetDateImported(v time.Time) *ListedHostKey {
+	s.DateImported = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ListedHostKey) SetDescription(v string) *ListedHostKey {
+	s.Description = &v
+	return s
+}
+
+// SetFingerprint sets the Fingerprint field's value.
+func (s *ListedHostKey) SetFingerprint(v string) *ListedHostKey {
+	s.Fingerprint = &v
+	return s
+}
+
+// SetHostKeyId sets the HostKeyId field's value.
+func (s *ListedHostKey) SetHostKeyId(v string) *ListedHostKey {
+	s.HostKeyId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ListedHostKey) SetType(v string) *ListedHostKey {
+	s.Type = &v
+	return s
+}
+
 // Returns the properties of the profile that was specified.
 type ListedProfile struct {
 	_ struct{} `type:"structure"`
@@ -13551,7 +14919,11 @@ type ListedProfile struct {
 	// The Amazon Resource Name (ARN) of the specified profile.
 	Arn *string `min:"20" type:"string"`
 
-	// The unique identifier for the AS2 process.
+	// The As2Id is the AS2-name, as defined in the RFC 4130 (https://datatracker.ietf.org/doc/html/rfc4130).
+	// For inbound transfers, this is the AS2-From header for the AS2 messages sent
+	// from the partner. For outbound connectors, this is the AS2-To header for
+	// the AS2 messages sent to the partner using the StartFileTransfer API operation.
+	// This ID cannot include spaces.
 	As2Id *string `min:"1" type:"string"`
 
 	// A unique identifier for the local or partner AS2 profile.
@@ -13833,8 +15205,8 @@ func (s *ListedUser) SetUserName(v string) *ListedUser {
 	return s
 }
 
-// Contains the ID, text description, and Amazon Resource Name (ARN) for the
-// workflow.
+// Contains the identifier, text description, and Amazon Resource Name (ARN)
+// for the workflow.
 type ListedWorkflow struct {
 	_ struct{} `type:"structure"`
 
@@ -14024,6 +15396,22 @@ type ProtocolDetails struct {
 	// Family server for the change to take effect. For details on using passive
 	// mode (PASV) in a NAT environment, see Configuring your FTPS server behind
 	// a firewall or NAT with Transfer Family (http://aws.amazon.com/blogs/storage/configuring-your-ftps-server-behind-a-firewall-or-nat-with-aws-transfer-family/).
+	//
+	// Special values
+	//
+	// The AUTO and 0.0.0.0 are special values for the PassiveIp parameter. The
+	// value PassiveIp=AUTO is assigned by default to FTP and FTPS type servers.
+	// In this case, the server automatically responds with one of the endpoint
+	// IPs within the PASV response. PassiveIp=0.0.0.0 has a more unique application
+	// for its usage. For example, if you have a High Availability (HA) Network
+	// Load Balancer (NLB) environment, where you have 3 subnets, you can only specify
+	// a single IP address using the PassiveIp parameter. This reduces the effectiveness
+	// of having High Availability. In this case, you can specify PassiveIp=0.0.0.0.
+	// This tells the client to use the same IP address as the Control connection
+	// and utilize all AZs for their connections. Note, however, that not all FTP
+	// clients support the PassiveIp=0.0.0.0 response. FileZilla and WinSCP do support
+	// it. If you are using other clients, check to see if your client supports
+	// the PassiveIp=0.0.0.0 response.
 	PassiveIp *string `type:"string"`
 
 	// Use the SetStatOption to ignore the error that is generated when the client
@@ -14331,8 +15719,8 @@ func (s *S3FileLocation) SetVersionId(v string) *S3FileLocation {
 	return s
 }
 
-// Specifies the customer input S3 file location. If it is used inside copyStepDetails.DestinationFileLocation,
-// it should be the S3 copy destination.
+// Specifies the customer input Amazon S3 file location. If it is used inside
+// copyStepDetails.DestinationFileLocation, it should be the S3 copy destination.
 //
 // You need to provide the bucket and key. The key can represent either a path
 // or a file. This is determined by whether or not you end the key value with
@@ -15170,12 +16558,12 @@ type TagStepDetails struct {
 	// Specifies which file to use as input to the workflow step: either the output
 	// from the previous step, or the originally uploaded file for the workflow.
 	//
-	//    * Enter ${previous.file} to use the previous file as the input. In this
+	//    * To use the previous file as the input, enter ${previous.file}. In this
 	//    case, this workflow step uses the output file from the previous workflow
 	//    step as input. This is the default value.
 	//
-	//    * Enter ${original.file} to use the originally-uploaded file location
-	//    as input for this step.
+	//    * To use the originally uploaded file location as input for this step,
+	//    enter ${original.file}.
 	SourceFileLocation *string `type:"string"`
 
 	// Array that contains from 1 to 10 key/value pairs.
@@ -15781,14 +17169,14 @@ func (s *UpdateAccessInput) SetServerId(v string) *UpdateAccessInput {
 type UpdateAccessOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The external ID of the group whose users have access to your Amazon S3 or
-	// Amazon EFS resources over the enabled protocols using Amazon Web ServicesTransfer
+	// The external identifier of the group whose users have access to your Amazon
+	// S3 or Amazon EFS resources over the enabled protocols using Amazon Web ServicesTransfer
 	// Family.
 	//
 	// ExternalId is a required field
 	ExternalId *string `min:"1" type:"string" required:"true"`
 
-	// The ID of the server that the user is attached to.
+	// The identifier of the server that the user is attached to.
 	//
 	// ServerId is a required field
 	ServerId *string `min:"19" type:"string" required:"true"`
@@ -15827,9 +17215,16 @@ func (s *UpdateAccessOutput) SetServerId(v string) *UpdateAccessOutput {
 type UpdateAgreementInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Identity and Access Management (IAM)
-	// role that grants access to at least the HomeDirectory of your users' Amazon
-	// S3 buckets.
+	// With AS2, you can send files by calling StartFileTransfer and specifying
+	// the file paths in the request parameter, SendFilePaths. We use the file’s
+	// parent directory (for example, for --send-file-paths /bucket/dir/file.txt,
+	// parent directory is /bucket/dir/) to temporarily store a processed AS2 message
+	// file, store the MDN when we receive them from the partner, and write a final
+	// JSON file containing relevant metadata of the transmission. So, the AccessRole
+	// needs to provide read and write access to the parent directory of the file
+	// location used in the StartFileTransfer request. Additionally, you need to
+	// provide read and write access to the parent directory of the files that you
+	// intend to send with StartFileTransfer.
 	AccessRole *string `min:"20" type:"string"`
 
 	// A unique identifier for the agreement. This identifier is returned when you
@@ -15846,10 +17241,13 @@ type UpdateAgreementInput struct {
 	// agreement.
 	Description *string `min:"1" type:"string"`
 
+	// A unique identifier for the AS2 local profile.
+	//
 	// To change the local profile identifier, provide a new value here.
 	LocalProfileId *string `min:"19" type:"string"`
 
-	// To change the partner profile identifier, provide a new value here.
+	// A unique identifier for the partner profile. To change the partner profile
+	// identifier, provide a new value here.
 	PartnerProfileId *string `min:"19" type:"string"`
 
 	// A system-assigned unique identifier for a server instance. This is the specific
@@ -16249,6 +17647,131 @@ func (s *UpdateConnectorOutput) SetConnectorId(v string) *UpdateConnectorOutput 
 	return s
 }
 
+type UpdateHostKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// An updated description for the host key.
+	//
+	// Description is a required field
+	Description *string `type:"string" required:"true"`
+
+	// The identifier of the host key that you are updating.
+	//
+	// HostKeyId is a required field
+	HostKeyId *string `min:"25" type:"string" required:"true"`
+
+	// The identifier of the server that contains the host key that you are updating.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateHostKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateHostKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateHostKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateHostKeyInput"}
+	if s.Description == nil {
+		invalidParams.Add(request.NewErrParamRequired("Description"))
+	}
+	if s.HostKeyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("HostKeyId"))
+	}
+	if s.HostKeyId != nil && len(*s.HostKeyId) < 25 {
+		invalidParams.Add(request.NewErrParamMinLen("HostKeyId", 25))
+	}
+	if s.ServerId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerId"))
+	}
+	if s.ServerId != nil && len(*s.ServerId) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerId", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateHostKeyInput) SetDescription(v string) *UpdateHostKeyInput {
+	s.Description = &v
+	return s
+}
+
+// SetHostKeyId sets the HostKeyId field's value.
+func (s *UpdateHostKeyInput) SetHostKeyId(v string) *UpdateHostKeyInput {
+	s.HostKeyId = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *UpdateHostKeyInput) SetServerId(v string) *UpdateHostKeyInput {
+	s.ServerId = &v
+	return s
+}
+
+type UpdateHostKeyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the host key identifier for the updated host key.
+	//
+	// HostKeyId is a required field
+	HostKeyId *string `min:"25" type:"string" required:"true"`
+
+	// Returns the server identifier for the server that contains the updated host
+	// key.
+	//
+	// ServerId is a required field
+	ServerId *string `min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateHostKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateHostKeyOutput) GoString() string {
+	return s.String()
+}
+
+// SetHostKeyId sets the HostKeyId field's value.
+func (s *UpdateHostKeyOutput) SetHostKeyId(v string) *UpdateHostKeyOutput {
+	s.HostKeyId = &v
+	return s
+}
+
+// SetServerId sets the ServerId field's value.
+func (s *UpdateHostKeyOutput) SetServerId(v string) *UpdateHostKeyOutput {
+	s.ServerId = &v
+	return s
+}
+
 type UpdateProfileInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16404,7 +17927,9 @@ type UpdateServerInput struct {
 	// possible with EndpointType set to VPC_ENDPOINT.
 	EndpointType *string `type:"string" enum:"EndpointType"`
 
-	// The RSA, ECDSA, or ED25519 private key to use for your server.
+	// The RSA, ECDSA, or ED25519 private key to use for your SFTP-enabled server.
+	// You can add multiple host keys, in case you want to rotate keys, or have
+	// a set of active keys that use different algorithms.
 	//
 	// Use the following command to generate an RSA 2048 bit key with no passphrase:
 	//
@@ -16430,8 +17955,7 @@ type UpdateServerInput struct {
 	// server to a new server, don't update the host key. Accidentally changing
 	// a server's host key can be disruptive.
 	//
-	// For more information, see Change the host key for your SFTP-enabled server
-	// (https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key)
+	// For more information, see Manage host keys for your SFTP-enabled server (https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key)
 	// in the Transfer Family User Guide.
 	//
 	// HostKey is a sensitive parameter and its value will be
@@ -16492,24 +18016,32 @@ type UpdateServerInput struct {
 	// protocol client can connect to your server's endpoint. The available protocols
 	// are:
 	//
-	//    * Secure Shell (SSH) File Transfer Protocol (SFTP): File transfer over
+	//    * SFTP (Secure Shell (SSH) File Transfer Protocol): File transfer over
 	//    SSH
 	//
-	//    * File Transfer Protocol Secure (FTPS): File transfer with TLS encryption
+	//    * FTPS (File Transfer Protocol Secure): File transfer with TLS encryption
 	//
-	//    * File Transfer Protocol (FTP): Unencrypted file transfer
+	//    * FTP (File Transfer Protocol): Unencrypted file transfer
 	//
-	// If you select FTPS, you must choose a certificate stored in Amazon Web ServicesCertificate
-	// Manager (ACM) which will be used to identify your server when clients connect
-	// to it over FTPS.
+	//    * AS2 (Applicability Statement 2): used for transporting structured business-to-business
+	//    data
 	//
-	// If Protocol includes either FTP or FTPS, then the EndpointType must be VPC
-	// and the IdentityProviderType must be AWS_DIRECTORY_SERVICE or API_GATEWAY.
+	//    * If you select FTPS, you must choose a certificate stored in Certificate
+	//    Manager (ACM) which is used to identify your server when clients connect
+	//    to it over FTPS.
 	//
-	// If Protocol includes FTP, then AddressAllocationIds cannot be associated.
+	//    * If Protocol includes either FTP or FTPS, then the EndpointType must
+	//    be VPC and the IdentityProviderType must be either AWS_DIRECTORY_SERVICE,
+	//    AWS_LAMBDA, or API_GATEWAY.
 	//
-	// If Protocol is set only to SFTP, the EndpointType can be set to PUBLIC and
-	// the IdentityProviderType can be set to SERVICE_MANAGED.
+	//    * If Protocol includes FTP, then AddressAllocationIds cannot be associated.
+	//
+	//    * If Protocol is set only to SFTP, the EndpointType can be set to PUBLIC
+	//    and the IdentityProviderType can be set any of the supported identity
+	//    types: SERVICE_MANAGED, AWS_DIRECTORY_SERVICE, AWS_LAMBDA, or API_GATEWAY.
+	//
+	//    * If Protocol includes AS2, then the EndpointType must be VPC, and domain
+	//    must be Amazon S3.
 	Protocols []*string `min:"1" type:"list" enum:"Protocol"`
 
 	// Specifies the name of the security policy that is attached to the server.
@@ -16523,6 +18055,11 @@ type UpdateServerInput struct {
 
 	// Specifies the workflow ID for the workflow to assign and the execution role
 	// that's used for executing the workflow.
+	//
+	// In addition to a workflow to execute when a file is uploaded completely,
+	// WorkflowDetails can also contain a workflow ID (and execution role) for a
+	// workflow to execute on partial upload. A partial upload occurs when a file
+	// is open when the session disconnects.
 	//
 	// To remove an associated workflow from a server, you can provide an empty
 	// OnUpload object, as in the following example.
@@ -17005,6 +18542,11 @@ func (s *UserDetails) SetUserName(v string) *UserDetails {
 
 // Specifies the workflow ID for the workflow to assign and the execution role
 // that's used for executing the workflow.
+//
+// In addition to a workflow to execute when a file is uploaded completely,
+// WorkflowDetails can also contain a workflow ID (and execution role) for a
+// workflow to execute on partial upload. A partial upload occurs when a file
+// is open when the session disconnects.
 type WorkflowDetail struct {
 	_ struct{} `type:"structure"`
 
@@ -17078,6 +18620,13 @@ func (s *WorkflowDetail) SetWorkflowId(v string) *WorkflowDetail {
 type WorkflowDetails struct {
 	_ struct{} `type:"structure"`
 
+	// A trigger that starts a workflow if a file is only partially uploaded. You
+	// can attach a workflow to a server that executes whenever there is a partial
+	// upload.
+	//
+	// A partial upload occurs when a file is open when the session disconnects.
+	OnPartialUpload []*WorkflowDetail `type:"list"`
+
 	// A trigger that starts a workflow: the workflow begins to execute after a
 	// file is uploaded.
 	//
@@ -17086,9 +18635,7 @@ type WorkflowDetails struct {
 	//
 	// aws transfer update-server --server-id s-01234567890abcdef --workflow-details
 	// '{"OnUpload":[]}'
-	//
-	// OnUpload is a required field
-	OnUpload []*WorkflowDetail `type:"list" required:"true"`
+	OnUpload []*WorkflowDetail `type:"list"`
 }
 
 // String returns the string representation.
@@ -17112,8 +18659,15 @@ func (s WorkflowDetails) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *WorkflowDetails) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "WorkflowDetails"}
-	if s.OnUpload == nil {
-		invalidParams.Add(request.NewErrParamRequired("OnUpload"))
+	if s.OnPartialUpload != nil {
+		for i, v := range s.OnPartialUpload {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OnPartialUpload", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.OnUpload != nil {
 		for i, v := range s.OnUpload {
@@ -17132,6 +18686,12 @@ func (s *WorkflowDetails) Validate() error {
 	return nil
 }
 
+// SetOnPartialUpload sets the OnPartialUpload field's value.
+func (s *WorkflowDetails) SetOnPartialUpload(v []*WorkflowDetail) *WorkflowDetails {
+	s.OnPartialUpload = v
+	return s
+}
+
 // SetOnUpload sets the OnUpload field's value.
 func (s *WorkflowDetails) SetOnUpload(v []*WorkflowDetail) *WorkflowDetails {
 	s.OnUpload = v
@@ -17148,34 +18708,54 @@ type WorkflowStep struct {
 	//
 	//    * A description
 	//
-	//    * An S3 location for the destination of the file copy.
+	//    * An Amazon S3 location for the destination of the file copy.
 	//
-	//    * A flag that indicates whether or not to overwrite an existing file of
-	//    the same name. The default is FALSE.
+	//    * A flag that indicates whether to overwrite an existing file of the same
+	//    name. The default is FALSE.
 	CopyStepDetails *CopyStepDetails `type:"structure"`
 
-	// Details for a step that invokes a lambda function.
+	// Details for a step that invokes an Lambda function.
 	//
-	// Consists of the lambda function name, target, and timeout (in seconds).
+	// Consists of the Lambda function's name, target, and timeout (in seconds).
 	CustomStepDetails *CustomStepDetails `type:"structure"`
+
+	// Details for a step that decrypts an encrypted file.
+	//
+	// Consists of the following values:
+	//
+	//    * A descriptive name
+	//
+	//    * An Amazon S3 or Amazon Elastic File System (Amazon EFS) location for
+	//    the source file to decrypt.
+	//
+	//    * An S3 or Amazon EFS location for the destination of the file decryption.
+	//
+	//    * A flag that indicates whether to overwrite an existing file of the same
+	//    name. The default is FALSE.
+	//
+	//    * The type of encryption that's used. Currently, only PGP encryption is
+	//    supported.
+	DecryptStepDetails *DecryptStepDetails `type:"structure"`
 
 	// Details for a step that deletes the file.
 	DeleteStepDetails *DeleteStepDetails `type:"structure"`
 
 	// Details for a step that creates one or more tags.
 	//
-	// You specify one or more tags: each tag contains a key/value pair.
+	// You specify one or more tags. Each tag contains a key-value pair.
 	TagStepDetails *TagStepDetails `type:"structure"`
 
 	// Currently, the following step types are supported.
 	//
-	//    * COPY: Copy the file to another location.
+	//    * COPY - Copy the file to another location.
 	//
-	//    * CUSTOM: Perform a custom step with an Lambda function target.
+	//    * CUSTOM - Perform a custom step with an Lambda function target.
 	//
-	//    * DELETE: Delete the file.
+	//    * DECRYPT - Decrypt a file that was encrypted before it was uploaded.
 	//
-	//    * TAG: Add a tag to the file.
+	//    * DELETE - Delete the file.
+	//
+	//    * TAG - Add a tag to the file.
 	Type *string `type:"string" enum:"WorkflowStepType"`
 }
 
@@ -17210,6 +18790,11 @@ func (s *WorkflowStep) Validate() error {
 			invalidParams.AddNested("CustomStepDetails", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.DecryptStepDetails != nil {
+		if err := s.DecryptStepDetails.Validate(); err != nil {
+			invalidParams.AddNested("DecryptStepDetails", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.TagStepDetails != nil {
 		if err := s.TagStepDetails.Validate(); err != nil {
 			invalidParams.AddNested("TagStepDetails", err.(request.ErrInvalidParams))
@@ -17231,6 +18816,12 @@ func (s *WorkflowStep) SetCopyStepDetails(v *CopyStepDetails) *WorkflowStep {
 // SetCustomStepDetails sets the CustomStepDetails field's value.
 func (s *WorkflowStep) SetCustomStepDetails(v *CustomStepDetails) *WorkflowStep {
 	s.CustomStepDetails = v
+	return s
+}
+
+// SetDecryptStepDetails sets the DecryptStepDetails field's value.
+func (s *WorkflowStep) SetDecryptStepDetails(v *DecryptStepDetails) *WorkflowStep {
+	s.DecryptStepDetails = v
 	return s
 }
 
@@ -17389,6 +18980,9 @@ const (
 
 	// EncryptionAlgAes256Cbc is a EncryptionAlg enum value
 	EncryptionAlgAes256Cbc = "AES256_CBC"
+
+	// EncryptionAlgNone is a EncryptionAlg enum value
+	EncryptionAlgNone = "NONE"
 )
 
 // EncryptionAlg_Values returns all elements of the EncryptionAlg enum
@@ -17397,6 +18991,19 @@ func EncryptionAlg_Values() []string {
 		EncryptionAlgAes128Cbc,
 		EncryptionAlgAes192Cbc,
 		EncryptionAlgAes256Cbc,
+		EncryptionAlgNone,
+	}
+}
+
+const (
+	// EncryptionTypePgp is a EncryptionType enum value
+	EncryptionTypePgp = "PGP"
+)
+
+// EncryptionType_Values returns all elements of the EncryptionType enum
+func EncryptionType_Values() []string {
+	return []string{
+		EncryptionTypePgp,
 	}
 }
 
@@ -17752,6 +19359,9 @@ const (
 
 	// WorkflowStepTypeDelete is a WorkflowStepType enum value
 	WorkflowStepTypeDelete = "DELETE"
+
+	// WorkflowStepTypeDecrypt is a WorkflowStepType enum value
+	WorkflowStepTypeDecrypt = "DECRYPT"
 )
 
 // WorkflowStepType_Values returns all elements of the WorkflowStepType enum
@@ -17761,5 +19371,6 @@ func WorkflowStepType_Values() []string {
 		WorkflowStepTypeCustom,
 		WorkflowStepTypeTag,
 		WorkflowStepTypeDelete,
+		WorkflowStepTypeDecrypt,
 	}
 }

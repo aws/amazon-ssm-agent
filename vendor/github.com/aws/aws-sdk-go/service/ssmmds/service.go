@@ -12,13 +12,13 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
-// SSMMDS provides the API operation methods for making requests to
+// Ssmmds provides the API operation methods for making requests to
 // Amazon Simple Systems Management Message Delivery Service. See this package's package overview docs
 // for details on the service.
 //
-// SSMMDS methods are safe to use concurrently. It is not safe to
+// Ssmmds methods are safe to use concurrently. It is not safe to
 // modify mutate any of the struct's properties though.
-type SSMMDS struct {
+type Ssmmds struct {
 	*client.Client
 }
 
@@ -30,24 +30,24 @@ var initRequest func(*request.Request)
 
 // Service information constants
 const (
-	ServiceName = "ec2messages" // Name of service.
+	ServiceName = "ssmmds"      // Name of service.
 	EndpointsID = "ec2messages" // ID to lookup a service endpoint with.
-	ServiceID   = "SSM MDS"     // ServiceID is a unique identifier of a specific service.
+	ServiceID   = "ssmmds"      // ServiceID is a unique identifier of a specific service.
 )
 
-// New creates a new instance of the SSMMDS client with a session.
+// New creates a new instance of the Ssmmds client with a session.
 // If additional configuration is needed for the client instance use the optional
 // aws.Config parameter to add your extra config.
 //
 // Example:
 //     mySession := session.Must(session.NewSession())
 //
-//     // Create a SSMMDS client from just a session.
+//     // Create a Ssmmds client from just a session.
 //     svc := ssmmds.New(mySession)
 //
-//     // Create a SSMMDS client with additional configuration
+//     // Create a Ssmmds client with additional configuration
 //     svc := ssmmds.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
-func New(p client.ConfigProvider, cfgs ...*aws.Config) *SSMMDS {
+func New(p client.ConfigProvider, cfgs ...*aws.Config) *Ssmmds {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {
 		c.SigningName = EndpointsID
@@ -57,8 +57,8 @@ func New(p client.ConfigProvider, cfgs ...*aws.Config) *SSMMDS {
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *SSMMDS {
-	svc := &SSMMDS{
+func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *Ssmmds {
+	svc := &Ssmmds{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
@@ -94,9 +94,9 @@ func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint,
 	return svc
 }
 
-// newRequest creates a new request for a SSMMDS operation and runs any
+// newRequest creates a new request for a Ssmmds operation and runs any
 // custom request initialization.
-func (c *SSMMDS) newRequest(op *request.Operation, params, data interface{}) *request.Request {
+func (c *Ssmmds) newRequest(op *request.Operation, params, data interface{}) *request.Request {
 	req := c.NewRequest(op, params, data)
 
 	// Run custom request initialization if present

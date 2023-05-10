@@ -39,7 +39,12 @@ const opAssociateEntityToThing = "AssociateEntityToThing"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/AssociateEntityToThing
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) AssociateEntityToThingRequest(input *AssociateEntityToThingInput) (req *request.Request, output *AssociateEntityToThingOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, AssociateEntityToThing, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opAssociateEntityToThing,
 		HTTPMethod: "POST",
@@ -80,6 +85,8 @@ func (c *IoTThingsGraph) AssociateEntityToThingRequest(input *AssociateEntityToT
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/AssociateEntityToThing
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) AssociateEntityToThing(input *AssociateEntityToThingInput) (*AssociateEntityToThingOutput, error) {
 	req, out := c.AssociateEntityToThingRequest(input)
 	return out, req.Send()
@@ -94,6 +101,8 @@ func (c *IoTThingsGraph) AssociateEntityToThing(input *AssociateEntityToThingInp
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) AssociateEntityToThingWithContext(ctx aws.Context, input *AssociateEntityToThingInput, opts ...request.Option) (*AssociateEntityToThingOutput, error) {
 	req, out := c.AssociateEntityToThingRequest(input)
 	req.SetContext(ctx)
@@ -127,7 +136,12 @@ const opCreateFlowTemplate = "CreateFlowTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/CreateFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateFlowTemplateRequest(input *CreateFlowTemplateInput) (req *request.Request, output *CreateFlowTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, CreateFlowTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opCreateFlowTemplate,
 		HTTPMethod: "POST",
@@ -170,6 +184,8 @@ func (c *IoTThingsGraph) CreateFlowTemplateRequest(input *CreateFlowTemplateInpu
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/CreateFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateFlowTemplate(input *CreateFlowTemplateInput) (*CreateFlowTemplateOutput, error) {
 	req, out := c.CreateFlowTemplateRequest(input)
 	return out, req.Send()
@@ -184,6 +200,8 @@ func (c *IoTThingsGraph) CreateFlowTemplate(input *CreateFlowTemplateInput) (*Cr
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateFlowTemplateWithContext(ctx aws.Context, input *CreateFlowTemplateInput, opts ...request.Option) (*CreateFlowTemplateOutput, error) {
 	req, out := c.CreateFlowTemplateRequest(input)
 	req.SetContext(ctx)
@@ -217,7 +235,12 @@ const opCreateSystemInstance = "CreateSystemInstance"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/CreateSystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateSystemInstanceRequest(input *CreateSystemInstanceInput) (req *request.Request, output *CreateSystemInstanceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, CreateSystemInstance, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opCreateSystemInstance,
 		HTTPMethod: "POST",
@@ -274,6 +297,8 @@ func (c *IoTThingsGraph) CreateSystemInstanceRequest(input *CreateSystemInstance
 //   * LimitExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/CreateSystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateSystemInstance(input *CreateSystemInstanceInput) (*CreateSystemInstanceOutput, error) {
 	req, out := c.CreateSystemInstanceRequest(input)
 	return out, req.Send()
@@ -288,6 +313,8 @@ func (c *IoTThingsGraph) CreateSystemInstance(input *CreateSystemInstanceInput) 
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateSystemInstanceWithContext(ctx aws.Context, input *CreateSystemInstanceInput, opts ...request.Option) (*CreateSystemInstanceOutput, error) {
 	req, out := c.CreateSystemInstanceRequest(input)
 	req.SetContext(ctx)
@@ -321,7 +348,12 @@ const opCreateSystemTemplate = "CreateSystemTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/CreateSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateSystemTemplateRequest(input *CreateSystemTemplateInput) (req *request.Request, output *CreateSystemTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, CreateSystemTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opCreateSystemTemplate,
 		HTTPMethod: "POST",
@@ -360,6 +392,8 @@ func (c *IoTThingsGraph) CreateSystemTemplateRequest(input *CreateSystemTemplate
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/CreateSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateSystemTemplate(input *CreateSystemTemplateInput) (*CreateSystemTemplateOutput, error) {
 	req, out := c.CreateSystemTemplateRequest(input)
 	return out, req.Send()
@@ -374,6 +408,8 @@ func (c *IoTThingsGraph) CreateSystemTemplate(input *CreateSystemTemplateInput) 
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) CreateSystemTemplateWithContext(ctx aws.Context, input *CreateSystemTemplateInput, opts ...request.Option) (*CreateSystemTemplateOutput, error) {
 	req, out := c.CreateSystemTemplateRequest(input)
 	req.SetContext(ctx)
@@ -407,7 +443,12 @@ const opDeleteFlowTemplate = "DeleteFlowTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteFlowTemplateRequest(input *DeleteFlowTemplateInput) (req *request.Request, output *DeleteFlowTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DeleteFlowTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDeleteFlowTemplate,
 		HTTPMethod: "POST",
@@ -448,6 +489,8 @@ func (c *IoTThingsGraph) DeleteFlowTemplateRequest(input *DeleteFlowTemplateInpu
 //   * ResourceInUseException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteFlowTemplate(input *DeleteFlowTemplateInput) (*DeleteFlowTemplateOutput, error) {
 	req, out := c.DeleteFlowTemplateRequest(input)
 	return out, req.Send()
@@ -462,6 +505,8 @@ func (c *IoTThingsGraph) DeleteFlowTemplate(input *DeleteFlowTemplateInput) (*De
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteFlowTemplateWithContext(ctx aws.Context, input *DeleteFlowTemplateInput, opts ...request.Option) (*DeleteFlowTemplateOutput, error) {
 	req, out := c.DeleteFlowTemplateRequest(input)
 	req.SetContext(ctx)
@@ -495,7 +540,12 @@ const opDeleteNamespace = "DeleteNamespace"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteNamespace
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteNamespaceRequest(input *DeleteNamespaceInput) (req *request.Request, output *DeleteNamespaceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DeleteNamespace, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDeleteNamespace,
 		HTTPMethod: "POST",
@@ -515,7 +565,7 @@ func (c *IoTThingsGraph) DeleteNamespaceRequest(input *DeleteNamespaceInput) (re
 //
 // Deletes the specified namespace. This action deletes all of the entities
 // in the namespace. Delete the systems and flows that use entities in the namespace
-// before performing this action.
+// before performing this action. This action takes no request parameters.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -530,6 +580,8 @@ func (c *IoTThingsGraph) DeleteNamespaceRequest(input *DeleteNamespaceInput) (re
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteNamespace
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteNamespace(input *DeleteNamespaceInput) (*DeleteNamespaceOutput, error) {
 	req, out := c.DeleteNamespaceRequest(input)
 	return out, req.Send()
@@ -544,6 +596,8 @@ func (c *IoTThingsGraph) DeleteNamespace(input *DeleteNamespaceInput) (*DeleteNa
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteNamespaceWithContext(ctx aws.Context, input *DeleteNamespaceInput, opts ...request.Option) (*DeleteNamespaceOutput, error) {
 	req, out := c.DeleteNamespaceRequest(input)
 	req.SetContext(ctx)
@@ -577,7 +631,12 @@ const opDeleteSystemInstance = "DeleteSystemInstance"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteSystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteSystemInstanceRequest(input *DeleteSystemInstanceInput) (req *request.Request, output *DeleteSystemInstanceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DeleteSystemInstance, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDeleteSystemInstance,
 		HTTPMethod: "POST",
@@ -619,6 +678,8 @@ func (c *IoTThingsGraph) DeleteSystemInstanceRequest(input *DeleteSystemInstance
 //   * ResourceInUseException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteSystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteSystemInstance(input *DeleteSystemInstanceInput) (*DeleteSystemInstanceOutput, error) {
 	req, out := c.DeleteSystemInstanceRequest(input)
 	return out, req.Send()
@@ -633,6 +694,8 @@ func (c *IoTThingsGraph) DeleteSystemInstance(input *DeleteSystemInstanceInput) 
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteSystemInstanceWithContext(ctx aws.Context, input *DeleteSystemInstanceInput, opts ...request.Option) (*DeleteSystemInstanceOutput, error) {
 	req, out := c.DeleteSystemInstanceRequest(input)
 	req.SetContext(ctx)
@@ -666,7 +729,12 @@ const opDeleteSystemTemplate = "DeleteSystemTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteSystemTemplateRequest(input *DeleteSystemTemplateInput) (req *request.Request, output *DeleteSystemTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DeleteSystemTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDeleteSystemTemplate,
 		HTTPMethod: "POST",
@@ -706,6 +774,8 @@ func (c *IoTThingsGraph) DeleteSystemTemplateRequest(input *DeleteSystemTemplate
 //   * ResourceInUseException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeleteSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteSystemTemplate(input *DeleteSystemTemplateInput) (*DeleteSystemTemplateOutput, error) {
 	req, out := c.DeleteSystemTemplateRequest(input)
 	return out, req.Send()
@@ -720,6 +790,8 @@ func (c *IoTThingsGraph) DeleteSystemTemplate(input *DeleteSystemTemplateInput) 
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeleteSystemTemplateWithContext(ctx aws.Context, input *DeleteSystemTemplateInput, opts ...request.Option) (*DeleteSystemTemplateOutput, error) {
 	req, out := c.DeleteSystemTemplateRequest(input)
 	req.SetContext(ctx)
@@ -753,7 +825,12 @@ const opDeploySystemInstance = "DeploySystemInstance"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeploySystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeploySystemInstanceRequest(input *DeploySystemInstanceInput) (req *request.Request, output *DeploySystemInstanceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DeploySystemInstance, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDeploySystemInstance,
 		HTTPMethod: "POST",
@@ -808,6 +885,8 @@ func (c *IoTThingsGraph) DeploySystemInstanceRequest(input *DeploySystemInstance
 //   * ResourceInUseException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeploySystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeploySystemInstance(input *DeploySystemInstanceInput) (*DeploySystemInstanceOutput, error) {
 	req, out := c.DeploySystemInstanceRequest(input)
 	return out, req.Send()
@@ -822,6 +901,8 @@ func (c *IoTThingsGraph) DeploySystemInstance(input *DeploySystemInstanceInput) 
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeploySystemInstanceWithContext(ctx aws.Context, input *DeploySystemInstanceInput, opts ...request.Option) (*DeploySystemInstanceOutput, error) {
 	req, out := c.DeploySystemInstanceRequest(input)
 	req.SetContext(ctx)
@@ -855,7 +936,12 @@ const opDeprecateFlowTemplate = "DeprecateFlowTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeprecateFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeprecateFlowTemplateRequest(input *DeprecateFlowTemplateInput) (req *request.Request, output *DeprecateFlowTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DeprecateFlowTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDeprecateFlowTemplate,
 		HTTPMethod: "POST",
@@ -895,6 +981,8 @@ func (c *IoTThingsGraph) DeprecateFlowTemplateRequest(input *DeprecateFlowTempla
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeprecateFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeprecateFlowTemplate(input *DeprecateFlowTemplateInput) (*DeprecateFlowTemplateOutput, error) {
 	req, out := c.DeprecateFlowTemplateRequest(input)
 	return out, req.Send()
@@ -909,6 +997,8 @@ func (c *IoTThingsGraph) DeprecateFlowTemplate(input *DeprecateFlowTemplateInput
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeprecateFlowTemplateWithContext(ctx aws.Context, input *DeprecateFlowTemplateInput, opts ...request.Option) (*DeprecateFlowTemplateOutput, error) {
 	req, out := c.DeprecateFlowTemplateRequest(input)
 	req.SetContext(ctx)
@@ -942,7 +1032,12 @@ const opDeprecateSystemTemplate = "DeprecateSystemTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeprecateSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeprecateSystemTemplateRequest(input *DeprecateSystemTemplateInput) (req *request.Request, output *DeprecateSystemTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DeprecateSystemTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDeprecateSystemTemplate,
 		HTTPMethod: "POST",
@@ -980,6 +1075,8 @@ func (c *IoTThingsGraph) DeprecateSystemTemplateRequest(input *DeprecateSystemTe
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DeprecateSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeprecateSystemTemplate(input *DeprecateSystemTemplateInput) (*DeprecateSystemTemplateOutput, error) {
 	req, out := c.DeprecateSystemTemplateRequest(input)
 	return out, req.Send()
@@ -994,6 +1091,8 @@ func (c *IoTThingsGraph) DeprecateSystemTemplate(input *DeprecateSystemTemplateI
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DeprecateSystemTemplateWithContext(ctx aws.Context, input *DeprecateSystemTemplateInput, opts ...request.Option) (*DeprecateSystemTemplateOutput, error) {
 	req, out := c.DeprecateSystemTemplateRequest(input)
 	req.SetContext(ctx)
@@ -1027,7 +1126,12 @@ const opDescribeNamespace = "DescribeNamespace"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DescribeNamespace
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DescribeNamespaceRequest(input *DescribeNamespaceInput) (req *request.Request, output *DescribeNamespaceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DescribeNamespace, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDescribeNamespace,
 		HTTPMethod: "POST",
@@ -1065,6 +1169,8 @@ func (c *IoTThingsGraph) DescribeNamespaceRequest(input *DescribeNamespaceInput)
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DescribeNamespace
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DescribeNamespace(input *DescribeNamespaceInput) (*DescribeNamespaceOutput, error) {
 	req, out := c.DescribeNamespaceRequest(input)
 	return out, req.Send()
@@ -1079,6 +1185,8 @@ func (c *IoTThingsGraph) DescribeNamespace(input *DescribeNamespaceInput) (*Desc
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DescribeNamespaceWithContext(ctx aws.Context, input *DescribeNamespaceInput, opts ...request.Option) (*DescribeNamespaceOutput, error) {
 	req, out := c.DescribeNamespaceRequest(input)
 	req.SetContext(ctx)
@@ -1112,7 +1220,12 @@ const opDissociateEntityFromThing = "DissociateEntityFromThing"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DissociateEntityFromThing
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DissociateEntityFromThingRequest(input *DissociateEntityFromThingInput) (req *request.Request, output *DissociateEntityFromThingOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, DissociateEntityFromThing, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opDissociateEntityFromThing,
 		HTTPMethod: "POST",
@@ -1152,6 +1265,8 @@ func (c *IoTThingsGraph) DissociateEntityFromThingRequest(input *DissociateEntit
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/DissociateEntityFromThing
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DissociateEntityFromThing(input *DissociateEntityFromThingInput) (*DissociateEntityFromThingOutput, error) {
 	req, out := c.DissociateEntityFromThingRequest(input)
 	return out, req.Send()
@@ -1166,6 +1281,8 @@ func (c *IoTThingsGraph) DissociateEntityFromThing(input *DissociateEntityFromTh
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) DissociateEntityFromThingWithContext(ctx aws.Context, input *DissociateEntityFromThingInput, opts ...request.Option) (*DissociateEntityFromThingOutput, error) {
 	req, out := c.DissociateEntityFromThingRequest(input)
 	req.SetContext(ctx)
@@ -1199,7 +1316,12 @@ const opGetEntities = "GetEntities"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetEntities
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetEntitiesRequest(input *GetEntitiesInput) (req *request.Request, output *GetEntitiesOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetEntities, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetEntities,
 		HTTPMethod: "POST",
@@ -1257,6 +1379,8 @@ func (c *IoTThingsGraph) GetEntitiesRequest(input *GetEntitiesInput) (req *reque
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetEntities
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetEntities(input *GetEntitiesInput) (*GetEntitiesOutput, error) {
 	req, out := c.GetEntitiesRequest(input)
 	return out, req.Send()
@@ -1271,6 +1395,8 @@ func (c *IoTThingsGraph) GetEntities(input *GetEntitiesInput) (*GetEntitiesOutpu
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetEntitiesWithContext(ctx aws.Context, input *GetEntitiesInput, opts ...request.Option) (*GetEntitiesOutput, error) {
 	req, out := c.GetEntitiesRequest(input)
 	req.SetContext(ctx)
@@ -1304,7 +1430,12 @@ const opGetFlowTemplate = "GetFlowTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplateRequest(input *GetFlowTemplateInput) (req *request.Request, output *GetFlowTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetFlowTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetFlowTemplate,
 		HTTPMethod: "POST",
@@ -1342,6 +1473,8 @@ func (c *IoTThingsGraph) GetFlowTemplateRequest(input *GetFlowTemplateInput) (re
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplate(input *GetFlowTemplateInput) (*GetFlowTemplateOutput, error) {
 	req, out := c.GetFlowTemplateRequest(input)
 	return out, req.Send()
@@ -1356,6 +1489,8 @@ func (c *IoTThingsGraph) GetFlowTemplate(input *GetFlowTemplateInput) (*GetFlowT
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplateWithContext(ctx aws.Context, input *GetFlowTemplateInput, opts ...request.Option) (*GetFlowTemplateOutput, error) {
 	req, out := c.GetFlowTemplateRequest(input)
 	req.SetContext(ctx)
@@ -1389,7 +1524,12 @@ const opGetFlowTemplateRevisions = "GetFlowTemplateRevisions"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetFlowTemplateRevisions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplateRevisionsRequest(input *GetFlowTemplateRevisionsInput) (req *request.Request, output *GetFlowTemplateRevisionsOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetFlowTemplateRevisions, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetFlowTemplateRevisions,
 		HTTPMethod: "POST",
@@ -1435,6 +1575,8 @@ func (c *IoTThingsGraph) GetFlowTemplateRevisionsRequest(input *GetFlowTemplateR
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetFlowTemplateRevisions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplateRevisions(input *GetFlowTemplateRevisionsInput) (*GetFlowTemplateRevisionsOutput, error) {
 	req, out := c.GetFlowTemplateRevisionsRequest(input)
 	return out, req.Send()
@@ -1449,6 +1591,8 @@ func (c *IoTThingsGraph) GetFlowTemplateRevisions(input *GetFlowTemplateRevision
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplateRevisionsWithContext(ctx aws.Context, input *GetFlowTemplateRevisionsInput, opts ...request.Option) (*GetFlowTemplateRevisionsOutput, error) {
 	req, out := c.GetFlowTemplateRevisionsRequest(input)
 	req.SetContext(ctx)
@@ -1473,6 +1617,8 @@ func (c *IoTThingsGraph) GetFlowTemplateRevisionsWithContext(ctx aws.Context, in
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplateRevisionsPages(input *GetFlowTemplateRevisionsInput, fn func(*GetFlowTemplateRevisionsOutput, bool) bool) error {
 	return c.GetFlowTemplateRevisionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1484,6 +1630,8 @@ func (c *IoTThingsGraph) GetFlowTemplateRevisionsPages(input *GetFlowTemplateRev
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetFlowTemplateRevisionsPagesWithContext(ctx aws.Context, input *GetFlowTemplateRevisionsInput, fn func(*GetFlowTemplateRevisionsOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -1534,7 +1682,12 @@ const opGetNamespaceDeletionStatus = "GetNamespaceDeletionStatus"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetNamespaceDeletionStatus
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetNamespaceDeletionStatusRequest(input *GetNamespaceDeletionStatusInput) (req *request.Request, output *GetNamespaceDeletionStatusOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetNamespaceDeletionStatus, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetNamespaceDeletionStatus,
 		HTTPMethod: "POST",
@@ -1569,6 +1722,8 @@ func (c *IoTThingsGraph) GetNamespaceDeletionStatusRequest(input *GetNamespaceDe
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetNamespaceDeletionStatus
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetNamespaceDeletionStatus(input *GetNamespaceDeletionStatusInput) (*GetNamespaceDeletionStatusOutput, error) {
 	req, out := c.GetNamespaceDeletionStatusRequest(input)
 	return out, req.Send()
@@ -1583,6 +1738,8 @@ func (c *IoTThingsGraph) GetNamespaceDeletionStatus(input *GetNamespaceDeletionS
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetNamespaceDeletionStatusWithContext(ctx aws.Context, input *GetNamespaceDeletionStatusInput, opts ...request.Option) (*GetNamespaceDeletionStatusOutput, error) {
 	req, out := c.GetNamespaceDeletionStatusRequest(input)
 	req.SetContext(ctx)
@@ -1616,7 +1773,12 @@ const opGetSystemInstance = "GetSystemInstance"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetSystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemInstanceRequest(input *GetSystemInstanceInput) (req *request.Request, output *GetSystemInstanceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetSystemInstance, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetSystemInstance,
 		HTTPMethod: "POST",
@@ -1653,6 +1815,8 @@ func (c *IoTThingsGraph) GetSystemInstanceRequest(input *GetSystemInstanceInput)
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetSystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemInstance(input *GetSystemInstanceInput) (*GetSystemInstanceOutput, error) {
 	req, out := c.GetSystemInstanceRequest(input)
 	return out, req.Send()
@@ -1667,6 +1831,8 @@ func (c *IoTThingsGraph) GetSystemInstance(input *GetSystemInstanceInput) (*GetS
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemInstanceWithContext(ctx aws.Context, input *GetSystemInstanceInput, opts ...request.Option) (*GetSystemInstanceOutput, error) {
 	req, out := c.GetSystemInstanceRequest(input)
 	req.SetContext(ctx)
@@ -1700,7 +1866,12 @@ const opGetSystemTemplate = "GetSystemTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplateRequest(input *GetSystemTemplateInput) (req *request.Request, output *GetSystemTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetSystemTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetSystemTemplate,
 		HTTPMethod: "POST",
@@ -1737,6 +1908,8 @@ func (c *IoTThingsGraph) GetSystemTemplateRequest(input *GetSystemTemplateInput)
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplate(input *GetSystemTemplateInput) (*GetSystemTemplateOutput, error) {
 	req, out := c.GetSystemTemplateRequest(input)
 	return out, req.Send()
@@ -1751,6 +1924,8 @@ func (c *IoTThingsGraph) GetSystemTemplate(input *GetSystemTemplateInput) (*GetS
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplateWithContext(ctx aws.Context, input *GetSystemTemplateInput, opts ...request.Option) (*GetSystemTemplateOutput, error) {
 	req, out := c.GetSystemTemplateRequest(input)
 	req.SetContext(ctx)
@@ -1784,7 +1959,12 @@ const opGetSystemTemplateRevisions = "GetSystemTemplateRevisions"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetSystemTemplateRevisions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplateRevisionsRequest(input *GetSystemTemplateRevisionsInput) (req *request.Request, output *GetSystemTemplateRevisionsOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetSystemTemplateRevisions, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetSystemTemplateRevisions,
 		HTTPMethod: "POST",
@@ -1830,6 +2010,8 @@ func (c *IoTThingsGraph) GetSystemTemplateRevisionsRequest(input *GetSystemTempl
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetSystemTemplateRevisions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplateRevisions(input *GetSystemTemplateRevisionsInput) (*GetSystemTemplateRevisionsOutput, error) {
 	req, out := c.GetSystemTemplateRevisionsRequest(input)
 	return out, req.Send()
@@ -1844,6 +2026,8 @@ func (c *IoTThingsGraph) GetSystemTemplateRevisions(input *GetSystemTemplateRevi
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplateRevisionsWithContext(ctx aws.Context, input *GetSystemTemplateRevisionsInput, opts ...request.Option) (*GetSystemTemplateRevisionsOutput, error) {
 	req, out := c.GetSystemTemplateRevisionsRequest(input)
 	req.SetContext(ctx)
@@ -1868,6 +2052,8 @@ func (c *IoTThingsGraph) GetSystemTemplateRevisionsWithContext(ctx aws.Context, 
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplateRevisionsPages(input *GetSystemTemplateRevisionsInput, fn func(*GetSystemTemplateRevisionsOutput, bool) bool) error {
 	return c.GetSystemTemplateRevisionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1879,6 +2065,8 @@ func (c *IoTThingsGraph) GetSystemTemplateRevisionsPages(input *GetSystemTemplat
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetSystemTemplateRevisionsPagesWithContext(ctx aws.Context, input *GetSystemTemplateRevisionsInput, fn func(*GetSystemTemplateRevisionsOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -1929,7 +2117,12 @@ const opGetUploadStatus = "GetUploadStatus"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetUploadStatus
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetUploadStatusRequest(input *GetUploadStatusInput) (req *request.Request, output *GetUploadStatusOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, GetUploadStatus, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opGetUploadStatus,
 		HTTPMethod: "POST",
@@ -1966,6 +2159,8 @@ func (c *IoTThingsGraph) GetUploadStatusRequest(input *GetUploadStatusInput) (re
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/GetUploadStatus
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetUploadStatus(input *GetUploadStatusInput) (*GetUploadStatusOutput, error) {
 	req, out := c.GetUploadStatusRequest(input)
 	return out, req.Send()
@@ -1980,6 +2175,8 @@ func (c *IoTThingsGraph) GetUploadStatus(input *GetUploadStatusInput) (*GetUploa
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) GetUploadStatusWithContext(ctx aws.Context, input *GetUploadStatusInput, opts ...request.Option) (*GetUploadStatusOutput, error) {
 	req, out := c.GetUploadStatusRequest(input)
 	req.SetContext(ctx)
@@ -2013,7 +2210,12 @@ const opListFlowExecutionMessages = "ListFlowExecutionMessages"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/ListFlowExecutionMessages
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListFlowExecutionMessagesRequest(input *ListFlowExecutionMessagesInput) (req *request.Request, output *ListFlowExecutionMessagesOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, ListFlowExecutionMessages, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opListFlowExecutionMessages,
 		HTTPMethod: "POST",
@@ -2057,6 +2259,8 @@ func (c *IoTThingsGraph) ListFlowExecutionMessagesRequest(input *ListFlowExecuti
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/ListFlowExecutionMessages
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListFlowExecutionMessages(input *ListFlowExecutionMessagesInput) (*ListFlowExecutionMessagesOutput, error) {
 	req, out := c.ListFlowExecutionMessagesRequest(input)
 	return out, req.Send()
@@ -2071,6 +2275,8 @@ func (c *IoTThingsGraph) ListFlowExecutionMessages(input *ListFlowExecutionMessa
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListFlowExecutionMessagesWithContext(ctx aws.Context, input *ListFlowExecutionMessagesInput, opts ...request.Option) (*ListFlowExecutionMessagesOutput, error) {
 	req, out := c.ListFlowExecutionMessagesRequest(input)
 	req.SetContext(ctx)
@@ -2095,6 +2301,8 @@ func (c *IoTThingsGraph) ListFlowExecutionMessagesWithContext(ctx aws.Context, i
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListFlowExecutionMessagesPages(input *ListFlowExecutionMessagesInput, fn func(*ListFlowExecutionMessagesOutput, bool) bool) error {
 	return c.ListFlowExecutionMessagesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2106,6 +2314,8 @@ func (c *IoTThingsGraph) ListFlowExecutionMessagesPages(input *ListFlowExecution
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListFlowExecutionMessagesPagesWithContext(ctx aws.Context, input *ListFlowExecutionMessagesInput, fn func(*ListFlowExecutionMessagesOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -2156,7 +2366,12 @@ const opListTagsForResource = "ListTagsForResource"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/ListTagsForResource
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, ListTagsForResource, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opListTagsForResource,
 		HTTPMethod: "POST",
@@ -2199,6 +2414,8 @@ func (c *IoTThingsGraph) ListTagsForResourceRequest(input *ListTagsForResourceIn
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/ListTagsForResource
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
 	return out, req.Send()
@@ -2213,6 +2430,8 @@ func (c *IoTThingsGraph) ListTagsForResource(input *ListTagsForResourceInput) (*
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
 	req.SetContext(ctx)
@@ -2237,6 +2456,8 @@ func (c *IoTThingsGraph) ListTagsForResourceWithContext(ctx aws.Context, input *
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListTagsForResourcePages(input *ListTagsForResourceInput, fn func(*ListTagsForResourceOutput, bool) bool) error {
 	return c.ListTagsForResourcePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2248,6 +2469,8 @@ func (c *IoTThingsGraph) ListTagsForResourcePages(input *ListTagsForResourceInpu
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) ListTagsForResourcePagesWithContext(ctx aws.Context, input *ListTagsForResourceInput, fn func(*ListTagsForResourceOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -2298,7 +2521,12 @@ const opSearchEntities = "SearchEntities"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchEntities
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchEntitiesRequest(input *SearchEntitiesInput) (req *request.Request, output *SearchEntitiesOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, SearchEntities, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opSearchEntities,
 		HTTPMethod: "POST",
@@ -2340,6 +2568,8 @@ func (c *IoTThingsGraph) SearchEntitiesRequest(input *SearchEntitiesInput) (req 
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchEntities
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchEntities(input *SearchEntitiesInput) (*SearchEntitiesOutput, error) {
 	req, out := c.SearchEntitiesRequest(input)
 	return out, req.Send()
@@ -2354,6 +2584,8 @@ func (c *IoTThingsGraph) SearchEntities(input *SearchEntitiesInput) (*SearchEnti
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchEntitiesWithContext(ctx aws.Context, input *SearchEntitiesInput, opts ...request.Option) (*SearchEntitiesOutput, error) {
 	req, out := c.SearchEntitiesRequest(input)
 	req.SetContext(ctx)
@@ -2378,6 +2610,8 @@ func (c *IoTThingsGraph) SearchEntitiesWithContext(ctx aws.Context, input *Searc
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchEntitiesPages(input *SearchEntitiesInput, fn func(*SearchEntitiesOutput, bool) bool) error {
 	return c.SearchEntitiesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2389,6 +2623,8 @@ func (c *IoTThingsGraph) SearchEntitiesPages(input *SearchEntitiesInput, fn func
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchEntitiesPagesWithContext(ctx aws.Context, input *SearchEntitiesInput, fn func(*SearchEntitiesOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -2439,7 +2675,12 @@ const opSearchFlowExecutions = "SearchFlowExecutions"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchFlowExecutions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowExecutionsRequest(input *SearchFlowExecutionsInput) (req *request.Request, output *SearchFlowExecutionsOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, SearchFlowExecutions, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opSearchFlowExecutions,
 		HTTPMethod: "POST",
@@ -2482,6 +2723,8 @@ func (c *IoTThingsGraph) SearchFlowExecutionsRequest(input *SearchFlowExecutions
 //   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchFlowExecutions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowExecutions(input *SearchFlowExecutionsInput) (*SearchFlowExecutionsOutput, error) {
 	req, out := c.SearchFlowExecutionsRequest(input)
 	return out, req.Send()
@@ -2496,6 +2739,8 @@ func (c *IoTThingsGraph) SearchFlowExecutions(input *SearchFlowExecutionsInput) 
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowExecutionsWithContext(ctx aws.Context, input *SearchFlowExecutionsInput, opts ...request.Option) (*SearchFlowExecutionsOutput, error) {
 	req, out := c.SearchFlowExecutionsRequest(input)
 	req.SetContext(ctx)
@@ -2520,6 +2765,8 @@ func (c *IoTThingsGraph) SearchFlowExecutionsWithContext(ctx aws.Context, input 
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowExecutionsPages(input *SearchFlowExecutionsInput, fn func(*SearchFlowExecutionsOutput, bool) bool) error {
 	return c.SearchFlowExecutionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2531,6 +2778,8 @@ func (c *IoTThingsGraph) SearchFlowExecutionsPages(input *SearchFlowExecutionsIn
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowExecutionsPagesWithContext(ctx aws.Context, input *SearchFlowExecutionsInput, fn func(*SearchFlowExecutionsOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -2581,7 +2830,12 @@ const opSearchFlowTemplates = "SearchFlowTemplates"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchFlowTemplates
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowTemplatesRequest(input *SearchFlowTemplatesInput) (req *request.Request, output *SearchFlowTemplatesOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, SearchFlowTemplates, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opSearchFlowTemplates,
 		HTTPMethod: "POST",
@@ -2622,6 +2876,8 @@ func (c *IoTThingsGraph) SearchFlowTemplatesRequest(input *SearchFlowTemplatesIn
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchFlowTemplates
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowTemplates(input *SearchFlowTemplatesInput) (*SearchFlowTemplatesOutput, error) {
 	req, out := c.SearchFlowTemplatesRequest(input)
 	return out, req.Send()
@@ -2636,6 +2892,8 @@ func (c *IoTThingsGraph) SearchFlowTemplates(input *SearchFlowTemplatesInput) (*
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowTemplatesWithContext(ctx aws.Context, input *SearchFlowTemplatesInput, opts ...request.Option) (*SearchFlowTemplatesOutput, error) {
 	req, out := c.SearchFlowTemplatesRequest(input)
 	req.SetContext(ctx)
@@ -2660,6 +2918,8 @@ func (c *IoTThingsGraph) SearchFlowTemplatesWithContext(ctx aws.Context, input *
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowTemplatesPages(input *SearchFlowTemplatesInput, fn func(*SearchFlowTemplatesOutput, bool) bool) error {
 	return c.SearchFlowTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2671,6 +2931,8 @@ func (c *IoTThingsGraph) SearchFlowTemplatesPages(input *SearchFlowTemplatesInpu
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchFlowTemplatesPagesWithContext(ctx aws.Context, input *SearchFlowTemplatesInput, fn func(*SearchFlowTemplatesOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -2721,7 +2983,12 @@ const opSearchSystemInstances = "SearchSystemInstances"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchSystemInstances
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemInstancesRequest(input *SearchSystemInstancesInput) (req *request.Request, output *SearchSystemInstancesOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, SearchSystemInstances, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opSearchSystemInstances,
 		HTTPMethod: "POST",
@@ -2762,6 +3029,8 @@ func (c *IoTThingsGraph) SearchSystemInstancesRequest(input *SearchSystemInstanc
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchSystemInstances
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemInstances(input *SearchSystemInstancesInput) (*SearchSystemInstancesOutput, error) {
 	req, out := c.SearchSystemInstancesRequest(input)
 	return out, req.Send()
@@ -2776,6 +3045,8 @@ func (c *IoTThingsGraph) SearchSystemInstances(input *SearchSystemInstancesInput
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemInstancesWithContext(ctx aws.Context, input *SearchSystemInstancesInput, opts ...request.Option) (*SearchSystemInstancesOutput, error) {
 	req, out := c.SearchSystemInstancesRequest(input)
 	req.SetContext(ctx)
@@ -2800,6 +3071,8 @@ func (c *IoTThingsGraph) SearchSystemInstancesWithContext(ctx aws.Context, input
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemInstancesPages(input *SearchSystemInstancesInput, fn func(*SearchSystemInstancesOutput, bool) bool) error {
 	return c.SearchSystemInstancesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2811,6 +3084,8 @@ func (c *IoTThingsGraph) SearchSystemInstancesPages(input *SearchSystemInstances
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemInstancesPagesWithContext(ctx aws.Context, input *SearchSystemInstancesInput, fn func(*SearchSystemInstancesOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -2861,7 +3136,12 @@ const opSearchSystemTemplates = "SearchSystemTemplates"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchSystemTemplates
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemTemplatesRequest(input *SearchSystemTemplatesInput) (req *request.Request, output *SearchSystemTemplatesOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, SearchSystemTemplates, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opSearchSystemTemplates,
 		HTTPMethod: "POST",
@@ -2904,6 +3184,8 @@ func (c *IoTThingsGraph) SearchSystemTemplatesRequest(input *SearchSystemTemplat
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchSystemTemplates
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemTemplates(input *SearchSystemTemplatesInput) (*SearchSystemTemplatesOutput, error) {
 	req, out := c.SearchSystemTemplatesRequest(input)
 	return out, req.Send()
@@ -2918,6 +3200,8 @@ func (c *IoTThingsGraph) SearchSystemTemplates(input *SearchSystemTemplatesInput
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemTemplatesWithContext(ctx aws.Context, input *SearchSystemTemplatesInput, opts ...request.Option) (*SearchSystemTemplatesOutput, error) {
 	req, out := c.SearchSystemTemplatesRequest(input)
 	req.SetContext(ctx)
@@ -2942,6 +3226,8 @@ func (c *IoTThingsGraph) SearchSystemTemplatesWithContext(ctx aws.Context, input
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemTemplatesPages(input *SearchSystemTemplatesInput, fn func(*SearchSystemTemplatesOutput, bool) bool) error {
 	return c.SearchSystemTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2953,6 +3239,8 @@ func (c *IoTThingsGraph) SearchSystemTemplatesPages(input *SearchSystemTemplates
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchSystemTemplatesPagesWithContext(ctx aws.Context, input *SearchSystemTemplatesInput, fn func(*SearchSystemTemplatesOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -3003,7 +3291,12 @@ const opSearchThings = "SearchThings"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchThings
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchThingsRequest(input *SearchThingsInput) (req *request.Request, output *SearchThingsOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, SearchThings, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opSearchThings,
 		HTTPMethod: "POST",
@@ -3054,6 +3347,8 @@ func (c *IoTThingsGraph) SearchThingsRequest(input *SearchThingsInput) (req *req
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/SearchThings
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchThings(input *SearchThingsInput) (*SearchThingsOutput, error) {
 	req, out := c.SearchThingsRequest(input)
 	return out, req.Send()
@@ -3068,6 +3363,8 @@ func (c *IoTThingsGraph) SearchThings(input *SearchThingsInput) (*SearchThingsOu
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchThingsWithContext(ctx aws.Context, input *SearchThingsInput, opts ...request.Option) (*SearchThingsOutput, error) {
 	req, out := c.SearchThingsRequest(input)
 	req.SetContext(ctx)
@@ -3092,6 +3389,8 @@ func (c *IoTThingsGraph) SearchThingsWithContext(ctx aws.Context, input *SearchT
 //            return pageNum <= 3
 //        })
 //
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchThingsPages(input *SearchThingsInput, fn func(*SearchThingsOutput, bool) bool) error {
 	return c.SearchThingsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3103,6 +3402,8 @@ func (c *IoTThingsGraph) SearchThingsPages(input *SearchThingsInput, fn func(*Se
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) SearchThingsPagesWithContext(ctx aws.Context, input *SearchThingsInput, fn func(*SearchThingsOutput, bool) bool, opts ...request.Option) error {
 	p := request.Pagination{
 		NewRequest: func() (*request.Request, error) {
@@ -3153,7 +3454,12 @@ const opTagResource = "TagResource"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/TagResource
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, TagResource, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opTagResource,
 		HTTPMethod: "POST",
@@ -3191,6 +3497,8 @@ func (c *IoTThingsGraph) TagResourceRequest(input *TagResourceInput) (req *reque
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/TagResource
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
 	return out, req.Send()
@@ -3205,6 +3513,8 @@ func (c *IoTThingsGraph) TagResource(input *TagResourceInput) (*TagResourceOutpu
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
 	req.SetContext(ctx)
@@ -3238,7 +3548,12 @@ const opUndeploySystemInstance = "UndeploySystemInstance"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UndeploySystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UndeploySystemInstanceRequest(input *UndeploySystemInstanceInput) (req *request.Request, output *UndeploySystemInstanceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, UndeploySystemInstance, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opUndeploySystemInstance,
 		HTTPMethod: "POST",
@@ -3277,6 +3592,8 @@ func (c *IoTThingsGraph) UndeploySystemInstanceRequest(input *UndeploySystemInst
 //   * ResourceInUseException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UndeploySystemInstance
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UndeploySystemInstance(input *UndeploySystemInstanceInput) (*UndeploySystemInstanceOutput, error) {
 	req, out := c.UndeploySystemInstanceRequest(input)
 	return out, req.Send()
@@ -3291,6 +3608,8 @@ func (c *IoTThingsGraph) UndeploySystemInstance(input *UndeploySystemInstanceInp
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UndeploySystemInstanceWithContext(ctx aws.Context, input *UndeploySystemInstanceInput, opts ...request.Option) (*UndeploySystemInstanceOutput, error) {
 	req, out := c.UndeploySystemInstanceRequest(input)
 	req.SetContext(ctx)
@@ -3324,7 +3643,12 @@ const opUntagResource = "UntagResource"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UntagResource
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, UntagResource, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opUntagResource,
 		HTTPMethod: "POST",
@@ -3362,6 +3686,8 @@ func (c *IoTThingsGraph) UntagResourceRequest(input *UntagResourceInput) (req *r
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UntagResource
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
 	return out, req.Send()
@@ -3376,6 +3702,8 @@ func (c *IoTThingsGraph) UntagResource(input *UntagResourceInput) (*UntagResourc
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
 	req.SetContext(ctx)
@@ -3409,7 +3737,12 @@ const opUpdateFlowTemplate = "UpdateFlowTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UpdateFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UpdateFlowTemplateRequest(input *UpdateFlowTemplateInput) (req *request.Request, output *UpdateFlowTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, UpdateFlowTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opUpdateFlowTemplate,
 		HTTPMethod: "POST",
@@ -3450,6 +3783,8 @@ func (c *IoTThingsGraph) UpdateFlowTemplateRequest(input *UpdateFlowTemplateInpu
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UpdateFlowTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UpdateFlowTemplate(input *UpdateFlowTemplateInput) (*UpdateFlowTemplateOutput, error) {
 	req, out := c.UpdateFlowTemplateRequest(input)
 	return out, req.Send()
@@ -3464,6 +3799,8 @@ func (c *IoTThingsGraph) UpdateFlowTemplate(input *UpdateFlowTemplateInput) (*Up
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UpdateFlowTemplateWithContext(ctx aws.Context, input *UpdateFlowTemplateInput, opts ...request.Option) (*UpdateFlowTemplateOutput, error) {
 	req, out := c.UpdateFlowTemplateRequest(input)
 	req.SetContext(ctx)
@@ -3497,7 +3834,12 @@ const opUpdateSystemTemplate = "UpdateSystemTemplate"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UpdateSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UpdateSystemTemplateRequest(input *UpdateSystemTemplateInput) (req *request.Request, output *UpdateSystemTemplateOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, UpdateSystemTemplate, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opUpdateSystemTemplate,
 		HTTPMethod: "POST",
@@ -3536,6 +3878,8 @@ func (c *IoTThingsGraph) UpdateSystemTemplateRequest(input *UpdateSystemTemplate
 //   * InternalFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UpdateSystemTemplate
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UpdateSystemTemplate(input *UpdateSystemTemplateInput) (*UpdateSystemTemplateOutput, error) {
 	req, out := c.UpdateSystemTemplateRequest(input)
 	return out, req.Send()
@@ -3550,6 +3894,8 @@ func (c *IoTThingsGraph) UpdateSystemTemplate(input *UpdateSystemTemplateInput) 
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UpdateSystemTemplateWithContext(ctx aws.Context, input *UpdateSystemTemplateInput, opts ...request.Option) (*UpdateSystemTemplateOutput, error) {
 	req, out := c.UpdateSystemTemplateRequest(input)
 	req.SetContext(ctx)
@@ -3583,7 +3929,12 @@ const opUploadEntityDefinitions = "UploadEntityDefinitions"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UploadEntityDefinitions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UploadEntityDefinitionsRequest(input *UploadEntityDefinitionsInput) (req *request.Request, output *UploadEntityDefinitionsOutput) {
+	if c.Client.Config.Logger != nil {
+		c.Client.Config.Logger.Log("This operation, UploadEntityDefinitions, has been deprecated")
+	}
 	op := &request.Operation{
 		Name:       opUploadEntityDefinitions,
 		HTTPMethod: "POST",
@@ -3637,6 +3988,8 @@ func (c *IoTThingsGraph) UploadEntityDefinitionsRequest(input *UploadEntityDefin
 //   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotthingsgraph-2018-09-06/UploadEntityDefinitions
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UploadEntityDefinitions(input *UploadEntityDefinitionsInput) (*UploadEntityDefinitionsOutput, error) {
 	req, out := c.UploadEntityDefinitionsRequest(input)
 	return out, req.Send()
@@ -3651,6 +4004,8 @@ func (c *IoTThingsGraph) UploadEntityDefinitions(input *UploadEntityDefinitionsI
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: since: 2022-08-30
 func (c *IoTThingsGraph) UploadEntityDefinitionsWithContext(ctx aws.Context, input *UploadEntityDefinitionsInput, opts ...request.Option) (*UploadEntityDefinitionsOutput, error) {
 	req, out := c.UploadEntityDefinitionsRequest(input)
 	req.SetContext(ctx)

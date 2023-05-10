@@ -224,7 +224,8 @@ func (c *DynamoDB) BatchGetItemRequest(input *BatchGetItemInput) (req *request.R
 // in the request. If you want strongly consistent reads instead, you can set
 // ConsistentRead to true for any or all tables.
 //
-// In order to minimize response latency, BatchGetItem retrieves items in parallel.
+// In order to minimize response latency, BatchGetItem may retrieve items in
+// parallel.
 //
 // When designing your application, keep in mind that DynamoDB does not return
 // items in any particular order. To help parse the response by item, include
@@ -415,7 +416,10 @@ func (c *DynamoDB) BatchWriteItemRequest(input *BatchWriteItemInput) (req *reque
 // in DynamoDB's JSON format for the API call. For more details on this distinction,
 // see Naming Rules and Data Types (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html).
 //
-// BatchWriteItem cannot update items. To update items, use the UpdateItem action.
+// BatchWriteItem cannot update items. If you perform a BatchWriteItem operation
+// on an existing item, that item's values will be overwritten by the operation
+// and it will appear like it was updated. To update items, we recommend you
+// use the UpdateItem action.
 //
 // The individual PutItem and DeleteItem operations specified in BatchWriteItem
 // are atomic; however BatchWriteItem as a whole is not. If any requested operations
@@ -660,14 +664,17 @@ func (c *DynamoDB) CreateBackupRequest(input *CreateBackupInput) (req *request.R
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -769,8 +776,13 @@ func (c *DynamoDB) CreateGlobalTableRequest(input *CreateGlobalTableInput) (req 
 // relationship between two or more DynamoDB tables with the same table name
 // in the provided Regions.
 //
-// This operation only applies to Version 2017.11.29 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
-// of global tables.
+// This operation only applies to Version 2017.11.29 (Legacy) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
+// of global tables. We recommend using Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// when creating new global tables, as it provides greater flexibility, higher
+// efficiency and consumes less write capacity than 2017.11.29 (Legacy). To
+// determine which version you are using, see Determining the version (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.DetermineVersion.html).
+// To update existing global tables from version 2017.11.29 (Legacy) to version
+// 2019.11.21 (Current), see Updating global tables (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_upgrade.html).
 //
 // If you want to add a new replica table to a global table, each of the following
 // conditions must be true:
@@ -821,14 +833,17 @@ func (c *DynamoDB) CreateGlobalTableRequest(input *CreateGlobalTableInput) (req 
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -967,14 +982,17 @@ func (c *DynamoDB) CreateTableRequest(input *CreateTableInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -1094,14 +1112,17 @@ func (c *DynamoDB) DeleteBackupRequest(input *DeleteBackupInput) (req *request.R
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -1350,6 +1371,9 @@ func (c *DynamoDB) DeleteTableRequest(input *DeleteTableInput) (req *request.Req
 // If the specified table does not exist, DynamoDB returns a ResourceNotFoundException.
 // If table is already in the DELETING state, no error is returned.
 //
+// This operation only applies to Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// of global tables.
+//
 // DynamoDB might continue to accept data read and write operations, such as
 // GetItem and PutItem, on a table in the DELETING state until the table deletion
 // is complete.
@@ -1382,14 +1406,17 @@ func (c *DynamoDB) DeleteTableRequest(input *DeleteTableInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -1692,7 +1719,7 @@ func (c *DynamoDB) DescribeContributorInsightsRequest(input *DescribeContributor
 
 // DescribeContributorInsights API operation for Amazon DynamoDB.
 //
-// Returns information about contributor insights, for a given table or global
+// Returns information about contributor insights for a given table or global
 // secondary index.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1776,7 +1803,10 @@ func (c *DynamoDB) DescribeEndpointsRequest(input *DescribeEndpointsInput) (req 
 
 // DescribeEndpoints API operation for Amazon DynamoDB.
 //
-// Returns the regional endpoint information.
+// Returns the regional endpoint information. This action must be included in
+// your VPC endpoint policies, or access to the DescribeEndpoints API will be
+// denied. For more information on policy permissions, please see Internetwork
+// traffic privacy (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/inter-network-traffic-privacy.html#inter-network-traffic-DescribeEndpoints).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1938,14 +1968,17 @@ func (c *DynamoDB) DescribeExportRequest(input *DescribeExportInput) (req *reque
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -2045,10 +2078,13 @@ func (c *DynamoDB) DescribeGlobalTableRequest(input *DescribeGlobalTableInput) (
 //
 // Returns information about the specified global table.
 //
-// This operation only applies to Version 2017.11.29 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
-// of global tables. If you are using global tables Version 2019.11.21 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
-// you can use DescribeTable (https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html)
-// instead.
+// This operation only applies to Version 2017.11.29 (Legacy) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
+// of global tables. We recommend using Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// when creating new global tables, as it provides greater flexibility, higher
+// efficiency and consumes less write capacity than 2017.11.29 (Legacy). To
+// determine which version you are using, see Determining the version (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.DetermineVersion.html).
+// To update existing global tables from version 2017.11.29 (Legacy) to version
+// 2019.11.21 (Current), see Updating global tables (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_upgrade.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2157,8 +2193,13 @@ func (c *DynamoDB) DescribeGlobalTableSettingsRequest(input *DescribeGlobalTable
 //
 // Describes Region-specific settings for a global table.
 //
-// This operation only applies to Version 2017.11.29 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
-// of global tables.
+// This operation only applies to Version 2017.11.29 (Legacy) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
+// of global tables. We recommend using Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// when creating new global tables, as it provides greater flexibility, higher
+// efficiency and consumes less write capacity than 2017.11.29 (Legacy). To
+// determine which version you are using, see Determining the version (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.DetermineVersion.html).
+// To update existing global tables from version 2017.11.29 (Legacy) to version
+// 2019.11.21 (Current), see Updating global tables (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_upgrade.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2191,6 +2232,85 @@ func (c *DynamoDB) DescribeGlobalTableSettings(input *DescribeGlobalTableSetting
 // for more information on using Contexts.
 func (c *DynamoDB) DescribeGlobalTableSettingsWithContext(ctx aws.Context, input *DescribeGlobalTableSettingsInput, opts ...request.Option) (*DescribeGlobalTableSettingsOutput, error) {
 	req, out := c.DescribeGlobalTableSettingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeImport = "DescribeImport"
+
+// DescribeImportRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeImport operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeImport for more information on using the DescribeImport
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeImportRequest method.
+//    req, resp := client.DescribeImportRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/DescribeImport
+func (c *DynamoDB) DescribeImportRequest(input *DescribeImportInput) (req *request.Request, output *DescribeImportOutput) {
+	op := &request.Operation{
+		Name:       opDescribeImport,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeImportInput{}
+	}
+
+	output = &DescribeImportOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeImport API operation for Amazon DynamoDB.
+//
+// Represents the properties of the import.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon DynamoDB's
+// API operation DescribeImport for usage and error information.
+//
+// Returned Error Types:
+//   * ImportNotFoundException
+//   The specified import was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/DescribeImport
+func (c *DynamoDB) DescribeImport(input *DescribeImportInput) (*DescribeImportOutput, error) {
+	req, out := c.DescribeImportRequest(input)
+	return out, req.Send()
+}
+
+// DescribeImportWithContext is the same as DescribeImport with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeImport for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DynamoDB) DescribeImportWithContext(ctx aws.Context, input *DescribeImportInput, opts ...request.Option) (*DescribeImportOutput, error) {
+	req, out := c.DescribeImportRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2540,6 +2660,9 @@ func (c *DynamoDB) DescribeTableRequest(input *DescribeTableInput) (req *request
 // table, when it was created, the primary key schema, and any indexes on the
 // table.
 //
+// This operation only applies to Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// of global tables.
+//
 // If you issue a DescribeTable request immediately after a CreateTable request,
 // DynamoDB might return a ResourceNotFoundException. This is because DescribeTable
 // uses an eventually consistent query, and the metadata for your table might
@@ -2629,7 +2752,7 @@ func (c *DynamoDB) DescribeTableReplicaAutoScalingRequest(input *DescribeTableRe
 //
 // Describes auto scaling settings across replicas of the global table at once.
 //
-// This operation only applies to Version 2019.11.21 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// This operation only applies to Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
 // of global tables.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2863,14 +2986,17 @@ func (c *DynamoDB) DisableKinesisStreamingDestinationRequest(input *DisableKines
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -2993,14 +3119,17 @@ func (c *DynamoDB) EnableKinesisStreamingDestinationRequest(input *EnableKinesis
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -3091,7 +3220,8 @@ func (c *DynamoDB) ExecuteStatementRequest(input *ExecuteStatementInput) (req *r
 // A single SELECT statement response can return up to the maximum number of
 // items (if using the Limit parameter) or a maximum of 1 MB of data (and then
 // apply any filtering to the results using WHERE clause). If LastEvaluatedKey
-// is present in the response, you need to paginate the result set.
+// is present in the response, you need to paginate the result set. If NextToken
+// is present, you need to paginate the result set and include NextToken.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3294,7 +3424,7 @@ func (c *DynamoDB) ExecuteTransactionRequest(input *ExecuteTransactionInput) (re
 //      as DynamoDB is automatically scaling the table. Throughput exceeds the
 //      current capacity for one or more global secondary indexes. DynamoDB is
 //      automatically scaling your index so please try again shortly. This message
-//      is returned when when writes get throttled on an On-Demand GSI as DynamoDB
+//      is returned when writes get throttled on an On-Demand GSI as DynamoDB
 //      is automatically scaling the GSI.
 //
 //      * Validation Error: Code: ValidationError Messages: One or more parameter
@@ -3311,6 +3441,47 @@ func (c *DynamoDB) ExecuteTransactionRequest(input *ExecuteTransactionInput) (re
 //
 //   * TransactionInProgressException
 //   The transaction with the given request token is already in progress.
+//
+//   Recommended Settings
+//
+//   This is a general recommendation for handling the TransactionInProgressException.
+//   These settings help ensure that the client retries will trigger completion
+//   of the ongoing TransactWriteItems request.
+//
+//      * Set clientExecutionTimeout to a value that allows at least one retry
+//      to be processed after 5 seconds have elapsed since the first attempt for
+//      the TransactWriteItems operation.
+//
+//      * Set socketTimeout to a value a little lower than the requestTimeout
+//      setting.
+//
+//      * requestTimeout should be set based on the time taken for the individual
+//      retries of a single HTTP request for your use case, but setting it to
+//      1 second or higher should work well to reduce chances of retries and TransactionInProgressException
+//      errors.
+//
+//      * Use exponential backoff when retrying and tune backoff if needed.
+//
+//   Assuming default retry policy (https://github.com/aws/aws-sdk-java/blob/fd409dee8ae23fb8953e0bb4dbde65536a7e0514/aws-java-sdk-core/src/main/java/com/amazonaws/retry/PredefinedRetryPolicies.java#L97),
+//   example timeout settings based on the guidelines above are as follows:
+//
+//   Example timeline:
+//
+//      * 0-1000 first attempt
+//
+//      * 1000-1500 first sleep/delay (default retry policy uses 500 ms as base
+//      delay for 4xx errors)
+//
+//      * 1500-2500 second attempt
+//
+//      * 2500-3500 second sleep/delay (500 * 2, exponential backoff)
+//
+//      * 3500-4500 third attempt
+//
+//      * 4500-6500 third sleep/delay (500 * 2^2)
+//
+//      * 6500-7500 fourth attempt (this can trigger inline recovery since 5 seconds
+//      have elapsed since the first attempt reached TC)
 //
 //   * IdempotentParameterMismatchException
 //   DynamoDB rejected the request because you retried a request with a different
@@ -3421,14 +3592,17 @@ func (c *DynamoDB) ExportTableToPointInTimeRequest(input *ExportTableToPointInTi
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -3586,6 +3760,109 @@ func (c *DynamoDB) GetItem(input *GetItemInput) (*GetItemOutput, error) {
 // for more information on using Contexts.
 func (c *DynamoDB) GetItemWithContext(ctx aws.Context, input *GetItemInput, opts ...request.Option) (*GetItemOutput, error) {
 	req, out := c.GetItemRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opImportTable = "ImportTable"
+
+// ImportTableRequest generates a "aws/request.Request" representing the
+// client's request for the ImportTable operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ImportTable for more information on using the ImportTable
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ImportTableRequest method.
+//    req, resp := client.ImportTableRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/ImportTable
+func (c *DynamoDB) ImportTableRequest(input *ImportTableInput) (req *request.Request, output *ImportTableOutput) {
+	op := &request.Operation{
+		Name:       opImportTable,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ImportTableInput{}
+	}
+
+	output = &ImportTableOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ImportTable API operation for Amazon DynamoDB.
+//
+// Imports table data from an S3 bucket.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon DynamoDB's
+// API operation ImportTable for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceInUseException
+//   The operation conflicts with the resource's availability. For example, you
+//   attempted to recreate an existing table, or tried to delete a table currently
+//   in the CREATING state.
+//
+//   * LimitExceededException
+//   There is no limit to the number of daily on-demand backups that can be taken.
+//
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
+//
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
+//
+//   There is a soft account quota of 2,500 tables.
+//
+//   * ImportConflictException
+//   There was a conflict when importing from the specified S3 source. This can
+//   occur when the current import conflicts with a previous import request that
+//   had the same client token.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/ImportTable
+func (c *DynamoDB) ImportTable(input *ImportTableInput) (*ImportTableOutput, error) {
+	req, out := c.ImportTableRequest(input)
+	return out, req.Send()
+}
+
+// ImportTableWithContext is the same as ImportTable with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ImportTable for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DynamoDB) ImportTableWithContext(ctx aws.Context, input *ImportTableInput, opts ...request.Option) (*ImportTableOutput, error) {
+	req, out := c.ImportTableRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3908,14 +4185,17 @@ func (c *DynamoDB) ListExportsRequest(input *ListExportsInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -4067,8 +4347,13 @@ func (c *DynamoDB) ListGlobalTablesRequest(input *ListGlobalTablesInput) (req *r
 //
 // Lists all global tables that have a replica in the specified Region.
 //
-// This operation only applies to Version 2017.11.29 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
-// of global tables.
+// This operation only applies to Version 2017.11.29 (Legacy) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
+// of global tables. We recommend using Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// when creating new global tables, as it provides greater flexibility, higher
+// efficiency and consumes less write capacity than 2017.11.29 (Legacy). To
+// determine which version you are using, see Determining the version (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.DetermineVersion.html).
+// To update existing global tables from version 2017.11.29 (Legacy) to version
+// 2019.11.21 (Current), see Updating global tables (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_upgrade.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4101,6 +4386,157 @@ func (c *DynamoDB) ListGlobalTablesWithContext(ctx aws.Context, input *ListGloba
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opListImports = "ListImports"
+
+// ListImportsRequest generates a "aws/request.Request" representing the
+// client's request for the ListImports operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListImports for more information on using the ListImports
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListImportsRequest method.
+//    req, resp := client.ListImportsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/ListImports
+func (c *DynamoDB) ListImportsRequest(input *ListImportsInput) (req *request.Request, output *ListImportsOutput) {
+	op := &request.Operation{
+		Name:       opListImports,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListImportsInput{}
+	}
+
+	output = &ListImportsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListImports API operation for Amazon DynamoDB.
+//
+// Lists completed imports within the past 90 days.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon DynamoDB's
+// API operation ListImports for usage and error information.
+//
+// Returned Error Types:
+//   * LimitExceededException
+//   There is no limit to the number of daily on-demand backups that can be taken.
+//
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
+//
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
+//
+//   There is a soft account quota of 2,500 tables.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dynamodb-2012-08-10/ListImports
+func (c *DynamoDB) ListImports(input *ListImportsInput) (*ListImportsOutput, error) {
+	req, out := c.ListImportsRequest(input)
+	return out, req.Send()
+}
+
+// ListImportsWithContext is the same as ListImports with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListImports for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DynamoDB) ListImportsWithContext(ctx aws.Context, input *ListImportsInput, opts ...request.Option) (*ListImportsOutput, error) {
+	req, out := c.ListImportsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListImportsPages iterates over the pages of a ListImports operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListImports method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListImports operation.
+//    pageNum := 0
+//    err := client.ListImportsPages(params,
+//        func(page *dynamodb.ListImportsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *DynamoDB) ListImportsPages(input *ListImportsInput, fn func(*ListImportsOutput, bool) bool) error {
+	return c.ListImportsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListImportsPagesWithContext same as ListImportsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DynamoDB) ListImportsPagesWithContext(ctx aws.Context, input *ListImportsInput, fn func(*ListImportsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListImportsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListImportsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListImportsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListTables = "ListTables"
@@ -4457,7 +4893,6 @@ func (c *DynamoDB) PutItemRequest(input *PutItemInput) (req *request.Request, ou
 // using the ReturnValues parameter.
 //
 // When you add an item, the primary key attributes are the only required attributes.
-// Attribute values cannot be null.
 //
 // Empty String and Binary attribute values are allowed. Attribute values of
 // type String and Binary must have a length greater than zero if the attribute
@@ -4833,7 +5268,7 @@ func (c *DynamoDB) RestoreTableFromBackupRequest(input *RestoreTableFromBackupIn
 // RestoreTableFromBackup API operation for Amazon DynamoDB.
 //
 // Creates a new table from an existing backup. Any number of users can execute
-// up to 4 concurrent restores (any type of restore) in a given account.
+// up to 50 concurrent restores (any type of restore) in a given account.
 //
 // You can call RestoreTableFromBackup at a maximum rate of 10 times per second.
 //
@@ -4875,14 +5310,17 @@ func (c *DynamoDB) RestoreTableFromBackupRequest(input *RestoreTableFromBackupIn
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -5039,14 +5477,17 @@ func (c *DynamoDB) RestoreTableToPointInTimeRequest(input *RestoreTableToPointIn
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -5377,14 +5818,17 @@ func (c *DynamoDB) TagResourceRequest(input *TagResourceInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -5493,7 +5937,7 @@ func (c *DynamoDB) TransactGetItemsRequest(input *TransactGetItemsInput) (req *r
 //
 // TransactGetItems is a synchronous operation that atomically retrieves multiple
 // items from one or more tables (but not from indexes) in a single account
-// and Region. A TransactGetItems call can contain up to 25 TransactGetItem
+// and Region. A TransactGetItems call can contain up to 100 TransactGetItem
 // objects, each of which contains a Get structure that specifies an item to
 // retrieve from a table in the account and Region. A call to TransactGetItems
 // cannot retrieve items from tables in more than one Amazon Web Services account
@@ -5511,7 +5955,7 @@ func (c *DynamoDB) TransactGetItemsRequest(input *TransactGetItemsInput) (req *r
 //
 //    * There is a user error, such as an invalid data format.
 //
-//    * The aggregate size of the items in the transaction cannot exceed 4 MB.
+//    * The aggregate size of the items in the transaction exceeded 4 MB.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5597,7 +6041,7 @@ func (c *DynamoDB) TransactGetItemsRequest(input *TransactGetItemsInput) (req *r
 //      as DynamoDB is automatically scaling the table. Throughput exceeds the
 //      current capacity for one or more global secondary indexes. DynamoDB is
 //      automatically scaling your index so please try again shortly. This message
-//      is returned when when writes get throttled on an On-Demand GSI as DynamoDB
+//      is returned when writes get throttled on an On-Demand GSI as DynamoDB
 //      is automatically scaling the GSI.
 //
 //      * Validation Error: Code: ValidationError Messages: One or more parameter
@@ -5719,7 +6163,7 @@ func (c *DynamoDB) TransactWriteItemsRequest(input *TransactWriteItemsInput) (re
 
 // TransactWriteItems API operation for Amazon DynamoDB.
 //
-// TransactWriteItems is a synchronous write operation that groups up to 25
+// TransactWriteItems is a synchronous write operation that groups up to 100
 // action requests. These actions can target items in different tables, but
 // not in different Amazon Web Services accounts or Regions, and no two actions
 // can target the same item. For example, you cannot both ConditionCheck and
@@ -5858,7 +6302,7 @@ func (c *DynamoDB) TransactWriteItemsRequest(input *TransactWriteItemsInput) (re
 //      as DynamoDB is automatically scaling the table. Throughput exceeds the
 //      current capacity for one or more global secondary indexes. DynamoDB is
 //      automatically scaling your index so please try again shortly. This message
-//      is returned when when writes get throttled on an On-Demand GSI as DynamoDB
+//      is returned when writes get throttled on an On-Demand GSI as DynamoDB
 //      is automatically scaling the GSI.
 //
 //      * Validation Error: Code: ValidationError Messages: One or more parameter
@@ -5875,6 +6319,47 @@ func (c *DynamoDB) TransactWriteItemsRequest(input *TransactWriteItemsInput) (re
 //
 //   * TransactionInProgressException
 //   The transaction with the given request token is already in progress.
+//
+//   Recommended Settings
+//
+//   This is a general recommendation for handling the TransactionInProgressException.
+//   These settings help ensure that the client retries will trigger completion
+//   of the ongoing TransactWriteItems request.
+//
+//      * Set clientExecutionTimeout to a value that allows at least one retry
+//      to be processed after 5 seconds have elapsed since the first attempt for
+//      the TransactWriteItems operation.
+//
+//      * Set socketTimeout to a value a little lower than the requestTimeout
+//      setting.
+//
+//      * requestTimeout should be set based on the time taken for the individual
+//      retries of a single HTTP request for your use case, but setting it to
+//      1 second or higher should work well to reduce chances of retries and TransactionInProgressException
+//      errors.
+//
+//      * Use exponential backoff when retrying and tune backoff if needed.
+//
+//   Assuming default retry policy (https://github.com/aws/aws-sdk-java/blob/fd409dee8ae23fb8953e0bb4dbde65536a7e0514/aws-java-sdk-core/src/main/java/com/amazonaws/retry/PredefinedRetryPolicies.java#L97),
+//   example timeout settings based on the guidelines above are as follows:
+//
+//   Example timeline:
+//
+//      * 0-1000 first attempt
+//
+//      * 1000-1500 first sleep/delay (default retry policy uses 500 ms as base
+//      delay for 4xx errors)
+//
+//      * 1500-2500 second attempt
+//
+//      * 2500-3500 second sleep/delay (500 * 2, exponential backoff)
+//
+//      * 3500-4500 third attempt
+//
+//      * 4500-6500 third sleep/delay (500 * 2^2)
+//
+//      * 6500-7500 fourth attempt (this can trigger inline recovery since 5 seconds
+//      have elapsed since the first attempt reached TC)
 //
 //   * IdempotentParameterMismatchException
 //   DynamoDB rejected the request because you retried a request with a different
@@ -6005,14 +6490,17 @@ func (c *DynamoDB) UntagResourceRequest(input *UntagResourceInput) (req *request
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -6337,6 +6825,19 @@ func (c *DynamoDB) UpdateGlobalTableRequest(input *UpdateGlobalTableInput) (req 
 // schema, have DynamoDB Streams enabled, and have the same provisioned and
 // maximum write capacity units.
 //
+// This operation only applies to Version 2017.11.29 (Legacy) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
+// of global tables. We recommend using Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// when creating new global tables, as it provides greater flexibility, higher
+// efficiency and consumes less write capacity than 2017.11.29 (Legacy). To
+// determine which version you are using, see Determining the version (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.DetermineVersion.html).
+// To update existing global tables from version 2017.11.29 (Legacy) to version
+// 2019.11.21 (Current), see Updating global tables (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_upgrade.html).
+//
+// This operation only applies to Version 2017.11.29 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
+// of global tables. If you are using global tables Version 2019.11.21 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// you can use DescribeTable (https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html)
+// instead.
+//
 // Although you can use UpdateGlobalTable to add replicas and remove replicas
 // in a single request, for simplicity we recommend that you issue separate
 // requests for adding or removing replicas.
@@ -6470,6 +6971,14 @@ func (c *DynamoDB) UpdateGlobalTableSettingsRequest(input *UpdateGlobalTableSett
 //
 // Updates settings for a global table.
 //
+// This operation only applies to Version 2017.11.29 (Legacy) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V1.html)
+// of global tables. We recommend using Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// when creating new global tables, as it provides greater flexibility, higher
+// efficiency and consumes less write capacity than 2017.11.29 (Legacy). To
+// determine which version you are using, see Determining the version (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.DetermineVersion.html).
+// To update existing global tables from version 2017.11.29 (Legacy) to version
+// 2019.11.21 (Current), see Updating global tables (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_upgrade.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -6490,14 +6999,17 @@ func (c *DynamoDB) UpdateGlobalTableSettingsRequest(input *UpdateGlobalTableSett
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -6741,6 +7253,9 @@ func (c *DynamoDB) UpdateTableRequest(input *UpdateTableInput) (req *request.Req
 // Modifies the provisioned throughput settings, global secondary indexes, or
 // DynamoDB Streams settings for a given table.
 //
+// This operation only applies to Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// of global tables.
+//
 // You can only perform one of the following operations at once:
 //
 //    * Modify the provisioned throughput settings of the table.
@@ -6775,14 +7290,17 @@ func (c *DynamoDB) UpdateTableRequest(input *UpdateTableInput) (req *request.Req
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -6857,7 +7375,7 @@ func (c *DynamoDB) UpdateTableReplicaAutoScalingRequest(input *UpdateTableReplic
 //
 // Updates auto scaling settings on your global tables at once.
 //
-// This operation only applies to Version 2019.11.21 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+// This operation only applies to Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
 // of global tables.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -6880,14 +7398,17 @@ func (c *DynamoDB) UpdateTableReplicaAutoScalingRequest(input *UpdateTableReplic
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -7034,14 +7555,17 @@ func (c *DynamoDB) UpdateTimeToLiveRequest(input *UpdateTimeToLiveInput) (req *r
 //   * LimitExceededException
 //   There is no limit to the number of daily on-demand backups that can be taken.
 //
-//   Up to 500 simultaneous table operations are allowed per account. These operations
-//   include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-//   and RestoreTableToPointInTime.
+//   For most purposes, up to 500 simultaneous table operations are allowed per
+//   account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+//   RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-//   The only exception is when you are creating a table with one or more secondary
-//   indexes. You can have up to 250 such requests running at a time; however,
-//   if the table or index specifications are complex, DynamoDB might temporarily
-//   reduce the number of concurrent operations.
+//   When you are creating a table with one or more secondary indexes, you can
+//   have up to 250 such requests running at a time. However, if the table or
+//   index specifications are complex, then DynamoDB might temporarily reduce
+//   the number of concurrent operations.
+//
+//   When importing into DynamoDB, up to 50 simultaneous import table operations
+//   are allowed per account.
 //
 //   There is a soft account quota of 2,500 tables.
 //
@@ -8633,7 +9157,7 @@ type BatchStatementError struct {
 	// The error code associated with the failed PartiQL batch statement.
 	Code *string `type:"string" enum:"BatchStatementErrorCodeEnum"`
 
-	// The error message associated with the PartiQL batch resposne.
+	// The error message associated with the PartiQL batch response.
 	Message *string `type:"string"`
 }
 
@@ -8926,8 +9450,8 @@ type BatchWriteItemOutput struct {
 
 	// A map of tables and requests against those tables that were not processed.
 	// The UnprocessedItems value is in the same form as RequestItems, so you can
-	// provide this value directly to a subsequent BatchGetItem operation. For more
-	// information, see RequestItems in the Request Parameters section.
+	// provide this value directly to a subsequent BatchWriteItem operation. For
+	// more information, see RequestItems in the Request Parameters section.
 	//
 	// Each UnprocessedItems entry consists of a table name and, for that table,
 	// a list of operations to perform (DeleteRequest or PutRequest).
@@ -8988,7 +9512,12 @@ func (s *BatchWriteItemOutput) SetUnprocessedItems(v map[string][]*WriteRequest)
 	return s
 }
 
-// Contains the details for the read/write capacity mode.
+// Contains the details for the read/write capacity mode. This page talks about
+// PROVISIONED and PAY_PER_REQUEST billing modes. For more information about
+// these modes, see Read/write capacity mode (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html).
+//
+// You may need to switch to on-demand mode at least once in order to return
+// a BillingModeSummary response.
 type BillingModeSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -9336,14 +9865,20 @@ type ConditionCheck struct {
 	_ struct{} `type:"structure"`
 
 	// A condition that must be satisfied in order for a conditional update to succeed.
+	// For more information, see Condition expressions (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+	// in the Amazon DynamoDB Developer Guide.
 	//
 	// ConditionExpression is a required field
 	ConditionExpression *string `type:"string" required:"true"`
 
-	// One or more substitution tokens for attribute names in an expression.
+	// One or more substitution tokens for attribute names in an expression. For
+	// more information, see Expression attribute names (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ExpressionAttributeNames.html)
+	// in the Amazon DynamoDB Developer Guide.
 	ExpressionAttributeNames map[string]*string `type:"map"`
 
-	// One or more values that can be substituted in an expression.
+	// One or more values that can be substituted in an expression. For more information,
+	// see Condition expressions (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.ConditionExpressions.html)
+	// in the Amazon DynamoDB Developer Guide.
 	ExpressionAttributeValues map[string]*AttributeValue `type:"map"`
 
 	// The primary key of the item to be checked. Each element consists of an attribute
@@ -10234,6 +10769,10 @@ type CreateTableInput struct {
 	//    workloads. PAY_PER_REQUEST sets the billing mode to On-Demand Mode (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand).
 	BillingMode *string `type:"string" enum:"BillingMode"`
 
+	// Indicates whether deletion protection is to be enabled (true) or disabled
+	// (false) on the table.
+	DeletionProtectionEnabled *bool `type:"boolean"`
+
 	// One or more global secondary indexes (the maximum is 20) to be created on
 	// the table. Each global secondary index in the array includes the following:
 	//
@@ -10479,6 +11018,12 @@ func (s *CreateTableInput) SetBillingMode(v string) *CreateTableInput {
 	return s
 }
 
+// SetDeletionProtectionEnabled sets the DeletionProtectionEnabled field's value.
+func (s *CreateTableInput) SetDeletionProtectionEnabled(v bool) *CreateTableInput {
+	s.DeletionProtectionEnabled = &v
+	return s
+}
+
 // SetGlobalSecondaryIndexes sets the GlobalSecondaryIndexes field's value.
 func (s *CreateTableInput) SetGlobalSecondaryIndexes(v []*GlobalSecondaryIndex) *CreateTableInput {
 	s.GlobalSecondaryIndexes = v
@@ -10562,6 +11107,66 @@ func (s CreateTableOutput) GoString() string {
 // SetTableDescription sets the TableDescription field's value.
 func (s *CreateTableOutput) SetTableDescription(v *TableDescription) *CreateTableOutput {
 	s.TableDescription = v
+	return s
+}
+
+// Processing options for the CSV file being imported.
+type CsvOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The delimiter used for separating items in the CSV file being imported.
+	Delimiter *string `min:"1" type:"string"`
+
+	// List of the headers used to specify a common header for all source CSV files
+	// being imported. If this field is specified then the first line of each CSV
+	// file is treated as data instead of the header. If this field is not specified
+	// the the first line of each CSV file is treated as the header.
+	HeaderList []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CsvOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CsvOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CsvOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CsvOptions"}
+	if s.Delimiter != nil && len(*s.Delimiter) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Delimiter", 1))
+	}
+	if s.HeaderList != nil && len(s.HeaderList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HeaderList", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDelimiter sets the Delimiter field's value.
+func (s *CsvOptions) SetDelimiter(v string) *CsvOptions {
+	s.Delimiter = &v
+	return s
+}
+
+// SetHeaderList sets the HeaderList field's value.
+func (s *CsvOptions) SetHeaderList(v []*string) *CsvOptions {
+	s.HeaderList = v
 	return s
 }
 
@@ -10891,7 +11496,7 @@ type DeleteItemInput struct {
 	// A map of attribute names to AttributeValue objects, representing the primary
 	// key of the item to delete.
 	//
-	// For the primary key, you must provide all of the attributes. For example,
+	// For the primary key, you must provide all of the key attributes. For example,
 	// with a simple primary key, you only need to provide a value for the partition
 	// key. For a composite primary key, you must provide values for both the partition
 	// key and the sort key.
@@ -11052,7 +11657,7 @@ type DeleteItemOutput struct {
 	// includes the total provisioned throughput consumed, along with statistics
 	// for the table and any indexes involved in the operation. ConsumedCapacity
 	// is only returned if the ReturnConsumedCapacity parameter was specified. For
-	// more information, see Provisioned Mode (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
+	// more information, see Provisioned Throughput (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
 	// in the Amazon DynamoDB Developer Guide.
 	ConsumedCapacity *ConsumedCapacity `type:"structure"`
 
@@ -11940,6 +12545,91 @@ func (s *DescribeGlobalTableSettingsOutput) SetGlobalTableName(v string) *Descri
 // SetReplicaSettings sets the ReplicaSettings field's value.
 func (s *DescribeGlobalTableSettingsOutput) SetReplicaSettings(v []*ReplicaSettingsDescription) *DescribeGlobalTableSettingsOutput {
 	s.ReplicaSettings = v
+	return s
+}
+
+type DescribeImportInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) associated with the table you're importing
+	// to.
+	//
+	// ImportArn is a required field
+	ImportArn *string `min:"37" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeImportInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeImportInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeImportInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeImportInput"}
+	if s.ImportArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImportArn"))
+	}
+	if s.ImportArn != nil && len(*s.ImportArn) < 37 {
+		invalidParams.Add(request.NewErrParamMinLen("ImportArn", 37))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetImportArn sets the ImportArn field's value.
+func (s *DescribeImportInput) SetImportArn(v string) *DescribeImportInput {
+	s.ImportArn = &v
+	return s
+}
+
+type DescribeImportOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Represents the properties of the table created for the import, and parameters
+	// of the import. The import parameters include import status, how many items
+	// were processed, and how many errors were encountered.
+	//
+	// ImportTableDescription is a required field
+	ImportTableDescription *ImportTableDescription `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeImportOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeImportOutput) GoString() string {
+	return s.String()
+}
+
+// SetImportTableDescription sets the ImportTableDescription field's value.
+func (s *DescribeImportOutput) SetImportTableDescription(v *ImportTableDescription) *DescribeImportOutput {
+	s.ImportTableDescription = v
 	return s
 }
 
@@ -13641,8 +14331,7 @@ type ExportTableToPointInTimeInput struct {
 	// for more than 8 hours, or the result might not be idempotent.
 	//
 	// If you submit a request with the same client token but a change in other
-	// parameters within the 8-hour idempotency window, DynamoDB returns an IdempotentParameterMismatch
-	// exception.
+	// parameters within the 8-hour idempotency window, DynamoDB returns an ImportConflictException.
 	ClientToken *string `type:"string" idempotencyToken:"true"`
 
 	// The format for the exported data. Valid values for ExportFormat are DYNAMODB_JSON
@@ -14122,7 +14811,7 @@ type GetItemOutput struct {
 	// the total provisioned throughput consumed, along with statistics for the
 	// table and any indexes involved in the operation. ConsumedCapacity is only
 	// returned if the ReturnConsumedCapacity parameter was specified. For more
-	// information, see Read/Write Capacity Mode (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
+	// information, see Provisioned Throughput (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html#ItemSizeCalculations.Reads)
 	// in the Amazon DynamoDB Developer Guide.
 	ConsumedCapacity *ConsumedCapacity `type:"structure"`
 
@@ -15063,6 +15752,600 @@ func (s *IdempotentParameterMismatchException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// There was a conflict when importing from the specified S3 source. This can
+// occur when the current import conflicts with a previous import request that
+// had the same client token.
+type ImportConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorImportConflictException(v protocol.ResponseMetadata) error {
+	return &ImportConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ImportConflictException) Code() string {
+	return "ImportConflictException"
+}
+
+// Message returns the exception's message.
+func (s *ImportConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ImportConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *ImportConflictException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ImportConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ImportConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The specified import was not found.
+type ImportNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorImportNotFoundException(v protocol.ResponseMetadata) error {
+	return &ImportNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ImportNotFoundException) Code() string {
+	return "ImportNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *ImportNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ImportNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *ImportNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ImportNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ImportNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Summary information about the source file for the import.
+type ImportSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Number (ARN) of the Cloudwatch Log Group associated with
+	// this import task.
+	CloudWatchLogGroupArn *string `min:"1" type:"string"`
+
+	// The time at which this import task ended. (Does this include the successful
+	// complete creation of the table it was imported to?)
+	EndTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Number (ARN) corresponding to the import request.
+	ImportArn *string `min:"37" type:"string"`
+
+	// The status of the import operation.
+	ImportStatus *string `type:"string" enum:"ImportStatus"`
+
+	// The format of the source data. Valid values are CSV, DYNAMODB_JSON or ION.
+	InputFormat *string `type:"string" enum:"InputFormat"`
+
+	// The path and S3 bucket of the source file that is being imported. This includes
+	// the S3Bucket (required), S3KeyPrefix (optional) and S3BucketOwner (optional
+	// if the bucket is owned by the requester).
+	S3BucketSource *S3BucketSource `type:"structure"`
+
+	// The time at which this import task began.
+	StartTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Number (ARN) of the table being imported into.
+	TableArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportSummary) GoString() string {
+	return s.String()
+}
+
+// SetCloudWatchLogGroupArn sets the CloudWatchLogGroupArn field's value.
+func (s *ImportSummary) SetCloudWatchLogGroupArn(v string) *ImportSummary {
+	s.CloudWatchLogGroupArn = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *ImportSummary) SetEndTime(v time.Time) *ImportSummary {
+	s.EndTime = &v
+	return s
+}
+
+// SetImportArn sets the ImportArn field's value.
+func (s *ImportSummary) SetImportArn(v string) *ImportSummary {
+	s.ImportArn = &v
+	return s
+}
+
+// SetImportStatus sets the ImportStatus field's value.
+func (s *ImportSummary) SetImportStatus(v string) *ImportSummary {
+	s.ImportStatus = &v
+	return s
+}
+
+// SetInputFormat sets the InputFormat field's value.
+func (s *ImportSummary) SetInputFormat(v string) *ImportSummary {
+	s.InputFormat = &v
+	return s
+}
+
+// SetS3BucketSource sets the S3BucketSource field's value.
+func (s *ImportSummary) SetS3BucketSource(v *S3BucketSource) *ImportSummary {
+	s.S3BucketSource = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *ImportSummary) SetStartTime(v time.Time) *ImportSummary {
+	s.StartTime = &v
+	return s
+}
+
+// SetTableArn sets the TableArn field's value.
+func (s *ImportSummary) SetTableArn(v string) *ImportSummary {
+	s.TableArn = &v
+	return s
+}
+
+// Represents the properties of the table being imported into.
+type ImportTableDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The client token that was provided for the import task. Reusing the client
+	// token on retry makes a call to ImportTable idempotent.
+	ClientToken *string `type:"string"`
+
+	// The Amazon Resource Number (ARN) of the Cloudwatch Log Group associated with
+	// the target table.
+	CloudWatchLogGroupArn *string `min:"1" type:"string"`
+
+	// The time at which the creation of the table associated with this import task
+	// completed.
+	EndTime *time.Time `type:"timestamp"`
+
+	// The number of errors occurred on importing the source file into the target
+	// table.
+	ErrorCount *int64 `type:"long"`
+
+	// The error code corresponding to the failure that the import job ran into
+	// during execution.
+	FailureCode *string `type:"string"`
+
+	// The error message corresponding to the failure that the import job ran into
+	// during execution.
+	FailureMessage *string `type:"string"`
+
+	// The Amazon Resource Number (ARN) corresponding to the import request.
+	ImportArn *string `min:"37" type:"string"`
+
+	// The status of the import.
+	ImportStatus *string `type:"string" enum:"ImportStatus"`
+
+	// The number of items successfully imported into the new table.
+	ImportedItemCount *int64 `type:"long"`
+
+	// The compression options for the data that has been imported into the target
+	// table. The values are NONE, GZIP, or ZSTD.
+	InputCompressionType *string `type:"string" enum:"InputCompressionType"`
+
+	// The format of the source data going into the target table.
+	InputFormat *string `type:"string" enum:"InputFormat"`
+
+	// The format options for the data that was imported into the target table.
+	// There is one value, CsvOption.
+	InputFormatOptions *InputFormatOptions `type:"structure"`
+
+	// The total number of items processed from the source file.
+	ProcessedItemCount *int64 `type:"long"`
+
+	// The total size of data processed from the source file, in Bytes.
+	ProcessedSizeBytes *int64 `type:"long"`
+
+	// Values for the S3 bucket the source file is imported from. Includes bucket
+	// name (required), key prefix (optional) and bucket account owner ID (optional).
+	S3BucketSource *S3BucketSource `type:"structure"`
+
+	// The time when this import task started.
+	StartTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Number (ARN) of the table being imported into.
+	TableArn *string `type:"string"`
+
+	// The parameters for the new table that is being imported into.
+	TableCreationParameters *TableCreationParameters `type:"structure"`
+
+	// The table id corresponding to the table created by import table process.
+	TableId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportTableDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportTableDescription) GoString() string {
+	return s.String()
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *ImportTableDescription) SetClientToken(v string) *ImportTableDescription {
+	s.ClientToken = &v
+	return s
+}
+
+// SetCloudWatchLogGroupArn sets the CloudWatchLogGroupArn field's value.
+func (s *ImportTableDescription) SetCloudWatchLogGroupArn(v string) *ImportTableDescription {
+	s.CloudWatchLogGroupArn = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *ImportTableDescription) SetEndTime(v time.Time) *ImportTableDescription {
+	s.EndTime = &v
+	return s
+}
+
+// SetErrorCount sets the ErrorCount field's value.
+func (s *ImportTableDescription) SetErrorCount(v int64) *ImportTableDescription {
+	s.ErrorCount = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *ImportTableDescription) SetFailureCode(v string) *ImportTableDescription {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureMessage sets the FailureMessage field's value.
+func (s *ImportTableDescription) SetFailureMessage(v string) *ImportTableDescription {
+	s.FailureMessage = &v
+	return s
+}
+
+// SetImportArn sets the ImportArn field's value.
+func (s *ImportTableDescription) SetImportArn(v string) *ImportTableDescription {
+	s.ImportArn = &v
+	return s
+}
+
+// SetImportStatus sets the ImportStatus field's value.
+func (s *ImportTableDescription) SetImportStatus(v string) *ImportTableDescription {
+	s.ImportStatus = &v
+	return s
+}
+
+// SetImportedItemCount sets the ImportedItemCount field's value.
+func (s *ImportTableDescription) SetImportedItemCount(v int64) *ImportTableDescription {
+	s.ImportedItemCount = &v
+	return s
+}
+
+// SetInputCompressionType sets the InputCompressionType field's value.
+func (s *ImportTableDescription) SetInputCompressionType(v string) *ImportTableDescription {
+	s.InputCompressionType = &v
+	return s
+}
+
+// SetInputFormat sets the InputFormat field's value.
+func (s *ImportTableDescription) SetInputFormat(v string) *ImportTableDescription {
+	s.InputFormat = &v
+	return s
+}
+
+// SetInputFormatOptions sets the InputFormatOptions field's value.
+func (s *ImportTableDescription) SetInputFormatOptions(v *InputFormatOptions) *ImportTableDescription {
+	s.InputFormatOptions = v
+	return s
+}
+
+// SetProcessedItemCount sets the ProcessedItemCount field's value.
+func (s *ImportTableDescription) SetProcessedItemCount(v int64) *ImportTableDescription {
+	s.ProcessedItemCount = &v
+	return s
+}
+
+// SetProcessedSizeBytes sets the ProcessedSizeBytes field's value.
+func (s *ImportTableDescription) SetProcessedSizeBytes(v int64) *ImportTableDescription {
+	s.ProcessedSizeBytes = &v
+	return s
+}
+
+// SetS3BucketSource sets the S3BucketSource field's value.
+func (s *ImportTableDescription) SetS3BucketSource(v *S3BucketSource) *ImportTableDescription {
+	s.S3BucketSource = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *ImportTableDescription) SetStartTime(v time.Time) *ImportTableDescription {
+	s.StartTime = &v
+	return s
+}
+
+// SetTableArn sets the TableArn field's value.
+func (s *ImportTableDescription) SetTableArn(v string) *ImportTableDescription {
+	s.TableArn = &v
+	return s
+}
+
+// SetTableCreationParameters sets the TableCreationParameters field's value.
+func (s *ImportTableDescription) SetTableCreationParameters(v *TableCreationParameters) *ImportTableDescription {
+	s.TableCreationParameters = v
+	return s
+}
+
+// SetTableId sets the TableId field's value.
+func (s *ImportTableDescription) SetTableId(v string) *ImportTableDescription {
+	s.TableId = &v
+	return s
+}
+
+type ImportTableInput struct {
+	_ struct{} `type:"structure"`
+
+	// Providing a ClientToken makes the call to ImportTableInput idempotent, meaning
+	// that multiple identical calls have the same effect as one single call.
+	//
+	// A client token is valid for 8 hours after the first request that uses it
+	// is completed. After 8 hours, any request with the same client token is treated
+	// as a new request. Do not resubmit the same request with the same client token
+	// for more than 8 hours, or the result might not be idempotent.
+	//
+	// If you submit a request with the same client token but a change in other
+	// parameters within the 8-hour idempotency window, DynamoDB returns an IdempotentParameterMismatch
+	// exception.
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// Type of compression to be used on the input coming from the imported table.
+	InputCompressionType *string `type:"string" enum:"InputCompressionType"`
+
+	// The format of the source data. Valid values for ImportFormat are CSV, DYNAMODB_JSON
+	// or ION.
+	//
+	// InputFormat is a required field
+	InputFormat *string `type:"string" required:"true" enum:"InputFormat"`
+
+	// Additional properties that specify how the input is formatted,
+	InputFormatOptions *InputFormatOptions `type:"structure"`
+
+	// The S3 bucket that provides the source for the import.
+	//
+	// S3BucketSource is a required field
+	S3BucketSource *S3BucketSource `type:"structure" required:"true"`
+
+	// Parameters for the table to import the data into.
+	//
+	// TableCreationParameters is a required field
+	TableCreationParameters *TableCreationParameters `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportTableInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportTableInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ImportTableInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ImportTableInput"}
+	if s.InputFormat == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputFormat"))
+	}
+	if s.S3BucketSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3BucketSource"))
+	}
+	if s.TableCreationParameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("TableCreationParameters"))
+	}
+	if s.InputFormatOptions != nil {
+		if err := s.InputFormatOptions.Validate(); err != nil {
+			invalidParams.AddNested("InputFormatOptions", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3BucketSource != nil {
+		if err := s.S3BucketSource.Validate(); err != nil {
+			invalidParams.AddNested("S3BucketSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TableCreationParameters != nil {
+		if err := s.TableCreationParameters.Validate(); err != nil {
+			invalidParams.AddNested("TableCreationParameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *ImportTableInput) SetClientToken(v string) *ImportTableInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetInputCompressionType sets the InputCompressionType field's value.
+func (s *ImportTableInput) SetInputCompressionType(v string) *ImportTableInput {
+	s.InputCompressionType = &v
+	return s
+}
+
+// SetInputFormat sets the InputFormat field's value.
+func (s *ImportTableInput) SetInputFormat(v string) *ImportTableInput {
+	s.InputFormat = &v
+	return s
+}
+
+// SetInputFormatOptions sets the InputFormatOptions field's value.
+func (s *ImportTableInput) SetInputFormatOptions(v *InputFormatOptions) *ImportTableInput {
+	s.InputFormatOptions = v
+	return s
+}
+
+// SetS3BucketSource sets the S3BucketSource field's value.
+func (s *ImportTableInput) SetS3BucketSource(v *S3BucketSource) *ImportTableInput {
+	s.S3BucketSource = v
+	return s
+}
+
+// SetTableCreationParameters sets the TableCreationParameters field's value.
+func (s *ImportTableInput) SetTableCreationParameters(v *TableCreationParameters) *ImportTableInput {
+	s.TableCreationParameters = v
+	return s
+}
+
+type ImportTableOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Represents the properties of the table created for the import, and parameters
+	// of the import. The import parameters include import status, how many items
+	// were processed, and how many errors were encountered.
+	//
+	// ImportTableDescription is a required field
+	ImportTableDescription *ImportTableDescription `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportTableOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImportTableOutput) GoString() string {
+	return s.String()
+}
+
+// SetImportTableDescription sets the ImportTableDescription field's value.
+func (s *ImportTableOutput) SetImportTableDescription(v *ImportTableDescription) *ImportTableOutput {
+	s.ImportTableDescription = v
+	return s
+}
+
 // The operation tried to access a nonexistent index.
 type IndexNotFoundException struct {
 	_            struct{}                  `type:"structure"`
@@ -15125,6 +16408,55 @@ func (s *IndexNotFoundException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *IndexNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The format options for the data that was imported into the target table.
+// There is one value, CsvOption.
+type InputFormatOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The options for imported source files in CSV format. The values are Delimiter
+	// and HeaderList.
+	Csv *CsvOptions `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputFormatOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputFormatOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputFormatOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputFormatOptions"}
+	if s.Csv != nil {
+		if err := s.Csv.Validate(); err != nil {
+			invalidParams.AddNested("Csv", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCsv sets the Csv field's value.
+func (s *InputFormatOptions) SetCsv(v *CsvOptions) *InputFormatOptions {
+	s.Csv = v
+	return s
 }
 
 // An error occurred on the server side.
@@ -15754,14 +17086,17 @@ func (s *KinesisDataStreamDestination) SetStreamArn(v string) *KinesisDataStream
 
 // There is no limit to the number of daily on-demand backups that can be taken.
 //
-// Up to 500 simultaneous table operations are allowed per account. These operations
-// include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive, RestoreTableFromBackup,
-// and RestoreTableToPointInTime.
+// For most purposes, up to 500 simultaneous table operations are allowed per
+// account. These operations include CreateTable, UpdateTable, DeleteTable,UpdateTimeToLive,
+// RestoreTableFromBackup, and RestoreTableToPointInTime.
 //
-// The only exception is when you are creating a table with one or more secondary
-// indexes. You can have up to 250 such requests running at a time; however,
-// if the table or index specifications are complex, DynamoDB might temporarily
-// reduce the number of concurrent operations.
+// When you are creating a table with one or more secondary indexes, you can
+// have up to 250 such requests running at a time. However, if the table or
+// index specifications are complex, then DynamoDB might temporarily reduce
+// the number of concurrent operations.
+//
+// When importing into DynamoDB, up to 50 simultaneous import table operations
+// are allowed per account.
 //
 // There is a soft account quota of 2,500 tables.
 type LimitExceededException struct {
@@ -16301,6 +17636,115 @@ func (s *ListGlobalTablesOutput) SetGlobalTables(v []*GlobalTable) *ListGlobalTa
 // SetLastEvaluatedGlobalTableName sets the LastEvaluatedGlobalTableName field's value.
 func (s *ListGlobalTablesOutput) SetLastEvaluatedGlobalTableName(v string) *ListGlobalTablesOutput {
 	s.LastEvaluatedGlobalTableName = &v
+	return s
+}
+
+type ListImportsInput struct {
+	_ struct{} `type:"structure"`
+
+	// An optional string that, if supplied, must be copied from the output of a
+	// previous call to ListImports. When provided in this manner, the API fetches
+	// the next page of results.
+	NextToken *string `min:"112" type:"string"`
+
+	// The number of ImportSummary objects returned in a single page.
+	PageSize *int64 `min:"1" type:"integer"`
+
+	// The Amazon Resource Name (ARN) associated with the table that was imported
+	// to.
+	TableArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListImportsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListImportsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListImportsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListImportsInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 112 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 112))
+	}
+	if s.PageSize != nil && *s.PageSize < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("PageSize", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListImportsInput) SetNextToken(v string) *ListImportsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListImportsInput) SetPageSize(v int64) *ListImportsInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetTableArn sets the TableArn field's value.
+func (s *ListImportsInput) SetTableArn(v string) *ListImportsInput {
+	s.TableArn = &v
+	return s
+}
+
+type ListImportsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of ImportSummary objects.
+	ImportSummaryList []*ImportSummary `type:"list"`
+
+	// If this value is returned, there are additional results to be displayed.
+	// To retrieve them, call ListImports again, with NextToken set to this value.
+	NextToken *string `min:"112" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListImportsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListImportsOutput) GoString() string {
+	return s.String()
+}
+
+// SetImportSummaryList sets the ImportSummaryList field's value.
+func (s *ListImportsOutput) SetImportSummaryList(v []*ImportSummary) *ListImportsOutput {
+	s.ImportSummaryList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListImportsOutput) SetNextToken(v string) *ListImportsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -17744,7 +19188,7 @@ type PutItemOutput struct {
 	// the total provisioned throughput consumed, along with statistics for the
 	// table and any indexes involved in the operation. ConsumedCapacity is only
 	// returned if the ReturnConsumedCapacity parameter was specified. For more
-	// information, see Read/Write Capacity Mode (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
+	// information, see Provisioned Throughput (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
 	// in the Amazon DynamoDB Developer Guide.
 	ConsumedCapacity *ConsumedCapacity `type:"structure"`
 
@@ -18102,7 +19546,8 @@ type QueryInput struct {
 	//    to specifying ALL_ATTRIBUTES.
 	//
 	//    * COUNT - Returns the number of matching items, rather than the matching
-	//    items themselves.
+	//    items themselves. Note that this uses the same quantity of read capacity
+	//    units as getting the items, and is subject to the same item size calculations.
 	//
 	//    * SPECIFIC_ATTRIBUTES - Returns only the attributes listed in ProjectionExpression.
 	//    This return value is equivalent to specifying ProjectionExpression without
@@ -18855,7 +20300,8 @@ type ReplicaGlobalSecondaryIndexAutoScalingDescription struct {
 	//
 	//    * CREATING - The index is being created.
 	//
-	//    * UPDATING - The index is being updated.
+	//    * UPDATING - The table/index configuration is being updated. The table/index
+	//    remains available for data operations when UPDATING
 	//
 	//    * DELETING - The index is being deleted.
 	//
@@ -20265,6 +21711,72 @@ func (s *RestoreTableToPointInTimeOutput) SetTableDescription(v *TableDescriptio
 	return s
 }
 
+// The S3 bucket that is being imported from.
+type S3BucketSource struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 bucket that is being imported from.
+	//
+	// S3Bucket is a required field
+	S3Bucket *string `type:"string" required:"true"`
+
+	// The account number of the S3 bucket that is being imported from. If the bucket
+	// is owned by the requester this is optional.
+	S3BucketOwner *string `type:"string"`
+
+	// The key prefix shared by all S3 Objects that are being imported.
+	S3KeyPrefix *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3BucketSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3BucketSource"}
+	if s.S3Bucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Bucket"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *S3BucketSource) SetS3Bucket(v string) *S3BucketSource {
+	s.S3Bucket = &v
+	return s
+}
+
+// SetS3BucketOwner sets the S3BucketOwner field's value.
+func (s *S3BucketSource) SetS3BucketOwner(v string) *S3BucketSource {
+	s.S3BucketOwner = &v
+	return s
+}
+
+// SetS3KeyPrefix sets the S3KeyPrefix field's value.
+func (s *S3BucketSource) SetS3KeyPrefix(v string) *S3BucketSource {
+	s.S3KeyPrefix = &v
+	return s
+}
+
 // The description of the server-side encryption status on the specified table.
 type SSEDescription struct {
 	_ struct{} `type:"structure"`
@@ -20591,7 +22103,8 @@ type ScanInput struct {
 	//    to specifying ALL_ATTRIBUTES.
 	//
 	//    * COUNT - Returns the number of matching items, rather than the matching
-	//    items themselves.
+	//    items themselves. Note that this uses the same quantity of read capacity
+	//    units as getting the items, and is subject to the same item size calculations.
 	//
 	//    * SPECIFIC_ATTRIBUTES - Returns only the attributes listed in ProjectionExpression.
 	//    This return value is equivalent to specifying ProjectionExpression without
@@ -20797,7 +22310,7 @@ type ScanOutput struct {
 	// the total provisioned throughput consumed, along with statistics for the
 	// table and any indexes involved in the operation. ConsumedCapacity is only
 	// returned if the ReturnConsumedCapacity parameter was specified. For more
-	// information, see Provisioned Throughput (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
+	// information, see Provisioned Throughput (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html#ItemSizeCalculations.Reads)
 	// in the Amazon DynamoDB Developer Guide.
 	ConsumedCapacity *ConsumedCapacity `type:"structure"`
 
@@ -21313,6 +22826,166 @@ func (s *TableClassSummary) SetTableClass(v string) *TableClassSummary {
 	return s
 }
 
+// The parameters for the table created as part of the import operation.
+type TableCreationParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The attributes of the table created as part of the import operation.
+	//
+	// AttributeDefinitions is a required field
+	AttributeDefinitions []*AttributeDefinition `type:"list" required:"true"`
+
+	// The billing mode for provisioning the table created as part of the import
+	// operation.
+	BillingMode *string `type:"string" enum:"BillingMode"`
+
+	// The Global Secondary Indexes (GSI) of the table to be created as part of
+	// the import operation.
+	GlobalSecondaryIndexes []*GlobalSecondaryIndex `type:"list"`
+
+	// The primary key and option sort key of the table created as part of the import
+	// operation.
+	//
+	// KeySchema is a required field
+	KeySchema []*KeySchemaElement `min:"1" type:"list" required:"true"`
+
+	// Represents the provisioned throughput settings for a specified table or index.
+	// The settings can be modified using the UpdateTable operation.
+	//
+	// For current minimum and maximum provisioned throughput values, see Service,
+	// Account, and Table Quotas (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html)
+	// in the Amazon DynamoDB Developer Guide.
+	ProvisionedThroughput *ProvisionedThroughput `type:"structure"`
+
+	// Represents the settings used to enable server-side encryption.
+	SSESpecification *SSESpecification `type:"structure"`
+
+	// The name of the table created as part of the import operation.
+	//
+	// TableName is a required field
+	TableName *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableCreationParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableCreationParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TableCreationParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TableCreationParameters"}
+	if s.AttributeDefinitions == nil {
+		invalidParams.Add(request.NewErrParamRequired("AttributeDefinitions"))
+	}
+	if s.KeySchema == nil {
+		invalidParams.Add(request.NewErrParamRequired("KeySchema"))
+	}
+	if s.KeySchema != nil && len(s.KeySchema) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KeySchema", 1))
+	}
+	if s.TableName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TableName"))
+	}
+	if s.TableName != nil && len(*s.TableName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("TableName", 3))
+	}
+	if s.AttributeDefinitions != nil {
+		for i, v := range s.AttributeDefinitions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AttributeDefinitions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.GlobalSecondaryIndexes != nil {
+		for i, v := range s.GlobalSecondaryIndexes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GlobalSecondaryIndexes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.KeySchema != nil {
+		for i, v := range s.KeySchema {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "KeySchema", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ProvisionedThroughput != nil {
+		if err := s.ProvisionedThroughput.Validate(); err != nil {
+			invalidParams.AddNested("ProvisionedThroughput", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributeDefinitions sets the AttributeDefinitions field's value.
+func (s *TableCreationParameters) SetAttributeDefinitions(v []*AttributeDefinition) *TableCreationParameters {
+	s.AttributeDefinitions = v
+	return s
+}
+
+// SetBillingMode sets the BillingMode field's value.
+func (s *TableCreationParameters) SetBillingMode(v string) *TableCreationParameters {
+	s.BillingMode = &v
+	return s
+}
+
+// SetGlobalSecondaryIndexes sets the GlobalSecondaryIndexes field's value.
+func (s *TableCreationParameters) SetGlobalSecondaryIndexes(v []*GlobalSecondaryIndex) *TableCreationParameters {
+	s.GlobalSecondaryIndexes = v
+	return s
+}
+
+// SetKeySchema sets the KeySchema field's value.
+func (s *TableCreationParameters) SetKeySchema(v []*KeySchemaElement) *TableCreationParameters {
+	s.KeySchema = v
+	return s
+}
+
+// SetProvisionedThroughput sets the ProvisionedThroughput field's value.
+func (s *TableCreationParameters) SetProvisionedThroughput(v *ProvisionedThroughput) *TableCreationParameters {
+	s.ProvisionedThroughput = v
+	return s
+}
+
+// SetSSESpecification sets the SSESpecification field's value.
+func (s *TableCreationParameters) SetSSESpecification(v *SSESpecification) *TableCreationParameters {
+	s.SSESpecification = v
+	return s
+}
+
+// SetTableName sets the TableName field's value.
+func (s *TableCreationParameters) SetTableName(v string) *TableCreationParameters {
+	s.TableName = &v
+	return s
+}
+
 // Represents the properties of a table.
 type TableDescription struct {
 	_ struct{} `type:"structure"`
@@ -21336,6 +23009,10 @@ type TableDescription struct {
 	// The date and time when the table was created, in UNIX epoch time (http://www.epochconverter.com/)
 	// format.
 	CreationDateTime *time.Time `type:"timestamp"`
+
+	// Indicates whether deletion protection is enabled (true) or disabled (false)
+	// on the table.
+	DeletionProtectionEnabled *bool `type:"boolean"`
 
 	// The global secondary indexes, if any, on the table. Each index is scoped
 	// to a given partition key value. Each element is composed of:
@@ -21509,7 +23186,8 @@ type TableDescription struct {
 	//
 	//    * CREATING - The table is being created.
 	//
-	//    * UPDATING - The table is being updated.
+	//    * UPDATING - The table/index configuration is being updated. The table/index
+	//    remains available for data operations when UPDATING.
 	//
 	//    * DELETING - The table is being deleted.
 	//
@@ -21567,6 +23245,12 @@ func (s *TableDescription) SetBillingModeSummary(v *BillingModeSummary) *TableDe
 // SetCreationDateTime sets the CreationDateTime field's value.
 func (s *TableDescription) SetCreationDateTime(v time.Time) *TableDescription {
 	s.CreationDateTime = &v
+	return s
+}
+
+// SetDeletionProtectionEnabled sets the DeletionProtectionEnabled field's value.
+func (s *TableDescription) SetDeletionProtectionEnabled(v bool) *TableDescription {
+	s.DeletionProtectionEnabled = &v
 	return s
 }
 
@@ -22150,7 +23834,7 @@ type TransactGetItemsInput struct {
 	// is valid.
 	ReturnConsumedCapacity *string `type:"string" enum:"ReturnConsumedCapacity"`
 
-	// An ordered array of up to 25 TransactGetItem objects, each of which contains
+	// An ordered array of up to 100 TransactGetItem objects, each of which contains
 	// a Get structure.
 	//
 	// TransactItems is a required field
@@ -22222,7 +23906,7 @@ type TransactGetItemsOutput struct {
 	// consumed by the TransactGetItems call in that table.
 	ConsumedCapacity []*ConsumedCapacity `type:"list"`
 
-	// An ordered array of up to 25 ItemResponse objects, each of which corresponds
+	// An ordered array of up to 100 ItemResponse objects, each of which corresponds
 	// to the TransactGetItem object in the same position in the TransactItems array.
 	// Each ItemResponse object contains a Map of the name-value pairs that are
 	// the projected attributes of the requested item.
@@ -22362,7 +24046,7 @@ type TransactWriteItemsInput struct {
 	//
 	// Although multiple identical calls using the same client request token produce
 	// the same result on the server (no side effects), the responses to the calls
-	// might not be the same. If the ReturnConsumedCapacity> parameter is set, then
+	// might not be the same. If the ReturnConsumedCapacity parameter is set, then
 	// the initial TransactWriteItems call returns the amount of write capacity
 	// units consumed in making the changes. Subsequent TransactWriteItems calls
 	// with the same client token return the number of read capacity units consumed
@@ -22400,7 +24084,7 @@ type TransactWriteItemsInput struct {
 	// NONE (the default), no statistics are returned.
 	ReturnItemCollectionMetrics *string `type:"string" enum:"ReturnItemCollectionMetrics"`
 
-	// An ordered array of up to 25 TransactWriteItem objects, each of which contains
+	// An ordered array of up to 100 TransactWriteItem objects, each of which contains
 	// a ConditionCheck, Put, Update, or Delete object. These can operate on items
 	// in different tables, but the tables must reside in the same Amazon Web Services
 	// account and Region, and no two of them can operate on the same item.
@@ -22595,7 +24279,7 @@ func (s *TransactWriteItemsOutput) SetItemCollectionMetrics(v map[string][]*Item
 //    as DynamoDB is automatically scaling the table. Throughput exceeds the
 //    current capacity for one or more global secondary indexes. DynamoDB is
 //    automatically scaling your index so please try again shortly. This message
-//    is returned when when writes get throttled on an On-Demand GSI as DynamoDB
+//    is returned when writes get throttled on an On-Demand GSI as DynamoDB
 //    is automatically scaling the GSI.
 //
 //    * Validation Error: Code: ValidationError Messages: One or more parameter
@@ -22740,6 +24424,47 @@ func (s *TransactionConflictException) RequestID() string {
 }
 
 // The transaction with the given request token is already in progress.
+//
+// Recommended Settings
+//
+// This is a general recommendation for handling the TransactionInProgressException.
+// These settings help ensure that the client retries will trigger completion
+// of the ongoing TransactWriteItems request.
+//
+//    * Set clientExecutionTimeout to a value that allows at least one retry
+//    to be processed after 5 seconds have elapsed since the first attempt for
+//    the TransactWriteItems operation.
+//
+//    * Set socketTimeout to a value a little lower than the requestTimeout
+//    setting.
+//
+//    * requestTimeout should be set based on the time taken for the individual
+//    retries of a single HTTP request for your use case, but setting it to
+//    1 second or higher should work well to reduce chances of retries and TransactionInProgressException
+//    errors.
+//
+//    * Use exponential backoff when retrying and tune backoff if needed.
+//
+// Assuming default retry policy (https://github.com/aws/aws-sdk-java/blob/fd409dee8ae23fb8953e0bb4dbde65536a7e0514/aws-java-sdk-core/src/main/java/com/amazonaws/retry/PredefinedRetryPolicies.java#L97),
+// example timeout settings based on the guidelines above are as follows:
+//
+// Example timeline:
+//
+//    * 0-1000 first attempt
+//
+//    * 1000-1500 first sleep/delay (default retry policy uses 500 ms as base
+//    delay for 4xx errors)
+//
+//    * 1500-2500 second attempt
+//
+//    * 2500-3500 second sleep/delay (500 * 2, exponential backoff)
+//
+//    * 3500-4500 third attempt
+//
+//    * 4500-6500 third sleep/delay (500 * 2^2)
+//
+//    * 6500-7500 fourth attempt (this can trigger inline recovery since 5 seconds
+//    have elapsed since the first attempt reached TC)
 type TransactionInProgressException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -23716,7 +25441,8 @@ type UpdateItemInput struct {
 	ReturnItemCollectionMetrics *string `type:"string" enum:"ReturnItemCollectionMetrics"`
 
 	// Use ReturnValues if you want to get the item attributes as they appear before
-	// or after they are updated. For UpdateItem, the valid values are:
+	// or after they are successfully updated. For UpdateItem, the valid values
+	// are:
 	//
 	//    * NONE - If ReturnValues is not specified, or if its value is NONE, then
 	//    nothing is returned. (This setting is the default for ReturnValues.)
@@ -23921,15 +25647,16 @@ type UpdateItemOutput struct {
 	// A map of attribute values as they appear before or after the UpdateItem operation,
 	// as determined by the ReturnValues parameter.
 	//
-	// The Attributes map is only present if ReturnValues was specified as something
-	// other than NONE in the request. Each element represents one attribute.
+	// The Attributes map is only present if the update was successful and ReturnValues
+	// was specified as something other than NONE in the request. Each element represents
+	// one attribute.
 	Attributes map[string]*AttributeValue `type:"map"`
 
 	// The capacity units consumed by the UpdateItem operation. The data returned
 	// includes the total provisioned throughput consumed, along with statistics
 	// for the table and any indexes involved in the operation. ConsumedCapacity
 	// is only returned if the ReturnConsumedCapacity parameter was specified. For
-	// more information, see Provisioned Throughput (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
+	// more information, see Provisioned Throughput (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html#ItemSizeCalculations.Reads)
 	// in the Amazon DynamoDB Developer Guide.
 	ConsumedCapacity *ConsumedCapacity `type:"structure"`
 
@@ -24118,6 +25845,10 @@ type UpdateTableInput struct {
 	//    workloads. PAY_PER_REQUEST sets the billing mode to On-Demand Mode (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand).
 	BillingMode *string `type:"string" enum:"BillingMode"`
 
+	// Indicates whether deletion protection is to be enabled (true) or disabled
+	// (false) on the table.
+	DeletionProtectionEnabled *bool `type:"boolean"`
+
 	// An array of one or more global secondary indexes for the table. For each
 	// index in the array, you can request one action:
 	//
@@ -24140,7 +25871,7 @@ type UpdateTableInput struct {
 
 	// A list of replica update actions (create, delete, or update) for the table.
 	//
-	// This property only applies to Version 2019.11.21 (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
+	// This property only applies to Version 2019.11.21 (Current) (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.V2.html)
 	// of global tables.
 	ReplicaUpdates []*ReplicationGroupUpdate `min:"1" type:"list"`
 
@@ -24250,6 +25981,12 @@ func (s *UpdateTableInput) SetAttributeDefinitions(v []*AttributeDefinition) *Up
 // SetBillingMode sets the BillingMode field's value.
 func (s *UpdateTableInput) SetBillingMode(v string) *UpdateTableInput {
 	s.BillingMode = &v
+	return s
+}
+
+// SetDeletionProtectionEnabled sets the DeletionProtectionEnabled field's value.
+func (s *UpdateTableInput) SetDeletionProtectionEnabled(v bool) *UpdateTableInput {
+	s.DeletionProtectionEnabled = &v
 	return s
 }
 
@@ -24990,6 +26727,34 @@ func GlobalTableStatus_Values() []string {
 }
 
 const (
+	// ImportStatusInProgress is a ImportStatus enum value
+	ImportStatusInProgress = "IN_PROGRESS"
+
+	// ImportStatusCompleted is a ImportStatus enum value
+	ImportStatusCompleted = "COMPLETED"
+
+	// ImportStatusCancelling is a ImportStatus enum value
+	ImportStatusCancelling = "CANCELLING"
+
+	// ImportStatusCancelled is a ImportStatus enum value
+	ImportStatusCancelled = "CANCELLED"
+
+	// ImportStatusFailed is a ImportStatus enum value
+	ImportStatusFailed = "FAILED"
+)
+
+// ImportStatus_Values returns all elements of the ImportStatus enum
+func ImportStatus_Values() []string {
+	return []string{
+		ImportStatusInProgress,
+		ImportStatusCompleted,
+		ImportStatusCancelling,
+		ImportStatusCancelled,
+		ImportStatusFailed,
+	}
+}
+
+const (
 	// IndexStatusCreating is a IndexStatus enum value
 	IndexStatusCreating = "CREATING"
 
@@ -25010,6 +26775,46 @@ func IndexStatus_Values() []string {
 		IndexStatusUpdating,
 		IndexStatusDeleting,
 		IndexStatusActive,
+	}
+}
+
+const (
+	// InputCompressionTypeGzip is a InputCompressionType enum value
+	InputCompressionTypeGzip = "GZIP"
+
+	// InputCompressionTypeZstd is a InputCompressionType enum value
+	InputCompressionTypeZstd = "ZSTD"
+
+	// InputCompressionTypeNone is a InputCompressionType enum value
+	InputCompressionTypeNone = "NONE"
+)
+
+// InputCompressionType_Values returns all elements of the InputCompressionType enum
+func InputCompressionType_Values() []string {
+	return []string{
+		InputCompressionTypeGzip,
+		InputCompressionTypeZstd,
+		InputCompressionTypeNone,
+	}
+}
+
+const (
+	// InputFormatDynamodbJson is a InputFormat enum value
+	InputFormatDynamodbJson = "DYNAMODB_JSON"
+
+	// InputFormatIon is a InputFormat enum value
+	InputFormatIon = "ION"
+
+	// InputFormatCsv is a InputFormat enum value
+	InputFormatCsv = "CSV"
+)
+
+// InputFormat_Values returns all elements of the InputFormat enum
+func InputFormat_Values() []string {
+	return []string{
+		InputFormatDynamodbJson,
+		InputFormatIon,
+		InputFormatCsv,
 	}
 }
 

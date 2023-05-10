@@ -4480,6 +4480,12 @@ func (c *Neptune) DescribeGlobalClustersRequest(input *DescribeGlobalClustersInp
 		Name:       opDescribeGlobalClusters,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -4528,6 +4534,58 @@ func (c *Neptune) DescribeGlobalClustersWithContext(ctx aws.Context, input *Desc
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribeGlobalClustersPages iterates over the pages of a DescribeGlobalClusters operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeGlobalClusters method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeGlobalClusters operation.
+//    pageNum := 0
+//    err := client.DescribeGlobalClustersPages(params,
+//        func(page *neptune.DescribeGlobalClustersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Neptune) DescribeGlobalClustersPages(input *DescribeGlobalClustersInput, fn func(*DescribeGlobalClustersOutput, bool) bool) error {
+	return c.DescribeGlobalClustersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeGlobalClustersPagesWithContext same as DescribeGlobalClustersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Neptune) DescribeGlobalClustersPagesWithContext(ctx aws.Context, input *DescribeGlobalClustersInput, fn func(*DescribeGlobalClustersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeGlobalClustersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeGlobalClustersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeGlobalClustersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeOrderableDBInstanceOptions = "DescribeOrderableDBInstanceOptions"
@@ -7777,6 +7835,98 @@ func (s *CloudwatchLogsExportConfiguration) SetEnableLogTypes(v []*string) *Clou
 	return s
 }
 
+// This data type is used as a response element in the ModifyDBCluster operation
+// and contains changes that will be applied during the next maintenance window.
+type ClusterPendingModifiedValues struct {
+	_ struct{} `type:"structure"`
+
+	// The allocated storage size in gibibytes (GiB) for database engines. For Neptune,
+	// AllocatedStorage always returns 1, because Neptune DB cluster storage size
+	// isn't fixed, but instead automatically adjusts as needed.
+	AllocatedStorage *int64 `type:"integer"`
+
+	// The number of days for which automatic DB snapshots are retained.
+	BackupRetentionPeriod *int64 `type:"integer"`
+
+	// The DBClusterIdentifier value for the DB cluster.
+	DBClusterIdentifier *string `type:"string"`
+
+	// The database engine version.
+	EngineVersion *string `type:"string"`
+
+	// A value that indicates whether mapping of Amazon Web Services Identity and
+	// Access Management (IAM) accounts to database accounts is enabled.
+	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
+
+	// The Provisioned IOPS (I/O operations per second) value. This setting is only
+	// for non-Aurora Multi-AZ DB clusters.
+	Iops *int64 `type:"integer"`
+
+	// This PendingCloudwatchLogsExports structure specifies pending changes to
+	// which CloudWatch logs are enabled and which are disabled.
+	PendingCloudwatchLogsExports *PendingCloudwatchLogsExports `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClusterPendingModifiedValues) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ClusterPendingModifiedValues) GoString() string {
+	return s.String()
+}
+
+// SetAllocatedStorage sets the AllocatedStorage field's value.
+func (s *ClusterPendingModifiedValues) SetAllocatedStorage(v int64) *ClusterPendingModifiedValues {
+	s.AllocatedStorage = &v
+	return s
+}
+
+// SetBackupRetentionPeriod sets the BackupRetentionPeriod field's value.
+func (s *ClusterPendingModifiedValues) SetBackupRetentionPeriod(v int64) *ClusterPendingModifiedValues {
+	s.BackupRetentionPeriod = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *ClusterPendingModifiedValues) SetDBClusterIdentifier(v string) *ClusterPendingModifiedValues {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *ClusterPendingModifiedValues) SetEngineVersion(v string) *ClusterPendingModifiedValues {
+	s.EngineVersion = &v
+	return s
+}
+
+// SetIAMDatabaseAuthenticationEnabled sets the IAMDatabaseAuthenticationEnabled field's value.
+func (s *ClusterPendingModifiedValues) SetIAMDatabaseAuthenticationEnabled(v bool) *ClusterPendingModifiedValues {
+	s.IAMDatabaseAuthenticationEnabled = &v
+	return s
+}
+
+// SetIops sets the Iops field's value.
+func (s *ClusterPendingModifiedValues) SetIops(v int64) *ClusterPendingModifiedValues {
+	s.Iops = &v
+	return s
+}
+
+// SetPendingCloudwatchLogsExports sets the PendingCloudwatchLogsExports field's value.
+func (s *ClusterPendingModifiedValues) SetPendingCloudwatchLogsExports(v *PendingCloudwatchLogsExports) *ClusterPendingModifiedValues {
+	s.PendingCloudwatchLogsExports = v
+	return s
+}
+
 type CopyDBClusterParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8661,6 +8811,12 @@ type CreateDBClusterInput struct {
 	// this DB cluster is created as a Read Replica.
 	ReplicationSourceIdentifier *string `type:"string"`
 
+	// Contains the scaling configuration of a Neptune Serverless DB cluster.
+	//
+	// For more information, see Using Amazon Neptune Serverless (https://docs.aws.amazon.com/neptune/latest/userguide/neptune-serverless-using.html)
+	// in the Amazon Neptune User Guide.
+	ServerlessV2ScalingConfiguration *ServerlessV2ScalingConfiguration `type:"structure"`
+
 	// SourceRegion is the source region where the resource exists. This is not
 	// sent over the wire and is only used for presigning. This value should always
 	// have the same region as the source ARN.
@@ -8854,6 +9010,12 @@ func (s *CreateDBClusterInput) SetPreferredMaintenanceWindow(v string) *CreateDB
 // SetReplicationSourceIdentifier sets the ReplicationSourceIdentifier field's value.
 func (s *CreateDBClusterInput) SetReplicationSourceIdentifier(v string) *CreateDBClusterInput {
 	s.ReplicationSourceIdentifier = &v
+	return s
+}
+
+// SetServerlessV2ScalingConfiguration sets the ServerlessV2ScalingConfiguration field's value.
+func (s *CreateDBClusterInput) SetServerlessV2ScalingConfiguration(v *ServerlessV2ScalingConfiguration) *CreateDBClusterInput {
+	s.ServerlessV2ScalingConfiguration = v
 	return s
 }
 
@@ -9211,7 +9373,9 @@ type CreateDBInstanceInput struct {
 	// For information on creating a DB cluster, see CreateDBCluster.
 	//
 	// Type: String
-	DBClusterIdentifier *string `type:"string"`
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
 
 	// The compute and memory capacity of the DB instance, for example, db.m4.large.
 	// Not all DB instance classes are available in all Amazon Regions.
@@ -9453,6 +9617,9 @@ func (s CreateDBInstanceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateDBInstanceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateDBInstanceInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
 	if s.DBInstanceClass == nil {
 		invalidParams.Add(request.NewErrParamRequired("DBInstanceClass"))
 	}
@@ -10409,6 +10576,10 @@ type DBCluster struct {
 	// Indicates the database engine version.
 	EngineVersion *string `type:"string"`
 
+	// Contains a user-supplied global database cluster identifier. This identifier
+	// is the unique key that identifies a global database.
+	GlobalClusterIdentifier *string `min:"1" type:"string"`
+
 	// Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.
 	HostedZoneId *string `type:"string"`
 
@@ -10429,6 +10600,10 @@ type DBCluster struct {
 
 	// Specifies whether the DB cluster has instances in multiple Availability Zones.
 	MultiAZ *bool `type:"boolean"`
+
+	// This data type is used as a response element in the ModifyDBCluster operation
+	// and contains changes that will be applied during the next maintenance window.
+	PendingModifiedValues *ClusterPendingModifiedValues `type:"structure"`
 
 	// Specifies the progress of the operation as a percentage.
 	PercentProgress *string `type:"string"`
@@ -10463,6 +10638,12 @@ type DBCluster struct {
 
 	// Not supported by Neptune.
 	ReplicationSourceIdentifier *string `type:"string"`
+
+	// Shows the scaling configuration for a Neptune Serverless DB cluster.
+	//
+	// For more information, see Using Amazon Neptune Serverless (https://docs.aws.amazon.com/neptune/latest/userguide/neptune-serverless-using.html)
+	// in the Amazon Neptune User Guide.
+	ServerlessV2ScalingConfiguration *ServerlessV2ScalingConfigurationInfo `type:"structure"`
 
 	// Specifies the current state of this DB cluster.
 	Status *string `type:"string"`
@@ -10636,6 +10817,12 @@ func (s *DBCluster) SetEngineVersion(v string) *DBCluster {
 	return s
 }
 
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *DBCluster) SetGlobalClusterIdentifier(v string) *DBCluster {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
 // SetHostedZoneId sets the HostedZoneId field's value.
 func (s *DBCluster) SetHostedZoneId(v string) *DBCluster {
 	s.HostedZoneId = &v
@@ -10669,6 +10856,12 @@ func (s *DBCluster) SetMasterUsername(v string) *DBCluster {
 // SetMultiAZ sets the MultiAZ field's value.
 func (s *DBCluster) SetMultiAZ(v bool) *DBCluster {
 	s.MultiAZ = &v
+	return s
+}
+
+// SetPendingModifiedValues sets the PendingModifiedValues field's value.
+func (s *DBCluster) SetPendingModifiedValues(v *ClusterPendingModifiedValues) *DBCluster {
+	s.PendingModifiedValues = v
 	return s
 }
 
@@ -10711,6 +10904,12 @@ func (s *DBCluster) SetReaderEndpoint(v string) *DBCluster {
 // SetReplicationSourceIdentifier sets the ReplicationSourceIdentifier field's value.
 func (s *DBCluster) SetReplicationSourceIdentifier(v string) *DBCluster {
 	s.ReplicationSourceIdentifier = &v
+	return s
+}
+
+// SetServerlessV2ScalingConfiguration sets the ServerlessV2ScalingConfiguration field's value.
+func (s *DBCluster) SetServerlessV2ScalingConfiguration(v *ServerlessV2ScalingConfigurationInfo) *DBCluster {
+	s.ServerlessV2ScalingConfiguration = v
 	return s
 }
 
@@ -17410,6 +17609,12 @@ type ModifyDBClusterInput struct {
 	// Constraints: Minimum 30-minute window.
 	PreferredMaintenanceWindow *string `type:"string"`
 
+	// Contains the scaling configuration of a Neptune Serverless DB cluster.
+	//
+	// For more information, see Using Amazon Neptune Serverless (https://docs.aws.amazon.com/neptune/latest/userguide/neptune-serverless-using.html)
+	// in the Amazon Neptune User Guide.
+	ServerlessV2ScalingConfiguration *ServerlessV2ScalingConfiguration `type:"structure"`
+
 	// A list of VPC security groups that the DB cluster will belong to.
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
@@ -17544,6 +17749,12 @@ func (s *ModifyDBClusterInput) SetPreferredBackupWindow(v string) *ModifyDBClust
 // SetPreferredMaintenanceWindow sets the PreferredMaintenanceWindow field's value.
 func (s *ModifyDBClusterInput) SetPreferredMaintenanceWindow(v string) *ModifyDBClusterInput {
 	s.PreferredMaintenanceWindow = &v
+	return s
+}
+
+// SetServerlessV2ScalingConfiguration sets the ServerlessV2ScalingConfiguration field's value.
+func (s *ModifyDBClusterInput) SetServerlessV2ScalingConfiguration(v *ServerlessV2ScalingConfiguration) *ModifyDBClusterInput {
+	s.ServerlessV2ScalingConfiguration = v
 	return s
 }
 
@@ -20406,6 +20617,12 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Default: The same port as the original DB cluster.
 	Port *int64 `type:"integer"`
 
+	// Contains the scaling configuration of a Neptune Serverless DB cluster.
+	//
+	// For more information, see Using Amazon Neptune Serverless (https://docs.aws.amazon.com/neptune/latest/userguide/neptune-serverless-using.html)
+	// in the Amazon Neptune User Guide.
+	ServerlessV2ScalingConfiguration *ServerlessV2ScalingConfiguration `type:"structure"`
+
 	// The identifier for the DB snapshot or DB cluster snapshot to restore from.
 	//
 	// You can use either the name or the Amazon Resource Name (ARN) to specify
@@ -20544,6 +20761,12 @@ func (s *RestoreDBClusterFromSnapshotInput) SetOptionGroupName(v string) *Restor
 // SetPort sets the Port field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetPort(v int64) *RestoreDBClusterFromSnapshotInput {
 	s.Port = &v
+	return s
+}
+
+// SetServerlessV2ScalingConfiguration sets the ServerlessV2ScalingConfiguration field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetServerlessV2ScalingConfiguration(v *ServerlessV2ScalingConfiguration) *RestoreDBClusterFromSnapshotInput {
+	s.ServerlessV2ScalingConfiguration = v
 	return s
 }
 
@@ -20709,6 +20932,12 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// as a full copy of the source DB cluster.
 	RestoreType *string `type:"string"`
 
+	// Contains the scaling configuration of a Neptune Serverless DB cluster.
+	//
+	// For more information, see Using Amazon Neptune Serverless (https://docs.aws.amazon.com/neptune/latest/userguide/neptune-serverless-using.html)
+	// in the Amazon Neptune User Guide.
+	ServerlessV2ScalingConfiguration *ServerlessV2ScalingConfiguration `type:"structure"`
+
 	// The identifier of the source DB cluster from which to restore.
 	//
 	// Constraints:
@@ -20833,6 +21062,12 @@ func (s *RestoreDBClusterToPointInTimeInput) SetRestoreType(v string) *RestoreDB
 	return s
 }
 
+// SetServerlessV2ScalingConfiguration sets the ServerlessV2ScalingConfiguration field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetServerlessV2ScalingConfiguration(v *ServerlessV2ScalingConfiguration) *RestoreDBClusterToPointInTimeInput {
+	s.ServerlessV2ScalingConfiguration = v
+	return s
+}
+
 // SetSourceDBClusterIdentifier sets the SourceDBClusterIdentifier field's value.
 func (s *RestoreDBClusterToPointInTimeInput) SetSourceDBClusterIdentifier(v string) *RestoreDBClusterToPointInTimeInput {
 	s.SourceDBClusterIdentifier = &v
@@ -20887,6 +21122,102 @@ func (s RestoreDBClusterToPointInTimeOutput) GoString() string {
 // SetDBCluster sets the DBCluster field's value.
 func (s *RestoreDBClusterToPointInTimeOutput) SetDBCluster(v *DBCluster) *RestoreDBClusterToPointInTimeOutput {
 	s.DBCluster = v
+	return s
+}
+
+// Contains the scaling configuration of a Neptune Serverless DB cluster.
+//
+// For more information, see Using Amazon Neptune Serverless (https://docs.aws.amazon.com/neptune/latest/userguide/neptune-serverless-using.html)
+// in the Amazon Neptune User Guide.
+type ServerlessV2ScalingConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of Neptune capacity units (NCUs) for a DB instance in
+	// a Neptune Serverless cluster. You can specify NCU values in half-step increments,
+	// such as 40, 40.5, 41, and so on.
+	MaxCapacity *float64 `type:"double"`
+
+	// The minimum number of Neptune capacity units (NCUs) for a DB instance in
+	// a Neptune Serverless cluster. You can specify NCU values in half-step increments,
+	// such as 8, 8.5, 9, and so on.
+	MinCapacity *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServerlessV2ScalingConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServerlessV2ScalingConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *ServerlessV2ScalingConfiguration) SetMaxCapacity(v float64) *ServerlessV2ScalingConfiguration {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetMinCapacity sets the MinCapacity field's value.
+func (s *ServerlessV2ScalingConfiguration) SetMinCapacity(v float64) *ServerlessV2ScalingConfiguration {
+	s.MinCapacity = &v
+	return s
+}
+
+// Shows the scaling configuration for a Neptune Serverless DB cluster.
+//
+// For more information, see Using Amazon Neptune Serverless (https://docs.aws.amazon.com/neptune/latest/userguide/neptune-serverless-using.html)
+// in the Amazon Neptune User Guide.
+type ServerlessV2ScalingConfigurationInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of Neptune capacity units (NCUs) for a DB instance in
+	// a Neptune Serverless cluster. You can specify NCU values in half-step increments,
+	// such as 40, 40.5, 41, and so on.
+	MaxCapacity *float64 `type:"double"`
+
+	// The minimum number of Neptune capacity units (NCUs) for a DB instance in
+	// a Neptune Serverless cluster. You can specify NCU values in half-step increments,
+	// such as 8, 8.5, 9, and so on.
+	MinCapacity *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServerlessV2ScalingConfigurationInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServerlessV2ScalingConfigurationInfo) GoString() string {
+	return s.String()
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *ServerlessV2ScalingConfigurationInfo) SetMaxCapacity(v float64) *ServerlessV2ScalingConfigurationInfo {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetMinCapacity sets the MinCapacity field's value.
+func (s *ServerlessV2ScalingConfigurationInfo) SetMinCapacity(v float64) *ServerlessV2ScalingConfigurationInfo {
+	s.MinCapacity = &v
 	return s
 }
 

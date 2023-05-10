@@ -752,6 +752,9 @@ type IoTAPI interface {
 	ListManagedJobTemplatesWithContext(aws.Context, *iot.ListManagedJobTemplatesInput, ...request.Option) (*iot.ListManagedJobTemplatesOutput, error)
 	ListManagedJobTemplatesRequest(*iot.ListManagedJobTemplatesInput) (*request.Request, *iot.ListManagedJobTemplatesOutput)
 
+	ListManagedJobTemplatesPages(*iot.ListManagedJobTemplatesInput, func(*iot.ListManagedJobTemplatesOutput, bool) bool) error
+	ListManagedJobTemplatesPagesWithContext(aws.Context, *iot.ListManagedJobTemplatesInput, func(*iot.ListManagedJobTemplatesOutput, bool) bool, ...request.Option) error
+
 	ListMetricValues(*iot.ListMetricValuesInput) (*iot.ListMetricValuesOutput, error)
 	ListMetricValuesWithContext(aws.Context, *iot.ListMetricValuesInput, ...request.Option) (*iot.ListMetricValuesOutput, error)
 	ListMetricValuesRequest(*iot.ListMetricValuesInput) (*request.Request, *iot.ListMetricValuesOutput)
@@ -825,6 +828,13 @@ type IoTAPI interface {
 
 	ListProvisioningTemplatesPages(*iot.ListProvisioningTemplatesInput, func(*iot.ListProvisioningTemplatesOutput, bool) bool) error
 	ListProvisioningTemplatesPagesWithContext(aws.Context, *iot.ListProvisioningTemplatesInput, func(*iot.ListProvisioningTemplatesOutput, bool) bool, ...request.Option) error
+
+	ListRelatedResourcesForAuditFinding(*iot.ListRelatedResourcesForAuditFindingInput) (*iot.ListRelatedResourcesForAuditFindingOutput, error)
+	ListRelatedResourcesForAuditFindingWithContext(aws.Context, *iot.ListRelatedResourcesForAuditFindingInput, ...request.Option) (*iot.ListRelatedResourcesForAuditFindingOutput, error)
+	ListRelatedResourcesForAuditFindingRequest(*iot.ListRelatedResourcesForAuditFindingInput) (*request.Request, *iot.ListRelatedResourcesForAuditFindingOutput)
+
+	ListRelatedResourcesForAuditFindingPages(*iot.ListRelatedResourcesForAuditFindingInput, func(*iot.ListRelatedResourcesForAuditFindingOutput, bool) bool) error
+	ListRelatedResourcesForAuditFindingPagesWithContext(aws.Context, *iot.ListRelatedResourcesForAuditFindingInput, func(*iot.ListRelatedResourcesForAuditFindingOutput, bool) bool, ...request.Option) error
 
 	ListRoleAliases(*iot.ListRoleAliasesInput) (*iot.ListRoleAliasesOutput, error)
 	ListRoleAliasesWithContext(aws.Context, *iot.ListRoleAliasesInput, ...request.Option) (*iot.ListRoleAliasesOutput, error)

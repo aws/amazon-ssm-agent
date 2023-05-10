@@ -15,7 +15,7 @@ import (
 )
 
 // SSMMDSAPI provides an interface to enable mocking the
-// ssmmds.SSMMDS service client's API operation,
+// ssmmds.Ssmmds service client's API operation,
 // paginators, and waiters. This make unit testing your code that calls out
 // to the SDK's service client's calls easier.
 //
@@ -39,16 +39,16 @@ import (
 // In your _test.go file:
 //
 //    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockSSMMDSClient struct {
+//    type mockSsmmdsClient struct {
 //        ssmmdsiface.SSMMDSAPI
 //    }
-//    func (m *mockSSMMDSClient) AcknowledgeMessage(input *ssmmds.AcknowledgeMessageInput) (*ssmmds.AcknowledgeMessageOutput, error) {
+//    func (m *mockSsmmdsClient) AcknowledgeMessage(input *ssmmds.AcknowledgeMessageInput) (*ssmmds.AcknowledgeMessageOutput, error) {
 //        // mock response/functionality
 //    }
 //
 //    func TestMyFunc(t *testing.T) {
 //        // Setup Test
-//        mockSvc := &mockSSMMDSClient{}
+//        mockSvc := &mockSsmmdsClient{}
 //
 //        myfunc(mockSvc)
 //
@@ -85,4 +85,4 @@ type SSMMDSAPI interface {
 	SendReplyRequest(*ssmmds.SendReplyInput) (*request.Request, *ssmmds.SendReplyOutput)
 }
 
-var _ SSMMDSAPI = (*ssmmds.SSMMDS)(nil)
+var _ SSMMDSAPI = (*ssmmds.Ssmmds)(nil)

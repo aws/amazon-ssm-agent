@@ -88,7 +88,7 @@ func (c *Route53RecoveryControlConfig) CreateClusterRequest(input *CreateCluster
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -193,7 +193,7 @@ func (c *Route53RecoveryControlConfig) CreateControlPanelRequest(input *CreateCo
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -301,7 +301,7 @@ func (c *Route53RecoveryControlConfig) CreateRoutingControlRequest(input *Create
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -383,7 +383,7 @@ func (c *Route53RecoveryControlConfig) CreateSafetyRuleRequest(input *CreateSafe
 //
 // Assertion rule: An assertion rule enforces that, when you change a routing
 // control state, that a certain criteria is met. For example, the criteria
-// might be that at least one routing control state is On after the transation
+// might be that at least one routing control state is On after the transaction
 // so that traffic continues to flow to at least one cell for the application.
 // This ensures that you avoid a fail-open scenario.
 //
@@ -501,7 +501,7 @@ func (c *Route53RecoveryControlConfig) DeleteClusterRequest(input *DeleteCluster
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -599,7 +599,7 @@ func (c *Route53RecoveryControlConfig) DeleteControlPanelRequest(input *DeleteCo
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -697,7 +697,7 @@ func (c *Route53RecoveryControlConfig) DeleteRoutingControlRequest(input *Delete
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -785,7 +785,7 @@ func (c *Route53RecoveryControlConfig) DeleteSafetyRuleRequest(input *DeleteSafe
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ValidationException
 //   400 response - Multiple causes. For example, you might have a malformed query
@@ -885,7 +885,7 @@ func (c *Route53RecoveryControlConfig) DescribeClusterRequest(input *DescribeClu
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -982,7 +982,7 @@ func (c *Route53RecoveryControlConfig) DescribeControlPanelRequest(input *Descri
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -1084,7 +1084,7 @@ func (c *Route53RecoveryControlConfig) DescribeRoutingControlRequest(input *Desc
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -1175,7 +1175,7 @@ func (c *Route53RecoveryControlConfig) DescribeSafetyRuleRequest(input *Describe
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53-recovery-control-config-2020-11-02/DescribeSafetyRule
 func (c *Route53RecoveryControlConfig) DescribeSafetyRule(input *DescribeSafetyRuleInput) (*DescribeSafetyRuleOutput, error) {
@@ -1262,7 +1262,7 @@ func (c *Route53RecoveryControlConfig) ListAssociatedRoute53HealthChecksRequest(
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ValidationException
 //   400 response - Multiple causes. For example, you might have a malformed query
@@ -1408,7 +1408,7 @@ func (c *Route53RecoveryControlConfig) ListClustersRequest(input *ListClustersIn
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -1560,7 +1560,7 @@ func (c *Route53RecoveryControlConfig) ListControlPanelsRequest(input *ListContr
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -1715,7 +1715,7 @@ func (c *Route53RecoveryControlConfig) ListRoutingControlsRequest(input *ListRou
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -1868,7 +1868,7 @@ func (c *Route53RecoveryControlConfig) ListSafetyRulesRequest(input *ListSafetyR
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -2014,7 +2014,7 @@ func (c *Route53RecoveryControlConfig) ListTagsForResourceRequest(input *ListTag
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ValidationException
 //   400 response - Multiple causes. For example, you might have a malformed query
@@ -2103,7 +2103,7 @@ func (c *Route53RecoveryControlConfig) TagResourceRequest(input *TagResourceInpu
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ValidationException
 //   400 response - Multiple causes. For example, you might have a malformed query
@@ -2192,7 +2192,7 @@ func (c *Route53RecoveryControlConfig) UntagResourceRequest(input *UntagResource
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ValidationException
 //   400 response - Multiple causes. For example, you might have a malformed query
@@ -2292,7 +2292,7 @@ func (c *Route53RecoveryControlConfig) UpdateControlPanelRequest(input *UpdateCo
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -2391,7 +2391,7 @@ func (c *Route53RecoveryControlConfig) UpdateRoutingControlRequest(input *Update
 //
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ThrottlingException
 //   429 response - LimitExceededException or TooManyRequestsException.
@@ -2479,7 +2479,7 @@ func (c *Route53RecoveryControlConfig) UpdateSafetyRuleRequest(input *UpdateSafe
 // Returned Error Types:
 //   * ResourceNotFoundException
 //   404 response - MalformedQueryString. The query string contains a syntax error
-//   or resource not found..
+//   or resource not found.
 //
 //   * ValidationException
 //   400 response - Multiple causes. For example, you might have a malformed query
@@ -2578,7 +2578,7 @@ func (s *AccessDeniedException) RequestID() string {
 // An assertion rule enforces that, when you change a routing control state,
 // that the criteria that you set in the rule configuration is met. Otherwise,
 // the change to the routing control is not accepted. For example, the criteria
-// might be that at least one routing control state is On after the transation
+// might be that at least one routing control state is On after the transaction
 // so that traffic continues to flow to at least one cell for the application.
 // This ensures that you avoid a fail-open scenario.
 type AssertionRule struct {
@@ -2606,7 +2606,7 @@ type AssertionRule struct {
 	// The criteria that you set for specific assertion routing controls (AssertedControls)
 	// that designate how many routing control states must be ON as the result of
 	// a transaction. For example, if you have three assertion routing controls,
-	// you might specify atleast 2 for your rule configuration. This means that
+	// you might specify ATLEAST 2 for your rule configuration. This means that
 	// at least two assertion routing control states must be ON, so that at least
 	// two Amazon Web Services Regions have traffic flowing to them.
 	//
@@ -4121,7 +4121,7 @@ func (s *DescribeSafetyRuleOutput) SetGatingRule(v *GatingRule) *DescribeSafetyR
 	return s
 }
 
-// A gating rule verifies that a gating routing control or set of gating rounting
+// A gating rule verifies that a gating routing control or set of gating routing
 // controls, evaluates as true, based on a rule configuration that you specify,
 // which allows a set of routing control state changes to complete.
 //
@@ -4153,7 +4153,7 @@ type GatingRule struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The criteria that you set for gating routing controls that designates how
+	// The criteria that you set for gating routing controls that designate how
 	// many of the routing control states must be ON to allow you to update target
 	// routing control states.
 	//
@@ -4176,7 +4176,7 @@ type GatingRule struct {
 	// evaluates to true for the gating routing control. As a simple example, if
 	// you have a single gating control, it acts as an overall "on/off" switch for
 	// a set of target routing controls. You can use this to manually override automated
-	// fail over, for example.
+	// failover, for example.
 	//
 	// TargetControls is a required field
 	TargetControls []*string `type:"list" required:"true"`
@@ -5023,7 +5023,7 @@ type NewAssertionRule struct {
 	// The criteria that you set for specific assertion controls (routing controls)
 	// that designate how many control states must be ON as the result of a transaction.
 	// For example, if you have three assertion controls, you might specify ATLEAST
-	// 2for your rule configuration. This means that at least two assertion controls
+	// 2 for your rule configuration. This means that at least two assertion controls
 	// must be ON, so that at least two Amazon Web Services Regions have traffic
 	// flowing to them.
 	//
@@ -5143,7 +5143,7 @@ type NewGatingRule struct {
 	Name *string `min:"1" type:"string" required:"true"`
 
 	// The criteria that you set for specific gating controls (routing controls)
-	// that designates how many control states must be ON to allow you to change
+	// that designate how many control states must be ON to allow you to change
 	// (set or unset) the target control states.
 	//
 	// RuleConfig is a required field
@@ -5152,7 +5152,7 @@ type NewGatingRule struct {
 	// Routing controls that can only be set or unset if the specified RuleConfig
 	// evaluates to true for the specified GatingControls. For example, say you
 	// have three gating controls, one for each of three Amazon Web Services Regions.
-	// Now you specify AtLeast 2 as your RuleConfig. With these settings, you can
+	// Now you specify ATLEAST 2 as your RuleConfig. With these settings, you can
 	// only change (set or unset) the routing controls that you have specified as
 	// TargetControls if that rule evaluates to true.
 	//
@@ -5265,7 +5265,7 @@ func (s *NewGatingRule) SetWaitPeriodMs(v int64) *NewGatingRule {
 }
 
 // 404 response - MalformedQueryString. The query string contains a syntax error
-// or resource not found..
+// or resource not found.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5399,12 +5399,12 @@ type Rule struct {
 	// An assertion rule enforces that, when a routing control state is changed,
 	// the criteria set by the rule configuration is met. Otherwise, the change
 	// to the routing control state is not accepted. For example, the criteria might
-	// be that at least one routing control state is On after the transation so
+	// be that at least one routing control state is On after the transaction so
 	// that traffic continues to flow to at least one cell for the application.
 	// This ensures that you avoid a fail-open scenario.
 	ASSERTION *AssertionRule `type:"structure"`
 
-	// A gating rule verifies that a gating routing control or set of gating rounting
+	// A gating rule verifies that a gating routing control or set of gating routing
 	// controls, evaluates as true, based on a rule configuration that you specify,
 	// which allows a set of routing control state changes to complete.
 	//

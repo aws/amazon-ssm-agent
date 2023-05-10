@@ -2094,6 +2094,8 @@ func (c *LookoutForVision) StartModelPackagingJobRequest(input *StartModelPackag
 //
 //    * s3:GetBucketLocation
 //
+//    * kms:GenerateDataKey
+//
 //    * greengrass:CreateComponentVersion
 //
 //    * greengrass:DescribeComponent

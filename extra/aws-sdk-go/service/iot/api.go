@@ -745,8 +745,7 @@ func (c *IoT) AttachThingPrincipalRequest(input *AttachThingPrincipalInput) (req
 // AttachThingPrincipal API operation for AWS IoT.
 //
 // Attaches the specified principal to the specified thing. A principal can
-// be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities
-// or federated identities.
+// be X.509 certificates, Amazon Cognito identities or federated identities.
 //
 // Requires permission to access the AttachThingPrincipal (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
@@ -1876,23 +1875,22 @@ func (c *IoT) CreateCertificateFromCsrRequest(input *CreateCertificateFromCsrInp
 //
 // Creates an X.509 certificate using the specified certificate signing request.
 //
-// Note: The CSR must include a public key that is either an RSA key with a
-// length of at least 2048 bits or an ECC key from NIST P-256, NIST P-384, or
-// NIST P-512 curves. For supported certificates, consult Certificate signing
-// algorithms supported by IoT (https://docs.aws.amazon.com/iot/latest/developerguide/x509-client-certs.html#x509-cert-algorithms).
-//
-// Note: Reusing the same certificate signing request (CSR) results in a distinct
-// certificate.
-//
 // Requires permission to access the CreateCertificateFromCsr (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
+//
+// The CSR must include a public key that is either an RSA key with a length
+// of at least 2048 bits or an ECC key from NIST P-25 or NIST P-384 curves.
+// For supported certificates, consult Certificate signing algorithms supported
+// by IoT (https://docs.aws.amazon.com/iot/latest/developerguide/x509-client-certs.html#x509-cert-algorithms).
+//
+// Reusing the same certificate signing request (CSR) results in a distinct
+// certificate.
 //
 // You can create multiple certificates in a batch by creating a directory,
 // copying multiple .csr files into that directory, and then specifying that
 // directory on the command line. The following commands show how to create
-// a batch of certificates given a batch of CSRs.
-//
-// Assuming a set of CSRs are located inside of the directory my-csr-directory:
+// a batch of certificates given a batch of CSRs. In the following commands,
+// we assume that a set of CSRs are located inside of the directory my-csr-directory:
 //
 // On Linux and OS X, the command is:
 //
@@ -1903,7 +1901,7 @@ func (c *IoT) CreateCertificateFromCsrRequest(input *CreateCertificateFromCsrInp
 // file name to the aws iot create-certificate-from-csr Amazon Web Services
 // CLI command to create a certificate for the corresponding CSR.
 //
-// The aws iot create-certificate-from-csr part of the command can also be run
+// You can also run the aws iot create-certificate-from-csr part of the command
 // in parallel to speed up the certificate creation process:
 //
 // $ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr
@@ -15832,6 +15830,12 @@ func (c *IoT) ListManagedJobTemplatesRequest(input *ListManagedJobTemplatesInput
 		Name:       opListManagedJobTemplates,
 		HTTPMethod: "GET",
 		HTTPPath:   "/managed-job-templates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -15887,6 +15891,58 @@ func (c *IoT) ListManagedJobTemplatesWithContext(ctx aws.Context, input *ListMan
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListManagedJobTemplatesPages iterates over the pages of a ListManagedJobTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListManagedJobTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListManagedJobTemplates operation.
+//    pageNum := 0
+//    err := client.ListManagedJobTemplatesPages(params,
+//        func(page *iot.ListManagedJobTemplatesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *IoT) ListManagedJobTemplatesPages(input *ListManagedJobTemplatesInput, fn func(*ListManagedJobTemplatesOutput, bool) bool) error {
+	return c.ListManagedJobTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListManagedJobTemplatesPagesWithContext same as ListManagedJobTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListManagedJobTemplatesPagesWithContext(ctx aws.Context, input *ListManagedJobTemplatesInput, fn func(*ListManagedJobTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListManagedJobTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListManagedJobTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListManagedJobTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListMetricValues = "ListMetricValues"
@@ -17497,6 +17553,175 @@ func (c *IoT) ListProvisioningTemplatesPagesWithContext(ctx aws.Context, input *
 
 	for p.Next() {
 		if !fn(p.Page().(*ListProvisioningTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListRelatedResourcesForAuditFinding = "ListRelatedResourcesForAuditFinding"
+
+// ListRelatedResourcesForAuditFindingRequest generates a "aws/request.Request" representing the
+// client's request for the ListRelatedResourcesForAuditFinding operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListRelatedResourcesForAuditFinding for more information on using the ListRelatedResourcesForAuditFinding
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListRelatedResourcesForAuditFindingRequest method.
+//    req, resp := client.ListRelatedResourcesForAuditFindingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListRelatedResourcesForAuditFindingRequest(input *ListRelatedResourcesForAuditFindingInput) (req *request.Request, output *ListRelatedResourcesForAuditFindingOutput) {
+	op := &request.Operation{
+		Name:       opListRelatedResourcesForAuditFinding,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/relatedResources",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListRelatedResourcesForAuditFindingInput{}
+	}
+
+	output = &ListRelatedResourcesForAuditFindingOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListRelatedResourcesForAuditFinding API operation for AWS IoT.
+//
+// The related resources of an Audit finding. The following resources can be
+// returned from calling this API:
+//
+//    * DEVICE_CERTIFICATE
+//
+//    * CA_CERTIFICATE
+//
+//    * IOT_POLICY
+//
+//    * COGNITO_IDENTITY_POOL
+//
+//    * CLIENT_ID
+//
+//    * ACCOUNT_SETTINGS
+//
+//    * ROLE_ALIAS
+//
+//    * IAM_ROLE
+//
+//    * ISSUER_CERTIFICATE
+//
+// This API is similar to DescribeAuditFinding's RelatedResources (https://docs.aws.amazon.com/iot/latest/apireference/API_DescribeAuditFinding.html)
+// but provides pagination and is not limited to 10 resources. When calling
+// DescribeAuditFinding (https://docs.aws.amazon.com/iot/latest/apireference/API_DescribeAuditFinding.html)
+// for the intermediate CA revoked for active device certificates check, RelatedResources
+// will not be populated. You must use this API, ListRelatedResourcesForAuditFinding,
+// to list the certificates.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation ListRelatedResourcesForAuditFinding for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidRequestException
+//   The request is not valid.
+//
+//   * ThrottlingException
+//   The rate exceeds the limit.
+//
+//   * InternalFailureException
+//   An unexpected error has occurred.
+//
+func (c *IoT) ListRelatedResourcesForAuditFinding(input *ListRelatedResourcesForAuditFindingInput) (*ListRelatedResourcesForAuditFindingOutput, error) {
+	req, out := c.ListRelatedResourcesForAuditFindingRequest(input)
+	return out, req.Send()
+}
+
+// ListRelatedResourcesForAuditFindingWithContext is the same as ListRelatedResourcesForAuditFinding with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListRelatedResourcesForAuditFinding for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListRelatedResourcesForAuditFindingWithContext(ctx aws.Context, input *ListRelatedResourcesForAuditFindingInput, opts ...request.Option) (*ListRelatedResourcesForAuditFindingOutput, error) {
+	req, out := c.ListRelatedResourcesForAuditFindingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListRelatedResourcesForAuditFindingPages iterates over the pages of a ListRelatedResourcesForAuditFinding operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListRelatedResourcesForAuditFinding method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListRelatedResourcesForAuditFinding operation.
+//    pageNum := 0
+//    err := client.ListRelatedResourcesForAuditFindingPages(params,
+//        func(page *iot.ListRelatedResourcesForAuditFindingOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *IoT) ListRelatedResourcesForAuditFindingPages(input *ListRelatedResourcesForAuditFindingInput, fn func(*ListRelatedResourcesForAuditFindingOutput, bool) bool) error {
+	return c.ListRelatedResourcesForAuditFindingPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListRelatedResourcesForAuditFindingPagesWithContext same as ListRelatedResourcesForAuditFindingPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListRelatedResourcesForAuditFindingPagesWithContext(ctx aws.Context, input *ListRelatedResourcesForAuditFindingInput, fn func(*ListRelatedResourcesForAuditFindingOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListRelatedResourcesForAuditFindingInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListRelatedResourcesForAuditFindingRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListRelatedResourcesForAuditFindingOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -19623,7 +19848,9 @@ func (c *IoT) ListThingsRequest(input *ListThingsInput) (req *request.Request, o
 // Lists your things. Use the attributeName and attributeValue parameters to
 // filter your things. For example, calling ListThings with attributeName=Color
 // and attributeValue=Red retrieves all things in the registry that contain
-// an attribute Color with the value Red.
+// an attribute Color with the value Red. For more information, see List Things
+// (https://docs.aws.amazon.com/iot/latest/developerguide/thing-registry.html#list-things)
+// from the Amazon Web Services IoT Core Developer Guide.
 //
 // Requires permission to access the ListThings (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
@@ -25610,6 +25837,10 @@ type Action struct {
 	// Invoke a Lambda function.
 	Lambda *LambdaAction `locationName:"lambda" type:"structure"`
 
+	// The Amazon Location Service rule action sends device location updates from
+	// an MQTT message to an Amazon Location tracker resource.
+	Location *LocationAction `locationName:"location" type:"structure"`
+
 	// Write data to an Amazon OpenSearch Service domain.
 	OpenSearch *OpenSearchAction `locationName:"openSearch" type:"structure"`
 
@@ -25722,6 +25953,11 @@ func (s *Action) Validate() error {
 	if s.Lambda != nil {
 		if err := s.Lambda.Validate(); err != nil {
 			invalidParams.AddNested("Lambda", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Location != nil {
+		if err := s.Location.Validate(); err != nil {
+			invalidParams.AddNested("Location", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.OpenSearch != nil {
@@ -25852,6 +26088,12 @@ func (s *Action) SetKinesis(v *KinesisAction) *Action {
 // SetLambda sets the Lambda field's value.
 func (s *Action) SetLambda(v *LambdaAction) *Action {
 	s.Lambda = v
+	return s
+}
+
+// SetLocation sets the Location field's value.
+func (s *Action) SetLocation(v *LocationAction) *Action {
+	s.Location = v
 	return s
 }
 
@@ -26675,7 +26917,7 @@ type AssociateTargetsWithJobInput struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `location:"querystring" locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// A list of thing group ARNs that define the targets of the job.
 	//
@@ -26709,9 +26951,6 @@ func (s *AssociateTargetsWithJobInput) Validate() error {
 	}
 	if s.JobId != nil && len(*s.JobId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
-	}
-	if s.NamespaceId != nil && len(*s.NamespaceId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NamespaceId", 1))
 	}
 	if s.Targets == nil {
 		invalidParams.Add(request.NewErrParamRequired("Targets"))
@@ -30461,6 +30700,10 @@ func (s *CloudwatchAlarmAction) SetStateValue(v string) *CloudwatchAlarmAction {
 type CloudwatchLogsAction struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates whether batches of log records will be extracted and uploaded into
+	// CloudWatch. Values include true or false (default).
+	BatchMode *bool `locationName:"batchMode" type:"boolean"`
+
 	// The CloudWatch log group to which the action sends data.
 	//
 	// LogGroupName is a required field
@@ -30504,6 +30747,12 @@ func (s *CloudwatchLogsAction) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetBatchMode sets the BatchMode field's value.
+func (s *CloudwatchLogsAction) SetBatchMode(v bool) *CloudwatchLogsAction {
+	s.BatchMode = &v
+	return s
 }
 
 // SetLogGroupName sets the LogGroupName field's value.
@@ -31898,6 +32147,9 @@ type CreateDomainConfigurationInput struct {
 	// For the cli-input-json file use format: "tags": "key1=value1&key2=value2..."
 	Tags []*Tag `locationName:"tags" type:"list"`
 
+	// An object that specifies the TLS configuration for a domain.
+	TlsConfig *TlsConfig `locationName:"tlsConfig" type:"structure"`
+
 	// The certificate used to validate the server certificate and prove domain
 	// name ownership. This certificate must be signed by a public certificate authority.
 	// This value is not required for Amazon Web Services-managed domains.
@@ -31992,6 +32244,12 @@ func (s *CreateDomainConfigurationInput) SetServiceType(v string) *CreateDomainC
 // SetTags sets the Tags field's value.
 func (s *CreateDomainConfigurationInput) SetTags(v []*Tag) *CreateDomainConfigurationInput {
 	s.Tags = v
+	return s
+}
+
+// SetTlsConfig sets the TlsConfig field's value.
+func (s *CreateDomainConfigurationInput) SetTlsConfig(v *TlsConfig) *CreateDomainConfigurationInput {
+	s.TlsConfig = v
 	return s
 }
 
@@ -32282,7 +32540,7 @@ type CreateFleetMetricInput struct {
 	Tags []*Tag `locationName:"tags" type:"list"`
 
 	// Used to support unit transformation such as milliseconds to seconds. The
-	// unit must be supported by CW metric (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html).
+	// unit must be supported by CW metric (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html).
 	// Default to null.
 	Unit *string `locationName:"unit" type:"string" enum:"FleetMetricUnit"`
 }
@@ -32480,18 +32738,12 @@ type CreateJobInput struct {
 	// or to create jobs from them.
 	DocumentParameters map[string]*string `locationName:"documentParameters" type:"map"`
 
-	// An S3 link to the job document. Required if you don't specify a value for
-	// document.
+	// An S3 link, or S3 object URL, to the job document. The link is an Amazon
+	// S3 object URL and is required if you don't specify a value for document.
 	//
-	// If the job document resides in an S3 bucket, you must use a placeholder link
-	// when specifying the document.
+	// For example, --document-source https://s3.region-code.amazonaws.com/example-firmware/device-firmware.1.0.
 	//
-	// The placeholder link is of the following form:
-	//
-	// ${aws:iot:s3-presigned-url:https://s3.amazonaws.com/bucket/key}
-	//
-	// where bucket is your bucket name and key is the object in the bucket to which
-	// you are linking.
+	// For more information, see Methods for accessing a bucket (https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html).
 	DocumentSource *string `locationName:"documentSource" min:"1" type:"string"`
 
 	// Allows you to create the criteria to retry a job.
@@ -32519,10 +32771,14 @@ type CreateJobInput struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `locationName:"namespaceId" type:"string"`
 
 	// Configuration information for pre-signed S3 URLs.
 	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
+
+	// The configuration that allows you to schedule a job for a future date and
+	// time in addition to specifying the end behavior for each job execution.
+	SchedulingConfig *SchedulingConfig `locationName:"schedulingConfig" type:"structure"`
 
 	// Metadata which can be used to manage the job.
 	Tags []*Tag `locationName:"tags" type:"list"`
@@ -32584,9 +32840,6 @@ func (s *CreateJobInput) Validate() error {
 	if s.JobTemplateArn != nil && len(*s.JobTemplateArn) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobTemplateArn", 1))
 	}
-	if s.NamespaceId != nil && len(*s.NamespaceId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NamespaceId", 1))
-	}
 	if s.Targets == nil {
 		invalidParams.Add(request.NewErrParamRequired("Targets"))
 	}
@@ -32611,6 +32864,11 @@ func (s *CreateJobInput) Validate() error {
 	if s.PresignedUrlConfig != nil {
 		if err := s.PresignedUrlConfig.Validate(); err != nil {
 			invalidParams.AddNested("PresignedUrlConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SchedulingConfig != nil {
+		if err := s.SchedulingConfig.Validate(); err != nil {
+			invalidParams.AddNested("SchedulingConfig", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Tags != nil {
@@ -32693,6 +32951,12 @@ func (s *CreateJobInput) SetNamespaceId(v string) *CreateJobInput {
 // SetPresignedUrlConfig sets the PresignedUrlConfig field's value.
 func (s *CreateJobInput) SetPresignedUrlConfig(v *PresignedUrlConfig) *CreateJobInput {
 	s.PresignedUrlConfig = v
+	return s
+}
+
+// SetSchedulingConfig sets the SchedulingConfig field's value.
+func (s *CreateJobInput) SetSchedulingConfig(v *SchedulingConfig) *CreateJobInput {
+	s.SchedulingConfig = v
 	return s
 }
 
@@ -32812,6 +33076,10 @@ type CreateJobTemplateInput struct {
 	// JobTemplateId is a required field
 	JobTemplateId *string `location:"uri" locationName:"jobTemplateId" min:"1" type:"string" required:"true"`
 
+	// Allows you to configure an optional maintenance window for the rollout of
+	// a job document to all devices in the target group for a job.
+	MaintenanceWindows []*MaintenanceWindow `locationName:"maintenanceWindows" type:"list"`
+
 	// Configuration for pre-signed S3 URLs.
 	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
 
@@ -32871,6 +33139,16 @@ func (s *CreateJobTemplateInput) Validate() error {
 	if s.JobExecutionsRolloutConfig != nil {
 		if err := s.JobExecutionsRolloutConfig.Validate(); err != nil {
 			invalidParams.AddNested("JobExecutionsRolloutConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MaintenanceWindows != nil {
+		for i, v := range s.MaintenanceWindows {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "MaintenanceWindows", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.PresignedUrlConfig != nil {
@@ -32940,6 +33218,12 @@ func (s *CreateJobTemplateInput) SetJobExecutionsRolloutConfig(v *JobExecutionsR
 // SetJobTemplateId sets the JobTemplateId field's value.
 func (s *CreateJobTemplateInput) SetJobTemplateId(v string) *CreateJobTemplateInput {
 	s.JobTemplateId = &v
+	return s
+}
+
+// SetMaintenanceWindows sets the MaintenanceWindows field's value.
+func (s *CreateJobTemplateInput) SetMaintenanceWindows(v []*MaintenanceWindow) *CreateJobTemplateInput {
+	s.MaintenanceWindows = v
 	return s
 }
 
@@ -33934,7 +34218,9 @@ type CreateProvisioningTemplateInput struct {
 	// True to enable the provisioning template, otherwise false.
 	Enabled *bool `locationName:"enabled" type:"boolean"`
 
-	// Creates a pre-provisioning hook template.
+	// Creates a pre-provisioning hook template. Only supports template of type
+	// FLEET_PROVISIONING. For more information about provisioning template types,
+	// see type (https://docs.aws.amazon.com/iot/latest/apireference/API_CreateProvisioningTemplate.html#iot-CreateProvisioningTemplate-request-type).
 	PreProvisioningHook *ProvisioningHook `locationName:"preProvisioningHook" type:"structure"`
 
 	// The role ARN for the role associated with the provisioning template. This
@@ -36520,7 +36806,7 @@ type DeleteJobExecutionInput struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `location:"querystring" locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// The name of the thing whose job execution will be deleted.
 	//
@@ -36557,9 +36843,6 @@ func (s *DeleteJobExecutionInput) Validate() error {
 	}
 	if s.JobId != nil && len(*s.JobId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
-	}
-	if s.NamespaceId != nil && len(*s.NamespaceId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NamespaceId", 1))
 	}
 	if s.ThingName == nil {
 		invalidParams.Add(request.NewErrParamRequired("ThingName"))
@@ -36657,7 +36940,7 @@ type DeleteJobInput struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `location:"querystring" locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 }
 
 // String returns the string representation.
@@ -36686,9 +36969,6 @@ func (s *DeleteJobInput) Validate() error {
 	}
 	if s.JobId != nil && len(*s.JobId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
-	}
-	if s.NamespaceId != nil && len(*s.NamespaceId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NamespaceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -39623,6 +39903,9 @@ type DescribeDomainConfigurationOutput struct {
 
 	// The type of service delivered by the endpoint.
 	ServiceType *string `locationName:"serviceType" type:"string" enum:"ServiceType"`
+
+	// An object that specifies the TLS configuration for a domain.
+	TlsConfig *TlsConfig `locationName:"tlsConfig" type:"structure"`
 }
 
 // String returns the string representation.
@@ -39694,6 +39977,12 @@ func (s *DescribeDomainConfigurationOutput) SetServerCertificates(v []*ServerCer
 // SetServiceType sets the ServiceType field's value.
 func (s *DescribeDomainConfigurationOutput) SetServiceType(v string) *DescribeDomainConfigurationOutput {
 	s.ServiceType = &v
+	return s
+}
+
+// SetTlsConfig sets the TlsConfig field's value.
+func (s *DescribeDomainConfigurationOutput) SetTlsConfig(v *TlsConfig) *DescribeDomainConfigurationOutput {
+	s.TlsConfig = v
 	return s
 }
 
@@ -39931,7 +40220,7 @@ type DescribeFleetMetricOutput struct {
 	QueryVersion *string `locationName:"queryVersion" type:"string"`
 
 	// Used to support unit transformation such as milliseconds to seconds. The
-	// unit must be supported by CW metric (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html).
+	// unit must be supported by CW metric (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html).
 	Unit *string `locationName:"unit" type:"string" enum:"FleetMetricUnit"`
 
 	// The version of the fleet metric.
@@ -40423,6 +40712,10 @@ type DescribeJobTemplateOutput struct {
 	// The unique identifier of the job template.
 	JobTemplateId *string `locationName:"jobTemplateId" min:"1" type:"string"`
 
+	// Allows you to configure an optional maintenance window for the rollout of
+	// a job document to all devices in the target group for a job.
+	MaintenanceWindows []*MaintenanceWindow `locationName:"maintenanceWindows" type:"list"`
+
 	// Configuration for pre-signed S3 URLs.
 	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
 
@@ -40502,6 +40795,12 @@ func (s *DescribeJobTemplateOutput) SetJobTemplateArn(v string) *DescribeJobTemp
 // SetJobTemplateId sets the JobTemplateId field's value.
 func (s *DescribeJobTemplateOutput) SetJobTemplateId(v string) *DescribeJobTemplateOutput {
 	s.JobTemplateId = &v
+	return s
+}
+
+// SetMaintenanceWindows sets the MaintenanceWindows field's value.
+func (s *DescribeJobTemplateOutput) SetMaintenanceWindows(v []*MaintenanceWindow) *DescribeJobTemplateOutput {
+	s.MaintenanceWindows = v
 	return s
 }
 
@@ -44058,7 +44357,7 @@ func (s *FleetMetricNameAndArn) SetMetricName(v string) *FleetMetricNameAndArn {
 type GetBehaviorModelTrainingSummariesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The maximum number of results to return at one time. The default is 25.
+	// The maximum number of results to return at one time. The default is 10.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The token for the next set of results.
@@ -46954,6 +47253,56 @@ func (s *IotSiteWiseAction) SetRoleArn(v string) *IotSiteWiseAction {
 	return s
 }
 
+// The certificate issuer indentifier.
+type IssuerCertificateIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The issuer certificate serial number.
+	IssuerCertificateSerialNumber *string `locationName:"issuerCertificateSerialNumber" type:"string"`
+
+	// The subject of the issuer certificate.
+	IssuerCertificateSubject *string `locationName:"issuerCertificateSubject" type:"string"`
+
+	// The issuer ID.
+	IssuerId *string `locationName:"issuerId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IssuerCertificateIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IssuerCertificateIdentifier) GoString() string {
+	return s.String()
+}
+
+// SetIssuerCertificateSerialNumber sets the IssuerCertificateSerialNumber field's value.
+func (s *IssuerCertificateIdentifier) SetIssuerCertificateSerialNumber(v string) *IssuerCertificateIdentifier {
+	s.IssuerCertificateSerialNumber = &v
+	return s
+}
+
+// SetIssuerCertificateSubject sets the IssuerCertificateSubject field's value.
+func (s *IssuerCertificateIdentifier) SetIssuerCertificateSubject(v string) *IssuerCertificateIdentifier {
+	s.IssuerCertificateSubject = &v
+	return s
+}
+
+// SetIssuerId sets the IssuerId field's value.
+func (s *IssuerCertificateIdentifier) SetIssuerId(v string) *IssuerCertificateIdentifier {
+	s.IssuerId = &v
+	return s
+}
+
 // The Job object contains details about a job.
 type Job struct {
 	_ struct{} `type:"structure"`
@@ -47021,13 +47370,20 @@ type Job struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `locationName:"namespaceId" type:"string"`
 
 	// Configuration for pre-signed S3 URLs.
 	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
 
 	// If the job was updated, provides the reason code for the update.
 	ReasonCode *string `locationName:"reasonCode" type:"string"`
+
+	// Displays the next seven maintenance window occurrences and their start times.
+	ScheduledJobRollouts []*ScheduledJobRollout `locationName:"scheduledJobRollouts" type:"list"`
+
+	// The configuration that allows you to schedule a job for a future date and
+	// time in addition to specifying the end behavior for each job execution.
+	SchedulingConfig *SchedulingConfig `locationName:"schedulingConfig" type:"structure"`
 
 	// The status of the job, one of IN_PROGRESS, CANCELED, DELETION_IN_PROGRESS
 	// or COMPLETED.
@@ -47178,6 +47534,18 @@ func (s *Job) SetPresignedUrlConfig(v *PresignedUrlConfig) *Job {
 // SetReasonCode sets the ReasonCode field's value.
 func (s *Job) SetReasonCode(v string) *Job {
 	s.ReasonCode = &v
+	return s
+}
+
+// SetScheduledJobRollouts sets the ScheduledJobRollouts field's value.
+func (s *Job) SetScheduledJobRollouts(v []*ScheduledJobRollout) *Job {
+	s.ScheduledJobRollouts = v
+	return s
+}
+
+// SetSchedulingConfig sets the SchedulingConfig field's value.
+func (s *Job) SetSchedulingConfig(v *SchedulingConfig) *Job {
+	s.SchedulingConfig = v
 	return s
 }
 
@@ -50714,7 +51082,7 @@ type ListJobExecutionsForThingInput struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `location:"querystring" locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -50755,9 +51123,6 @@ func (s *ListJobExecutionsForThingInput) Validate() error {
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.NamespaceId != nil && len(*s.NamespaceId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NamespaceId", 1))
 	}
 	if s.ThingName == nil {
 		invalidParams.Add(request.NewErrParamRequired("ThingName"))
@@ -50958,7 +51323,7 @@ type ListJobsInput struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `location:"querystring" locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -51009,9 +51374,6 @@ func (s *ListJobsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListJobsInput"}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.NamespaceId != nil && len(*s.NamespaceId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NamespaceId", 1))
 	}
 	if s.ThingGroupId != nil && len(*s.ThingGroupId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ThingGroupId", 1))
@@ -52444,6 +52806,118 @@ func (s *ListProvisioningTemplatesOutput) SetNextToken(v string) *ListProvisioni
 // SetTemplates sets the Templates field's value.
 func (s *ListProvisioningTemplatesOutput) SetTemplates(v []*ProvisioningTemplateSummary) *ListProvisioningTemplatesOutput {
 	s.Templates = v
+	return s
+}
+
+type ListRelatedResourcesForAuditFindingInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The finding Id.
+	//
+	// FindingId is a required field
+	FindingId *string `location:"querystring" locationName:"findingId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRelatedResourcesForAuditFindingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRelatedResourcesForAuditFindingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListRelatedResourcesForAuditFindingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListRelatedResourcesForAuditFindingInput"}
+	if s.FindingId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FindingId"))
+	}
+	if s.FindingId != nil && len(*s.FindingId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FindingId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFindingId sets the FindingId field's value.
+func (s *ListRelatedResourcesForAuditFindingInput) SetFindingId(v string) *ListRelatedResourcesForAuditFindingInput {
+	s.FindingId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListRelatedResourcesForAuditFindingInput) SetMaxResults(v int64) *ListRelatedResourcesForAuditFindingInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRelatedResourcesForAuditFindingInput) SetNextToken(v string) *ListRelatedResourcesForAuditFindingInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListRelatedResourcesForAuditFindingOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token that can be used to retrieve the next set of results, or null for
+	// the first API call.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The related resources.
+	RelatedResources []*RelatedResource `locationName:"relatedResources" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRelatedResourcesForAuditFindingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRelatedResourcesForAuditFindingOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRelatedResourcesForAuditFindingOutput) SetNextToken(v string) *ListRelatedResourcesForAuditFindingOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRelatedResources sets the RelatedResources field's value.
+func (s *ListRelatedResourcesForAuditFindingOutput) SetRelatedResources(v []*RelatedResource) *ListRelatedResourcesForAuditFindingOutput {
+	s.RelatedResources = v
 	return s
 }
 
@@ -54865,6 +55339,189 @@ func (s *ListViolationEventsOutput) SetViolationEvents(v []*ViolationEvent) *Lis
 	return s
 }
 
+// The Amazon Location rule action sends device location updates from an MQTT
+// message to an Amazon Location tracker resource.
+type LocationAction struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ID of the device providing the location data.
+	//
+	// DeviceId is a required field
+	DeviceId *string `locationName:"deviceId" type:"string" required:"true"`
+
+	// A string that evaluates to a double value that represents the latitude of
+	// the device's location.
+	//
+	// Latitude is a required field
+	Latitude *string `locationName:"latitude" type:"string" required:"true"`
+
+	// A string that evaluates to a double value that represents the longitude of
+	// the device's location.
+	//
+	// Longitude is a required field
+	Longitude *string `locationName:"longitude" type:"string" required:"true"`
+
+	// The IAM role that grants permission to write to the Amazon Location resource.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
+
+	// The time that the location data was sampled. The default value is the time
+	// the MQTT message was processed.
+	Timestamp *LocationTimestamp `locationName:"timestamp" type:"structure"`
+
+	// The name of the tracker resource in Amazon Location in which the location
+	// is updated.
+	//
+	// TrackerName is a required field
+	TrackerName *string `locationName:"trackerName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LocationAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LocationAction) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LocationAction) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LocationAction"}
+	if s.DeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.Latitude == nil {
+		invalidParams.Add(request.NewErrParamRequired("Latitude"))
+	}
+	if s.Longitude == nil {
+		invalidParams.Add(request.NewErrParamRequired("Longitude"))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.TrackerName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TrackerName"))
+	}
+	if s.Timestamp != nil {
+		if err := s.Timestamp.Validate(); err != nil {
+			invalidParams.AddNested("Timestamp", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeviceId sets the DeviceId field's value.
+func (s *LocationAction) SetDeviceId(v string) *LocationAction {
+	s.DeviceId = &v
+	return s
+}
+
+// SetLatitude sets the Latitude field's value.
+func (s *LocationAction) SetLatitude(v string) *LocationAction {
+	s.Latitude = &v
+	return s
+}
+
+// SetLongitude sets the Longitude field's value.
+func (s *LocationAction) SetLongitude(v string) *LocationAction {
+	s.Longitude = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *LocationAction) SetRoleArn(v string) *LocationAction {
+	s.RoleArn = &v
+	return s
+}
+
+// SetTimestamp sets the Timestamp field's value.
+func (s *LocationAction) SetTimestamp(v *LocationTimestamp) *LocationAction {
+	s.Timestamp = v
+	return s
+}
+
+// SetTrackerName sets the TrackerName field's value.
+func (s *LocationAction) SetTrackerName(v string) *LocationAction {
+	s.TrackerName = &v
+	return s
+}
+
+// Describes how to interpret an application-defined timestamp value from an
+// MQTT message payload and the precision of that value.
+type LocationTimestamp struct {
+	_ struct{} `type:"structure"`
+
+	// The precision of the timestamp value that results from the expression described
+	// in value.
+	//
+	// Valid values: SECONDS | MILLISECONDS | MICROSECONDS | NANOSECONDS. The default
+	// is MILLISECONDS.
+	Unit *string `locationName:"unit" type:"string"`
+
+	// An expression that returns a long epoch time value.
+	//
+	// Value is a required field
+	Value *string `locationName:"value" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LocationTimestamp) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LocationTimestamp) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LocationTimestamp) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LocationTimestamp"}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetUnit sets the Unit field's value.
+func (s *LocationTimestamp) SetUnit(v string) *LocationTimestamp {
+	s.Unit = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *LocationTimestamp) SetValue(v string) *LocationTimestamp {
+	s.Value = &v
+	return s
+}
+
 // A log target.
 type LogTarget struct {
 	_ struct{} `type:"structure"`
@@ -55063,6 +55720,75 @@ func (s *MachineLearningDetectionConfig) Validate() error {
 // SetConfidenceLevel sets the ConfidenceLevel field's value.
 func (s *MachineLearningDetectionConfig) SetConfidenceLevel(v string) *MachineLearningDetectionConfig {
 	s.ConfidenceLevel = &v
+	return s
+}
+
+// An optional configuration within the SchedulingConfig to setup a recurring
+// maintenance window with a predetermined start time and duration for the rollout
+// of a job document to all devices in a target group for a job.
+type MaintenanceWindow struct {
+	_ struct{} `type:"structure"`
+
+	// Displays the duration of the next maintenance window.
+	//
+	// DurationInMinutes is a required field
+	DurationInMinutes *int64 `locationName:"durationInMinutes" min:"30" type:"integer" required:"true"`
+
+	// Displays the start time of the next maintenance window.
+	//
+	// StartTime is a required field
+	StartTime *string `locationName:"startTime" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceWindow) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MaintenanceWindow) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MaintenanceWindow) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MaintenanceWindow"}
+	if s.DurationInMinutes == nil {
+		invalidParams.Add(request.NewErrParamRequired("DurationInMinutes"))
+	}
+	if s.DurationInMinutes != nil && *s.DurationInMinutes < 30 {
+		invalidParams.Add(request.NewErrParamMinValue("DurationInMinutes", 30))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+	if s.StartTime != nil && len(*s.StartTime) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StartTime", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDurationInMinutes sets the DurationInMinutes field's value.
+func (s *MaintenanceWindow) SetDurationInMinutes(v int64) *MaintenanceWindow {
+	s.DurationInMinutes = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *MaintenanceWindow) SetStartTime(v string) *MaintenanceWindow {
+	s.StartTime = &v
 	return s
 }
 
@@ -55749,6 +56475,144 @@ func (s *MqttContext) SetPassword(v []byte) *MqttContext {
 // SetUsername sets the Username field's value.
 func (s *MqttContext) SetUsername(v string) *MqttContext {
 	s.Username = &v
+	return s
+}
+
+// Specifies MQTT Version 5.0 headers information. For more information, see
+// MQTT (https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html) from
+// Amazon Web Services IoT Core Developer Guide.
+type MqttHeaders struct {
+	_ struct{} `type:"structure"`
+
+	// A UTF-8 encoded string that describes the content of the publishing message.
+	//
+	// For more information, see Content Type (https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901118)
+	// from the MQTT Version 5.0 specification.
+	//
+	// Supports substitution templates (https://docs.aws.amazon.com/iot/latest/developerguide/iot-substitution-templates.html).
+	ContentType *string `locationName:"contentType" type:"string"`
+
+	// The base64-encoded binary data used by the sender of the request message
+	// to identify which request the response message is for when it's received.
+	//
+	// For more information, see Correlation Data (https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901115)
+	// from the MQTT Version 5.0 specification.
+	//
+	// This binary data must be based64-encoded.
+	//
+	// Supports substitution templates (https://docs.aws.amazon.com/iot/latest/developerguide/iot-substitution-templates.html).
+	CorrelationData *string `locationName:"correlationData" type:"string"`
+
+	// A user-defined integer value that will persist a message at the message broker
+	// for a specified amount of time to ensure that the message will expire if
+	// it's no longer relevant to the subscriber. The value of messageExpiry represents
+	// the number of seconds before it expires. For more information about the limits
+	// of messageExpiry, see Amazon Web Services IoT Core message broker and protocol
+	// limits and quotas (https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html)
+	// from the Amazon Web Services Reference Guide.
+	//
+	// Supports substitution templates (https://docs.aws.amazon.com/iot/latest/developerguide/iot-substitution-templates.html).
+	MessageExpiry *string `locationName:"messageExpiry" type:"string"`
+
+	// An Enum string value that indicates whether the payload is formatted as UTF-8.
+	//
+	// Valid values are UNSPECIFIED_BYTES and UTF8_DATA.
+	//
+	// For more information, see Payload Format Indicator (https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901111)
+	// from the MQTT Version 5.0 specification.
+	//
+	// Supports substitution templates (https://docs.aws.amazon.com/iot/latest/developerguide/iot-substitution-templates.html).
+	PayloadFormatIndicator *string `locationName:"payloadFormatIndicator" type:"string"`
+
+	// A UTF-8 encoded string that's used as the topic name for a response message.
+	// The response topic is used to describe the topic which the receiver should
+	// publish to as part of the request-response flow. The topic must not contain
+	// wildcard characters.
+	//
+	// For more information, see Response Topic (https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901114)
+	// from the MQTT Version 5.0 specification.
+	//
+	// Supports substitution templates (https://docs.aws.amazon.com/iot/latest/developerguide/iot-substitution-templates.html).
+	ResponseTopic *string `locationName:"responseTopic" type:"string"`
+
+	// An array of key-value pairs that you define in the MQTT5 header.
+	UserProperties []*UserProperty `locationName:"userProperties" min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MqttHeaders) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MqttHeaders) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MqttHeaders) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MqttHeaders"}
+	if s.UserProperties != nil && len(s.UserProperties) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserProperties", 1))
+	}
+	if s.UserProperties != nil {
+		for i, v := range s.UserProperties {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "UserProperties", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContentType sets the ContentType field's value.
+func (s *MqttHeaders) SetContentType(v string) *MqttHeaders {
+	s.ContentType = &v
+	return s
+}
+
+// SetCorrelationData sets the CorrelationData field's value.
+func (s *MqttHeaders) SetCorrelationData(v string) *MqttHeaders {
+	s.CorrelationData = &v
+	return s
+}
+
+// SetMessageExpiry sets the MessageExpiry field's value.
+func (s *MqttHeaders) SetMessageExpiry(v string) *MqttHeaders {
+	s.MessageExpiry = &v
+	return s
+}
+
+// SetPayloadFormatIndicator sets the PayloadFormatIndicator field's value.
+func (s *MqttHeaders) SetPayloadFormatIndicator(v string) *MqttHeaders {
+	s.PayloadFormatIndicator = &v
+	return s
+}
+
+// SetResponseTopic sets the ResponseTopic field's value.
+func (s *MqttHeaders) SetResponseTopic(v string) *MqttHeaders {
+	s.ResponseTopic = &v
+	return s
+}
+
+// SetUserProperties sets the UserProperties field's value.
+func (s *MqttHeaders) SetUserProperties(v []*UserProperty) *MqttHeaders {
+	s.UserProperties = v
 	return s
 }
 
@@ -56565,8 +57429,8 @@ type PresignedUrlConfig struct {
 	// receives an MQTT request for the job document.
 	ExpiresInSec *int64 `locationName:"expiresInSec" min:"60" type:"long"`
 
-	// The ARN of an IAM role that grants grants permission to download files from
-	// the S3 bucket where the job data/updates are stored. The role must also grant
+	// The ARN of an IAM role that grants permission to download files from the
+	// S3 bucket where the job data/updates are stored. The role must also grant
 	// permission for IoT to download the files.
 	//
 	// For information about addressing the confused deputy problem, see cross-service
@@ -56784,7 +57648,7 @@ type ProvisioningTemplateVersionSummary struct {
 	// false.
 	IsDefaultVersion *bool `locationName:"isDefaultVersion" type:"boolean"`
 
-	// The ID of the fleet privisioning template version.
+	// The ID of the fleet provisioning template version.
 	VersionId *int64 `locationName:"versionId" type:"integer"`
 }
 
@@ -58282,6 +59146,10 @@ func (s ReplaceTopicRuleOutput) GoString() string {
 type RepublishAction struct {
 	_ struct{} `type:"structure"`
 
+	// MQTT Version 5.0 headers information. For more information, see MQTT (https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html)
+	// from the Amazon Web Services IoT Core Developer Guide.
+	Headers *MqttHeaders `locationName:"headers" type:"structure"`
+
 	// The Quality of Service (QoS) level to use when republishing messages. The
 	// default value is 0.
 	Qos *int64 `locationName:"qos" type:"integer"`
@@ -58324,11 +59192,22 @@ func (s *RepublishAction) Validate() error {
 	if s.Topic == nil {
 		invalidParams.Add(request.NewErrParamRequired("Topic"))
 	}
+	if s.Headers != nil {
+		if err := s.Headers.Validate(); err != nil {
+			invalidParams.AddNested("Headers", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetHeaders sets the Headers field's value.
+func (s *RepublishAction) SetHeaders(v *MqttHeaders) *RepublishAction {
+	s.Headers = v
+	return s
 }
 
 // SetQos sets the Qos field's value.
@@ -58436,11 +59315,17 @@ type ResourceIdentifier struct {
 	// The ID of the Amazon Cognito identity pool.
 	CognitoIdentityPoolId *string `locationName:"cognitoIdentityPoolId" type:"string"`
 
+	// The ARN of the identified device certificate.
+	DeviceCertificateArn *string `locationName:"deviceCertificateArn" type:"string"`
+
 	// The ID of the certificate attached to the resource.
 	DeviceCertificateId *string `locationName:"deviceCertificateId" min:"64" type:"string"`
 
 	// The ARN of the IAM role that has overly permissive actions.
 	IamRoleArn *string `locationName:"iamRoleArn" min:"20" type:"string"`
+
+	// The issuer certificate identifier.
+	IssuerCertificateIdentifier *IssuerCertificateIdentifier `locationName:"issuerCertificateIdentifier" type:"structure"`
 
 	// The version of the policy associated with the resource.
 	PolicyVersionIdentifier *PolicyVersionIdentifier `locationName:"policyVersionIdentifier" type:"structure"`
@@ -58521,6 +59406,12 @@ func (s *ResourceIdentifier) SetCognitoIdentityPoolId(v string) *ResourceIdentif
 	return s
 }
 
+// SetDeviceCertificateArn sets the DeviceCertificateArn field's value.
+func (s *ResourceIdentifier) SetDeviceCertificateArn(v string) *ResourceIdentifier {
+	s.DeviceCertificateArn = &v
+	return s
+}
+
 // SetDeviceCertificateId sets the DeviceCertificateId field's value.
 func (s *ResourceIdentifier) SetDeviceCertificateId(v string) *ResourceIdentifier {
 	s.DeviceCertificateId = &v
@@ -58530,6 +59421,12 @@ func (s *ResourceIdentifier) SetDeviceCertificateId(v string) *ResourceIdentifie
 // SetIamRoleArn sets the IamRoleArn field's value.
 func (s *ResourceIdentifier) SetIamRoleArn(v string) *ResourceIdentifier {
 	s.IamRoleArn = &v
+	return s
+}
+
+// SetIssuerCertificateIdentifier sets the IssuerCertificateIdentifier field's value.
+func (s *ResourceIdentifier) SetIssuerCertificateIdentifier(v *IssuerCertificateIdentifier) *ResourceIdentifier {
+	s.IssuerCertificateIdentifier = v
 	return s
 }
 
@@ -59164,6 +60061,140 @@ func (s *ScheduledAuditMetadata) SetScheduledAuditArn(v string) *ScheduledAuditM
 // SetScheduledAuditName sets the ScheduledAuditName field's value.
 func (s *ScheduledAuditMetadata) SetScheduledAuditName(v string) *ScheduledAuditMetadata {
 	s.ScheduledAuditName = &v
+	return s
+}
+
+// Displays the next seven maintenance window occurrences and their start times.
+type ScheduledJobRollout struct {
+	_ struct{} `type:"structure"`
+
+	// Displays the start times of the next seven maintenance window occurrences.
+	StartTime *string `locationName:"startTime" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScheduledJobRollout) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScheduledJobRollout) GoString() string {
+	return s.String()
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *ScheduledJobRollout) SetStartTime(v string) *ScheduledJobRollout {
+	s.StartTime = &v
+	return s
+}
+
+// Specifies the date and time that a job will begin the rollout of the job
+// document to all devices in the target group. Additionally, you can specify
+// the end behavior for each job execution when it reaches the scheduled end
+// time.
+type SchedulingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the end behavior for all job executions after a job reaches the
+	// selected endTime. If endTime is not selected when creating the job, then
+	// endBehavior does not apply.
+	EndBehavior *string `locationName:"endBehavior" type:"string" enum:"JobEndBehavior"`
+
+	// The time a job will stop rollout of the job document to all devices in the
+	// target group for a job. The endTime must take place no later than two years
+	// from the current time and be scheduled a minimum of thirty minutes from the
+	// current time. The minimum duration between startTime and endTime is thirty
+	// minutes. The maximum duration between startTime and endTime is two years.
+	// The date and time format for the endTime is YYYY-MM-DD for the date and HH:MM
+	// for the time.
+	EndTime *string `locationName:"endTime" min:"1" type:"string"`
+
+	// An optional configuration within the SchedulingConfig to setup a recurring
+	// maintenance window with a predetermined start time and duration for the rollout
+	// of a job document to all devices in a target group for a job.
+	MaintenanceWindows []*MaintenanceWindow `locationName:"maintenanceWindows" type:"list"`
+
+	// The time a job will begin rollout of the job document to all devices in the
+	// target group for a job. The startTime can be scheduled up to a year in advance
+	// and must be scheduled a minimum of thirty minutes from the current time.
+	// The date and time format for the startTime is YYYY-MM-DD for the date and
+	// HH:MM for the time.
+	StartTime *string `locationName:"startTime" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchedulingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchedulingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SchedulingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SchedulingConfig"}
+	if s.EndTime != nil && len(*s.EndTime) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EndTime", 1))
+	}
+	if s.StartTime != nil && len(*s.StartTime) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StartTime", 1))
+	}
+	if s.MaintenanceWindows != nil {
+		for i, v := range s.MaintenanceWindows {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "MaintenanceWindows", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndBehavior sets the EndBehavior field's value.
+func (s *SchedulingConfig) SetEndBehavior(v string) *SchedulingConfig {
+	s.EndBehavior = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *SchedulingConfig) SetEndTime(v string) *SchedulingConfig {
+	s.EndTime = &v
+	return s
+}
+
+// SetMaintenanceWindows sets the MaintenanceWindows field's value.
+func (s *SchedulingConfig) SetMaintenanceWindows(v []*MaintenanceWindow) *SchedulingConfig {
+	s.MaintenanceWindows = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *SchedulingConfig) SetStartTime(v string) *SchedulingConfig {
+	s.StartTime = &v
 	return s
 }
 
@@ -62452,7 +63483,9 @@ type ThingGroupIndexingConfiguration struct {
 	CustomFields []*Field `locationName:"customFields" type:"list"`
 
 	// Contains fields that are indexed and whose types are already known by the
-	// Fleet Indexing service.
+	// Fleet Indexing service. This is an optional field. For more information,
+	// see Managed fields (https://docs.aws.amazon.com/iot/latest/developerguide/managing-fleet-index.html#managed-field)
+	// in the Amazon Web Services IoT Core Developer Guide.
 	ManagedFields []*Field `locationName:"managedFields" type:"list"`
 
 	// Thing group indexing mode.
@@ -63253,6 +64286,40 @@ func (s *TimestreamTimestamp) SetUnit(v string) *TimestreamTimestamp {
 // SetValue sets the Value field's value.
 func (s *TimestreamTimestamp) SetValue(v string) *TimestreamTimestamp {
 	s.Value = &v
+	return s
+}
+
+// An object that specifies the TLS configuration for a domain.
+type TlsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The security policy for a domain configuration. For more information, see
+	// Security policies (https://docs.aws.amazon.com/iot/latest/developerguide/transport-security.html#tls-policy-table)
+	// in the Amazon Web Services IoT Core developer guide.
+	SecurityPolicy *string `locationName:"securityPolicy" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TlsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TlsConfig) GoString() string {
+	return s.String()
+}
+
+// SetSecurityPolicy sets the SecurityPolicy field's value.
+func (s *TlsConfig) SetSecurityPolicy(v string) *TlsConfig {
+	s.SecurityPolicy = &v
 	return s
 }
 
@@ -65407,6 +66474,9 @@ type UpdateDomainConfigurationInput struct {
 
 	// Removes the authorization configuration from a domain.
 	RemoveAuthorizerConfig *bool `locationName:"removeAuthorizerConfig" type:"boolean"`
+
+	// An object that specifies the TLS configuration for a domain.
+	TlsConfig *TlsConfig `locationName:"tlsConfig" type:"structure"`
 }
 
 // String returns the string representation.
@@ -65469,6 +66539,12 @@ func (s *UpdateDomainConfigurationInput) SetDomainConfigurationStatus(v string) 
 // SetRemoveAuthorizerConfig sets the RemoveAuthorizerConfig field's value.
 func (s *UpdateDomainConfigurationInput) SetRemoveAuthorizerConfig(v bool) *UpdateDomainConfigurationInput {
 	s.RemoveAuthorizerConfig = &v
+	return s
+}
+
+// SetTlsConfig sets the TlsConfig field's value.
+func (s *UpdateDomainConfigurationInput) SetTlsConfig(v *TlsConfig) *UpdateDomainConfigurationInput {
+	s.TlsConfig = v
 	return s
 }
 
@@ -65993,7 +67069,7 @@ type UpdateJobInput struct {
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
 	// The namespaceId feature is in public preview.
-	NamespaceId *string `location:"querystring" locationName:"namespaceId" min:"1" type:"string"`
+	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// Configuration information for pre-signed S3 URLs.
 	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
@@ -66031,9 +67107,6 @@ func (s *UpdateJobInput) Validate() error {
 	}
 	if s.JobId != nil && len(*s.JobId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
-	}
-	if s.NamespaceId != nil && len(*s.NamespaceId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NamespaceId", 1))
 	}
 	if s.AbortConfig != nil {
 		if err := s.AbortConfig.Validate(); err != nil {
@@ -66261,7 +67334,9 @@ type UpdateProvisioningTemplateInput struct {
 	// True to enable the provisioning template, otherwise false.
 	Enabled *bool `locationName:"enabled" type:"boolean"`
 
-	// Updates the pre-provisioning hook template.
+	// Updates the pre-provisioning hook template. Only supports template of type
+	// FLEET_PROVISIONING. For more information about provisioning template types,
+	// see type (https://docs.aws.amazon.com/iot/latest/apireference/API_CreateProvisioningTemplate.html#iot-CreateProvisioningTemplate-request-type).
 	PreProvisioningHook *ProvisioningHook `locationName:"preProvisioningHook" type:"structure"`
 
 	// The ARN of the role associated with the provisioning template. This IoT role
@@ -67501,6 +68576,68 @@ func (s UpdateTopicRuleDestinationOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateTopicRuleDestinationOutput) GoString() string {
 	return s.String()
+}
+
+// A key-value pair that you define in the header. Both the key and the value
+// are either literal strings or valid substitution templates (https://docs.aws.amazon.com/iot/latest/developerguide/iot-substitution-templates.html).
+type UserProperty struct {
+	_ struct{} `type:"structure"`
+
+	// A key to be specified in UserProperty.
+	//
+	// Key is a required field
+	Key *string `locationName:"key" type:"string" required:"true"`
+
+	// A value to be specified in UserProperty.
+	//
+	// Value is a required field
+	Value *string `locationName:"value" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserProperty) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserProperty) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserProperty) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserProperty"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *UserProperty) SetKey(v string) *UserProperty {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *UserProperty) SetValue(v string) *UserProperty {
+	s.Value = &v
+	return s
 }
 
 type ValidateSecurityProfileBehaviorsInput struct {
@@ -69169,6 +70306,26 @@ func IndexStatus_Values() []string {
 }
 
 const (
+	// JobEndBehaviorStopRollout is a JobEndBehavior enum value
+	JobEndBehaviorStopRollout = "STOP_ROLLOUT"
+
+	// JobEndBehaviorCancel is a JobEndBehavior enum value
+	JobEndBehaviorCancel = "CANCEL"
+
+	// JobEndBehaviorForceCancel is a JobEndBehavior enum value
+	JobEndBehaviorForceCancel = "FORCE_CANCEL"
+)
+
+// JobEndBehavior_Values returns all elements of the JobEndBehavior enum
+func JobEndBehavior_Values() []string {
+	return []string{
+		JobEndBehaviorStopRollout,
+		JobEndBehaviorCancel,
+		JobEndBehaviorForceCancel,
+	}
+}
+
+const (
 	// JobExecutionFailureTypeFailed is a JobExecutionFailureType enum value
 	JobExecutionFailureTypeFailed = "FAILED"
 
@@ -69244,6 +70401,9 @@ const (
 
 	// JobStatusDeletionInProgress is a JobStatus enum value
 	JobStatusDeletionInProgress = "DELETION_IN_PROGRESS"
+
+	// JobStatusScheduled is a JobStatus enum value
+	JobStatusScheduled = "SCHEDULED"
 )
 
 // JobStatus_Values returns all elements of the JobStatus enum
@@ -69253,6 +70413,7 @@ func JobStatus_Values() []string {
 		JobStatusCanceled,
 		JobStatusCompleted,
 		JobStatusDeletionInProgress,
+		JobStatusScheduled,
 	}
 }
 
@@ -69408,6 +70569,12 @@ const (
 
 	// OTAUpdateStatusCreateFailed is a OTAUpdateStatus enum value
 	OTAUpdateStatusCreateFailed = "CREATE_FAILED"
+
+	// OTAUpdateStatusDeleteInProgress is a OTAUpdateStatus enum value
+	OTAUpdateStatusDeleteInProgress = "DELETE_IN_PROGRESS"
+
+	// OTAUpdateStatusDeleteFailed is a OTAUpdateStatus enum value
+	OTAUpdateStatusDeleteFailed = "DELETE_FAILED"
 )
 
 // OTAUpdateStatus_Values returns all elements of the OTAUpdateStatus enum
@@ -69417,6 +70584,8 @@ func OTAUpdateStatus_Values() []string {
 		OTAUpdateStatusCreateInProgress,
 		OTAUpdateStatusCreateComplete,
 		OTAUpdateStatusCreateFailed,
+		OTAUpdateStatusDeleteInProgress,
+		OTAUpdateStatusDeleteFailed,
 	}
 }
 
@@ -69488,6 +70657,9 @@ const (
 
 	// ResourceTypeIamRole is a ResourceType enum value
 	ResourceTypeIamRole = "IAM_ROLE"
+
+	// ResourceTypeIssuerCertificate is a ResourceType enum value
+	ResourceTypeIssuerCertificate = "ISSUER_CERTIFICATE"
 )
 
 // ResourceType_Values returns all elements of the ResourceType enum
@@ -69501,6 +70673,7 @@ func ResourceType_Values() []string {
 		ResourceTypeAccountSettings,
 		ResourceTypeRoleAlias,
 		ResourceTypeIamRole,
+		ResourceTypeIssuerCertificate,
 	}
 }
 

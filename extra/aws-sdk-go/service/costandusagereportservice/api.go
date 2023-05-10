@@ -1207,6 +1207,9 @@ const (
 	// AWSRegionApSoutheast2 is a AWSRegion enum value
 	AWSRegionApSoutheast2 = "ap-southeast-2"
 
+	// AWSRegionApSoutheast3 is a AWSRegion enum value
+	AWSRegionApSoutheast3 = "ap-southeast-3"
+
 	// AWSRegionApNortheast1 is a AWSRegion enum value
 	AWSRegionApNortheast1 = "ap-northeast-1"
 
@@ -1236,6 +1239,12 @@ const (
 
 	// AWSRegionEuSouth1 is a AWSRegion enum value
 	AWSRegionEuSouth1 = "eu-south-1"
+
+	// AWSRegionEuSouth2 is a AWSRegion enum value
+	AWSRegionEuSouth2 = "eu-south-2"
+
+	// AWSRegionMeCentral1 is a AWSRegion enum value
+	AWSRegionMeCentral1 = "me-central-1"
 
 	// AWSRegionMeSouth1 is a AWSRegion enum value
 	AWSRegionMeSouth1 = "me-south-1"
@@ -1270,6 +1279,7 @@ func AWSRegion_Values() []string {
 		AWSRegionApSouth1,
 		AWSRegionApSoutheast1,
 		AWSRegionApSoutheast2,
+		AWSRegionApSoutheast3,
 		AWSRegionApNortheast1,
 		AWSRegionApNortheast2,
 		AWSRegionApNortheast3,
@@ -1280,6 +1290,8 @@ func AWSRegion_Values() []string {
 		AWSRegionEuWest3,
 		AWSRegionEuNorth1,
 		AWSRegionEuSouth1,
+		AWSRegionEuSouth2,
+		AWSRegionMeCentral1,
 		AWSRegionMeSouth1,
 		AWSRegionSaEast1,
 		AWSRegionUsEast1,

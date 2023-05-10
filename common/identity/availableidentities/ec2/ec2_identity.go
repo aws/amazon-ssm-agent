@@ -251,7 +251,7 @@ func (i *Identity) loadRegistrationInfo() *authregister.RegistrationInfo {
 // NewEC2Identity initializes the ec2 identity
 func NewEC2Identity(log log.T) *Identity {
 	awsConfig := &aws.Config{}
-	awsConfig = awsConfig.WithMaxRetries(3)
+	awsConfig = awsConfig.WithMaxRetries(3).WithEC2MetadataEnableFallback(false)
 	sess, err := session.NewSession(awsConfig)
 	if err != nil {
 		log.Errorf("Failed to create session with aws config. Err: %v", err)

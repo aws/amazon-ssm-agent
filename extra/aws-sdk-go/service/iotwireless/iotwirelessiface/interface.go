@@ -164,6 +164,10 @@ type IoTWirelessAPI interface {
 	DeleteWirelessDeviceWithContext(aws.Context, *iotwireless.DeleteWirelessDeviceInput, ...request.Option) (*iotwireless.DeleteWirelessDeviceOutput, error)
 	DeleteWirelessDeviceRequest(*iotwireless.DeleteWirelessDeviceInput) (*request.Request, *iotwireless.DeleteWirelessDeviceOutput)
 
+	DeleteWirelessDeviceImportTask(*iotwireless.DeleteWirelessDeviceImportTaskInput) (*iotwireless.DeleteWirelessDeviceImportTaskOutput, error)
+	DeleteWirelessDeviceImportTaskWithContext(aws.Context, *iotwireless.DeleteWirelessDeviceImportTaskInput, ...request.Option) (*iotwireless.DeleteWirelessDeviceImportTaskOutput, error)
+	DeleteWirelessDeviceImportTaskRequest(*iotwireless.DeleteWirelessDeviceImportTaskInput) (*request.Request, *iotwireless.DeleteWirelessDeviceImportTaskOutput)
+
 	DeleteWirelessGateway(*iotwireless.DeleteWirelessGatewayInput) (*iotwireless.DeleteWirelessGatewayOutput, error)
 	DeleteWirelessGatewayWithContext(aws.Context, *iotwireless.DeleteWirelessGatewayInput, ...request.Option) (*iotwireless.DeleteWirelessGatewayOutput, error)
 	DeleteWirelessGatewayRequest(*iotwireless.DeleteWirelessGatewayInput) (*request.Request, *iotwireless.DeleteWirelessGatewayOutput)
@@ -175,6 +179,10 @@ type IoTWirelessAPI interface {
 	DeleteWirelessGatewayTaskDefinition(*iotwireless.DeleteWirelessGatewayTaskDefinitionInput) (*iotwireless.DeleteWirelessGatewayTaskDefinitionOutput, error)
 	DeleteWirelessGatewayTaskDefinitionWithContext(aws.Context, *iotwireless.DeleteWirelessGatewayTaskDefinitionInput, ...request.Option) (*iotwireless.DeleteWirelessGatewayTaskDefinitionOutput, error)
 	DeleteWirelessGatewayTaskDefinitionRequest(*iotwireless.DeleteWirelessGatewayTaskDefinitionInput) (*request.Request, *iotwireless.DeleteWirelessGatewayTaskDefinitionOutput)
+
+	DeregisterWirelessDevice(*iotwireless.DeregisterWirelessDeviceInput) (*iotwireless.DeregisterWirelessDeviceOutput, error)
+	DeregisterWirelessDeviceWithContext(aws.Context, *iotwireless.DeregisterWirelessDeviceInput, ...request.Option) (*iotwireless.DeregisterWirelessDeviceOutput, error)
+	DeregisterWirelessDeviceRequest(*iotwireless.DeregisterWirelessDeviceInput) (*request.Request, *iotwireless.DeregisterWirelessDeviceOutput)
 
 	DisassociateAwsAccountFromPartnerAccount(*iotwireless.DisassociateAwsAccountFromPartnerAccountInput) (*iotwireless.DisassociateAwsAccountFromPartnerAccountOutput, error)
 	DisassociateAwsAccountFromPartnerAccountWithContext(aws.Context, *iotwireless.DisassociateAwsAccountFromPartnerAccountInput, ...request.Option) (*iotwireless.DisassociateAwsAccountFromPartnerAccountOutput, error)
@@ -248,6 +256,10 @@ type IoTWirelessAPI interface {
 	GetPositionConfigurationWithContext(aws.Context, *iotwireless.GetPositionConfigurationInput, ...request.Option) (*iotwireless.GetPositionConfigurationOutput, error)
 	GetPositionConfigurationRequest(*iotwireless.GetPositionConfigurationInput) (*request.Request, *iotwireless.GetPositionConfigurationOutput)
 
+	GetPositionEstimate(*iotwireless.GetPositionEstimateInput) (*iotwireless.GetPositionEstimateOutput, error)
+	GetPositionEstimateWithContext(aws.Context, *iotwireless.GetPositionEstimateInput, ...request.Option) (*iotwireless.GetPositionEstimateOutput, error)
+	GetPositionEstimateRequest(*iotwireless.GetPositionEstimateInput) (*request.Request, *iotwireless.GetPositionEstimateOutput)
+
 	GetResourceEventConfiguration(*iotwireless.GetResourceEventConfigurationInput) (*iotwireless.GetResourceEventConfigurationOutput, error)
 	GetResourceEventConfigurationWithContext(aws.Context, *iotwireless.GetResourceEventConfigurationInput, ...request.Option) (*iotwireless.GetResourceEventConfigurationOutput, error)
 	GetResourceEventConfigurationRequest(*iotwireless.GetResourceEventConfigurationInput) (*request.Request, *iotwireless.GetResourceEventConfigurationOutput)
@@ -255,6 +267,10 @@ type IoTWirelessAPI interface {
 	GetResourceLogLevel(*iotwireless.GetResourceLogLevelInput) (*iotwireless.GetResourceLogLevelOutput, error)
 	GetResourceLogLevelWithContext(aws.Context, *iotwireless.GetResourceLogLevelInput, ...request.Option) (*iotwireless.GetResourceLogLevelOutput, error)
 	GetResourceLogLevelRequest(*iotwireless.GetResourceLogLevelInput) (*request.Request, *iotwireless.GetResourceLogLevelOutput)
+
+	GetResourcePosition(*iotwireless.GetResourcePositionInput) (*iotwireless.GetResourcePositionOutput, error)
+	GetResourcePositionWithContext(aws.Context, *iotwireless.GetResourcePositionInput, ...request.Option) (*iotwireless.GetResourcePositionOutput, error)
+	GetResourcePositionRequest(*iotwireless.GetResourcePositionInput) (*request.Request, *iotwireless.GetResourcePositionOutput)
 
 	GetServiceEndpoint(*iotwireless.GetServiceEndpointInput) (*iotwireless.GetServiceEndpointOutput, error)
 	GetServiceEndpointWithContext(aws.Context, *iotwireless.GetServiceEndpointInput, ...request.Option) (*iotwireless.GetServiceEndpointOutput, error)
@@ -267,6 +283,10 @@ type IoTWirelessAPI interface {
 	GetWirelessDevice(*iotwireless.GetWirelessDeviceInput) (*iotwireless.GetWirelessDeviceOutput, error)
 	GetWirelessDeviceWithContext(aws.Context, *iotwireless.GetWirelessDeviceInput, ...request.Option) (*iotwireless.GetWirelessDeviceOutput, error)
 	GetWirelessDeviceRequest(*iotwireless.GetWirelessDeviceInput) (*request.Request, *iotwireless.GetWirelessDeviceOutput)
+
+	GetWirelessDeviceImportTask(*iotwireless.GetWirelessDeviceImportTaskInput) (*iotwireless.GetWirelessDeviceImportTaskOutput, error)
+	GetWirelessDeviceImportTaskWithContext(aws.Context, *iotwireless.GetWirelessDeviceImportTaskInput, ...request.Option) (*iotwireless.GetWirelessDeviceImportTaskOutput, error)
+	GetWirelessDeviceImportTaskRequest(*iotwireless.GetWirelessDeviceImportTaskInput) (*request.Request, *iotwireless.GetWirelessDeviceImportTaskOutput)
 
 	GetWirelessDeviceStatistics(*iotwireless.GetWirelessDeviceStatisticsInput) (*iotwireless.GetWirelessDeviceStatisticsOutput, error)
 	GetWirelessDeviceStatisticsWithContext(aws.Context, *iotwireless.GetWirelessDeviceStatisticsInput, ...request.Option) (*iotwireless.GetWirelessDeviceStatisticsOutput, error)
@@ -309,6 +329,10 @@ type IoTWirelessAPI interface {
 
 	ListDeviceProfilesPages(*iotwireless.ListDeviceProfilesInput, func(*iotwireless.ListDeviceProfilesOutput, bool) bool) error
 	ListDeviceProfilesPagesWithContext(aws.Context, *iotwireless.ListDeviceProfilesInput, func(*iotwireless.ListDeviceProfilesOutput, bool) bool, ...request.Option) error
+
+	ListDevicesForWirelessDeviceImportTask(*iotwireless.ListDevicesForWirelessDeviceImportTaskInput) (*iotwireless.ListDevicesForWirelessDeviceImportTaskOutput, error)
+	ListDevicesForWirelessDeviceImportTaskWithContext(aws.Context, *iotwireless.ListDevicesForWirelessDeviceImportTaskInput, ...request.Option) (*iotwireless.ListDevicesForWirelessDeviceImportTaskOutput, error)
+	ListDevicesForWirelessDeviceImportTaskRequest(*iotwireless.ListDevicesForWirelessDeviceImportTaskInput) (*request.Request, *iotwireless.ListDevicesForWirelessDeviceImportTaskOutput)
 
 	ListEventConfigurations(*iotwireless.ListEventConfigurationsInput) (*iotwireless.ListEventConfigurationsOutput, error)
 	ListEventConfigurationsWithContext(aws.Context, *iotwireless.ListEventConfigurationsInput, ...request.Option) (*iotwireless.ListEventConfigurationsOutput, error)
@@ -371,6 +395,10 @@ type IoTWirelessAPI interface {
 	ListTagsForResourceWithContext(aws.Context, *iotwireless.ListTagsForResourceInput, ...request.Option) (*iotwireless.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*iotwireless.ListTagsForResourceInput) (*request.Request, *iotwireless.ListTagsForResourceOutput)
 
+	ListWirelessDeviceImportTasks(*iotwireless.ListWirelessDeviceImportTasksInput) (*iotwireless.ListWirelessDeviceImportTasksOutput, error)
+	ListWirelessDeviceImportTasksWithContext(aws.Context, *iotwireless.ListWirelessDeviceImportTasksInput, ...request.Option) (*iotwireless.ListWirelessDeviceImportTasksOutput, error)
+	ListWirelessDeviceImportTasksRequest(*iotwireless.ListWirelessDeviceImportTasksInput) (*request.Request, *iotwireless.ListWirelessDeviceImportTasksOutput)
+
 	ListWirelessDevices(*iotwireless.ListWirelessDevicesInput) (*iotwireless.ListWirelessDevicesOutput, error)
 	ListWirelessDevicesWithContext(aws.Context, *iotwireless.ListWirelessDevicesInput, ...request.Option) (*iotwireless.ListWirelessDevicesOutput, error)
 	ListWirelessDevicesRequest(*iotwireless.ListWirelessDevicesInput) (*request.Request, *iotwireless.ListWirelessDevicesOutput)
@@ -429,6 +457,14 @@ type IoTWirelessAPI interface {
 	StartMulticastGroupSessionWithContext(aws.Context, *iotwireless.StartMulticastGroupSessionInput, ...request.Option) (*iotwireless.StartMulticastGroupSessionOutput, error)
 	StartMulticastGroupSessionRequest(*iotwireless.StartMulticastGroupSessionInput) (*request.Request, *iotwireless.StartMulticastGroupSessionOutput)
 
+	StartSingleWirelessDeviceImportTask(*iotwireless.StartSingleWirelessDeviceImportTaskInput) (*iotwireless.StartSingleWirelessDeviceImportTaskOutput, error)
+	StartSingleWirelessDeviceImportTaskWithContext(aws.Context, *iotwireless.StartSingleWirelessDeviceImportTaskInput, ...request.Option) (*iotwireless.StartSingleWirelessDeviceImportTaskOutput, error)
+	StartSingleWirelessDeviceImportTaskRequest(*iotwireless.StartSingleWirelessDeviceImportTaskInput) (*request.Request, *iotwireless.StartSingleWirelessDeviceImportTaskOutput)
+
+	StartWirelessDeviceImportTask(*iotwireless.StartWirelessDeviceImportTaskInput) (*iotwireless.StartWirelessDeviceImportTaskOutput, error)
+	StartWirelessDeviceImportTaskWithContext(aws.Context, *iotwireless.StartWirelessDeviceImportTaskInput, ...request.Option) (*iotwireless.StartWirelessDeviceImportTaskOutput, error)
+	StartWirelessDeviceImportTaskRequest(*iotwireless.StartWirelessDeviceImportTaskInput) (*request.Request, *iotwireless.StartWirelessDeviceImportTaskOutput)
+
 	TagResource(*iotwireless.TagResourceInput) (*iotwireless.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *iotwireless.TagResourceInput, ...request.Option) (*iotwireless.TagResourceOutput, error)
 	TagResourceRequest(*iotwireless.TagResourceInput) (*request.Request, *iotwireless.TagResourceOutput)
@@ -477,9 +513,17 @@ type IoTWirelessAPI interface {
 	UpdateResourceEventConfigurationWithContext(aws.Context, *iotwireless.UpdateResourceEventConfigurationInput, ...request.Option) (*iotwireless.UpdateResourceEventConfigurationOutput, error)
 	UpdateResourceEventConfigurationRequest(*iotwireless.UpdateResourceEventConfigurationInput) (*request.Request, *iotwireless.UpdateResourceEventConfigurationOutput)
 
+	UpdateResourcePosition(*iotwireless.UpdateResourcePositionInput) (*iotwireless.UpdateResourcePositionOutput, error)
+	UpdateResourcePositionWithContext(aws.Context, *iotwireless.UpdateResourcePositionInput, ...request.Option) (*iotwireless.UpdateResourcePositionOutput, error)
+	UpdateResourcePositionRequest(*iotwireless.UpdateResourcePositionInput) (*request.Request, *iotwireless.UpdateResourcePositionOutput)
+
 	UpdateWirelessDevice(*iotwireless.UpdateWirelessDeviceInput) (*iotwireless.UpdateWirelessDeviceOutput, error)
 	UpdateWirelessDeviceWithContext(aws.Context, *iotwireless.UpdateWirelessDeviceInput, ...request.Option) (*iotwireless.UpdateWirelessDeviceOutput, error)
 	UpdateWirelessDeviceRequest(*iotwireless.UpdateWirelessDeviceInput) (*request.Request, *iotwireless.UpdateWirelessDeviceOutput)
+
+	UpdateWirelessDeviceImportTask(*iotwireless.UpdateWirelessDeviceImportTaskInput) (*iotwireless.UpdateWirelessDeviceImportTaskOutput, error)
+	UpdateWirelessDeviceImportTaskWithContext(aws.Context, *iotwireless.UpdateWirelessDeviceImportTaskInput, ...request.Option) (*iotwireless.UpdateWirelessDeviceImportTaskOutput, error)
+	UpdateWirelessDeviceImportTaskRequest(*iotwireless.UpdateWirelessDeviceImportTaskInput) (*request.Request, *iotwireless.UpdateWirelessDeviceImportTaskOutput)
 
 	UpdateWirelessGateway(*iotwireless.UpdateWirelessGatewayInput) (*iotwireless.UpdateWirelessGatewayOutput, error)
 	UpdateWirelessGatewayWithContext(aws.Context, *iotwireless.UpdateWirelessGatewayInput, ...request.Option) (*iotwireless.UpdateWirelessGatewayOutput, error)

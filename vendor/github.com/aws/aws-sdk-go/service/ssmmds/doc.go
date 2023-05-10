@@ -20,7 +20,7 @@
 // See aws.Config documentation for more information on configuring SDK clients.
 // https://docs.aws.amazon.com/sdk-for-go/api/aws/#Config
 //
-// See the Amazon Simple Systems Management Message Delivery Service client SSMMDS for more
+// See the Amazon Simple Systems Management Message Delivery Service client Ssmmds for more
 // information on creating client for this service.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/ssmmds/#New
 package ssmmds

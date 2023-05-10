@@ -60,18 +60,31 @@ func (c *RedshiftDataAPIService) BatchExecuteStatementRequest(input *BatchExecut
 // (DML) or data definition language (DDL). Depending on the authorization method,
 // use one of the following combinations of request parameters:
 //
-//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
-//    Name (ARN) of the secret, the database name, and the cluster identifier
-//    that matches the cluster in the secret. When connecting to a serverless
-//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
-//    database name.
+//    * Secrets Manager - when connecting to a cluster, provide the secret-arn
+//    of a secret stored in Secrets Manager which has username and password.
+//    The specified secret contains credentials to connect to the database you
+//    specify. When you are connecting to a cluster, you also supply the database
+//    name, If you provide a cluster identifier (dbClusterIdentifier), it must
+//    match the cluster identifier stored in the secret. When you are connecting
+//    to a serverless workgroup, you also supply the database name.
 //
-//    * Temporary credentials - when connecting to a cluster, specify the cluster
-//    identifier, the database name, and the database user name. Also, permission
-//    to call the redshift:GetClusterCredentials operation is required. When
-//    connecting to a serverless workgroup, specify the workgroup name and database
-//    name. Also, permission to call the redshift-serverless:GetCredentials
-//    operation is required.
+//    * Temporary credentials - when connecting to your data warehouse, choose
+//    one of the following options: When connecting to a serverless workgroup,
+//    specify the workgroup name and database name. The database user name is
+//    derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required. When connecting to a cluster as an IAM identity,
+//    specify the cluster identifier and the database name. The database user
+//    name is derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift:GetClusterCredentialsWithIAM
+//    operation is required. When connecting to a cluster as a database user,
+//    specify the cluster identifier, the database name, and the database user
+//    name. Also, permission to call the redshift:GetClusterCredentials operation
+//    is required.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -157,6 +170,10 @@ func (c *RedshiftDataAPIService) CancelStatementRequest(input *CancelStatementIn
 // CancelStatement API operation for Redshift Data API Service.
 //
 // Cancels a running query. To be canceled, a query must be running.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -248,6 +265,10 @@ func (c *RedshiftDataAPIService) DescribeStatementRequest(input *DescribeStateme
 // Amazon Redshift Data API. The information includes when the query started,
 // when it finished, the query status, the number of rows returned, and the
 // SQL statement.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -343,18 +364,31 @@ func (c *RedshiftDataAPIService) DescribeTableRequest(input *DescribeTableInput)
 // the column list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
-//    Name (ARN) of the secret, the database name, and the cluster identifier
-//    that matches the cluster in the secret. When connecting to a serverless
-//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
-//    database name.
+//    * Secrets Manager - when connecting to a cluster, provide the secret-arn
+//    of a secret stored in Secrets Manager which has username and password.
+//    The specified secret contains credentials to connect to the database you
+//    specify. When you are connecting to a cluster, you also supply the database
+//    name, If you provide a cluster identifier (dbClusterIdentifier), it must
+//    match the cluster identifier stored in the secret. When you are connecting
+//    to a serverless workgroup, you also supply the database name.
 //
-//    * Temporary credentials - when connecting to a cluster, specify the cluster
-//    identifier, the database name, and the database user name. Also, permission
-//    to call the redshift:GetClusterCredentials operation is required. When
-//    connecting to a serverless workgroup, specify the workgroup name and database
-//    name. Also, permission to call the redshift-serverless:GetCredentials
-//    operation is required.
+//    * Temporary credentials - when connecting to your data warehouse, choose
+//    one of the following options: When connecting to a serverless workgroup,
+//    specify the workgroup name and database name. The database user name is
+//    derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required. When connecting to a cluster as an IAM identity,
+//    specify the cluster identifier and the database name. The database user
+//    name is derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift:GetClusterCredentialsWithIAM
+//    operation is required. When connecting to a cluster as a database user,
+//    specify the cluster identifier, the database name, and the database user
+//    name. Also, permission to call the redshift:GetClusterCredentials operation
+//    is required.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -496,18 +530,31 @@ func (c *RedshiftDataAPIService) ExecuteStatementRequest(input *ExecuteStatement
 // Depending on the authorization method, use one of the following combinations
 // of request parameters:
 //
-//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
-//    Name (ARN) of the secret, the database name, and the cluster identifier
-//    that matches the cluster in the secret. When connecting to a serverless
-//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
-//    database name.
+//    * Secrets Manager - when connecting to a cluster, provide the secret-arn
+//    of a secret stored in Secrets Manager which has username and password.
+//    The specified secret contains credentials to connect to the database you
+//    specify. When you are connecting to a cluster, you also supply the database
+//    name, If you provide a cluster identifier (dbClusterIdentifier), it must
+//    match the cluster identifier stored in the secret. When you are connecting
+//    to a serverless workgroup, you also supply the database name.
 //
-//    * Temporary credentials - when connecting to a cluster, specify the cluster
-//    identifier, the database name, and the database user name. Also, permission
-//    to call the redshift:GetClusterCredentials operation is required. When
-//    connecting to a serverless workgroup, specify the workgroup name and database
-//    name. Also, permission to call the redshift-serverless:GetCredentials
-//    operation is required.
+//    * Temporary credentials - when connecting to your data warehouse, choose
+//    one of the following options: When connecting to a serverless workgroup,
+//    specify the workgroup name and database name. The database user name is
+//    derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required. When connecting to a cluster as an IAM identity,
+//    specify the cluster identifier and the database name. The database user
+//    name is derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift:GetClusterCredentialsWithIAM
+//    operation is required. When connecting to a cluster as a database user,
+//    specify the cluster identifier, the database name, and the database user
+//    name. Also, permission to call the redshift:GetClusterCredentials operation
+//    is required.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -600,6 +647,10 @@ func (c *RedshiftDataAPIService) GetStatementResultRequest(input *GetStatementRe
 //
 // Fetches the temporarily cached result of an SQL statement. A token is returned
 // to page through the statement results.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -746,18 +797,31 @@ func (c *RedshiftDataAPIService) ListDatabasesRequest(input *ListDatabasesInput)
 // database list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
-//    Name (ARN) of the secret, the database name, and the cluster identifier
-//    that matches the cluster in the secret. When connecting to a serverless
-//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
-//    database name.
+//    * Secrets Manager - when connecting to a cluster, provide the secret-arn
+//    of a secret stored in Secrets Manager which has username and password.
+//    The specified secret contains credentials to connect to the database you
+//    specify. When you are connecting to a cluster, you also supply the database
+//    name, If you provide a cluster identifier (dbClusterIdentifier), it must
+//    match the cluster identifier stored in the secret. When you are connecting
+//    to a serverless workgroup, you also supply the database name.
 //
-//    * Temporary credentials - when connecting to a cluster, specify the cluster
-//    identifier, the database name, and the database user name. Also, permission
-//    to call the redshift:GetClusterCredentials operation is required. When
-//    connecting to a serverless workgroup, specify the workgroup name and database
-//    name. Also, permission to call the redshift-serverless:GetCredentials
-//    operation is required.
+//    * Temporary credentials - when connecting to your data warehouse, choose
+//    one of the following options: When connecting to a serverless workgroup,
+//    specify the workgroup name and database name. The database user name is
+//    derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required. When connecting to a cluster as an IAM identity,
+//    specify the cluster identifier and the database name. The database user
+//    name is derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift:GetClusterCredentialsWithIAM
+//    operation is required. When connecting to a cluster as a database user,
+//    specify the cluster identifier, the database name, and the database user
+//    name. Also, permission to call the redshift:GetClusterCredentials operation
+//    is required.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -904,18 +968,31 @@ func (c *RedshiftDataAPIService) ListSchemasRequest(input *ListSchemasInput) (re
 // schema list. Depending on the authorization method, use one of the following
 // combinations of request parameters:
 //
-//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
-//    Name (ARN) of the secret, the database name, and the cluster identifier
-//    that matches the cluster in the secret. When connecting to a serverless
-//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
-//    database name.
+//    * Secrets Manager - when connecting to a cluster, provide the secret-arn
+//    of a secret stored in Secrets Manager which has username and password.
+//    The specified secret contains credentials to connect to the database you
+//    specify. When you are connecting to a cluster, you also supply the database
+//    name, If you provide a cluster identifier (dbClusterIdentifier), it must
+//    match the cluster identifier stored in the secret. When you are connecting
+//    to a serverless workgroup, you also supply the database name.
 //
-//    * Temporary credentials - when connecting to a cluster, specify the cluster
-//    identifier, the database name, and the database user name. Also, permission
-//    to call the redshift:GetClusterCredentials operation is required. When
-//    connecting to a serverless workgroup, specify the workgroup name and database
-//    name. Also, permission to call the redshift-serverless:GetCredentials
-//    operation is required.
+//    * Temporary credentials - when connecting to your data warehouse, choose
+//    one of the following options: When connecting to a serverless workgroup,
+//    specify the workgroup name and database name. The database user name is
+//    derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required. When connecting to a cluster as an IAM identity,
+//    specify the cluster identifier and the database name. The database user
+//    name is derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift:GetClusterCredentialsWithIAM
+//    operation is required. When connecting to a cluster as a database user,
+//    specify the cluster identifier, the database name, and the database user
+//    name. Also, permission to call the redshift:GetClusterCredentials operation
+//    is required.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1061,6 +1138,10 @@ func (c *RedshiftDataAPIService) ListStatementsRequest(input *ListStatementsInpu
 // List of SQL statements. By default, only finished statements are shown. A
 // token is returned to page through the statement list.
 //
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1204,18 +1285,31 @@ func (c *RedshiftDataAPIService) ListTablesRequest(input *ListTablesInput) (req 
 // to page through the table list. Depending on the authorization method, use
 // one of the following combinations of request parameters:
 //
-//    * Secrets Manager - when connecting to a cluster, specify the Amazon Resource
-//    Name (ARN) of the secret, the database name, and the cluster identifier
-//    that matches the cluster in the secret. When connecting to a serverless
-//    workgroup, specify the Amazon Resource Name (ARN) of the secret and the
-//    database name.
+//    * Secrets Manager - when connecting to a cluster, provide the secret-arn
+//    of a secret stored in Secrets Manager which has username and password.
+//    The specified secret contains credentials to connect to the database you
+//    specify. When you are connecting to a cluster, you also supply the database
+//    name, If you provide a cluster identifier (dbClusterIdentifier), it must
+//    match the cluster identifier stored in the secret. When you are connecting
+//    to a serverless workgroup, you also supply the database name.
 //
-//    * Temporary credentials - when connecting to a cluster, specify the cluster
-//    identifier, the database name, and the database user name. Also, permission
-//    to call the redshift:GetClusterCredentials operation is required. When
-//    connecting to a serverless workgroup, specify the workgroup name and database
-//    name. Also, permission to call the redshift-serverless:GetCredentials
-//    operation is required.
+//    * Temporary credentials - when connecting to your data warehouse, choose
+//    one of the following options: When connecting to a serverless workgroup,
+//    specify the workgroup name and database name. The database user name is
+//    derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift-serverless:GetCredentials
+//    operation is required. When connecting to a cluster as an IAM identity,
+//    specify the cluster identifier and the database name. The database user
+//    name is derived from the IAM identity. For example, arn:iam::123456789012:user:foo
+//    has the database user name IAM:foo. Also, permission to call the redshift:GetClusterCredentialsWithIAM
+//    operation is required. When connecting to a cluster as a database user,
+//    specify the cluster identifier, the database name, and the database user
+//    name. Also, permission to call the redshift:GetClusterCredentials operation
+//    is required.
+//
+// For more information about the Amazon Redshift Data API and CLI usage examples,
+// see Using the Amazon Redshift Data API (https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html)
+// in the Amazon Redshift Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1444,6 +1538,10 @@ func (s *BatchExecuteStatementException) RequestID() string {
 type BatchExecuteStatementInput struct {
 	_ struct{} `type:"structure"`
 
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
 	// The cluster identifier. This parameter is required when connecting to a cluster
 	// and authenticating using either Secrets Manager or temporary credentials.
 	ClusterIdentifier *string `type:"string"`
@@ -1455,15 +1553,13 @@ type BatchExecuteStatementInput struct {
 	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when connecting to a cluster
-	// and authenticating using temporary credentials.
+	// as a database user and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The name or ARN of the secret that enables access to the database. This parameter
 	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 
-	// One or more SQL statements to run.
-	//
 	// Sqls is a required field
 	Sqls []*string `min:"1" type:"list" required:"true"`
 
@@ -1475,9 +1571,9 @@ type BatchExecuteStatementInput struct {
 	// event bus after the SQL statements run.
 	WithEvent *bool `type:"boolean"`
 
-	// The serverless workgroup name. This parameter is required when connecting
-	// to a serverless workgroup and authenticating using either Secrets Manager
-	// or temporary credentials.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This parameter
+	// is required when connecting to a serverless workgroup and authenticating
+	// using either Secrets Manager or temporary credentials.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -1502,6 +1598,9 @@ func (s BatchExecuteStatementInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *BatchExecuteStatementInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "BatchExecuteStatementInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
 	}
@@ -1519,6 +1618,12 @@ func (s *BatchExecuteStatementInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *BatchExecuteStatementInput) SetClientToken(v string) *BatchExecuteStatementInput {
+	s.ClientToken = &v
+	return s
 }
 
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
@@ -1593,8 +1698,8 @@ type BatchExecuteStatementOutput struct {
 	// The name or ARN of the secret that enables access to the database.
 	SecretArn *string `type:"string"`
 
-	// The serverless workgroup name. This element is not returned when connecting
-	// to a provisioned cluster.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This element
+	// is not returned when connecting to a provisioned cluster.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -2077,7 +2182,7 @@ type DescribeStatementOutput struct {
 	// updated. An example is the time the status last changed.
 	UpdatedAt *time.Time `type:"timestamp"`
 
-	// The serverless workgroup name.
+	// The serverless workgroup name or Amazon Resource Name (ARN).
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -2232,7 +2337,7 @@ type DescribeTableInput struct {
 	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when connecting to a cluster
-	// and authenticating using temporary credentials.
+	// as a database user and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of tables to return in the response. If more tables exist
@@ -2260,9 +2365,9 @@ type DescribeTableInput struct {
 	// for all schemas in the database are returned
 	Table *string `type:"string"`
 
-	// The serverless workgroup name. This parameter is required when connecting
-	// to a serverless workgroup and authenticating using either Secrets Manager
-	// or temporary credentials.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This parameter
+	// is required when connecting to a serverless workgroup and authenticating
+	// using either Secrets Manager or temporary credentials.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -2486,6 +2591,10 @@ func (s *ExecuteStatementException) RequestID() string {
 type ExecuteStatementInput struct {
 	_ struct{} `type:"structure"`
 
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
 	// The cluster identifier. This parameter is required when connecting to a cluster
 	// and authenticating using either Secrets Manager or temporary credentials.
 	ClusterIdentifier *string `type:"string"`
@@ -2497,7 +2606,7 @@ type ExecuteStatementInput struct {
 	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when connecting to a cluster
-	// and authenticating using temporary credentials.
+	// as a database user and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The parameters for the SQL statement.
@@ -2520,9 +2629,9 @@ type ExecuteStatementInput struct {
 	// event bus after the SQL statement runs.
 	WithEvent *bool `type:"boolean"`
 
-	// The serverless workgroup name. This parameter is required when connecting
-	// to a serverless workgroup and authenticating using either Secrets Manager
-	// or temporary credentials.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This parameter
+	// is required when connecting to a serverless workgroup and authenticating
+	// using either Secrets Manager or temporary credentials.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -2547,6 +2656,9 @@ func (s ExecuteStatementInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ExecuteStatementInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ExecuteStatementInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
 	if s.Database == nil {
 		invalidParams.Add(request.NewErrParamRequired("Database"))
 	}
@@ -2574,6 +2686,12 @@ func (s *ExecuteStatementInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *ExecuteStatementInput) SetClientToken(v string) *ExecuteStatementInput {
+	s.ClientToken = &v
+	return s
 }
 
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
@@ -2654,8 +2772,8 @@ type ExecuteStatementOutput struct {
 	// The name or ARN of the secret that enables access to the database.
 	SecretArn *string `type:"string"`
 
-	// The serverless workgroup name. This element is not returned when connecting
-	// to a provisioned cluster.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This element
+	// is not returned when connecting to a provisioned cluster.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -3006,7 +3124,7 @@ type ListDatabasesInput struct {
 	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when connecting to a cluster
-	// and authenticating using temporary credentials.
+	// as a database user and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of databases to return in the response. If more databases
@@ -3025,9 +3143,9 @@ type ListDatabasesInput struct {
 	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 
-	// The serverless workgroup name. This parameter is required when connecting
-	// to a serverless workgroup and authenticating using either Secrets Manager
-	// or temporary credentials.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This parameter
+	// is required when connecting to a serverless workgroup and authenticating
+	// using either Secrets Manager or temporary credentials.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -3170,7 +3288,7 @@ type ListSchemasInput struct {
 	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when connecting to a cluster
-	// and authenticating using temporary credentials.
+	// as a database user and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of schemas to return in the response. If more schemas
@@ -3194,9 +3312,9 @@ type ListSchemasInput struct {
 	// is required when authenticating using Secrets Manager.
 	SecretArn *string `type:"string"`
 
-	// The serverless workgroup name. This parameter is required when connecting
-	// to a serverless workgroup and authenticating using either Secrets Manager
-	// or temporary credentials.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This parameter
+	// is required when connecting to a serverless workgroup and authenticating
+	// using either Secrets Manager or temporary credentials.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -3493,7 +3611,7 @@ type ListTablesInput struct {
 	Database *string `type:"string" required:"true"`
 
 	// The database user name. This parameter is required when connecting to a cluster
-	// and authenticating using temporary credentials.
+	// as a database user and authenticating using temporary credentials.
 	DbUser *string `type:"string"`
 
 	// The maximum number of tables to return in the response. If more tables exist
@@ -3528,9 +3646,9 @@ type ListTablesInput struct {
 	// returned.
 	TablePattern *string `type:"string"`
 
-	// The serverless workgroup name. This parameter is required when connecting
-	// to a serverless workgroup and authenticating using either Secrets Manager
-	// or temporary credentials.
+	// The serverless workgroup name or Amazon Resource Name (ARN). This parameter
+	// is required when connecting to a serverless workgroup and authenticating
+	// using either Secrets Manager or temporary credentials.
 	WorkgroupName *string `min:"3" type:"string"`
 }
 
@@ -3752,7 +3870,7 @@ type SqlParameter struct {
 	Name *string `locationName:"name" type:"string" required:"true"`
 
 	// The value of the parameter. Amazon Redshift implicitly converts to the proper
-	// data type. For more inforation, see Data types (https://docs.aws.amazon.com/redshift/latest/dg/c_Supported_data_types.html)
+	// data type. For more information, see Data types (https://docs.aws.amazon.com/redshift/latest/dg/c_Supported_data_types.html)
 	// in the Amazon Redshift Database Developer Guide.
 	//
 	// Value is a required field

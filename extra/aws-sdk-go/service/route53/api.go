@@ -1400,6 +1400,10 @@ func (c *Route53) CreateQueryLoggingConfigRequest(input *CreateQueryLoggingConfi
 //      it can’t be used with the log group associated with query log. Update
 //      or provide a resource policy to grant permissions for the KMS key.
 //
+//      * The Key management service (KMS) key you specified is marked as disabled
+//      for the log group associated with query log. Update or provide a resource
+//      policy to grant permissions for the KMS key.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53-2013-04-01/CreateQueryLoggingConfig
 func (c *Route53) CreateQueryLoggingConfig(input *CreateQueryLoggingConfigInput) (*CreateQueryLoggingConfigOutput, error) {
 	req, out := c.CreateQueryLoggingConfigRequest(input)
@@ -7839,9 +7843,6 @@ func (s *AlarmIdentifier) SetRegion(v string) *AlarmIdentifier {
 // you want to route traffic to.
 //
 // When creating resource record sets for a private hosted zone, note the following:
-//
-//    * Creating geolocation alias resource record sets or latency alias resource
-//    record sets in a private hosted zone is unsupported.
 //
 //    * For information about creating failover resource record sets in a private
 //    hosted zone, see Configuring Failover in a Private Hosted Zone (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html).
@@ -18069,9 +18070,6 @@ type ResourceRecordSet struct {
 	//    * You can't create an alias resource record set in a private hosted zone
 	//    to route traffic to a CloudFront distribution.
 	//
-	//    * Creating geolocation alias resource record sets or latency alias resource
-	//    record sets in a private hosted zone is unsupported.
-	//
 	//    * For information about creating failover resource record sets in a private
 	//    hosted zone, see Configuring Failover in a Private Hosted Zone (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html)
 	//    in the Amazon Route 53 Developer Guide.
@@ -18333,9 +18331,6 @@ type ResourceRecordSet struct {
 	// typically is an Amazon Web Services resource, such as an EC2 instance or
 	// an ELB load balancer, and is referred to by an IP address or a DNS domain
 	// name, depending on the record type.
-	//
-	// Although creating latency and latency alias resource record sets in a private
-	// hosted zone is allowed, it's not supported.
 	//
 	// When Amazon Route 53 receives a DNS query for a domain name and type for
 	// which you have created latency resource record sets, Route 53 selects the
@@ -20365,6 +20360,9 @@ const (
 	// CloudWatchRegionEuCentral1 is a CloudWatchRegion enum value
 	CloudWatchRegionEuCentral1 = "eu-central-1"
 
+	// CloudWatchRegionEuCentral2 is a CloudWatchRegion enum value
+	CloudWatchRegionEuCentral2 = "eu-central-2"
+
 	// CloudWatchRegionEuWest1 is a CloudWatchRegion enum value
 	CloudWatchRegionEuWest1 = "eu-west-1"
 
@@ -20380,8 +20378,14 @@ const (
 	// CloudWatchRegionMeSouth1 is a CloudWatchRegion enum value
 	CloudWatchRegionMeSouth1 = "me-south-1"
 
+	// CloudWatchRegionMeCentral1 is a CloudWatchRegion enum value
+	CloudWatchRegionMeCentral1 = "me-central-1"
+
 	// CloudWatchRegionApSouth1 is a CloudWatchRegion enum value
 	CloudWatchRegionApSouth1 = "ap-south-1"
+
+	// CloudWatchRegionApSouth2 is a CloudWatchRegion enum value
+	CloudWatchRegionApSouth2 = "ap-south-2"
 
 	// CloudWatchRegionApSoutheast1 is a CloudWatchRegion enum value
 	CloudWatchRegionApSoutheast1 = "ap-southeast-1"
@@ -20419,6 +20423,9 @@ const (
 	// CloudWatchRegionEuSouth1 is a CloudWatchRegion enum value
 	CloudWatchRegionEuSouth1 = "eu-south-1"
 
+	// CloudWatchRegionEuSouth2 is a CloudWatchRegion enum value
+	CloudWatchRegionEuSouth2 = "eu-south-2"
+
 	// CloudWatchRegionUsGovWest1 is a CloudWatchRegion enum value
 	CloudWatchRegionUsGovWest1 = "us-gov-west-1"
 
@@ -20433,6 +20440,9 @@ const (
 
 	// CloudWatchRegionUsIsobEast1 is a CloudWatchRegion enum value
 	CloudWatchRegionUsIsobEast1 = "us-isob-east-1"
+
+	// CloudWatchRegionApSoutheast4 is a CloudWatchRegion enum value
+	CloudWatchRegionApSoutheast4 = "ap-southeast-4"
 )
 
 // CloudWatchRegion_Values returns all elements of the CloudWatchRegion enum
@@ -20444,12 +20454,15 @@ func CloudWatchRegion_Values() []string {
 		CloudWatchRegionUsWest2,
 		CloudWatchRegionCaCentral1,
 		CloudWatchRegionEuCentral1,
+		CloudWatchRegionEuCentral2,
 		CloudWatchRegionEuWest1,
 		CloudWatchRegionEuWest2,
 		CloudWatchRegionEuWest3,
 		CloudWatchRegionApEast1,
 		CloudWatchRegionMeSouth1,
+		CloudWatchRegionMeCentral1,
 		CloudWatchRegionApSouth1,
+		CloudWatchRegionApSouth2,
 		CloudWatchRegionApSoutheast1,
 		CloudWatchRegionApSoutheast2,
 		CloudWatchRegionApSoutheast3,
@@ -20462,11 +20475,13 @@ func CloudWatchRegion_Values() []string {
 		CloudWatchRegionCnNorth1,
 		CloudWatchRegionAfSouth1,
 		CloudWatchRegionEuSouth1,
+		CloudWatchRegionEuSouth2,
 		CloudWatchRegionUsGovWest1,
 		CloudWatchRegionUsGovEast1,
 		CloudWatchRegionUsIsoEast1,
 		CloudWatchRegionUsIsoWest1,
 		CloudWatchRegionUsIsobEast1,
+		CloudWatchRegionApSoutheast4,
 	}
 }
 
@@ -20738,6 +20753,9 @@ const (
 	// ResourceRecordSetRegionEuCentral1 is a ResourceRecordSetRegion enum value
 	ResourceRecordSetRegionEuCentral1 = "eu-central-1"
 
+	// ResourceRecordSetRegionEuCentral2 is a ResourceRecordSetRegion enum value
+	ResourceRecordSetRegionEuCentral2 = "eu-central-2"
+
 	// ResourceRecordSetRegionApSoutheast1 is a ResourceRecordSetRegion enum value
 	ResourceRecordSetRegionApSoutheast1 = "ap-southeast-1"
 
@@ -20774,14 +20792,26 @@ const (
 	// ResourceRecordSetRegionMeSouth1 is a ResourceRecordSetRegion enum value
 	ResourceRecordSetRegionMeSouth1 = "me-south-1"
 
+	// ResourceRecordSetRegionMeCentral1 is a ResourceRecordSetRegion enum value
+	ResourceRecordSetRegionMeCentral1 = "me-central-1"
+
 	// ResourceRecordSetRegionApSouth1 is a ResourceRecordSetRegion enum value
 	ResourceRecordSetRegionApSouth1 = "ap-south-1"
+
+	// ResourceRecordSetRegionApSouth2 is a ResourceRecordSetRegion enum value
+	ResourceRecordSetRegionApSouth2 = "ap-south-2"
 
 	// ResourceRecordSetRegionAfSouth1 is a ResourceRecordSetRegion enum value
 	ResourceRecordSetRegionAfSouth1 = "af-south-1"
 
 	// ResourceRecordSetRegionEuSouth1 is a ResourceRecordSetRegion enum value
 	ResourceRecordSetRegionEuSouth1 = "eu-south-1"
+
+	// ResourceRecordSetRegionEuSouth2 is a ResourceRecordSetRegion enum value
+	ResourceRecordSetRegionEuSouth2 = "eu-south-2"
+
+	// ResourceRecordSetRegionApSoutheast4 is a ResourceRecordSetRegion enum value
+	ResourceRecordSetRegionApSoutheast4 = "ap-southeast-4"
 )
 
 // ResourceRecordSetRegion_Values returns all elements of the ResourceRecordSetRegion enum
@@ -20796,6 +20826,7 @@ func ResourceRecordSetRegion_Values() []string {
 		ResourceRecordSetRegionEuWest2,
 		ResourceRecordSetRegionEuWest3,
 		ResourceRecordSetRegionEuCentral1,
+		ResourceRecordSetRegionEuCentral2,
 		ResourceRecordSetRegionApSoutheast1,
 		ResourceRecordSetRegionApSoutheast2,
 		ResourceRecordSetRegionApSoutheast3,
@@ -20808,9 +20839,13 @@ func ResourceRecordSetRegion_Values() []string {
 		ResourceRecordSetRegionCnNorthwest1,
 		ResourceRecordSetRegionApEast1,
 		ResourceRecordSetRegionMeSouth1,
+		ResourceRecordSetRegionMeCentral1,
 		ResourceRecordSetRegionApSouth1,
+		ResourceRecordSetRegionApSouth2,
 		ResourceRecordSetRegionAfSouth1,
 		ResourceRecordSetRegionEuSouth1,
+		ResourceRecordSetRegionEuSouth2,
+		ResourceRecordSetRegionApSoutheast4,
 	}
 }
 
@@ -20895,6 +20930,9 @@ const (
 	// VPCRegionEuCentral1 is a VPCRegion enum value
 	VPCRegionEuCentral1 = "eu-central-1"
 
+	// VPCRegionEuCentral2 is a VPCRegion enum value
+	VPCRegionEuCentral2 = "eu-central-2"
+
 	// VPCRegionApEast1 is a VPCRegion enum value
 	VPCRegionApEast1 = "ap-east-1"
 
@@ -20916,6 +20954,9 @@ const (
 	// VPCRegionUsIsobEast1 is a VPCRegion enum value
 	VPCRegionUsIsobEast1 = "us-isob-east-1"
 
+	// VPCRegionMeCentral1 is a VPCRegion enum value
+	VPCRegionMeCentral1 = "me-central-1"
+
 	// VPCRegionApSoutheast1 is a VPCRegion enum value
 	VPCRegionApSoutheast1 = "ap-southeast-1"
 
@@ -20927,6 +20968,9 @@ const (
 
 	// VPCRegionApSouth1 is a VPCRegion enum value
 	VPCRegionApSouth1 = "ap-south-1"
+
+	// VPCRegionApSouth2 is a VPCRegion enum value
+	VPCRegionApSouth2 = "ap-south-2"
 
 	// VPCRegionApNortheast1 is a VPCRegion enum value
 	VPCRegionApNortheast1 = "ap-northeast-1"
@@ -20954,6 +20998,12 @@ const (
 
 	// VPCRegionEuSouth1 is a VPCRegion enum value
 	VPCRegionEuSouth1 = "eu-south-1"
+
+	// VPCRegionEuSouth2 is a VPCRegion enum value
+	VPCRegionEuSouth2 = "eu-south-2"
+
+	// VPCRegionApSoutheast4 is a VPCRegion enum value
+	VPCRegionApSoutheast4 = "ap-southeast-4"
 )
 
 // VPCRegion_Values returns all elements of the VPCRegion enum
@@ -20967,6 +21017,7 @@ func VPCRegion_Values() []string {
 		VPCRegionEuWest2,
 		VPCRegionEuWest3,
 		VPCRegionEuCentral1,
+		VPCRegionEuCentral2,
 		VPCRegionApEast1,
 		VPCRegionMeSouth1,
 		VPCRegionUsGovWest1,
@@ -20974,10 +21025,12 @@ func VPCRegion_Values() []string {
 		VPCRegionUsIsoEast1,
 		VPCRegionUsIsoWest1,
 		VPCRegionUsIsobEast1,
+		VPCRegionMeCentral1,
 		VPCRegionApSoutheast1,
 		VPCRegionApSoutheast2,
 		VPCRegionApSoutheast3,
 		VPCRegionApSouth1,
+		VPCRegionApSouth2,
 		VPCRegionApNortheast1,
 		VPCRegionApNortheast2,
 		VPCRegionApNortheast3,
@@ -20987,5 +21040,7 @@ func VPCRegion_Values() []string {
 		VPCRegionCnNorth1,
 		VPCRegionAfSouth1,
 		VPCRegionEuSouth1,
+		VPCRegionEuSouth2,
+		VPCRegionApSoutheast4,
 	}
 }

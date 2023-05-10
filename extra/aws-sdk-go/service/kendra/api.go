@@ -57,7 +57,7 @@ func (c *Kendra) AssociateEntitiesToExperienceRequest(input *AssociateEntitiesTo
 
 // AssociateEntitiesToExperience API operation for AWSKendraFrontendService.
 //
-// Grants users or groups in your Amazon Web Services SSO identity source access
+// Grants users or groups in your IAM Identity Center identity source access
 // to your Amazon Kendra experience. You can create an Amazon Kendra experience
 // such as a search application. For more information on creating a search application
 // experience, see Building a search experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
@@ -71,16 +71,29 @@ func (c *Kendra) AssociateEntitiesToExperienceRequest(input *AssociateEntitiesTo
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ResourceAlreadyExistException
+//   The resource you want to use already exists. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/AssociateEntitiesToExperience
 func (c *Kendra) AssociateEntitiesToExperience(input *AssociateEntitiesToExperienceInput) (*AssociateEntitiesToExperienceOutput, error) {
@@ -148,11 +161,11 @@ func (c *Kendra) AssociatePersonasToEntitiesRequest(input *AssociatePersonasToEn
 
 // AssociatePersonasToEntities API operation for AWSKendraFrontendService.
 //
-// Defines the specific permissions of users or groups in your Amazon Web Services
-// SSO identity source with access to your Amazon Kendra experience. You can
-// create an Amazon Kendra experience such as a search application. For more
-// information on creating a search application experience, see Building a search
-// experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+// Defines the specific permissions of users or groups in your IAM Identity
+// Center identity source with access to your Amazon Kendra experience. You
+// can create an Amazon Kendra experience such as a search application. For
+// more information on creating a search application experience, see Building
+// a search experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -163,16 +176,29 @@ func (c *Kendra) AssociatePersonasToEntitiesRequest(input *AssociatePersonasToEn
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ResourceAlreadyExistException
+//   The resource you want to use already exists. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/AssociatePersonasToEntities
 func (c *Kendra) AssociatePersonasToEntities(input *AssociatePersonasToEntitiesInput) (*AssociatePersonasToEntitiesOutput, error) {
@@ -256,16 +282,29 @@ func (c *Kendra) BatchDeleteDocumentRequest(input *BatchDeleteDocumentInput) (re
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/BatchDeleteDocument
 func (c *Kendra) BatchDeleteDocument(input *BatchDeleteDocumentInput) (*BatchDeleteDocumentOutput, error) {
@@ -284,6 +323,105 @@ func (c *Kendra) BatchDeleteDocument(input *BatchDeleteDocumentInput) (*BatchDel
 // for more information on using Contexts.
 func (c *Kendra) BatchDeleteDocumentWithContext(ctx aws.Context, input *BatchDeleteDocumentInput, opts ...request.Option) (*BatchDeleteDocumentOutput, error) {
 	req, out := c.BatchDeleteDocumentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opBatchDeleteFeaturedResultsSet = "BatchDeleteFeaturedResultsSet"
+
+// BatchDeleteFeaturedResultsSetRequest generates a "aws/request.Request" representing the
+// client's request for the BatchDeleteFeaturedResultsSet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchDeleteFeaturedResultsSet for more information on using the BatchDeleteFeaturedResultsSet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchDeleteFeaturedResultsSetRequest method.
+//    req, resp := client.BatchDeleteFeaturedResultsSetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/BatchDeleteFeaturedResultsSet
+func (c *Kendra) BatchDeleteFeaturedResultsSetRequest(input *BatchDeleteFeaturedResultsSetInput) (req *request.Request, output *BatchDeleteFeaturedResultsSetOutput) {
+	op := &request.Operation{
+		Name:       opBatchDeleteFeaturedResultsSet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchDeleteFeaturedResultsSetInput{}
+	}
+
+	output = &BatchDeleteFeaturedResultsSetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchDeleteFeaturedResultsSet API operation for AWSKendraFrontendService.
+//
+// Removes one or more sets of featured results. Features results are placed
+// above all other results for certain queries. If there's an exact match of
+// a query, then one or more specific documents are featured in the search results.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation BatchDeleteFeaturedResultsSet for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
+//
+//   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
+//
+//   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/BatchDeleteFeaturedResultsSet
+func (c *Kendra) BatchDeleteFeaturedResultsSet(input *BatchDeleteFeaturedResultsSetInput) (*BatchDeleteFeaturedResultsSetOutput, error) {
+	req, out := c.BatchDeleteFeaturedResultsSetRequest(input)
+	return out, req.Send()
+}
+
+// BatchDeleteFeaturedResultsSetWithContext is the same as BatchDeleteFeaturedResultsSet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchDeleteFeaturedResultsSet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) BatchDeleteFeaturedResultsSetWithContext(ctx aws.Context, input *BatchDeleteFeaturedResultsSetInput, opts ...request.Option) (*BatchDeleteFeaturedResultsSetOutput, error) {
+	req, out := c.BatchDeleteFeaturedResultsSetRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -356,16 +494,29 @@ func (c *Kendra) BatchGetDocumentStatusRequest(input *BatchGetDocumentStatusInpu
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/BatchGetDocumentStatus
 func (c *Kendra) BatchGetDocumentStatus(input *BatchGetDocumentStatusInput) (*BatchGetDocumentStatusOutput, error) {
@@ -456,18 +607,35 @@ func (c *Kendra) BatchPutDocumentRequest(input *BatchPutDocumentInput) (req *req
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/BatchPutDocument
 func (c *Kendra) BatchPutDocument(input *BatchPutDocumentInput) (*BatchPutDocumentOutput, error) {
@@ -556,16 +724,29 @@ func (c *Kendra) ClearQuerySuggestionsRequest(input *ClearQuerySuggestionsInput)
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ClearQuerySuggestions
 func (c *Kendra) ClearQuerySuggestions(input *ClearQuerySuggestionsInput) (*ClearQuerySuggestionsOutput, error) {
@@ -667,18 +848,35 @@ func (c *Kendra) CreateAccessControlConfigurationRequest(input *CreateAccessCont
 //
 // Returned Error Types:
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateAccessControlConfiguration
 func (c *Kendra) CreateAccessControlConfiguration(input *CreateAccessControlConfigurationInput) (*CreateAccessControlConfigurationOutput, error) {
@@ -746,17 +944,14 @@ func (c *Kendra) CreateDataSourceRequest(input *CreateDataSourceInput) (req *req
 
 // CreateDataSource API operation for AWSKendraFrontendService.
 //
-// Creates a data source that you want to use with an Amazon Kendra index.
+// Creates a data source connector that you want to use with an Amazon Kendra
+// index.
 //
 // You specify a name, data source connector type and description for your data
 // source. You also specify configuration information for the data source connector.
 //
 // CreateDataSource is a synchronous operation. The operation returns 200 if
 // the data source was successfully created. Otherwise, an exception is raised.
-//
-// Amazon S3 and custom (https://docs.aws.amazon.com/kendra/latest/dg/data-source-custom.html)
-// data sources are the only supported data sources in the Amazon Web Services
-// GovCloud (US-West) region.
 //
 // For an example of creating an index and data source using the Python SDK,
 // see Getting started with Python SDK (https://docs.aws.amazon.com/kendra/latest/dg/gs-python.html).
@@ -772,20 +967,39 @@ func (c *Kendra) CreateDataSourceRequest(input *CreateDataSourceInput) (req *req
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ResourceAlreadyExistException
+//   The resource you want to use already exists. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateDataSource
 func (c *Kendra) CreateDataSource(input *CreateDataSourceInput) (*CreateDataSourceOutput, error) {
@@ -866,18 +1080,35 @@ func (c *Kendra) CreateExperienceRequest(input *CreateExperienceInput) (req *req
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateExperience
 func (c *Kendra) CreateExperience(input *CreateExperienceInput) (*CreateExperienceOutput, error) {
@@ -945,7 +1176,8 @@ func (c *Kendra) CreateFaqRequest(input *CreateFaqInput) (req *request.Request, 
 
 // CreateFaq API operation for AWSKendraFrontendService.
 //
-// Creates an new set of frequently asked question (FAQ) questions and answers.
+// Creates a set of frequently ask questions (FAQs) using a specified FAQ file
+// stored in an Amazon S3 bucket.
 //
 // Adding FAQs to an index is an asynchronous operation.
 //
@@ -961,18 +1193,35 @@ func (c *Kendra) CreateFaqRequest(input *CreateFaqInput) (req *request.Request, 
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateFaq
 func (c *Kendra) CreateFaq(input *CreateFaqInput) (*CreateFaqOutput, error) {
@@ -991,6 +1240,120 @@ func (c *Kendra) CreateFaq(input *CreateFaqInput) (*CreateFaqOutput, error) {
 // for more information on using Contexts.
 func (c *Kendra) CreateFaqWithContext(ctx aws.Context, input *CreateFaqInput, opts ...request.Option) (*CreateFaqOutput, error) {
 	req, out := c.CreateFaqRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateFeaturedResultsSet = "CreateFeaturedResultsSet"
+
+// CreateFeaturedResultsSetRequest generates a "aws/request.Request" representing the
+// client's request for the CreateFeaturedResultsSet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateFeaturedResultsSet for more information on using the CreateFeaturedResultsSet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateFeaturedResultsSetRequest method.
+//    req, resp := client.CreateFeaturedResultsSetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateFeaturedResultsSet
+func (c *Kendra) CreateFeaturedResultsSetRequest(input *CreateFeaturedResultsSetInput) (req *request.Request, output *CreateFeaturedResultsSetOutput) {
+	op := &request.Operation{
+		Name:       opCreateFeaturedResultsSet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateFeaturedResultsSetInput{}
+	}
+
+	output = &CreateFeaturedResultsSetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateFeaturedResultsSet API operation for AWSKendraFrontendService.
+//
+// Creates a set of featured results to display at the top of the search results
+// page. Featured results are placed above all other results for certain queries.
+// You map specific queries to specific documents for featuring in the results.
+// If a query contains an exact match, then one or more specific documents are
+// featured in the search results.
+//
+// You can create up to 50 sets of featured results per index. You can request
+// to increase this limit by contacting Support (http://aws.amazon.com/contact-us/).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation CreateFeaturedResultsSet for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
+//
+//   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
+//
+//   * FeaturedResultsConflictException
+//   An error message with a list of conflicting queries used across different
+//   sets of featured results. This occurred with the request for a new featured
+//   results set. Check that the queries you specified for featured results are
+//   unique per featured results set for each index.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
+//
+//   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
+//
+//   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateFeaturedResultsSet
+func (c *Kendra) CreateFeaturedResultsSet(input *CreateFeaturedResultsSetInput) (*CreateFeaturedResultsSetOutput, error) {
+	req, out := c.CreateFeaturedResultsSetRequest(input)
+	return out, req.Send()
+}
+
+// CreateFeaturedResultsSetWithContext is the same as CreateFeaturedResultsSet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateFeaturedResultsSet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) CreateFeaturedResultsSetWithContext(ctx aws.Context, input *CreateFeaturedResultsSetInput, opts ...request.Option) (*CreateFeaturedResultsSetOutput, error) {
+	req, out := c.CreateFeaturedResultsSetRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1062,18 +1425,35 @@ func (c *Kendra) CreateIndexRequest(input *CreateIndexInput) (req *request.Reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceAlreadyExistException
+//   The resource you want to use already exists. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateIndex
 func (c *Kendra) CreateIndex(input *CreateIndexInput) (*CreateIndexOutput, error) {
@@ -1157,7 +1537,7 @@ func (c *Kendra) CreateQuerySuggestionsBlockListRequest(input *CreateQuerySugges
 // Web Services GovCloud (US-West) region.
 //
 // For an example of creating a block list for query suggestions using the Python
-// SDK, see Query suggestions block list (https://docs.aws.amazon.com/kendra/latest/dg/query-suggestions.html#suggestions-block-list).
+// SDK, see Query suggestions block list (https://docs.aws.amazon.com/kendra/latest/dg/query-suggestions.html#query-suggestions-blocklist).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1168,18 +1548,35 @@ func (c *Kendra) CreateQuerySuggestionsBlockListRequest(input *CreateQuerySugges
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateQuerySuggestionsBlockList
 func (c *Kendra) CreateQuerySuggestionsBlockList(input *CreateQuerySuggestionsBlockListInput) (*CreateQuerySuggestionsBlockListOutput, error) {
@@ -1262,18 +1659,35 @@ func (c *Kendra) CreateThesaurusRequest(input *CreateThesaurusInput) (req *reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateThesaurus
 func (c *Kendra) CreateThesaurus(input *CreateThesaurusInput) (*CreateThesaurusOutput, error) {
@@ -1356,16 +1770,29 @@ func (c *Kendra) DeleteAccessControlConfigurationRequest(input *DeleteAccessCont
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteAccessControlConfiguration
 func (c *Kendra) DeleteAccessControlConfiguration(input *DeleteAccessControlConfigurationInput) (*DeleteAccessControlConfigurationOutput, error) {
@@ -1434,10 +1861,10 @@ func (c *Kendra) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *req
 
 // DeleteDataSource API operation for AWSKendraFrontendService.
 //
-// Deletes an Amazon Kendra data source. An exception is not thrown if the data
-// source is already being deleted. While the data source is being deleted,
-// the Status field returned by a call to the DescribeDataSource API is set
-// to DELETING. For more information, see Deleting Data Sources (https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html).
+// Deletes an Amazon Kendra data source connector. An exception is not thrown
+// if the data source is already being deleted. While the data source is being
+// deleted, the Status field returned by a call to the DescribeDataSource API
+// is set to DELETING. For more information, see Deleting Data Sources (https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1448,16 +1875,29 @@ func (c *Kendra) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *req
 //
 // Returned Error Types:
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteDataSource
 func (c *Kendra) DeleteDataSource(input *DeleteDataSourceInput) (*DeleteDataSourceOutput, error) {
@@ -1539,16 +1979,29 @@ func (c *Kendra) DeleteExperienceRequest(input *DeleteExperienceInput) (req *req
 //
 // Returned Error Types:
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteExperience
 func (c *Kendra) DeleteExperience(input *DeleteExperienceInput) (*DeleteExperienceOutput, error) {
@@ -1628,16 +2081,29 @@ func (c *Kendra) DeleteFaqRequest(input *DeleteFaqInput) (req *request.Request, 
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteFaq
 func (c *Kendra) DeleteFaq(input *DeleteFaqInput) (*DeleteFaqOutput, error) {
@@ -1719,16 +2185,29 @@ func (c *Kendra) DeleteIndexRequest(input *DeleteIndexInput) (req *request.Reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteIndex
 func (c *Kendra) DeleteIndex(input *DeleteIndexInput) (*DeleteIndexOutput, error) {
@@ -1822,16 +2301,29 @@ func (c *Kendra) DeletePrincipalMappingRequest(input *DeletePrincipalMappingInpu
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeletePrincipalMapping
 func (c *Kendra) DeletePrincipalMapping(input *DeletePrincipalMappingInput) (*DeletePrincipalMappingOutput, error) {
@@ -1918,16 +2410,29 @@ func (c *Kendra) DeleteQuerySuggestionsBlockListRequest(input *DeleteQuerySugges
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteQuerySuggestionsBlockList
 func (c *Kendra) DeleteQuerySuggestionsBlockList(input *DeleteQuerySuggestionsBlockListInput) (*DeleteQuerySuggestionsBlockListOutput, error) {
@@ -2007,16 +2512,29 @@ func (c *Kendra) DeleteThesaurusRequest(input *DeleteThesaurusInput) (req *reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteThesaurus
 func (c *Kendra) DeleteThesaurus(input *DeleteThesaurusInput) (*DeleteThesaurusOutput, error) {
@@ -2098,14 +2616,25 @@ func (c *Kendra) DescribeAccessControlConfigurationRequest(input *DescribeAccess
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeAccessControlConfiguration
 func (c *Kendra) DescribeAccessControlConfiguration(input *DescribeAccessControlConfigurationInput) (*DescribeAccessControlConfigurationOutput, error) {
@@ -2173,7 +2702,7 @@ func (c *Kendra) DescribeDataSourceRequest(input *DescribeDataSourceInput) (req 
 
 // DescribeDataSource API operation for AWSKendraFrontendService.
 //
-// Gets information about an Amazon Kendra data source.
+// Gets information about an Amazon Kendra data source connector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2184,14 +2713,25 @@ func (c *Kendra) DescribeDataSourceRequest(input *DescribeDataSourceInput) (req 
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeDataSource
 func (c *Kendra) DescribeDataSource(input *DescribeDataSourceInput) (*DescribeDataSourceOutput, error) {
@@ -2272,14 +2812,25 @@ func (c *Kendra) DescribeExperienceRequest(input *DescribeExperienceInput) (req 
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeExperience
 func (c *Kendra) DescribeExperience(input *DescribeExperienceInput) (*DescribeExperienceOutput, error) {
@@ -2358,14 +2909,25 @@ func (c *Kendra) DescribeFaqRequest(input *DescribeFaqInput) (req *request.Reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeFaq
 func (c *Kendra) DescribeFaq(input *DescribeFaqInput) (*DescribeFaqOutput, error) {
@@ -2384,6 +2946,105 @@ func (c *Kendra) DescribeFaq(input *DescribeFaqInput) (*DescribeFaqOutput, error
 // for more information on using Contexts.
 func (c *Kendra) DescribeFaqWithContext(ctx aws.Context, input *DescribeFaqInput, opts ...request.Option) (*DescribeFaqOutput, error) {
 	req, out := c.DescribeFaqRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeFeaturedResultsSet = "DescribeFeaturedResultsSet"
+
+// DescribeFeaturedResultsSetRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeFeaturedResultsSet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeFeaturedResultsSet for more information on using the DescribeFeaturedResultsSet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeFeaturedResultsSetRequest method.
+//    req, resp := client.DescribeFeaturedResultsSetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeFeaturedResultsSet
+func (c *Kendra) DescribeFeaturedResultsSetRequest(input *DescribeFeaturedResultsSetInput) (req *request.Request, output *DescribeFeaturedResultsSetOutput) {
+	op := &request.Operation{
+		Name:       opDescribeFeaturedResultsSet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeFeaturedResultsSetInput{}
+	}
+
+	output = &DescribeFeaturedResultsSetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeFeaturedResultsSet API operation for AWSKendraFrontendService.
+//
+// Gets information about a set of featured results. Features results are placed
+// above all other results for certain queries. If there's an exact match of
+// a query, then one or more specific documents are featured in the search results.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribeFeaturedResultsSet for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
+//
+//   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
+//
+//   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeFeaturedResultsSet
+func (c *Kendra) DescribeFeaturedResultsSet(input *DescribeFeaturedResultsSetInput) (*DescribeFeaturedResultsSetOutput, error) {
+	req, out := c.DescribeFeaturedResultsSetRequest(input)
+	return out, req.Send()
+}
+
+// DescribeFeaturedResultsSetWithContext is the same as DescribeFeaturedResultsSet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeFeaturedResultsSet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribeFeaturedResultsSetWithContext(ctx aws.Context, input *DescribeFeaturedResultsSetInput, opts ...request.Option) (*DescribeFeaturedResultsSetOutput, error) {
+	req, out := c.DescribeFeaturedResultsSetRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2444,14 +3105,25 @@ func (c *Kendra) DescribeIndexRequest(input *DescribeIndexInput) (req *request.R
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeIndex
 func (c *Kendra) DescribeIndex(input *DescribeIndexInput) (*DescribeIndexOutput, error) {
@@ -2538,14 +3210,25 @@ func (c *Kendra) DescribePrincipalMappingRequest(input *DescribePrincipalMapping
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribePrincipalMapping
 func (c *Kendra) DescribePrincipalMapping(input *DescribePrincipalMappingInput) (*DescribePrincipalMappingOutput, error) {
@@ -2629,14 +3312,25 @@ func (c *Kendra) DescribeQuerySuggestionsBlockListRequest(input *DescribeQuerySu
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeQuerySuggestionsBlockList
 func (c *Kendra) DescribeQuerySuggestionsBlockList(input *DescribeQuerySuggestionsBlockListInput) (*DescribeQuerySuggestionsBlockListOutput, error) {
@@ -2720,14 +3414,25 @@ func (c *Kendra) DescribeQuerySuggestionsConfigRequest(input *DescribeQuerySugge
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeQuerySuggestionsConfig
 func (c *Kendra) DescribeQuerySuggestionsConfig(input *DescribeQuerySuggestionsConfigInput) (*DescribeQuerySuggestionsConfigOutput, error) {
@@ -2806,14 +3511,25 @@ func (c *Kendra) DescribeThesaurusRequest(input *DescribeThesaurusInput) (req *r
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeThesaurus
 func (c *Kendra) DescribeThesaurus(input *DescribeThesaurusInput) (*DescribeThesaurusOutput, error) {
@@ -2881,8 +3597,8 @@ func (c *Kendra) DisassociateEntitiesFromExperienceRequest(input *DisassociateEn
 
 // DisassociateEntitiesFromExperience API operation for AWSKendraFrontendService.
 //
-// Prevents users or groups in your Amazon Web Services SSO identity source
-// from accessing your Amazon Kendra experience. You can create an Amazon Kendra
+// Prevents users or groups in your IAM Identity Center identity source from
+// accessing your Amazon Kendra experience. You can create an Amazon Kendra
 // experience such as a search application. For more information on creating
 // a search application experience, see Building a search experience with no
 // code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
@@ -2896,14 +3612,25 @@ func (c *Kendra) DisassociateEntitiesFromExperienceRequest(input *DisassociateEn
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DisassociateEntitiesFromExperience
 func (c *Kendra) DisassociateEntitiesFromExperience(input *DisassociateEntitiesFromExperienceInput) (*DisassociateEntitiesFromExperienceOutput, error) {
@@ -2971,11 +3698,11 @@ func (c *Kendra) DisassociatePersonasFromEntitiesRequest(input *DisassociatePers
 
 // DisassociatePersonasFromEntities API operation for AWSKendraFrontendService.
 //
-// Removes the specific permissions of users or groups in your Amazon Web Services
-// SSO identity source with access to your Amazon Kendra experience. You can
-// create an Amazon Kendra experience such as a search application. For more
-// information on creating a search application experience, see Building a search
-// experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
+// Removes the specific permissions of users or groups in your IAM Identity
+// Center identity source with access to your Amazon Kendra experience. You
+// can create an Amazon Kendra experience such as a search application. For
+// more information on creating a search application experience, see Building
+// a search experience with no code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2986,14 +3713,25 @@ func (c *Kendra) DisassociatePersonasFromEntitiesRequest(input *DisassociatePers
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DisassociatePersonasFromEntities
 func (c *Kendra) DisassociatePersonasFromEntities(input *DisassociatePersonasFromEntitiesInput) (*DisassociatePersonasFromEntitiesOutput, error) {
@@ -3075,18 +3813,35 @@ func (c *Kendra) GetQuerySuggestionsRequest(input *GetQuerySuggestionsInput) (re
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/GetQuerySuggestions
 func (c *Kendra) GetQuerySuggestions(input *GetQuerySuggestionsInput) (*GetQuerySuggestionsOutput, error) {
@@ -3172,13 +3927,21 @@ func (c *Kendra) GetSnapshotsRequest(input *GetSnapshotsInput) (req *request.Req
 //
 // Returned Error Types:
 //   * InvalidRequestException
-//   The input to the request is not valid.
+//   The input to the request is not valid. Please provide the correct input and
+//   try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/GetSnapshots
 func (c *Kendra) GetSnapshots(input *GetSnapshotsInput) (*GetSnapshotsOutput, error) {
@@ -3318,14 +4081,25 @@ func (c *Kendra) ListAccessControlConfigurationsRequest(input *ListAccessControl
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListAccessControlConfigurations
 func (c *Kendra) ListAccessControlConfigurations(input *ListAccessControlConfigurationsInput) (*ListAccessControlConfigurationsOutput, error) {
@@ -3451,7 +4225,7 @@ func (c *Kendra) ListDataSourceSyncJobsRequest(input *ListDataSourceSyncJobsInpu
 
 // ListDataSourceSyncJobs API operation for AWSKendraFrontendService.
 //
-// Gets statistics about synchronizing Amazon Kendra with a data source.
+// Gets statistics about synchronizing a data source connector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3462,16 +4236,29 @@ func (c *Kendra) ListDataSourceSyncJobsRequest(input *ListDataSourceSyncJobsInpu
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListDataSourceSyncJobs
 func (c *Kendra) ListDataSourceSyncJobs(input *ListDataSourceSyncJobsInput) (*ListDataSourceSyncJobsOutput, error) {
@@ -3597,7 +4384,7 @@ func (c *Kendra) ListDataSourcesRequest(input *ListDataSourcesInput) (req *reque
 
 // ListDataSources API operation for AWSKendraFrontendService.
 //
-// Lists the data sources that you have created.
+// Lists the data source connectors that you have created.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3608,14 +4395,25 @@ func (c *Kendra) ListDataSourcesRequest(input *ListDataSourcesInput) (req *reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListDataSources
 func (c *Kendra) ListDataSources(input *ListDataSourcesInput) (*ListDataSourcesOutput, error) {
@@ -3753,14 +4551,25 @@ func (c *Kendra) ListEntityPersonasRequest(input *ListEntityPersonasInput) (req 
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListEntityPersonas
 func (c *Kendra) ListEntityPersonas(input *ListEntityPersonasInput) (*ListEntityPersonasOutput, error) {
@@ -3886,8 +4695,8 @@ func (c *Kendra) ListExperienceEntitiesRequest(input *ListExperienceEntitiesInpu
 
 // ListExperienceEntities API operation for AWSKendraFrontendService.
 //
-// Lists users or groups in your Amazon Web Services SSO identity source that
-// are granted access to your Amazon Kendra experience. You can create an Amazon
+// Lists users or groups in your IAM Identity Center identity source that are
+// granted access to your Amazon Kendra experience. You can create an Amazon
 // Kendra experience such as a search application. For more information on creating
 // a search application experience, see Building a search experience with no
 // code (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html).
@@ -3901,14 +4710,25 @@ func (c *Kendra) ListExperienceEntitiesRequest(input *ListExperienceEntitiesInpu
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListExperienceEntities
 func (c *Kendra) ListExperienceEntities(input *ListExperienceEntitiesInput) (*ListExperienceEntitiesOutput, error) {
@@ -4048,14 +4868,25 @@ func (c *Kendra) ListExperiencesRequest(input *ListExperiencesInput) (req *reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListExperiences
 func (c *Kendra) ListExperiences(input *ListExperiencesInput) (*ListExperiencesOutput, error) {
@@ -4192,14 +5023,25 @@ func (c *Kendra) ListFaqsRequest(input *ListFaqsInput) (req *request.Request, ou
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListFaqs
 func (c *Kendra) ListFaqs(input *ListFaqsInput) (*ListFaqsOutput, error) {
@@ -4275,6 +5117,106 @@ func (c *Kendra) ListFaqsPagesWithContext(ctx aws.Context, input *ListFaqsInput,
 	return p.Err()
 }
 
+const opListFeaturedResultsSets = "ListFeaturedResultsSets"
+
+// ListFeaturedResultsSetsRequest generates a "aws/request.Request" representing the
+// client's request for the ListFeaturedResultsSets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListFeaturedResultsSets for more information on using the ListFeaturedResultsSets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListFeaturedResultsSetsRequest method.
+//    req, resp := client.ListFeaturedResultsSetsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListFeaturedResultsSets
+func (c *Kendra) ListFeaturedResultsSetsRequest(input *ListFeaturedResultsSetsInput) (req *request.Request, output *ListFeaturedResultsSetsOutput) {
+	op := &request.Operation{
+		Name:       opListFeaturedResultsSets,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListFeaturedResultsSetsInput{}
+	}
+
+	output = &ListFeaturedResultsSetsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListFeaturedResultsSets API operation for AWSKendraFrontendService.
+//
+// Lists all your sets of featured results for a given index. Features results
+// are placed above all other results for certain queries. If there's an exact
+// match of a query, then one or more specific documents are featured in the
+// search results.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListFeaturedResultsSets for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
+//
+//   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
+//
+//   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListFeaturedResultsSets
+func (c *Kendra) ListFeaturedResultsSets(input *ListFeaturedResultsSetsInput) (*ListFeaturedResultsSetsOutput, error) {
+	req, out := c.ListFeaturedResultsSetsRequest(input)
+	return out, req.Send()
+}
+
+// ListFeaturedResultsSetsWithContext is the same as ListFeaturedResultsSets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListFeaturedResultsSets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListFeaturedResultsSetsWithContext(ctx aws.Context, input *ListFeaturedResultsSetsInput, opts ...request.Option) (*ListFeaturedResultsSetsOutput, error) {
+	req, out := c.ListFeaturedResultsSetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListGroupsOlderThanOrderingId = "ListGroupsOlderThanOrderingId"
 
 // ListGroupsOlderThanOrderingIdRequest generates a "aws/request.Request" representing the
@@ -4340,16 +5282,29 @@ func (c *Kendra) ListGroupsOlderThanOrderingIdRequest(input *ListGroupsOlderThan
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListGroupsOlderThanOrderingId
 func (c *Kendra) ListGroupsOlderThanOrderingId(input *ListGroupsOlderThanOrderingIdInput) (*ListGroupsOlderThanOrderingIdOutput, error) {
@@ -4486,12 +5441,21 @@ func (c *Kendra) ListIndicesRequest(input *ListIndicesInput) (req *request.Reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListIndices
 func (c *Kendra) ListIndices(input *ListIndicesInput) (*ListIndicesOutput, error) {
@@ -4634,14 +5598,25 @@ func (c *Kendra) ListQuerySuggestionsBlockListsRequest(input *ListQuerySuggestio
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListQuerySuggestionsBlockLists
 func (c *Kendra) ListQuerySuggestionsBlockLists(input *ListQuerySuggestionsBlockListsInput) (*ListQuerySuggestionsBlockListsOutput, error) {
@@ -4773,14 +5748,25 @@ func (c *Kendra) ListTagsForResourceRequest(input *ListTagsForResourceInput) (re
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceUnavailableException
+//   The resource you want to use isn't available. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListTagsForResource
 func (c *Kendra) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -4865,14 +5851,25 @@ func (c *Kendra) ListThesauriRequest(input *ListThesauriInput) (req *request.Req
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListThesauri
 func (c *Kendra) ListThesauri(input *ListThesauriInput) (*ListThesauriOutput, error) {
@@ -5010,9 +6007,6 @@ func (c *Kendra) PutPrincipalMappingRequest(input *PutPrincipalMappingInput) (re
 // If more than five PUT actions for a group are currently processing, a validation
 // exception is thrown.
 //
-// PutPrincipalMapping is currently not supported in the Amazon Web Services
-// GovCloud (US-West) region.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -5022,18 +6016,35 @@ func (c *Kendra) PutPrincipalMappingRequest(input *PutPrincipalMappingInput) (re
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/PutPrincipalMapping
 func (c *Kendra) PutPrincipalMapping(input *PutPrincipalMappingInput) (*PutPrincipalMappingOutput, error) {
@@ -5117,7 +6128,7 @@ func (c *Kendra) QueryRequest(input *QueryInput) (req *request.Request, output *
 //
 //    * Relevant documents
 //
-// You can specify that the query return only one type of result using the QueryResultTypeConfig
+// You can specify that the query return only one type of result using the QueryResultTypeFilter
 // parameter.
 //
 // Each query returns the 100 most relevant results.
@@ -5131,18 +6142,35 @@ func (c *Kendra) QueryRequest(input *QueryInput) (req *request.Request, output *
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/Query
 func (c *Kendra) Query(input *QueryInput) (*QueryOutput, error) {
@@ -5210,8 +6238,9 @@ func (c *Kendra) StartDataSourceSyncJobRequest(input *StartDataSourceSyncJobInpu
 
 // StartDataSourceSyncJob API operation for AWSKendraFrontendService.
 //
-// Starts a synchronization job for a data source. If a synchronization job
-// is already in progress, Amazon Kendra returns a ResourceInUseException exception.
+// Starts a synchronization job for a data source connector. If a synchronization
+// job is already in progress, Amazon Kendra returns a ResourceInUseException
+// exception.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5222,18 +6251,33 @@ func (c *Kendra) StartDataSourceSyncJobRequest(input *StartDataSourceSyncJobInpu
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ResourceInUseException
+//   The resource you want to use is currently in use. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/StartDataSourceSyncJob
 func (c *Kendra) StartDataSourceSyncJob(input *StartDataSourceSyncJobInput) (*StartDataSourceSyncJobOutput, error) {
@@ -5314,14 +6358,25 @@ func (c *Kendra) StopDataSourceSyncJobRequest(input *StopDataSourceSyncJobInput)
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/StopDataSourceSyncJob
 func (c *Kendra) StopDataSourceSyncJob(input *StopDataSourceSyncJobInput) (*StopDataSourceSyncJobOutput, error) {
@@ -5405,16 +6460,29 @@ func (c *Kendra) SubmitFeedbackRequest(input *SubmitFeedbackInput) (req *request
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceUnavailableException
+//   The resource you want to use isn't available. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/SubmitFeedback
 func (c *Kendra) SubmitFeedback(input *SubmitFeedbackInput) (*SubmitFeedbackOutput, error) {
@@ -5495,14 +6563,25 @@ func (c *Kendra) TagResourceRequest(input *TagResourceInput) (req *request.Reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceUnavailableException
+//   The resource you want to use isn't available. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/TagResource
 func (c *Kendra) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -5582,14 +6661,25 @@ func (c *Kendra) UntagResourceRequest(input *UntagResourceInput) (req *request.R
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceUnavailableException
+//   The resource you want to use isn't available. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UntagResource
 func (c *Kendra) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -5690,18 +6780,35 @@ func (c *Kendra) UpdateAccessControlConfigurationRequest(input *UpdateAccessCont
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateAccessControlConfiguration
 func (c *Kendra) UpdateAccessControlConfiguration(input *UpdateAccessControlConfigurationInput) (*UpdateAccessControlConfigurationOutput, error) {
@@ -5770,7 +6877,7 @@ func (c *Kendra) UpdateDataSourceRequest(input *UpdateDataSourceInput) (req *req
 
 // UpdateDataSource API operation for AWSKendraFrontendService.
 //
-// Updates an existing Amazon Kendra data source.
+// Updates an existing Amazon Kendra data source connector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5781,16 +6888,29 @@ func (c *Kendra) UpdateDataSourceRequest(input *UpdateDataSourceInput) (req *req
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateDataSource
 func (c *Kendra) UpdateDataSource(input *UpdateDataSourceInput) (*UpdateDataSourceOutput, error) {
@@ -5872,16 +6992,29 @@ func (c *Kendra) UpdateExperienceRequest(input *UpdateExperienceInput) (req *req
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateExperience
 func (c *Kendra) UpdateExperience(input *UpdateExperienceInput) (*UpdateExperienceOutput, error) {
@@ -5900,6 +7033,112 @@ func (c *Kendra) UpdateExperience(input *UpdateExperienceInput) (*UpdateExperien
 // for more information on using Contexts.
 func (c *Kendra) UpdateExperienceWithContext(ctx aws.Context, input *UpdateExperienceInput, opts ...request.Option) (*UpdateExperienceOutput, error) {
 	req, out := c.UpdateExperienceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateFeaturedResultsSet = "UpdateFeaturedResultsSet"
+
+// UpdateFeaturedResultsSetRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateFeaturedResultsSet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateFeaturedResultsSet for more information on using the UpdateFeaturedResultsSet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateFeaturedResultsSetRequest method.
+//    req, resp := client.UpdateFeaturedResultsSetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateFeaturedResultsSet
+func (c *Kendra) UpdateFeaturedResultsSetRequest(input *UpdateFeaturedResultsSetInput) (req *request.Request, output *UpdateFeaturedResultsSetOutput) {
+	op := &request.Operation{
+		Name:       opUpdateFeaturedResultsSet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateFeaturedResultsSetInput{}
+	}
+
+	output = &UpdateFeaturedResultsSetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateFeaturedResultsSet API operation for AWSKendraFrontendService.
+//
+// Updates a set of featured results. Features results are placed above all
+// other results for certain queries. You map specific queries to specific documents
+// for featuring in the results. If a query contains an exact match of a query,
+// then one or more specific documents are featured in the search results.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation UpdateFeaturedResultsSet for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
+//
+//   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
+//
+//   * FeaturedResultsConflictException
+//   An error message with a list of conflicting queries used across different
+//   sets of featured results. This occurred with the request for a new featured
+//   results set. Check that the queries you specified for featured results are
+//   unique per featured results set for each index.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
+//
+//   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateFeaturedResultsSet
+func (c *Kendra) UpdateFeaturedResultsSet(input *UpdateFeaturedResultsSetInput) (*UpdateFeaturedResultsSetOutput, error) {
+	req, out := c.UpdateFeaturedResultsSetRequest(input)
+	return out, req.Send()
+}
+
+// UpdateFeaturedResultsSetWithContext is the same as UpdateFeaturedResultsSet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateFeaturedResultsSet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) UpdateFeaturedResultsSetWithContext(ctx aws.Context, input *UpdateFeaturedResultsSetInput, opts ...request.Option) (*UpdateFeaturedResultsSetOutput, error) {
+	req, out := c.UpdateFeaturedResultsSetRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5961,18 +7200,35 @@ func (c *Kendra) UpdateIndexRequest(input *UpdateIndexInput) (req *request.Reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ServiceQuotaExceededException
+//   You have exceeded the set limits for your Amazon Kendra service. Please see
+//   Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+//   information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+//   about an increase of limits.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateIndex
 func (c *Kendra) UpdateIndex(input *UpdateIndexInput) (*UpdateIndexOutput, error) {
@@ -6065,16 +7321,29 @@ func (c *Kendra) UpdateQuerySuggestionsBlockListRequest(input *UpdateQuerySugges
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateQuerySuggestionsBlockList
 func (c *Kendra) UpdateQuerySuggestionsBlockList(input *UpdateQuerySuggestionsBlockListInput) (*UpdateQuerySuggestionsBlockListOutput, error) {
@@ -6148,8 +7417,8 @@ func (c *Kendra) UpdateQuerySuggestionsConfigRequest(input *UpdateQuerySuggestio
 // Amazon Kendra supports partial updates, so you only need to provide the fields
 // you want to update.
 //
-// If an update is currently processing (i.e. 'happening'), you need to wait
-// for the update to finish before making another update.
+// If an update is currently processing, you need to wait for the update to
+// finish before making another update.
 //
 // Updates to query suggestions settings might not take effect right away. The
 // time for your updated settings to take effect depends on the updates made
@@ -6169,16 +7438,29 @@ func (c *Kendra) UpdateQuerySuggestionsConfigRequest(input *UpdateQuerySuggestio
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateQuerySuggestionsConfig
 func (c *Kendra) UpdateQuerySuggestionsConfig(input *UpdateQuerySuggestionsConfigInput) (*UpdateQuerySuggestionsConfigOutput, error) {
@@ -6258,16 +7540,29 @@ func (c *Kendra) UpdateThesaurusRequest(input *UpdateThesaurusInput) (req *reque
 //
 // Returned Error Types:
 //   * ValidationException
+//   The input fails to satisfy the constraints set by the Amazon Kendra service.
+//   Please provide the correct input and try again.
 //
 //   * ResourceNotFoundException
+//   The resource you want to use doesn’t exist. Please check you have provided
+//   the correct resource and try again.
 //
 //   * ThrottlingException
+//   The request was denied due to request throttling. Please reduce the number
+//   of requests and try again.
 //
 //   * AccessDeniedException
+//   You don't have sufficient access to perform this action. Please ensure you
+//   have the required permission policies and user accounts and try again.
 //
 //   * ConflictException
+//   A conflict occurred with the request. Please fix any inconsistences with
+//   your resources and try again.
 //
 //   * InternalServerException
+//   An issue occurred with the internal server used for your Amazon Kendra service.
+//   Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+//   for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateThesaurus
 func (c *Kendra) UpdateThesaurus(input *UpdateThesaurusInput) (*UpdateThesaurusOutput, error) {
@@ -6331,7 +7626,7 @@ func (s *AccessControlConfigurationSummary) SetId(v string) *AccessControlConfig
 type AccessControlListConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Path to the Amazon Web Services S3 bucket that contains the ACL files.
+	// Path to the Amazon S3 bucket that contains the ACL files.
 	KeyPath *string `min:"1" type:"string"`
 }
 
@@ -6372,6 +7667,8 @@ func (s *AccessControlListConfiguration) SetKeyPath(v string) *AccessControlList
 	return s
 }
 
+// You don't have sufficient access to perform this action. Please ensure you
+// have the required permission policies and user accounts and try again.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -6646,7 +7943,11 @@ type AlfrescoConfiguration struct {
 	SiteUrl *string `min:"1" type:"string" required:"true"`
 
 	// The path to the SSL certificate stored in an Amazon S3 bucket. You use this
-	// to connect to Alfresco.
+	// to connect to Alfresco if you require a secure SSL connection.
+	//
+	// You can simply generate a self-signed X509 certificate on any computer using
+	// OpenSSL. For an example of using OpenSSL to create an X509 certificate, see
+	// Create and sign an X509 certificate (https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-ssl.html).
 	//
 	// SslCertificateS3Path is a required field
 	SslCertificateS3Path *S3Path `type:"structure" required:"true"`
@@ -6845,7 +8146,7 @@ func (s *AlfrescoConfiguration) SetWikiFieldMappings(v []*DataSourceToIndexField
 type AssociateEntitiesToExperienceInput struct {
 	_ struct{} `type:"structure"`
 
-	// Lists users or groups in your Amazon Web Services SSO identity source.
+	// Lists users or groups in your IAM Identity Center identity source.
 	//
 	// EntityList is a required field
 	EntityList []*EntityConfiguration `min:"1" type:"list" required:"true"`
@@ -6938,8 +8239,8 @@ func (s *AssociateEntitiesToExperienceInput) SetIndexId(v string) *AssociateEnti
 type AssociateEntitiesToExperienceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Lists the users or groups in your Amazon Web Services SSO identity source
-	// that failed to properly configure with your Amazon Kendra experience.
+	// Lists the users or groups in your IAM Identity Center identity source that
+	// failed to properly configure with your Amazon Kendra experience.
 	FailedEntityList []*FailedEntity `min:"1" type:"list"`
 }
 
@@ -6981,8 +8282,8 @@ type AssociatePersonasToEntitiesInput struct {
 	IndexId *string `min:"36" type:"string" required:"true"`
 
 	// The personas that define the specific permissions of users or groups in your
-	// Amazon Web Services SSO identity source. The available personas or access
-	// roles are Owner and Viewer. For more information on these personas, see Providing
+	// IAM Identity Center identity source. The available personas or access roles
+	// are Owner and Viewer. For more information on these personas, see Providing
 	// access to your search page (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html#access-search-experience).
 	//
 	// Personas is a required field
@@ -7066,8 +8367,8 @@ func (s *AssociatePersonasToEntitiesInput) SetPersonas(v []*EntityPersonaConfigu
 type AssociatePersonasToEntitiesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Lists the users or groups in your Amazon Web Services SSO identity source
-	// that failed to properly configure with your Amazon Kendra experience.
+	// Lists the users or groups in your IAM Identity Center identity source that
+	// failed to properly configure with your Amazon Kendra experience.
 	FailedEntityList []*FailedEntity `min:"1" type:"list"`
 }
 
@@ -7095,7 +8396,8 @@ func (s *AssociatePersonasToEntitiesOutput) SetFailedEntityList(v []*FailedEntit
 	return s
 }
 
-// Provides filtering the query results based on document attributes.
+// Provides filtering the query results based on document attributes or metadata
+// fields.
 //
 // When you use the AndAllFilters or OrAllFilters, filters you can use 2 layers
 // under the first attribute filter. For example, you can use:
@@ -7118,31 +8420,31 @@ type AttributeFilter struct {
 	// Performs a logical AND operation on all supplied filters.
 	AndAllFilters []*AttributeFilter `type:"list"`
 
-	// Returns true when a document contains all of the specified document attributes.
-	// This filter is only applicable to StringListValue metadata.
+	// Returns true when a document contains all of the specified document attributes
+	// or metadata fields. This filter is only applicable to StringListValue metadata.
 	ContainsAll *DocumentAttribute `type:"structure"`
 
-	// Returns true when a document contains any of the specified document attributes.
-	// This filter is only applicable to StringListValue metadata.
+	// Returns true when a document contains any of the specified document attributes
+	// or metadata fields. This filter is only applicable to StringListValue metadata.
 	ContainsAny *DocumentAttribute `type:"structure"`
 
-	// Performs an equals operation on two document attributes.
+	// Performs an equals operation on two document attributes or metadata fields.
 	EqualsTo *DocumentAttribute `type:"structure"`
 
-	// Performs a greater than operation on two document attributes. Use with a
-	// document attribute of type Date or Long.
+	// Performs a greater than operation on two document attributes or metadata
+	// fields. Use with a document attribute of type Date or Long.
 	GreaterThan *DocumentAttribute `type:"structure"`
 
-	// Performs a greater or equals than operation on two document attributes. Use
-	// with a document attribute of type Date or Long.
+	// Performs a greater or equals than operation on two document attributes or
+	// metadata fields. Use with a document attribute of type Date or Long.
 	GreaterThanOrEquals *DocumentAttribute `type:"structure"`
 
-	// Performs a less than operation on two document attributes. Use with a document
-	// attribute of type Date or Long.
+	// Performs a less than operation on two document attributes or metadata fields.
+	// Use with a document attribute of type Date or Long.
 	LessThan *DocumentAttribute `type:"structure"`
 
-	// Performs a less than or equals operation on two document attributes. Use
-	// with a document attribute of type Date or Long.
+	// Performs a less than or equals operation on two document attributes or metadata
+	// fields. Use with a document attribute of type Date or Long.
 	LessThanOrEquals *DocumentAttribute `type:"structure"`
 
 	// Performs a logical NOT operation on all supplied filters.
@@ -7287,6 +8589,224 @@ func (s *AttributeFilter) SetNotFilter(v *AttributeFilter) *AttributeFilter {
 // SetOrAllFilters sets the OrAllFilters field's value.
 func (s *AttributeFilter) SetOrAllFilters(v []*AttributeFilter) *AttributeFilter {
 	s.OrAllFilters = v
+	return s
+}
+
+// Gets information on the configuration of document fields/attributes that
+// you want to base query suggestions on. To change your configuration, use
+// AttributeSuggestionsUpdateConfig (https://docs.aws.amazon.com/kendra/latest/dg/API_AttributeSuggestionsUpdateConfig.html)
+// and then call UpdateQuerySuggestionsConfig (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateQuerySuggestionsConfig.html).
+type AttributeSuggestionsDescribeConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The mode is set to either ACTIVE or INACTIVE. If the Mode for query history
+	// is set to ENABLED when calling UpdateQuerySuggestionsConfig (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateQuerySuggestionsConfig.html)
+	// and AttributeSuggestionsMode to use fields/attributes is set to ACTIVE, and
+	// you haven't set your SuggestionTypes preference to DOCUMENT_ATTRIBUTES, then
+	// Amazon Kendra uses the query history.
+	AttributeSuggestionsMode *string `type:"string" enum:"AttributeSuggestionsMode"`
+
+	// The list of fields/attributes that you want to set as suggestible for query
+	// suggestions.
+	SuggestableConfigList []*SuggestableConfig `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeSuggestionsDescribeConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeSuggestionsDescribeConfig) GoString() string {
+	return s.String()
+}
+
+// SetAttributeSuggestionsMode sets the AttributeSuggestionsMode field's value.
+func (s *AttributeSuggestionsDescribeConfig) SetAttributeSuggestionsMode(v string) *AttributeSuggestionsDescribeConfig {
+	s.AttributeSuggestionsMode = &v
+	return s
+}
+
+// SetSuggestableConfigList sets the SuggestableConfigList field's value.
+func (s *AttributeSuggestionsDescribeConfig) SetSuggestableConfigList(v []*SuggestableConfig) *AttributeSuggestionsDescribeConfig {
+	s.SuggestableConfigList = v
+	return s
+}
+
+// Provides the configuration information for the document fields/attributes
+// that you want to base query suggestions on.
+type AttributeSuggestionsGetConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The list of additional document field/attribute keys or field names to include
+	// in the response. You can use additional fields to provide extra information
+	// in the response. Additional fields are not used to based suggestions on.
+	AdditionalResponseAttributes []*string `min:"1" type:"list"`
+
+	// Filters the search results based on document fields/attributes.
+	AttributeFilter *AttributeFilter `type:"structure"`
+
+	// The list of document field/attribute keys or field names to use for query
+	// suggestions. If the content within any of the fields match what your user
+	// starts typing as their query, then the field content is returned as a query
+	// suggestion.
+	SuggestionAttributes []*string `min:"1" type:"list"`
+
+	// Applies user context filtering so that only users who are given access to
+	// certain documents see these document in their search results.
+	UserContext *UserContext `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeSuggestionsGetConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeSuggestionsGetConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AttributeSuggestionsGetConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AttributeSuggestionsGetConfig"}
+	if s.AdditionalResponseAttributes != nil && len(s.AdditionalResponseAttributes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AdditionalResponseAttributes", 1))
+	}
+	if s.SuggestionAttributes != nil && len(s.SuggestionAttributes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SuggestionAttributes", 1))
+	}
+	if s.AttributeFilter != nil {
+		if err := s.AttributeFilter.Validate(); err != nil {
+			invalidParams.AddNested("AttributeFilter", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.UserContext != nil {
+		if err := s.UserContext.Validate(); err != nil {
+			invalidParams.AddNested("UserContext", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalResponseAttributes sets the AdditionalResponseAttributes field's value.
+func (s *AttributeSuggestionsGetConfig) SetAdditionalResponseAttributes(v []*string) *AttributeSuggestionsGetConfig {
+	s.AdditionalResponseAttributes = v
+	return s
+}
+
+// SetAttributeFilter sets the AttributeFilter field's value.
+func (s *AttributeSuggestionsGetConfig) SetAttributeFilter(v *AttributeFilter) *AttributeSuggestionsGetConfig {
+	s.AttributeFilter = v
+	return s
+}
+
+// SetSuggestionAttributes sets the SuggestionAttributes field's value.
+func (s *AttributeSuggestionsGetConfig) SetSuggestionAttributes(v []*string) *AttributeSuggestionsGetConfig {
+	s.SuggestionAttributes = v
+	return s
+}
+
+// SetUserContext sets the UserContext field's value.
+func (s *AttributeSuggestionsGetConfig) SetUserContext(v *UserContext) *AttributeSuggestionsGetConfig {
+	s.UserContext = v
+	return s
+}
+
+// Updates the configuration information for the document fields/attributes
+// that you want to base query suggestions on.
+//
+// To deactivate using documents fields for query suggestions, set the mode
+// to INACTIVE. You must also set SuggestionTypes as either QUERY or DOCUMENT_ATTRIBUTES
+// and then call GetQuerySuggestions (https://docs.aws.amazon.com/kendra/latest/dg/API_GetQuerySuggestions.html).
+// If you set to QUERY, then Amazon Kendra uses the query history to base suggestions
+// on. If you set to DOCUMENT_ATTRIBUTES, then Amazon Kendra uses the contents
+// of document fields to base suggestions on.
+type AttributeSuggestionsUpdateConfig struct {
+	_ struct{} `type:"structure"`
+
+	// You can set the mode to ACTIVE or INACTIVE. You must also set SuggestionTypes
+	// as either QUERY or DOCUMENT_ATTRIBUTES and then call GetQuerySuggestions
+	// (https://docs.aws.amazon.com/kendra/latest/dg/API_GetQuerySuggestions.html).
+	// If Mode to use query history is set to ENABLED when calling UpdateQuerySuggestionsConfig
+	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateQuerySuggestionsConfig.html)
+	// and AttributeSuggestionsMode to use fields/attributes is set to ACTIVE, and
+	// you haven't set your SuggestionTypes preference to DOCUMENT_ATTRIBUTES, then
+	// Amazon Kendra uses the query history.
+	AttributeSuggestionsMode *string `type:"string" enum:"AttributeSuggestionsMode"`
+
+	// The list of fields/attributes that you want to set as suggestible for query
+	// suggestions.
+	SuggestableConfigList []*SuggestableConfig `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeSuggestionsUpdateConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeSuggestionsUpdateConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AttributeSuggestionsUpdateConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AttributeSuggestionsUpdateConfig"}
+	if s.SuggestableConfigList != nil {
+		for i, v := range s.SuggestableConfigList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SuggestableConfigList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributeSuggestionsMode sets the AttributeSuggestionsMode field's value.
+func (s *AttributeSuggestionsUpdateConfig) SetAttributeSuggestionsMode(v string) *AttributeSuggestionsUpdateConfig {
+	s.AttributeSuggestionsMode = &v
+	return s
+}
+
+// SetSuggestableConfigList sets the SuggestableConfigList field's value.
+func (s *AttributeSuggestionsUpdateConfig) SetSuggestableConfigList(v []*SuggestableConfig) *AttributeSuggestionsUpdateConfig {
+	s.SuggestableConfigList = v
 	return s
 }
 
@@ -7605,6 +9125,167 @@ func (s *BatchDeleteDocumentResponseFailedDocument) SetId(v string) *BatchDelete
 	return s
 }
 
+// Provides information about a set of featured results that couldn't be removed
+// from an index by the BatchDeleteFeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchDeleteFeaturedResultsSet.html)
+// API.
+type BatchDeleteFeaturedResultsSetError struct {
+	_ struct{} `type:"structure"`
+
+	// The error code for why the set of featured results couldn't be removed from
+	// the index.
+	//
+	// ErrorCode is a required field
+	ErrorCode *string `type:"string" required:"true" enum:"ErrorCode"`
+
+	// An explanation for why the set of featured results couldn't be removed from
+	// the index.
+	//
+	// ErrorMessage is a required field
+	ErrorMessage *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the set of featured results that couldn't be removed from
+	// the index.
+	//
+	// Id is a required field
+	Id *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteFeaturedResultsSetError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteFeaturedResultsSetError) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *BatchDeleteFeaturedResultsSetError) SetErrorCode(v string) *BatchDeleteFeaturedResultsSetError {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *BatchDeleteFeaturedResultsSetError) SetErrorMessage(v string) *BatchDeleteFeaturedResultsSetError {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *BatchDeleteFeaturedResultsSetError) SetId(v string) *BatchDeleteFeaturedResultsSetError {
+	s.Id = &v
+	return s
+}
+
+type BatchDeleteFeaturedResultsSetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifiers of the featured results sets that you want to delete.
+	//
+	// FeaturedResultsSetIds is a required field
+	FeaturedResultsSetIds []*string `min:"1" type:"list" required:"true"`
+
+	// The identifier of the index used for featuring results.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteFeaturedResultsSetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteFeaturedResultsSetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchDeleteFeaturedResultsSetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchDeleteFeaturedResultsSetInput"}
+	if s.FeaturedResultsSetIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("FeaturedResultsSetIds"))
+	}
+	if s.FeaturedResultsSetIds != nil && len(s.FeaturedResultsSetIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FeaturedResultsSetIds", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFeaturedResultsSetIds sets the FeaturedResultsSetIds field's value.
+func (s *BatchDeleteFeaturedResultsSetInput) SetFeaturedResultsSetIds(v []*string) *BatchDeleteFeaturedResultsSetInput {
+	s.FeaturedResultsSetIds = v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *BatchDeleteFeaturedResultsSetInput) SetIndexId(v string) *BatchDeleteFeaturedResultsSetInput {
+	s.IndexId = &v
+	return s
+}
+
+type BatchDeleteFeaturedResultsSetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of errors for the featured results set IDs, explaining why they
+	// couldn't be removed from the index.
+	//
+	// Errors is a required field
+	Errors []*BatchDeleteFeaturedResultsSetError `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteFeaturedResultsSetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteFeaturedResultsSetOutput) GoString() string {
+	return s.String()
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchDeleteFeaturedResultsSetOutput) SetErrors(v []*BatchDeleteFeaturedResultsSetError) *BatchDeleteFeaturedResultsSetOutput {
+	s.Errors = v
+	return s
+}
+
 type BatchGetDocumentStatusInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7734,7 +9415,7 @@ func (s *BatchGetDocumentStatusOutput) SetErrors(v []*BatchGetDocumentStatusResp
 type BatchGetDocumentStatusResponseError struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the document whose status could not be retrieved.
+	// The identifier of the document whose status could not be retrieved.
 	DocumentId *string `min:"1" type:"string"`
 
 	// Indicates the source of the error.
@@ -7796,14 +9477,11 @@ type BatchPutDocumentInput struct {
 	//
 	// Documents have the following file size limits.
 	//
-	//    * 5 MB total size for inline documents
-	//
-	//    * 50 MB total size for files from an S3 bucket
+	//    * 50 MB total size for any file
 	//
 	//    * 5 MB extracted text for any file
 	//
-	// For more information about file size and transaction per second quotas, see
-	// Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
+	// For more information, see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
 	//
 	// Documents is a required field
 	Documents []*Document `min:"1" type:"list" required:"true"`
@@ -7814,8 +9492,8 @@ type BatchPutDocumentInput struct {
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of a role that is allowed to run the BatchPutDocument
-	// API. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	// The Amazon Resource Name (ARN) of an IAM role with permission to access your
+	// S3 bucket. For more information, see IAM access roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	RoleArn *string `type:"string"`
 }
 
@@ -7945,7 +9623,7 @@ type BatchPutDocumentResponseFailedDocument struct {
 	// A description of the reason why the document could not be indexed.
 	ErrorMessage *string `min:"1" type:"string"`
 
-	// The unique identifier of the document.
+	// The identifier of the document.
 	Id *string `min:"1" type:"string"`
 }
 
@@ -8053,8 +9731,7 @@ type BoxConfiguration struct {
 	//    * passphrase—A set of characters that act like a password.
 	//
 	// You create an application in Box to generate the keys or credentials required
-	// for the secret. For more information, see Authentication for a Box data source
-	// (https://docs.aws.amazon.com/kendra/latest/dg/data-source-box.html#box-authentication).
+	// for the secret. For more information, see Using a Box data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-box.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -8411,12 +10088,12 @@ func (s ClearQuerySuggestionsOutput) GoString() string {
 type ClickFeedback struct {
 	_ struct{} `type:"structure"`
 
-	// The Unix timestamp of the date and time that the result was clicked.
+	// The Unix timestamp when the result was clicked.
 	//
 	// ClickTime is a required field
 	ClickTime *time.Time `type:"timestamp" required:"true"`
 
-	// The unique identifier of the search result that was clicked.
+	// The identifier of the search result that was clicked.
 	//
 	// ResultId is a required field
 	ResultId *string `min:"1" type:"string" required:"true"`
@@ -8486,7 +10163,7 @@ type ColumnConfiguration struct {
 	// DocumentDataColumnName is a required field
 	DocumentDataColumnName *string `min:"1" type:"string" required:"true"`
 
-	// The column that provides the document's unique identifier.
+	// The column that provides the document's identifier.
 	//
 	// DocumentIdColumnName is a required field
 	DocumentIdColumnName *string `min:"1" type:"string" required:"true"`
@@ -8592,6 +10269,8 @@ func (s *ColumnConfiguration) SetFieldMappings(v []*DataSourceToIndexFieldMappin
 	return s
 }
 
+// A conflict occurred with the request. Please fix any inconsistences with
+// your resources and try again.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -8653,6 +10332,60 @@ func (s *ConflictException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Information about a conflicting query used across different sets of featured
+// results. When you create a featured results set, you must check that the
+// queries are unique per featured results set for each index.
+type ConflictingItem struct {
+	_ struct{} `type:"structure"`
+
+	// The text of the conflicting query.
+	QueryText *string `min:"1" type:"string"`
+
+	// The identifier of the set of featured results that the conflicting query
+	// belongs to.
+	SetId *string `min:"1" type:"string"`
+
+	// The name for the set of featured results that the conflicting query belongs
+	// to.
+	SetName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictingItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictingItem) GoString() string {
+	return s.String()
+}
+
+// SetQueryText sets the QueryText field's value.
+func (s *ConflictingItem) SetQueryText(v string) *ConflictingItem {
+	s.QueryText = &v
+	return s
+}
+
+// SetSetId sets the SetId field's value.
+func (s *ConflictingItem) SetSetId(v string) *ConflictingItem {
+	s.SetId = &v
+	return s
+}
+
+// SetSetName sets the SetName field's value.
+func (s *ConflictingItem) SetSetName(v string) *ConflictingItem {
+	s.SetName = &v
+	return s
 }
 
 // Configuration of attachment settings for the Confluence data source. Attachment
@@ -8951,6 +10684,11 @@ type ConfluenceConfiguration struct {
 	// pages.
 	AttachmentConfiguration *ConfluenceAttachmentConfiguration `type:"structure"`
 
+	// Whether you want to connect to Confluence using basic authentication of user
+	// name and password, or a personal access token. You can use a personal access
+	// token for Confluence Server.
+	AuthenticationType *string `type:"string" enum:"ConfluenceAuthenticationType"`
+
 	// Configuration information for indexing Confluence blogs.
 	BlogConfiguration *ConfluenceBlogConfiguration `type:"structure"`
 
@@ -8973,10 +10711,31 @@ type ConfluenceConfiguration struct {
 	// Configuration information for indexing Confluence pages.
 	PageConfiguration *ConfluencePageConfiguration `type:"structure"`
 
+	// Configuration information to connect to your Confluence URL instance via
+	// a web proxy. You can use this option for Confluence Server.
+	//
+	// You must provide the website host name and port number. For example, the
+	// host name of https://a.example.com/page1.html is "a.example.com" and the
+	// port is 443, the standard port for HTTPS.
+	//
+	// Web proxy credentials are optional and you can use them to connect to a web
+	// proxy server that requires basic authentication of user name and password.
+	// To store web proxy credentials, you use a secret in Secrets Manager.
+	//
+	// It is recommended that you follow best security practices when configuring
+	// your web proxy. This includes setting up throttling, setting up logging and
+	// monitoring, and applying security patches on a regular basis. If you use
+	// your web proxy with multiple data sources, sync jobs that occur at the same
+	// time could strain the load on your proxy. It is recommended you prepare your
+	// proxy beforehand for any security and load requirements.
+	ProxyConfiguration *ProxyConfiguration `type:"structure"`
+
 	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
 	// the user name and password required to connect to the Confluence instance.
-	// If you use Confluence cloud, you use a generated API token as the password.
-	// For more information, see Using a Confluence data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-confluence.html).
+	// If you use Confluence Cloud, you use a generated API token as the password.
+	//
+	// You can also provide authentication credentials in the form of a personal
+	// access token. For more information, see Using a Confluence data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-confluence.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -9052,6 +10811,11 @@ func (s *ConfluenceConfiguration) Validate() error {
 			invalidParams.AddNested("PageConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ProxyConfiguration != nil {
+		if err := s.ProxyConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ProxyConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.SpaceConfiguration != nil {
 		if err := s.SpaceConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("SpaceConfiguration", err.(request.ErrInvalidParams))
@@ -9072,6 +10836,12 @@ func (s *ConfluenceConfiguration) Validate() error {
 // SetAttachmentConfiguration sets the AttachmentConfiguration field's value.
 func (s *ConfluenceConfiguration) SetAttachmentConfiguration(v *ConfluenceAttachmentConfiguration) *ConfluenceConfiguration {
 	s.AttachmentConfiguration = v
+	return s
+}
+
+// SetAuthenticationType sets the AuthenticationType field's value.
+func (s *ConfluenceConfiguration) SetAuthenticationType(v string) *ConfluenceConfiguration {
+	s.AuthenticationType = &v
 	return s
 }
 
@@ -9096,6 +10866,12 @@ func (s *ConfluenceConfiguration) SetInclusionPatterns(v []*string) *ConfluenceC
 // SetPageConfiguration sets the PageConfiguration field's value.
 func (s *ConfluenceConfiguration) SetPageConfiguration(v *ConfluencePageConfiguration) *ConfluenceConfiguration {
 	s.PageConfiguration = v
+	return s
+}
+
+// SetProxyConfiguration sets the ProxyConfiguration field's value.
+func (s *ConfluenceConfiguration) SetProxyConfiguration(v *ProxyConfiguration) *ConfluenceConfiguration {
+	s.ProxyConfiguration = v
 	return s
 }
 
@@ -9191,7 +10967,7 @@ func (s *ConfluencePageConfiguration) SetPageFieldMappings(v []*ConfluencePageTo
 	return s
 }
 
-// >Maps attributes or field names of Confluence pages to Amazon Kendra index
+// Maps attributes or field names of Confluence pages to Amazon Kendra index
 // field names. To create custom fields, use the UpdateIndex API before you
 // map to Confluence fields. For more information, see Mapping data source fields
 // (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
@@ -9377,7 +11153,7 @@ func (s *ConfluenceSpaceConfiguration) SetSpaceFieldMappings(v []*ConfluenceSpac
 	return s
 }
 
-// >Maps attributes or field names of Confluence spaces to Amazon Kendra index
+// Maps attributes or field names of Confluence spaces to Amazon Kendra index
 // field names. To create custom fields, use the UpdateIndex API before you
 // map to Confluence fields. For more information, see Mapping data source fields
 // (https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html). The Confluence
@@ -9909,14 +11685,14 @@ type CreateDataSourceInput struct {
 	// documents in languages other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
 	LanguageCode *string `min:"2" type:"string"`
 
-	// A unique name for the data source connector. A data source name can't be
-	// changed without deleting and recreating the data source connector.
+	// A name for the data source connector.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of a role with permission to access the data
-	// source connector. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	// The Amazon Resource Name (ARN) of an IAM role with permission to access the
+	// data source and required resources. For more information, see IAM access
+	// roles for Amazon Kendra. (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
 	// You can't specify the RoleArn parameter when the Type parameter is set to
 	// CUSTOM. If you do, you receive a ValidationException exception.
@@ -9929,19 +11705,27 @@ type CreateDataSourceInput struct {
 	// Kendra will not periodically update the index. You can call the StartDataSourceSyncJob
 	// API to update the index.
 	//
+	// Specify a cron- format schedule string or an empty string to indicate that
+	// the index is updated on demand.
+	//
 	// You can't specify the Schedule parameter when the Type parameter is set to
 	// CUSTOM. If you do, you receive a ValidationException exception.
 	Schedule *string `type:"string"`
 
-	// A list of key-value pairs that identify the data source connector. You can
-	// use the tags to identify and organize your resources and to control access
-	// to resources.
+	// A list of key-value pairs that identify or categorize the data source connector.
+	// You can also use tags to help control access to the data source connector.
+	// Tag keys and values can consist of Unicode letters, digits, white space,
+	// and any of the following symbols: _ . : / = + - @.
 	Tags []*Tag `type:"list"`
 
 	// The type of data source repository. For example, SHAREPOINT.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"DataSourceType"`
+
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your data source. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10004,6 +11788,11 @@ func (s *CreateDataSourceInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -10079,6 +11868,12 @@ func (s *CreateDataSourceInput) SetType(v string) *CreateDataSourceInput {
 	return s
 }
 
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *CreateDataSourceInput) SetVpcConfiguration(v *DataSourceVpcConfiguration) *CreateDataSourceInput {
+	s.VpcConfiguration = v
+	return s
+}
+
 type CreateDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -10139,10 +11934,11 @@ type CreateExperienceInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of a role with permission to access Query
-	// API, QuerySuggestions API, SubmitFeedback API, and Amazon Web Services SSO
+	// The Amazon Resource Name (ARN) of an IAM role with permission to access Query
+	// API, GetQuerySuggestions API, and other required APIs. The role also must
+	// include permission to access IAM Identity Center (successor to Single Sign-On)
 	// that stores your user and group information. For more information, see IAM
-	// roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	// access roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	RoleArn *string `type:"string"`
 }
 
@@ -10233,7 +12029,7 @@ func (s *CreateExperienceInput) SetRoleArn(v string) *CreateExperienceInput {
 type CreateExperienceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier for your created Amazon Kendra experience.
+	// The identifier of your Amazon Kendra experience.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
@@ -10300,9 +12096,9 @@ type CreateFaqInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of a role with permission to access the S3
-	// bucket that contains the FAQs. For more information, see IAM Roles for Amazon
-	// Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	// The Amazon Resource Name (ARN) of an IAM role with permission to access the
+	// S3 bucket that contains the FAQs. For more information, see IAM access roles
+	// for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
@@ -10441,7 +12237,7 @@ func (s *CreateFaqInput) SetTags(v []*Tag) *CreateFaqInput {
 type CreateFaqOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the FAQ.
+	// The identifier of the FAQ.
 	Id *string `min:"1" type:"string"`
 }
 
@@ -10469,6 +12265,195 @@ func (s *CreateFaqOutput) SetId(v string) *CreateFaqOutput {
 	return s
 }
 
+type CreateFeaturedResultsSetInput struct {
+	_ struct{} `type:"structure"`
+
+	// A token that you provide to identify the request to create a set of featured
+	// results. Multiple calls to the CreateFeaturedResultsSet API with the same
+	// client token will create only one featured results set.
+	ClientToken *string `min:"1" type:"string"`
+
+	// A description for the set of featured results.
+	Description *string `type:"string"`
+
+	// A list of document IDs for the documents you want to feature at the top of
+	// the search results page. For more information on the list of documents, see
+	// FeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_FeaturedResultsSet.html).
+	FeaturedDocuments []*FeaturedDocument `type:"list"`
+
+	// A name for the set of featured results.
+	//
+	// FeaturedResultsSetName is a required field
+	FeaturedResultsSetName *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index that you want to use for featuring results.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// A list of queries for featuring results. For more information on the list
+	// of queries, see FeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_FeaturedResultsSet.html).
+	QueryTexts []*string `type:"list"`
+
+	// The current status of the set of featured results. When the value is ACTIVE,
+	// featured results are ready for use. You can still configure your settings
+	// before setting the status to ACTIVE. You can set the status to ACTIVE or
+	// INACTIVE using the UpdateFeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateFeaturedResultsSet.html)
+	// API. The queries you specify for featured results must be unique per featured
+	// results set for each index, whether the status is ACTIVE or INACTIVE.
+	Status *string `type:"string" enum:"FeaturedResultsSetStatus"`
+
+	// A list of key-value pairs that identify or categorize the featured results
+	// set. You can also use tags to help control access to the featured results
+	// set. Tag keys and values can consist of Unicode letters, digits, white space,
+	// and any of the following symbols:_ . : / = + - @.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFeaturedResultsSetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFeaturedResultsSetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateFeaturedResultsSetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateFeaturedResultsSetInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.FeaturedResultsSetName == nil {
+		invalidParams.Add(request.NewErrParamRequired("FeaturedResultsSetName"))
+	}
+	if s.FeaturedResultsSetName != nil && len(*s.FeaturedResultsSetName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FeaturedResultsSetName", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.FeaturedDocuments != nil {
+		for i, v := range s.FeaturedDocuments {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FeaturedDocuments", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateFeaturedResultsSetInput) SetClientToken(v string) *CreateFeaturedResultsSetInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateFeaturedResultsSetInput) SetDescription(v string) *CreateFeaturedResultsSetInput {
+	s.Description = &v
+	return s
+}
+
+// SetFeaturedDocuments sets the FeaturedDocuments field's value.
+func (s *CreateFeaturedResultsSetInput) SetFeaturedDocuments(v []*FeaturedDocument) *CreateFeaturedResultsSetInput {
+	s.FeaturedDocuments = v
+	return s
+}
+
+// SetFeaturedResultsSetName sets the FeaturedResultsSetName field's value.
+func (s *CreateFeaturedResultsSetInput) SetFeaturedResultsSetName(v string) *CreateFeaturedResultsSetInput {
+	s.FeaturedResultsSetName = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *CreateFeaturedResultsSetInput) SetIndexId(v string) *CreateFeaturedResultsSetInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetQueryTexts sets the QueryTexts field's value.
+func (s *CreateFeaturedResultsSetInput) SetQueryTexts(v []*string) *CreateFeaturedResultsSetInput {
+	s.QueryTexts = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateFeaturedResultsSetInput) SetStatus(v string) *CreateFeaturedResultsSetInput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateFeaturedResultsSetInput) SetTags(v []*Tag) *CreateFeaturedResultsSetInput {
+	s.Tags = v
+	return s
+}
+
+type CreateFeaturedResultsSetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information on the set of featured results. This includes the identifier
+	// of the featured results set, whether the featured results set is active or
+	// inactive, when the featured results set was created, and more.
+	FeaturedResultsSet *FeaturedResultsSet `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFeaturedResultsSetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFeaturedResultsSetOutput) GoString() string {
+	return s.String()
+}
+
+// SetFeaturedResultsSet sets the FeaturedResultsSet field's value.
+func (s *CreateFeaturedResultsSetOutput) SetFeaturedResultsSet(v *FeaturedResultsSet) *CreateFeaturedResultsSetOutput {
+	s.FeaturedResultsSet = v
+	return s
+}
+
 type CreateIndexInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10482,13 +12467,12 @@ type CreateIndexInput struct {
 
 	// The Amazon Kendra edition to use for the index. Choose DEVELOPER_EDITION
 	// for indexes intended for development, testing, or proof of concept. Use ENTERPRISE_EDITION
-	// for your production databases. Once you set the edition for an index, it
-	// can't be changed.
+	// for production. Once you set the edition for an index, it can't be changed.
 	//
 	// The Edition parameter is optional. If you don't supply a value, the default
 	// is ENTERPRISE_EDITION.
 	//
-	// For more information on quota limits for enterprise and developer editions,
+	// For more information on quota limits for Enterprise and Developer editions,
 	// see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html).
 	Edition *string `type:"string" enum:"IndexEdition"`
 
@@ -10497,10 +12481,9 @@ type CreateIndexInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// An Identity and Access Management (IAM) role that gives Amazon Kendra permissions
-	// to access your Amazon CloudWatch logs and metrics. This is also the role
-	// you use when you call the BatchPutDocument API to index documents from an
-	// Amazon S3 bucket.
+	// The Amazon Resource Name (ARN) of an IAM role with permission to access your
+	// Amazon CloudWatch logs and metrics. For more information, see IAM access
+	// roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
@@ -10509,8 +12492,10 @@ type CreateIndexInput struct {
 	// data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.
 	ServerSideEncryptionConfiguration *ServerSideEncryptionConfiguration `type:"structure"`
 
-	// A list of key-value pairs that identify the index. You can use the tags to
-	// identify and organize your resources and to control access to resources.
+	// A list of key-value pairs that identify or categorize the index. You can
+	// also use tags to help control access to the index. Tag keys and values can
+	// consist of Unicode letters, digits, white space, and any of the following
+	// symbols: _ . : / = + - @.
 	Tags []*Tag `type:"list"`
 
 	// The user context policy.
@@ -10529,8 +12514,8 @@ type CreateIndexInput struct {
 	// to the user will be searchable and displayable.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
 
-	// Enables fetching access levels of groups and users from an Amazon Web Services
-	// Single Sign On identity source. To configure this, see UserGroupResolutionConfiguration
+	// Gets users and groups from IAM Identity Center (successor to Single Sign-On)
+	// identity source. To configure this, see UserGroupResolutionConfiguration
 	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UserGroupResolutionConfiguration.html).
 	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
@@ -10671,8 +12656,8 @@ func (s *CreateIndexInput) SetUserTokenConfigurations(v []*UserTokenConfiguratio
 type CreateIndexOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the index. Use this identifier when you query an
-	// index, set up a data source, or index a document.
+	// The identifier of the index. Use this identifier when you query an index,
+	// set up a data source, or index a document.
 	Id *string `min:"36" type:"string"`
 }
 
@@ -10707,7 +12692,7 @@ type CreateQuerySuggestionsBlockListInput struct {
 	// block list.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
-	// A user-friendly description for the block list.
+	// A description for the block list.
 	//
 	// For example, the description "List of all offensive words that can appear
 	// in user queries and need to be blocked from suggestions."
@@ -10719,20 +12704,17 @@ type CreateQuerySuggestionsBlockListInput struct {
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
-	// A user friendly name for the block list.
+	// A name for the block list.
 	//
-	// For example, the block list named 'offensive-words' includes all offensive
-	// words that could appear in user queries and need to be blocked from suggestions.
+	// For example, the name 'offensive-words', which includes all offensive words
+	// that could appear in user queries and need to be blocked from suggestions.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The IAM (Identity and Access Management) role used by Amazon Kendra to access
-	// the block list text file in your S3 bucket.
-	//
-	// You need permissions to the role ARN (Amazon Web Services Resource Name).
-	// The role needs S3 read permissions to your file in S3 and needs to give STS
-	// (Security Token Service) assume role permissions to Amazon Kendra.
+	// The Amazon Resource Name (ARN) of an IAM role with permission to access your
+	// S3 bucket that contains the block list text file. For more information, see
+	// IAM access roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
@@ -10747,7 +12729,9 @@ type CreateQuerySuggestionsBlockListInput struct {
 	// SourceS3Path is a required field
 	SourceS3Path *S3Path `type:"structure" required:"true"`
 
-	// A tag that you can assign to a block list that categorizes the block list.
+	// A list of key-value pairs that identify or categorize the block list. Tag
+	// keys and values can consist of Unicode letters, digits, white space, and
+	// any of the following symbols: _ . : / = + - @.
 	Tags []*Tag `type:"list"`
 }
 
@@ -10860,7 +12844,7 @@ func (s *CreateQuerySuggestionsBlockListInput) SetTags(v []*Tag) *CreateQuerySug
 type CreateQuerySuggestionsBlockListOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the created block list.
+	// The identifier of the block list.
 	Id *string `min:"36" type:"string"`
 }
 
@@ -10909,8 +12893,9 @@ type CreateThesaurusInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// An IAM role that gives Amazon Kendra permissions to access thesaurus file
-	// specified in SourceS3Path.
+	// The Amazon Resource Name (ARN) of an IAM role with permission to access your
+	// S3 bucket that contains the thesaurus file. For more information, see IAM
+	// access roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
@@ -10920,8 +12905,10 @@ type CreateThesaurusInput struct {
 	// SourceS3Path is a required field
 	SourceS3Path *S3Path `type:"structure" required:"true"`
 
-	// A list of key-value pairs that identify the thesaurus. You can use the tags
-	// to identify and organize your resources and to control access to resources.
+	// A list of key-value pairs that identify or categorize the thesaurus. You
+	// can also use tags to help control access to the thesaurus. Tag keys and values
+	// can consist of Unicode letters, digits, white space, and any of the following
+	// symbols: _ . : / = + - @.
 	Tags []*Tag `type:"list"`
 }
 
@@ -11034,7 +13021,7 @@ func (s *CreateThesaurusInput) SetTags(v []*Tag) *CreateThesaurusInput {
 type CreateThesaurusOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the thesaurus.
+	// The identifier of the thesaurus.
 	Id *string `min:"1" type:"string"`
 }
 
@@ -11226,6 +13213,10 @@ type DataSourceConfiguration struct {
 
 	// Provides the configuration information to connect to Slack as your data source.
 	SlackConfiguration *SlackConfiguration `type:"structure"`
+
+	// Provides a template for the configuration information to connect to your
+	// data source.
+	TemplateConfiguration *TemplateConfiguration `type:"structure"`
 
 	// Provides the configuration information required for Amazon Kendra Web Crawler.
 	WebCrawlerConfiguration *WebCrawlerConfiguration `type:"structure"`
@@ -11438,6 +13429,12 @@ func (s *DataSourceConfiguration) SetSlackConfiguration(v *SlackConfiguration) *
 	return s
 }
 
+// SetTemplateConfiguration sets the TemplateConfiguration field's value.
+func (s *DataSourceConfiguration) SetTemplateConfiguration(v *TemplateConfiguration) *DataSourceConfiguration {
+	s.TemplateConfiguration = v
+	return s
+}
+
 // SetWebCrawlerConfiguration sets the WebCrawlerConfiguration field's value.
 func (s *DataSourceConfiguration) SetWebCrawlerConfiguration(v *WebCrawlerConfiguration) *DataSourceConfiguration {
 	s.WebCrawlerConfiguration = v
@@ -11520,15 +13517,14 @@ func (s *DataSourceGroup) SetGroupId(v string) *DataSourceGroup {
 	return s
 }
 
-// Summary information for an Amazon Kendra data source. Returned in a call
-// to the DescribeDataSource API.
+// Summary information for a Amazon Kendra data source.
 type DataSourceSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The UNIX datetime that the data source was created.
+	// The Unix timestamp when the data source connector was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
-	// The unique identifier for the data source.
+	// The identifier for the data source.
 	Id *string `min:"1" type:"string"`
 
 	// The code for a language. This shows a supported language for all documents
@@ -11547,7 +13543,7 @@ type DataSourceSummary struct {
 	// The type of the data source.
 	Type *string `type:"string" enum:"DataSourceType"`
 
-	// The UNIX datetime that the data source was lasted updated.
+	// The Unix timestamp when the data source connector was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -11619,7 +13615,7 @@ type DataSourceSyncJob struct {
 	// underlying data source, this field contains a code that identifies the error.
 	DataSourceErrorCode *string `min:"1" type:"string"`
 
-	// The UNIX datetime that the synchronization job completed.
+	// The Unix timestamp when the synchronization job completed.
 	EndTime *time.Time `type:"timestamp"`
 
 	// If the Status field is set to FAILED, the ErrorCode field indicates the reason
@@ -11630,7 +13626,7 @@ type DataSourceSyncJob struct {
 	// of the error that caused the synchronization to fail.
 	ErrorMessage *string `min:"1" type:"string"`
 
-	// A unique identifier for the synchronization job.
+	// A identifier for the synchronization job.
 	ExecutionId *string `min:"1" type:"string"`
 
 	// Maps a batch delete document request to a specific data source sync job.
@@ -11638,7 +13634,7 @@ type DataSourceSyncJob struct {
 	// a data source connector.
 	Metrics *DataSourceSyncJobMetrics `type:"structure"`
 
-	// The UNIX datetime that the synchronization job started.
+	// The Unix timestamp when the synchronization job started.
 	StartTime *time.Time `type:"timestamp"`
 
 	// The execution status of the synchronization job. When the Status field is
@@ -12225,12 +14221,12 @@ func (s DeleteAccessControlConfigurationOutput) GoString() string {
 type DeleteDataSourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the data source you want to delete.
+	// The identifier of the data source connector you want to delete.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index used with the data source.
+	// The identifier of the index used with the data source connector.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -12587,13 +14583,13 @@ type DeletePrincipalMappingInput struct {
 	// top of other actions with lower number IDs. This prevents previous actions
 	// with lower number IDs from possibly overriding the latest action.
 	//
-	// The ordering ID can be the UNIX time of the last update you made to a group
+	// The ordering ID can be the Unix time of the last update you made to a group
 	// members list. You would then provide this list when calling PutPrincipalMapping.
 	// This ensures your DELETE action for that updated group with the latest members
 	// list doesn't get overwritten by earlier DELETE actions for the same group
 	// which are yet to be processed.
 	//
-	// The default ordering ID is the current UNIX time in milliseconds that the
+	// The default ordering ID is the current Unix time in milliseconds that the
 	// action was received by Amazon Kendra.
 	OrderingId *int64 `type:"long"`
 }
@@ -13007,12 +15003,12 @@ func (s *DescribeAccessControlConfigurationOutput) SetName(v string) *DescribeAc
 type DescribeDataSourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the data source.
+	// The identifier of the data source connector.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index used with the data source.
+	// The identifier of the index used with the data source connector.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -13073,12 +15069,12 @@ func (s *DescribeDataSourceInput) SetIndexId(v string) *DescribeDataSourceInput 
 type DescribeDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Configuration details for the data source. This shows how the data source
-	// is configured. The configuration options for a data source depend on the
-	// data source provider.
+	// Configuration details for the data source connector. This shows how the data
+	// source is configured. The configuration options for a data source depend
+	// on the data source provider.
 	Configuration *DataSourceConfiguration `type:"structure"`
 
-	// The Unix timestamp of when the data source was created.
+	// The Unix timestamp when the data source connector was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// Configuration information for altering document metadata and content during
@@ -13089,17 +15085,17 @@ type DescribeDataSourceOutput struct {
 	// see Customizing document metadata during the ingestion process (https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html).
 	CustomDocumentEnrichmentConfiguration *CustomDocumentEnrichmentConfiguration `type:"structure"`
 
-	// The description for the data source.
+	// The description for the data source connector.
 	Description *string `type:"string"`
 
 	// When the Status field value is FAILED, the ErrorMessage field contains a
 	// description of the error that caused the data source to fail.
 	ErrorMessage *string `min:"1" type:"string"`
 
-	// The identifier of the data source.
+	// The identifier of the data source connector.
 	Id *string `min:"1" type:"string"`
 
-	// The identifier of the index that contains the data source.
+	// The identifier of the index used with the data source connector.
 	IndexId *string `min:"36" type:"string"`
 
 	// The code for a language. This shows a supported language for all documents
@@ -13108,26 +15104,30 @@ type DescribeDataSourceOutput struct {
 	// other than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
 	LanguageCode *string `min:"2" type:"string"`
 
-	// The name that you gave the data source when it was created.
+	// The name for the data source connector.
 	Name *string `min:"1" type:"string"`
 
-	// The Amazon Resource Name (ARN) of the role that enables the data source to
-	// access its resources.
+	// The Amazon Resource Name (ARN) of the role with permission to access the
+	// data source and required resources.
 	RoleArn *string `type:"string"`
 
 	// The schedule for Amazon Kendra to update the index.
 	Schedule *string `type:"string"`
 
-	// The current status of the data source. When the status is ACTIVE the data
-	// source is ready to use. When the status is FAILED, the ErrorMessage field
-	// contains the reason that the data source failed.
+	// The current status of the data source connector. When the status is ACTIVE
+	// the data source is ready to use. When the status is FAILED, the ErrorMessage
+	// field contains the reason that the data source failed.
 	Status *string `type:"string" enum:"DataSourceStatus"`
 
-	// The type of the data source.
+	// The type of the data source. For example, SHAREPOINT.
 	Type *string `type:"string" enum:"DataSourceType"`
 
-	// The Unix timestamp of when the data source was last updated.
+	// The Unix timestamp when the data source connector was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
+
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your data source. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -13232,6 +15232,12 @@ func (s *DescribeDataSourceOutput) SetUpdatedAt(v time.Time) *DescribeDataSource
 	return s
 }
 
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *DescribeDataSourceOutput) SetVpcConfiguration(v *DataSourceVpcConfiguration) *DescribeDataSourceOutput {
+	s.VpcConfiguration = v
+	return s
+}
+
 type DescribeExperienceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13308,7 +15314,7 @@ type DescribeExperienceOutput struct {
 	// group information to grant access to your Amazon Kendra experience.
 	Configuration *ExperienceConfiguration `type:"structure"`
 
-	// Shows the date-time your Amazon Kendra experience was created.
+	// The Unix timestamp when your Amazon Kendra experience was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// Shows the description for your Amazon Kendra experience.
@@ -13331,8 +15337,8 @@ type DescribeExperienceOutput struct {
 	Name *string `min:"1" type:"string"`
 
 	// Shows the Amazon Resource Name (ARN) of a role with permission to access
-	// Query API, QuerySuggestions API, SubmitFeedback API, and Amazon Web Services
-	// SSO that stores your user and group information.
+	// Query API, QuerySuggestions API, SubmitFeedback API, and IAM Identity Center
+	// that stores your user and group information.
 	RoleArn *string `type:"string"`
 
 	// The current processing status of your Amazon Kendra experience. When the
@@ -13340,7 +15346,7 @@ type DescribeExperienceOutput struct {
 	// status is FAILED, the ErrorMessage field contains the reason that this failed.
 	Status *string `type:"string" enum:"ExperienceStatus"`
 
-	// Shows the date-time your Amazon Kendra experience was last updated.
+	// The Unix timestamp when your Amazon Kendra experience was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -13497,7 +15503,7 @@ func (s *DescribeFaqInput) SetIndexId(v string) *DescribeFaqInput {
 type DescribeFaqOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The date and time that the FAQ was created.
+	// The Unix timestamp when the FAQ was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The description of the FAQ that you provided when it was created.
@@ -13535,7 +15541,7 @@ type DescribeFaqOutput struct {
 	// The status of the FAQ. It is ready to use when the status is ACTIVE.
 	Status *string `type:"string" enum:"FaqStatus"`
 
-	// The date and time that the FAQ was last updated.
+	// The Unix timestamp when the FAQ was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -13629,6 +15635,188 @@ func (s *DescribeFaqOutput) SetUpdatedAt(v time.Time) *DescribeFaqOutput {
 	return s
 }
 
+type DescribeFeaturedResultsSetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the set of featured results that you want to get information
+	// on.
+	//
+	// FeaturedResultsSetId is a required field
+	FeaturedResultsSetId *string `min:"36" type:"string" required:"true"`
+
+	// The identifier of the index used for featuring results.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFeaturedResultsSetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFeaturedResultsSetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeFeaturedResultsSetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeFeaturedResultsSetInput"}
+	if s.FeaturedResultsSetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FeaturedResultsSetId"))
+	}
+	if s.FeaturedResultsSetId != nil && len(*s.FeaturedResultsSetId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("FeaturedResultsSetId", 36))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFeaturedResultsSetId sets the FeaturedResultsSetId field's value.
+func (s *DescribeFeaturedResultsSetInput) SetFeaturedResultsSetId(v string) *DescribeFeaturedResultsSetInput {
+	s.FeaturedResultsSetId = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeFeaturedResultsSetInput) SetIndexId(v string) *DescribeFeaturedResultsSetInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeFeaturedResultsSetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix timestamp when the set of the featured results was created.
+	CreationTimestamp *int64 `type:"long"`
+
+	// The description for the set of featured results.
+	Description *string `type:"string"`
+
+	// The list of document IDs that don't exist but you have specified as featured
+	// documents. Amazon Kendra cannot feature these documents if they don't exist
+	// in the index. You can check the status of a document and its ID or check
+	// for documents with status errors using the BatchGetDocumentStatus (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchGetDocumentStatus.html)
+	// API.
+	FeaturedDocumentsMissing []*FeaturedDocumentMissing `type:"list"`
+
+	// The list of document IDs for the documents you want to feature with their
+	// metadata information. For more information on the list of featured documents,
+	// see FeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_FeaturedResultsSet.html).
+	FeaturedDocumentsWithMetadata []*FeaturedDocumentWithMetadata `type:"list"`
+
+	// The identifier of the set of featured results.
+	FeaturedResultsSetId *string `min:"36" type:"string"`
+
+	// The name for the set of featured results.
+	FeaturedResultsSetName *string `min:"1" type:"string"`
+
+	// The timestamp when the set of featured results was last updated.
+	LastUpdatedTimestamp *int64 `type:"long"`
+
+	// The list of queries for featuring results. For more information on the list
+	// of queries, see FeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_FeaturedResultsSet.html).
+	QueryTexts []*string `type:"list"`
+
+	// The current status of the set of featured results. When the value is ACTIVE,
+	// featured results are ready for use. You can still configure your settings
+	// before setting the status to ACTIVE. You can set the status to ACTIVE or
+	// INACTIVE using the UpdateFeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateFeaturedResultsSet.html)
+	// API. The queries you specify for featured results must be unique per featured
+	// results set for each index, whether the status is ACTIVE or INACTIVE.
+	Status *string `type:"string" enum:"FeaturedResultsSetStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFeaturedResultsSetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFeaturedResultsSetOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetCreationTimestamp(v int64) *DescribeFeaturedResultsSetOutput {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetDescription(v string) *DescribeFeaturedResultsSetOutput {
+	s.Description = &v
+	return s
+}
+
+// SetFeaturedDocumentsMissing sets the FeaturedDocumentsMissing field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetFeaturedDocumentsMissing(v []*FeaturedDocumentMissing) *DescribeFeaturedResultsSetOutput {
+	s.FeaturedDocumentsMissing = v
+	return s
+}
+
+// SetFeaturedDocumentsWithMetadata sets the FeaturedDocumentsWithMetadata field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetFeaturedDocumentsWithMetadata(v []*FeaturedDocumentWithMetadata) *DescribeFeaturedResultsSetOutput {
+	s.FeaturedDocumentsWithMetadata = v
+	return s
+}
+
+// SetFeaturedResultsSetId sets the FeaturedResultsSetId field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetFeaturedResultsSetId(v string) *DescribeFeaturedResultsSetOutput {
+	s.FeaturedResultsSetId = &v
+	return s
+}
+
+// SetFeaturedResultsSetName sets the FeaturedResultsSetName field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetFeaturedResultsSetName(v string) *DescribeFeaturedResultsSetOutput {
+	s.FeaturedResultsSetName = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetLastUpdatedTimestamp(v int64) *DescribeFeaturedResultsSetOutput {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetQueryTexts sets the QueryTexts field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetQueryTexts(v []*string) *DescribeFeaturedResultsSetOutput {
+	s.QueryTexts = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeFeaturedResultsSetOutput) SetStatus(v string) *DescribeFeaturedResultsSetOutput {
+	s.Status = &v
+	return s
+}
+
 type DescribeIndexInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13688,7 +15876,7 @@ type DescribeIndexOutput struct {
 	// capacity for an index and adjusting this, see Adjusting capacity (https://docs.aws.amazon.com/kendra/latest/dg/adjusting-capacity.html).
 	CapacityUnits *CapacityUnitsConfiguration `type:"structure"`
 
-	// The Unix datetime that the index was created.
+	// The Unix timestamp when the index was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The description for the index.
@@ -13730,14 +15918,15 @@ type DescribeIndexOutput struct {
 	// a message that explains why.
 	Status *string `type:"string" enum:"IndexStatus"`
 
-	// The Unix datetime that the index was last updated.
+	// The Unix when the index was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 
 	// The user context policy for the Amazon Kendra index.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
 
 	// Whether you have enabled the configuration for fetching access levels of
-	// groups and users from an Amazon Web Services Single Sign On identity source.
+	// groups and users from an IAM Identity Center (successor to Single Sign-On)
+	// identity source.
 	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
 	// The user token configuration for the Amazon Kendra index.
@@ -13953,17 +16142,17 @@ type DescribePrincipalMappingOutput struct {
 	// Shows the following information on the processing of PUT and DELETE actions
 	// for mapping users to their groups:
 	//
-	//    * Status – the status can be either PROCESSING, SUCCEEDED, DELETING,
-	//    DELETED, or FAILED.
+	//    * Status—the status can be either PROCESSING, SUCCEEDED, DELETING, DELETED,
+	//    or FAILED.
 	//
-	//    * Last updated – the last date-time an action was updated.
+	//    * Last updated—the last date-time an action was updated.
 	//
-	//    * Received – the last date-time an action was received or submitted.
+	//    * Received—the last date-time an action was received or submitted.
 	//
-	//    * Ordering ID – the latest action that should process and apply after
+	//    * Ordering ID—the latest action that should process and apply after
 	//    other actions.
 	//
-	//    * Failure reason – the reason an action could not be processed.
+	//    * Failure reason—the reason an action could not be processed.
 	GroupOrderingIdSummaries []*GroupOrderingIdSummary `type:"list"`
 
 	// Shows the identifier of the index to see information on the processing of
@@ -14082,7 +16271,7 @@ func (s *DescribeQuerySuggestionsBlockListInput) SetIndexId(v string) *DescribeQ
 type DescribeQuerySuggestionsBlockListOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The date-time a block list for query suggestions was created.
+	// The Unix timestamp when a block list for query suggestions was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The description for the block list.
@@ -14127,7 +16316,7 @@ type DescribeQuerySuggestionsBlockListOutput struct {
 	// list is ready for use.
 	Status *string `type:"string" enum:"QuerySuggestionsBlockListStatus"`
 
-	// The date-time a block list for query suggestions was last updated.
+	// The Unix timestamp when a block list for query suggestions was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -14274,11 +16463,15 @@ func (s *DescribeQuerySuggestionsConfigInput) SetIndexId(v string) *DescribeQuer
 type DescribeQuerySuggestionsConfigOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Configuration information for the document fields/attributes that you want
+	// to base query suggestions on.
+	AttributeSuggestionsConfig *AttributeSuggestionsDescribeConfig `type:"structure"`
+
 	// TRUE to use all queries, otherwise use only queries that include user information
 	// to generate the query suggestions.
 	IncludeQueriesWithoutUserInformation *bool `type:"boolean"`
 
-	// The date-time query suggestions for an index was last cleared.
+	// The Unix timestamp when query suggestions for an index was last cleared.
 	//
 	// After you clear suggestions, Amazon Kendra learns new suggestions based on
 	// new queries added to the query log from the time you cleared suggestions.
@@ -14286,7 +16479,10 @@ type DescribeQuerySuggestionsConfigOutput struct {
 	// suggestions.
 	LastClearTime *time.Time `type:"timestamp"`
 
-	// The date-time query suggestions for an index was last updated.
+	// The Unix timestamp when query suggestions for an index was last updated.
+	//
+	// Amazon Kendra automatically updates suggestions every 24 hours, after you
+	// change a setting or after you apply a block list (https://docs.aws.amazon.com/kendra/latest/dg/query-suggestions.html#query-suggestions-blocklist).
 	LastSuggestionsBuildTime *time.Time `type:"timestamp"`
 
 	// The minimum number of unique users who must search a query in order for the
@@ -14319,6 +16515,10 @@ type DescribeQuerySuggestionsConfigOutput struct {
 	// This count can change when you update your query suggestions settings, if
 	// you filter out certain queries from suggestions using a block list, and as
 	// the query log accumulates more queries for Amazon Kendra to learn from.
+	//
+	// If the count is much lower than you expected, it could be because Amazon
+	// Kendra needs more queries in the query history to learn from or your current
+	// query suggestions settings are too strict.
 	TotalSuggestionsCount *int64 `type:"integer"`
 }
 
@@ -14338,6 +16538,12 @@ func (s DescribeQuerySuggestionsConfigOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DescribeQuerySuggestionsConfigOutput) GoString() string {
 	return s.String()
+}
+
+// SetAttributeSuggestionsConfig sets the AttributeSuggestionsConfig field's value.
+func (s *DescribeQuerySuggestionsConfigOutput) SetAttributeSuggestionsConfig(v *AttributeSuggestionsDescribeConfig) *DescribeQuerySuggestionsConfigOutput {
+	s.AttributeSuggestionsConfig = v
+	return s
 }
 
 // SetIncludeQueriesWithoutUserInformation sets the IncludeQueriesWithoutUserInformation field's value.
@@ -14463,7 +16669,7 @@ func (s *DescribeThesaurusInput) SetIndexId(v string) *DescribeThesaurusInput {
 type DescribeThesaurusOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The Unix datetime that the thesaurus was created.
+	// The Unix timestamp when the thesaurus was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The thesaurus description.
@@ -14507,7 +16713,7 @@ type DescribeThesaurusOutput struct {
 	// a,b,c and a=>d, the term count would be 4.
 	TermCount *int64 `type:"long"`
 
-	// The Unix datetime that the thesaurus was last updated.
+	// The Unix timestamp when the thesaurus was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -14610,7 +16816,7 @@ func (s *DescribeThesaurusOutput) SetUpdatedAt(v time.Time) *DescribeThesaurusOu
 type DisassociateEntitiesFromExperienceInput struct {
 	_ struct{} `type:"structure"`
 
-	// Lists users or groups in your Amazon Web Services SSO identity source.
+	// Lists users or groups in your IAM Identity Center identity source.
 	//
 	// EntityList is a required field
 	EntityList []*EntityConfiguration `min:"1" type:"list" required:"true"`
@@ -14703,8 +16909,8 @@ func (s *DisassociateEntitiesFromExperienceInput) SetIndexId(v string) *Disassoc
 type DisassociateEntitiesFromExperienceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Lists the users or groups in your Amazon Web Services SSO identity source
-	// that failed to properly remove access to your Amazon Kendra experience.
+	// Lists the users or groups in your IAM Identity Center identity source that
+	// failed to properly remove access to your Amazon Kendra experience.
 	FailedEntityList []*FailedEntity `min:"1" type:"list"`
 }
 
@@ -14735,8 +16941,8 @@ func (s *DisassociateEntitiesFromExperienceOutput) SetFailedEntityList(v []*Fail
 type DisassociatePersonasFromEntitiesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifiers of users or groups in your Amazon Web Services SSO identity
-	// source. For example, user IDs could be user emails.
+	// The identifiers of users or groups in your IAM Identity Center identity source.
+	// For example, user IDs could be user emails.
 	//
 	// EntityIds is a required field
 	EntityIds []*string `min:"1" type:"list" required:"true"`
@@ -14819,8 +17025,8 @@ func (s *DisassociatePersonasFromEntitiesInput) SetIndexId(v string) *Disassocia
 type DisassociatePersonasFromEntitiesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Lists the users or groups in your Amazon Web Services SSO identity source
-	// that failed to properly remove access to your Amazon Kendra experience.
+	// Lists the users or groups in your IAM Identity Center identity source that
+	// failed to properly remove access to your Amazon Kendra experience.
 	FailedEntityList []*FailedEntity `min:"1" type:"list"`
 }
 
@@ -14889,7 +17095,7 @@ type Document struct {
 	// to.
 	HierarchicalAccessControlList []*HierarchicalPrincipal `min:"1" type:"list"`
 
-	// A unique identifier of the document in the index.
+	// A identifier of the document in the index.
 	//
 	// Note, each document ID must be unique per index. You cannot create a data
 	// source to index your documents with their unique IDs and then use the BatchPutDocument
@@ -15315,7 +17521,7 @@ type DocumentAttributeValue struct {
 	// A long integer value.
 	LongValue *int64 `type:"long"`
 
-	// A list of strings.
+	// A list of strings. The default maximum length or number of strings is 10.
 	StringListValue []*string `type:"list"`
 
 	// A string, such as "department".
@@ -15462,7 +17668,7 @@ type DocumentInfo struct {
 	//    the version defaults to "0".
 	Attributes []*DocumentAttribute `type:"list"`
 
-	// The unique identifier of the document.
+	// The identifier of the document.
 	//
 	// DocumentId is a required field
 	DocumentId *string `min:"1" type:"string" required:"true"`
@@ -15733,13 +17939,13 @@ func (s *DocumentsMetadataConfiguration) SetS3Prefix(v string) *DocumentsMetadat
 	return s
 }
 
-// Provides the configuration information for users or groups in your Amazon
-// Web Services SSO identity source to grant access your Amazon Kendra experience.
+// Provides the configuration information for users or groups in your IAM Identity
+// Center identity source to grant access your Amazon Kendra experience.
 type EntityConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of a user or group in your Amazon Web Services SSO identity
-	// source. For example, a user ID could be an email.
+	// The identifier of a user or group in your IAM Identity Center identity source.
+	// For example, a user ID could be an email.
 	//
 	// EntityId is a required field
 	EntityId *string `min:"1" type:"string" required:"true"`
@@ -15887,21 +18093,21 @@ func (s *EntityDisplayData) SetUserName(v string) *EntityDisplayData {
 	return s
 }
 
-// Provides the configuration information for users or groups in your Amazon
-// Web Services SSO identity source for access to your Amazon Kendra experience.
-// Specific permissions are defined for each user or group once they are granted
-// access to your Amazon Kendra experience.
+// Provides the configuration information for users or groups in your IAM Identity
+// Center identity source for access to your Amazon Kendra experience. Specific
+// permissions are defined for each user or group once they are granted access
+// to your Amazon Kendra experience.
 type EntityPersonaConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of a user or group in your Amazon Web Services SSO identity
-	// source. For example, a user ID could be an email.
+	// The identifier of a user or group in your IAM Identity Center identity source.
+	// For example, a user ID could be an email.
 	//
 	// EntityId is a required field
 	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The persona that defines the specific permissions of the user or group in
-	// your Amazon Web Services SSO identity source. The available personas or access
+	// your IAM Identity Center identity source. The available personas or access
 	// roles are Owner and Viewer. For more information on these personas, see Providing
 	// access to your search page (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html#access-search-experience).
 	//
@@ -15969,7 +18175,7 @@ type ExperienceConfiguration struct {
 	// you want to use for your Amazon Kendra experience.
 	ContentSourceConfiguration *ContentSourceConfiguration `type:"structure"`
 
-	// The Amazon Web Services SSO field name that contains the identifiers of your
+	// The IAM Identity Center field name that contains the identifiers of your
 	// users, such as their emails.
 	UserIdentityConfiguration *UserIdentityConfiguration `type:"structure"`
 }
@@ -16068,7 +18274,7 @@ func (s *ExperienceEndpoint) SetEndpointType(v string) *ExperienceEndpoint {
 	return s
 }
 
-// Summary information for users or groups in your Amazon Web Services SSO identity
+// Summary information for users or groups in your IAM Identity Center identity
 // source with granted access to your Amazon Kendra experience. You can create
 // an Amazon Kendra experience such as a search application. For more information
 // on creating a search application experience, see Building a search experience
@@ -16079,8 +18285,8 @@ type ExperienceEntitiesSummary struct {
 	// Information about the user entity.
 	DisplayData *EntityDisplayData `type:"structure"`
 
-	// The identifier of a user or group in your Amazon Web Services SSO identity
-	// source. For example, a user ID could be an email.
+	// The identifier of a user or group in your IAM Identity Center identity source.
+	// For example, a user ID could be an email.
 	EntityId *string `min:"1" type:"string"`
 
 	// Shows the type as User or Group.
@@ -16130,7 +18336,7 @@ func (s *ExperienceEntitiesSummary) SetEntityType(v string) *ExperienceEntitiesS
 type ExperiencesSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The date-time your Amazon Kendra experience was created.
+	// The Unix timestamp when your Amazon Kendra experience was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The endpoint URLs for your Amazon Kendra experiences. The URLs are unique
@@ -16341,16 +18547,16 @@ func (s *FacetResult) SetDocumentAttributeValueType(v string) *FacetResult {
 	return s
 }
 
-// Information on the users or groups in your Amazon Web Services SSO identity
-// source that failed to properly configure with your Amazon Kendra experience.
+// Information on the users or groups in your IAM Identity Center identity source
+// that failed to properly configure with your Amazon Kendra experience.
 type FailedEntity struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the user or group in your Amazon Web Services SSO identity
+	// The identifier of the user or group in your IAM Identity Center identity
 	// source. For example, a user ID could be an email.
 	EntityId *string `min:"1" type:"string"`
 
-	// The reason the user or group in your Amazon Web Services SSO identity source
+	// The reason the user or group in your IAM Identity Center identity source
 	// failed to properly configure with your Amazon Kendra experience.
 	ErrorMessage *string `min:"1" type:"string"`
 }
@@ -16425,13 +18631,13 @@ func (s *FaqStatistics) SetIndexedQuestionAnswersCount(v int64) *FaqStatistics {
 type FaqSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The UNIX datetime that the FAQ was added to the index.
+	// The Unix timestamp when the FAQ was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The file type used to create the FAQ.
 	FileFormat *string `type:"string" enum:"FaqFileFormat"`
 
-	// The unique identifier of the FAQ.
+	// The identifier of the FAQ.
 	Id *string `min:"1" type:"string"`
 
 	// The code for a language. This shows a supported language for the FAQ document
@@ -16447,7 +18653,7 @@ type FaqSummary struct {
 	// for use.
 	Status *string `type:"string" enum:"FaqStatus"`
 
-	// The UNIX datetime that the FAQ was last updated.
+	// The Unix timestamp when the FAQ was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -16508,6 +18714,533 @@ func (s *FaqSummary) SetStatus(v string) *FaqSummary {
 // SetUpdatedAt sets the UpdatedAt field's value.
 func (s *FaqSummary) SetUpdatedAt(v time.Time) *FaqSummary {
 	s.UpdatedAt = &v
+	return s
+}
+
+// A featured document. This document is displayed at the top of the search
+// results page, placed above all other results for certain queries. If there's
+// an exact match of a query, then the document is featured in the search results.
+type FeaturedDocument struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the document to feature in the search results. You can
+	// use the Query (https://docs.aws.amazon.com/kendra/latest/dg/API_Query.html)
+	// API to search for specific documents with their document IDs included in
+	// the result items, or you can use the console.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedDocument) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedDocument) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FeaturedDocument) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FeaturedDocument"}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *FeaturedDocument) SetId(v string) *FeaturedDocument {
+	s.Id = &v
+	return s
+}
+
+// A document ID doesn't exist but you have specified as a featured document.
+// Amazon Kendra cannot feature the document if it doesn't exist in the index.
+// You can check the status of a document and its ID or check for documents
+// with status errors using the BatchGetDocumentStatus (https://docs.aws.amazon.com/kendra/latest/dg/API_BatchGetDocumentStatus.html)
+// API.
+type FeaturedDocumentMissing struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the document that doesn't exist but you have specified
+	// as a featured document.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedDocumentMissing) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedDocumentMissing) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *FeaturedDocumentMissing) SetId(v string) *FeaturedDocumentMissing {
+	s.Id = &v
+	return s
+}
+
+// A featured document with its metadata information. This document is displayed
+// at the top of the search results page, placed above all other results for
+// certain queries. If there's an exact match of a query, then the document
+// is featured in the search results.
+type FeaturedDocumentWithMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the featured document with its metadata. You can use the
+	// Query (https://docs.aws.amazon.com/kendra/latest/dg/API_Query.html) API to
+	// search for specific documents with their document IDs included in the result
+	// items, or you can use the console.
+	Id *string `min:"1" type:"string"`
+
+	// The main title of the featured document.
+	Title *string `min:"1" type:"string"`
+
+	// The source URI location of the featured document.
+	URI *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedDocumentWithMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedDocumentWithMetadata) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *FeaturedDocumentWithMetadata) SetId(v string) *FeaturedDocumentWithMetadata {
+	s.Id = &v
+	return s
+}
+
+// SetTitle sets the Title field's value.
+func (s *FeaturedDocumentWithMetadata) SetTitle(v string) *FeaturedDocumentWithMetadata {
+	s.Title = &v
+	return s
+}
+
+// SetURI sets the URI field's value.
+func (s *FeaturedDocumentWithMetadata) SetURI(v string) *FeaturedDocumentWithMetadata {
+	s.URI = &v
+	return s
+}
+
+// An error message with a list of conflicting queries used across different
+// sets of featured results. This occurred with the request for a new featured
+// results set. Check that the queries you specified for featured results are
+// unique per featured results set for each index.
+type FeaturedResultsConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A list of the conflicting queries, including the query text, the name for
+	// the featured results set, and the identifier of the featured results set.
+	ConflictingItems []*ConflictingItem `type:"list"`
+
+	// An explanation for the conflicting queries.
+	Message_ *string `locationName:"Message" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorFeaturedResultsConflictException(v protocol.ResponseMetadata) error {
+	return &FeaturedResultsConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *FeaturedResultsConflictException) Code() string {
+	return "FeaturedResultsConflictException"
+}
+
+// Message returns the exception's message.
+func (s *FeaturedResultsConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *FeaturedResultsConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *FeaturedResultsConflictException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *FeaturedResultsConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *FeaturedResultsConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// A single featured result item. A featured result is displayed at the top
+// of the search results page, placed above all other results for certain queries.
+// If there's an exact match of a query, then certain documents are featured
+// in the search results.
+type FeaturedResultsItem struct {
+	_ struct{} `type:"structure"`
+
+	// One or more additional attributes associated with the featured result.
+	AdditionalAttributes []*AdditionalResultAttribute `type:"list"`
+
+	// An array of document attributes assigned to a featured document in the search
+	// results. For example, the document author (_author) or the source URI (_source_uri)
+	// of the document.
+	DocumentAttributes []*DocumentAttribute `type:"list"`
+
+	// Provides text and information about where to highlight the text.
+	DocumentExcerpt *TextWithHighlights `type:"structure"`
+
+	// The identifier of the featured document.
+	DocumentId *string `min:"1" type:"string"`
+
+	// Provides text and information about where to highlight the text.
+	DocumentTitle *TextWithHighlights `type:"structure"`
+
+	// The source URI location of the featured document.
+	DocumentURI *string `min:"1" type:"string"`
+
+	// A token that identifies a particular featured result from a particular query.
+	// Use this token to provide click-through feedback for the result. For more
+	// information, see Submitting feedback (https://docs.aws.amazon.com/kendra/latest/dg/submitting-feedback.html).
+	FeedbackToken *string `min:"1" type:"string"`
+
+	// The identifier of the featured result.
+	Id *string `min:"1" type:"string"`
+
+	// The type of document within the featured result response. For example, a
+	// response could include a question-answer type that's relevant to the query.
+	Type *string `type:"string" enum:"QueryResultType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsItem) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalAttributes sets the AdditionalAttributes field's value.
+func (s *FeaturedResultsItem) SetAdditionalAttributes(v []*AdditionalResultAttribute) *FeaturedResultsItem {
+	s.AdditionalAttributes = v
+	return s
+}
+
+// SetDocumentAttributes sets the DocumentAttributes field's value.
+func (s *FeaturedResultsItem) SetDocumentAttributes(v []*DocumentAttribute) *FeaturedResultsItem {
+	s.DocumentAttributes = v
+	return s
+}
+
+// SetDocumentExcerpt sets the DocumentExcerpt field's value.
+func (s *FeaturedResultsItem) SetDocumentExcerpt(v *TextWithHighlights) *FeaturedResultsItem {
+	s.DocumentExcerpt = v
+	return s
+}
+
+// SetDocumentId sets the DocumentId field's value.
+func (s *FeaturedResultsItem) SetDocumentId(v string) *FeaturedResultsItem {
+	s.DocumentId = &v
+	return s
+}
+
+// SetDocumentTitle sets the DocumentTitle field's value.
+func (s *FeaturedResultsItem) SetDocumentTitle(v *TextWithHighlights) *FeaturedResultsItem {
+	s.DocumentTitle = v
+	return s
+}
+
+// SetDocumentURI sets the DocumentURI field's value.
+func (s *FeaturedResultsItem) SetDocumentURI(v string) *FeaturedResultsItem {
+	s.DocumentURI = &v
+	return s
+}
+
+// SetFeedbackToken sets the FeedbackToken field's value.
+func (s *FeaturedResultsItem) SetFeedbackToken(v string) *FeaturedResultsItem {
+	s.FeedbackToken = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *FeaturedResultsItem) SetId(v string) *FeaturedResultsItem {
+	s.Id = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *FeaturedResultsItem) SetType(v string) *FeaturedResultsItem {
+	s.Type = &v
+	return s
+}
+
+// A set of featured results that are displayed at the top of your search results.
+// Featured results are placed above all other results for certain queries.
+// If there's an exact match of a query, then one or more specific documents
+// are featured in the search results.
+type FeaturedResultsSet struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix timestamp when the set of featured results was created.
+	CreationTimestamp *int64 `type:"long"`
+
+	// The description for the set of featured results.
+	Description *string `type:"string"`
+
+	// The list of document IDs for the documents you want to feature at the top
+	// of the search results page. You can use the Query (https://docs.aws.amazon.com/kendra/latest/dg/API_Query.html)
+	// API to search for specific documents with their document IDs included in
+	// the result items, or you can use the console.
+	//
+	// You can add up to four featured documents. You can request to increase this
+	// limit by contacting Support (http://aws.amazon.com/contact-us/).
+	//
+	// Specific queries are mapped to specific documents for featuring in the results.
+	// If a query contains an exact match, then one or more specific documents are
+	// featured in the results. The exact match applies to the full query. For example,
+	// if you only specify 'Kendra', queries such as 'How does kendra semantically
+	// rank results?' will not render the featured results. Featured results are
+	// designed for specific queries, rather than queries that are too broad in
+	// scope.
+	FeaturedDocuments []*FeaturedDocument `type:"list"`
+
+	// The identifier of the set of featured results.
+	FeaturedResultsSetId *string `min:"36" type:"string"`
+
+	// The name for the set of featured results.
+	FeaturedResultsSetName *string `min:"1" type:"string"`
+
+	// The Unix timestamp when the set of featured results was last updated.
+	LastUpdatedTimestamp *int64 `type:"long"`
+
+	// The list of queries for featuring results.
+	//
+	// Specific queries are mapped to specific documents for featuring in the results.
+	// If a query contains an exact match, then one or more specific documents are
+	// featured in the results. The exact match applies to the full query. For example,
+	// if you only specify 'Kendra', queries such as 'How does kendra semantically
+	// rank results?' will not render the featured results. Featured results are
+	// designed for specific queries, rather than queries that are too broad in
+	// scope.
+	QueryTexts []*string `type:"list"`
+
+	// The current status of the set of featured results. When the value is ACTIVE,
+	// featured results are ready for use. You can still configure your settings
+	// before setting the status to ACTIVE. You can set the status to ACTIVE or
+	// INACTIVE using the UpdateFeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateFeaturedResultsSet.html)
+	// API. The queries you specify for featured results must be unique per featured
+	// results set for each index, whether the status is ACTIVE or INACTIVE.
+	Status *string `type:"string" enum:"FeaturedResultsSetStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsSet) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsSet) GoString() string {
+	return s.String()
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *FeaturedResultsSet) SetCreationTimestamp(v int64) *FeaturedResultsSet {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *FeaturedResultsSet) SetDescription(v string) *FeaturedResultsSet {
+	s.Description = &v
+	return s
+}
+
+// SetFeaturedDocuments sets the FeaturedDocuments field's value.
+func (s *FeaturedResultsSet) SetFeaturedDocuments(v []*FeaturedDocument) *FeaturedResultsSet {
+	s.FeaturedDocuments = v
+	return s
+}
+
+// SetFeaturedResultsSetId sets the FeaturedResultsSetId field's value.
+func (s *FeaturedResultsSet) SetFeaturedResultsSetId(v string) *FeaturedResultsSet {
+	s.FeaturedResultsSetId = &v
+	return s
+}
+
+// SetFeaturedResultsSetName sets the FeaturedResultsSetName field's value.
+func (s *FeaturedResultsSet) SetFeaturedResultsSetName(v string) *FeaturedResultsSet {
+	s.FeaturedResultsSetName = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *FeaturedResultsSet) SetLastUpdatedTimestamp(v int64) *FeaturedResultsSet {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetQueryTexts sets the QueryTexts field's value.
+func (s *FeaturedResultsSet) SetQueryTexts(v []*string) *FeaturedResultsSet {
+	s.QueryTexts = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *FeaturedResultsSet) SetStatus(v string) *FeaturedResultsSet {
+	s.Status = &v
+	return s
+}
+
+// Summary information for a set of featured results. Featured results are placed
+// above all other results for certain queries. If there's an exact match of
+// a query, then one or more specific documents are featured in the search results.
+type FeaturedResultsSetSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix timestamp when the set of featured results was created.
+	CreationTimestamp *int64 `type:"long"`
+
+	// The identifier of the set of featured results.
+	FeaturedResultsSetId *string `min:"36" type:"string"`
+
+	// The name for the set of featured results.
+	FeaturedResultsSetName *string `min:"1" type:"string"`
+
+	// The Unix timestamp when the set of featured results was last updated.
+	LastUpdatedTimestamp *int64 `type:"long"`
+
+	// The current status of the set of featured results. When the value is ACTIVE,
+	// featured results are ready for use. You can still configure your settings
+	// before setting the status to ACTIVE. You can set the status to ACTIVE or
+	// INACTIVE using the UpdateFeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateFeaturedResultsSet.html)
+	// API. The queries you specify for featured results must be unique per featured
+	// results set for each index, whether the status is ACTIVE or INACTIVE.
+	Status *string `type:"string" enum:"FeaturedResultsSetStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsSetSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeaturedResultsSetSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *FeaturedResultsSetSummary) SetCreationTimestamp(v int64) *FeaturedResultsSetSummary {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetFeaturedResultsSetId sets the FeaturedResultsSetId field's value.
+func (s *FeaturedResultsSetSummary) SetFeaturedResultsSetId(v string) *FeaturedResultsSetSummary {
+	s.FeaturedResultsSetId = &v
+	return s
+}
+
+// SetFeaturedResultsSetName sets the FeaturedResultsSetName field's value.
+func (s *FeaturedResultsSetSummary) SetFeaturedResultsSetName(v string) *FeaturedResultsSetSummary {
+	s.FeaturedResultsSetName = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *FeaturedResultsSetSummary) SetLastUpdatedTimestamp(v int64) *FeaturedResultsSetSummary {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *FeaturedResultsSetSummary) SetStatus(v string) *FeaturedResultsSetSummary {
+	s.Status = &v
 	return s
 }
 
@@ -16681,6 +19414,10 @@ func (s *FsxConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *F
 type GetQuerySuggestionsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Configuration information for the document fields/attributes that you want
+	// to base query suggestions on.
+	AttributeSuggestionsConfig *AttributeSuggestionsGetConfig `type:"structure"`
+
 	// The identifier of the index you want to get query suggestions from.
 	//
 	// IndexId is a required field
@@ -16700,6 +19437,18 @@ type GetQuerySuggestionsInput struct {
 	//
 	// QueryText is a required field
 	QueryText *string `type:"string" required:"true"`
+
+	// The suggestions type to base query suggestions on. The suggestion types are
+	// query history or document fields/attributes. You can set one type or the
+	// other.
+	//
+	// If you set query history as your suggestions type, Amazon Kendra suggests
+	// queries relevant to your users based on popular queries in the query history.
+	//
+	// If you set document fields/attributes as your suggestions type, Amazon Kendra
+	// suggests queries relevant to your users based on the contents of document
+	// fields.
+	SuggestionTypes []*string `type:"list" enum:"SuggestionType"`
 }
 
 // String returns the string representation.
@@ -16732,11 +19481,22 @@ func (s *GetQuerySuggestionsInput) Validate() error {
 	if s.QueryText == nil {
 		invalidParams.Add(request.NewErrParamRequired("QueryText"))
 	}
+	if s.AttributeSuggestionsConfig != nil {
+		if err := s.AttributeSuggestionsConfig.Validate(); err != nil {
+			invalidParams.AddNested("AttributeSuggestionsConfig", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAttributeSuggestionsConfig sets the AttributeSuggestionsConfig field's value.
+func (s *GetQuerySuggestionsInput) SetAttributeSuggestionsConfig(v *AttributeSuggestionsGetConfig) *GetQuerySuggestionsInput {
+	s.AttributeSuggestionsConfig = v
+	return s
 }
 
 // SetIndexId sets the IndexId field's value.
@@ -16757,10 +19517,16 @@ func (s *GetQuerySuggestionsInput) SetQueryText(v string) *GetQuerySuggestionsIn
 	return s
 }
 
+// SetSuggestionTypes sets the SuggestionTypes field's value.
+func (s *GetQuerySuggestionsInput) SetSuggestionTypes(v []*string) *GetQuerySuggestionsInput {
+	s.SuggestionTypes = v
+	return s
+}
+
 type GetQuerySuggestionsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for a list of query suggestions for an index.
+	// The identifier for a list of query suggestions for an index.
 	QuerySuggestionsId *string `min:"1" type:"string"`
 
 	// A list of query suggestions for an index.
@@ -16927,7 +19693,7 @@ type GetSnapshotsOutput struct {
 	// can use in a later request to retrieve the next set of search metrics data.
 	NextToken *string `min:"1" type:"string"`
 
-	// The date-time for the beginning and end of the time window for the search
+	// The Unix timestamp for the beginning and end of the time window for the search
 	// metrics data.
 	SnapShotTimeFilter *TimeRange `type:"structure"`
 
@@ -17108,9 +19874,8 @@ type GitHubConfiguration struct {
 	// the key-value pairs required to connect to your GitHub. The secret must contain
 	// a JSON structure with the following keys:
 	//
-	//    * githubToken—The access token created in GitHub. For more information
-	//    on creating a token in GitHub, see Authentication for a GitHub data source
-	//    (https://docs.aws.amazon.com/kendra/latest/dg/data-source-github.html#github-authentication).
+	//    * personalToken—The access token created in GitHub. For more information
+	//    on creating a token in GitHub, see Using a GitHub data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-github.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -17759,16 +20524,16 @@ type GroupOrderingIdSummary struct {
 	// action for mapping users to their groups.
 	FailureReason *string `min:"1" type:"string"`
 
-	// The last date-time an action was updated. An action can be a PUT or DELETE
-	// action for mapping users to their groups.
+	// The Unix timestamp when an action was last updated. An action can be a PUT
+	// or DELETE action for mapping users to their groups.
 	LastUpdatedAt *time.Time `type:"timestamp"`
 
 	// The order in which actions should complete processing. An action can be a
 	// PUT or DELETE action for mapping users to their groups.
 	OrderingId *int64 `type:"long"`
 
-	// The date-time an action was received by Amazon Kendra. An action can be a
-	// PUT or DELETE action for mapping users to their groups.
+	// The Unix timestamp when an action was received by Amazon Kendra. An action
+	// can be a PUT or DELETE action for mapping users to their groups.
 	ReceivedAt *time.Time `type:"timestamp"`
 
 	// The current processing status of actions for mapping users to their groups.
@@ -18101,15 +20866,15 @@ type IndexConfigurationSummary struct {
 	// CreatedAt is a required field
 	CreatedAt *time.Time `type:"timestamp" required:"true"`
 
-	// Indicates whether the index is a enterprise edition index or a developer
-	// edition index.
+	// Indicates whether the index is a Enterprise Edition index or a Developer
+	// Edition index.
 	Edition *string `type:"string" enum:"IndexEdition"`
 
-	// A unique identifier for the index. Use this to identify the index when you
-	// are using APIs such as Query, DescribeIndex, UpdateIndex, and DeleteIndex.
+	// A identifier for the index. Use this to identify the index when you are using
+	// APIs such as Query, DescribeIndex, UpdateIndex, and DeleteIndex.
 	Id *string `min:"36" type:"string"`
 
-	// The identifier of the index.
+	// The name of the index.
 	Name *string `min:"1" type:"string"`
 
 	// The current status of the index. When the status is ACTIVE, the index is
@@ -18118,7 +20883,7 @@ type IndexConfigurationSummary struct {
 	// Status is a required field
 	Status *string `type:"string" required:"true" enum:"IndexStatus"`
 
-	// The Unix timestamp when the index was last updated by the UpdateIndex API.
+	// The Unix timestamp when the index was last updated.
 	//
 	// UpdatedAt is a required field
 	UpdatedAt *time.Time `type:"timestamp" required:"true"`
@@ -18303,6 +21068,9 @@ func (s *InlineCustomDocumentEnrichmentConfiguration) SetTarget(v *DocumentAttri
 	return s
 }
 
+// An issue occurred with the internal server used for your Amazon Kendra service.
+// Please wait a few minutes and try again, or contact Support (http://aws.amazon.com/contact-us/)
+// for help.
 type InternalServerException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -18366,7 +21134,8 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The input to the request is not valid.
+// The input to the request is not valid. Please provide the correct input and
+// try again.
 type InvalidRequestException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -18479,9 +21248,7 @@ type JiraConfiguration struct {
 	// one or more of these options to crawl.
 	IssueType []*string `type:"list"`
 
-	// The URL of the Jira account. For example, company.atlassian.net or https://jira.company.com.
-	// You can find your Jira account URL in the URL of your profile page for Jira
-	// desktop.
+	// The URL of the Jira account. For example, company.atlassian.net.
 	//
 	// JiraAccountUrl is a required field
 	JiraAccountUrl *string `min:"1" type:"string" required:"true"`
@@ -18501,10 +21268,10 @@ type JiraConfiguration struct {
 	// key-value pairs required to connect to your Jira data source. The secret
 	// must contain a JSON structure with the following keys:
 	//
-	//    * jiraId—The Jira username.
+	//    * jiraId—The Jira user name or email.
 	//
-	//    * jiraCredentials—The Jira API token. For more information on creating
-	//    an API token in Jira, see Authentication for a Jira data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-jira.html#jira-authentication).
+	//    * jiraCredentials—The Jira API token. For more information, see Using
+	//    a Jira data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-jira.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -18520,7 +21287,7 @@ type JiraConfiguration struct {
 	UseChangeLog *bool `type:"boolean"`
 
 	// Configuration information for an Amazon Virtual Private Cloud to connect
-	// to your Jira. Your Jira account must reside inside your VPC.
+	// to your Jira. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
 	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 
 	// A list of DataSourceToIndexFieldMapping objects that map attributes or field
@@ -19036,12 +21803,12 @@ func (s *ListAccessControlConfigurationsOutput) SetNextToken(v string) *ListAcce
 type ListDataSourceSyncJobsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the data source.
+	// The identifier of the data source connector.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index used with the data source.
+	// The identifier of the index used with the data source connector.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -19060,8 +21827,8 @@ type ListDataSourceSyncJobsInput struct {
 	// to jobs between the specified dates.
 	StartTimeFilter *TimeRange `type:"structure"`
 
-	// When specified, only returns synchronization jobs with the Status field equal
-	// to the specified status.
+	// Only returns synchronization jobs with the Status field equal to the specified
+	// status.
 	StatusFilter *string `type:"string" enum:"DataSourceSyncJobStatus"`
 }
 
@@ -19150,7 +21917,7 @@ func (s *ListDataSourceSyncJobsInput) SetStatusFilter(v string) *ListDataSourceS
 type ListDataSourceSyncJobsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A history of synchronization jobs for the data source.
+	// A history of synchronization jobs for the data source connector.
 	History []*DataSourceSyncJob `type:"list"`
 
 	// If the response is truncated, Amazon Kendra returns this token that you can
@@ -19191,17 +21958,17 @@ func (s *ListDataSourceSyncJobsOutput) SetNextToken(v string) *ListDataSourceSyn
 type ListDataSourcesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the index used with one or more data sources.
+	// The identifier of the index used with one or more data source connectors.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
 
-	// The maximum number of data sources to return.
+	// The maximum number of data source connectors to return.
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// If the previous response was incomplete (because there is more data to retrieve),
 	// Amazon Kendra returns a pagination token in the response. You can use this
-	// pagination token to retrieve the next set of data sources (DataSourceSummaryItems).
+	// pagination token to retrieve the next set of data source connectors.
 	NextToken *string `min:"1" type:"string"`
 }
 
@@ -19267,10 +22034,10 @@ type ListDataSourcesOutput struct {
 	_ struct{} `type:"structure"`
 
 	// If the response is truncated, Amazon Kendra returns this token that you can
-	// use in the subsequent request to retrieve the next set of data sources.
+	// use in the subsequent request to retrieve the next set of data source connectors.
 	NextToken *string `min:"1" type:"string"`
 
-	// An array of summary information for one or more data sources.
+	// An array of summary information for one or more data source connector.
 	SummaryItems []*DataSourceSummary `type:"list"`
 }
 
@@ -19791,6 +22558,122 @@ func (s *ListFaqsOutput) SetNextToken(v string) *ListFaqsOutput {
 	return s
 }
 
+type ListFeaturedResultsSetsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index used for featuring results.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of featured results sets to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the response is truncated, Amazon Kendra returns a pagination token in
+	// the response. You can use this pagination token to retrieve the next set
+	// of featured results sets.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFeaturedResultsSetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFeaturedResultsSetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListFeaturedResultsSetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListFeaturedResultsSetsInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListFeaturedResultsSetsInput) SetIndexId(v string) *ListFeaturedResultsSetsInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListFeaturedResultsSetsInput) SetMaxResults(v int64) *ListFeaturedResultsSetsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListFeaturedResultsSetsInput) SetNextToken(v string) *ListFeaturedResultsSetsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListFeaturedResultsSetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of summary information for one or more featured results sets.
+	FeaturedResultsSetSummaryItems []*FeaturedResultsSetSummary `type:"list"`
+
+	// If the response is truncated, Amazon Kendra returns a pagination token in
+	// the response.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFeaturedResultsSetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFeaturedResultsSetsOutput) GoString() string {
+	return s.String()
+}
+
+// SetFeaturedResultsSetSummaryItems sets the FeaturedResultsSetSummaryItems field's value.
+func (s *ListFeaturedResultsSetsOutput) SetFeaturedResultsSetSummaryItems(v []*FeaturedResultsSetSummary) *ListFeaturedResultsSetsOutput {
+	s.FeaturedResultsSetSummaryItems = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListFeaturedResultsSetsOutput) SetNextToken(v string) *ListFeaturedResultsSetsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListGroupsOlderThanOrderingIdInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19943,12 +22826,12 @@ func (s *ListGroupsOlderThanOrderingIdOutput) SetNextToken(v string) *ListGroups
 type ListIndicesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of data sources to return.
+	// The maximum number of indices to return.
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// If the previous response was incomplete (because there is more data to retrieve),
 	// Amazon Kendra returns a pagination token in the response. You can use this
-	// pagination token to retrieve the next set of indexes (DataSourceSummaryItems).
+	// pagination token to retrieve the next set of indexes.
 	NextToken *string `min:"1" type:"string"`
 }
 
@@ -20495,7 +23378,11 @@ type OnPremiseConfiguration struct {
 	OrganizationName *string `min:"1" type:"string" required:"true"`
 
 	// The path to the SSL certificate stored in an Amazon S3 bucket. You use this
-	// to connect to GitHub.
+	// to connect to GitHub if you require a secure SSL connection.
+	//
+	// You can simply generate a self-signed X509 certificate on any computer using
+	// OpenSSL. For an example of using OpenSSL to create an X509 certificate, see
+	// Create and sign an X509 certificate (https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-ssl.html).
 	//
 	// SslCertificateS3Path is a required field
 	SslCertificateS3Path *S3Path `type:"structure" required:"true"`
@@ -20606,7 +23493,7 @@ type OneDriveConfiguration struct {
 	OneDriveUsers *OneDriveUsers `type:"structure" required:"true"`
 
 	// The Amazon Resource Name (ARN) of an Secrets Managersecret that contains
-	// the user name and password to connect to OneDrive. The user namd should be
+	// the user name and password to connect to OneDrive. The user name should be
 	// the application ID for the OneDrive application, and the password is the
 	// application key for the OneDrive application.
 	//
@@ -20785,7 +23672,7 @@ func (s *OneDriveUsers) SetOneDriveUserS3Path(v *S3Path) *OneDriveUsers {
 	return s
 }
 
-// Summary information for users or groups in your Amazon Web Services SSO identity
+// Summary information for users or groups in your IAM Identity Center identity
 // source. This applies to users and groups with specific permissions that define
 // their level of access to your Amazon Kendra experience. You can create an
 // Amazon Kendra experience such as a search application. For more information
@@ -20794,20 +23681,20 @@ func (s *OneDriveUsers) SetOneDriveUserS3Path(v *S3Path) *OneDriveUsers {
 type PersonasSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The date-time the summary information was created.
+	// The Unix timestamp when the summary information was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
-	// The identifier of a user or group in your Amazon Web Services SSO identity
-	// source. For example, a user ID could be an email.
+	// The identifier of a user or group in your IAM Identity Center identity source.
+	// For example, a user ID could be an email.
 	EntityId *string `min:"1" type:"string"`
 
 	// The persona that defines the specific permissions of the user or group in
-	// your Amazon Web Services SSO identity source. The available personas or access
+	// your IAM Identity Center identity source. The available personas or access
 	// roles are Owner and Viewer. For more information on these personas, see Providing
 	// access to your search page (https://docs.aws.amazon.com/kendra/latest/dg/deploying-search-experience-no-code.html#access-search-experience).
 	Persona *string `type:"string" enum:"Persona"`
 
-	// The date-time the summary information was last updated.
+	// The Unix timestamp when the summary information was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -21076,13 +23963,13 @@ type PutPrincipalMappingInput struct {
 	// top of other actions with lower number IDs. This prevents previous actions
 	// with lower number IDs from possibly overriding the latest action.
 	//
-	// The ordering ID can be the UNIX time of the last update you made to a group
+	// The ordering ID can be the Unix time of the last update you made to a group
 	// members list. You would then provide this list when calling PutPrincipalMapping.
 	// This ensures your PUT action for that updated group with the latest members
 	// list doesn't get overwritten by earlier PUT actions for the same group which
 	// are yet to be processed.
 	//
-	// The default ordering ID is the current UNIX time in milliseconds that the
+	// The default ordering ID is the current Unix time in milliseconds that the
 	// action was received by Amazon Kendra.
 	OrderingId *int64 `type:"long"`
 
@@ -21233,8 +24120,8 @@ type QueryInput struct {
 	// attribute key specified. This helps your users narrow their search.
 	Facets []*Facet `type:"list"`
 
-	// The unique identifier of the index to search. The identifier is returned
-	// in the response from the CreateIndex API.
+	// The identifier of the index to search. The identifier is returned in the
+	// response from the CreateIndex API.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -21252,7 +24139,9 @@ type QueryInput struct {
 	// Sets the type of query. Only results for the specified query type are returned.
 	QueryResultTypeFilter *string `type:"string" enum:"QueryResultType"`
 
-	// The text to search for.
+	// The input query text for the search. Amazon Kendra truncates queries at 30
+	// token words, which excludes punctuation and stop words. Truncation still
+	// applies if you use Boolean or more advanced, complex queries.
 	QueryText *string `min:"1" type:"string"`
 
 	// An array of document attributes to include in the response. You can limit
@@ -21449,8 +24338,14 @@ type QueryOutput struct {
 	// key that was specified in the Facets input parameter.
 	FacetResults []*FacetResult `type:"list"`
 
-	// The unique identifier for the search. You use QueryId to identify the search
-	// when using the feedback API.
+	// The list of featured result items. Featured results are displayed at the
+	// top of the search results page, placed above all other results for certain
+	// queries. If there's an exact match of a query, then certain documents are
+	// featured in the search results.
+	FeaturedResultsItems []*FeaturedResultsItem `type:"list"`
+
+	// The identifier for the search. You use QueryId to identify the search when
+	// using the feedback API.
 	QueryId *string `min:"1" type:"string"`
 
 	// The results of the search.
@@ -21493,6 +24388,12 @@ func (s QueryOutput) GoString() string {
 // SetFacetResults sets the FacetResults field's value.
 func (s *QueryOutput) SetFacetResults(v []*FacetResult) *QueryOutput {
 	s.FacetResults = v
+	return s
+}
+
+// SetFeaturedResultsItems sets the FeaturedResultsItems field's value.
+func (s *QueryOutput) SetFeaturedResultsItems(v []*FeaturedResultsItem) *QueryOutput {
+	s.FeaturedResultsItems = v
 	return s
 }
 
@@ -21547,7 +24448,7 @@ type QueryResultItem struct {
 	// the relevant terms in the excerpt.
 	DocumentExcerpt *TextWithHighlights `type:"structure"`
 
-	// The unique identifier for the document.
+	// The identifier for the document.
 	DocumentId *string `min:"1" type:"string"`
 
 	// The title of the document. Contains the text of the title and information
@@ -21562,7 +24463,13 @@ type QueryResultItem struct {
 	// see Submitting feedback (https://docs.aws.amazon.com/kendra/latest/dg/submitting-feedback.html).
 	FeedbackToken *string `min:"1" type:"string"`
 
-	// The unique identifier for the query result.
+	// If the Type of document within the response is ANSWER, then it is either
+	// a TABLE answer or TEXT answer. If it's a table answer, a table excerpt is
+	// returned in TableExcerpt. If it's a text answer, a text excerpt is returned
+	// in DocumentExcerpt.
+	Format *string `type:"string" enum:"QueryResultFormat"`
+
+	// The identifier for the query result.
 	Id *string `min:"1" type:"string"`
 
 	// Indicates the confidence that Amazon Kendra has that a result matches the
@@ -21574,7 +24481,11 @@ type QueryResultItem struct {
 	// Kendra is not confident that the result matches the query.
 	ScoreAttributes *ScoreAttributes `type:"structure"`
 
-	// The type of document.
+	// An excerpt from a table within a document.
+	TableExcerpt *TableExcerpt `type:"structure"`
+
+	// The type of document within the response. For example, a response could include
+	// a question-answer that's relevant to the query.
 	Type *string `type:"string" enum:"QueryResultType"`
 }
 
@@ -21638,6 +24549,12 @@ func (s *QueryResultItem) SetFeedbackToken(v string) *QueryResultItem {
 	return s
 }
 
+// SetFormat sets the Format field's value.
+func (s *QueryResultItem) SetFormat(v string) *QueryResultItem {
+	s.Format = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *QueryResultItem) SetId(v string) *QueryResultItem {
 	s.Id = &v
@@ -21647,6 +24564,12 @@ func (s *QueryResultItem) SetId(v string) *QueryResultItem {
 // SetScoreAttributes sets the ScoreAttributes field's value.
 func (s *QueryResultItem) SetScoreAttributes(v *ScoreAttributes) *QueryResultItem {
 	s.ScoreAttributes = v
+	return s
+}
+
+// SetTableExcerpt sets the TableExcerpt field's value.
+func (s *QueryResultItem) SetTableExcerpt(v *TableExcerpt) *QueryResultItem {
+	s.TableExcerpt = v
 	return s
 }
 
@@ -21667,8 +24590,7 @@ func (s *QueryResultItem) SetType(v string) *QueryResultItem {
 type QuerySuggestionsBlockListSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The date-time summary information for a query suggestions block list was
-	// last created.
+	// The Unix timestamp when the block list was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The identifier of a block list.
@@ -21683,7 +24605,7 @@ type QuerySuggestionsBlockListSummary struct {
 	// The status of the block list.
 	Status *string `type:"string" enum:"QuerySuggestionsBlockListStatus"`
 
-	// The date-time the block list was last updated.
+	// The Unix timestamp when the block list was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -21761,7 +24683,8 @@ type QuipConfiguration struct {
 	// TRUE to index file comments.
 	CrawlFileComments *bool `type:"boolean"`
 
-	// The Quip site domain.
+	// The Quip site domain. For example, https://quip-company.quipdomain.com/browse.
+	// The domain in this example is "quipdomain".
 	//
 	// Domain is a required field
 	Domain *string `min:"1" type:"string" required:"true"`
@@ -21773,7 +24696,10 @@ type QuipConfiguration struct {
 	// takes precedence, and the file isn't included in the index.
 	ExclusionPatterns []*string `type:"list"`
 
-	// The identifiers of the Quip folders you want to index.
+	// The identifiers of the Quip folders you want to index. You can find the folder
+	// ID in your browser URL when you access your folder in Quip. For example,
+	// https://quip-company.quipdomain.com/zlLuOVNSarTL/folder-name. The folder
+	// ID in this example is "zlLuOVNSarTL".
 	FolderIds []*string `type:"list"`
 
 	// A list of regular expression patterns to include certain files in your Quip
@@ -21794,8 +24720,8 @@ type QuipConfiguration struct {
 	// the key-value pairs that are required to connect to your Quip. The secret
 	// must contain a JSON structure with the following keys:
 	//
-	//    * accessToken—The token created in Quip. For more information, see Authentication
-	//    for a Quip data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-slack.html#quip-authentication).
+	//    * accessToken—The token created in Quip. For more information, see Using
+	//    a Quip data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-slack.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -22091,13 +25017,13 @@ func (s *Relevance) SetValueImportanceMap(v map[string]*int64) *Relevance {
 type RelevanceFeedback struct {
 	_ struct{} `type:"structure"`
 
-	// Whether to document was relevant or not relevant to the search.
+	// Whether the document was relevant or not relevant to the search.
 	//
 	// RelevanceValue is a required field
 	RelevanceValue *string `type:"string" required:"true" enum:"RelevanceType"`
 
-	// The unique identifier of the search result that the user provided relevance
-	// feedback for.
+	// The identifier of the search result that the user provided relevance feedback
+	// for.
 	//
 	// ResultId is a required field
 	ResultId *string `min:"1" type:"string" required:"true"`
@@ -22152,6 +25078,8 @@ func (s *RelevanceFeedback) SetResultId(v string) *RelevanceFeedback {
 	return s
 }
 
+// The resource you want to use already exists. Please check you have provided
+// the correct resource and try again.
 type ResourceAlreadyExistException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -22215,6 +25143,8 @@ func (s *ResourceAlreadyExistException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The resource you want to use is currently in use. Please check you have provided
+// the correct resource and try again.
 type ResourceInUseException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -22278,6 +25208,8 @@ func (s *ResourceInUseException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The resource you want to use doesn’t exist. Please check you have provided
+// the correct resource and try again.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -22341,6 +25273,8 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The resource you want to use isn't available. Please check you have provided
+// the correct resource and try again.
 type ResourceUnavailableException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -22831,8 +25765,8 @@ type SalesforceConfiguration struct {
 	//    * password - The password associated with the user logging in to the Salesforce
 	//    instance.
 	//
-	//    * securityToken - The token associated with the user account logging in
-	//    to the Salesforce instance.
+	//    * securityToken - The token associated with the user logging in to the
+	//    Salesforce instance.
 	//
 	//    * username - The user name of the user logging in to the Salesforce instance.
 	//
@@ -23539,8 +26473,8 @@ func (s *Search) SetSortable(v bool) *Search {
 //
 // When selecting websites to index, you must adhere to the Amazon Acceptable
 // Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-// that you must only use Amazon Kendra Web Crawler to index your own webpages,
-// or webpages that you have authorization to index.
+// that you must only use Amazon Kendra Web Crawler to index your own web pages,
+// or web pages that you have authorization to index.
 type SeedUrlConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -23562,7 +26496,7 @@ type SeedUrlConfiguration struct {
 	//    are also crawled.
 	//
 	//    * EVERYTHING – crawl the website host names with subdomains and other
-	//    domains that the webpages link to.
+	//    domains that the web pages link to.
 	//
 	// The default mode is set to HOST_ONLY.
 	WebCrawlerMode *string `type:"string" enum:"WebCrawlerMode"`
@@ -23690,8 +26624,8 @@ type ServiceNowConfiguration struct {
 	// The Amazon Resource Name (ARN) of the Secrets Manager secret that contains
 	// the user name and password required to connect to the ServiceNow instance.
 	// You can also provide OAuth authentication credentials of user name, password,
-	// client ID, and client secret. For more information, see Authentication for
-	// a ServiceNow data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-servicenow.html#servicenow-authentication).
+	// client ID, and client secret. For more information, see Using a ServiceNow
+	// data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-servicenow.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -24073,6 +27007,10 @@ func (s *ServiceNowServiceCatalogConfiguration) SetIncludeAttachmentFilePatterns
 	return s
 }
 
+// You have exceeded the set limits for your Amazon Kendra service. Please see
+// Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html) for more
+// information, or contact Support (http://aws.amazon.com/contact-us/) to inquire
+// about an increase of limits.
 type ServiceQuotaExceededException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -24141,9 +27079,9 @@ func (s *ServiceQuotaExceededException) RequestID() string {
 type SharePointConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Whether you want to connect to SharePoint using basic authentication of user
-	// name and password, or OAuth authentication of user name, password, client
-	// ID, and client secret. You can use OAuth authentication for SharePoint Online.
+	// Whether you want to connect to SharePoint Online using basic authentication
+	// of user name and password, or OAuth authentication of user name, password,
+	// client ID, and client secret, or AD App-only authentication of client secret.
 	AuthenticationType *string `type:"string" enum:"SharePointOnlineAuthenticationType"`
 
 	// TRUE to index document attachments.
@@ -24181,15 +27119,28 @@ type SharePointConfiguration struct {
 	// The regex applies to the display URL of the SharePoint document.
 	InclusionPatterns []*string `type:"list"`
 
+	// Configuration information to connect to your Microsoft SharePoint site URLs
+	// via instance via a web proxy. You can use this option for SharePoint Server.
+	//
+	// You must provide the website host name and port number. For example, the
+	// host name of https://a.example.com/page1.html is "a.example.com" and the
+	// port is 443, the standard port for HTTPS.
+	//
+	// Web proxy credentials are optional and you can use them to connect to a web
+	// proxy server that requires basic authentication of user name and password.
+	// To store web proxy credentials, you use a secret in Secrets Manager.
+	//
+	// It is recommended that you follow best security practices when configuring
+	// your web proxy. This includes setting up throttling, setting up logging and
+	// monitoring, and applying security patches on a regular basis. If you use
+	// your web proxy with multiple data sources, sync jobs that occur at the same
+	// time could strain the load on your proxy. It is recommended you prepare your
+	// proxy beforehand for any security and load requirements.
+	ProxyConfiguration *ProxyConfiguration `type:"structure"`
+
 	// The Amazon Resource Name (ARN) of an Secrets Manager secret that contains
 	// the user name and password required to connect to the SharePoint instance.
-	// If you use SharePoint Server, you also need to provide the sever domain name
-	// as part of the credentials. For more information, see Using a Microsoft SharePoint
-	// Data Source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html).
-	//
-	// You can also provide OAuth authentication credentials of user name, password,
-	// client ID, and client secret. For more information, see Authentication for
-	// a SharePoint data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html#sharepoint-authentication).
+	// For more information, see Microsoft SharePoint (https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html).
 	//
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
@@ -24200,10 +27151,14 @@ type SharePointConfiguration struct {
 	SharePointVersion *string `type:"string" required:"true" enum:"SharePointVersion"`
 
 	// The path to the SSL certificate stored in an Amazon S3 bucket. You use this
-	// to connect to SharePoint.
+	// to connect to SharePoint Server if you require a secure SSL connection.
+	//
+	// You can generate a self-signed X509 certificate on any computer using OpenSSL.
+	// For an example of using OpenSSL to create an X509 certificate, see Create
+	// and sign an X509 certificate (https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-ssl.html).
 	SslCertificateS3Path *S3Path `type:"structure"`
 
-	// The Microsoft SharePoint site URLs for the documents you want to indext.
+	// The Microsoft SharePoint site URLs for the documents you want to index.
 	//
 	// Urls is a required field
 	Urls []*string `min:"1" type:"list" required:"true"`
@@ -24272,6 +27227,11 @@ func (s *SharePointConfiguration) Validate() error {
 			}
 		}
 	}
+	if s.ProxyConfiguration != nil {
+		if err := s.ProxyConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ProxyConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.SslCertificateS3Path != nil {
 		if err := s.SslCertificateS3Path.Validate(); err != nil {
 			invalidParams.AddNested("SslCertificateS3Path", err.(request.ErrInvalidParams))
@@ -24331,6 +27291,12 @@ func (s *SharePointConfiguration) SetInclusionPatterns(v []*string) *SharePointC
 	return s
 }
 
+// SetProxyConfiguration sets the ProxyConfiguration field's value.
+func (s *SharePointConfiguration) SetProxyConfiguration(v *ProxyConfiguration) *SharePointConfiguration {
+	s.ProxyConfiguration = v
+	return s
+}
+
 // SetSecretArn sets the SecretArn field's value.
 func (s *SharePointConfiguration) SetSecretArn(v string) *SharePointConfiguration {
 	s.SecretArn = &v
@@ -24371,8 +27337,8 @@ func (s *SharePointConfiguration) SetVpcConfiguration(v *DataSourceVpcConfigurat
 //
 // When selecting websites to index, you must adhere to the Amazon Acceptable
 // Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-// that you must only use Amazon Kendra Web Crawler to index your own webpages,
-// or webpages that you have authorization to index.
+// that you must only use Amazon Kendra Web Crawler to index your own web pages,
+// or web pages that you have authorization to index.
 type SiteMapsConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -24762,6 +27728,59 @@ func (s *SortingConfiguration) SetSortOrder(v string) *SortingConfiguration {
 	return s
 }
 
+// The document ID and its fields/attributes that are used for a query suggestion,
+// if document fields set to use for query suggestions.
+type SourceDocument struct {
+	_ struct{} `type:"structure"`
+
+	// The additional fields/attributes to include in the response. You can use
+	// additional fields to provide extra information in the response. Additional
+	// fields are not used to based suggestions on.
+	AdditionalAttributes []*DocumentAttribute `type:"list"`
+
+	// The identifier of the document used for a query suggestion.
+	DocumentId *string `min:"1" type:"string"`
+
+	// The document fields/attributes used for a query suggestion.
+	SuggestionAttributes []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceDocument) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceDocument) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalAttributes sets the AdditionalAttributes field's value.
+func (s *SourceDocument) SetAdditionalAttributes(v []*DocumentAttribute) *SourceDocument {
+	s.AdditionalAttributes = v
+	return s
+}
+
+// SetDocumentId sets the DocumentId field's value.
+func (s *SourceDocument) SetDocumentId(v string) *SourceDocument {
+	s.DocumentId = &v
+	return s
+}
+
+// SetSuggestionAttributes sets the SuggestionAttributes field's value.
+func (s *SourceDocument) SetSuggestionAttributes(v []*string) *SourceDocument {
+	s.SuggestionAttributes = v
+	return s
+}
+
 // A query with suggested spell corrections.
 type SpellCorrectedQuery struct {
 	_ struct{} `type:"structure"`
@@ -24904,12 +27923,12 @@ func (s *SqlConfiguration) SetQueryIdentifiersEnclosingOption(v string) *SqlConf
 type StartDataSourceSyncJobInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the data source to synchronize.
+	// The identifier of the data source connector to synchronize.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index that contains the data source.
+	// The identifier of the index used with the data source connector.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -25002,7 +28021,7 @@ func (s *StartDataSourceSyncJobOutput) SetExecutionId(v string) *StartDataSource
 type Status struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the document.
+	// The identifier of the document.
 	DocumentId *string `min:"1" type:"string"`
 
 	// The current status of a document.
@@ -25065,12 +28084,13 @@ func (s *Status) SetFailureReason(v string) *Status {
 type StopDataSourceSyncJobInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the data source for which to stop the synchronization jobs.
+	// The identifier of the data source connector for which to stop the synchronization
+	// jobs.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the index that contains the data source.
+	// The identifier of the index used with the data source connector.
 	//
 	// IndexId is a required field
 	IndexId *string `min:"36" type:"string" required:"true"`
@@ -25279,15 +28299,75 @@ func (s SubmitFeedbackOutput) GoString() string {
 	return s.String()
 }
 
+// Provides the configuration information for a document field/attribute that
+// you want to base query suggestions on.
+type SuggestableConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the document field/attribute.
+	AttributeName *string `min:"1" type:"string"`
+
+	// TRUE means the document field/attribute is suggestible, so the contents within
+	// the field can be used for query suggestions.
+	Suggestable *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestableConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuggestableConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SuggestableConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SuggestableConfig"}
+	if s.AttributeName != nil && len(*s.AttributeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AttributeName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributeName sets the AttributeName field's value.
+func (s *SuggestableConfig) SetAttributeName(v string) *SuggestableConfig {
+	s.AttributeName = &v
+	return s
+}
+
+// SetSuggestable sets the Suggestable field's value.
+func (s *SuggestableConfig) SetSuggestable(v bool) *SuggestableConfig {
+	s.Suggestable = &v
+	return s
+}
+
 // A single query suggestion.
 type Suggestion struct {
 	_ struct{} `type:"structure"`
 
-	// The unique UUID (universally unique identifier) of a single query suggestion.
+	// The UUID (universally unique identifier) of a single query suggestion.
 	Id *string `min:"1" type:"string"`
 
-	// The value for the unique UUID (universally unique identifier) of a single
-	// query suggestion.
+	// The list of document IDs and their fields/attributes that are used for a
+	// single query suggestion, if document fields set to use for query suggestions.
+	SourceDocuments []*SourceDocument `type:"list"`
+
+	// The value for the UUID (universally unique identifier) of a single query
+	// suggestion.
 	//
 	// The value is the text string of a suggestion.
 	Value *SuggestionValue `type:"structure"`
@@ -25314,6 +28394,12 @@ func (s Suggestion) GoString() string {
 // SetId sets the Id field's value.
 func (s *Suggestion) SetId(v string) *Suggestion {
 	s.Id = &v
+	return s
+}
+
+// SetSourceDocuments sets the SourceDocuments field's value.
+func (s *Suggestion) SetSourceDocuments(v []*SourceDocument) *Suggestion {
+	s.SourceDocuments = v
 	return s
 }
 
@@ -25436,6 +28522,146 @@ func (s SuggestionValue) GoString() string {
 // SetText sets the Text field's value.
 func (s *SuggestionValue) SetText(v *SuggestionTextWithHighlights) *SuggestionValue {
 	s.Text = v
+	return s
+}
+
+// Provides information about a table cell in a table excerpt.
+type TableCell struct {
+	_ struct{} `type:"structure"`
+
+	// TRUE means that the table cell should be treated as a header.
+	Header *bool `type:"boolean"`
+
+	// TRUE means that the table cell has a high enough confidence and is relevant
+	// to the query, so the value or content should be highlighted.
+	Highlighted *bool `type:"boolean"`
+
+	// TRUE if the response of the table cell is the top answer. This is the cell
+	// value or content with the highest confidence score or is the most relevant
+	// to the query.
+	TopAnswer *bool `type:"boolean"`
+
+	// The actual value or content within a table cell. A table cell could contain
+	// a date value of a year, or a string value of text, for example.
+	Value *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableCell) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableCell) GoString() string {
+	return s.String()
+}
+
+// SetHeader sets the Header field's value.
+func (s *TableCell) SetHeader(v bool) *TableCell {
+	s.Header = &v
+	return s
+}
+
+// SetHighlighted sets the Highlighted field's value.
+func (s *TableCell) SetHighlighted(v bool) *TableCell {
+	s.Highlighted = &v
+	return s
+}
+
+// SetTopAnswer sets the TopAnswer field's value.
+func (s *TableCell) SetTopAnswer(v bool) *TableCell {
+	s.TopAnswer = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *TableCell) SetValue(v string) *TableCell {
+	s.Value = &v
+	return s
+}
+
+// An excerpt from a table within a document. The table excerpt displays up
+// to five columns and three rows, depending on how many table cells are relevant
+// to the query and how many columns are available in the original table. The
+// top most relevant cell is displayed in the table excerpt, along with the
+// next most relevant cells.
+type TableExcerpt struct {
+	_ struct{} `type:"structure"`
+
+	// A list of rows in the table excerpt.
+	Rows []*TableRow `type:"list"`
+
+	// A count of the number of rows in the original table within the document.
+	TotalNumberOfRows *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableExcerpt) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableExcerpt) GoString() string {
+	return s.String()
+}
+
+// SetRows sets the Rows field's value.
+func (s *TableExcerpt) SetRows(v []*TableRow) *TableExcerpt {
+	s.Rows = v
+	return s
+}
+
+// SetTotalNumberOfRows sets the TotalNumberOfRows field's value.
+func (s *TableExcerpt) SetTotalNumberOfRows(v int64) *TableExcerpt {
+	s.TotalNumberOfRows = &v
+	return s
+}
+
+// Information about a row in a table excerpt.
+type TableRow struct {
+	_ struct{} `type:"structure"`
+
+	// A list of table cells in a row.
+	Cells []*TableCell `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableRow) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TableRow) GoString() string {
+	return s.String()
+}
+
+// SetCells sets the Cells field's value.
+func (s *TableRow) SetCells(v []*TableCell) *TableRow {
+	s.Cells = v
 	return s
 }
 
@@ -25603,6 +28829,30 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
+// Provides a template for the configuration information to connect to your
+// data source.
+type TemplateConfiguration struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TemplateConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TemplateConfiguration) GoString() string {
+	return s.String()
+}
+
 // Provides information about text documents indexed in an index.
 type TextDocumentStatistics struct {
 	_ struct{} `type:"structure"`
@@ -25693,7 +28943,7 @@ func (s *TextWithHighlights) SetText(v string) *TextWithHighlights {
 type ThesaurusSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The Unix datetime that the thesaurus was created.
+	// The Unix timestamp when the thesaurus was created.
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The identifier of the thesaurus.
@@ -25705,7 +28955,7 @@ type ThesaurusSummary struct {
 	// The status of the thesaurus.
 	Status *string `type:"string" enum:"ThesaurusStatus"`
 
-	// The Unix datetime that the thesaurus was last updated.
+	// The Unix timestamp when the thesaurus was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
 }
 
@@ -25757,6 +29007,8 @@ func (s *ThesaurusSummary) SetUpdatedAt(v time.Time) *ThesaurusSummary {
 	return s
 }
 
+// The request was denied due to request throttling. Please reduce the number
+// of requests and try again.
 type ThrottlingException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -25824,10 +29076,10 @@ func (s *ThrottlingException) RequestID() string {
 type TimeRange struct {
 	_ struct{} `type:"structure"`
 
-	// The UNIX datetime of the end of the time range.
+	// The Unix timestamp for the end of the time range.
 	EndTime *time.Time `type:"timestamp"`
 
-	// The UNIX datetime of the beginning of the time range.
+	// The Unix timestamp for the beginning of the time range.
 	StartTime *time.Time `type:"timestamp"`
 }
 
@@ -26120,7 +29372,7 @@ type UpdateDataSourceInput struct {
 	// A new description for the data source connector.
 	Description *string `type:"string"`
 
-	// The identifier of the data source you want to update.
+	// The identifier of the data source connector you want to update.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
@@ -26137,16 +29389,20 @@ type UpdateDataSourceInput struct {
 	// than English (https://docs.aws.amazon.com/kendra/latest/dg/in-adding-languages.html).
 	LanguageCode *string `min:"2" type:"string"`
 
-	// A new name for the data source connector. You must first delete the data
-	// source and re-create it to change the name of the data source.
+	// A new name for the data source connector.
 	Name *string `min:"1" type:"string"`
 
 	// The Amazon Resource Name (ARN) of a role with permission to access the data
-	// source. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	// source and required resources. For more information, see IAM roles for Amazon
+	// Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	RoleArn *string `type:"string"`
 
 	// The sync schedule you want to update for the data source connector.
 	Schedule *string `type:"string"`
+
+	// Configuration information for an Amazon Virtual Private Cloud to connect
+	// to your data source. For more information, see Configuring a VPC (https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html).
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -26196,6 +29452,11 @@ func (s *UpdateDataSourceInput) Validate() error {
 	if s.CustomDocumentEnrichmentConfiguration != nil {
 		if err := s.CustomDocumentEnrichmentConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("CustomDocumentEnrichmentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -26259,6 +29520,12 @@ func (s *UpdateDataSourceInput) SetSchedule(v string) *UpdateDataSourceInput {
 	return s
 }
 
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *UpdateDataSourceInput) SetVpcConfiguration(v *DataSourceVpcConfiguration) *UpdateDataSourceInput {
+	s.VpcConfiguration = v
+	return s
+}
+
 type UpdateDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -26304,9 +29571,9 @@ type UpdateExperienceInput struct {
 	Name *string `min:"1" type:"string"`
 
 	// The Amazon Resource Name (ARN) of a role with permission to access Query
-	// API, QuerySuggestions API, SubmitFeedback API, and Amazon Web Services SSO
-	// that stores your user and group information. For more information, see IAM
-	// roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
+	// API, QuerySuggestions API, SubmitFeedback API, and IAM Identity Center that
+	// stores your user and group information. For more information, see IAM roles
+	// for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	RoleArn *string `type:"string"`
 }
 
@@ -26416,6 +29683,170 @@ func (s UpdateExperienceOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateFeaturedResultsSetInput struct {
+	_ struct{} `type:"structure"`
+
+	// A new description for the set of featured results.
+	Description *string `type:"string"`
+
+	// A list of document IDs for the documents you want to feature at the top of
+	// the search results page. For more information on the list of featured documents,
+	// see FeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_FeaturedResultsSet.html).
+	FeaturedDocuments []*FeaturedDocument `type:"list"`
+
+	// The identifier of the set of featured results that you want to update.
+	//
+	// FeaturedResultsSetId is a required field
+	FeaturedResultsSetId *string `min:"36" type:"string" required:"true"`
+
+	// A new name for the set of featured results.
+	FeaturedResultsSetName *string `min:"1" type:"string"`
+
+	// The identifier of the index used for featuring results.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// A list of queries for featuring results. For more information on the list
+	// of queries, see FeaturedResultsSet (https://docs.aws.amazon.com/kendra/latest/dg/API_FeaturedResultsSet.html).
+	QueryTexts []*string `type:"list"`
+
+	// You can set the status to ACTIVE or INACTIVE. When the value is ACTIVE, featured
+	// results are ready for use. You can still configure your settings before setting
+	// the status to ACTIVE. The queries you specify for featured results must be
+	// unique per featured results set for each index, whether the status is ACTIVE
+	// or INACTIVE.
+	Status *string `type:"string" enum:"FeaturedResultsSetStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFeaturedResultsSetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFeaturedResultsSetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateFeaturedResultsSetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateFeaturedResultsSetInput"}
+	if s.FeaturedResultsSetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FeaturedResultsSetId"))
+	}
+	if s.FeaturedResultsSetId != nil && len(*s.FeaturedResultsSetId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("FeaturedResultsSetId", 36))
+	}
+	if s.FeaturedResultsSetName != nil && len(*s.FeaturedResultsSetName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FeaturedResultsSetName", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.FeaturedDocuments != nil {
+		for i, v := range s.FeaturedDocuments {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FeaturedDocuments", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateFeaturedResultsSetInput) SetDescription(v string) *UpdateFeaturedResultsSetInput {
+	s.Description = &v
+	return s
+}
+
+// SetFeaturedDocuments sets the FeaturedDocuments field's value.
+func (s *UpdateFeaturedResultsSetInput) SetFeaturedDocuments(v []*FeaturedDocument) *UpdateFeaturedResultsSetInput {
+	s.FeaturedDocuments = v
+	return s
+}
+
+// SetFeaturedResultsSetId sets the FeaturedResultsSetId field's value.
+func (s *UpdateFeaturedResultsSetInput) SetFeaturedResultsSetId(v string) *UpdateFeaturedResultsSetInput {
+	s.FeaturedResultsSetId = &v
+	return s
+}
+
+// SetFeaturedResultsSetName sets the FeaturedResultsSetName field's value.
+func (s *UpdateFeaturedResultsSetInput) SetFeaturedResultsSetName(v string) *UpdateFeaturedResultsSetInput {
+	s.FeaturedResultsSetName = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *UpdateFeaturedResultsSetInput) SetIndexId(v string) *UpdateFeaturedResultsSetInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetQueryTexts sets the QueryTexts field's value.
+func (s *UpdateFeaturedResultsSetInput) SetQueryTexts(v []*string) *UpdateFeaturedResultsSetInput {
+	s.QueryTexts = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateFeaturedResultsSetInput) SetStatus(v string) *UpdateFeaturedResultsSetInput {
+	s.Status = &v
+	return s
+}
+
+type UpdateFeaturedResultsSetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information on the set of featured results. This includes the identifier
+	// of the featured results set, whether the featured results set is active or
+	// inactive, when the featured results set was last updated, and more.
+	FeaturedResultsSet *FeaturedResultsSet `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFeaturedResultsSetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFeaturedResultsSetOutput) GoString() string {
+	return s.String()
+}
+
+// SetFeaturedResultsSet sets the FeaturedResultsSet field's value.
+func (s *UpdateFeaturedResultsSetOutput) SetFeaturedResultsSet(v *FeaturedResultsSet) *UpdateFeaturedResultsSetOutput {
+	s.FeaturedResultsSet = v
+	return s
+}
+
 type UpdateIndexInput struct {
 	_ struct{} `type:"structure"`
 
@@ -26450,8 +29881,8 @@ type UpdateIndexInput struct {
 	// The user context policy.
 	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
 
-	// Enables fetching access levels of groups and users from an Amazon Web Services
-	// Single Sign On identity source. To configure this, see UserGroupResolutionConfiguration
+	// Enables fetching access levels of groups and users from an IAM Identity Center
+	// (successor to Single Sign-On) identity source. To configure this, see UserGroupResolutionConfiguration
 	// (https://docs.aws.amazon.com/kendra/latest/dg/API_UserGroupResolutionConfiguration.html).
 	UserGroupResolutionConfiguration *UserGroupResolutionConfiguration `type:"structure"`
 
@@ -26747,6 +30178,10 @@ func (s UpdateQuerySuggestionsBlockListOutput) GoString() string {
 type UpdateQuerySuggestionsConfigInput struct {
 	_ struct{} `type:"structure"`
 
+	// Configuration information for the document fields/attributes that you want
+	// to base query suggestions on.
+	AttributeSuggestionsConfig *AttributeSuggestionsUpdateConfig `type:"structure"`
+
 	// TRUE to include queries without user information (i.e. all queries, irrespective
 	// of the user), otherwise FALSE to only include queries with user information.
 	//
@@ -26838,11 +30273,22 @@ func (s *UpdateQuerySuggestionsConfigInput) Validate() error {
 	if s.MinimumQueryCount != nil && *s.MinimumQueryCount < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MinimumQueryCount", 1))
 	}
+	if s.AttributeSuggestionsConfig != nil {
+		if err := s.AttributeSuggestionsConfig.Validate(); err != nil {
+			invalidParams.AddNested("AttributeSuggestionsConfig", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAttributeSuggestionsConfig sets the AttributeSuggestionsConfig field's value.
+func (s *UpdateQuerySuggestionsConfigInput) SetAttributeSuggestionsConfig(v *AttributeSuggestionsUpdateConfig) *UpdateQuerySuggestionsConfigInput {
+	s.AttributeSuggestionsConfig = v
+	return s
 }
 
 // SetIncludeQueriesWithoutUserInformation sets the IncludeQueriesWithoutUserInformation field's value.
@@ -27044,8 +30490,8 @@ func (s UpdateThesaurusOutput) GoString() string {
 //
 // When selecting websites to index, you must adhere to the Amazon Acceptable
 // Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-// that you must only use Amazon Kendra Web Crawler to index your own webpages,
-// or webpages that you have authorization to index.
+// that you must only use Amazon Kendra Web Crawler to index your own web pages,
+// or web pages that you have authorization to index.
 type Urls struct {
 	_ struct{} `type:"structure"`
 
@@ -27054,7 +30500,7 @@ type Urls struct {
 	//
 	// You can choose to crawl only the website host names, or the website host
 	// names with subdomains, or the website host names with subdomains and other
-	// domains that the webpages link to.
+	// domains that the web pages link to.
 	//
 	// You can list up to 100 seed URLs.
 	SeedUrlConfiguration *SeedUrlConfiguration `type:"structure"`
@@ -27227,32 +30673,32 @@ func (s *UserContext) SetUserId(v string) *UserContext {
 	return s
 }
 
-// Provides the configuration information to fetch access levels of groups and
-// users from an Amazon Web Services Single Sign On identity source. This is
-// useful for user context filtering, where search results are filtered based
-// on the user or their group access to documents. You can also use the PutPrincipalMapping
+// Provides the configuration information to get users and groups from an IAM
+// Identity Center (successor to Single Sign-On) identity source. This is useful
+// for user context filtering, where search results are filtered based on the
+// user or their group access to documents. You can also use the PutPrincipalMapping
 // (https://docs.aws.amazon.com/kendra/latest/dg/API_PutPrincipalMapping.html)
 // API to map users to their groups so that you only need to provide the user
 // ID when you issue the query.
 //
-// To set up an Amazon Web Services SSO identity source in the console to use
-// with Amazon Kendra, see Getting started with an Amazon Web Services SSO identity
-// source (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
-// You must also grant the required permissions to use Amazon Web Services SSO
-// with Amazon Kendra. For more information, see IAM roles for Amazon Web Services
-// SSO (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html#iam-roles-aws-sso).
+// To set up an IAM Identity Center identity source in the console to use with
+// Amazon Kendra, see Getting started with an IAM Identity Center identity source
+// (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
+// You must also grant the required permissions to use IAM Identity Center with
+// Amazon Kendra. For more information, see IAM roles for IAM Identity Center
+// (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html#iam-roles-aws-sso).
 //
 // Amazon Kendra currently does not support using UserGroupResolutionConfiguration
-// with an Amazon Web Services organization member account for your Amazon Web
-// Services SSO identify source. You must create your index in the management
-// account for the organization in order to use UserGroupResolutionConfiguration.
+// with an Amazon Web Services organization member account for your IAM Identity
+// Center identify source. You must create your index in the management account
+// for the organization in order to use UserGroupResolutionConfiguration.
 type UserGroupResolutionConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The identity store provider (mode) you want to use to fetch access levels
-	// of groups and users. Amazon Web Services Single Sign On is currently the
-	// only available mode. Your users and groups must exist in an Amazon Web Services
-	// SSO identity source in order to use this mode.
+	// The identity store provider (mode) you want to use to get users and groups.
+	// IAM Identity Center (successor to Single Sign-On) is currently the only available
+	// mode. Your users and groups must exist in an IAM Identity Center identity
+	// source in order to use this mode.
 	//
 	// UserGroupResolutionMode is a required field
 	UserGroupResolutionMode *string `type:"string" required:"true" enum:"UserGroupResolutionMode"`
@@ -27299,13 +30745,13 @@ func (s *UserGroupResolutionConfiguration) SetUserGroupResolutionMode(v string) 
 type UserIdentityConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Web Services SSO field name that contains the identifiers of your
+	// The IAM Identity Center field name that contains the identifiers of your
 	// users, such as their emails. This is used for user context filtering (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html)
 	// and for granting access to your Amazon Kendra experience. You must set up
-	// Amazon Web Services SSO with Amazon Kendra. You must include your users and
-	// groups in your Access Control List when you ingest documents into your index.
-	// For more information, see Getting started with an Amazon Web Services SSO
-	// identity source (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
+	// IAM Identity Center with Amazon Kendra. You must include your users and groups
+	// in your Access Control List when you ingest documents into your index. For
+	// more information, see Getting started with an IAM Identity Center identity
+	// source (https://docs.aws.amazon.com/kendra/latest/dg/getting-started-aws-sso.html).
 	IdentityAttributeName *string `min:"1" type:"string"`
 }
 
@@ -27407,6 +30853,8 @@ func (s *UserTokenConfiguration) SetJwtTokenTypeConfiguration(v *JwtTokenTypeCon
 	return s
 }
 
+// The input fails to satisfy the constraints set by the Amazon Kendra service.
+// Please provide the correct input and try again.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -27529,26 +30977,25 @@ type WebCrawlerConfiguration struct {
 	// Specifies the number of levels in a website that you want to crawl.
 	//
 	// The first level begins from the website seed or starting point URL. For example,
-	// if a website has 3 levels – index level (i.e. seed in this example), sections
-	// level, and subsections level – and you are only interested in crawling
-	// information up to the sections level (i.e. levels 0-1), you can set your
-	// depth to 1.
+	// if a website has three levels—index level (the seed in this example), sections
+	// level, and subsections level—and you are only interested in crawling information
+	// up to the sections level (levels 0-1), you can set your depth to 1.
 	//
 	// The default crawl depth is set to 2.
 	CrawlDepth *int64 `type:"integer"`
 
-	// The maximum size (in MB) of a webpage or attachment to crawl.
+	// The maximum size (in MB) of a web page or attachment to crawl.
 	//
 	// Files larger than this size (in MB) are skipped/not crawled.
 	//
-	// The default maximum size of a webpage or attachment is set to 50 MB.
+	// The default maximum size of a web page or attachment is set to 50 MB.
 	MaxContentSizePerPageInMegaBytes *float64 `min:"1e-06" type:"float"`
 
-	// The maximum number of URLs on a webpage to include when crawling a website.
-	// This number is per webpage.
+	// The maximum number of URLs on a web page to include when crawling a website.
+	// This number is per web page.
 	//
-	// As a website’s webpages are crawled, any URLs the webpages link to are
-	// also crawled. URLs on a webpage are crawled in order of appearance.
+	// As a website’s web pages are crawled, any URLs the web pages link to are
+	// also crawled. URLs on a web page are crawled in order of appearance.
 	//
 	// The default maximum links per page is 100.
 	MaxLinksPerPage *int64 `min:"1" type:"integer"`
@@ -27599,8 +31046,8 @@ type WebCrawlerConfiguration struct {
 	//
 	// When selecting websites to index, you must adhere to the Amazon Acceptable
 	// Use Policy (https://aws.amazon.com/aup/) and all other Amazon terms. Remember
-	// that you must only use Amazon Kendra Web Crawler to index your own webpages,
-	// or webpages that you have authorization to index.
+	// that you must only use Amazon Kendra Web Crawler to index your own web pages,
+	// or web pages that you have authorization to index.
 	//
 	// Urls is a required field
 	Urls *Urls `type:"structure" required:"true"`
@@ -27886,6 +31333,22 @@ func AlfrescoEntity_Values() []string {
 }
 
 const (
+	// AttributeSuggestionsModeActive is a AttributeSuggestionsMode enum value
+	AttributeSuggestionsModeActive = "ACTIVE"
+
+	// AttributeSuggestionsModeInactive is a AttributeSuggestionsMode enum value
+	AttributeSuggestionsModeInactive = "INACTIVE"
+)
+
+// AttributeSuggestionsMode_Values returns all elements of the AttributeSuggestionsMode enum
+func AttributeSuggestionsMode_Values() []string {
+	return []string{
+		AttributeSuggestionsModeActive,
+		AttributeSuggestionsModeInactive,
+	}
+}
+
+const (
 	// ConditionOperatorGreaterThan is a ConditionOperator enum value
 	ConditionOperatorGreaterThan = "GreaterThan"
 
@@ -27986,6 +31449,22 @@ func ConfluenceAttachmentFieldName_Values() []string {
 		ConfluenceAttachmentFieldNameSpaceName,
 		ConfluenceAttachmentFieldNameUrl,
 		ConfluenceAttachmentFieldNameVersion,
+	}
+}
+
+const (
+	// ConfluenceAuthenticationTypeHttpBasic is a ConfluenceAuthenticationType enum value
+	ConfluenceAuthenticationTypeHttpBasic = "HTTP_BASIC"
+
+	// ConfluenceAuthenticationTypePat is a ConfluenceAuthenticationType enum value
+	ConfluenceAuthenticationTypePat = "PAT"
+)
+
+// ConfluenceAuthenticationType_Values returns all elements of the ConfluenceAuthenticationType enum
+func ConfluenceAuthenticationType_Values() []string {
+	return []string{
+		ConfluenceAuthenticationTypeHttpBasic,
+		ConfluenceAuthenticationTypePat,
 	}
 }
 
@@ -28144,6 +31623,27 @@ const (
 
 	// ContentTypePpt is a ContentType enum value
 	ContentTypePpt = "PPT"
+
+	// ContentTypeRtf is a ContentType enum value
+	ContentTypeRtf = "RTF"
+
+	// ContentTypeXml is a ContentType enum value
+	ContentTypeXml = "XML"
+
+	// ContentTypeXslt is a ContentType enum value
+	ContentTypeXslt = "XSLT"
+
+	// ContentTypeMsExcel is a ContentType enum value
+	ContentTypeMsExcel = "MS_EXCEL"
+
+	// ContentTypeCsv is a ContentType enum value
+	ContentTypeCsv = "CSV"
+
+	// ContentTypeJson is a ContentType enum value
+	ContentTypeJson = "JSON"
+
+	// ContentTypeMd is a ContentType enum value
+	ContentTypeMd = "MD"
 )
 
 // ContentType_Values returns all elements of the ContentType enum
@@ -28154,6 +31654,13 @@ func ContentType_Values() []string {
 		ContentTypeMsWord,
 		ContentTypePlainText,
 		ContentTypePpt,
+		ContentTypeRtf,
+		ContentTypeXml,
+		ContentTypeXslt,
+		ContentTypeMsExcel,
+		ContentTypeCsv,
+		ContentTypeJson,
+		ContentTypeMd,
 	}
 }
 
@@ -28275,6 +31782,9 @@ const (
 
 	// DataSourceTypeAlfresco is a DataSourceType enum value
 	DataSourceTypeAlfresco = "ALFRESCO"
+
+	// DataSourceTypeTemplate is a DataSourceType enum value
+	DataSourceTypeTemplate = "TEMPLATE"
 )
 
 // DataSourceType_Values returns all elements of the DataSourceType enum
@@ -28298,6 +31808,7 @@ func DataSourceType_Values() []string {
 		DataSourceTypeJira,
 		DataSourceTypeGithub,
 		DataSourceTypeAlfresco,
+		DataSourceTypeTemplate,
 	}
 }
 
@@ -28494,6 +32005,22 @@ func FaqStatus_Values() []string {
 		FaqStatusActive,
 		FaqStatusDeleting,
 		FaqStatusFailed,
+	}
+}
+
+const (
+	// FeaturedResultsSetStatusActive is a FeaturedResultsSetStatus enum value
+	FeaturedResultsSetStatusActive = "ACTIVE"
+
+	// FeaturedResultsSetStatusInactive is a FeaturedResultsSetStatus enum value
+	FeaturedResultsSetStatusInactive = "INACTIVE"
+)
+
+// FeaturedResultsSetStatus_Values returns all elements of the FeaturedResultsSetStatus enum
+func FeaturedResultsSetStatus_Values() []string {
+	return []string{
+		FeaturedResultsSetStatusActive,
+		FeaturedResultsSetStatusInactive,
 	}
 }
 
@@ -28778,6 +32305,22 @@ func QueryIdentifiersEnclosingOption_Values() []string {
 	return []string{
 		QueryIdentifiersEnclosingOptionDoubleQuotes,
 		QueryIdentifiersEnclosingOptionNone,
+	}
+}
+
+const (
+	// QueryResultFormatTable is a QueryResultFormat enum value
+	QueryResultFormatTable = "TABLE"
+
+	// QueryResultFormatText is a QueryResultFormat enum value
+	QueryResultFormatText = "TEXT"
+)
+
+// QueryResultFormat_Values returns all elements of the QueryResultFormat enum
+func QueryResultFormat_Values() []string {
+	return []string{
+		QueryResultFormatTable,
+		QueryResultFormatText,
 	}
 }
 
@@ -29079,6 +32622,9 @@ const (
 
 	// SharePointVersionSharepointOnline is a SharePointVersion enum value
 	SharePointVersionSharepointOnline = "SHAREPOINT_ONLINE"
+
+	// SharePointVersionSharepoint2019 is a SharePointVersion enum value
+	SharePointVersionSharepoint2019 = "SHAREPOINT_2019"
 )
 
 // SharePointVersion_Values returns all elements of the SharePointVersion enum
@@ -29087,6 +32633,7 @@ func SharePointVersion_Values() []string {
 		SharePointVersionSharepoint2013,
 		SharePointVersionSharepoint2016,
 		SharePointVersionSharepointOnline,
+		SharePointVersionSharepoint2019,
 	}
 }
 
@@ -29127,6 +32674,22 @@ func SortOrder_Values() []string {
 	return []string{
 		SortOrderDesc,
 		SortOrderAsc,
+	}
+}
+
+const (
+	// SuggestionTypeQuery is a SuggestionType enum value
+	SuggestionTypeQuery = "QUERY"
+
+	// SuggestionTypeDocumentAttributes is a SuggestionType enum value
+	SuggestionTypeDocumentAttributes = "DOCUMENT_ATTRIBUTES"
+)
+
+// SuggestionType_Values returns all elements of the SuggestionType enum
+func SuggestionType_Values() []string {
+	return []string{
+		SuggestionTypeQuery,
+		SuggestionTypeDocumentAttributes,
 	}
 }
 

@@ -239,6 +239,25 @@ func (c *ServiceCatalog) AssociatePrincipalWithPortfolioRequest(input *Associate
 //
 // Associates the specified principal ARN with the specified portfolio.
 //
+// If you share the portfolio with principal name sharing enabled, the PrincipalARN
+// association is included in the share.
+//
+// The PortfolioID, PrincipalARN, and PrincipalType parameters are required.
+//
+// You can associate a maximum of 10 Principals with a portfolio using PrincipalType
+// as IAM_PATTERN
+//
+// When you associate a principal with portfolio, a potential privilege escalation
+// path may occur when that portfolio is then shared with other accounts. For
+// a user in a recipient account who is not an Service Catalog Admin, but still
+// has the ability to create Principals (Users/Groups/Roles), that user could
+// create a role that matches a principal name association for the portfolio.
+// Although this user may not know which principal names are associated through
+// Service Catalog, they may be able to guess the user. If this potential escalation
+// path is a concern, then Service Catalog recommends using PrincipalType as
+// IAM. With this configuration, the PrincipalARN must already exist in the
+// recipient account before it can be associated.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -435,6 +454,9 @@ func (c *ServiceCatalog) AssociateServiceActionWithProvisioningArtifactRequest(i
 //   The current limits of the service would have been exceeded by this operation.
 //   Decrease your resource use or increase your service limits and retry the
 //   operation.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateServiceActionWithProvisioningArtifact
 func (c *ServiceCatalog) AssociateServiceActionWithProvisioningArtifact(input *AssociateServiceActionWithProvisioningArtifactInput) (*AssociateServiceActionWithProvisioningArtifactOutput, error) {
@@ -1052,6 +1074,17 @@ func (c *ServiceCatalog) CreatePortfolioShareRequest(input *CreatePortfolioShare
 // If the portfolio share with the specified account or organization node already
 // exists, this action will have no effect and will not return an error. To
 // update an existing share, you must use the UpdatePortfolioShare API instead.
+//
+// When you associate a principal with portfolio, a potential privilege escalation
+// path may occur when that portfolio is then shared with other accounts. For
+// a user in a recipient account who is not an Service Catalog Admin, but still
+// has the ability to create Principals (Users/Groups/Roles), that user could
+// create a role that matches a principal name association for the portfolio.
+// Although this user may not know which principal names are associated through
+// Service Catalog, they may be able to guess the user. If this potential escalation
+// path is a concern, then Service Catalog recommends using PrincipalType as
+// IAM. With this configuration, the PrincipalARN must already exist in the
+// recipient account before it can be associated.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2806,6 +2839,9 @@ func (c *ServiceCatalog) DescribeProductRequest(input *DescribeProductInput) (re
 //
 // Gets information about the specified product.
 //
+// Running this operation with administrator access results in a failure. DescribeProductAsAdmin
+// should be used instead.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3909,6 +3945,16 @@ func (c *ServiceCatalog) DisassociatePrincipalFromPortfolioRequest(input *Disass
 //
 // Disassociates a previously associated principal ARN from a specified portfolio.
 //
+// The PrincipalType and PrincipalARN must match the AssociatePrincipalWithPortfolio
+// call request details. For example, to disassociate an association created
+// with a PrincipalARN of PrincipalType IAM you must use the PrincipalType IAM
+// when calling DisassociatePrincipalFromPortfolio.
+//
+// For portfolios that have been shared with principal name sharing enabled:
+// after disassociating a principal, share recipient accounts will no longer
+// be able to provision products in this portfolio using a role matching the
+// name of the associated principal.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -4752,21 +4798,25 @@ func (c *ServiceCatalog) ImportAsProvisionedProductRequest(input *ImportAsProvis
 
 // ImportAsProvisionedProduct API operation for AWS Service Catalog.
 //
-// Requests the import of a resource as a Amazon Web Services Service Catalog
-// provisioned product that is associated to a Amazon Web Services Service Catalog
-// product and provisioning artifact. Once imported, all supported Amazon Web
-// Services Service Catalog governance actions are supported on the provisioned
+// Requests the import of a resource as an Service Catalog provisioned product
+// that is associated to an Service Catalog product and provisioning artifact.
+// Once imported, all supported governance actions are supported on the provisioned
 // product.
 //
-// Resource import only supports CloudFormation stack ARNs. CloudFormation StackSets
+// Resource import only supports CloudFormation stack ARNs. CloudFormation StackSets,
 // and non-root nested stacks are not supported.
 //
 // The CloudFormation stack must have one of the following statuses to be imported:
 // CREATE_COMPLETE, UPDATE_COMPLETE, UPDATE_ROLLBACK_COMPLETE, IMPORT_COMPLETE,
-// IMPORT_ROLLBACK_COMPLETE.
+// and IMPORT_ROLLBACK_COMPLETE.
 //
 // Import of the resource requires that the CloudFormation stack template matches
-// the associated Amazon Web Services Service Catalog product provisioning artifact.
+// the associated Service Catalog product provisioning artifact.
+//
+// When you import an existing CloudFormation stack into a portfolio, constraints
+// that are associated with the product aren't applied during the import process.
+// The constraints are applied after you call UpdateProvisionedProduct for the
+// provisioned product.
 //
 // The user or role that performs this operation must have the cloudformation:GetTemplate
 // and cloudformation:DescribeStacks IAM policy permissions.
@@ -5287,9 +5337,15 @@ func (c *ServiceCatalog) ListLaunchPathsRequest(input *ListLaunchPathsInput) (re
 
 // ListLaunchPaths API operation for AWS Service Catalog.
 //
-// Lists the paths to the specified product. A path is how the user has access
-// to a specified product, and is necessary when provisioning a product. A path
-// also determines the constraints put on the product.
+// Lists the paths to the specified product. A path describes how the user gets
+// access to a specified product and is necessary when provisioning a product.
+// A path also determines the constraints that are put on a product. A path
+// is dependent on a specific product, porfolio, and principal.
+//
+// When provisioning a product that's been added to a portfolio, you must grant
+// your user, group, or role access to the portfolio. For more information,
+// see Granting users access (https://docs.aws.amazon.com/servicecatalog/latest/adminguide/catalogs_portfolios_users.html)
+// in the Service Catalog User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5997,7 +6053,8 @@ func (c *ServiceCatalog) ListPrincipalsForPortfolioRequest(input *ListPrincipals
 
 // ListPrincipalsForPortfolio API operation for AWS Service Catalog.
 //
-// Lists all principal ARNs associated with the specified portfolio.
+// Lists all PrincipalARNs and corresponding PrincipalTypes associated with
+// the specified portfolio.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7123,6 +7180,255 @@ func (c *ServiceCatalog) ListTagOptionsPagesWithContext(ctx aws.Context, input *
 	return p.Err()
 }
 
+const opNotifyProvisionProductEngineWorkflowResult = "NotifyProvisionProductEngineWorkflowResult"
+
+// NotifyProvisionProductEngineWorkflowResultRequest generates a "aws/request.Request" representing the
+// client's request for the NotifyProvisionProductEngineWorkflowResult operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See NotifyProvisionProductEngineWorkflowResult for more information on using the NotifyProvisionProductEngineWorkflowResult
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the NotifyProvisionProductEngineWorkflowResultRequest method.
+//    req, resp := client.NotifyProvisionProductEngineWorkflowResultRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyProvisionProductEngineWorkflowResult
+func (c *ServiceCatalog) NotifyProvisionProductEngineWorkflowResultRequest(input *NotifyProvisionProductEngineWorkflowResultInput) (req *request.Request, output *NotifyProvisionProductEngineWorkflowResultOutput) {
+	op := &request.Operation{
+		Name:       opNotifyProvisionProductEngineWorkflowResult,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &NotifyProvisionProductEngineWorkflowResultInput{}
+	}
+
+	output = &NotifyProvisionProductEngineWorkflowResultOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// NotifyProvisionProductEngineWorkflowResult API operation for AWS Service Catalog.
+//
+// Notifies the result of the provisioning engine execution.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation NotifyProvisionProductEngineWorkflowResult for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyProvisionProductEngineWorkflowResult
+func (c *ServiceCatalog) NotifyProvisionProductEngineWorkflowResult(input *NotifyProvisionProductEngineWorkflowResultInput) (*NotifyProvisionProductEngineWorkflowResultOutput, error) {
+	req, out := c.NotifyProvisionProductEngineWorkflowResultRequest(input)
+	return out, req.Send()
+}
+
+// NotifyProvisionProductEngineWorkflowResultWithContext is the same as NotifyProvisionProductEngineWorkflowResult with the addition of
+// the ability to pass a context and additional request options.
+//
+// See NotifyProvisionProductEngineWorkflowResult for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) NotifyProvisionProductEngineWorkflowResultWithContext(ctx aws.Context, input *NotifyProvisionProductEngineWorkflowResultInput, opts ...request.Option) (*NotifyProvisionProductEngineWorkflowResultOutput, error) {
+	req, out := c.NotifyProvisionProductEngineWorkflowResultRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opNotifyTerminateProvisionedProductEngineWorkflowResult = "NotifyTerminateProvisionedProductEngineWorkflowResult"
+
+// NotifyTerminateProvisionedProductEngineWorkflowResultRequest generates a "aws/request.Request" representing the
+// client's request for the NotifyTerminateProvisionedProductEngineWorkflowResult operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See NotifyTerminateProvisionedProductEngineWorkflowResult for more information on using the NotifyTerminateProvisionedProductEngineWorkflowResult
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the NotifyTerminateProvisionedProductEngineWorkflowResultRequest method.
+//    req, resp := client.NotifyTerminateProvisionedProductEngineWorkflowResultRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyTerminateProvisionedProductEngineWorkflowResult
+func (c *ServiceCatalog) NotifyTerminateProvisionedProductEngineWorkflowResultRequest(input *NotifyTerminateProvisionedProductEngineWorkflowResultInput) (req *request.Request, output *NotifyTerminateProvisionedProductEngineWorkflowResultOutput) {
+	op := &request.Operation{
+		Name:       opNotifyTerminateProvisionedProductEngineWorkflowResult,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &NotifyTerminateProvisionedProductEngineWorkflowResultInput{}
+	}
+
+	output = &NotifyTerminateProvisionedProductEngineWorkflowResultOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// NotifyTerminateProvisionedProductEngineWorkflowResult API operation for AWS Service Catalog.
+//
+// Notifies the result of the terminate engine execution.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation NotifyTerminateProvisionedProductEngineWorkflowResult for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyTerminateProvisionedProductEngineWorkflowResult
+func (c *ServiceCatalog) NotifyTerminateProvisionedProductEngineWorkflowResult(input *NotifyTerminateProvisionedProductEngineWorkflowResultInput) (*NotifyTerminateProvisionedProductEngineWorkflowResultOutput, error) {
+	req, out := c.NotifyTerminateProvisionedProductEngineWorkflowResultRequest(input)
+	return out, req.Send()
+}
+
+// NotifyTerminateProvisionedProductEngineWorkflowResultWithContext is the same as NotifyTerminateProvisionedProductEngineWorkflowResult with the addition of
+// the ability to pass a context and additional request options.
+//
+// See NotifyTerminateProvisionedProductEngineWorkflowResult for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) NotifyTerminateProvisionedProductEngineWorkflowResultWithContext(ctx aws.Context, input *NotifyTerminateProvisionedProductEngineWorkflowResultInput, opts ...request.Option) (*NotifyTerminateProvisionedProductEngineWorkflowResultOutput, error) {
+	req, out := c.NotifyTerminateProvisionedProductEngineWorkflowResultRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opNotifyUpdateProvisionedProductEngineWorkflowResult = "NotifyUpdateProvisionedProductEngineWorkflowResult"
+
+// NotifyUpdateProvisionedProductEngineWorkflowResultRequest generates a "aws/request.Request" representing the
+// client's request for the NotifyUpdateProvisionedProductEngineWorkflowResult operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See NotifyUpdateProvisionedProductEngineWorkflowResult for more information on using the NotifyUpdateProvisionedProductEngineWorkflowResult
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the NotifyUpdateProvisionedProductEngineWorkflowResultRequest method.
+//    req, resp := client.NotifyUpdateProvisionedProductEngineWorkflowResultRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyUpdateProvisionedProductEngineWorkflowResult
+func (c *ServiceCatalog) NotifyUpdateProvisionedProductEngineWorkflowResultRequest(input *NotifyUpdateProvisionedProductEngineWorkflowResultInput) (req *request.Request, output *NotifyUpdateProvisionedProductEngineWorkflowResultOutput) {
+	op := &request.Operation{
+		Name:       opNotifyUpdateProvisionedProductEngineWorkflowResult,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &NotifyUpdateProvisionedProductEngineWorkflowResultInput{}
+	}
+
+	output = &NotifyUpdateProvisionedProductEngineWorkflowResultOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// NotifyUpdateProvisionedProductEngineWorkflowResult API operation for AWS Service Catalog.
+//
+// Notifies the result of the update engine execution.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation NotifyUpdateProvisionedProductEngineWorkflowResult for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyUpdateProvisionedProductEngineWorkflowResult
+func (c *ServiceCatalog) NotifyUpdateProvisionedProductEngineWorkflowResult(input *NotifyUpdateProvisionedProductEngineWorkflowResultInput) (*NotifyUpdateProvisionedProductEngineWorkflowResultOutput, error) {
+	req, out := c.NotifyUpdateProvisionedProductEngineWorkflowResultRequest(input)
+	return out, req.Send()
+}
+
+// NotifyUpdateProvisionedProductEngineWorkflowResultWithContext is the same as NotifyUpdateProvisionedProductEngineWorkflowResult with the addition of
+// the ability to pass a context and additional request options.
+//
+// See NotifyUpdateProvisionedProductEngineWorkflowResult for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) NotifyUpdateProvisionedProductEngineWorkflowResultWithContext(ctx aws.Context, input *NotifyUpdateProvisionedProductEngineWorkflowResultInput, opts ...request.Option) (*NotifyUpdateProvisionedProductEngineWorkflowResultOutput, error) {
+	req, out := c.NotifyUpdateProvisionedProductEngineWorkflowResultRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opProvisionProduct = "ProvisionProduct"
 
 // ProvisionProductRequest generates a "aws/request.Request" representing the
@@ -7170,14 +7476,19 @@ func (c *ServiceCatalog) ProvisionProductRequest(input *ProvisionProductInput) (
 // Provisions the specified product.
 //
 // A provisioned product is a resourced instance of a product. For example,
-// provisioning a product based on a CloudFormation template launches a CloudFormation
-// stack and its underlying resources. You can check the status of this request
-// using DescribeRecord.
+// provisioning a product that's based on an CloudFormation template launches
+// an CloudFormation stack and its underlying resources. You can check the status
+// of this request using DescribeRecord.
 //
-// If the request contains a tag key with an empty list of values, there is
-// a tag conflict for that key. Do not include conflicted keys as tags, or this
-// causes the error "Parameter validation failed: Missing required parameter
+// If the request contains a tag key with an empty list of values, there's a
+// tag conflict for that key. Don't include conflicted keys as tags, or this
+// will cause the error "Parameter validation failed: Missing required parameter
 // in Tags[N]:Value".
+//
+// When provisioning a product that's been added to a portfolio, you must grant
+// your user, group, or role access to the portfolio. For more information,
+// see Granting users access (https://docs.aws.amazon.com/servicecatalog/latest/adminguide/catalogs_portfolios_users.html)
+// in the Service Catalog User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7708,13 +8019,6 @@ func (c *ServiceCatalog) SearchProvisionedProductsRequest(input *SearchProvision
 //
 // Gets information about the provisioned products that meet the specified criteria.
 //
-// To ensure a complete list of provisioned products and remove duplicate products,
-// use sort-by createdTime.
-//
-// Here is a CLI example:
-//
-// aws servicecatalog search-provisioned-products --sort-by createdTime
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -8105,7 +8409,8 @@ func (c *ServiceCatalog) UpdatePortfolioShareRequest(input *UpdatePortfolioShare
 // UpdatePortfolioShare API operation for AWS Service Catalog.
 //
 // Updates the specified portfolio share. You can use this API to enable or
-// disable TagOptions sharing for an existing portfolio share.
+// disable TagOptions sharing or Principal sharing for an existing portfolio
+// share.
 //
 // The portfolio share cannot be updated if the CreatePortfolioShare operation
 // is IN_PROGRESS, as the share is not available to recipient entities. In this
@@ -8120,6 +8425,17 @@ func (c *ServiceCatalog) UpdatePortfolioShareRequest(input *UpdatePortfolioShare
 //
 // This API cannot be used for removing the portfolio share. You must use DeletePortfolioShare
 // API for that action.
+//
+// When you associate a principal with portfolio, a potential privilege escalation
+// path may occur when that portfolio is then shared with other accounts. For
+// a user in a recipient account who is not an Service Catalog Admin, but still
+// has the ability to create Principals (Users/Groups/Roles), that user could
+// create a role that matches a principal name association for the portfolio.
+// Although this user may not know which principal names are associated through
+// Service Catalog, they may be able to guess the user. If this potential escalation
+// path is a concern, then Service Catalog recommends using PrincipalType as
+// IAM. With this configuration, the PrincipalARN must already exist in the
+// recipient account before it can be associated.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8691,8 +9007,6 @@ type AcceptPortfolioShareInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -8932,8 +9246,6 @@ type AssociatePrincipalWithPortfolioInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -8944,12 +9256,18 @@ type AssociatePrincipalWithPortfolioInput struct {
 	// PortfolioId is a required field
 	PortfolioId *string `min:"1" type:"string" required:"true"`
 
-	// The ARN of the principal (IAM user, role, or group).
+	// The ARN of the principal (user, role, or group). This field allows an ARN
+	// with no accountID if PrincipalType is IAM_PATTERN.
+	//
+	// You can associate multiple IAM patterns even if the account has no principal
+	// with that name. This is useful in Principal Name Sharing if you want to share
+	// a principal without creating it in the account that owns the portfolio.
 	//
 	// PrincipalARN is a required field
 	PrincipalARN *string `min:"1" type:"string" required:"true"`
 
-	// The principal type. The supported value is IAM.
+	// The principal type. The supported value is IAM if you use a fully defined
+	// ARN, or IAM_PATTERN if you use an ARN with no accountID.
 	//
 	// PrincipalType is a required field
 	PrincipalType *string `type:"string" required:"true" enum:"PrincipalType"`
@@ -9048,8 +9366,6 @@ type AssociateProductWithPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -9163,8 +9479,6 @@ type AssociateServiceActionWithProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -9369,8 +9683,6 @@ type BatchAssociateServiceActionWithProvisioningArtifactInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -9475,8 +9787,6 @@ type BatchDisassociateServiceActionFromProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -9642,6 +9952,110 @@ func (s *CloudWatchDashboard) SetName(v string) *CloudWatchDashboard {
 	return s
 }
 
+// The subtype containing details about the Codestar connection Type.
+type CodeStarParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The absolute path wehre the artifact resides within the repo and branch,
+	// formatted as "folder/file.json."
+	//
+	// ArtifactPath is a required field
+	ArtifactPath *string `min:"1" type:"string" required:"true"`
+
+	// The specific branch where the artifact resides.
+	//
+	// Branch is a required field
+	Branch *string `min:"1" type:"string" required:"true"`
+
+	// The CodeStar ARN, which is the connection between Service Catalog and the
+	// external repository.
+	//
+	// ConnectionArn is a required field
+	ConnectionArn *string `min:"1" type:"string" required:"true"`
+
+	// The specific repository where the product’s artifact-to-be-synced resides,
+	// formatted as "Account/Repo."
+	//
+	// Repository is a required field
+	Repository *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CodeStarParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CodeStarParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeStarParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeStarParameters"}
+	if s.ArtifactPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("ArtifactPath"))
+	}
+	if s.ArtifactPath != nil && len(*s.ArtifactPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ArtifactPath", 1))
+	}
+	if s.Branch == nil {
+		invalidParams.Add(request.NewErrParamRequired("Branch"))
+	}
+	if s.Branch != nil && len(*s.Branch) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Branch", 1))
+	}
+	if s.ConnectionArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionArn"))
+	}
+	if s.ConnectionArn != nil && len(*s.ConnectionArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectionArn", 1))
+	}
+	if s.Repository == nil {
+		invalidParams.Add(request.NewErrParamRequired("Repository"))
+	}
+	if s.Repository != nil && len(*s.Repository) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Repository", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArtifactPath sets the ArtifactPath field's value.
+func (s *CodeStarParameters) SetArtifactPath(v string) *CodeStarParameters {
+	s.ArtifactPath = &v
+	return s
+}
+
+// SetBranch sets the Branch field's value.
+func (s *CodeStarParameters) SetBranch(v string) *CodeStarParameters {
+	s.Branch = &v
+	return s
+}
+
+// SetConnectionArn sets the ConnectionArn field's value.
+func (s *CodeStarParameters) SetConnectionArn(v string) *CodeStarParameters {
+	s.ConnectionArn = &v
+	return s
+}
+
+// SetRepository sets the Repository field's value.
+func (s *CodeStarParameters) SetRepository(v string) *CodeStarParameters {
+	s.Repository = &v
+	return s
+}
+
 // Information about a constraint.
 type ConstraintDetail struct {
 	_ struct{} `type:"structure"`
@@ -9782,8 +10196,6 @@ type CopyProductInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -9932,8 +10344,6 @@ type CreateConstraintInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -10186,8 +10596,6 @@ type CreatePortfolioInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -10349,8 +10757,6 @@ type CreatePortfolioShareInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -10370,6 +10776,17 @@ type CreatePortfolioShareInput struct {
 	//
 	// PortfolioId is a required field
 	PortfolioId *string `min:"1" type:"string" required:"true"`
+
+	// Enables or disables Principal sharing when creating the portfolio share.
+	// If this flag is not provided, principal sharing is disabled.
+	//
+	// When you enable Principal Name Sharing for a portfolio share, the share recipient
+	// account end users with a principal that matches any of the associated IAM
+	// patterns can provision products from the portfolio. Once shared, the share
+	// recipient can view associations of PrincipalType: IAM_PATTERN on their portfolio.
+	// You can create the principals in the recipient account before or after creating
+	// the share.
+	SharePrincipals *bool `type:"boolean"`
 
 	// Enables or disables TagOptions sharing when creating the portfolio share.
 	// If this flag is not provided, TagOptions sharing is disabled.
@@ -10434,6 +10851,12 @@ func (s *CreatePortfolioShareInput) SetPortfolioId(v string) *CreatePortfolioSha
 	return s
 }
 
+// SetSharePrincipals sets the SharePrincipals field's value.
+func (s *CreatePortfolioShareInput) SetSharePrincipals(v bool) *CreatePortfolioShareInput {
+	s.SharePrincipals = &v
+	return s
+}
+
 // SetShareTagOptions sets the ShareTagOptions field's value.
 func (s *CreatePortfolioShareInput) SetShareTagOptions(v bool) *CreatePortfolioShareInput {
 	s.ShareTagOptions = &v
@@ -10477,8 +10900,6 @@ type CreateProductInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -10511,9 +10932,17 @@ type CreateProductInput struct {
 	ProductType *string `type:"string" required:"true" enum:"ProductType"`
 
 	// The configuration of the provisioning artifact.
+	ProvisioningArtifactParameters *ProvisioningArtifactProperties `type:"structure"`
+
+	// Specifies connection details for the created product and syncs the product
+	// to the connection source artifact. This automatically manages the product's
+	// artifacts based on changes to the source. The SourceConnection parameter
+	// consists of the following sub-fields.
 	//
-	// ProvisioningArtifactParameters is a required field
-	ProvisioningArtifactParameters *ProvisioningArtifactProperties `type:"structure" required:"true"`
+	//    * Type
+	//
+	//    * ConnectionParamters
+	SourceConnection *SourceConnection `type:"structure"`
 
 	// The support information about the product.
 	SupportDescription *string `type:"string"`
@@ -10563,12 +10992,14 @@ func (s *CreateProductInput) Validate() error {
 	if s.ProductType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ProductType"))
 	}
-	if s.ProvisioningArtifactParameters == nil {
-		invalidParams.Add(request.NewErrParamRequired("ProvisioningArtifactParameters"))
-	}
 	if s.ProvisioningArtifactParameters != nil {
 		if err := s.ProvisioningArtifactParameters.Validate(); err != nil {
 			invalidParams.AddNested("ProvisioningArtifactParameters", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SourceConnection != nil {
+		if err := s.SourceConnection.Validate(); err != nil {
+			invalidParams.AddNested("SourceConnection", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Tags != nil {
@@ -10633,6 +11064,12 @@ func (s *CreateProductInput) SetProductType(v string) *CreateProductInput {
 // SetProvisioningArtifactParameters sets the ProvisioningArtifactParameters field's value.
 func (s *CreateProductInput) SetProvisioningArtifactParameters(v *ProvisioningArtifactProperties) *CreateProductInput {
 	s.ProvisioningArtifactParameters = v
+	return s
+}
+
+// SetSourceConnection sets the SourceConnection field's value.
+func (s *CreateProductInput) SetSourceConnection(v *SourceConnection) *CreateProductInput {
+	s.SourceConnection = v
 	return s
 }
 
@@ -10713,8 +11150,6 @@ type CreateProvisionedProductPlanInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -10990,8 +11425,6 @@ type CreateProvisioningArtifactInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -11088,13 +11521,13 @@ type CreateProvisioningArtifactOutput struct {
 	// Specify the template source with one of the following options, but not both.
 	// Keys accepted: [ LoadTemplateFromURL, ImportFromPhysicalId ].
 	//
-	// The URL of the CloudFormation template in Amazon S3, Amazon Web Services
-	// CodeCommit, or GitHub in JSON format.
+	// Use the URL of the CloudFormation template in Amazon S3 or GitHub in JSON
+	// format.
 	//
 	// LoadTemplateFromURL
 	//
-	// Use the URL of the CloudFormation template in Amazon S3, Amazon Web Services
-	// CodeCommit, or GitHub in JSON format.
+	// Use the URL of the CloudFormation template in Amazon S3 or GitHub in JSON
+	// format.
 	//
 	// ImportFromPhysicalId
 	//
@@ -11149,8 +11582,6 @@ type CreateServiceActionInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -11422,8 +11853,6 @@ type DeleteConstraintInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -11508,8 +11937,6 @@ type DeletePortfolioInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -11593,8 +12020,6 @@ type DeletePortfolioShareInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -11708,8 +12133,6 @@ type DeleteProductInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -11793,8 +12216,6 @@ type DeleteProvisionedProductPlanInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -11889,8 +12310,6 @@ type DeleteProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -11992,8 +12411,6 @@ type DeleteServiceActionInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -12150,8 +12567,6 @@ type DescribeConstraintInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -12263,8 +12678,6 @@ type DescribeCopyProductStatusInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -12375,8 +12788,6 @@ type DescribePortfolioInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -12750,8 +13161,6 @@ type DescribeProductAsAdminInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -12905,8 +13314,6 @@ type DescribeProductInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -13031,8 +13438,6 @@ type DescribeProductViewInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -13138,8 +13543,6 @@ type DescribeProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -13257,8 +13660,6 @@ type DescribeProvisionedProductPlanInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -13391,8 +13792,6 @@ type DescribeProvisioningArtifactInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -13487,8 +13886,7 @@ func (s *DescribeProvisioningArtifactInput) SetVerbose(v bool) *DescribeProvisio
 type DescribeProvisioningArtifactOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The URL of the CloudFormation template in Amazon S3, Amazon Web Services
-	// CodeCommit, or GitHub in JSON format.
+	// The URL of the CloudFormation template in Amazon S3 or GitHub in JSON format.
 	Info map[string]*string `min:"1" type:"map"`
 
 	// Information about the provisioning artifact.
@@ -13538,8 +13936,6 @@ type DescribeProvisioningParametersInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -13748,8 +14144,6 @@ type DescribeRecordInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -13884,8 +14278,6 @@ type DescribeServiceActionExecutionParametersInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -13995,8 +14387,6 @@ type DescribeServiceActionInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -14304,8 +14694,6 @@ type DisassociatePrincipalFromPortfolioInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -14316,10 +14704,15 @@ type DisassociatePrincipalFromPortfolioInput struct {
 	// PortfolioId is a required field
 	PortfolioId *string `min:"1" type:"string" required:"true"`
 
-	// The ARN of the principal (IAM user, role, or group).
+	// The ARN of the principal (user, role, or group). This field allows an ARN
+	// with no accountID if PrincipalType is IAM_PATTERN.
 	//
 	// PrincipalARN is a required field
 	PrincipalARN *string `min:"1" type:"string" required:"true"`
+
+	// The supported value is IAM if you use a fully defined ARN, or IAM_PATTERN
+	// if you use no accountID.
+	PrincipalType *string `type:"string" enum:"PrincipalType"`
 }
 
 // String returns the string representation.
@@ -14380,6 +14773,12 @@ func (s *DisassociatePrincipalFromPortfolioInput) SetPrincipalARN(v string) *Dis
 	return s
 }
 
+// SetPrincipalType sets the PrincipalType field's value.
+func (s *DisassociatePrincipalFromPortfolioInput) SetPrincipalType(v string) *DisassociatePrincipalFromPortfolioInput {
+	s.PrincipalType = &v
+	return s
+}
+
 type DisassociatePrincipalFromPortfolioOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -14406,8 +14805,6 @@ type DisassociateProductFromPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -14509,8 +14906,6 @@ type DisassociateServiceActionFromProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -14818,12 +15213,58 @@ func (s EnableAWSOrganizationsAccessOutput) GoString() string {
 	return s.String()
 }
 
+// The ID for the provisioned product resources that are part of a resource
+// group.
+type EngineWorkflowResourceIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The unique key-value pair for a tag that identifies provisioned product resources.
+	UniqueTag *UniqueTagResourceIdentifier `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EngineWorkflowResourceIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EngineWorkflowResourceIdentifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EngineWorkflowResourceIdentifier) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EngineWorkflowResourceIdentifier"}
+	if s.UniqueTag != nil {
+		if err := s.UniqueTag.Validate(); err != nil {
+			invalidParams.AddNested("UniqueTag", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetUniqueTag sets the UniqueTag field's value.
+func (s *EngineWorkflowResourceIdentifier) SetUniqueTag(v *UniqueTagResourceIdentifier) *EngineWorkflowResourceIdentifier {
+	s.UniqueTag = v
+	return s
+}
+
 type ExecuteProvisionedProductPlanInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -14931,8 +15372,6 @@ type ExecuteProvisionedProductServiceActionInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -15246,8 +15685,6 @@ type GetProvisionedProductOutputsInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -15388,8 +15825,6 @@ type ImportAsProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -15674,6 +16109,88 @@ func (s *InvalidStateException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Provides details about the product's connection sync and contains the following
+// sub-fields.
+//
+//    * LastSyncTime
+//
+//    * LastSyncStatus
+//
+//    * LastSyncStatusMessage
+//
+//    * LastSuccessfulSyncTime
+//
+//    * LastSuccessfulSyncProvisioningArtifactID
+type LastSync struct {
+	_ struct{} `type:"structure"`
+
+	// The ProvisioningArtifactID of the ProvisioningArtifact created from the latest
+	// successful sync.
+	LastSuccessfulSyncProvisioningArtifactId *string `min:"1" type:"string"`
+
+	// The time of the latest successful sync from the source repo artifact to the
+	// Service Catalog product.
+	LastSuccessfulSyncTime *time.Time `type:"timestamp"`
+
+	// The current status of the sync. Responses include SUCCEEDED or FAILED.
+	LastSyncStatus *string `type:"string" enum:"LastSyncStatus"`
+
+	// The sync's status message.
+	LastSyncStatusMessage *string `type:"string"`
+
+	// The time of the last attempted sync from the repository to the Service Catalog
+	// product.
+	LastSyncTime *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LastSync) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LastSync) GoString() string {
+	return s.String()
+}
+
+// SetLastSuccessfulSyncProvisioningArtifactId sets the LastSuccessfulSyncProvisioningArtifactId field's value.
+func (s *LastSync) SetLastSuccessfulSyncProvisioningArtifactId(v string) *LastSync {
+	s.LastSuccessfulSyncProvisioningArtifactId = &v
+	return s
+}
+
+// SetLastSuccessfulSyncTime sets the LastSuccessfulSyncTime field's value.
+func (s *LastSync) SetLastSuccessfulSyncTime(v time.Time) *LastSync {
+	s.LastSuccessfulSyncTime = &v
+	return s
+}
+
+// SetLastSyncStatus sets the LastSyncStatus field's value.
+func (s *LastSync) SetLastSyncStatus(v string) *LastSync {
+	s.LastSyncStatus = &v
+	return s
+}
+
+// SetLastSyncStatusMessage sets the LastSyncStatusMessage field's value.
+func (s *LastSync) SetLastSyncStatusMessage(v string) *LastSync {
+	s.LastSyncStatusMessage = &v
+	return s
+}
+
+// SetLastSyncTime sets the LastSyncTime field's value.
+func (s *LastSync) SetLastSyncTime(v time.Time) *LastSync {
+	s.LastSyncTime = &v
+	return s
+}
+
 // A launch path object.
 type LaunchPath struct {
 	_ struct{} `type:"structure"`
@@ -15845,8 +16362,6 @@ type ListAcceptedPortfolioSharesInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -15958,8 +16473,6 @@ type ListBudgetsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -16082,8 +16595,6 @@ type ListConstraintsForPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -16219,8 +16730,6 @@ type ListLaunchPathsInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -16342,8 +16851,6 @@ type ListOrganizationPortfolioAccessInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -16488,8 +16995,6 @@ type ListPortfolioAccessInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -16625,8 +17130,6 @@ type ListPortfoliosForProductInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -16749,8 +17252,6 @@ type ListPortfoliosInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -16846,8 +17347,6 @@ type ListPrincipalsForPortfolioInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -16931,7 +17430,7 @@ type ListPrincipalsForPortfolioOutput struct {
 	// additional results, this value is null.
 	NextPageToken *string `type:"string"`
 
-	// The IAM principals (users or roles) associated with the portfolio.
+	// The PrincipalARNs and corresponding PrincipalTypes associated with the portfolio.
 	Principals []*Principal `type:"list"`
 }
 
@@ -16969,8 +17468,6 @@ type ListProvisionedProductPlansInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -17098,8 +17595,6 @@ type ListProvisioningArtifactsForServiceActionInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -17223,8 +17718,6 @@ type ListProvisioningArtifactsInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -17327,8 +17820,6 @@ type ListRecordHistoryInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -17611,8 +18102,6 @@ type ListServiceActionsForProvisioningArtifactInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -17753,8 +18242,6 @@ type ListServiceActionsInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -17850,8 +18337,6 @@ type ListStackInstancesForProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -18141,6 +18626,420 @@ func (s *ListTagOptionsOutput) SetPageToken(v string) *ListTagOptionsOutput {
 func (s *ListTagOptionsOutput) SetTagOptionDetails(v []*TagOptionDetail) *ListTagOptionsOutput {
 	s.TagOptionDetails = v
 	return s
+}
+
+type NotifyProvisionProductEngineWorkflowResultInput struct {
+	_ struct{} `type:"structure"`
+
+	// The reason why the provisioning engine execution failed.
+	FailureReason *string `min:"1" type:"string"`
+
+	// The idempotency token that identifies the provisioning engine execution.
+	IdempotencyToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The output of the provisioning engine execution.
+	Outputs []*RecordOutput `type:"list"`
+
+	// The identifier of the record.
+	//
+	// RecordId is a required field
+	RecordId *string `min:"1" type:"string" required:"true"`
+
+	// The ID for the provisioned product resources that are part of a resource
+	// group.
+	ResourceIdentifier *EngineWorkflowResourceIdentifier `type:"structure"`
+
+	// The status of the provisioning engine execution.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"EngineWorkflowStatus"`
+
+	// The encrypted contents of the provisioning engine execution payload that
+	// Service Catalog sends after the Terraform product provisioning workflow starts.
+	//
+	// WorkflowToken is a required field
+	WorkflowToken *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyProvisionProductEngineWorkflowResultInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyProvisionProductEngineWorkflowResultInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NotifyProvisionProductEngineWorkflowResultInput"}
+	if s.FailureReason != nil && len(*s.FailureReason) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FailureReason", 1))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.RecordId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RecordId"))
+	}
+	if s.RecordId != nil && len(*s.RecordId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RecordId", 1))
+	}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+	if s.WorkflowToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkflowToken"))
+	}
+	if s.WorkflowToken != nil && len(*s.WorkflowToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowToken", 1))
+	}
+	if s.ResourceIdentifier != nil {
+		if err := s.ResourceIdentifier.Validate(); err != nil {
+			invalidParams.AddNested("ResourceIdentifier", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) SetFailureReason(v string) *NotifyProvisionProductEngineWorkflowResultInput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) SetIdempotencyToken(v string) *NotifyProvisionProductEngineWorkflowResultInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetOutputs sets the Outputs field's value.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) SetOutputs(v []*RecordOutput) *NotifyProvisionProductEngineWorkflowResultInput {
+	s.Outputs = v
+	return s
+}
+
+// SetRecordId sets the RecordId field's value.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) SetRecordId(v string) *NotifyProvisionProductEngineWorkflowResultInput {
+	s.RecordId = &v
+	return s
+}
+
+// SetResourceIdentifier sets the ResourceIdentifier field's value.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) SetResourceIdentifier(v *EngineWorkflowResourceIdentifier) *NotifyProvisionProductEngineWorkflowResultInput {
+	s.ResourceIdentifier = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) SetStatus(v string) *NotifyProvisionProductEngineWorkflowResultInput {
+	s.Status = &v
+	return s
+}
+
+// SetWorkflowToken sets the WorkflowToken field's value.
+func (s *NotifyProvisionProductEngineWorkflowResultInput) SetWorkflowToken(v string) *NotifyProvisionProductEngineWorkflowResultInput {
+	s.WorkflowToken = &v
+	return s
+}
+
+type NotifyProvisionProductEngineWorkflowResultOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyProvisionProductEngineWorkflowResultOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyProvisionProductEngineWorkflowResultOutput) GoString() string {
+	return s.String()
+}
+
+type NotifyTerminateProvisionedProductEngineWorkflowResultInput struct {
+	_ struct{} `type:"structure"`
+
+	// The reason why the terminate engine execution failed.
+	FailureReason *string `min:"1" type:"string"`
+
+	// The idempotency token that identifies the terminate engine execution.
+	IdempotencyToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The identifier of the record.
+	//
+	// RecordId is a required field
+	RecordId *string `min:"1" type:"string" required:"true"`
+
+	// The status of the terminate engine execution.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"EngineWorkflowStatus"`
+
+	// The encrypted contents of the terminate engine execution payload that Service
+	// Catalog sends after the Terraform product terminate workflow starts.
+	//
+	// WorkflowToken is a required field
+	WorkflowToken *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyTerminateProvisionedProductEngineWorkflowResultInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyTerminateProvisionedProductEngineWorkflowResultInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NotifyTerminateProvisionedProductEngineWorkflowResultInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NotifyTerminateProvisionedProductEngineWorkflowResultInput"}
+	if s.FailureReason != nil && len(*s.FailureReason) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FailureReason", 1))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.RecordId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RecordId"))
+	}
+	if s.RecordId != nil && len(*s.RecordId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RecordId", 1))
+	}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+	if s.WorkflowToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkflowToken"))
+	}
+	if s.WorkflowToken != nil && len(*s.WorkflowToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *NotifyTerminateProvisionedProductEngineWorkflowResultInput) SetFailureReason(v string) *NotifyTerminateProvisionedProductEngineWorkflowResultInput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *NotifyTerminateProvisionedProductEngineWorkflowResultInput) SetIdempotencyToken(v string) *NotifyTerminateProvisionedProductEngineWorkflowResultInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetRecordId sets the RecordId field's value.
+func (s *NotifyTerminateProvisionedProductEngineWorkflowResultInput) SetRecordId(v string) *NotifyTerminateProvisionedProductEngineWorkflowResultInput {
+	s.RecordId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *NotifyTerminateProvisionedProductEngineWorkflowResultInput) SetStatus(v string) *NotifyTerminateProvisionedProductEngineWorkflowResultInput {
+	s.Status = &v
+	return s
+}
+
+// SetWorkflowToken sets the WorkflowToken field's value.
+func (s *NotifyTerminateProvisionedProductEngineWorkflowResultInput) SetWorkflowToken(v string) *NotifyTerminateProvisionedProductEngineWorkflowResultInput {
+	s.WorkflowToken = &v
+	return s
+}
+
+type NotifyTerminateProvisionedProductEngineWorkflowResultOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyTerminateProvisionedProductEngineWorkflowResultOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyTerminateProvisionedProductEngineWorkflowResultOutput) GoString() string {
+	return s.String()
+}
+
+type NotifyUpdateProvisionedProductEngineWorkflowResultInput struct {
+	_ struct{} `type:"structure"`
+
+	// The reason why the update engine execution failed.
+	FailureReason *string `min:"1" type:"string"`
+
+	// The idempotency token that identifies the update engine execution.
+	IdempotencyToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The output of the update engine execution.
+	Outputs []*RecordOutput `type:"list"`
+
+	// The identifier of the record.
+	//
+	// RecordId is a required field
+	RecordId *string `min:"1" type:"string" required:"true"`
+
+	// The status of the update engine execution.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"EngineWorkflowStatus"`
+
+	// The encrypted contents of the update engine execution payload that Service
+	// Catalog sends after the Terraform product update workflow starts.
+	//
+	// WorkflowToken is a required field
+	WorkflowToken *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyUpdateProvisionedProductEngineWorkflowResultInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyUpdateProvisionedProductEngineWorkflowResultInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NotifyUpdateProvisionedProductEngineWorkflowResultInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NotifyUpdateProvisionedProductEngineWorkflowResultInput"}
+	if s.FailureReason != nil && len(*s.FailureReason) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FailureReason", 1))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.RecordId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RecordId"))
+	}
+	if s.RecordId != nil && len(*s.RecordId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RecordId", 1))
+	}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+	if s.WorkflowToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkflowToken"))
+	}
+	if s.WorkflowToken != nil && len(*s.WorkflowToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *NotifyUpdateProvisionedProductEngineWorkflowResultInput) SetFailureReason(v string) *NotifyUpdateProvisionedProductEngineWorkflowResultInput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *NotifyUpdateProvisionedProductEngineWorkflowResultInput) SetIdempotencyToken(v string) *NotifyUpdateProvisionedProductEngineWorkflowResultInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetOutputs sets the Outputs field's value.
+func (s *NotifyUpdateProvisionedProductEngineWorkflowResultInput) SetOutputs(v []*RecordOutput) *NotifyUpdateProvisionedProductEngineWorkflowResultInput {
+	s.Outputs = v
+	return s
+}
+
+// SetRecordId sets the RecordId field's value.
+func (s *NotifyUpdateProvisionedProductEngineWorkflowResultInput) SetRecordId(v string) *NotifyUpdateProvisionedProductEngineWorkflowResultInput {
+	s.RecordId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *NotifyUpdateProvisionedProductEngineWorkflowResultInput) SetStatus(v string) *NotifyUpdateProvisionedProductEngineWorkflowResultInput {
+	s.Status = &v
+	return s
+}
+
+// SetWorkflowToken sets the WorkflowToken field's value.
+func (s *NotifyUpdateProvisionedProductEngineWorkflowResultInput) SetWorkflowToken(v string) *NotifyUpdateProvisionedProductEngineWorkflowResultInput {
+	s.WorkflowToken = &v
+	return s
+}
+
+type NotifyUpdateProvisionedProductEngineWorkflowResultOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyUpdateProvisionedProductEngineWorkflowResultOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotifyUpdateProvisionedProductEngineWorkflowResultOutput) GoString() string {
+	return s.String()
 }
 
 // The operation is not supported.
@@ -18438,7 +19337,7 @@ type PortfolioShareDetail struct {
 	Accepted *bool `type:"boolean"`
 
 	// The identifier of the recipient entity that received the portfolio share.
-	// The recipient entities can be one of the following:
+	// The recipient entity can be one of the following:
 	//
 	// 1. An external account.
 	//
@@ -18448,6 +19347,9 @@ type PortfolioShareDetail struct {
 	//
 	// 4. The organization itself. (This shares with every account in the organization).
 	PrincipalId *string `min:"1" type:"string"`
+
+	// Indicates if Principal sharing is enabled or disabled for the portfolio share.
+	SharePrincipals *bool `type:"boolean"`
 
 	// Indicates whether TagOptions sharing is enabled or disabled for the portfolio
 	// share.
@@ -18487,6 +19389,12 @@ func (s *PortfolioShareDetail) SetPrincipalId(v string) *PortfolioShareDetail {
 	return s
 }
 
+// SetSharePrincipals sets the SharePrincipals field's value.
+func (s *PortfolioShareDetail) SetSharePrincipals(v bool) *PortfolioShareDetail {
+	s.SharePrincipals = &v
+	return s
+}
+
 // SetShareTagOptions sets the ShareTagOptions field's value.
 func (s *PortfolioShareDetail) SetShareTagOptions(v bool) *PortfolioShareDetail {
 	s.ShareTagOptions = &v
@@ -18503,10 +19411,12 @@ func (s *PortfolioShareDetail) SetType(v string) *PortfolioShareDetail {
 type Principal struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the principal (IAM user, role, or group).
+	// The ARN of the principal (user, role, or group). This field allows for an
+	// ARN with no accountID if the PrincipalType is an IAM_PATTERN.
 	PrincipalARN *string `min:"1" type:"string"`
 
-	// The principal type. The supported value is IAM.
+	// The principal type. The supported value is IAM if you use a fully defined
+	// ARN, or IAM_PATTERN if you use an ARN with no accountID.
 	PrincipalType *string `type:"string" enum:"PrincipalType"`
 }
 
@@ -18595,6 +19505,13 @@ type ProductViewDetail struct {
 	// Summary information about the product view.
 	ProductViewSummary *ProductViewSummary `type:"structure"`
 
+	// A top level ProductViewDetail response containing details about the product’s
+	// connection. Service Catalog returns this field for the CreateProduct, UpdateProduct,
+	// DescribeProductAsAdmin, and SearchProductAsAdmin APIs. This response contains
+	// the same fields as the ConnectionParameters request, with the addition of
+	// the LastSync response.
+	SourceConnection *SourceConnectionDetail `type:"structure"`
+
 	// The status of the product.
 	//
 	//    * AVAILABLE - The product is ready for use.
@@ -18639,6 +19556,12 @@ func (s *ProductViewDetail) SetProductARN(v string) *ProductViewDetail {
 // SetProductViewSummary sets the ProductViewSummary field's value.
 func (s *ProductViewDetail) SetProductViewSummary(v *ProductViewSummary) *ProductViewDetail {
 	s.ProductViewSummary = v
+	return s
+}
+
+// SetSourceConnection sets the SourceConnection field's value.
+func (s *ProductViewDetail) SetSourceConnection(v *SourceConnectionDetail) *ProductViewDetail {
+	s.SourceConnection = v
 	return s
 }
 
@@ -18781,8 +19704,6 @@ type ProvisionProductInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -19117,11 +20038,10 @@ type ProvisionedProductAttribute struct {
 	// The type of provisioned product. The supported values are CFN_STACK and CFN_STACKSET.
 	Type *string `type:"string"`
 
-	// The Amazon Resource Name (ARN) of the IAM user.
+	// The Amazon Resource Name (ARN) of the user.
 	UserArn *string `type:"string"`
 
-	// The ARN of the IAM user in the session. This ARN might contain a session
-	// ID.
+	// The ARN of the user in the session. This ARN might contain a session ID.
 	UserArnSession *string `type:"string"`
 }
 
@@ -19496,7 +20416,7 @@ type ProvisionedProductPlanDetails struct {
 	// One or more tags.
 	Tags []*Tag `type:"list"`
 
-	// The time when the plan was last updated.
+	// The UTC time stamp when the plan was last updated.
 	UpdatedTime *time.Time `type:"timestamp"`
 }
 
@@ -19779,6 +20699,16 @@ type ProvisioningArtifactDetail struct {
 	// The name of the provisioning artifact.
 	Name *string `type:"string"`
 
+	// Specifies the revision of the external artifact that was used to automatically
+	// sync the Service Catalog product and create the provisioning artifact. Service
+	// Catalog includes this response parameter as a high level field to the existing
+	// ProvisioningArtifactDetail type, which is returned as part of the response
+	// for CreateProduct, UpdateProduct, DescribeProductAsAdmin, DescribeProvisioningArtifact,
+	// ListProvisioningArtifact, and UpdateProvisioningArticat APIs.
+	//
+	// This field only exists for Repo-Synced products.
+	SourceRevision *string `min:"1" type:"string"`
+
 	// The type of provisioning artifact.
 	//
 	//    * CLOUD_FORMATION_TEMPLATE - CloudFormation template
@@ -19841,6 +20771,12 @@ func (s *ProvisioningArtifactDetail) SetId(v string) *ProvisioningArtifactDetail
 // SetName sets the Name field's value.
 func (s *ProvisioningArtifactDetail) SetName(v string) *ProvisioningArtifactDetail {
 	s.Name = &v
+	return s
+}
+
+// SetSourceRevision sets the SourceRevision field's value.
+func (s *ProvisioningArtifactDetail) SetSourceRevision(v string) *ProvisioningArtifactDetail {
+	s.SourceRevision = &v
 	return s
 }
 
@@ -20033,24 +20969,22 @@ type ProvisioningArtifactProperties struct {
 	// the previous provisioning artifact.
 	Description *string `type:"string"`
 
-	// If set to true, Amazon Web Services Service Catalog stops validating the
-	// specified provisioning artifact even if it is invalid.
+	// If set to true, Service Catalog stops validating the specified provisioning
+	// artifact even if it is invalid.
 	DisableTemplateValidation *bool `type:"boolean"`
 
 	// Specify the template source with one of the following options, but not both.
 	// Keys accepted: [ LoadTemplateFromURL, ImportFromPhysicalId ]
 	//
-	// The URL of the CloudFormation template in Amazon S3, Amazon Web Services
-	// CodeCommit, or GitHub in JSON format. Specify the URL in JSON format as follows:
+	// The URL of the CloudFormation template in Amazon S3 or GitHub in JSON format.
+	// Specify the URL in JSON format as follows:
 	//
 	// "LoadTemplateFromURL": "https://s3.amazonaws.com/cf-templates-ozkq9d3hgiq2-us-east-1/..."
 	//
 	// ImportFromPhysicalId: The physical id of the resource that contains the template.
 	// Currently only supports CloudFormation stack arn. Specify the physical id
 	// in JSON format as follows: ImportFromPhysicalId: “arn:aws:cloudformation:[us-east-1]:[accountId]:stack/[StackName]/[resourceId]
-	//
-	// Info is a required field
-	Info map[string]*string `min:"1" type:"map" required:"true"`
+	Info map[string]*string `min:"1" type:"map"`
 
 	// The name of the provisioning artifact (for example, v1 v2beta). No spaces
 	// are allowed.
@@ -20064,6 +20998,8 @@ type ProvisioningArtifactProperties struct {
 	//
 	//    * MARKETPLACE_CAR - Amazon Web Services Marketplace Clusters and Amazon
 	//    Web Services Resources
+	//
+	//    * TERRAFORM_OPEN_SOURCE - Terraform open source configuration file
 	Type *string `type:"string" enum:"ProvisioningArtifactType"`
 }
 
@@ -20088,9 +21024,6 @@ func (s ProvisioningArtifactProperties) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ProvisioningArtifactProperties) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ProvisioningArtifactProperties"}
-	if s.Info == nil {
-		invalidParams.Add(request.NewErrParamRequired("Info"))
-	}
 	if s.Info != nil && len(s.Info) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Info", 1))
 	}
@@ -20778,8 +21711,6 @@ type RejectPortfolioShareInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -21272,8 +22203,6 @@ type ScanProvisionedProductsInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -21377,8 +22306,6 @@ type SearchProductsAsAdminInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -21534,8 +22461,6 @@ type SearchProductsInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -21667,8 +22592,6 @@ type SearchProvisionedProductsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -22089,6 +23012,179 @@ func (s *ShareError) SetMessage(v string) *ShareError {
 	return s
 }
 
+// A top level ProductViewDetail response containing details about the product’s
+// connection. Service Catalog returns this field for the CreateProduct, UpdateProduct,
+// DescribeProductAsAdmin, and SearchProductAsAdmin APIs. This response contains
+// the same fields as the ConnectionParameters request, with the addition of
+// the LastSync response.
+type SourceConnection struct {
+	_ struct{} `type:"structure"`
+
+	// The connection details based on the connection Type.
+	//
+	// ConnectionParameters is a required field
+	ConnectionParameters *SourceConnectionParameters `type:"structure" required:"true"`
+
+	// The only supported SourceConnection type is Codestar.
+	Type *string `type:"string" enum:"SourceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConnection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConnection) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SourceConnection) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SourceConnection"}
+	if s.ConnectionParameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectionParameters"))
+	}
+	if s.ConnectionParameters != nil {
+		if err := s.ConnectionParameters.Validate(); err != nil {
+			invalidParams.AddNested("ConnectionParameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectionParameters sets the ConnectionParameters field's value.
+func (s *SourceConnection) SetConnectionParameters(v *SourceConnectionParameters) *SourceConnection {
+	s.ConnectionParameters = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *SourceConnection) SetType(v string) *SourceConnection {
+	s.Type = &v
+	return s
+}
+
+// Provides details about the configured SourceConnection.
+type SourceConnectionDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The connection details based on the connection Type.
+	ConnectionParameters *SourceConnectionParameters `type:"structure"`
+
+	// Provides details about the product's connection sync and contains the following
+	// sub-fields.
+	//
+	//    * LastSyncTime
+	//
+	//    * LastSyncStatus
+	//
+	//    * LastSyncStatusMessage
+	//
+	//    * LastSuccessfulSyncTime
+	//
+	//    * LastSuccessfulSyncProvisioningArtifactID
+	LastSync *LastSync `type:"structure"`
+
+	// The only supported SourceConnection type is Codestar.
+	Type *string `type:"string" enum:"SourceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConnectionDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConnectionDetail) GoString() string {
+	return s.String()
+}
+
+// SetConnectionParameters sets the ConnectionParameters field's value.
+func (s *SourceConnectionDetail) SetConnectionParameters(v *SourceConnectionParameters) *SourceConnectionDetail {
+	s.ConnectionParameters = v
+	return s
+}
+
+// SetLastSync sets the LastSync field's value.
+func (s *SourceConnectionDetail) SetLastSync(v *LastSync) *SourceConnectionDetail {
+	s.LastSync = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *SourceConnectionDetail) SetType(v string) *SourceConnectionDetail {
+	s.Type = &v
+	return s
+}
+
+// Provides connection details.
+type SourceConnectionParameters struct {
+	_ struct{} `type:"structure"`
+
+	// Provides ConnectionType details.
+	CodeStar *CodeStarParameters `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConnectionParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConnectionParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SourceConnectionParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SourceConnectionParameters"}
+	if s.CodeStar != nil {
+		if err := s.CodeStar.Validate(); err != nil {
+			invalidParams.AddNested("CodeStar", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCodeStar sets the CodeStar field's value.
+func (s *SourceConnectionParameters) SetCodeStar(v *CodeStarParameters) *SourceConnectionParameters {
+	s.CodeStar = v
+	return s
+}
+
 // An CloudFormation stack, in a specific account and Region, that's part of
 // a stack set operation. A stack instance is a reference to an attempted or
 // actual stack in a given account within a given Region. A stack instance can
@@ -22410,8 +23506,6 @@ type TerminateProvisionedProductInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -22546,12 +23640,67 @@ func (s *TerminateProvisionedProductOutput) SetRecordDetail(v *RecordDetail) *Te
 	return s
 }
 
+// The unique key-value pair for a tag that identifies provisioned product resources.
+type UniqueTagResourceIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// A unique key that's attached to a resource.
+	Key *string `min:"1" type:"string"`
+
+	// A unique value that's attached to a resource.
+	Value *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UniqueTagResourceIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UniqueTagResourceIdentifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UniqueTagResourceIdentifier) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UniqueTagResourceIdentifier"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value != nil && len(*s.Value) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *UniqueTagResourceIdentifier) SetKey(v string) *UniqueTagResourceIdentifier {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *UniqueTagResourceIdentifier) SetValue(v string) *UniqueTagResourceIdentifier {
+	s.Value = &v
+	return s
+}
+
 type UpdateConstraintInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -22741,8 +23890,6 @@ type UpdatePortfolioInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -22906,8 +24053,6 @@ type UpdatePortfolioShareInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -22925,9 +24070,14 @@ type UpdatePortfolioShareInput struct {
 	// PortfolioId is a required field
 	PortfolioId *string `min:"1" type:"string" required:"true"`
 
-	// A flag to enable or disable TagOptions sharing for the portfolio share. If
-	// this field is not provided, the current state of TagOptions sharing on the
+	// A flag to enables or disables Principals sharing in the portfolio. If this
+	// field is not provided, the current state of the Principals sharing on the
 	// portfolio share will not be modified.
+	SharePrincipals *bool `type:"boolean"`
+
+	// Enables or disables TagOptions sharing for the portfolio share. If this field
+	// is not provided, the current state of TagOptions sharing on the portfolio
+	// share will not be modified.
 	ShareTagOptions *bool `type:"boolean"`
 }
 
@@ -22989,6 +24139,12 @@ func (s *UpdatePortfolioShareInput) SetPortfolioId(v string) *UpdatePortfolioSha
 	return s
 }
 
+// SetSharePrincipals sets the SharePrincipals field's value.
+func (s *UpdatePortfolioShareInput) SetSharePrincipals(v bool) *UpdatePortfolioShareInput {
+	s.SharePrincipals = &v
+	return s
+}
+
 // SetShareTagOptions sets the ShareTagOptions field's value.
 func (s *UpdatePortfolioShareInput) SetShareTagOptions(v bool) *UpdatePortfolioShareInput {
 	s.ShareTagOptions = &v
@@ -23042,8 +24198,6 @@ type UpdateProductInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -23071,6 +24225,16 @@ type UpdateProductInput struct {
 
 	// The tags to remove from the product.
 	RemoveTags []*string `type:"list"`
+
+	// Specifies connection details for the updated product and syncs the product
+	// to the connection source artifact. This automatically manages the product's
+	// artifacts based on changes to the source. The SourceConnection parameter
+	// consists of the following sub-fields.
+	//
+	//    * Type
+	//
+	//    * ConnectionParamters
+	SourceConnection *SourceConnection `type:"structure"`
 
 	// The updated support description for the product.
 	SupportDescription *string `type:"string"`
@@ -23117,6 +24281,11 @@ func (s *UpdateProductInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AddTags", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.SourceConnection != nil {
+		if err := s.SourceConnection.Validate(); err != nil {
+			invalidParams.AddNested("SourceConnection", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -23171,6 +24340,12 @@ func (s *UpdateProductInput) SetOwner(v string) *UpdateProductInput {
 // SetRemoveTags sets the RemoveTags field's value.
 func (s *UpdateProductInput) SetRemoveTags(v []*string) *UpdateProductInput {
 	s.RemoveTags = v
+	return s
+}
+
+// SetSourceConnection sets the SourceConnection field's value.
+func (s *UpdateProductInput) SetSourceConnection(v *SourceConnection) *UpdateProductInput {
+	s.SourceConnection = v
 	return s
 }
 
@@ -23236,8 +24411,6 @@ type UpdateProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -23476,8 +24649,6 @@ type UpdateProvisionedProductPropertiesInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -23501,9 +24672,9 @@ type UpdateProvisionedProductPropertiesInput struct {
 	// or ExecuteProvisionedProductServiceAction. Only a role ARN is valid. A user
 	// ARN is invalid.
 	//
-	// The OWNER key accepts IAM user ARNs, IAM role ARNs, and STS assumed-role
-	// ARNs. The owner is the user that has permission to see, update, terminate,
-	// and execute service actions in the provisioned product.
+	// The OWNER key accepts user ARNs, IAM role ARNs, and STS assumed-role ARNs.
+	// The owner is the user that has permission to see, update, terminate, and
+	// execute service actions in the provisioned product.
 	//
 	// The administrator can change the owner of a provisioned product to another
 	// IAM or STS entity within the same account. Both end user owners and administrators
@@ -23653,8 +24824,6 @@ type UpdateProvisioningArtifactInput struct {
 
 	// The language code.
 	//
-	//    * en - English (default)
-	//
 	//    * jp - Japanese
 	//
 	//    * zh - Chinese
@@ -23779,8 +24948,7 @@ func (s *UpdateProvisioningArtifactInput) SetProvisioningArtifactId(v string) *U
 type UpdateProvisioningArtifactOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The URL of the CloudFormation template in Amazon S3, Amazon Web Services
-	// CodeCommit, or GitHub in JSON format.
+	// The URL of the CloudFormation template in Amazon S3 or GitHub in JSON format.
 	Info map[string]*string `min:"1" type:"map"`
 
 	// Information about the provisioning artifact.
@@ -24084,8 +25252,6 @@ type UpdateServiceActionInput struct {
 	_ struct{} `type:"structure"`
 
 	// The language code.
-	//
-	//    * en - English (default)
 	//
 	//    * jp - Japanese
 	//
@@ -24467,6 +25633,22 @@ func DescribePortfolioShareType_Values() []string {
 }
 
 const (
+	// EngineWorkflowStatusSucceeded is a EngineWorkflowStatus enum value
+	EngineWorkflowStatusSucceeded = "SUCCEEDED"
+
+	// EngineWorkflowStatusFailed is a EngineWorkflowStatus enum value
+	EngineWorkflowStatusFailed = "FAILED"
+)
+
+// EngineWorkflowStatus_Values returns all elements of the EngineWorkflowStatus enum
+func EngineWorkflowStatus_Values() []string {
+	return []string{
+		EngineWorkflowStatusSucceeded,
+		EngineWorkflowStatusFailed,
+	}
+}
+
+const (
 	// EvaluationTypeStatic is a EvaluationType enum value
 	EvaluationTypeStatic = "STATIC"
 
@@ -24479,6 +25661,22 @@ func EvaluationType_Values() []string {
 	return []string{
 		EvaluationTypeStatic,
 		EvaluationTypeDynamic,
+	}
+}
+
+const (
+	// LastSyncStatusSucceeded is a LastSyncStatus enum value
+	LastSyncStatusSucceeded = "SUCCEEDED"
+
+	// LastSyncStatusFailed is a LastSyncStatus enum value
+	LastSyncStatusFailed = "FAILED"
+)
+
+// LastSyncStatus_Values returns all elements of the LastSyncStatus enum
+func LastSyncStatus_Values() []string {
+	return []string{
+		LastSyncStatusSucceeded,
+		LastSyncStatusFailed,
 	}
 }
 
@@ -24525,12 +25723,16 @@ func PortfolioShareType_Values() []string {
 const (
 	// PrincipalTypeIam is a PrincipalType enum value
 	PrincipalTypeIam = "IAM"
+
+	// PrincipalTypeIamPattern is a PrincipalType enum value
+	PrincipalTypeIamPattern = "IAM_PATTERN"
 )
 
 // PrincipalType_Values returns all elements of the PrincipalType enum
 func PrincipalType_Values() []string {
 	return []string{
 		PrincipalTypeIam,
+		PrincipalTypeIamPattern,
 	}
 }
 
@@ -24552,6 +25754,9 @@ const (
 
 	// ProductTypeMarketplace is a ProductType enum value
 	ProductTypeMarketplace = "MARKETPLACE"
+
+	// ProductTypeTerraformOpenSource is a ProductType enum value
+	ProductTypeTerraformOpenSource = "TERRAFORM_OPEN_SOURCE"
 )
 
 // ProductType_Values returns all elements of the ProductType enum
@@ -24559,6 +25764,7 @@ func ProductType_Values() []string {
 	return []string{
 		ProductTypeCloudFormationTemplate,
 		ProductTypeMarketplace,
+		ProductTypeTerraformOpenSource,
 	}
 }
 
@@ -24743,6 +25949,9 @@ const (
 
 	// ProvisioningArtifactTypeMarketplaceCar is a ProvisioningArtifactType enum value
 	ProvisioningArtifactTypeMarketplaceCar = "MARKETPLACE_CAR"
+
+	// ProvisioningArtifactTypeTerraformOpenSource is a ProvisioningArtifactType enum value
+	ProvisioningArtifactTypeTerraformOpenSource = "TERRAFORM_OPEN_SOURCE"
 )
 
 // ProvisioningArtifactType_Values returns all elements of the ProvisioningArtifactType enum
@@ -24751,6 +25960,7 @@ func ProvisioningArtifactType_Values() []string {
 		ProvisioningArtifactTypeCloudFormationTemplate,
 		ProvisioningArtifactTypeMarketplaceAmi,
 		ProvisioningArtifactTypeMarketplaceCar,
+		ProvisioningArtifactTypeTerraformOpenSource,
 	}
 }
 
@@ -24869,6 +26079,9 @@ const (
 
 	// ServiceActionAssociationErrorCodeThrottling is a ServiceActionAssociationErrorCode enum value
 	ServiceActionAssociationErrorCodeThrottling = "THROTTLING"
+
+	// ServiceActionAssociationErrorCodeInvalidParameter is a ServiceActionAssociationErrorCode enum value
+	ServiceActionAssociationErrorCodeInvalidParameter = "INVALID_PARAMETER"
 )
 
 // ServiceActionAssociationErrorCode_Values returns all elements of the ServiceActionAssociationErrorCode enum
@@ -24879,6 +26092,7 @@ func ServiceActionAssociationErrorCode_Values() []string {
 		ServiceActionAssociationErrorCodeLimitExceeded,
 		ServiceActionAssociationErrorCodeResourceNotFound,
 		ServiceActionAssociationErrorCodeThrottling,
+		ServiceActionAssociationErrorCodeInvalidParameter,
 	}
 }
 
@@ -24959,6 +26173,18 @@ func SortOrder_Values() []string {
 	return []string{
 		SortOrderAscending,
 		SortOrderDescending,
+	}
+}
+
+const (
+	// SourceTypeCodestar is a SourceType enum value
+	SourceTypeCodestar = "CODESTAR"
+)
+
+// SourceType_Values returns all elements of the SourceType enum
+func SourceType_Values() []string {
+	return []string{
+		SourceTypeCodestar,
 	}
 }
 

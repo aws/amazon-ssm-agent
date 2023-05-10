@@ -108,6 +108,10 @@ type S3ControlAPI interface {
 	DeleteBucketPolicyWithContext(aws.Context, *s3control.DeleteBucketPolicyInput, ...request.Option) (*s3control.DeleteBucketPolicyOutput, error)
 	DeleteBucketPolicyRequest(*s3control.DeleteBucketPolicyInput) (*request.Request, *s3control.DeleteBucketPolicyOutput)
 
+	DeleteBucketReplication(*s3control.DeleteBucketReplicationInput) (*s3control.DeleteBucketReplicationOutput, error)
+	DeleteBucketReplicationWithContext(aws.Context, *s3control.DeleteBucketReplicationInput, ...request.Option) (*s3control.DeleteBucketReplicationOutput, error)
+	DeleteBucketReplicationRequest(*s3control.DeleteBucketReplicationInput) (*request.Request, *s3control.DeleteBucketReplicationOutput)
+
 	DeleteBucketTagging(*s3control.DeleteBucketTaggingInput) (*s3control.DeleteBucketTaggingOutput, error)
 	DeleteBucketTaggingWithContext(aws.Context, *s3control.DeleteBucketTaggingInput, ...request.Option) (*s3control.DeleteBucketTaggingOutput, error)
 	DeleteBucketTaggingRequest(*s3control.DeleteBucketTaggingInput) (*request.Request, *s3control.DeleteBucketTaggingOutput)
@@ -180,9 +184,17 @@ type S3ControlAPI interface {
 	GetBucketPolicyWithContext(aws.Context, *s3control.GetBucketPolicyInput, ...request.Option) (*s3control.GetBucketPolicyOutput, error)
 	GetBucketPolicyRequest(*s3control.GetBucketPolicyInput) (*request.Request, *s3control.GetBucketPolicyOutput)
 
+	GetBucketReplication(*s3control.GetBucketReplicationInput) (*s3control.GetBucketReplicationOutput, error)
+	GetBucketReplicationWithContext(aws.Context, *s3control.GetBucketReplicationInput, ...request.Option) (*s3control.GetBucketReplicationOutput, error)
+	GetBucketReplicationRequest(*s3control.GetBucketReplicationInput) (*request.Request, *s3control.GetBucketReplicationOutput)
+
 	GetBucketTagging(*s3control.GetBucketTaggingInput) (*s3control.GetBucketTaggingOutput, error)
 	GetBucketTaggingWithContext(aws.Context, *s3control.GetBucketTaggingInput, ...request.Option) (*s3control.GetBucketTaggingOutput, error)
 	GetBucketTaggingRequest(*s3control.GetBucketTaggingInput) (*request.Request, *s3control.GetBucketTaggingOutput)
+
+	GetBucketVersioning(*s3control.GetBucketVersioningInput) (*s3control.GetBucketVersioningOutput, error)
+	GetBucketVersioningWithContext(aws.Context, *s3control.GetBucketVersioningInput, ...request.Option) (*s3control.GetBucketVersioningOutput, error)
+	GetBucketVersioningRequest(*s3control.GetBucketVersioningInput) (*request.Request, *s3control.GetBucketVersioningOutput)
 
 	GetJobTagging(*s3control.GetJobTaggingInput) (*s3control.GetJobTaggingOutput, error)
 	GetJobTaggingWithContext(aws.Context, *s3control.GetJobTaggingInput, ...request.Option) (*s3control.GetJobTaggingOutput, error)
@@ -199,6 +211,10 @@ type S3ControlAPI interface {
 	GetMultiRegionAccessPointPolicyStatus(*s3control.GetMultiRegionAccessPointPolicyStatusInput) (*s3control.GetMultiRegionAccessPointPolicyStatusOutput, error)
 	GetMultiRegionAccessPointPolicyStatusWithContext(aws.Context, *s3control.GetMultiRegionAccessPointPolicyStatusInput, ...request.Option) (*s3control.GetMultiRegionAccessPointPolicyStatusOutput, error)
 	GetMultiRegionAccessPointPolicyStatusRequest(*s3control.GetMultiRegionAccessPointPolicyStatusInput) (*request.Request, *s3control.GetMultiRegionAccessPointPolicyStatusOutput)
+
+	GetMultiRegionAccessPointRoutes(*s3control.GetMultiRegionAccessPointRoutesInput) (*s3control.GetMultiRegionAccessPointRoutesOutput, error)
+	GetMultiRegionAccessPointRoutesWithContext(aws.Context, *s3control.GetMultiRegionAccessPointRoutesInput, ...request.Option) (*s3control.GetMultiRegionAccessPointRoutesOutput, error)
+	GetMultiRegionAccessPointRoutesRequest(*s3control.GetMultiRegionAccessPointRoutesInput) (*request.Request, *s3control.GetMultiRegionAccessPointRoutesOutput)
 
 	GetPublicAccessBlock(*s3control.GetPublicAccessBlockInput) (*s3control.GetPublicAccessBlockOutput, error)
 	GetPublicAccessBlockWithContext(aws.Context, *s3control.GetPublicAccessBlockInput, ...request.Option) (*s3control.GetPublicAccessBlockOutput, error)
@@ -274,9 +290,17 @@ type S3ControlAPI interface {
 	PutBucketPolicyWithContext(aws.Context, *s3control.PutBucketPolicyInput, ...request.Option) (*s3control.PutBucketPolicyOutput, error)
 	PutBucketPolicyRequest(*s3control.PutBucketPolicyInput) (*request.Request, *s3control.PutBucketPolicyOutput)
 
+	PutBucketReplication(*s3control.PutBucketReplicationInput) (*s3control.PutBucketReplicationOutput, error)
+	PutBucketReplicationWithContext(aws.Context, *s3control.PutBucketReplicationInput, ...request.Option) (*s3control.PutBucketReplicationOutput, error)
+	PutBucketReplicationRequest(*s3control.PutBucketReplicationInput) (*request.Request, *s3control.PutBucketReplicationOutput)
+
 	PutBucketTagging(*s3control.PutBucketTaggingInput) (*s3control.PutBucketTaggingOutput, error)
 	PutBucketTaggingWithContext(aws.Context, *s3control.PutBucketTaggingInput, ...request.Option) (*s3control.PutBucketTaggingOutput, error)
 	PutBucketTaggingRequest(*s3control.PutBucketTaggingInput) (*request.Request, *s3control.PutBucketTaggingOutput)
+
+	PutBucketVersioning(*s3control.PutBucketVersioningInput) (*s3control.PutBucketVersioningOutput, error)
+	PutBucketVersioningWithContext(aws.Context, *s3control.PutBucketVersioningInput, ...request.Option) (*s3control.PutBucketVersioningOutput, error)
+	PutBucketVersioningRequest(*s3control.PutBucketVersioningInput) (*request.Request, *s3control.PutBucketVersioningOutput)
 
 	PutJobTagging(*s3control.PutJobTaggingInput) (*s3control.PutJobTaggingOutput, error)
 	PutJobTaggingWithContext(aws.Context, *s3control.PutJobTaggingInput, ...request.Option) (*s3control.PutJobTaggingOutput, error)
@@ -297,6 +321,10 @@ type S3ControlAPI interface {
 	PutStorageLensConfigurationTagging(*s3control.PutStorageLensConfigurationTaggingInput) (*s3control.PutStorageLensConfigurationTaggingOutput, error)
 	PutStorageLensConfigurationTaggingWithContext(aws.Context, *s3control.PutStorageLensConfigurationTaggingInput, ...request.Option) (*s3control.PutStorageLensConfigurationTaggingOutput, error)
 	PutStorageLensConfigurationTaggingRequest(*s3control.PutStorageLensConfigurationTaggingInput) (*request.Request, *s3control.PutStorageLensConfigurationTaggingOutput)
+
+	SubmitMultiRegionAccessPointRoutes(*s3control.SubmitMultiRegionAccessPointRoutesInput) (*s3control.SubmitMultiRegionAccessPointRoutesOutput, error)
+	SubmitMultiRegionAccessPointRoutesWithContext(aws.Context, *s3control.SubmitMultiRegionAccessPointRoutesInput, ...request.Option) (*s3control.SubmitMultiRegionAccessPointRoutesOutput, error)
+	SubmitMultiRegionAccessPointRoutesRequest(*s3control.SubmitMultiRegionAccessPointRoutesInput) (*request.Request, *s3control.SubmitMultiRegionAccessPointRoutesOutput)
 
 	UpdateJobPriority(*s3control.UpdateJobPriorityInput) (*s3control.UpdateJobPriorityOutput, error)
 	UpdateJobPriorityWithContext(aws.Context, *s3control.UpdateJobPriorityInput, ...request.Option) (*s3control.UpdateJobPriorityOutput, error)

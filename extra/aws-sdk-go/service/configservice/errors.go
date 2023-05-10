@@ -14,6 +14,13 @@ const (
 	// You have specified a template that is not valid or supported.
 	ErrCodeConformancePackTemplateValidationException = "ConformancePackTemplateValidationException"
 
+	// ErrCodeIdempotentParameterMismatch for service response error code
+	// "IdempotentParameterMismatch".
+	//
+	// Using the same client token with one or more different parameters. Specify
+	// a new client token with the parameter changes and try again.
+	ErrCodeIdempotentParameterMismatch = "IdempotentParameterMismatch"
+
 	// ErrCodeInsufficientDeliveryPolicyException for service response error code
 	// "InsufficientDeliveryPolicyException".
 	//
@@ -36,8 +43,9 @@ const (
 	//    a service-linked role.
 	//
 	//    * For PutConformancePack and PutOrganizationConformancePack, a conformance
-	//    pack cannot be created because you do not have permissions: To call IAM
-	//    GetRole action or create a service-linked role. To read Amazon S3 bucket.
+	//    pack cannot be created because you do not have the following permissions:
+	//    You do not have permission to call IAM GetRole action or create a service-linked
+	//    role. You do not have permission to read Amazon S3 bucket or call SSM:GetDocument.
 	ErrCodeInsufficientPermissionsException = "InsufficientPermissionsException"
 
 	// ErrCodeInvalidConfigurationRecorderNameException for service response error code
@@ -67,14 +75,14 @@ const (
 	// ErrCodeInvalidNextTokenException for service response error code
 	// "InvalidNextTokenException".
 	//
-	// The specified next token is invalid. Specify the nextToken string that was
-	// returned in the previous response to get the next page of results.
+	// The specified next token is not valid. Specify the nextToken string that
+	// was returned in the previous response to get the next page of results.
 	ErrCodeInvalidNextTokenException = "InvalidNextTokenException"
 
 	// ErrCodeInvalidParameterValueException for service response error code
 	// "InvalidParameterValueException".
 	//
-	// One or more of the specified parameters are invalid. Verify that your parameters
+	// One or more of the specified parameters are not valid. Verify that your parameters
 	// are valid and try again.
 	ErrCodeInvalidParameterValueException = "InvalidParameterValueException"
 
@@ -82,13 +90,14 @@ const (
 	// "InvalidRecordingGroupException".
 	//
 	// Config throws an exception if the recording group does not contain a valid
-	// list of resource types. Invalid values might also be incorrectly formatted.
+	// list of resource types. Values that are not valid might also be incorrectly
+	// formatted.
 	ErrCodeInvalidRecordingGroupException = "InvalidRecordingGroupException"
 
 	// ErrCodeInvalidResultTokenException for service response error code
 	// "InvalidResultTokenException".
 	//
-	// The specified ResultToken is invalid.
+	// The specified ResultToken is not valid.
 	ErrCodeInvalidResultTokenException = "InvalidResultTokenException"
 
 	// ErrCodeInvalidRoleException for service response error code
@@ -143,8 +152,9 @@ const (
 	// ErrCodeMaxActiveResourcesExceededException for service response error code
 	// "MaxActiveResourcesExceededException".
 	//
-	// You have reached the limit (100,000) of active custom resource types in your
-	// account. Delete unused resources using DeleteResourceConfig.
+	// You have reached the limit of active custom resource types in your account.
+	// There is a limit of 100,000. Delete unused resources using DeleteResourceConfig
+	// (https://docs.aws.amazon.com/config/latest/APIReference/API_DeleteResourceConfig.html) .
 	ErrCodeMaxActiveResourcesExceededException = "MaxActiveResourcesExceededException"
 
 	// ErrCodeMaxNumberOfConfigRulesExceededException for service response error code
@@ -164,8 +174,9 @@ const (
 	// ErrCodeMaxNumberOfConformancePacksExceededException for service response error code
 	// "MaxNumberOfConformancePacksExceededException".
 	//
-	// You have reached the limit (6) of the number of conformance packs in an account
-	// (6 conformance pack with 25 Config rules per pack).
+	// You have reached the limit of the number of conformance packs you can create
+	// in an account. For more information, see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+	// in the Config Developer Guide.
 	ErrCodeMaxNumberOfConformancePacksExceededException = "MaxNumberOfConformancePacksExceededException"
 
 	// ErrCodeMaxNumberOfDeliveryChannelsExceededException for service response error code
@@ -178,15 +189,16 @@ const (
 	// "MaxNumberOfOrganizationConfigRulesExceededException".
 	//
 	// You have reached the limit of the number of organization Config rules you
-	// can create.
+	// can create. For more information, see see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+	// in the Config Developer Guide.
 	ErrCodeMaxNumberOfOrganizationConfigRulesExceededException = "MaxNumberOfOrganizationConfigRulesExceededException"
 
 	// ErrCodeMaxNumberOfOrganizationConformancePacksExceededException for service response error code
 	// "MaxNumberOfOrganizationConformancePacksExceededException".
 	//
-	// You have reached the limit (6) of the number of organization conformance
-	// packs in an account (6 conformance pack with 25 Config rules per pack per
-	// account).
+	// You have reached the limit of the number of organization conformance packs
+	// you can create in an account. For more information, see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+	// in the Config Developer Guide.
 	ErrCodeMaxNumberOfOrganizationConformancePacksExceededException = "MaxNumberOfOrganizationConformancePacksExceededException"
 
 	// ErrCodeMaxNumberOfRetentionConfigurationsExceededException for service response error code
@@ -231,7 +243,7 @@ const (
 	// "NoSuchConfigRuleException".
 	//
 	// The Config rule in the request is not valid. Verify that the rule is an Config
-	// Custom Policy rule, that the rule name is correct, and that valid Amazon
+	// Process Check rule, that the rule name is correct, and that valid Amazon
 	// Resouce Names (ARNs) are used before trying again.
 	ErrCodeNoSuchConfigRuleException = "NoSuchConfigRuleException"
 
@@ -269,7 +281,7 @@ const (
 	// "NoSuchOrganizationConfigRuleException".
 	//
 	// The Config rule in the request is not valid. Verify that the rule is an organization
-	// Config Custom Policy rule, that the rule name is correct, and that valid
+	// Config Process Check rule, that the rule name is correct, and that valid
 	// Amazon Resouce Names (ARNs) are used before trying again.
 	ErrCodeNoSuchOrganizationConfigRuleException = "NoSuchOrganizationConfigRuleException"
 
@@ -326,7 +338,7 @@ const (
 	//
 	// For all OrganizationConfigRule and OrganizationConformancePack APIs, Config
 	// throws an exception if APIs are called from member accounts. All APIs must
-	// be called from organization master account.
+	// be called from organization management account.
 	ErrCodeOrganizationAccessDeniedException = "OrganizationAccessDeniedException"
 
 	// ErrCodeOrganizationAllFeaturesNotEnabledException for service response error code
@@ -406,8 +418,9 @@ const (
 	// ErrCodeTooManyTagsException for service response error code
 	// "TooManyTagsException".
 	//
-	// You have reached the limit of the number of tags you can use. You have more
-	// than 50 tags.
+	// You have reached the limit of the number of tags you can use. For more information,
+	// see Service Limits (https://docs.aws.amazon.com/config/latest/developerguide/configlimits.html)
+	// in the Config Developer Guide.
 	ErrCodeTooManyTagsException = "TooManyTagsException"
 
 	// ErrCodeValidationException for service response error code
@@ -427,6 +440,7 @@ const (
 
 var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ConformancePackTemplateValidationException":               newErrorConformancePackTemplateValidationException,
+	"IdempotentParameterMismatch":                              newErrorIdempotentParameterMismatch,
 	"InsufficientDeliveryPolicyException":                      newErrorInsufficientDeliveryPolicyException,
 	"InsufficientPermissionsException":                         newErrorInsufficientPermissionsException,
 	"InvalidConfigurationRecorderNameException":                newErrorInvalidConfigurationRecorderNameException,

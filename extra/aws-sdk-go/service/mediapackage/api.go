@@ -1896,6 +1896,9 @@ type Channel struct {
 	// The Amazon Resource Name (ARN) assigned to the Channel.
 	Arn *string `locationName:"arn" type:"string"`
 
+	// The date and time the Channel was created.
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	// A short text description of the Channel.
 	Description *string `locationName:"description" type:"string"`
 
@@ -1936,6 +1939,12 @@ func (s Channel) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *Channel) SetArn(v string) *Channel {
 	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *Channel) SetCreatedAt(v string) *Channel {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -1983,6 +1992,9 @@ type CmafEncryption struct {
 	// used in conjunction with the key for encrypting blocks. If you don't specify
 	// a value, then MediaPackage creates the constant initialization vector (IV).
 	ConstantInitializationVector *string `locationName:"constantInitializationVector" type:"string"`
+
+	// The encryption method to use.
+	EncryptionMethod *string `locationName:"encryptionMethod" type:"string" enum:"CmafEncryptionMethod"`
 
 	// Time (in seconds) between each encryption key rotation.
 	KeyRotationIntervalSeconds *int64 `locationName:"keyRotationIntervalSeconds" type:"integer"`
@@ -2033,6 +2045,12 @@ func (s *CmafEncryption) Validate() error {
 // SetConstantInitializationVector sets the ConstantInitializationVector field's value.
 func (s *CmafEncryption) SetConstantInitializationVector(v string) *CmafEncryption {
 	s.ConstantInitializationVector = &v
+	return s
+}
+
+// SetEncryptionMethod sets the EncryptionMethod field's value.
+func (s *CmafEncryption) SetEncryptionMethod(v string) *CmafEncryption {
+	s.EncryptionMethod = &v
 	return s
 }
 
@@ -2283,6 +2301,8 @@ type ConfigureLogsOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// Configure egress access logging.
@@ -2321,6 +2341,12 @@ func (s ConfigureLogsOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *ConfigureLogsOutput) SetArn(v string) *ConfigureLogsOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ConfigureLogsOutput) SetCreatedAt(v string) *ConfigureLogsOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -2426,6 +2452,8 @@ type CreateChannelOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// Configure egress access logging.
@@ -2464,6 +2492,12 @@ func (s CreateChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateChannelOutput) SetArn(v string) *CreateChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateChannelOutput) SetCreatedAt(v string) *CreateChannelOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -2895,6 +2929,8 @@ type CreateOriginEndpointOutput struct {
 	// A Common Media Application Format (CMAF) packaging configuration.
 	CmafPackage *CmafPackage `locationName:"cmafPackage" type:"structure"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	// A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.
 	DashPackage *DashPackage `locationName:"dashPackage" type:"structure"`
 
@@ -2963,6 +2999,12 @@ func (s *CreateOriginEndpointOutput) SetChannelId(v string) *CreateOriginEndpoin
 // SetCmafPackage sets the CmafPackage field's value.
 func (s *CreateOriginEndpointOutput) SetCmafPackage(v *CmafPackage) *CreateOriginEndpointOutput {
 	s.CmafPackage = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateOriginEndpointOutput) SetCreatedAt(v string) *CreateOriginEndpointOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -3502,6 +3544,8 @@ type DescribeChannelOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// Configure egress access logging.
@@ -3540,6 +3584,12 @@ func (s DescribeChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeChannelOutput) SetArn(v string) *DescribeChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeChannelOutput) SetCreatedAt(v string) *DescribeChannelOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -3782,6 +3832,8 @@ type DescribeOriginEndpointOutput struct {
 	// A Common Media Application Format (CMAF) packaging configuration.
 	CmafPackage *CmafPackage `locationName:"cmafPackage" type:"structure"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	// A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.
 	DashPackage *DashPackage `locationName:"dashPackage" type:"structure"`
 
@@ -3850,6 +3902,12 @@ func (s *DescribeOriginEndpointOutput) SetChannelId(v string) *DescribeOriginEnd
 // SetCmafPackage sets the CmafPackage field's value.
 func (s *DescribeOriginEndpointOutput) SetCmafPackage(v *CmafPackage) *DescribeOriginEndpointOutput {
 	s.CmafPackage = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeOriginEndpointOutput) SetCreatedAt(v string) *DescribeOriginEndpointOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -4098,7 +4156,7 @@ type HarvestJob struct {
 	// The ID of the Channel that the HarvestJob will harvest from.
 	ChannelId *string `locationName:"channelId" type:"string"`
 
-	// The time the HarvestJob was submitted
+	// The date and time the HarvestJob was submitted.
 	CreatedAt *string `locationName:"createdAt" type:"string"`
 
 	// The end of the time-window which will be harvested.
@@ -5485,6 +5543,9 @@ type OriginEndpoint struct {
 	// A Common Media Application Format (CMAF) packaging configuration.
 	CmafPackage *CmafPackage `locationName:"cmafPackage" type:"structure"`
 
+	// The date and time the OriginEndpoint was created.
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	// A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.
 	DashPackage *DashPackage `locationName:"dashPackage" type:"structure"`
 
@@ -5567,6 +5628,12 @@ func (s *OriginEndpoint) SetChannelId(v string) *OriginEndpoint {
 // SetCmafPackage sets the CmafPackage field's value.
 func (s *OriginEndpoint) SetCmafPackage(v *CmafPackage) *OriginEndpoint {
 	s.CmafPackage = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *OriginEndpoint) SetCreatedAt(v string) *OriginEndpoint {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -5696,6 +5763,8 @@ type RotateChannelCredentialsOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// Configure egress access logging.
@@ -5734,6 +5803,12 @@ func (s RotateChannelCredentialsOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *RotateChannelCredentialsOutput) SetArn(v string) *RotateChannelCredentialsOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *RotateChannelCredentialsOutput) SetCreatedAt(v string) *RotateChannelCredentialsOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -5840,6 +5915,8 @@ type RotateIngestEndpointCredentialsOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// Configure egress access logging.
@@ -5878,6 +5955,12 @@ func (s RotateIngestEndpointCredentialsOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *RotateIngestEndpointCredentialsOutput) SetArn(v string) *RotateIngestEndpointCredentialsOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *RotateIngestEndpointCredentialsOutput) SetCreatedAt(v string) *RotateIngestEndpointCredentialsOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -6578,6 +6661,8 @@ type UpdateChannelOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// Configure egress access logging.
@@ -6616,6 +6701,12 @@ func (s UpdateChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *UpdateChannelOutput) SetArn(v string) *UpdateChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *UpdateChannelOutput) SetCreatedAt(v string) *UpdateChannelOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -6833,6 +6924,8 @@ type UpdateOriginEndpointOutput struct {
 	// A Common Media Application Format (CMAF) packaging configuration.
 	CmafPackage *CmafPackage `locationName:"cmafPackage" type:"structure"`
 
+	CreatedAt *string `locationName:"createdAt" type:"string"`
+
 	// A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.
 	DashPackage *DashPackage `locationName:"dashPackage" type:"structure"`
 
@@ -6901,6 +6994,12 @@ func (s *UpdateOriginEndpointOutput) SetChannelId(v string) *UpdateOriginEndpoin
 // SetCmafPackage sets the CmafPackage field's value.
 func (s *UpdateOriginEndpointOutput) SetCmafPackage(v *CmafPackage) *UpdateOriginEndpointOutput {
 	s.CmafPackage = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *UpdateOriginEndpointOutput) SetCreatedAt(v string) *UpdateOriginEndpointOutput {
+	s.CreatedAt = &v
 	return s
 }
 
@@ -7031,6 +7130,23 @@ func AdsOnDeliveryRestrictions_Values() []string {
 		AdsOnDeliveryRestrictionsRestricted,
 		AdsOnDeliveryRestrictionsUnrestricted,
 		AdsOnDeliveryRestrictionsBoth,
+	}
+}
+
+// The encryption method to use.
+const (
+	// CmafEncryptionMethodSampleAes is a CmafEncryptionMethod enum value
+	CmafEncryptionMethodSampleAes = "SAMPLE_AES"
+
+	// CmafEncryptionMethodAesCtr is a CmafEncryptionMethod enum value
+	CmafEncryptionMethodAesCtr = "AES_CTR"
+)
+
+// CmafEncryptionMethod_Values returns all elements of the CmafEncryptionMethod enum
+func CmafEncryptionMethod_Values() []string {
+	return []string{
+		CmafEncryptionMethodSampleAes,
+		CmafEncryptionMethodAesCtr,
 	}
 }
 

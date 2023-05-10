@@ -12473,8 +12473,8 @@ type GlobalCluster struct {
 	GlobalClusterMembers []*GlobalClusterMember `locationNameList:"GlobalClusterMember" type:"list"`
 
 	// The Amazon Web Services Region-unique, immutable identifier for the global
-	// database cluster. This identifier is found in AWS CloudTrail log entries
-	// whenever the AWS KMS customer master key (CMK) for the cluster is accessed.
+	// database cluster. This identifier is found in CloudTrail log entries whenever
+	// the KMS customer master key (CMK) for the cluster is accessed.
 	GlobalClusterResourceId *string `type:"string"`
 
 	// Specifies the current state of this global cluster.
@@ -14810,6 +14810,17 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
+	// The name of the DB cluster parameter group to associate with this DB cluster.
+	//
+	// Type: String. Required: No.
+	//
+	// If this argument is omitted, the default DB cluster parameter group is used.
+	// If supplied, must match the name of an existing default DB cluster parameter
+	// group. The string must consist of from 1 to 255 letters, numbers or hyphens.
+	// Its first character must be a letter, and it cannot end with a hyphen or
+	// contain two consecutive hyphens.
+	DBClusterParameterGroupName *string `type:"string"`
+
 	// The name of the subnet group to use for the new cluster.
 	//
 	// Constraints: If provided, must match the name of an existing DBSubnetGroup.
@@ -14931,6 +14942,12 @@ func (s *RestoreDBClusterFromSnapshotInput) SetAvailabilityZones(v []*string) *R
 // SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetDBClusterIdentifier(v string) *RestoreDBClusterFromSnapshotInput {
 	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetDBClusterParameterGroupName sets the DBClusterParameterGroupName field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetDBClusterParameterGroupName(v string) *RestoreDBClusterFromSnapshotInput {
+	s.DBClusterParameterGroupName = &v
 	return s
 }
 

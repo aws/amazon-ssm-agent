@@ -553,13 +553,16 @@ func (c *FSx) CreateDataRepositoryAssociationRequest(input *CreateDataRepository
 // repository association is a link between a directory on the file system and
 // an Amazon S3 bucket or prefix. You can have a maximum of 8 data repository
 // associations on a file system. Data repository associations are supported
-// only for file systems with the Persistent_2 deployment type.
+// for all file systems except for Scratch_1 deployment type.
 //
 // Each data repository association must have a unique Amazon FSx file system
 // directory and a unique S3 bucket or prefix associated with it. You can configure
 // a data repository association for automatic import only, for automatic export
 // only, or for both. To learn more about linking a data repository to your
 // file system, see Linking your file system to an S3 bucket (https://docs.aws.amazon.com/fsx/latest/LustreGuide/create-dra-linked-data-repo.html).
+//
+// CreateDataRepositoryAssociation isn't supported on Amazon File Cache resources.
+// To create a DRA on Amazon File Cache, use the CreateFileCache operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -722,6 +725,125 @@ func (c *FSx) CreateDataRepositoryTaskWithContext(ctx aws.Context, input *Create
 	return out, req.Send()
 }
 
+const opCreateFileCache = "CreateFileCache"
+
+// CreateFileCacheRequest generates a "aws/request.Request" representing the
+// client's request for the CreateFileCache operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateFileCache for more information on using the CreateFileCache
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateFileCacheRequest method.
+//    req, resp := client.CreateFileCacheRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/CreateFileCache
+func (c *FSx) CreateFileCacheRequest(input *CreateFileCacheInput) (req *request.Request, output *CreateFileCacheOutput) {
+	op := &request.Operation{
+		Name:       opCreateFileCache,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateFileCacheInput{}
+	}
+
+	output = &CreateFileCacheOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateFileCache API operation for Amazon FSx.
+//
+// Creates a new Amazon File Cache resource.
+//
+// You can use this operation with a client request token in the request that
+// Amazon File Cache uses to ensure idempotent creation. If a cache with the
+// specified client request token exists and the parameters match, CreateFileCache
+// returns the description of the existing cache. If a cache with the specified
+// client request token exists and the parameters don't match, this call returns
+// IncompatibleParameterError. If a file cache with the specified client request
+// token doesn't exist, CreateFileCache does the following:
+//
+//    * Creates a new, empty Amazon File Cache resourcewith an assigned ID,
+//    and an initial lifecycle state of CREATING.
+//
+//    * Returns the description of the cache in JSON format.
+//
+// The CreateFileCache call returns while the cache's lifecycle state is still
+// CREATING. You can check the cache creation status by calling the DescribeFileCaches
+// (https://docs.aws.amazon.com/fsx/latest/APIReference/API_DescribeFileCaches.html)
+// operation, which returns the cache state along with other information.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon FSx's
+// API operation CreateFileCache for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequest
+//   A generic error indicating a failure with a client request.
+//
+//   * IncompatibleParameterError
+//   The error returned when a second request is received with the same client
+//   request token but different parameters settings. A client request token should
+//   always uniquely identify a single request.
+//
+//   * InvalidNetworkSettings
+//   One or more network settings specified in the request are invalid.
+//
+//   * InvalidPerUnitStorageThroughput
+//   An invalid value for PerUnitStorageThroughput was provided. Please create
+//   your file system again, using a valid value.
+//
+//   * ServiceLimitExceeded
+//   An error indicating that a particular service limit was exceeded. You can
+//   increase some service limits by contacting Amazon Web Services Support.
+//
+//   * InternalServerError
+//   A generic error indicating a server-side failure.
+//
+//   * MissingFileCacheConfiguration
+//   A cache configuration is required for this operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/CreateFileCache
+func (c *FSx) CreateFileCache(input *CreateFileCacheInput) (*CreateFileCacheOutput, error) {
+	req, out := c.CreateFileCacheRequest(input)
+	return out, req.Send()
+}
+
+// CreateFileCacheWithContext is the same as CreateFileCache with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateFileCache for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FSx) CreateFileCacheWithContext(ctx aws.Context, input *CreateFileCacheInput, opts ...request.Option) (*CreateFileCacheOutput, error) {
+	req, out := c.CreateFileCacheRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateFileSystem = "CreateFileSystem"
 
 // CreateFileSystemRequest generates a "aws/request.Request" representing the
@@ -799,17 +921,6 @@ func (c *FSx) CreateFileSystemRequest(input *CreateFileSystemInput) (req *reques
 //    an initial lifecycle state of CREATING.
 //
 //    * Returns the description of the file system in JSON format.
-//
-// This operation requires a client request token in the request that Amazon
-// FSx uses to ensure idempotent creation. This means that calling the operation
-// multiple times with the same client request token has no effect. By using
-// the idempotent operation, you can retry a CreateFileSystem operation without
-// the risk of creating an extra file system. This approach can be useful when
-// an initial call fails in a way that makes it unclear whether a file system
-// was created. Examples are if a transport-level timeout occurred, or your
-// connection was reset. If you use the same client request token and the initial
-// call created a file system, the client receives a success message as long
-// as the parameters are the same.
 //
 // The CreateFileSystem call returns while the file system's lifecycle state
 // is still CREATING. You can check the file-system creation status by calling
@@ -1595,8 +1706,8 @@ func (c *FSx) DeleteDataRepositoryAssociationRequest(input *DeleteDataRepository
 // Deleting the data repository association unlinks the file system from the
 // Amazon S3 bucket. When deleting a data repository association, you have the
 // option of deleting the data in the file system that corresponds to the data
-// repository association. Data repository associations are supported only for
-// file systems with the Persistent_2 deployment type.
+// repository association. Data repository associations are supported for all
+// file systems except for Scratch_1 deployment type.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1641,6 +1752,111 @@ func (c *FSx) DeleteDataRepositoryAssociation(input *DeleteDataRepositoryAssocia
 // for more information on using Contexts.
 func (c *FSx) DeleteDataRepositoryAssociationWithContext(ctx aws.Context, input *DeleteDataRepositoryAssociationInput, opts ...request.Option) (*DeleteDataRepositoryAssociationOutput, error) {
 	req, out := c.DeleteDataRepositoryAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteFileCache = "DeleteFileCache"
+
+// DeleteFileCacheRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteFileCache operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteFileCache for more information on using the DeleteFileCache
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteFileCacheRequest method.
+//    req, resp := client.DeleteFileCacheRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/DeleteFileCache
+func (c *FSx) DeleteFileCacheRequest(input *DeleteFileCacheInput) (req *request.Request, output *DeleteFileCacheOutput) {
+	op := &request.Operation{
+		Name:       opDeleteFileCache,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteFileCacheInput{}
+	}
+
+	output = &DeleteFileCacheOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteFileCache API operation for Amazon FSx.
+//
+// Deletes an Amazon File Cache resource. After deletion, the cache no longer
+// exists, and its data is gone.
+//
+// The DeleteFileCache operation returns while the cache has the DELETING status.
+// You can check the cache deletion status by calling the DescribeFileCaches
+// (https://docs.aws.amazon.com/fsx/latest/APIReference/API_DescribeFileCaches.html)
+// operation, which returns a list of caches in your account. If you pass the
+// cache ID for a deleted cache, the DescribeFileCaches operation returns a
+// FileCacheNotFound error.
+//
+// The data in a deleted cache is also deleted and can't be recovered by any
+// means.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon FSx's
+// API operation DeleteFileCache for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequest
+//   A generic error indicating a failure with a client request.
+//
+//   * IncompatibleParameterError
+//   The error returned when a second request is received with the same client
+//   request token but different parameters settings. A client request token should
+//   always uniquely identify a single request.
+//
+//   * FileCacheNotFound
+//   No caches were found based upon supplied parameters.
+//
+//   * ServiceLimitExceeded
+//   An error indicating that a particular service limit was exceeded. You can
+//   increase some service limits by contacting Amazon Web Services Support.
+//
+//   * InternalServerError
+//   A generic error indicating a server-side failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/DeleteFileCache
+func (c *FSx) DeleteFileCache(input *DeleteFileCacheInput) (*DeleteFileCacheOutput, error) {
+	req, out := c.DeleteFileCacheRequest(input)
+	return out, req.Send()
+}
+
+// DeleteFileCacheWithContext is the same as DeleteFileCache with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteFileCache for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FSx) DeleteFileCacheWithContext(ctx aws.Context, input *DeleteFileCacheInput, opts ...request.Option) (*DeleteFileCacheOutput, error) {
+	req, out := c.DeleteFileCacheRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2258,25 +2474,27 @@ func (c *FSx) DescribeDataRepositoryAssociationsRequest(input *DescribeDataRepos
 
 // DescribeDataRepositoryAssociations API operation for Amazon FSx.
 //
-// Returns the description of specific Amazon FSx for Lustre data repository
-// associations, if one or more AssociationIds values are provided in the request,
-// or if filters are used in the request. Data repository associations are supported
-// only for file systems with the Persistent_2 deployment type.
+// Returns the description of specific Amazon FSx for Lustre or Amazon File
+// Cache data repository associations, if one or more AssociationIds values
+// are provided in the request, or if filters are used in the request. Data
+// repository associations are supported on Amazon File Cache resources and
+// all Amazon FSx for Lustre file systems excluding Scratch_1 deployment types.
 //
 // You can use filters to narrow the response to include just data repository
 // associations for specific file systems (use the file-system-id filter with
-// the ID of the file system) or data repository associations for a specific
-// repository type (use the data-repository-type filter with a value of S3).
-// If you don't use filters, the response returns all data repository associations
+// the ID of the file system) or caches (use the file-cache-id filter with the
+// ID of the cache), or data repository associations for a specific repository
+// type (use the data-repository-type filter with a value of S3 or NFS). If
+// you don't use filters, the response returns all data repository associations
 // owned by your Amazon Web Services account in the Amazon Web Services Region
 // of the endpoint that you're calling.
 //
 // When retrieving all data repository associations, you can paginate the response
 // by using the optional MaxResults parameter to limit the number of data repository
 // associations returned in a response. If more data repository associations
-// remain, Amazon FSx returns a NextToken value in the response. In this case,
-// send a later request with the NextToken request parameter set to the value
-// of NextToken from the last response.
+// remain, a NextToken value is returned in the response. In this case, send
+// a later request with the NextToken request parameter set to the value of
+// NextToken from the last response.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2425,19 +2643,19 @@ func (c *FSx) DescribeDataRepositoryTasksRequest(input *DescribeDataRepositoryTa
 
 // DescribeDataRepositoryTasks API operation for Amazon FSx.
 //
-// Returns the description of specific Amazon FSx for Lustre data repository
-// tasks, if one or more TaskIds values are provided in the request, or if filters
-// are used in the request. You can use filters to narrow the response to include
-// just tasks for specific file systems, or tasks in a specific lifecycle state.
-// Otherwise, it returns all data repository tasks owned by your Amazon Web
-// Services account in the Amazon Web Services Region of the endpoint that you're
-// calling.
+// Returns the description of specific Amazon FSx for Lustre or Amazon File
+// Cache data repository tasks, if one or more TaskIds values are provided in
+// the request, or if filters are used in the request. You can use filters to
+// narrow the response to include just tasks for specific file systems or caches,
+// or tasks in a specific lifecycle state. Otherwise, it returns all data repository
+// tasks owned by your Amazon Web Services account in the Amazon Web Services
+// Region of the endpoint that you're calling.
 //
 // When retrieving all tasks, you can paginate the response by using the optional
 // MaxResults parameter to limit the number of tasks returned in a response.
-// If more tasks remain, Amazon FSx returns a NextToken value in the response.
-// In this case, send a later request with the NextToken request parameter set
-// to the value of NextToken from the last response.
+// If more tasks remain, a NextToken value is returned in the response. In this
+// case, send a later request with the NextToken request parameter set to the
+// value of NextToken from the last response.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2526,6 +2744,172 @@ func (c *FSx) DescribeDataRepositoryTasksPagesWithContext(ctx aws.Context, input
 
 	for p.Next() {
 		if !fn(p.Page().(*DescribeDataRepositoryTasksOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opDescribeFileCaches = "DescribeFileCaches"
+
+// DescribeFileCachesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeFileCaches operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeFileCaches for more information on using the DescribeFileCaches
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeFileCachesRequest method.
+//    req, resp := client.DescribeFileCachesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/DescribeFileCaches
+func (c *FSx) DescribeFileCachesRequest(input *DescribeFileCachesInput) (req *request.Request, output *DescribeFileCachesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeFileCaches,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeFileCachesInput{}
+	}
+
+	output = &DescribeFileCachesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeFileCaches API operation for Amazon FSx.
+//
+// Returns the description of a specific Amazon File Cache resource, if a FileCacheIds
+// value is provided for that cache. Otherwise, it returns descriptions of all
+// caches owned by your Amazon Web Services account in the Amazon Web Services
+// Region of the endpoint that you're calling.
+//
+// When retrieving all cache descriptions, you can optionally specify the MaxResults
+// parameter to limit the number of descriptions in a response. If more cache
+// descriptions remain, the operation returns a NextToken value in the response.
+// In this case, send a later request with the NextToken request parameter set
+// to the value of NextToken from the last response.
+//
+// This operation is used in an iterative process to retrieve a list of your
+// cache descriptions. DescribeFileCaches is called first without a NextTokenvalue.
+// Then the operation continues to be called with the NextToken parameter set
+// to the value of the last NextToken value until a response has no NextToken.
+//
+// When using this operation, keep the following in mind:
+//
+//    * The implementation might return fewer than MaxResults cache descriptions
+//    while still including a NextToken value.
+//
+//    * The order of caches returned in the response of one DescribeFileCaches
+//    call and the order of caches returned across the responses of a multicall
+//    iteration is unspecified.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon FSx's
+// API operation DescribeFileCaches for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequest
+//   A generic error indicating a failure with a client request.
+//
+//   * FileCacheNotFound
+//   No caches were found based upon supplied parameters.
+//
+//   * InternalServerError
+//   A generic error indicating a server-side failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/DescribeFileCaches
+func (c *FSx) DescribeFileCaches(input *DescribeFileCachesInput) (*DescribeFileCachesOutput, error) {
+	req, out := c.DescribeFileCachesRequest(input)
+	return out, req.Send()
+}
+
+// DescribeFileCachesWithContext is the same as DescribeFileCaches with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeFileCaches for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FSx) DescribeFileCachesWithContext(ctx aws.Context, input *DescribeFileCachesInput, opts ...request.Option) (*DescribeFileCachesOutput, error) {
+	req, out := c.DescribeFileCachesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeFileCachesPages iterates over the pages of a DescribeFileCaches operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeFileCaches method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeFileCaches operation.
+//    pageNum := 0
+//    err := client.DescribeFileCachesPages(params,
+//        func(page *fsx.DescribeFileCachesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *FSx) DescribeFileCachesPages(input *DescribeFileCachesInput, fn func(*DescribeFileCachesOutput, bool) bool) error {
+	return c.DescribeFileCachesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeFileCachesPagesWithContext same as DescribeFileCachesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FSx) DescribeFileCachesPagesWithContext(ctx aws.Context, input *DescribeFileCachesInput, fn func(*DescribeFileCachesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeFileCachesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeFileCachesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeFileCachesOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -3976,7 +4360,7 @@ func (c *FSx) UpdateDataRepositoryAssociationRequest(input *UpdateDataRepository
 //
 // Updates the configuration of an existing data repository association on an
 // Amazon FSx for Lustre file system. Data repository associations are supported
-// only for file systems with the Persistent_2 deployment type.
+// for all file systems except for Scratch_1 deployment type.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4021,6 +4405,107 @@ func (c *FSx) UpdateDataRepositoryAssociation(input *UpdateDataRepositoryAssocia
 // for more information on using Contexts.
 func (c *FSx) UpdateDataRepositoryAssociationWithContext(ctx aws.Context, input *UpdateDataRepositoryAssociationInput, opts ...request.Option) (*UpdateDataRepositoryAssociationOutput, error) {
 	req, out := c.UpdateDataRepositoryAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateFileCache = "UpdateFileCache"
+
+// UpdateFileCacheRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateFileCache operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateFileCache for more information on using the UpdateFileCache
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateFileCacheRequest method.
+//    req, resp := client.UpdateFileCacheRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/UpdateFileCache
+func (c *FSx) UpdateFileCacheRequest(input *UpdateFileCacheInput) (req *request.Request, output *UpdateFileCacheOutput) {
+	op := &request.Operation{
+		Name:       opUpdateFileCache,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateFileCacheInput{}
+	}
+
+	output = &UpdateFileCacheOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateFileCache API operation for Amazon FSx.
+//
+// Updates the configuration of an existing Amazon File Cache resource. You
+// can update multiple properties in a single request.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon FSx's
+// API operation UpdateFileCache for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequest
+//   A generic error indicating a failure with a client request.
+//
+//   * UnsupportedOperation
+//   The requested operation is not supported for this resource or API.
+//
+//   * IncompatibleParameterError
+//   The error returned when a second request is received with the same client
+//   request token but different parameters settings. A client request token should
+//   always uniquely identify a single request.
+//
+//   * InternalServerError
+//   A generic error indicating a server-side failure.
+//
+//   * FileCacheNotFound
+//   No caches were found based upon supplied parameters.
+//
+//   * MissingFileCacheConfiguration
+//   A cache configuration is required for this operation.
+//
+//   * ServiceLimitExceeded
+//   An error indicating that a particular service limit was exceeded. You can
+//   increase some service limits by contacting Amazon Web Services Support.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fsx-2018-03-01/UpdateFileCache
+func (c *FSx) UpdateFileCache(input *UpdateFileCacheInput) (*UpdateFileCacheOutput, error) {
+	req, out := c.UpdateFileCacheRequest(input)
+	return out, req.Send()
+}
+
+// UpdateFileCacheWithContext is the same as UpdateFileCache with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateFileCache for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FSx) UpdateFileCacheWithContext(ctx aws.Context, input *UpdateFileCacheInput, opts ...request.Option) (*UpdateFileCacheOutput, error) {
+	req, out := c.UpdateFileCacheRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4073,7 +4558,7 @@ func (c *FSx) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 // Use this operation to update the configuration of an existing Amazon FSx
 // file system. You can update multiple properties in a single request.
 //
-// For Amazon FSx for Windows File Server file systems, you can update the following
+// For FSx for Windows File Server file systems, you can update the following
 // properties:
 //
 //    * AuditLogConfiguration
@@ -4090,7 +4575,7 @@ func (c *FSx) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 //
 //    * WeeklyMaintenanceStartTime
 //
-// For Amazon FSx for Lustre file systems, you can update the following properties:
+// For FSx for Lustre file systems, you can update the following properties:
 //
 //    * AutoImportPolicy
 //
@@ -4106,8 +4591,9 @@ func (c *FSx) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 //
 //    * WeeklyMaintenanceStartTime
 //
-// For Amazon FSx for NetApp ONTAP file systems, you can update the following
-// properties:
+// For FSx for ONTAP file systems, you can update the following properties:
+//
+//    * AddRouteTableIds
 //
 //    * AutomaticBackupRetentionDays
 //
@@ -4117,14 +4603,15 @@ func (c *FSx) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 //
 //    * FsxAdminPassword
 //
+//    * RemoveRouteTableIds
+//
 //    * StorageCapacity
 //
 //    * ThroughputCapacity
 //
 //    * WeeklyMaintenanceStartTime
 //
-// For the Amazon FSx for OpenZFS file systems, you can update the following
-// properties:
+// For FSx for OpenZFS file systems, you can update the following properties:
 //
 //    * AutomaticBackupRetentionDays
 //
@@ -4133,6 +4620,10 @@ func (c *FSx) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 //    * CopyTagsToVolumes
 //
 //    * DailyAutomaticBackupStartTime
+//
+//    * DiskIopsConfiguration
+//
+//    * StorageCapacity
 //
 //    * ThroughputCapacity
 //
@@ -4156,6 +4647,9 @@ func (c *FSx) UpdateFileSystemRequest(input *UpdateFileSystemInput) (req *reques
 //   The error returned when a second request is received with the same client
 //   request token but different parameters settings. A client request token should
 //   always uniquely identify a single request.
+//
+//   * InvalidNetworkSettings
+//   One or more network settings specified in the request are invalid.
 //
 //   * InternalServerError
 //   A generic error indicating a server-side failure.
@@ -4630,6 +5124,10 @@ type AdministrativeAction struct {
 	//    Amazon FSx for OpenZFS volume initiated from the Amazon FSx console, API
 	//    (UpdateVolume), or CLI (update-volume).
 	//
+	//    * VOLUME_RESTORE - An Amazon FSx for OpenZFS volume is returned to the
+	//    state saved by the specified snapshot, initiated from an API (RestoreVolumeFromSnapshot)
+	//    or CLI (restore-volume-from-snapshot).
+	//
 	//    * SNAPSHOT_UPDATE - A snapshot update to an Amazon FSx for OpenZFS volume
 	//    initiated from the Amazon FSx console, API (UpdateSnapshot), or CLI (update-snapshot).
 	//
@@ -4870,7 +5368,7 @@ type AssociateFileSystemAliasesInput struct {
 	Aliases []*string `type:"list" required:"true"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -4979,21 +5477,21 @@ func (s *AssociateFileSystemAliasesOutput) SetAliases(v []*Alias) *AssociateFile
 // Describes a data repository association's automatic export policy. The AutoExportPolicy
 // defines the types of updated objects on the file system that will be automatically
 // exported to the data repository. As you create, modify, or delete files,
-// Amazon FSx automatically exports the defined changes asynchronously once
-// your application finishes modifying the file.
+// Amazon FSx for Lustre automatically exports the defined changes asynchronously
+// once your application finishes modifying the file.
 //
-// This AutoExportPolicy is supported only for file systems with the Persistent_2
-// deployment type.
+// The AutoExportPolicy is only supported on Amazon FSx for Lustre file systems
+// with a data repository association.
 type AutoExportPolicy struct {
 	_ struct{} `type:"structure"`
 
 	// The AutoExportPolicy can have the following event values:
 	//
-	//    * NEW - Amazon FSx automatically exports new files and directories to
-	//    the data repository as they are added to the file system.
+	//    * NEW - New files and directories are automatically exported to the data
+	//    repository as they are added to the file system.
 	//
-	//    * CHANGED - Amazon FSx automatically exports changes to files and directories
-	//    on the file system to the data repository.
+	//    * CHANGED - Changes to files and directories on the file system are automatically
+	//    exported to the data repository.
 	//
 	//    * DELETED - Files and directories are automatically deleted on the data
 	//    repository when they are deleted on the file system.
@@ -5028,11 +5526,11 @@ func (s *AutoExportPolicy) SetEvents(v []*string) *AutoExportPolicy {
 
 // Describes the data repository association's automatic import policy. The
 // AutoImportPolicy defines how Amazon FSx keeps your file metadata and directory
-// listings up to date by importing changes to your file system as you modify
-// objects in a linked S3 bucket.
+// listings up to date by importing changes to your Amazon FSx for Lustre file
+// system as you modify objects in a linked S3 bucket.
 //
-// This AutoImportPolicy is supported only for file systems with the Persistent_2
-// deployment type.
+// The AutoImportPolicy is only supported on Amazon FSx for Lustre file systems
+// with a data repository association.
 type AutoImportPolicy struct {
 	_ struct{} `type:"structure"`
 
@@ -5771,8 +6269,7 @@ type CompletionReport struct {
 	// Path you provide must be located within the file system’s ExportPath. An
 	// example Path value is "s3://myBucket/myExportPath/optionalPrefix". The report
 	// provides the following information for each file in the report: FilePath,
-	// FileStatus, and ErrorCode. To learn more about a file system's ExportPath,
-	// see .
+	// FileStatus, and ErrorCode.
 	Path *string `min:"3" type:"string"`
 
 	// Required if Enabled is set to true. Specifies the scope of the CompletionReport;
@@ -5844,7 +6341,7 @@ type CopyBackupInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -6023,7 +6520,7 @@ func (s *CopyBackupOutput) SetBackup(v *Backup) *CopyBackupOutput {
 type CreateBackupInput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) A string of up to 64 ASCII characters that Amazon FSx uses to
+	// (Optional) A string of up to 63 ASCII characters that Amazon FSx uses to
 	// ensure idempotent creation. This string is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
@@ -6157,7 +6654,7 @@ type CreateDataRepositoryAssociationInput struct {
 	BatchImportMetaDataOnCreate *bool `type:"boolean"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -6186,12 +6683,10 @@ type CreateDataRepositoryAssociationInput struct {
 	// S3 bucket, and no other S3 bucket can be linked to the directory.
 	//
 	// If you specify only a forward slash (/) as the file system path, you can
-	// link only 1 data repository to the file system. You can only specify "/"
+	// link only one data repository to the file system. You can only specify "/"
 	// as the file system path for the first data repository associated with a file
 	// system.
-	//
-	// FileSystemPath is a required field
-	FileSystemPath *string `min:"1" type:"string" required:"true"`
+	FileSystemPath *string `min:"1" type:"string"`
 
 	// For files imported from a data repository, this value determines the stripe
 	// count and maximum amount of data per file (in MiB) stored on a single physical
@@ -6248,9 +6743,6 @@ func (s *CreateDataRepositoryAssociationInput) Validate() error {
 	}
 	if s.FileSystemId != nil && len(*s.FileSystemId) < 11 {
 		invalidParams.Add(request.NewErrParamMinLen("FileSystemId", 11))
-	}
-	if s.FileSystemPath == nil {
-		invalidParams.Add(request.NewErrParamRequired("FileSystemPath"))
 	}
 	if s.FileSystemPath != nil && len(*s.FileSystemPath) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("FileSystemPath", 1))
@@ -6360,8 +6852,12 @@ func (s *CreateDataRepositoryAssociationOutput) SetAssociation(v *DataRepository
 type CreateDataRepositoryTaskInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies the amount of data to release, in GiB, by an Amazon File Cache
+	// AUTO_RELEASE_DATA task that automatically releases files from the cache.
+	CapacityToRelease *int64 `min:"1" type:"long"`
+
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -6424,6 +6920,9 @@ func (s CreateDataRepositoryTaskInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateDataRepositoryTaskInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateDataRepositoryTaskInput"}
+	if s.CapacityToRelease != nil && *s.CapacityToRelease < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("CapacityToRelease", 1))
+	}
 	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
 	}
@@ -6462,6 +6961,12 @@ func (s *CreateDataRepositoryTaskInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCapacityToRelease sets the CapacityToRelease field's value.
+func (s *CreateDataRepositoryTaskInput) SetCapacityToRelease(v int64) *CreateDataRepositoryTaskInput {
+	s.CapacityToRelease = &v
+	return s
 }
 
 // SetClientRequestToken sets the ClientRequestToken field's value.
@@ -6531,6 +7036,362 @@ func (s *CreateDataRepositoryTaskOutput) SetDataRepositoryTask(v *DataRepository
 	return s
 }
 
+type CreateFileCacheInput struct {
+	_ struct{} `type:"structure"`
+
+	// An idempotency token for resource creation, in a string of up to 63 ASCII
+	// characters. This token is automatically filled on your behalf when you use
+	// the Command Line Interface (CLI) or an Amazon Web Services SDK.
+	//
+	// By using the idempotent operation, you can retry a CreateFileCache operation
+	// without the risk of creating an extra cache. This approach can be useful
+	// when an initial call fails in a way that makes it unclear whether a cache
+	// was created. Examples are if a transport level timeout occurred, or your
+	// connection was reset. If you use the same client request token and the initial
+	// call created a cache, the client receives success as long as the parameters
+	// are the same.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// A boolean flag indicating whether tags for the cache should be copied to
+	// data repository associations. This value defaults to false.
+	CopyTagsToDataRepositoryAssociations *bool `type:"boolean"`
+
+	// A list of up to 8 configurations for data repository associations (DRAs)
+	// to be created during the cache creation. The DRAs link the cache to either
+	// an Amazon S3 data repository or a Network File System (NFS) data repository
+	// that supports the NFSv3 protocol.
+	//
+	// The DRA configurations must meet the following requirements:
+	//
+	//    * All configurations on the list must be of the same data repository type,
+	//    either all S3 or all NFS. A cache can't link to different data repository
+	//    types at the same time.
+	//
+	//    * An NFS DRA must link to an NFS file system that supports the NFSv3 protocol.
+	//
+	// DRA automatic import and automatic export is not supported.
+	DataRepositoryAssociations []*FileCacheDataRepositoryAssociation `type:"list"`
+
+	// The type of cache that you're creating, which must be LUSTRE.
+	//
+	// FileCacheType is a required field
+	FileCacheType *string `type:"string" required:"true" enum:"FileCacheType"`
+
+	// Sets the Lustre version for the cache that you're creating, which must be
+	// 2.12.
+	//
+	// FileCacheTypeVersion is a required field
+	FileCacheTypeVersion *string `min:"1" type:"string" required:"true"`
+
+	// Specifies the ID of the Key Management Service (KMS) key to use for encrypting
+	// data on an Amazon File Cache. If a KmsKeyId isn't specified, the Amazon FSx-managed
+	// KMS key for your account is used. For more information, see Encrypt (https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html)
+	// in the Key Management Service API Reference.
+	KmsKeyId *string `min:"1" type:"string"`
+
+	// The configuration for the Amazon File Cache resource being created.
+	LustreConfiguration *CreateFileCacheLustreConfiguration `type:"structure"`
+
+	// A list of IDs specifying the security groups to apply to all network interfaces
+	// created for Amazon File Cache access. This list isn't returned in later requests
+	// to describe the cache.
+	SecurityGroupIds []*string `type:"list"`
+
+	// The storage capacity of the cache in gibibytes (GiB). Valid values are 1200
+	// GiB, 2400 GiB, and increments of 2400 GiB.
+	//
+	// StorageCapacity is a required field
+	StorageCapacity *int64 `type:"integer" required:"true"`
+
+	// A list of subnet IDs that the cache will be accessible from. You can specify
+	// only one subnet ID in a call to the CreateFileCache operation.
+	//
+	// SubnetIds is a required field
+	SubnetIds []*string `type:"list" required:"true"`
+
+	// A list of Tag values, with a maximum of 50 elements.
+	Tags []*Tag `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFileCacheInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFileCacheInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateFileCacheInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateFileCacheInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.FileCacheType == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileCacheType"))
+	}
+	if s.FileCacheTypeVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileCacheTypeVersion"))
+	}
+	if s.FileCacheTypeVersion != nil && len(*s.FileCacheTypeVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileCacheTypeVersion", 1))
+	}
+	if s.KmsKeyId != nil && len(*s.KmsKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyId", 1))
+	}
+	if s.StorageCapacity == nil {
+		invalidParams.Add(request.NewErrParamRequired("StorageCapacity"))
+	}
+	if s.SubnetIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubnetIds"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.DataRepositoryAssociations != nil {
+		for i, v := range s.DataRepositoryAssociations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DataRepositoryAssociations", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.LustreConfiguration != nil {
+		if err := s.LustreConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("LustreConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateFileCacheInput) SetClientRequestToken(v string) *CreateFileCacheInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCopyTagsToDataRepositoryAssociations sets the CopyTagsToDataRepositoryAssociations field's value.
+func (s *CreateFileCacheInput) SetCopyTagsToDataRepositoryAssociations(v bool) *CreateFileCacheInput {
+	s.CopyTagsToDataRepositoryAssociations = &v
+	return s
+}
+
+// SetDataRepositoryAssociations sets the DataRepositoryAssociations field's value.
+func (s *CreateFileCacheInput) SetDataRepositoryAssociations(v []*FileCacheDataRepositoryAssociation) *CreateFileCacheInput {
+	s.DataRepositoryAssociations = v
+	return s
+}
+
+// SetFileCacheType sets the FileCacheType field's value.
+func (s *CreateFileCacheInput) SetFileCacheType(v string) *CreateFileCacheInput {
+	s.FileCacheType = &v
+	return s
+}
+
+// SetFileCacheTypeVersion sets the FileCacheTypeVersion field's value.
+func (s *CreateFileCacheInput) SetFileCacheTypeVersion(v string) *CreateFileCacheInput {
+	s.FileCacheTypeVersion = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *CreateFileCacheInput) SetKmsKeyId(v string) *CreateFileCacheInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLustreConfiguration sets the LustreConfiguration field's value.
+func (s *CreateFileCacheInput) SetLustreConfiguration(v *CreateFileCacheLustreConfiguration) *CreateFileCacheInput {
+	s.LustreConfiguration = v
+	return s
+}
+
+// SetSecurityGroupIds sets the SecurityGroupIds field's value.
+func (s *CreateFileCacheInput) SetSecurityGroupIds(v []*string) *CreateFileCacheInput {
+	s.SecurityGroupIds = v
+	return s
+}
+
+// SetStorageCapacity sets the StorageCapacity field's value.
+func (s *CreateFileCacheInput) SetStorageCapacity(v int64) *CreateFileCacheInput {
+	s.StorageCapacity = &v
+	return s
+}
+
+// SetSubnetIds sets the SubnetIds field's value.
+func (s *CreateFileCacheInput) SetSubnetIds(v []*string) *CreateFileCacheInput {
+	s.SubnetIds = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateFileCacheInput) SetTags(v []*Tag) *CreateFileCacheInput {
+	s.Tags = v
+	return s
+}
+
+// The Amazon File Cache configuration for the cache that you are creating.
+type CreateFileCacheLustreConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the cache deployment type, which must be CACHE_1.
+	//
+	// DeploymentType is a required field
+	DeploymentType *string `type:"string" required:"true" enum:"FileCacheLustreDeploymentType"`
+
+	// The configuration for a Lustre MDT (Metadata Target) storage volume.
+	//
+	// MetadataConfiguration is a required field
+	MetadataConfiguration *FileCacheLustreMetadataConfiguration `type:"structure" required:"true"`
+
+	// Provisions the amount of read and write throughput for each 1 tebibyte (TiB)
+	// of cache storage capacity, in MB/s/TiB. The only supported value is 1000.
+	//
+	// PerUnitStorageThroughput is a required field
+	PerUnitStorageThroughput *int64 `min:"12" type:"integer" required:"true"`
+
+	// A recurring weekly time, in the format D:HH:MM.
+	//
+	// D is the day of the week, for which 1 represents Monday and 7 represents
+	// Sunday. For further details, see the ISO-8601 spec as described on Wikipedia
+	// (https://en.wikipedia.org/wiki/ISO_week_date).
+	//
+	// HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute
+	// of the hour.
+	//
+	// For example, 1:05:00 specifies maintenance at 5 AM Monday.
+	WeeklyMaintenanceStartTime *string `min:"7" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFileCacheLustreConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFileCacheLustreConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateFileCacheLustreConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateFileCacheLustreConfiguration"}
+	if s.DeploymentType == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeploymentType"))
+	}
+	if s.MetadataConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetadataConfiguration"))
+	}
+	if s.PerUnitStorageThroughput == nil {
+		invalidParams.Add(request.NewErrParamRequired("PerUnitStorageThroughput"))
+	}
+	if s.PerUnitStorageThroughput != nil && *s.PerUnitStorageThroughput < 12 {
+		invalidParams.Add(request.NewErrParamMinValue("PerUnitStorageThroughput", 12))
+	}
+	if s.WeeklyMaintenanceStartTime != nil && len(*s.WeeklyMaintenanceStartTime) < 7 {
+		invalidParams.Add(request.NewErrParamMinLen("WeeklyMaintenanceStartTime", 7))
+	}
+	if s.MetadataConfiguration != nil {
+		if err := s.MetadataConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("MetadataConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeploymentType sets the DeploymentType field's value.
+func (s *CreateFileCacheLustreConfiguration) SetDeploymentType(v string) *CreateFileCacheLustreConfiguration {
+	s.DeploymentType = &v
+	return s
+}
+
+// SetMetadataConfiguration sets the MetadataConfiguration field's value.
+func (s *CreateFileCacheLustreConfiguration) SetMetadataConfiguration(v *FileCacheLustreMetadataConfiguration) *CreateFileCacheLustreConfiguration {
+	s.MetadataConfiguration = v
+	return s
+}
+
+// SetPerUnitStorageThroughput sets the PerUnitStorageThroughput field's value.
+func (s *CreateFileCacheLustreConfiguration) SetPerUnitStorageThroughput(v int64) *CreateFileCacheLustreConfiguration {
+	s.PerUnitStorageThroughput = &v
+	return s
+}
+
+// SetWeeklyMaintenanceStartTime sets the WeeklyMaintenanceStartTime field's value.
+func (s *CreateFileCacheLustreConfiguration) SetWeeklyMaintenanceStartTime(v string) *CreateFileCacheLustreConfiguration {
+	s.WeeklyMaintenanceStartTime = &v
+	return s
+}
+
+type CreateFileCacheOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the cache that was created.
+	FileCache *FileCacheCreating `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFileCacheOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFileCacheOutput) GoString() string {
+	return s.String()
+}
+
+// SetFileCache sets the FileCache field's value.
+func (s *CreateFileCacheOutput) SetFileCache(v *FileCacheCreating) *CreateFileCacheOutput {
+	s.FileCache = v
+	return s
+}
+
 // The request object for the CreateFileSystemFromBackup operation.
 type CreateFileSystemFromBackupInput struct {
 	_ struct{} `type:"structure"`
@@ -6540,7 +7401,7 @@ type CreateFileSystemFromBackupInput struct {
 	// BackupId is a required field
 	BackupId *string `min:"12" type:"string" required:"true"`
 
-	// A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent
+	// A string of up to 63 ASCII characters that Amazon FSx uses to ensure idempotent
 	// creation. This string is automatically filled on your behalf when you use
 	// the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
@@ -6574,9 +7435,8 @@ type CreateFileSystemFromBackupInput struct {
 
 	// The Lustre configuration for the file system being created.
 	//
-	// The following parameters are not supported for file systems with the Persistent_2
-	// deployment type. Instead, use CreateDataRepositoryAssociation to create a
-	// data repository association to link your Lustre file system to a data repository.
+	// The following parameters are not supported for file systems with a data repository
+	// association created with .
 	//
 	//    * AutoImportPolicy
 	//
@@ -6595,6 +7455,17 @@ type CreateFileSystemFromBackupInput struct {
 	// all network interfaces. This value isn't returned in later DescribeFileSystem
 	// requests.
 	SecurityGroupIds []*string `type:"list"`
+
+	// Sets the storage capacity of the OpenZFS file system that you're creating
+	// from a backup, in gibibytes (GiB). Valid values are from 64 GiB up to 524,288
+	// GiB (512 TiB). However, the value that you specify must be equal to or greater
+	// than the backup's storage capacity value. If you don't use the StorageCapacity
+	// parameter, the default is the backup's StorageCapacity value.
+	//
+	// If used to create a file system other than OpenZFS, you must provide a value
+	// that matches the backup's StorageCapacity value. If you provide any other
+	// value, Amazon FSx responds with a 400 Bad Request.
+	StorageCapacity *int64 `type:"integer"`
 
 	// Sets the storage type for the Windows or OpenZFS file system that you're
 	// creating from a backup. Valid values are SSD and HDD.
@@ -6751,6 +7622,12 @@ func (s *CreateFileSystemFromBackupInput) SetSecurityGroupIds(v []*string) *Crea
 	return s
 }
 
+// SetStorageCapacity sets the StorageCapacity field's value.
+func (s *CreateFileSystemFromBackupInput) SetStorageCapacity(v int64) *CreateFileSystemFromBackupInput {
+	s.StorageCapacity = &v
+	return s
+}
+
 // SetStorageType sets the StorageType field's value.
 func (s *CreateFileSystemFromBackupInput) SetStorageType(v string) *CreateFileSystemFromBackupInput {
 	s.StorageType = &v
@@ -6811,7 +7688,7 @@ func (s *CreateFileSystemFromBackupOutput) SetFileSystem(v *FileSystem) *CreateF
 type CreateFileSystemInput struct {
 	_ struct{} `type:"structure"`
 
-	// A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent
+	// A string of up to 63 ASCII characters that Amazon FSx uses to ensure idempotent
 	// creation. This string is automatically filled on your behalf when you use
 	// the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
@@ -6858,9 +7735,8 @@ type CreateFileSystemInput struct {
 
 	// The Lustre configuration for the file system being created.
 	//
-	// The following parameters are not supported for file systems with the Persistent_2
-	// deployment type. Instead, use CreateDataRepositoryAssociation to create a
-	// data repository association to link your Lustre file system to a data repository.
+	// The following parameters are not supported for file systems with a data repository
+	// association created with .
 	//
 	//    * AutoImportPolicy
 	//
@@ -7119,9 +7995,8 @@ func (s *CreateFileSystemInput) SetWindowsConfiguration(v *CreateFileSystemWindo
 
 // The Lustre configuration for the file system being created.
 //
-// The following parameters are not supported for file systems with the Persistent_2
-// deployment type. Instead, use CreateDataRepositoryAssociation to create a
-// data repository association to link your Lustre file system to a data repository.
+// The following parameters are not supported for file systems with a data repository
+// association created with .
 //
 //    * AutoImportPolicy
 //
@@ -7133,11 +8008,10 @@ func (s *CreateFileSystemInput) SetWindowsConfiguration(v *CreateFileSystemWindo
 type CreateFileSystemLustreConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) Available with Scratch and Persistent_1 deployment types. When
-	// you create your file system, your existing S3 objects appear as file and
-	// directory listings. Use this property to choose how Amazon FSx keeps your
-	// file and directory listings up to date as you add or modify objects in your
-	// linked S3 bucket. AutoImportPolicy can have the following values:
+	// (Optional) When you create your file system, your existing S3 objects appear
+	// as file and directory listings. Use this parameter to choose how Amazon FSx
+	// keeps your file and directory listings up to date as you add or modify objects
+	// in your linked S3 bucket. AutoImportPolicy can have the following values:
 	//
 	//    * NONE - (Default) AutoImport is off. Amazon FSx only updates file and
 	//    directory listings from the linked S3 bucket when the file system is created.
@@ -7161,9 +8035,7 @@ type CreateFileSystemLustreConfiguration struct {
 	// For more information, see Automatically import updates from your S3 bucket
 	// (https://docs.aws.amazon.com/fsx/latest/LustreGuide/older-deployment-types.html#legacy-auto-import-from-s3).
 	//
-	// This parameter is not supported for file systems with the Persistent_2 deployment
-	// type. Instead, use CreateDataRepositoryAssociation to create a data repository
-	// association to link your Lustre file system to a data repository.
+	// This parameter is not supported for file systems with a data repository association.
 	AutoImportPolicy *string `type:"string" enum:"AutoImportPolicyType"`
 
 	// The number of days to retain automatic backups. Setting this property to
@@ -7228,10 +8100,9 @@ type CreateFileSystemLustreConfiguration struct {
 	//
 	// Encryption of data in transit is automatically turned on when you access
 	// SCRATCH_2, PERSISTENT_1 and PERSISTENT_2 file systems from Amazon EC2 instances
-	// that support automatic encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/data-
-	// protection.html) in the Amazon Web Services Regions where they are available.
-	// For more information about encryption in transit for FSx for Lustre file
-	// systems, see Encrypting data in transit (https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html)
+	// that support automatic encryption in the Amazon Web Services Regions where
+	// they are available. For more information about encryption in transit for
+	// FSx for Lustre file systems, see Encrypting data in transit (https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html)
 	// in the Amazon FSx for Lustre User Guide.
 	//
 	// (Default = SCRATCH_1)
@@ -7246,13 +8117,13 @@ type CreateFileSystemLustreConfiguration struct {
 	// This parameter is required when StorageType is set to HDD.
 	DriveCacheType *string `type:"string" enum:"DriveCacheType"`
 
-	// (Optional) Available with Scratch and Persistent_1 deployment types. Specifies
-	// the path in the Amazon S3 bucket where the root of your Amazon FSx file system
-	// is exported. The path must use the same Amazon S3 bucket as specified in
-	// ImportPath. You can provide an optional prefix to which new and changed data
-	// is to be exported from your Amazon FSx for Lustre file system. If an ExportPath
-	// value is not provided, Amazon FSx sets a default export path, s3://import-bucket/FSxLustre[creation-timestamp].
-	// The timestamp is in UTC format, for example s3://import-bucket/FSxLustre20181105T222312Z.
+	// (Optional) Specifies the path in the Amazon S3 bucket where the root of your
+	// Amazon FSx file system is exported. The path must use the same Amazon S3
+	// bucket as specified in ImportPath. You can provide an optional prefix to
+	// which new and changed data is to be exported from your Amazon FSx for Lustre
+	// file system. If an ExportPath value is not provided, Amazon FSx sets a default
+	// export path, s3://import-bucket/FSxLustre[creation-timestamp]. The timestamp
+	// is in UTC format, for example s3://import-bucket/FSxLustre20181105T222312Z.
 	//
 	// The Amazon S3 export bucket must be the same as the import bucket specified
 	// by ImportPath. If you specify only a bucket name, such as s3://import-bucket,
@@ -7262,9 +8133,7 @@ type CreateFileSystemLustreConfiguration struct {
 	// Amazon FSx exports the contents of your file system to that export prefix
 	// in the Amazon S3 bucket.
 	//
-	// This parameter is not supported for file systems with the Persistent_2 deployment
-	// type. Instead, use CreateDataRepositoryAssociation to create a data repository
-	// association to link your Lustre file system to a data repository.
+	// This parameter is not supported for file systems with a data repository association.
 	ExportPath *string `min:"3" type:"string"`
 
 	// (Optional) The path to the Amazon S3 bucket (including the optional prefix)
@@ -7274,9 +8143,7 @@ type CreateFileSystemLustreConfiguration struct {
 	// If you specify a prefix after the Amazon S3 bucket name, only object keys
 	// with that prefix are loaded into the file system.
 	//
-	// This parameter is not supported for file systems with the Persistent_2 deployment
-	// type. Instead, use CreateDataRepositoryAssociation to create a data repository
-	// association to link your Lustre file system to a data repository.
+	// This parameter is not supported for file systems with a data repository association.
 	ImportPath *string `min:"3" type:"string"`
 
 	// (Optional) For files imported from a data repository, this value determines
@@ -7288,9 +8155,7 @@ type CreateFileSystemLustreConfiguration struct {
 	// The default chunk size is 1,024 MiB (1 GiB) and can go as high as 512,000
 	// MiB (500 GiB). Amazon S3 objects have a maximum size of 5 TB.
 	//
-	// This parameter is not supported for file systems with the Persistent_2 deployment
-	// type. Instead, use CreateDataRepositoryAssociation to create a data repository
-	// association to link your Lustre file system to a data repository.
+	// This parameter is not supported for file systems with a data repository association.
 	ImportedFileChunkSize *int64 `min:"1" type:"integer"`
 
 	// The Lustre logging configuration used when creating an Amazon FSx for Lustre
@@ -7500,11 +8365,13 @@ type CreateFileSystemOntapConfiguration struct {
 	DiskIopsConfiguration *DiskIopsConfiguration `type:"structure"`
 
 	// (Multi-AZ only) Specifies the IP address range in which the endpoints to
-	// access your file system will be created. By default, Amazon FSx selects an
-	// unused IP address range for you from the 198.19.* range.
-	//
-	// The Endpoint IP address range you select for your file system must exist
-	// outside the VPC's CIDR range and must be at least /30 or larger.
+	// access your file system will be created. By default in the Amazon FSx API,
+	// Amazon FSx selects an unused IP address range for you from the 198.19.* range.
+	// By default in the Amazon FSx console, Amazon FSx chooses the last 64 IP addresses
+	// from the VPC’s primary CIDR range to use as the endpoint IP address range
+	// for the file system. You can have overlapping endpoint IP addresses for file
+	// systems deployed in the same VPC/route tables, as long as they don't overlap
+	// with any subnet.
 	EndpointIpAddressRange *string `min:"9" type:"string"`
 
 	// The ONTAP administrative password for the fsxadmin user with which you administer
@@ -7526,7 +8393,7 @@ type CreateFileSystemOntapConfiguration struct {
 	RouteTableIds []*string `type:"list"`
 
 	// Sets the throughput capacity for the file system that you're creating. Valid
-	// values are 128, 256, 512, 1024, and 2048 MBps.
+	// values are 128, 256, 512, 1024, 2048, and 4096 MBps.
 	//
 	// ThroughputCapacity is a required field
 	ThroughputCapacity *int64 `min:"8" type:"integer" required:"true"`
@@ -7688,9 +8555,22 @@ type CreateFileSystemOpenZFSConfiguration struct {
 	// 05:00 specifies 5 AM daily.
 	DailyAutomaticBackupStartTime *string `min:"5" type:"string"`
 
-	// Specifies the file system deployment type. Amazon FSx for OpenZFS supports
-	// SINGLE_AZ_1. SINGLE_AZ_1 deployment type is configured for redundancy within
-	// a single Availability Zone.
+	// Specifies the file system deployment type. Single AZ deployment types are
+	// configured for redundancy within a single Availability Zone in an Amazon
+	// Web Services Region . Valid values are the following:
+	//
+	//    * SINGLE_AZ_1- (Default) Creates file systems with throughput capacities
+	//    of 64 - 4,096 MB/s. Single_AZ_1 is available in all Amazon Web Services
+	//    Regions where Amazon FSx for OpenZFS is available, except US West (Oregon).
+	//
+	//    * SINGLE_AZ_2- Creates file systems with throughput capacities of 160
+	//    - 10,240 MB/s using an NVMe L2ARC cache. Single_AZ_2 is available only
+	//    in the US East (N. Virginia), US East (Ohio), US West (Oregon), and Europe
+	//    (Ireland) Amazon Web Services Regions.
+	//
+	// For more information, see: Deployment type availability (https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/availability-durability.html#available-aws-regions)
+	// and File system performance (https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance.html#zfs-fs-performance)
+	// in the Amazon FSx for OpenZFS User Guide.
 	//
 	// DeploymentType is a required field
 	DeploymentType *string `type:"string" required:"true" enum:"OpenZFSDeploymentType"`
@@ -7707,9 +8587,16 @@ type CreateFileSystemOpenZFSConfiguration struct {
 	RootVolumeConfiguration *OpenZFSCreateRootVolumeConfiguration `type:"structure"`
 
 	// Specifies the throughput of an Amazon FSx for OpenZFS file system, measured
-	// in megabytes per second (MB/s). Valid values are 64, 128, 256, 512, 1024,
-	// 2048, 3072, or 4096 MB/s. You pay for additional throughput capacity that
-	// you provision.
+	// in megabytes per second (MB/s). Valid values depend on the DeploymentType
+	// you choose, as follows:
+	//
+	//    * For SINGLE_AZ_1, valid values are 64, 128, 256, 512, 1024, 2048, 3072,
+	//    or 4096 MB/s.
+	//
+	//    * For SINGLE_AZ_2, valid values are 160, 320, 640, 1280, 2560, 3840, 5120,
+	//    7680, or 10240 MB/s.
+	//
+	// You pay for additional throughput capacity that you provision.
 	//
 	// ThroughputCapacity is a required field
 	ThroughputCapacity *int64 `min:"8" type:"integer" required:"true"`
@@ -8095,17 +8982,42 @@ func (s *CreateFileSystemWindowsConfiguration) SetWeeklyMaintenanceStartTime(v s
 type CreateOntapVolumeConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the location in the SVM's namespace where the volume is mounted.
-	// The JunctionPath must have a leading forward slash, such as /vol3.
-	//
-	// JunctionPath is a required field
-	JunctionPath *string `min:"1" type:"string" required:"true"`
+	// A boolean flag indicating whether tags for the volume should be copied to
+	// backups. This value defaults to false. If it's set to true, all tags for
+	// the volume are copied to all automatic and user-initiated backups where the
+	// user doesn't specify tags. If this value is true, and you specify one or
+	// more tags, only the specified tags are copied to backups. If you specify
+	// one or more tags when creating a user-initiated backup, no tags are copied
+	// from the volume, regardless of this value.
+	CopyTagsToBackups *bool `type:"boolean"`
 
-	// The security style for the volume. Specify one of the following values:
+	// Specifies the location in the SVM's namespace where the volume is mounted.
+	// This parameter is required. The JunctionPath must have a leading forward
+	// slash, such as /vol3.
+	JunctionPath *string `min:"1" type:"string"`
+
+	// Specifies the type of volume you are creating. Valid values are the following:
+	//
+	//    * RW specifies a read/write volume. RW is the default.
+	//
+	//    * DP specifies a data-protection volume. A DP volume is read-only and
+	//    can be used as the destination of a NetApp SnapMirror relationship.
+	//
+	// For more information, see Volume types (https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/volume-types)
+	// in the Amazon FSx for NetApp ONTAP User Guide.
+	OntapVolumeType *string `type:"string" enum:"InputOntapVolumeType"`
+
+	// Specifies the security style for the volume. If a volume's security style
+	// is not specified, it is automatically set to the root volume's security style.
+	// The security style determines the type of permissions that FSx for ONTAP
+	// uses to control data access. For more information, see Volume security style
+	// (https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/managing-volumes.html#volume-security-style)
+	// in the Amazon FSx for NetApp ONTAP User Guide. Specify one of the following
+	// values:
 	//
 	//    * UNIX if the file system is managed by a UNIX administrator, the majority
 	//    of users are NFS clients, and an application accessing the data uses a
-	//    UNIX user as the service account. UNIX is the default.
+	//    UNIX user as the service account.
 	//
 	//    * NTFS if the file system is managed by a Windows administrator, the majority
 	//    of users are SMB clients, and an application accessing the data uses a
@@ -8116,15 +9028,37 @@ type CreateOntapVolumeConfiguration struct {
 	SecurityStyle *string `type:"string" enum:"SecurityStyle"`
 
 	// Specifies the size of the volume, in megabytes (MB), that you are creating.
+	// Provide any whole number in the range of 20–104857600 to specify the size
+	// of the volume.
 	//
 	// SizeInMegabytes is a required field
 	SizeInMegabytes *int64 `type:"integer" required:"true"`
 
-	// Set to true to enable deduplication, compression, and compaction storage
-	// efficiency features on the volume.
+	// Specifies the snapshot policy for the volume. There are three built-in snapshot
+	// policies:
 	//
-	// StorageEfficiencyEnabled is a required field
-	StorageEfficiencyEnabled *bool `type:"boolean" required:"true"`
+	//    * default: This is the default policy. A maximum of six hourly snapshots
+	//    taken five minutes past the hour. A maximum of two daily snapshots taken
+	//    Monday through Saturday at 10 minutes after midnight. A maximum of two
+	//    weekly snapshots taken every Sunday at 15 minutes after midnight.
+	//
+	//    * default-1weekly: This policy is the same as the default policy except
+	//    that it only retains one snapshot from the weekly schedule.
+	//
+	//    * none: This policy does not take any snapshots. This policy can be assigned
+	//    to volumes to prevent automatic snapshots from being taken.
+	//
+	// You can also provide the name of a custom policy that you created with the
+	// ONTAP CLI or REST API.
+	//
+	// For more information, see Snapshot policies (https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/snapshots-ontap.html#snapshot-policies)
+	// in the Amazon FSx for NetApp ONTAP User Guide.
+	SnapshotPolicy *string `min:"1" type:"string"`
+
+	// Set to true to enable deduplication, compression, and compaction storage
+	// efficiency features on the volume, or set to false to disable them. This
+	// parameter is required.
+	StorageEfficiencyEnabled *bool `type:"boolean"`
 
 	// Specifies the ONTAP SVM in which to create the volume.
 	//
@@ -8173,17 +9107,14 @@ func (s CreateOntapVolumeConfiguration) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateOntapVolumeConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateOntapVolumeConfiguration"}
-	if s.JunctionPath == nil {
-		invalidParams.Add(request.NewErrParamRequired("JunctionPath"))
-	}
 	if s.JunctionPath != nil && len(*s.JunctionPath) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JunctionPath", 1))
 	}
 	if s.SizeInMegabytes == nil {
 		invalidParams.Add(request.NewErrParamRequired("SizeInMegabytes"))
 	}
-	if s.StorageEfficiencyEnabled == nil {
-		invalidParams.Add(request.NewErrParamRequired("StorageEfficiencyEnabled"))
+	if s.SnapshotPolicy != nil && len(*s.SnapshotPolicy) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SnapshotPolicy", 1))
 	}
 	if s.StorageVirtualMachineId == nil {
 		invalidParams.Add(request.NewErrParamRequired("StorageVirtualMachineId"))
@@ -8203,9 +9134,21 @@ func (s *CreateOntapVolumeConfiguration) Validate() error {
 	return nil
 }
 
+// SetCopyTagsToBackups sets the CopyTagsToBackups field's value.
+func (s *CreateOntapVolumeConfiguration) SetCopyTagsToBackups(v bool) *CreateOntapVolumeConfiguration {
+	s.CopyTagsToBackups = &v
+	return s
+}
+
 // SetJunctionPath sets the JunctionPath field's value.
 func (s *CreateOntapVolumeConfiguration) SetJunctionPath(v string) *CreateOntapVolumeConfiguration {
 	s.JunctionPath = &v
+	return s
+}
+
+// SetOntapVolumeType sets the OntapVolumeType field's value.
+func (s *CreateOntapVolumeConfiguration) SetOntapVolumeType(v string) *CreateOntapVolumeConfiguration {
+	s.OntapVolumeType = &v
 	return s
 }
 
@@ -8218,6 +9161,12 @@ func (s *CreateOntapVolumeConfiguration) SetSecurityStyle(v string) *CreateOntap
 // SetSizeInMegabytes sets the SizeInMegabytes field's value.
 func (s *CreateOntapVolumeConfiguration) SetSizeInMegabytes(v int64) *CreateOntapVolumeConfiguration {
 	s.SizeInMegabytes = &v
+	return s
+}
+
+// SetSnapshotPolicy sets the SnapshotPolicy field's value.
+func (s *CreateOntapVolumeConfiguration) SetSnapshotPolicy(v string) *CreateOntapVolumeConfiguration {
+	s.SnapshotPolicy = &v
 	return s
 }
 
@@ -8530,7 +9479,7 @@ type CreateSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -8669,7 +9618,7 @@ type CreateStorageVirtualMachineInput struct {
 	ActiveDirectoryConfiguration *CreateSvmActiveDirectoryConfiguration `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -8929,7 +9878,7 @@ type CreateVolumeFromBackupInput struct {
 	BackupId *string `min:"12" type:"string" required:"true"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -9072,7 +10021,7 @@ type CreateVolumeInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -9229,7 +10178,8 @@ func (s *CreateVolumeOutput) SetVolume(v *Volume) *CreateVolumeOutput {
 }
 
 // The configuration of a data repository association that links an Amazon FSx
-// for Lustre file system to an Amazon S3 bucket. The data repository association
+// for Lustre file system to an Amazon S3 bucket or an Amazon File Cache resource
+// to an Amazon S3 bucket or an NFS file system. The data repository association
 // configuration object is returned in the response of the following operations:
 //
 //    * CreateDataRepositoryAssociation
@@ -9238,8 +10188,9 @@ func (s *CreateVolumeOutput) SetVolume(v *Volume) *CreateVolumeOutput {
 //
 //    * DescribeDataRepositoryAssociations
 //
-// Data repository associations are supported only for file systems with the
-// Persistent_2 deployment type.
+// Data repository associations are supported on Amazon File Cache resources
+// and all Amazon FSx for Lustre file systems excluding Scratch_1 deployment
+// types.
 type DataRepositoryAssociation struct {
 	_ struct{} `type:"structure"`
 
@@ -9249,38 +10200,86 @@ type DataRepositoryAssociation struct {
 	// A boolean flag indicating whether an import data repository task to import
 	// metadata should run after the data repository association is created. The
 	// task runs if this flag is set to true.
+	//
+	// BatchImportMetaDataOnCreate is not supported for data repositories linked
+	// to an Amazon File Cache resource.
 	BatchImportMetaDataOnCreate *bool `type:"boolean"`
 
 	// The time that the resource was created, in seconds (since 1970-01-01T00:00:00Z),
 	// also known as Unix time.
 	CreationTime *time.Time `type:"timestamp"`
 
-	// The path to the Amazon S3 data repository that will be linked to the file
-	// system. The path can be an S3 bucket or prefix in the format s3://myBucket/myPrefix/.
-	// This path specifies where in the S3 data repository files will be imported
-	// from or exported to.
+	// The path to the data repository that will be linked to the cache or file
+	// system.
+	//
+	//    * For Amazon File Cache, the path can be an NFS data repository that will
+	//    be linked to the cache. The path can be in one of two formats: If you
+	//    are not using the DataRepositorySubdirectories parameter, the path is
+	//    to an NFS Export directory (or one of its subdirectories) in the format
+	//    nsf://nfs-domain-name/exportpath. You can therefore link a single NFS
+	//    Export to a single data repository association. If you are using the DataRepositorySubdirectories
+	//    parameter, the path is the domain name of the NFS file system in the format
+	//    nfs://filer-domain-name, which indicates the root of the subdirectories
+	//    specified with the DataRepositorySubdirectories parameter.
+	//
+	//    * For Amazon File Cache, the path can be an S3 bucket or prefix in the
+	//    format s3://myBucket/myPrefix/.
+	//
+	//    * For Amazon FSx for Lustre, the path can be an S3 bucket or prefix in
+	//    the format s3://myBucket/myPrefix/.
 	DataRepositoryPath *string `min:"3" type:"string"`
 
-	// Provides detailed information about the data respository if its Lifecycle
+	// For Amazon File Cache, a list of NFS Exports that will be linked with an
+	// NFS data repository association. All the subdirectories must be on a single
+	// NFS file system. The Export paths are in the format /exportpath1. To use
+	// this parameter, you must configure DataRepositoryPath as the domain name
+	// of the NFS file system. The NFS file system domain name in effect is the
+	// root of the subdirectories. Note that DataRepositorySubdirectories is not
+	// supported for S3 data repositories.
+	DataRepositorySubdirectories []*string `type:"list"`
+
+	// Provides detailed information about the data repository if its Lifecycle
 	// is set to MISCONFIGURED or FAILED.
 	FailureDetails *DataRepositoryFailureDetails `type:"structure"`
+
+	// The globally unique ID of the Amazon File Cache resource.
+	FileCacheId *string `min:"11" type:"string"`
+
+	// A path on the Amazon File Cache that points to a high-level directory (such
+	// as /ns1/) or subdirectory (such as /ns1/subdir/) that will be mapped 1-1
+	// with DataRepositoryPath. The leading forward slash in the path is required.
+	// Two data repository associations cannot have overlapping cache paths. For
+	// example, if a data repository is associated with cache path /ns1/, then you
+	// cannot link another data repository with cache path /ns1/ns2.
+	//
+	// This path specifies the directory in your cache where files will be exported
+	// from. This cache directory can be linked to only one data repository (S3
+	// or NFS) and no other data repository can be linked to the directory.
+	//
+	// The cache path can only be set to root (/) on an NFS DRA when DataRepositorySubdirectories
+	// is specified. If you specify root (/) as the cache path, you can create only
+	// one DRA on the cache.
+	//
+	// The cache path cannot be set to root (/) for an S3 DRA.
+	FileCachePath *string `min:"1" type:"string"`
 
 	// The globally unique ID of the file system, assigned by Amazon FSx.
 	FileSystemId *string `min:"11" type:"string"`
 
-	// A path on the file system that points to a high-level directory (such as
-	// /ns1/) or subdirectory (such as /ns1/subdir/) that will be mapped 1-1 with
-	// DataRepositoryPath. The leading forward slash in the name is required. Two
-	// data repository associations cannot have overlapping file system paths. For
-	// example, if a data repository is associated with file system path /ns1/,
-	// then you cannot link another data repository with file system path /ns1/ns2.
+	// A path on the Amazon FSx for Lustre file system that points to a high-level
+	// directory (such as /ns1/) or subdirectory (such as /ns1/subdir/) that will
+	// be mapped 1-1 with DataRepositoryPath. The leading forward slash in the name
+	// is required. Two data repository associations cannot have overlapping file
+	// system paths. For example, if a data repository is associated with file system
+	// path /ns1/, then you cannot link another data repository with file system
+	// path /ns1/ns2.
 	//
 	// This path specifies where in your file system files will be exported from
 	// or imported to. This file system directory can be linked to only one Amazon
 	// S3 bucket, and no other S3 bucket can be linked to the directory.
 	//
 	// If you specify only a forward slash (/) as the file system path, you can
-	// link only 1 data repository to the file system. You can only specify "/"
+	// link only one data repository to the file system. You can only specify "/"
 	// as the file system path for the first data repository associated with a file
 	// system.
 	FileSystemPath *string `min:"1" type:"string"`
@@ -9288,7 +10287,7 @@ type DataRepositoryAssociation struct {
 	// For files imported from a data repository, this value determines the stripe
 	// count and maximum amount of data per file (in MiB) stored on a single physical
 	// disk. The maximum number of disks that a single file can be striped across
-	// is limited by the total number of disks that make up the file system.
+	// is limited by the total number of disks that make up the file system or cache.
 	//
 	// The default chunk size is 1,024 MiB (1 GiB) and can go as high as 512,000
 	// MiB (500 GiB). Amazon S3 objects have a maximum size of 5 TB.
@@ -9297,14 +10296,15 @@ type DataRepositoryAssociation struct {
 	// Describes the state of a data repository association. The lifecycle can have
 	// the following values:
 	//
-	//    * CREATING - The data repository association between the FSx file system
-	//    and the S3 data repository is being created. The data repository is unavailable.
+	//    * CREATING - The data repository association between the file system or
+	//    cache and the data repository is being created. The data repository is
+	//    unavailable.
 	//
 	//    * AVAILABLE - The data repository association is available for use.
 	//
-	//    * MISCONFIGURED - Amazon FSx cannot automatically import updates from
-	//    the S3 bucket or automatically export updates to the S3 bucket until the
-	//    data repository association configuration is corrected.
+	//    * MISCONFIGURED - The data repository association is misconfigured. Until
+	//    the configuration is corrected, automatic import and automatic export
+	//    will not work (only for Amazon FSx for Lustre).
 	//
 	//    * UPDATING - The data repository association is undergoing a customer
 	//    initiated update that might affect its availability.
@@ -9316,6 +10316,10 @@ type DataRepositoryAssociation struct {
 	//    cannot be recovered.
 	Lifecycle *string `type:"string" enum:"DataRepositoryLifecycle"`
 
+	// The configuration for an NFS data repository linked to an Amazon File Cache
+	// resource with a data repository association.
+	NFS *NFSDataRepositoryConfiguration `type:"structure"`
+
 	// The Amazon Resource Name (ARN) for a given resource. ARNs uniquely identify
 	// Amazon Web Services resources. We require an ARN when you need to specify
 	// a resource unambiguously across all of Amazon Web Services. For more information,
@@ -9324,10 +10328,7 @@ type DataRepositoryAssociation struct {
 	ResourceARN *string `min:"8" type:"string"`
 
 	// The configuration for an Amazon S3 data repository linked to an Amazon FSx
-	// Lustre file system with a data repository association. The configuration
-	// defines which file events (new, changed, or deleted files or directories)
-	// are automatically imported from the linked data repository to the file system
-	// or automatically exported from the file system to the data repository.
+	// for Lustre file system with a data repository association.
 	S3 *S3DataRepositoryConfiguration `type:"structure"`
 
 	// A list of Tag values, with a maximum of 50 elements.
@@ -9376,9 +10377,27 @@ func (s *DataRepositoryAssociation) SetDataRepositoryPath(v string) *DataReposit
 	return s
 }
 
+// SetDataRepositorySubdirectories sets the DataRepositorySubdirectories field's value.
+func (s *DataRepositoryAssociation) SetDataRepositorySubdirectories(v []*string) *DataRepositoryAssociation {
+	s.DataRepositorySubdirectories = v
+	return s
+}
+
 // SetFailureDetails sets the FailureDetails field's value.
 func (s *DataRepositoryAssociation) SetFailureDetails(v *DataRepositoryFailureDetails) *DataRepositoryAssociation {
 	s.FailureDetails = v
+	return s
+}
+
+// SetFileCacheId sets the FileCacheId field's value.
+func (s *DataRepositoryAssociation) SetFileCacheId(v string) *DataRepositoryAssociation {
+	s.FileCacheId = &v
+	return s
+}
+
+// SetFileCachePath sets the FileCachePath field's value.
+func (s *DataRepositoryAssociation) SetFileCachePath(v string) *DataRepositoryAssociation {
+	s.FileCachePath = &v
 	return s
 }
 
@@ -9403,6 +10422,12 @@ func (s *DataRepositoryAssociation) SetImportedFileChunkSize(v int64) *DataRepos
 // SetLifecycle sets the Lifecycle field's value.
 func (s *DataRepositoryAssociation) SetLifecycle(v string) *DataRepositoryAssociation {
 	s.Lifecycle = &v
+	return s
+}
+
+// SetNFS sets the NFS field's value.
+func (s *DataRepositoryAssociation) SetNFS(v *NFSDataRepositoryConfiguration) *DataRepositoryAssociation {
+	s.NFS = v
 	return s
 }
 
@@ -9492,8 +10517,8 @@ func (s *DataRepositoryAssociationNotFound) RequestID() string {
 // The data repository configuration object for Lustre file systems returned
 // in the response of the CreateFileSystem operation.
 //
-// This data type is not supported for file systems with the Persistent_2 deployment
-// type. Instead, use .
+// This data type is not supported on file systems with a data repository association.
+// For file systems with a data repository association, see .
 type DataRepositoryConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -9526,7 +10551,7 @@ type DataRepositoryConfiguration struct {
 	// store new and changed Lustre file system files in S3.
 	ExportPath *string `min:"3" type:"string"`
 
-	// Provides detailed information about the data respository if its Lifecycle
+	// Provides detailed information about the data repository if its Lifecycle
 	// is set to MISCONFIGURED or FAILED.
 	FailureDetails *DataRepositoryFailureDetails `type:"structure"`
 
@@ -9622,7 +10647,7 @@ func (s *DataRepositoryConfiguration) SetLifecycle(v string) *DataRepositoryConf
 	return s
 }
 
-// Provides detailed information about the data respository if its Lifecycle
+// Provides detailed information about the data repository if its Lifecycle
 // is set to MISCONFIGURED or FAILED.
 type DataRepositoryFailureDetails struct {
 	_ struct{} `type:"structure"`
@@ -9656,10 +10681,15 @@ func (s *DataRepositoryFailureDetails) SetMessage(v string) *DataRepositoryFailu
 }
 
 // A description of the data repository task. You use data repository tasks
-// to perform bulk transfer operations between your Amazon FSx file system and
-// a linked data repository.
+// to perform bulk transfer operations between an Amazon FSx for Lustre file
+// system and a linked data repository. An Amazon File Cache resource uses a
+// task to automatically release files from the cache.
 type DataRepositoryTask struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies the amount of data to release, in GiB, by an Amazon File Cache
+	// AUTO_RELEASE_DATA task that automatically releases files from the cache.
+	CapacityToRelease *int64 `min:"1" type:"long"`
 
 	// The time that the resource was created, in seconds (since 1970-01-01T00:00:00Z),
 	// also known as Unix time.
@@ -9667,34 +10697,35 @@ type DataRepositoryTask struct {
 	// CreationTime is a required field
 	CreationTime *time.Time `type:"timestamp" required:"true"`
 
-	// The time that Amazon FSx completed processing the task, populated after the
-	// task is complete.
+	// The time the system completed processing the task, populated after the task
+	// is complete.
 	EndTime *time.Time `type:"timestamp"`
 
 	// Failure message describing why the task failed, it is populated only when
 	// Lifecycle is set to FAILED.
 	FailureDetails *DataRepositoryTaskFailureDetails `type:"structure"`
 
-	// The globally unique ID of the file system, assigned by Amazon FSx.
-	//
-	// FileSystemId is a required field
-	FileSystemId *string `min:"11" type:"string" required:"true"`
+	// The system-generated, unique ID of the cache.
+	FileCacheId *string `min:"11" type:"string"`
+
+	// The globally unique ID of the file system.
+	FileSystemId *string `min:"11" type:"string"`
 
 	// The lifecycle status of the data repository task, as follows:
 	//
-	//    * PENDING - Amazon FSx has not started the task.
+	//    * PENDING - The task has not started.
 	//
-	//    * EXECUTING - Amazon FSx is processing the task.
+	//    * EXECUTING - The task is in process.
 	//
-	//    * FAILED - Amazon FSx was not able to complete the task. For example,
-	//    there may be files the task failed to process. The DataRepositoryTaskFailureDetails
+	//    * FAILED - The task was not able to be completed. For example, there may
+	//    be files the task failed to process. The DataRepositoryTaskFailureDetails
 	//    property provides more information about task failures.
 	//
-	//    * SUCCEEDED - FSx completed the task successfully.
+	//    * SUCCEEDED - The task has completed successfully.
 	//
-	//    * CANCELED - Amazon FSx canceled the task and it did not complete.
+	//    * CANCELED - The task was canceled and it did not complete.
 	//
-	//    * CANCELING - FSx is in process of canceling the task.
+	//    * CANCELING - The task is in process of being canceled.
 	//
 	// You cannot delete an FSx for Lustre file system if there are data repository
 	// tasks for the file system in the PENDING or EXECUTING states. Please retry
@@ -9706,9 +10737,9 @@ type DataRepositoryTask struct {
 	// Lifecycle is a required field
 	Lifecycle *string `type:"string" required:"true" enum:"DataRepositoryTaskLifecycle"`
 
-	// An array of paths on the Amazon FSx for Lustre file system that specify the
-	// data for the data repository task to process. For example, in an EXPORT_TO_REPOSITORY
-	// task, the paths specify which data to export to the linked data repository.
+	// An array of paths that specify the data for the data repository task to process.
+	// For example, in an EXPORT_TO_REPOSITORY task, the paths specify which data
+	// to export to the linked data repository.
 	//
 	// (Default) If Paths is not specified, Amazon FSx uses the file system root
 	// directory.
@@ -9728,7 +10759,7 @@ type DataRepositoryTask struct {
 	// in the Amazon Web Services General Reference.
 	ResourceARN *string `min:"8" type:"string"`
 
-	// The time that Amazon FSx began processing the task.
+	// The time the system began processing the task.
 	StartTime *time.Time `type:"timestamp"`
 
 	// Provides the status of the number of files that the task has processed successfully
@@ -9745,11 +10776,16 @@ type DataRepositoryTask struct {
 
 	// The type of data repository task.
 	//
-	//    * The EXPORT_TO_REPOSITORY data repository task exports from your Lustre
-	//    file system from to a linked S3 bucket.
+	//    * EXPORT_TO_REPOSITORY tasks export from your Amazon FSx for Lustre file
+	//    system to a linked data repository.
 	//
-	//    * The IMPORT_METADATA_FROM_REPOSITORY data repository task imports metadata
-	//    changes from a linked S3 bucket to your Lustre file system.
+	//    * IMPORT_METADATA_FROM_REPOSITORY tasks import metadata changes from a
+	//    linked S3 bucket to your Amazon FSx for Lustre file system.
+	//
+	//    * AUTO_RELEASE_DATA tasks automatically release files from an Amazon File
+	//    Cache resource.
+	//
+	//    * RELEASE_DATA_FROM_FILESYSTEM tasks are not supported.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"DataRepositoryTaskType"`
@@ -9773,6 +10809,12 @@ func (s DataRepositoryTask) GoString() string {
 	return s.String()
 }
 
+// SetCapacityToRelease sets the CapacityToRelease field's value.
+func (s *DataRepositoryTask) SetCapacityToRelease(v int64) *DataRepositoryTask {
+	s.CapacityToRelease = &v
+	return s
+}
+
 // SetCreationTime sets the CreationTime field's value.
 func (s *DataRepositoryTask) SetCreationTime(v time.Time) *DataRepositoryTask {
 	s.CreationTime = &v
@@ -9788,6 +10830,12 @@ func (s *DataRepositoryTask) SetEndTime(v time.Time) *DataRepositoryTask {
 // SetFailureDetails sets the FailureDetails field's value.
 func (s *DataRepositoryTask) SetFailureDetails(v *DataRepositoryTaskFailureDetails) *DataRepositoryTask {
 	s.FailureDetails = v
+	return s
+}
+
+// SetFileCacheId sets the FileCacheId field's value.
+func (s *DataRepositoryTask) SetFileCacheId(v string) *DataRepositoryTask {
+	s.FileCacheId = &v
 	return s
 }
 
@@ -10146,6 +11194,10 @@ type DataRepositoryTaskStatus struct {
 	// The time at which the task status was last updated.
 	LastUpdatedTime *time.Time `type:"timestamp"`
 
+	// The total amount of data, in GiB, released by an Amazon File Cache AUTO_RELEASE_DATA
+	// task that automatically releases files from the cache.
+	ReleasedCapacity *int64 `type:"long"`
+
 	// A running total of the number of files that the task has successfully processed.
 	SucceededCount *int64 `type:"long"`
 
@@ -10185,6 +11237,12 @@ func (s *DataRepositoryTaskStatus) SetLastUpdatedTime(v time.Time) *DataReposito
 	return s
 }
 
+// SetReleasedCapacity sets the ReleasedCapacity field's value.
+func (s *DataRepositoryTaskStatus) SetReleasedCapacity(v int64) *DataRepositoryTaskStatus {
+	s.ReleasedCapacity = &v
+	return s
+}
+
 // SetSucceededCount sets the SucceededCount field's value.
 func (s *DataRepositoryTaskStatus) SetSucceededCount(v int64) *DataRepositoryTaskStatus {
 	s.SucceededCount = &v
@@ -10206,7 +11264,7 @@ type DeleteBackupInput struct {
 	// BackupId is a required field
 	BackupId *string `min:"12" type:"string" required:"true"`
 
-	// A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent
+	// A string of up to 63 ASCII characters that Amazon FSx uses to ensure idempotent
 	// deletion. This parameter is automatically filled on your behalf when using
 	// the CLI or SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
@@ -10312,15 +11370,13 @@ type DeleteDataRepositoryAssociationInput struct {
 	AssociationId *string `min:"13" type:"string" required:"true"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// Set to true to delete the data in the file system that corresponds to the
 	// data repository association.
-	//
-	// DeleteDataInFileSystem is a required field
-	DeleteDataInFileSystem *bool `type:"boolean" required:"true"`
+	DeleteDataInFileSystem *bool `type:"boolean"`
 }
 
 // String returns the string representation.
@@ -10352,9 +11408,6 @@ func (s *DeleteDataRepositoryAssociationInput) Validate() error {
 	}
 	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
-	}
-	if s.DeleteDataInFileSystem == nil {
-		invalidParams.Add(request.NewErrParamRequired("DeleteDataInFileSystem"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10431,11 +11484,115 @@ func (s *DeleteDataRepositoryAssociationOutput) SetLifecycle(v string) *DeleteDa
 	return s
 }
 
+type DeleteFileCacheInput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) An idempotency token for resource creation, in a string of up
+	// to 63 ASCII characters. This token is automatically filled on your behalf
+	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of the cache that's being deleted.
+	//
+	// FileCacheId is a required field
+	FileCacheId *string `min:"11" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFileCacheInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFileCacheInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteFileCacheInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteFileCacheInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.FileCacheId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileCacheId"))
+	}
+	if s.FileCacheId != nil && len(*s.FileCacheId) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("FileCacheId", 11))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DeleteFileCacheInput) SetClientRequestToken(v string) *DeleteFileCacheInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetFileCacheId sets the FileCacheId field's value.
+func (s *DeleteFileCacheInput) SetFileCacheId(v string) *DeleteFileCacheInput {
+	s.FileCacheId = &v
+	return s
+}
+
+type DeleteFileCacheOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the cache that's being deleted.
+	FileCacheId *string `min:"11" type:"string"`
+
+	// The cache lifecycle for the deletion request. If the DeleteFileCache operation
+	// is successful, this status is DELETING.
+	Lifecycle *string `type:"string" enum:"FileCacheLifecycle"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFileCacheOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFileCacheOutput) GoString() string {
+	return s.String()
+}
+
+// SetFileCacheId sets the FileCacheId field's value.
+func (s *DeleteFileCacheOutput) SetFileCacheId(v string) *DeleteFileCacheOutput {
+	s.FileCacheId = &v
+	return s
+}
+
+// SetLifecycle sets the Lifecycle field's value.
+func (s *DeleteFileCacheOutput) SetLifecycle(v string) *DeleteFileCacheOutput {
+	s.Lifecycle = &v
+	return s
+}
+
 // The request object for DeleteFileSystem operation.
 type DeleteFileSystemInput struct {
 	_ struct{} `type:"structure"`
 
-	// A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent
+	// A string of up to 63 ASCII characters that Amazon FSx uses to ensure idempotent
 	// deletion. This token is automatically filled on your behalf when using the
 	// Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
@@ -10964,7 +12121,7 @@ type DeleteSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -11068,7 +12225,7 @@ type DeleteStorageVirtualMachineInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -11171,7 +12328,7 @@ type DeleteVolumeInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -11652,7 +12809,7 @@ func (s *DescribeDataRepositoryAssociationsInput) SetNextToken(v string) *Descri
 type DescribeDataRepositoryAssociationsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An array of one ore more data repository association descriptions.
+	// An array of one or more data repository association descriptions.
 	Associations []*DataRepositoryAssociation `type:"list"`
 
 	// (Optional) Opaque pagination token returned from a previous operation (String).
@@ -11812,12 +12969,122 @@ func (s *DescribeDataRepositoryTasksOutput) SetNextToken(v string) *DescribeData
 	return s
 }
 
+type DescribeFileCachesInput struct {
+	_ struct{} `type:"structure"`
+
+	// IDs of the caches whose descriptions you want to retrieve (String).
+	FileCacheIds []*string `type:"list"`
+
+	// The maximum number of resources to return in the response. This value must
+	// be an integer greater than zero.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// (Optional) Opaque pagination token returned from a previous operation (String).
+	// If present, this token indicates from what point you can continue processing
+	// the request, where the previous NextToken value left off.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFileCachesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFileCachesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeFileCachesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeFileCachesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFileCacheIds sets the FileCacheIds field's value.
+func (s *DescribeFileCachesInput) SetFileCacheIds(v []*string) *DescribeFileCachesInput {
+	s.FileCacheIds = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeFileCachesInput) SetMaxResults(v int64) *DescribeFileCachesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeFileCachesInput) SetNextToken(v string) *DescribeFileCachesInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeFileCachesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The response object for the DescribeFileCaches operation.
+	FileCaches []*FileCache `type:"list"`
+
+	// (Optional) Opaque pagination token returned from a previous operation (String).
+	// If present, this token indicates from what point you can continue processing
+	// the request, where the previous NextToken value left off.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFileCachesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeFileCachesOutput) GoString() string {
+	return s.String()
+}
+
+// SetFileCaches sets the FileCaches field's value.
+func (s *DescribeFileCachesOutput) SetFileCaches(v []*FileCache) *DescribeFileCachesOutput {
+	s.FileCaches = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeFileCachesOutput) SetNextToken(v string) *DescribeFileCachesOutput {
+	s.NextToken = &v
+	return s
+}
+
 // The request object for DescribeFileSystemAliases operation.
 type DescribeFileSystemAliasesInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -12433,7 +13700,7 @@ type DisassociateFileSystemAliasesInput struct {
 	Aliases []*string `type:"list" required:"true"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -12582,6 +13849,842 @@ func (s *DiskIopsConfiguration) SetMode(v string) *DiskIopsConfiguration {
 	return s
 }
 
+// A description of a specific Amazon File Cache resource, which is a response
+// object from the DescribeFileCaches operation.
+type FileCache struct {
+	_ struct{} `type:"structure"`
+
+	// The time that the resource was created, in seconds (since 1970-01-01T00:00:00Z),
+	// also known as Unix time.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The Domain Name System (DNS) name for the cache.
+	DNSName *string `min:"16" type:"string"`
+
+	// A list of IDs of data repository associations that are associated with this
+	// cache.
+	DataRepositoryAssociationIds []*string `type:"list"`
+
+	// A structure providing details of any failures that occurred.
+	FailureDetails *FileCacheFailureDetails `type:"structure"`
+
+	// The system-generated, unique ID of the cache.
+	FileCacheId *string `min:"11" type:"string"`
+
+	// The type of cache, which must be LUSTRE.
+	FileCacheType *string `type:"string" enum:"FileCacheType"`
+
+	// The Lustre version of the cache, which must be 2.12.
+	FileCacheTypeVersion *string `min:"1" type:"string"`
+
+	// Specifies the ID of the Key Management Service (KMS) key to use for encrypting
+	// data on an Amazon File Cache. If a KmsKeyId isn't specified, the Amazon FSx-managed
+	// KMS key for your account is used. For more information, see Encrypt (https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html)
+	// in the Key Management Service API Reference.
+	KmsKeyId *string `min:"1" type:"string"`
+
+	// The lifecycle status of the cache. The following are the possible values
+	// and what they mean:
+	//
+	//    * AVAILABLE - The cache is in a healthy state, and is reachable and available
+	//    for use.
+	//
+	//    * CREATING - The new cache is being created.
+	//
+	//    * DELETING - An existing cache is being deleted.
+	//
+	//    * UPDATING - The cache is undergoing a customer-initiated update.
+	//
+	//    * FAILED - An existing cache has experienced an unrecoverable failure.
+	//    When creating a new cache, the cache was unable to be created.
+	Lifecycle *string `type:"string" enum:"FileCacheLifecycle"`
+
+	// The configuration for the Amazon File Cache resource.
+	LustreConfiguration *FileCacheLustreConfiguration `type:"structure"`
+
+	// A list of network interface IDs.
+	NetworkInterfaceIds []*string `type:"list"`
+
+	// An Amazon Web Services account ID. This ID is a 12-digit number that you
+	// use to construct Amazon Resource Names (ARNs) for resources.
+	OwnerId *string `min:"12" type:"string"`
+
+	// The Amazon Resource Name (ARN) for a given resource. ARNs uniquely identify
+	// Amazon Web Services resources. We require an ARN when you need to specify
+	// a resource unambiguously across all of Amazon Web Services. For more information,
+	// see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
+	ResourceARN *string `min:"8" type:"string"`
+
+	// The storage capacity of the cache in gibibytes (GiB).
+	StorageCapacity *int64 `type:"integer"`
+
+	// A list of subnet IDs that the cache will be accessible from. You can specify
+	// only one subnet ID in a call to the CreateFileCache operation.
+	SubnetIds []*string `type:"list"`
+
+	// The ID of your virtual private cloud (VPC). For more information, see VPC
+	// and subnets (https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html)
+	// in the Amazon VPC User Guide.
+	VpcId *string `min:"12" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCache) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCache) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *FileCache) SetCreationTime(v time.Time) *FileCache {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDNSName sets the DNSName field's value.
+func (s *FileCache) SetDNSName(v string) *FileCache {
+	s.DNSName = &v
+	return s
+}
+
+// SetDataRepositoryAssociationIds sets the DataRepositoryAssociationIds field's value.
+func (s *FileCache) SetDataRepositoryAssociationIds(v []*string) *FileCache {
+	s.DataRepositoryAssociationIds = v
+	return s
+}
+
+// SetFailureDetails sets the FailureDetails field's value.
+func (s *FileCache) SetFailureDetails(v *FileCacheFailureDetails) *FileCache {
+	s.FailureDetails = v
+	return s
+}
+
+// SetFileCacheId sets the FileCacheId field's value.
+func (s *FileCache) SetFileCacheId(v string) *FileCache {
+	s.FileCacheId = &v
+	return s
+}
+
+// SetFileCacheType sets the FileCacheType field's value.
+func (s *FileCache) SetFileCacheType(v string) *FileCache {
+	s.FileCacheType = &v
+	return s
+}
+
+// SetFileCacheTypeVersion sets the FileCacheTypeVersion field's value.
+func (s *FileCache) SetFileCacheTypeVersion(v string) *FileCache {
+	s.FileCacheTypeVersion = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *FileCache) SetKmsKeyId(v string) *FileCache {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLifecycle sets the Lifecycle field's value.
+func (s *FileCache) SetLifecycle(v string) *FileCache {
+	s.Lifecycle = &v
+	return s
+}
+
+// SetLustreConfiguration sets the LustreConfiguration field's value.
+func (s *FileCache) SetLustreConfiguration(v *FileCacheLustreConfiguration) *FileCache {
+	s.LustreConfiguration = v
+	return s
+}
+
+// SetNetworkInterfaceIds sets the NetworkInterfaceIds field's value.
+func (s *FileCache) SetNetworkInterfaceIds(v []*string) *FileCache {
+	s.NetworkInterfaceIds = v
+	return s
+}
+
+// SetOwnerId sets the OwnerId field's value.
+func (s *FileCache) SetOwnerId(v string) *FileCache {
+	s.OwnerId = &v
+	return s
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *FileCache) SetResourceARN(v string) *FileCache {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetStorageCapacity sets the StorageCapacity field's value.
+func (s *FileCache) SetStorageCapacity(v int64) *FileCache {
+	s.StorageCapacity = &v
+	return s
+}
+
+// SetSubnetIds sets the SubnetIds field's value.
+func (s *FileCache) SetSubnetIds(v []*string) *FileCache {
+	s.SubnetIds = v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *FileCache) SetVpcId(v string) *FileCache {
+	s.VpcId = &v
+	return s
+}
+
+// The response object for the Amazon File Cache resource being created in the
+// CreateFileCache operation.
+type FileCacheCreating struct {
+	_ struct{} `type:"structure"`
+
+	// A boolean flag indicating whether tags for the cache should be copied to
+	// data repository associations.
+	CopyTagsToDataRepositoryAssociations *bool `type:"boolean"`
+
+	// The time that the resource was created, in seconds (since 1970-01-01T00:00:00Z),
+	// also known as Unix time.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The Domain Name System (DNS) name for the cache.
+	DNSName *string `min:"16" type:"string"`
+
+	// A list of IDs of data repository associations that are associated with this
+	// cache.
+	DataRepositoryAssociationIds []*string `type:"list"`
+
+	// A structure providing details of any failures that occurred.
+	FailureDetails *FileCacheFailureDetails `type:"structure"`
+
+	// The system-generated, unique ID of the cache.
+	FileCacheId *string `min:"11" type:"string"`
+
+	// The type of cache, which must be LUSTRE.
+	FileCacheType *string `type:"string" enum:"FileCacheType"`
+
+	// The Lustre version of the cache, which must be 2.12.
+	FileCacheTypeVersion *string `min:"1" type:"string"`
+
+	// Specifies the ID of the Key Management Service (KMS) key to use for encrypting
+	// data on an Amazon File Cache. If a KmsKeyId isn't specified, the Amazon FSx-managed
+	// KMS key for your account is used. For more information, see Encrypt (https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html)
+	// in the Key Management Service API Reference.
+	KmsKeyId *string `min:"1" type:"string"`
+
+	// The lifecycle status of the cache. The following are the possible values
+	// and what they mean:
+	//
+	//    * AVAILABLE - The cache is in a healthy state, and is reachable and available
+	//    for use.
+	//
+	//    * CREATING - The new cache is being created.
+	//
+	//    * DELETING - An existing cache is being deleted.
+	//
+	//    * UPDATING - The cache is undergoing a customer-initiated update.
+	//
+	//    * FAILED - An existing cache has experienced an unrecoverable failure.
+	//    When creating a new cache, the cache was unable to be created.
+	Lifecycle *string `type:"string" enum:"FileCacheLifecycle"`
+
+	// The configuration for the Amazon File Cache resource.
+	LustreConfiguration *FileCacheLustreConfiguration `type:"structure"`
+
+	// A list of network interface IDs.
+	NetworkInterfaceIds []*string `type:"list"`
+
+	// An Amazon Web Services account ID. This ID is a 12-digit number that you
+	// use to construct Amazon Resource Names (ARNs) for resources.
+	OwnerId *string `min:"12" type:"string"`
+
+	// The Amazon Resource Name (ARN) for a given resource. ARNs uniquely identify
+	// Amazon Web Services resources. We require an ARN when you need to specify
+	// a resource unambiguously across all of Amazon Web Services. For more information,
+	// see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	// in the Amazon Web Services General Reference.
+	ResourceARN *string `min:"8" type:"string"`
+
+	// The storage capacity of the cache in gibibytes (GiB).
+	StorageCapacity *int64 `type:"integer"`
+
+	// A list of subnet IDs that the cache will be accessible from. You can specify
+	// only one subnet ID in a call to the CreateFileCache operation.
+	SubnetIds []*string `type:"list"`
+
+	// A list of Tag values, with a maximum of 50 elements.
+	Tags []*Tag `min:"1" type:"list"`
+
+	// The ID of your virtual private cloud (VPC). For more information, see VPC
+	// and subnets (https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html)
+	// in the Amazon VPC User Guide.
+	VpcId *string `min:"12" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheCreating) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheCreating) GoString() string {
+	return s.String()
+}
+
+// SetCopyTagsToDataRepositoryAssociations sets the CopyTagsToDataRepositoryAssociations field's value.
+func (s *FileCacheCreating) SetCopyTagsToDataRepositoryAssociations(v bool) *FileCacheCreating {
+	s.CopyTagsToDataRepositoryAssociations = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *FileCacheCreating) SetCreationTime(v time.Time) *FileCacheCreating {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDNSName sets the DNSName field's value.
+func (s *FileCacheCreating) SetDNSName(v string) *FileCacheCreating {
+	s.DNSName = &v
+	return s
+}
+
+// SetDataRepositoryAssociationIds sets the DataRepositoryAssociationIds field's value.
+func (s *FileCacheCreating) SetDataRepositoryAssociationIds(v []*string) *FileCacheCreating {
+	s.DataRepositoryAssociationIds = v
+	return s
+}
+
+// SetFailureDetails sets the FailureDetails field's value.
+func (s *FileCacheCreating) SetFailureDetails(v *FileCacheFailureDetails) *FileCacheCreating {
+	s.FailureDetails = v
+	return s
+}
+
+// SetFileCacheId sets the FileCacheId field's value.
+func (s *FileCacheCreating) SetFileCacheId(v string) *FileCacheCreating {
+	s.FileCacheId = &v
+	return s
+}
+
+// SetFileCacheType sets the FileCacheType field's value.
+func (s *FileCacheCreating) SetFileCacheType(v string) *FileCacheCreating {
+	s.FileCacheType = &v
+	return s
+}
+
+// SetFileCacheTypeVersion sets the FileCacheTypeVersion field's value.
+func (s *FileCacheCreating) SetFileCacheTypeVersion(v string) *FileCacheCreating {
+	s.FileCacheTypeVersion = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *FileCacheCreating) SetKmsKeyId(v string) *FileCacheCreating {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLifecycle sets the Lifecycle field's value.
+func (s *FileCacheCreating) SetLifecycle(v string) *FileCacheCreating {
+	s.Lifecycle = &v
+	return s
+}
+
+// SetLustreConfiguration sets the LustreConfiguration field's value.
+func (s *FileCacheCreating) SetLustreConfiguration(v *FileCacheLustreConfiguration) *FileCacheCreating {
+	s.LustreConfiguration = v
+	return s
+}
+
+// SetNetworkInterfaceIds sets the NetworkInterfaceIds field's value.
+func (s *FileCacheCreating) SetNetworkInterfaceIds(v []*string) *FileCacheCreating {
+	s.NetworkInterfaceIds = v
+	return s
+}
+
+// SetOwnerId sets the OwnerId field's value.
+func (s *FileCacheCreating) SetOwnerId(v string) *FileCacheCreating {
+	s.OwnerId = &v
+	return s
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *FileCacheCreating) SetResourceARN(v string) *FileCacheCreating {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetStorageCapacity sets the StorageCapacity field's value.
+func (s *FileCacheCreating) SetStorageCapacity(v int64) *FileCacheCreating {
+	s.StorageCapacity = &v
+	return s
+}
+
+// SetSubnetIds sets the SubnetIds field's value.
+func (s *FileCacheCreating) SetSubnetIds(v []*string) *FileCacheCreating {
+	s.SubnetIds = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *FileCacheCreating) SetTags(v []*Tag) *FileCacheCreating {
+	s.Tags = v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *FileCacheCreating) SetVpcId(v string) *FileCacheCreating {
+	s.VpcId = &v
+	return s
+}
+
+// The configuration for a data repository association (DRA) to be created during
+// the Amazon File Cache resource creation. The DRA links the cache to either
+// an Amazon S3 bucket or prefix, or a Network File System (NFS) data repository
+// that supports the NFSv3 protocol.
+//
+// The DRA does not support automatic import or automatic export.
+type FileCacheDataRepositoryAssociation struct {
+	_ struct{} `type:"structure"`
+
+	// The path to the S3 or NFS data repository that links to the cache. You must
+	// provide one of the following paths:
+	//
+	//    * The path can be an NFS data repository that links to the cache. The
+	//    path can be in one of two formats: If you are not using the DataRepositorySubdirectories
+	//    parameter, the path is to an NFS Export directory (or one of its subdirectories)
+	//    in the format nsf://nfs-domain-name/exportpath. You can therefore link
+	//    a single NFS Export to a single data repository association. If you are
+	//    using the DataRepositorySubdirectories parameter, the path is the domain
+	//    name of the NFS file system in the format nfs://filer-domain-name, which
+	//    indicates the root of the subdirectories specified with the DataRepositorySubdirectories
+	//    parameter.
+	//
+	//    * The path can be an S3 bucket or prefix in the format s3://myBucket/myPrefix/.
+	//
+	// DataRepositoryPath is a required field
+	DataRepositoryPath *string `min:"3" type:"string" required:"true"`
+
+	// A list of NFS Exports that will be linked with this data repository association.
+	// The Export paths are in the format /exportpath1. To use this parameter, you
+	// must configure DataRepositoryPath as the domain name of the NFS file system.
+	// The NFS file system domain name in effect is the root of the subdirectories.
+	// Note that DataRepositorySubdirectories is not supported for S3 data repositories.
+	DataRepositorySubdirectories []*string `type:"list"`
+
+	// A path on the cache that points to a high-level directory (such as /ns1/)
+	// or subdirectory (such as /ns1/subdir/) that will be mapped 1-1 with DataRepositoryPath.
+	// The leading forward slash in the name is required. Two data repository associations
+	// cannot have overlapping cache paths. For example, if a data repository is
+	// associated with cache path /ns1/, then you cannot link another data repository
+	// with cache path /ns1/ns2.
+	//
+	// This path specifies where in your cache files will be exported from. This
+	// cache directory can be linked to only one data repository, and no data repository
+	// other can be linked to the directory.
+	//
+	// The cache path can only be set to root (/) on an NFS DRA when DataRepositorySubdirectories
+	// is specified. If you specify root (/) as the cache path, you can create only
+	// one DRA on the cache.
+	//
+	// The cache path cannot be set to root (/) for an S3 DRA.
+	//
+	// FileCachePath is a required field
+	FileCachePath *string `min:"1" type:"string" required:"true"`
+
+	// The configuration for a data repository association that links an Amazon
+	// File Cache resource to an NFS data repository.
+	NFS *FileCacheNFSConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheDataRepositoryAssociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheDataRepositoryAssociation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FileCacheDataRepositoryAssociation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FileCacheDataRepositoryAssociation"}
+	if s.DataRepositoryPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataRepositoryPath"))
+	}
+	if s.DataRepositoryPath != nil && len(*s.DataRepositoryPath) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("DataRepositoryPath", 3))
+	}
+	if s.FileCachePath == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileCachePath"))
+	}
+	if s.FileCachePath != nil && len(*s.FileCachePath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileCachePath", 1))
+	}
+	if s.NFS != nil {
+		if err := s.NFS.Validate(); err != nil {
+			invalidParams.AddNested("NFS", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataRepositoryPath sets the DataRepositoryPath field's value.
+func (s *FileCacheDataRepositoryAssociation) SetDataRepositoryPath(v string) *FileCacheDataRepositoryAssociation {
+	s.DataRepositoryPath = &v
+	return s
+}
+
+// SetDataRepositorySubdirectories sets the DataRepositorySubdirectories field's value.
+func (s *FileCacheDataRepositoryAssociation) SetDataRepositorySubdirectories(v []*string) *FileCacheDataRepositoryAssociation {
+	s.DataRepositorySubdirectories = v
+	return s
+}
+
+// SetFileCachePath sets the FileCachePath field's value.
+func (s *FileCacheDataRepositoryAssociation) SetFileCachePath(v string) *FileCacheDataRepositoryAssociation {
+	s.FileCachePath = &v
+	return s
+}
+
+// SetNFS sets the NFS field's value.
+func (s *FileCacheDataRepositoryAssociation) SetNFS(v *FileCacheNFSConfiguration) *FileCacheDataRepositoryAssociation {
+	s.NFS = v
+	return s
+}
+
+// A structure providing details of any failures that occurred.
+type FileCacheFailureDetails struct {
+	_ struct{} `type:"structure"`
+
+	// A message describing any failures that occurred.
+	Message *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheFailureDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheFailureDetails) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *FileCacheFailureDetails) SetMessage(v string) *FileCacheFailureDetails {
+	s.Message = &v
+	return s
+}
+
+// The configuration for the Amazon File Cache resource.
+type FileCacheLustreConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The deployment type of the Amazon File Cache resource, which must be CACHE_1.
+	DeploymentType *string `type:"string" enum:"FileCacheLustreDeploymentType"`
+
+	// The configuration for Lustre logging used to write the enabled logging events
+	// for your Amazon File Cache resource to Amazon CloudWatch Logs.
+	LogConfiguration *LustreLogConfiguration `type:"structure"`
+
+	// The configuration for a Lustre MDT (Metadata Target) storage volume.
+	MetadataConfiguration *FileCacheLustreMetadataConfiguration `type:"structure"`
+
+	// You use the MountName value when mounting the cache. If you pass a cache
+	// ID to the DescribeFileCaches operation, it returns the the MountName value
+	// as part of the cache's description.
+	MountName *string `min:"1" type:"string"`
+
+	// Per unit storage throughput represents the megabytes per second of read or
+	// write throughput per 1 tebibyte of storage provisioned. Cache throughput
+	// capacity is equal to Storage capacity (TiB) * PerUnitStorageThroughput (MB/s/TiB).
+	// The only supported value is 1000.
+	PerUnitStorageThroughput *int64 `min:"12" type:"integer"`
+
+	// A recurring weekly time, in the format D:HH:MM.
+	//
+	// D is the day of the week, for which 1 represents Monday and 7 represents
+	// Sunday. For further details, see the ISO-8601 spec as described on Wikipedia
+	// (https://en.wikipedia.org/wiki/ISO_week_date).
+	//
+	// HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute
+	// of the hour.
+	//
+	// For example, 1:05:00 specifies maintenance at 5 AM Monday.
+	WeeklyMaintenanceStartTime *string `min:"7" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheLustreConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheLustreConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetDeploymentType sets the DeploymentType field's value.
+func (s *FileCacheLustreConfiguration) SetDeploymentType(v string) *FileCacheLustreConfiguration {
+	s.DeploymentType = &v
+	return s
+}
+
+// SetLogConfiguration sets the LogConfiguration field's value.
+func (s *FileCacheLustreConfiguration) SetLogConfiguration(v *LustreLogConfiguration) *FileCacheLustreConfiguration {
+	s.LogConfiguration = v
+	return s
+}
+
+// SetMetadataConfiguration sets the MetadataConfiguration field's value.
+func (s *FileCacheLustreConfiguration) SetMetadataConfiguration(v *FileCacheLustreMetadataConfiguration) *FileCacheLustreConfiguration {
+	s.MetadataConfiguration = v
+	return s
+}
+
+// SetMountName sets the MountName field's value.
+func (s *FileCacheLustreConfiguration) SetMountName(v string) *FileCacheLustreConfiguration {
+	s.MountName = &v
+	return s
+}
+
+// SetPerUnitStorageThroughput sets the PerUnitStorageThroughput field's value.
+func (s *FileCacheLustreConfiguration) SetPerUnitStorageThroughput(v int64) *FileCacheLustreConfiguration {
+	s.PerUnitStorageThroughput = &v
+	return s
+}
+
+// SetWeeklyMaintenanceStartTime sets the WeeklyMaintenanceStartTime field's value.
+func (s *FileCacheLustreConfiguration) SetWeeklyMaintenanceStartTime(v string) *FileCacheLustreConfiguration {
+	s.WeeklyMaintenanceStartTime = &v
+	return s
+}
+
+// The configuration for a Lustre MDT (Metadata Target) storage volume. The
+// metadata on Amazon File Cache is managed by a Lustre Metadata Server (MDS)
+// while the actual metadata is persisted on an MDT.
+type FileCacheLustreMetadataConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The storage capacity of the Lustre MDT (Metadata Target) storage volume in
+	// gibibytes (GiB). The only supported value is 2400 GiB.
+	//
+	// StorageCapacity is a required field
+	StorageCapacity *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheLustreMetadataConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheLustreMetadataConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FileCacheLustreMetadataConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FileCacheLustreMetadataConfiguration"}
+	if s.StorageCapacity == nil {
+		invalidParams.Add(request.NewErrParamRequired("StorageCapacity"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStorageCapacity sets the StorageCapacity field's value.
+func (s *FileCacheLustreMetadataConfiguration) SetStorageCapacity(v int64) *FileCacheLustreMetadataConfiguration {
+	s.StorageCapacity = &v
+	return s
+}
+
+// The configuration for an NFS data repository association (DRA) created during
+// the creation of the Amazon File Cache resource.
+type FileCacheNFSConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of up to 2 IP addresses of DNS servers used to resolve the NFS file
+	// system domain name. The provided IP addresses can either be the IP addresses
+	// of a DNS forwarder or resolver that the customer manages and runs inside
+	// the customer VPC, or the IP addresses of the on-premises DNS servers.
+	DnsIps []*string `type:"list"`
+
+	// The version of the NFS (Network File System) protocol of the NFS data repository.
+	// The only supported value is NFS3, which indicates that the data repository
+	// must support the NFSv3 protocol.
+	//
+	// Version is a required field
+	Version *string `type:"string" required:"true" enum:"NfsVersion"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheNFSConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheNFSConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FileCacheNFSConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FileCacheNFSConfiguration"}
+	if s.Version == nil {
+		invalidParams.Add(request.NewErrParamRequired("Version"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDnsIps sets the DnsIps field's value.
+func (s *FileCacheNFSConfiguration) SetDnsIps(v []*string) *FileCacheNFSConfiguration {
+	s.DnsIps = v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *FileCacheNFSConfiguration) SetVersion(v string) *FileCacheNFSConfiguration {
+	s.Version = &v
+	return s
+}
+
+// No caches were found based upon supplied parameters.
+type FileCacheNotFound struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A detailed error message.
+	Message_ *string `locationName:"Message" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheNotFound) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FileCacheNotFound) GoString() string {
+	return s.String()
+}
+
+func newErrorFileCacheNotFound(v protocol.ResponseMetadata) error {
+	return &FileCacheNotFound{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *FileCacheNotFound) Code() string {
+	return "FileCacheNotFound"
+}
+
+// Message returns the exception's message.
+func (s *FileCacheNotFound) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *FileCacheNotFound) OrigErr() error {
+	return nil
+}
+
+func (s *FileCacheNotFound) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *FileCacheNotFound) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *FileCacheNotFound) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // A description of a specific Amazon FSx file system.
 type FileSystem struct {
 	_ struct{} `type:"structure"`
@@ -12598,8 +14701,7 @@ type FileSystem struct {
 	// The Domain Name System (DNS) name for the file system.
 	DNSName *string `min:"16" type:"string"`
 
-	// A structure providing details of any failures that occurred when creating
-	// a file system.
+	// A structure providing details of any failures that occurred.
 	FailureDetails *FileSystemFailureDetails `type:"structure"`
 
 	// The system-generated, unique 17-digit ID of the file system.
@@ -12671,8 +14773,8 @@ type FileSystem struct {
 	OpenZFSConfiguration *OpenZFSFileSystemConfiguration `type:"structure"`
 
 	// The Amazon Web Services account that created the file system. If the file
-	// system was created by an Identity and Access Management (IAM) user, the Amazon
-	// Web Services account to which the IAM user belongs is the owner.
+	// system was created by a user in IAM Identity Center, the Amazon Web Services
+	// account to which the IAM user belongs is the owner.
 	OwnerId *string `min:"12" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the file system resource.
@@ -12943,12 +15045,11 @@ func (s *FileSystemEndpoints) SetManagement(v *FileSystemEndpoint) *FileSystemEn
 	return s
 }
 
-// A structure providing details of any failures that occurred when creating
-// a file system.
+// A structure providing details of any failures that occurred.
 type FileSystemFailureDetails struct {
 	_ struct{} `type:"structure"`
 
-	// A message describing any failures that occurred during file system creation.
+	// A message describing any failures that occurred.
 	Message *string `min:"1" type:"string"`
 }
 
@@ -14007,8 +16108,8 @@ type LustreFileSystemConfiguration struct {
 	// The data repository configuration object for Lustre file systems returned
 	// in the response of the CreateFileSystem operation.
 	//
-	// This data type is not supported for file systems with the Persistent_2 deployment
-	// type. Instead, use .
+	// This data type is not supported on file systems with a data repository association.
+	// For file systems with a data repository association, see .
 	DataRepositoryConfiguration *DataRepositoryConfiguration `type:"structure"`
 
 	// The deployment type of the FSx for Lustre file system. Scratch deployment
@@ -14165,11 +16266,8 @@ func (s *LustreFileSystemConfiguration) SetWeeklyMaintenanceStartTime(v string) 
 }
 
 // The configuration for Lustre logging used to write the enabled logging events
-// for your file system to Amazon CloudWatch Logs.
-//
-// When logging is enabled, Lustre logs error and warning events from data repository
-// operations such as automatic export and data repository tasks. To learn more
-// about Lustre logging, see Logging with Amazon CloudWatch Logs (https://docs.aws.amazon.com/fsx/latest/LustreGuide/cw-event-logging.html).
+// for your Amazon FSx for Lustre file system or Amazon File Cache resource
+// to Amazon CloudWatch Logs.
 type LustreLogConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -14188,6 +16286,9 @@ type LustreLogConfiguration struct {
 	//    * WARN_ERROR - both warning events and error events are logged.
 	//
 	//    * DISABLED - logging of data repository events is turned off.
+	//
+	// Note that Amazon File Cache uses a default setting of WARN_ERROR, which can't
+	// be changed.
 	//
 	// Level is a required field
 	Level *string `type:"string" required:"true" enum:"LustreAccessAuditLogLevel"`
@@ -14224,18 +16325,12 @@ func (s *LustreLogConfiguration) SetLevel(v string) *LustreLogConfiguration {
 }
 
 // The Lustre logging configuration used when creating or updating an Amazon
-// FSx for Lustre file system. Lustre logging writes the enabled logging events
-// for your file system to Amazon CloudWatch Logs.
+// FSx for Lustre file system. An Amazon File Cache is created with Lustre logging
+// enabled by default, with a setting of WARN_ERROR for the logging events.
+// which can't be changed.
 //
-// Error and warning events can be logged from the following data repository
-// operations:
-//
-//    * Automatic export
-//
-//    * Data repository tasks
-//
-// To learn more about Lustre logging, see Logging to Amazon CloudWatch Logs
-// (https://docs.aws.amazon.com/fsx/latest/LustreGuide/cw-event-logging.html).
+// Lustre logging writes the enabled logging events for your file system or
+// cache to Amazon CloudWatch Logs.
 type LustreLogCreateConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -14252,7 +16347,8 @@ type LustreLogCreateConfiguration struct {
 	//    /aws/fsx prefix.
 	//
 	//    * If you do not provide a destination, Amazon FSx will create and use
-	//    a log stream in the CloudWatch Logs /aws/fsx/lustre log group.
+	//    a log stream in the CloudWatch Logs /aws/fsx/lustre log group (for Amazon
+	//    FSx for Lustre) or /aws/fsx/filecache (for Amazon File Cache).
 	//
 	//    * If Destination is provided and the resource does not exist, the request
 	//    will fail with a BadRequest error.
@@ -14402,6 +16498,71 @@ func (s *LustreRootSquashConfiguration) SetRootSquash(v string) *LustreRootSquas
 	return s
 }
 
+// A cache configuration is required for this operation.
+type MissingFileCacheConfiguration struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A detailed error message.
+	Message_ *string `locationName:"Message" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MissingFileCacheConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MissingFileCacheConfiguration) GoString() string {
+	return s.String()
+}
+
+func newErrorMissingFileCacheConfiguration(v protocol.ResponseMetadata) error {
+	return &MissingFileCacheConfiguration{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *MissingFileCacheConfiguration) Code() string {
+	return "MissingFileCacheConfiguration"
+}
+
+// Message returns the exception's message.
+func (s *MissingFileCacheConfiguration) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *MissingFileCacheConfiguration) OrigErr() error {
+	return nil
+}
+
+func (s *MissingFileCacheConfiguration) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *MissingFileCacheConfiguration) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *MissingFileCacheConfiguration) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // A file system configuration is required for this operation.
 type MissingFileSystemConfiguration struct {
 	_            struct{}                  `type:"structure"`
@@ -14532,6 +16693,64 @@ func (s *MissingVolumeConfiguration) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The configuration for a data repository association that links an Amazon
+// File Cache resource to an NFS data repository.
+type NFSDataRepositoryConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// This parameter is not supported for Amazon File Cache.
+	AutoExportPolicy *AutoExportPolicy `type:"structure"`
+
+	// A list of up to 2 IP addresses of DNS servers used to resolve the NFS file
+	// system domain name. The provided IP addresses can either be the IP addresses
+	// of a DNS forwarder or resolver that the customer manages and runs inside
+	// the customer VPC, or the IP addresses of the on-premises DNS servers.
+	DnsIps []*string `type:"list"`
+
+	// The version of the NFS (Network File System) protocol of the NFS data repository.
+	// Currently, the only supported value is NFS3, which indicates that the data
+	// repository must support the NFSv3 protocol.
+	//
+	// Version is a required field
+	Version *string `type:"string" required:"true" enum:"NfsVersion"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NFSDataRepositoryConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NFSDataRepositoryConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetAutoExportPolicy sets the AutoExportPolicy field's value.
+func (s *NFSDataRepositoryConfiguration) SetAutoExportPolicy(v *AutoExportPolicy) *NFSDataRepositoryConfiguration {
+	s.AutoExportPolicy = v
+	return s
+}
+
+// SetDnsIps sets the DnsIps field's value.
+func (s *NFSDataRepositoryConfiguration) SetDnsIps(v []*string) *NFSDataRepositoryConfiguration {
+	s.DnsIps = v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *NFSDataRepositoryConfiguration) SetVersion(v string) *NFSDataRepositoryConfiguration {
+	s.Version = &v
+	return s
+}
+
 // The resource specified for the tagging operation is not a resource type owned
 // by Amazon FSx. Use the API of the relevant service to perform the operation.
 type NotServiceResourceError struct {
@@ -14633,13 +16852,13 @@ type OntapFileSystemConfiguration struct {
 	// of provisioned IOPS and the provision mode.
 	DiskIopsConfiguration *DiskIopsConfiguration `type:"structure"`
 
-	// (Multi-AZ only) The IP address range in which the endpoints to access your
-	// file system are created.
-	//
-	// The Endpoint IP address range you select for your file system must exist
-	// outside the VPC's CIDR range and must be at least /30 or larger. If you do
-	// not specify this optional parameter, Amazon FSx will automatically select
-	// a CIDR block for you.
+	// (Multi-AZ only) Specifies the IP address range in which the endpoints to
+	// access your file system will be created. By default in the Amazon FSx API,
+	// Amazon FSx selects an unused IP address range for you from the 198.19.* range.
+	// By default in the Amazon FSx console, Amazon FSx chooses the last 64 IP addresses
+	// from the VPC’s primary CIDR range to use as the endpoint IP address range
+	// for the file system. You can have overlapping endpoint IP addresses for file
+	// systems deployed in the same VPC/route tables.
 	EndpointIpAddressRange *string `min:"9" type:"string"`
 
 	// The Management and Intercluster endpoints that are used to access data or
@@ -14755,6 +16974,15 @@ func (s *OntapFileSystemConfiguration) SetWeeklyMaintenanceStartTime(v string) *
 type OntapVolumeConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// A boolean flag indicating whether tags for the volume should be copied to
+	// backups. This value defaults to false. If it's set to true, all tags for
+	// the volume are copied to all automatic and user-initiated backups where the
+	// user doesn't specify tags. If this value is true, and you specify one or
+	// more tags, only the specified tags are copied to backups. If you specify
+	// one or more tags when creating a user-initiated backup, no tags are copied
+	// from the volume, regardless of this value.
+	CopyTagsToBackups *bool `type:"boolean"`
+
 	// Specifies the FlexCache endpoint type of the volume. Valid values are the
 	// following:
 	//
@@ -14793,6 +17021,27 @@ type OntapVolumeConfiguration struct {
 
 	// The configured size of the volume, in megabytes (MBs).
 	SizeInMegabytes *int64 `type:"integer"`
+
+	// Specifies the snapshot policy for the volume. There are three built-in snapshot
+	// policies:
+	//
+	//    * default: This is the default policy. A maximum of six hourly snapshots
+	//    taken five minutes past the hour. A maximum of two daily snapshots taken
+	//    Monday through Saturday at 10 minutes after midnight. A maximum of two
+	//    weekly snapshots taken every Sunday at 15 minutes after midnight.
+	//
+	//    * default-1weekly: This policy is the same as the default policy except
+	//    that it only retains one snapshot from the weekly schedule.
+	//
+	//    * none: This policy does not take any snapshots. This policy can be assigned
+	//    to volumes to prevent automatic snapshots from being taken.
+	//
+	// You can also provide the name of a custom policy that you created with the
+	// ONTAP CLI or REST API.
+	//
+	// For more information, see Snapshot policies (https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/snapshots-ontap.html#snapshot-policies)
+	// in the Amazon FSx for NetApp ONTAP User Guide.
+	SnapshotPolicy *string `min:"1" type:"string"`
 
 	// The volume's storage efficiency setting.
 	StorageEfficiencyEnabled *bool `type:"boolean"`
@@ -14835,6 +17084,12 @@ func (s OntapVolumeConfiguration) GoString() string {
 	return s.String()
 }
 
+// SetCopyTagsToBackups sets the CopyTagsToBackups field's value.
+func (s *OntapVolumeConfiguration) SetCopyTagsToBackups(v bool) *OntapVolumeConfiguration {
+	s.CopyTagsToBackups = &v
+	return s
+}
+
 // SetFlexCacheEndpointType sets the FlexCacheEndpointType field's value.
 func (s *OntapVolumeConfiguration) SetFlexCacheEndpointType(v string) *OntapVolumeConfiguration {
 	s.FlexCacheEndpointType = &v
@@ -14862,6 +17117,12 @@ func (s *OntapVolumeConfiguration) SetSecurityStyle(v string) *OntapVolumeConfig
 // SetSizeInMegabytes sets the SizeInMegabytes field's value.
 func (s *OntapVolumeConfiguration) SetSizeInMegabytes(v int64) *OntapVolumeConfiguration {
 	s.SizeInMegabytes = &v
+	return s
+}
+
+// SetSnapshotPolicy sets the SnapshotPolicy field's value.
+func (s *OntapVolumeConfiguration) SetSnapshotPolicy(v string) *OntapVolumeConfiguration {
+	s.SnapshotPolicy = &v
 	return s
 }
 
@@ -15142,8 +17403,7 @@ type OpenZFSFileSystemConfiguration struct {
 	DailyAutomaticBackupStartTime *string `min:"5" type:"string"`
 
 	// Specifies the file-system deployment type. Amazon FSx for OpenZFS supports
-	// SINGLE_AZ_1. SINGLE_AZ_1 is a file system configured for a single Availability
-	// Zone (AZ) of redundancy.
+	// SINGLE_AZ_1 and SINGLE_AZ_2.
 	DeploymentType *string `type:"string" enum:"OpenZFSDeploymentType"`
 
 	// The SSD IOPS (input/output operations per second) configuration for an Amazon
@@ -15157,7 +17417,7 @@ type OpenZFSFileSystemConfiguration struct {
 	RootVolumeId *string `min:"23" type:"string"`
 
 	// The throughput of an Amazon FSx file system, measured in megabytes per second
-	// (MBps). Valid values are 64, 128, 256, 512, 1024, 2048, 3072, or 4096 MB/s.
+	// (MBps).
 	ThroughputCapacity *int64 `min:"8" type:"integer"`
 
 	// A recurring weekly time, in the format D:HH:MM.
@@ -15458,6 +17718,14 @@ type OpenZFSVolumeConfiguration struct {
 	//    write throughput speeds.
 	DataCompressionType *string `type:"string" enum:"OpenZFSDataCompressionType"`
 
+	// A Boolean value indicating whether dependent clone volumes created from intermediate
+	// snapshots should be deleted when a volume is restored from snapshot.
+	DeleteClonedVolumes *bool `type:"boolean"`
+
+	// A Boolean value indicating whether snapshots between the current state and
+	// the specified snapshot should be deleted when a volume is restored from snapshot.
+	DeleteIntermediateSnaphots *bool `type:"boolean"`
+
 	// The configuration object for mounting a Network File System (NFS) file system.
 	NfsExports []*OpenZFSNfsExport `type:"list"`
 
@@ -15476,6 +17744,9 @@ type OpenZFSVolumeConfiguration struct {
 	// workloads should use the default record size. For guidance on when to set
 	// a custom record size, see the Amazon FSx for OpenZFS User Guide.
 	RecordSizeKiB *int64 `min:"4" type:"integer"`
+
+	// Specifies the ID of the snapshot to which the volume was restored.
+	RestoreToSnapshot *string `min:"11" type:"string"`
 
 	// The maximum amount of storage in gibibtyes (GiB) that the volume can use
 	// from its parent. You can specify a quota larger than the storage on the parent
@@ -15523,6 +17794,18 @@ func (s *OpenZFSVolumeConfiguration) SetDataCompressionType(v string) *OpenZFSVo
 	return s
 }
 
+// SetDeleteClonedVolumes sets the DeleteClonedVolumes field's value.
+func (s *OpenZFSVolumeConfiguration) SetDeleteClonedVolumes(v bool) *OpenZFSVolumeConfiguration {
+	s.DeleteClonedVolumes = &v
+	return s
+}
+
+// SetDeleteIntermediateSnaphots sets the DeleteIntermediateSnaphots field's value.
+func (s *OpenZFSVolumeConfiguration) SetDeleteIntermediateSnaphots(v bool) *OpenZFSVolumeConfiguration {
+	s.DeleteIntermediateSnaphots = &v
+	return s
+}
+
 // SetNfsExports sets the NfsExports field's value.
 func (s *OpenZFSVolumeConfiguration) SetNfsExports(v []*OpenZFSNfsExport) *OpenZFSVolumeConfiguration {
 	s.NfsExports = v
@@ -15550,6 +17833,12 @@ func (s *OpenZFSVolumeConfiguration) SetReadOnly(v bool) *OpenZFSVolumeConfigura
 // SetRecordSizeKiB sets the RecordSizeKiB field's value.
 func (s *OpenZFSVolumeConfiguration) SetRecordSizeKiB(v int64) *OpenZFSVolumeConfiguration {
 	s.RecordSizeKiB = &v
+	return s
+}
+
+// SetRestoreToSnapshot sets the RestoreToSnapshot field's value.
+func (s *OpenZFSVolumeConfiguration) SetRestoreToSnapshot(v string) *OpenZFSVolumeConfiguration {
+	s.RestoreToSnapshot = &v
 	return s
 }
 
@@ -15581,7 +17870,7 @@ type ReleaseFileSystemNfsV3LocksInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -15815,7 +18104,7 @@ type RestoreVolumeFromSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -15912,6 +18201,11 @@ func (s *RestoreVolumeFromSnapshotInput) SetVolumeId(v string) *RestoreVolumeFro
 type RestoreVolumeFromSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
+	// A list of administrative actions for the file system that are in process
+	// or waiting to be processed. Administrative actions describe changes to the
+	// Amazon FSx system.
+	AdministrativeActions []*AdministrativeAction `type:"list"`
+
 	// The lifecycle state of the volume being restored.
 	Lifecycle *string `type:"string" enum:"VolumeLifecycle"`
 
@@ -15937,6 +18231,12 @@ func (s RestoreVolumeFromSnapshotOutput) GoString() string {
 	return s.String()
 }
 
+// SetAdministrativeActions sets the AdministrativeActions field's value.
+func (s *RestoreVolumeFromSnapshotOutput) SetAdministrativeActions(v []*AdministrativeAction) *RestoreVolumeFromSnapshotOutput {
+	s.AdministrativeActions = v
+	return s
+}
+
 // SetLifecycle sets the Lifecycle field's value.
 func (s *RestoreVolumeFromSnapshotOutput) SetLifecycle(v string) *RestoreVolumeFromSnapshotOutput {
 	s.Lifecycle = &v
@@ -15950,12 +18250,15 @@ func (s *RestoreVolumeFromSnapshotOutput) SetVolumeId(v string) *RestoreVolumeFr
 }
 
 // The configuration for an Amazon S3 data repository linked to an Amazon FSx
-// Lustre file system with a data repository association. The configuration
-// consists of an AutoImportPolicy that defines file events on the data repository
-// are automatically imported to the file system and an AutoExportPolicy that
-// defines which file events on the file system are automatically exported to
-// the data repository. File events are when files or directories are added,
+// for Lustre file system with a data repository association. The configuration
+// consists of an AutoImportPolicy that defines which file events on the data
+// repository are automatically imported to the file system and an AutoExportPolicy
+// that defines which file events on the file system are automatically exported
+// to the data repository. File events are when files or directories are added,
 // changed, or deleted on the file system or the data repository.
+//
+// Data repository associations on Amazon File Cache don't use S3DataRepositoryConfiguration
+// because they don't support automatic import or automatic export.
 type S3DataRepositoryConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -17516,7 +19819,7 @@ type UpdateDataRepositoryAssociationInput struct {
 	AssociationId *string `min:"13" type:"string" required:"true"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -17632,11 +19935,173 @@ func (s *UpdateDataRepositoryAssociationOutput) SetAssociation(v *DataRepository
 	return s
 }
 
+type UpdateFileCacheInput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) An idempotency token for resource creation, in a string of up
+	// to 63 ASCII characters. This token is automatically filled on your behalf
+	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of the cache that you are updating.
+	//
+	// FileCacheId is a required field
+	FileCacheId *string `min:"11" type:"string" required:"true"`
+
+	// The configuration updates for an Amazon File Cache resource.
+	LustreConfiguration *UpdateFileCacheLustreConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFileCacheInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFileCacheInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateFileCacheInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateFileCacheInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.FileCacheId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileCacheId"))
+	}
+	if s.FileCacheId != nil && len(*s.FileCacheId) < 11 {
+		invalidParams.Add(request.NewErrParamMinLen("FileCacheId", 11))
+	}
+	if s.LustreConfiguration != nil {
+		if err := s.LustreConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("LustreConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *UpdateFileCacheInput) SetClientRequestToken(v string) *UpdateFileCacheInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetFileCacheId sets the FileCacheId field's value.
+func (s *UpdateFileCacheInput) SetFileCacheId(v string) *UpdateFileCacheInput {
+	s.FileCacheId = &v
+	return s
+}
+
+// SetLustreConfiguration sets the LustreConfiguration field's value.
+func (s *UpdateFileCacheInput) SetLustreConfiguration(v *UpdateFileCacheLustreConfiguration) *UpdateFileCacheInput {
+	s.LustreConfiguration = v
+	return s
+}
+
+// The configuration update for an Amazon File Cache resource.
+type UpdateFileCacheLustreConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A recurring weekly time, in the format D:HH:MM.
+	//
+	// D is the day of the week, for which 1 represents Monday and 7 represents
+	// Sunday. For further details, see the ISO-8601 spec as described on Wikipedia
+	// (https://en.wikipedia.org/wiki/ISO_week_date).
+	//
+	// HH is the zero-padded hour of the day (0-23), and MM is the zero-padded minute
+	// of the hour.
+	//
+	// For example, 1:05:00 specifies maintenance at 5 AM Monday.
+	WeeklyMaintenanceStartTime *string `min:"7" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFileCacheLustreConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFileCacheLustreConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateFileCacheLustreConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateFileCacheLustreConfiguration"}
+	if s.WeeklyMaintenanceStartTime != nil && len(*s.WeeklyMaintenanceStartTime) < 7 {
+		invalidParams.Add(request.NewErrParamMinLen("WeeklyMaintenanceStartTime", 7))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWeeklyMaintenanceStartTime sets the WeeklyMaintenanceStartTime field's value.
+func (s *UpdateFileCacheLustreConfiguration) SetWeeklyMaintenanceStartTime(v string) *UpdateFileCacheLustreConfiguration {
+	s.WeeklyMaintenanceStartTime = &v
+	return s
+}
+
+type UpdateFileCacheOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the cache that was updated.
+	FileCache *FileCache `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFileCacheOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFileCacheOutput) GoString() string {
+	return s.String()
+}
+
+// SetFileCache sets the FileCache field's value.
+func (s *UpdateFileCacheOutput) SetFileCache(v *FileCache) *UpdateFileCacheOutput {
+	s.FileCache = v
+	return s
+}
+
 // The request object for the UpdateFileSystem operation.
 type UpdateFileSystemInput struct {
 	_ struct{} `type:"structure"`
 
-	// A string of up to 64 ASCII characters that Amazon FSx uses to ensure idempotent
+	// A string of up to 63 ASCII characters that Amazon FSx uses to ensure idempotent
 	// updates. This string is automatically filled on your behalf when you use
 	// the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
@@ -17656,19 +20121,13 @@ type UpdateFileSystemInput struct {
 	// The configuration updates for an Amazon FSx for OpenZFS file system.
 	OpenZFSConfiguration *UpdateFileSystemOpenZFSConfiguration `type:"structure"`
 
-	// Use this parameter to increase the storage capacity of an Amazon FSx for
-	// Windows File Server, Amazon FSx for Lustre, or Amazon FSx for NetApp ONTAP
-	// file system. Specifies the storage capacity target value, in GiB, to increase
-	// the storage capacity for the file system that you're updating.
+	// Use this parameter to increase the storage capacity of an FSx for Windows
+	// File Server, FSx for Lustre, FSx for OpenZFS, or FSx for ONTAP file system.
+	// Specifies the storage capacity target value, in GiB, to increase the storage
+	// capacity for the file system that you're updating.
 	//
 	// You can't make a storage capacity increase request if there is an existing
 	// storage capacity increase request in progress.
-	//
-	// For Windows file systems, the storage capacity target value must be at least
-	// 10 percent greater than the current storage capacity value. To increase storage
-	// capacity, the file system must have at least 16 MBps of throughput capacity.
-	// For more information, see Managing storage capacity (https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html)
-	// in the Amazon FSx for Windows File Server User Guide.
 	//
 	// For Lustre file systems, the storage capacity target value can be the following:
 	//
@@ -17684,7 +20143,18 @@ type UpdateFileSystemInput struct {
 	//    * For SCRATCH_1 file systems, you can't increase the storage capacity.
 	//
 	// For more information, see Managing storage and throughput capacity (https://docs.aws.amazon.com/fsx/latest/LustreGuide/managing-storage-capacity.html)
-	// in the Amazon FSx for Lustre User Guide.
+	// in the FSx for Lustre User Guide.
+	//
+	// For FSx for OpenZFS file systems, the storage capacity target value must
+	// be at least 10 percent greater than the current storage capacity value. For
+	// more information, see Managing storage capacity (https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/managing-storage-capacity.html)
+	// in the FSx for OpenZFS User Guide.
+	//
+	// For Windows file systems, the storage capacity target value must be at least
+	// 10 percent greater than the current storage capacity value. To increase storage
+	// capacity, the file system must have at least 16 MBps of throughput capacity.
+	// For more information, see Managing storage capacity (https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html)
+	// in the Amazon FSx for Windows File Server User Guide.
 	//
 	// For ONTAP file systems, the storage capacity target value must be at least
 	// 10 percent greater than the current storage capacity value. For more information,
@@ -17825,9 +20295,7 @@ type UpdateFileSystemLustreConfiguration struct {
 	//    any existing objects that are changed in the S3 bucket, and any objects
 	//    that were deleted in the S3 bucket.
 	//
-	// The AutoImportPolicy parameter is not supported for Lustre file systems with
-	// the Persistent_2 deployment type. Instead, use to update a data repository
-	// association on your Persistent_2 file system.
+	// This parameter is not supported for file systems with a data repository association.
 	AutoImportPolicy *string `type:"string" enum:"AutoImportPolicyType"`
 
 	// The number of days to retain automatic backups. Setting this property to
@@ -17960,6 +20428,10 @@ func (s *UpdateFileSystemLustreConfiguration) SetWeeklyMaintenanceStartTime(v st
 type UpdateFileSystemOntapConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// (Multi-AZ only) A list of IDs of new virtual private cloud (VPC) route tables
+	// to associate (add) with your Amazon FSx for NetApp ONTAP file system.
+	AddRouteTableIds []*string `type:"list"`
+
 	// The number of days to retain automatic backups. Setting this property to
 	// 0 disables automatic backups. You can retain automatic backups for a maximum
 	// of 90 days. The default is 0.
@@ -17984,9 +20456,15 @@ type UpdateFileSystemOntapConfiguration struct {
 	// String and GoString methods.
 	FsxAdminPassword *string `min:"8" type:"string" sensitive:"true"`
 
+	// (Multi-AZ only) A list of IDs of existing virtual private cloud (VPC) route
+	// tables to disassociate (remove) from your Amazon FSx for NetApp ONTAP file
+	// system. You can use the API operation to retrieve the list of VPC route table
+	// IDs for a file system.
+	RemoveRouteTableIds []*string `type:"list"`
+
 	// Specifies the throughput of an FSx for NetApp ONTAP file system, measured
-	// in megabytes per second (MBps). Valid values are 128, 256, 512, 1024, or
-	// 2048 MB/s.
+	// in megabytes per second (MBps). Valid values are 128, 256, 512, 1024, 2048,
+	// and 4096 MBps.
 	ThroughputCapacity *int64 `min:"8" type:"integer"`
 
 	// A recurring weekly time, in the format D:HH:MM.
@@ -18042,6 +20520,12 @@ func (s *UpdateFileSystemOntapConfiguration) Validate() error {
 	return nil
 }
 
+// SetAddRouteTableIds sets the AddRouteTableIds field's value.
+func (s *UpdateFileSystemOntapConfiguration) SetAddRouteTableIds(v []*string) *UpdateFileSystemOntapConfiguration {
+	s.AddRouteTableIds = v
+	return s
+}
+
 // SetAutomaticBackupRetentionDays sets the AutomaticBackupRetentionDays field's value.
 func (s *UpdateFileSystemOntapConfiguration) SetAutomaticBackupRetentionDays(v int64) *UpdateFileSystemOntapConfiguration {
 	s.AutomaticBackupRetentionDays = &v
@@ -18063,6 +20547,12 @@ func (s *UpdateFileSystemOntapConfiguration) SetDiskIopsConfiguration(v *DiskIop
 // SetFsxAdminPassword sets the FsxAdminPassword field's value.
 func (s *UpdateFileSystemOntapConfiguration) SetFsxAdminPassword(v string) *UpdateFileSystemOntapConfiguration {
 	s.FsxAdminPassword = &v
+	return s
+}
+
+// SetRemoveRouteTableIds sets the RemoveRouteTableIds field's value.
+func (s *UpdateFileSystemOntapConfiguration) SetRemoveRouteTableIds(v []*string) *UpdateFileSystemOntapConfiguration {
+	s.RemoveRouteTableIds = v
 	return s
 }
 
@@ -18116,8 +20606,15 @@ type UpdateFileSystemOpenZFSConfiguration struct {
 	// SSD IOPS and how the amount was provisioned (by the customer or by the system).
 	DiskIopsConfiguration *DiskIopsConfiguration `type:"structure"`
 
-	// The throughput of an Amazon FSx file system, measured in megabytes per second
-	// (MBps). Valid values are 64, 128, 256, 512, 1024, 2048, 3072, or 4096 MB/s.
+	// The throughput of an Amazon FSx for OpenZFS file system, measured in megabytes
+	// per second (MB/s). Valid values depend on the DeploymentType you choose,
+	// as follows:
+	//
+	//    * For SINGLE_AZ_1, valid values are 64, 128, 256, 512, 1024, 2048, 3072,
+	//    or 4096 MB/s.
+	//
+	//    * For SINGLE_AZ_2, valid values are 160, 320, 640, 1280, 2560, 3840, 5120,
+	//    7680, or 10240 MB/s.
 	ThroughputCapacity *int64 `min:"8" type:"integer"`
 
 	// A recurring weekly time, in the format D:HH:MM.
@@ -18372,6 +20869,15 @@ func (s *UpdateFileSystemWindowsConfiguration) SetWeeklyMaintenanceStartTime(v s
 type UpdateOntapVolumeConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// A boolean flag indicating whether tags for the volume should be copied to
+	// backups. This value defaults to false. If it's set to true, all tags for
+	// the volume are copied to all automatic and user-initiated backups where the
+	// user doesn't specify tags. If this value is true, and you specify one or
+	// more tags, only the specified tags are copied to backups. If you specify
+	// one or more tags when creating a user-initiated backup, no tags are copied
+	// from the volume, regardless of this value.
+	CopyTagsToBackups *bool `type:"boolean"`
+
 	// Specifies the location in the SVM's namespace where the volume is mounted.
 	// The JunctionPath must have a leading forward slash, such as /vol3.
 	JunctionPath *string `min:"1" type:"string"`
@@ -18381,6 +20887,27 @@ type UpdateOntapVolumeConfiguration struct {
 
 	// Specifies the size of the volume in megabytes.
 	SizeInMegabytes *int64 `type:"integer"`
+
+	// Specifies the snapshot policy for the volume. There are three built-in snapshot
+	// policies:
+	//
+	//    * default: This is the default policy. A maximum of six hourly snapshots
+	//    taken five minutes past the hour. A maximum of two daily snapshots taken
+	//    Monday through Saturday at 10 minutes after midnight. A maximum of two
+	//    weekly snapshots taken every Sunday at 15 minutes after midnight.
+	//
+	//    * default-1weekly: This policy is the same as the default policy except
+	//    that it only retains one snapshot from the weekly schedule.
+	//
+	//    * none: This policy does not take any snapshots. This policy can be assigned
+	//    to volumes to prevent automatic snapshots from being taken.
+	//
+	// You can also provide the name of a custom policy that you created with the
+	// ONTAP CLI or REST API.
+	//
+	// For more information, see Snapshot policies (https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/snapshots-ontap.html#snapshot-policies)
+	// in the Amazon FSx for NetApp ONTAP User Guide.
+	SnapshotPolicy *string `min:"1" type:"string"`
 
 	// Default is false. Set to true to enable the deduplication, compression, and
 	// compaction storage efficiency features on the volume.
@@ -18414,6 +20941,9 @@ func (s *UpdateOntapVolumeConfiguration) Validate() error {
 	if s.JunctionPath != nil && len(*s.JunctionPath) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JunctionPath", 1))
 	}
+	if s.SnapshotPolicy != nil && len(*s.SnapshotPolicy) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SnapshotPolicy", 1))
+	}
 	if s.TieringPolicy != nil {
 		if err := s.TieringPolicy.Validate(); err != nil {
 			invalidParams.AddNested("TieringPolicy", err.(request.ErrInvalidParams))
@@ -18424,6 +20954,12 @@ func (s *UpdateOntapVolumeConfiguration) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCopyTagsToBackups sets the CopyTagsToBackups field's value.
+func (s *UpdateOntapVolumeConfiguration) SetCopyTagsToBackups(v bool) *UpdateOntapVolumeConfiguration {
+	s.CopyTagsToBackups = &v
+	return s
 }
 
 // SetJunctionPath sets the JunctionPath field's value.
@@ -18441,6 +20977,12 @@ func (s *UpdateOntapVolumeConfiguration) SetSecurityStyle(v string) *UpdateOntap
 // SetSizeInMegabytes sets the SizeInMegabytes field's value.
 func (s *UpdateOntapVolumeConfiguration) SetSizeInMegabytes(v int64) *UpdateOntapVolumeConfiguration {
 	s.SizeInMegabytes = &v
+	return s
+}
+
+// SetSnapshotPolicy sets the SnapshotPolicy field's value.
+func (s *UpdateOntapVolumeConfiguration) SetSnapshotPolicy(v string) *UpdateOntapVolumeConfiguration {
+	s.SnapshotPolicy = &v
 	return s
 }
 
@@ -18608,7 +21150,7 @@ type UpdateSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -18724,7 +21266,7 @@ type UpdateStorageVirtualMachineInput struct {
 	ActiveDirectoryConfiguration *UpdateSvmActiveDirectoryConfiguration `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -18895,7 +21437,7 @@ type UpdateVolumeInput struct {
 	_ struct{} `type:"structure"`
 
 	// (Optional) An idempotency token for resource creation, in a string of up
-	// to 64 ASCII characters. This token is automatically filled on your behalf
+	// to 63 ASCII characters. This token is automatically filled on your behalf
 	// when you use the Command Line Interface (CLI) or an Amazon Web Services SDK.
 	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
@@ -19032,9 +21574,9 @@ func (s *UpdateVolumeOutput) SetVolume(v *Volume) *UpdateVolumeOutput {
 type Volume struct {
 	_ struct{} `type:"structure"`
 
-	// A list of administrative actions for the file system that are in process
-	// or waiting to be processed. Administrative actions describe changes to the
-	// Amazon FSx system that you initiated.
+	// A list of administrative actions for the volume that are in process or waiting
+	// to be processed. Administrative actions describe changes to the volume that
+	// you have initiated using the UpdateVolume action.
 	AdministrativeActions []*AdministrativeAction `type:"list"`
 
 	// The time that the resource was created, in seconds (since 1970-01-01T00:00:00Z),
@@ -19761,6 +22303,10 @@ func ActiveDirectoryErrorType_Values() []string {
 //    Amazon FSx for OpenZFS volume initiated from the Amazon FSx console, API
 //    (UpdateVolume), or CLI (update-volume).
 //
+//    * VOLUME_RESTORE - An Amazon FSx for OpenZFS volume is returned to the
+//    state saved by the specified snapshot, initiated from an API (RestoreVolumeFromSnapshot)
+//    or CLI (restore-volume-from-snapshot).
+//
 //    * SNAPSHOT_UPDATE - A snapshot update to an Amazon FSx for OpenZFS volume
 //    initiated from the Amazon FSx console, API (UpdateSnapshot), or CLI (update-snapshot).
 //
@@ -19787,6 +22333,9 @@ const (
 
 	// AdministrativeActionTypeReleaseNfsV3Locks is a AdministrativeActionType enum value
 	AdministrativeActionTypeReleaseNfsV3Locks = "RELEASE_NFS_V3_LOCKS"
+
+	// AdministrativeActionTypeVolumeRestore is a AdministrativeActionType enum value
+	AdministrativeActionTypeVolumeRestore = "VOLUME_RESTORE"
 )
 
 // AdministrativeActionType_Values returns all elements of the AdministrativeActionType enum
@@ -19799,6 +22348,7 @@ func AdministrativeActionType_Values() []string {
 		AdministrativeActionTypeVolumeUpdate,
 		AdministrativeActionTypeSnapshotUpdate,
 		AdministrativeActionTypeReleaseNfsV3Locks,
+		AdministrativeActionTypeVolumeRestore,
 	}
 }
 
@@ -19985,6 +22535,9 @@ const (
 
 	// DataRepositoryTaskFilterNameDataRepositoryAssociationId is a DataRepositoryTaskFilterName enum value
 	DataRepositoryTaskFilterNameDataRepositoryAssociationId = "data-repository-association-id"
+
+	// DataRepositoryTaskFilterNameFileCacheId is a DataRepositoryTaskFilterName enum value
+	DataRepositoryTaskFilterNameFileCacheId = "file-cache-id"
 )
 
 // DataRepositoryTaskFilterName_Values returns all elements of the DataRepositoryTaskFilterName enum
@@ -19993,6 +22546,7 @@ func DataRepositoryTaskFilterName_Values() []string {
 		DataRepositoryTaskFilterNameFileSystemId,
 		DataRepositoryTaskFilterNameTaskLifecycle,
 		DataRepositoryTaskFilterNameDataRepositoryAssociationId,
+		DataRepositoryTaskFilterNameFileCacheId,
 	}
 }
 
@@ -20034,6 +22588,12 @@ const (
 
 	// DataRepositoryTaskTypeImportMetadataFromRepository is a DataRepositoryTaskType enum value
 	DataRepositoryTaskTypeImportMetadataFromRepository = "IMPORT_METADATA_FROM_REPOSITORY"
+
+	// DataRepositoryTaskTypeReleaseDataFromFilesystem is a DataRepositoryTaskType enum value
+	DataRepositoryTaskTypeReleaseDataFromFilesystem = "RELEASE_DATA_FROM_FILESYSTEM"
+
+	// DataRepositoryTaskTypeAutoReleaseData is a DataRepositoryTaskType enum value
+	DataRepositoryTaskTypeAutoReleaseData = "AUTO_RELEASE_DATA"
 )
 
 // DataRepositoryTaskType_Values returns all elements of the DataRepositoryTaskType enum
@@ -20041,6 +22601,8 @@ func DataRepositoryTaskType_Values() []string {
 	return []string{
 		DataRepositoryTaskTypeExportToRepository,
 		DataRepositoryTaskTypeImportMetadataFromRepository,
+		DataRepositoryTaskTypeReleaseDataFromFilesystem,
+		DataRepositoryTaskTypeAutoReleaseData,
 	}
 }
 
@@ -20117,6 +22679,58 @@ func EventType_Values() []string {
 		EventTypeNew,
 		EventTypeChanged,
 		EventTypeDeleted,
+	}
+}
+
+const (
+	// FileCacheLifecycleAvailable is a FileCacheLifecycle enum value
+	FileCacheLifecycleAvailable = "AVAILABLE"
+
+	// FileCacheLifecycleCreating is a FileCacheLifecycle enum value
+	FileCacheLifecycleCreating = "CREATING"
+
+	// FileCacheLifecycleDeleting is a FileCacheLifecycle enum value
+	FileCacheLifecycleDeleting = "DELETING"
+
+	// FileCacheLifecycleUpdating is a FileCacheLifecycle enum value
+	FileCacheLifecycleUpdating = "UPDATING"
+
+	// FileCacheLifecycleFailed is a FileCacheLifecycle enum value
+	FileCacheLifecycleFailed = "FAILED"
+)
+
+// FileCacheLifecycle_Values returns all elements of the FileCacheLifecycle enum
+func FileCacheLifecycle_Values() []string {
+	return []string{
+		FileCacheLifecycleAvailable,
+		FileCacheLifecycleCreating,
+		FileCacheLifecycleDeleting,
+		FileCacheLifecycleUpdating,
+		FileCacheLifecycleFailed,
+	}
+}
+
+const (
+	// FileCacheLustreDeploymentTypeCache1 is a FileCacheLustreDeploymentType enum value
+	FileCacheLustreDeploymentTypeCache1 = "CACHE_1"
+)
+
+// FileCacheLustreDeploymentType_Values returns all elements of the FileCacheLustreDeploymentType enum
+func FileCacheLustreDeploymentType_Values() []string {
+	return []string{
+		FileCacheLustreDeploymentTypeCache1,
+	}
+}
+
+const (
+	// FileCacheTypeLustre is a FileCacheType enum value
+	FileCacheTypeLustre = "LUSTRE"
+)
+
+// FileCacheType_Values returns all elements of the FileCacheType enum
+func FileCacheType_Values() []string {
+	return []string{
+		FileCacheTypeLustre,
 	}
 }
 
@@ -20215,6 +22829,12 @@ const (
 
 	// FilterNameDataRepositoryType is a FilterName enum value
 	FilterNameDataRepositoryType = "data-repository-type"
+
+	// FilterNameFileCacheId is a FilterName enum value
+	FilterNameFileCacheId = "file-cache-id"
+
+	// FilterNameFileCacheType is a FilterName enum value
+	FilterNameFileCacheType = "file-cache-type"
 )
 
 // FilterName_Values returns all elements of the FilterName enum
@@ -20225,6 +22845,8 @@ func FilterName_Values() []string {
 		FilterNameFileSystemType,
 		FilterNameVolumeId,
 		FilterNameDataRepositoryType,
+		FilterNameFileCacheId,
+		FilterNameFileCacheType,
 	}
 }
 
@@ -20245,6 +22867,22 @@ func FlexCacheEndpointType_Values() []string {
 		FlexCacheEndpointTypeNone,
 		FlexCacheEndpointTypeOrigin,
 		FlexCacheEndpointTypeCache,
+	}
+}
+
+const (
+	// InputOntapVolumeTypeRw is a InputOntapVolumeType enum value
+	InputOntapVolumeTypeRw = "RW"
+
+	// InputOntapVolumeTypeDp is a InputOntapVolumeType enum value
+	InputOntapVolumeTypeDp = "DP"
+)
+
+// InputOntapVolumeType_Values returns all elements of the InputOntapVolumeType enum
+func InputOntapVolumeType_Values() []string {
+	return []string{
+		InputOntapVolumeTypeRw,
+		InputOntapVolumeTypeDp,
 	}
 }
 
@@ -20293,6 +22931,18 @@ func LustreDeploymentType_Values() []string {
 		LustreDeploymentTypeScratch2,
 		LustreDeploymentTypePersistent1,
 		LustreDeploymentTypePersistent2,
+	}
+}
+
+const (
+	// NfsVersionNfs3 is a NfsVersion enum value
+	NfsVersionNfs3 = "NFS3"
+)
+
+// NfsVersion_Values returns all elements of the NfsVersion enum
+func NfsVersion_Values() []string {
+	return []string{
+		NfsVersionNfs3,
 	}
 }
 
@@ -20371,12 +23021,16 @@ func OpenZFSDataCompressionType_Values() []string {
 const (
 	// OpenZFSDeploymentTypeSingleAz1 is a OpenZFSDeploymentType enum value
 	OpenZFSDeploymentTypeSingleAz1 = "SINGLE_AZ_1"
+
+	// OpenZFSDeploymentTypeSingleAz2 is a OpenZFSDeploymentType enum value
+	OpenZFSDeploymentTypeSingleAz2 = "SINGLE_AZ_2"
 )
 
 // OpenZFSDeploymentType_Values returns all elements of the OpenZFSDeploymentType enum
 func OpenZFSDeploymentType_Values() []string {
 	return []string{
 		OpenZFSDeploymentTypeSingleAz1,
+		OpenZFSDeploymentTypeSingleAz2,
 	}
 }
 
@@ -20504,6 +23158,9 @@ const (
 
 	// ServiceLimitTotalSsdIops is a ServiceLimit enum value
 	ServiceLimitTotalSsdIops = "TOTAL_SSD_IOPS"
+
+	// ServiceLimitFileCacheCount is a ServiceLimit enum value
+	ServiceLimitFileCacheCount = "FILE_CACHE_COUNT"
 )
 
 // ServiceLimit_Values returns all elements of the ServiceLimit enum
@@ -20518,6 +23175,7 @@ func ServiceLimit_Values() []string {
 		ServiceLimitStorageVirtualMachinesPerFileSystem,
 		ServiceLimitVolumesPerFileSystem,
 		ServiceLimitTotalSsdIops,
+		ServiceLimitFileCacheCount,
 	}
 }
 

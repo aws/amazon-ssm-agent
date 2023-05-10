@@ -80,6 +80,10 @@ type CloudWatchLogsAPI interface {
 	CreateLogStreamWithContext(aws.Context, *cloudwatchlogs.CreateLogStreamInput, ...request.Option) (*cloudwatchlogs.CreateLogStreamOutput, error)
 	CreateLogStreamRequest(*cloudwatchlogs.CreateLogStreamInput) (*request.Request, *cloudwatchlogs.CreateLogStreamOutput)
 
+	DeleteDataProtectionPolicy(*cloudwatchlogs.DeleteDataProtectionPolicyInput) (*cloudwatchlogs.DeleteDataProtectionPolicyOutput, error)
+	DeleteDataProtectionPolicyWithContext(aws.Context, *cloudwatchlogs.DeleteDataProtectionPolicyInput, ...request.Option) (*cloudwatchlogs.DeleteDataProtectionPolicyOutput, error)
+	DeleteDataProtectionPolicyRequest(*cloudwatchlogs.DeleteDataProtectionPolicyInput) (*request.Request, *cloudwatchlogs.DeleteDataProtectionPolicyOutput)
+
 	DeleteDestination(*cloudwatchlogs.DeleteDestinationInput) (*cloudwatchlogs.DeleteDestinationOutput, error)
 	DeleteDestinationWithContext(aws.Context, *cloudwatchlogs.DeleteDestinationInput, ...request.Option) (*cloudwatchlogs.DeleteDestinationOutput, error)
 	DeleteDestinationRequest(*cloudwatchlogs.DeleteDestinationInput) (*request.Request, *cloudwatchlogs.DeleteDestinationOutput)
@@ -174,6 +178,10 @@ type CloudWatchLogsAPI interface {
 	FilterLogEventsPages(*cloudwatchlogs.FilterLogEventsInput, func(*cloudwatchlogs.FilterLogEventsOutput, bool) bool) error
 	FilterLogEventsPagesWithContext(aws.Context, *cloudwatchlogs.FilterLogEventsInput, func(*cloudwatchlogs.FilterLogEventsOutput, bool) bool, ...request.Option) error
 
+	GetDataProtectionPolicy(*cloudwatchlogs.GetDataProtectionPolicyInput) (*cloudwatchlogs.GetDataProtectionPolicyOutput, error)
+	GetDataProtectionPolicyWithContext(aws.Context, *cloudwatchlogs.GetDataProtectionPolicyInput, ...request.Option) (*cloudwatchlogs.GetDataProtectionPolicyOutput, error)
+	GetDataProtectionPolicyRequest(*cloudwatchlogs.GetDataProtectionPolicyInput) (*request.Request, *cloudwatchlogs.GetDataProtectionPolicyOutput)
+
 	GetLogEvents(*cloudwatchlogs.GetLogEventsInput) (*cloudwatchlogs.GetLogEventsOutput, error)
 	GetLogEventsWithContext(aws.Context, *cloudwatchlogs.GetLogEventsInput, ...request.Option) (*cloudwatchlogs.GetLogEventsOutput, error)
 	GetLogEventsRequest(*cloudwatchlogs.GetLogEventsInput) (*request.Request, *cloudwatchlogs.GetLogEventsOutput)
@@ -193,9 +201,17 @@ type CloudWatchLogsAPI interface {
 	GetQueryResultsWithContext(aws.Context, *cloudwatchlogs.GetQueryResultsInput, ...request.Option) (*cloudwatchlogs.GetQueryResultsOutput, error)
 	GetQueryResultsRequest(*cloudwatchlogs.GetQueryResultsInput) (*request.Request, *cloudwatchlogs.GetQueryResultsOutput)
 
+	ListTagsForResource(*cloudwatchlogs.ListTagsForResourceInput) (*cloudwatchlogs.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *cloudwatchlogs.ListTagsForResourceInput, ...request.Option) (*cloudwatchlogs.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*cloudwatchlogs.ListTagsForResourceInput) (*request.Request, *cloudwatchlogs.ListTagsForResourceOutput)
+
 	ListTagsLogGroup(*cloudwatchlogs.ListTagsLogGroupInput) (*cloudwatchlogs.ListTagsLogGroupOutput, error)
 	ListTagsLogGroupWithContext(aws.Context, *cloudwatchlogs.ListTagsLogGroupInput, ...request.Option) (*cloudwatchlogs.ListTagsLogGroupOutput, error)
 	ListTagsLogGroupRequest(*cloudwatchlogs.ListTagsLogGroupInput) (*request.Request, *cloudwatchlogs.ListTagsLogGroupOutput)
+
+	PutDataProtectionPolicy(*cloudwatchlogs.PutDataProtectionPolicyInput) (*cloudwatchlogs.PutDataProtectionPolicyOutput, error)
+	PutDataProtectionPolicyWithContext(aws.Context, *cloudwatchlogs.PutDataProtectionPolicyInput, ...request.Option) (*cloudwatchlogs.PutDataProtectionPolicyOutput, error)
+	PutDataProtectionPolicyRequest(*cloudwatchlogs.PutDataProtectionPolicyInput) (*request.Request, *cloudwatchlogs.PutDataProtectionPolicyOutput)
 
 	PutDestination(*cloudwatchlogs.PutDestinationInput) (*cloudwatchlogs.PutDestinationOutput, error)
 	PutDestinationWithContext(aws.Context, *cloudwatchlogs.PutDestinationInput, ...request.Option) (*cloudwatchlogs.PutDestinationOutput, error)
@@ -241,6 +257,10 @@ type CloudWatchLogsAPI interface {
 	TagLogGroupWithContext(aws.Context, *cloudwatchlogs.TagLogGroupInput, ...request.Option) (*cloudwatchlogs.TagLogGroupOutput, error)
 	TagLogGroupRequest(*cloudwatchlogs.TagLogGroupInput) (*request.Request, *cloudwatchlogs.TagLogGroupOutput)
 
+	TagResource(*cloudwatchlogs.TagResourceInput) (*cloudwatchlogs.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *cloudwatchlogs.TagResourceInput, ...request.Option) (*cloudwatchlogs.TagResourceOutput, error)
+	TagResourceRequest(*cloudwatchlogs.TagResourceInput) (*request.Request, *cloudwatchlogs.TagResourceOutput)
+
 	TestMetricFilter(*cloudwatchlogs.TestMetricFilterInput) (*cloudwatchlogs.TestMetricFilterOutput, error)
 	TestMetricFilterWithContext(aws.Context, *cloudwatchlogs.TestMetricFilterInput, ...request.Option) (*cloudwatchlogs.TestMetricFilterOutput, error)
 	TestMetricFilterRequest(*cloudwatchlogs.TestMetricFilterInput) (*request.Request, *cloudwatchlogs.TestMetricFilterOutput)
@@ -248,6 +268,10 @@ type CloudWatchLogsAPI interface {
 	UntagLogGroup(*cloudwatchlogs.UntagLogGroupInput) (*cloudwatchlogs.UntagLogGroupOutput, error)
 	UntagLogGroupWithContext(aws.Context, *cloudwatchlogs.UntagLogGroupInput, ...request.Option) (*cloudwatchlogs.UntagLogGroupOutput, error)
 	UntagLogGroupRequest(*cloudwatchlogs.UntagLogGroupInput) (*request.Request, *cloudwatchlogs.UntagLogGroupOutput)
+
+	UntagResource(*cloudwatchlogs.UntagResourceInput) (*cloudwatchlogs.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *cloudwatchlogs.UntagResourceInput, ...request.Option) (*cloudwatchlogs.UntagResourceOutput, error)
+	UntagResourceRequest(*cloudwatchlogs.UntagResourceInput) (*request.Request, *cloudwatchlogs.UntagResourceOutput)
 }
 
 var _ CloudWatchLogsAPI = (*cloudwatchlogs.CloudWatchLogs)(nil)

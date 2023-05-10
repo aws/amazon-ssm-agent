@@ -64,6 +64,10 @@ type LakeFormationAPI interface {
 	AddLFTagsToResourceWithContext(aws.Context, *lakeformation.AddLFTagsToResourceInput, ...request.Option) (*lakeformation.AddLFTagsToResourceOutput, error)
 	AddLFTagsToResourceRequest(*lakeformation.AddLFTagsToResourceInput) (*request.Request, *lakeformation.AddLFTagsToResourceOutput)
 
+	AssumeDecoratedRoleWithSAML(*lakeformation.AssumeDecoratedRoleWithSAMLInput) (*lakeformation.AssumeDecoratedRoleWithSAMLOutput, error)
+	AssumeDecoratedRoleWithSAMLWithContext(aws.Context, *lakeformation.AssumeDecoratedRoleWithSAMLInput, ...request.Option) (*lakeformation.AssumeDecoratedRoleWithSAMLOutput, error)
+	AssumeDecoratedRoleWithSAMLRequest(*lakeformation.AssumeDecoratedRoleWithSAMLInput) (*request.Request, *lakeformation.AssumeDecoratedRoleWithSAMLOutput)
+
 	BatchGrantPermissions(*lakeformation.BatchGrantPermissionsInput) (*lakeformation.BatchGrantPermissionsOutput, error)
 	BatchGrantPermissionsWithContext(aws.Context, *lakeformation.BatchGrantPermissionsInput, ...request.Option) (*lakeformation.BatchGrantPermissionsOutput, error)
 	BatchGrantPermissionsRequest(*lakeformation.BatchGrantPermissionsInput) (*request.Request, *lakeformation.BatchGrantPermissionsOutput)
@@ -115,6 +119,10 @@ type LakeFormationAPI interface {
 	ExtendTransaction(*lakeformation.ExtendTransactionInput) (*lakeformation.ExtendTransactionOutput, error)
 	ExtendTransactionWithContext(aws.Context, *lakeformation.ExtendTransactionInput, ...request.Option) (*lakeformation.ExtendTransactionOutput, error)
 	ExtendTransactionRequest(*lakeformation.ExtendTransactionInput) (*request.Request, *lakeformation.ExtendTransactionOutput)
+
+	GetDataCellsFilter(*lakeformation.GetDataCellsFilterInput) (*lakeformation.GetDataCellsFilterOutput, error)
+	GetDataCellsFilterWithContext(aws.Context, *lakeformation.GetDataCellsFilterInput, ...request.Option) (*lakeformation.GetDataCellsFilterOutput, error)
+	GetDataCellsFilterRequest(*lakeformation.GetDataCellsFilterInput) (*request.Request, *lakeformation.GetDataCellsFilterOutput)
 
 	GetDataLakeSettings(*lakeformation.GetDataLakeSettingsInput) (*lakeformation.GetDataLakeSettingsOutput, error)
 	GetDataLakeSettingsWithContext(aws.Context, *lakeformation.GetDataLakeSettingsInput, ...request.Option) (*lakeformation.GetDataLakeSettingsOutput, error)
@@ -252,6 +260,10 @@ type LakeFormationAPI interface {
 	StartTransaction(*lakeformation.StartTransactionInput) (*lakeformation.StartTransactionOutput, error)
 	StartTransactionWithContext(aws.Context, *lakeformation.StartTransactionInput, ...request.Option) (*lakeformation.StartTransactionOutput, error)
 	StartTransactionRequest(*lakeformation.StartTransactionInput) (*request.Request, *lakeformation.StartTransactionOutput)
+
+	UpdateDataCellsFilter(*lakeformation.UpdateDataCellsFilterInput) (*lakeformation.UpdateDataCellsFilterOutput, error)
+	UpdateDataCellsFilterWithContext(aws.Context, *lakeformation.UpdateDataCellsFilterInput, ...request.Option) (*lakeformation.UpdateDataCellsFilterOutput, error)
+	UpdateDataCellsFilterRequest(*lakeformation.UpdateDataCellsFilterInput) (*request.Request, *lakeformation.UpdateDataCellsFilterOutput)
 
 	UpdateLFTag(*lakeformation.UpdateLFTagInput) (*lakeformation.UpdateLFTagOutput, error)
 	UpdateLFTagWithContext(aws.Context, *lakeformation.UpdateLFTagInput, ...request.Option) (*lakeformation.UpdateLFTagOutput, error)

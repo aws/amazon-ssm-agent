@@ -3984,6 +3984,15 @@ const (
 
 	// LanguageCodeDeAt is a LanguageCode enum value
 	LanguageCodeDeAt = "de-AT"
+
+	// LanguageCodeYueCn is a LanguageCode enum value
+	LanguageCodeYueCn = "yue-CN"
+
+	// LanguageCodeArAe is a LanguageCode enum value
+	LanguageCodeArAe = "ar-AE"
+
+	// LanguageCodeFiFi is a LanguageCode enum value
+	LanguageCodeFiFi = "fi-FI"
 )
 
 // LanguageCode_Values returns all elements of the LanguageCode enum
@@ -4022,6 +4031,9 @@ func LanguageCode_Values() []string {
 		LanguageCodeEnZa,
 		LanguageCodeCaEs,
 		LanguageCodeDeAt,
+		LanguageCodeYueCn,
+		LanguageCodeArAe,
+		LanguageCodeFiFi,
 	}
 }
 
@@ -4329,6 +4341,54 @@ const (
 
 	// VoiceIdKajal is a VoiceId enum value
 	VoiceIdKajal = "Kajal"
+
+	// VoiceIdHiujin is a VoiceId enum value
+	VoiceIdHiujin = "Hiujin"
+
+	// VoiceIdLaura is a VoiceId enum value
+	VoiceIdLaura = "Laura"
+
+	// VoiceIdElin is a VoiceId enum value
+	VoiceIdElin = "Elin"
+
+	// VoiceIdIda is a VoiceId enum value
+	VoiceIdIda = "Ida"
+
+	// VoiceIdSuvi is a VoiceId enum value
+	VoiceIdSuvi = "Suvi"
+
+	// VoiceIdOla is a VoiceId enum value
+	VoiceIdOla = "Ola"
+
+	// VoiceIdHala is a VoiceId enum value
+	VoiceIdHala = "Hala"
+
+	// VoiceIdAndres is a VoiceId enum value
+	VoiceIdAndres = "Andres"
+
+	// VoiceIdSergio is a VoiceId enum value
+	VoiceIdSergio = "Sergio"
+
+	// VoiceIdRemi is a VoiceId enum value
+	VoiceIdRemi = "Remi"
+
+	// VoiceIdAdriano is a VoiceId enum value
+	VoiceIdAdriano = "Adriano"
+
+	// VoiceIdThiago is a VoiceId enum value
+	VoiceIdThiago = "Thiago"
+
+	// VoiceIdRuth is a VoiceId enum value
+	VoiceIdRuth = "Ruth"
+
+	// VoiceIdStephen is a VoiceId enum value
+	VoiceIdStephen = "Stephen"
+
+	// VoiceIdKazuha is a VoiceId enum value
+	VoiceIdKazuha = "Kazuha"
+
+	// VoiceIdTomoko is a VoiceId enum value
+	VoiceIdTomoko = "Tomoko"
 )
 
 // VoiceId_Values returns all elements of the VoiceId enum
@@ -4406,5 +4466,21 @@ func VoiceId_Values() []string {
 		VoiceIdLiam,
 		VoiceIdPedro,
 		VoiceIdKajal,
+		VoiceIdHiujin,
+		VoiceIdLaura,
+		VoiceIdElin,
+		VoiceIdIda,
+		VoiceIdSuvi,
+		VoiceIdOla,
+		VoiceIdHala,
+		VoiceIdAndres,
+		VoiceIdSergio,
+		VoiceIdRemi,
+		VoiceIdAdriano,
+		VoiceIdThiago,
+		VoiceIdRuth,
+		VoiceIdStephen,
+		VoiceIdKazuha,
+		VoiceIdTomoko,
 	}
 }

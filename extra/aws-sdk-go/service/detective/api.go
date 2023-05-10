@@ -73,6 +73,10 @@ func (c *Detective) AcceptInvitationRequest(input *AcceptInvitationInput) (req *
 // API operation AcceptInvitation for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * ConflictException
 //   The request attempted an invalid action.
 //
@@ -161,6 +165,10 @@ func (c *Detective) BatchGetGraphMemberDatasourcesRequest(input *BatchGetGraphMe
 // API operation BatchGetGraphMemberDatasources for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -246,6 +254,10 @@ func (c *Detective) BatchGetMembershipDatasourcesRequest(input *BatchGetMembersh
 // API operation BatchGetMembershipDatasources for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -351,6 +363,10 @@ func (c *Detective) CreateGraphRequest(input *CreateGraphInput) (req *request.Re
 // API operation CreateGraph for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * ConflictException
 //   The request attempted an invalid action.
 //
@@ -477,6 +493,10 @@ func (c *Detective) CreateMembersRequest(input *CreateMembersInput) (req *reques
 // API operation CreateMembers for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -580,6 +600,10 @@ func (c *Detective) DeleteGraphRequest(input *DeleteGraphInput) (req *request.Re
 // API operation DeleteGraph for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -680,6 +704,10 @@ func (c *Detective) DeleteMembersRequest(input *DeleteMembersInput) (req *reques
 // API operation DeleteMembers for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * ConflictException
 //   The request attempted an invalid action.
 //
@@ -772,6 +800,10 @@ func (c *Detective) DescribeOrganizationConfigurationRequest(input *DescribeOrga
 // API operation DescribeOrganizationConfiguration for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -870,6 +902,10 @@ func (c *Detective) DisableOrganizationAdminAccountRequest(input *DisableOrganiz
 // API operation DisableOrganizationAdminAccount for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -963,6 +999,10 @@ func (c *Detective) DisassociateMembershipRequest(input *DisassociateMembershipI
 // API operation DisassociateMembership for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * ConflictException
 //   The request attempted an invalid action.
 //
@@ -1068,6 +1108,10 @@ func (c *Detective) EnableOrganizationAdminAccountRequest(input *EnableOrganizat
 // API operation EnableOrganizationAdminAccount for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -1155,6 +1199,10 @@ func (c *Detective) GetMembersRequest(input *GetMembersInput) (req *request.Requ
 // API operation GetMembers for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -1246,6 +1294,10 @@ func (c *Detective) ListDatasourcePackagesRequest(input *ListDatasourcePackagesI
 // API operation ListDatasourcePackages for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -1393,6 +1445,10 @@ func (c *Detective) ListGraphsRequest(input *ListGraphsInput) (req *request.Requ
 // API operation ListGraphs for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -1541,6 +1597,10 @@ func (c *Detective) ListInvitationsRequest(input *ListInvitationsInput) (req *re
 // API operation ListInvitations for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -1688,6 +1748,10 @@ func (c *Detective) ListMembersRequest(input *ListMembersInput) (req *request.Re
 // API operation ListMembers for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -1832,6 +1896,10 @@ func (c *Detective) ListOrganizationAdminAccountsRequest(input *ListOrganization
 // API operation ListOrganizationAdminAccounts for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -1970,6 +2038,10 @@ func (c *Detective) ListTagsForResourceRequest(input *ListTagsForResourceInput) 
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -2062,6 +2134,10 @@ func (c *Detective) RejectInvitationRequest(input *RejectInvitationInput) (req *
 // API operation RejectInvitation for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * ConflictException
 //   The request attempted an invalid action.
 //
@@ -2158,6 +2234,10 @@ func (c *Detective) StartMonitoringMemberRequest(input *StartMonitoringMemberInp
 // API operation StartMonitoringMember for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * ConflictException
 //   The request attempted an invalid action.
 //
@@ -2260,6 +2340,10 @@ func (c *Detective) TagResourceRequest(input *TagResourceInput) (req *request.Re
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -2346,6 +2430,10 @@ func (c *Detective) UntagResourceRequest(input *UntagResourceInput) (req *reques
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -2432,6 +2520,10 @@ func (c *Detective) UpdateDatasourcePackagesRequest(input *UpdateDatasourcePacka
 // API operation UpdateDatasourcePackages for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -2533,6 +2625,10 @@ func (c *Detective) UpdateOrganizationConfigurationRequest(input *UpdateOrganiza
 // API operation UpdateOrganizationConfiguration for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//   The request issuer does not have permission to access this resource or perform
+//   this operation.
+//
 //   * InternalServerException
 //   The request was valid but failed because of a problem with the service.
 //
@@ -2634,6 +2730,83 @@ func (s AcceptInvitationOutput) String() string {
 // value will be replaced with "sensitive".
 func (s AcceptInvitationOutput) GoString() string {
 	return s.String()
+}
+
+// The request issuer does not have permission to access this resource or perform
+// this operation.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The SDK default error code associated with the access denied exception.
+	ErrorCode *string `type:"string" enum:"ErrorCode"`
+
+	// The SDK default explanation of why access was denied.
+	ErrorCodeReason *string `type:"string"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+
+	// The error code associated with the access denied exception.
+	SubErrorCode *string `type:"string" enum:"ErrorCode"`
+
+	// An explanation of why access was denied.
+	SubErrorCodeReason *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An Amazon Web Services account that is the administrator account of or a

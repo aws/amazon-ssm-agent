@@ -537,6 +537,9 @@ func (c *ConnectCampaigns) GetCampaignStateRequest(input *GetCampaignStateInput)
 //   * ResourceNotFoundException
 //   The specified resource was not found.
 //
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by an AWS service.
+//
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
@@ -1125,6 +1128,9 @@ func (c *ConnectCampaigns) PauseCampaignRequest(input *PauseCampaignInput) (req 
 //   * ResourceNotFoundException
 //   The specified resource was not found.
 //
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by an AWS service.
+//
 //   * ConflictException
 //   The request could not be processed because of conflict in the current state
 //   of the resource.
@@ -1322,6 +1328,9 @@ func (c *ConnectCampaigns) ResumeCampaignRequest(input *ResumeCampaignInput) (re
 //   * ResourceNotFoundException
 //   The specified resource was not found.
 //
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by an AWS service.
+//
 //   * ConflictException
 //   The request could not be processed because of conflict in the current state
 //   of the resource.
@@ -1418,6 +1427,9 @@ func (c *ConnectCampaigns) StartCampaignRequest(input *StartCampaignInput) (req 
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by an AWS service.
 //
 //   * ConflictException
 //   The request could not be processed because of conflict in the current state
@@ -1610,6 +1622,9 @@ func (c *ConnectCampaigns) StopCampaignRequest(input *StopCampaignInput) (req *r
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by an AWS service.
 //
 //   * ConflictException
 //   The request could not be processed because of conflict in the current state

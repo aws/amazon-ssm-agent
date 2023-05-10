@@ -208,6 +208,12 @@ func (a *API) AttachExamples(filename string) error {
 		return fmt.Errorf("failed to decode %s, err: %v", filename, err)
 	}
 
+	if a.Metadata.ServiceID == "" {
+		fmt.Println(strings.Split(filename, "/")[3])
+		servID := strings.Split(filename, "/")[3]
+		a.Metadata.ServiceID = servID
+	}
+
 	return p.setup()
 }
 

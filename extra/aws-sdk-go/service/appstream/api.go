@@ -985,8 +985,8 @@ func (c *AppStream) CreateFleetRequest(input *CreateFleetInput) (req *request.Re
 
 // CreateFleet API operation for Amazon AppStream.
 //
-// Creates a fleet. A fleet consists of streaming instances that run a specified
-// image when using Always-On or On-Demand.
+// Creates a fleet. A fleet consists of streaming instances that your users
+// access for their applications and desktops.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6847,6 +6847,55 @@ func (s *BatchDisassociateUserStackOutput) SetErrors(v []*UserStackAssociationEr
 	return s
 }
 
+// The certificate-based authentication properties used to authenticate SAML
+// 2.0 Identity Provider (IdP) user identities to Active Directory domain-joined
+// streaming instances. Fallback is turned on by default when certificate-based
+// authentication is Enabled . Fallback allows users to log in using their AD
+// domain password if certificate-based authentication is unsuccessful, or to
+// unlock a desktop lock screen. Enabled_no_directory_login_fallback enables
+// certificate-based authentication, but does not allow users to log in using
+// their AD domain password. Users will be disconnected to re-authenticate using
+// certificates.
+type CertificateBasedAuthProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the AWS Certificate Manager Private CA resource.
+	CertificateAuthorityArn *string `type:"string"`
+
+	// The status of the certificate-based authentication properties.
+	Status *string `type:"string" enum:"CertificateBasedAuthStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CertificateBasedAuthProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CertificateBasedAuthProperties) GoString() string {
+	return s.String()
+}
+
+// SetCertificateAuthorityArn sets the CertificateAuthorityArn field's value.
+func (s *CertificateBasedAuthProperties) SetCertificateAuthorityArn(v string) *CertificateBasedAuthProperties {
+	s.CertificateAuthorityArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CertificateBasedAuthProperties) SetStatus(v string) *CertificateBasedAuthProperties {
+	s.Status = &v
+	return s
+}
+
 // Describes the capacity for a fleet.
 type ComputeCapacity struct {
 	_ struct{} `type:"structure"`
@@ -7499,6 +7548,17 @@ func (s *CreateApplicationOutput) SetApplication(v *Application) *CreateApplicat
 type CreateDirectoryConfigInput struct {
 	_ struct{} `type:"structure"`
 
+	// The certificate-based authentication properties used to authenticate SAML
+	// 2.0 Identity Provider (IdP) user identities to Active Directory domain-joined
+	// streaming instances. Fallback is turned on by default when certificate-based
+	// authentication is Enabled . Fallback allows users to log in using their AD
+	// domain password if certificate-based authentication is unsuccessful, or to
+	// unlock a desktop lock screen. Enabled_no_directory_login_fallback enables
+	// certificate-based authentication, but does not allow users to log in using
+	// their AD domain password. Users will be disconnected to re-authenticate using
+	// certificates.
+	CertificateBasedAuthProperties *CertificateBasedAuthProperties `type:"structure"`
+
 	// The fully qualified name of the directory (for example, corp.example.com).
 	//
 	// DirectoryName is a required field
@@ -7551,6 +7611,12 @@ func (s *CreateDirectoryConfigInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCertificateBasedAuthProperties sets the CertificateBasedAuthProperties field's value.
+func (s *CreateDirectoryConfigInput) SetCertificateBasedAuthProperties(v *CertificateBasedAuthProperties) *CreateDirectoryConfigInput {
+	s.CertificateBasedAuthProperties = v
+	return s
 }
 
 // SetDirectoryName sets the DirectoryName field's value.
@@ -7838,6 +7904,10 @@ type CreateFleetInput struct {
 	//
 	//    * stream.standard.large
 	//
+	//    * stream.standard.xlarge
+	//
+	//    * stream.standard.2xlarge
+	//
 	//    * stream.compute.large
 	//
 	//    * stream.compute.xlarge
@@ -7903,6 +7973,12 @@ type CreateFleetInput struct {
 	//    * stream.standard.small
 	//
 	//    * stream.standard.medium
+	//
+	//    * stream.standard.large
+	//
+	//    * stream.standard.xlarge
+	//
+	//    * stream.standard.2xlarge
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
@@ -11730,6 +11806,17 @@ func (s *DescribeUsersOutput) SetUsers(v []*User) *DescribeUsersOutput {
 type DirectoryConfig struct {
 	_ struct{} `type:"structure"`
 
+	// The certificate-based authentication properties used to authenticate SAML
+	// 2.0 Identity Provider (IdP) user identities to Active Directory domain-joined
+	// streaming instances. Fallback is turned on by default when certificate-based
+	// authentication is Enabled . Fallback allows users to log in using their AD
+	// domain password if certificate-based authentication is unsuccessful, or to
+	// unlock a desktop lock screen. Enabled_no_directory_login_fallback enables
+	// certificate-based authentication, but does not allow users to log in using
+	// their AD domain password. Users will be disconnected to re-authenticate using
+	// certificates.
+	CertificateBasedAuthProperties *CertificateBasedAuthProperties `type:"structure"`
+
 	// The time the directory configuration was created.
 	CreatedTime *time.Time `type:"timestamp"`
 
@@ -11762,6 +11849,12 @@ func (s DirectoryConfig) String() string {
 // value will be replaced with "sensitive".
 func (s DirectoryConfig) GoString() string {
 	return s.String()
+}
+
+// SetCertificateBasedAuthProperties sets the CertificateBasedAuthProperties field's value.
+func (s *DirectoryConfig) SetCertificateBasedAuthProperties(v *CertificateBasedAuthProperties) *DirectoryConfig {
+	s.CertificateBasedAuthProperties = v
+	return s
 }
 
 // SetCreatedTime sets the CreatedTime field's value.
@@ -16330,6 +16423,17 @@ func (s *UpdateApplicationOutput) SetApplication(v *Application) *UpdateApplicat
 type UpdateDirectoryConfigInput struct {
 	_ struct{} `type:"structure"`
 
+	// The certificate-based authentication properties used to authenticate SAML
+	// 2.0 Identity Provider (IdP) user identities to Active Directory domain-joined
+	// streaming instances. Fallback is turned on by default when certificate-based
+	// authentication is Enabled . Fallback allows users to log in using their AD
+	// domain password if certificate-based authentication is unsuccessful, or to
+	// unlock a desktop lock screen. Enabled_no_directory_login_fallback enables
+	// certificate-based authentication, but does not allow users to log in using
+	// their AD domain password. Users will be disconnected to re-authenticate using
+	// certificates.
+	CertificateBasedAuthProperties *CertificateBasedAuthProperties `type:"structure"`
+
 	// The name of the Directory Config object.
 	//
 	// DirectoryName is a required field
@@ -16377,6 +16481,12 @@ func (s *UpdateDirectoryConfigInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCertificateBasedAuthProperties sets the CertificateBasedAuthProperties field's value.
+func (s *UpdateDirectoryConfigInput) SetCertificateBasedAuthProperties(v *CertificateBasedAuthProperties) *UpdateDirectoryConfigInput {
+	s.CertificateBasedAuthProperties = v
+	return s
 }
 
 // SetDirectoryName sets the DirectoryName field's value.
@@ -16646,6 +16756,10 @@ type UpdateFleetInput struct {
 	//
 	//    * stream.standard.large
 	//
+	//    * stream.standard.xlarge
+	//
+	//    * stream.standard.2xlarge
+	//
 	//    * stream.compute.large
 	//
 	//    * stream.compute.xlarge
@@ -16711,6 +16825,12 @@ type UpdateFleetInput struct {
 	//    * stream.standard.small
 	//
 	//    * stream.standard.medium
+	//
+	//    * stream.standard.large
+	//
+	//    * stream.standard.xlarge
+	//
+	//    * stream.standard.2xlarge
 	InstanceType *string `min:"1" type:"string"`
 
 	// The maximum number of concurrent sessions for a fleet.
@@ -17830,6 +17950,9 @@ const (
 
 	// AuthenticationTypeUserpool is a AuthenticationType enum value
 	AuthenticationTypeUserpool = "USERPOOL"
+
+	// AuthenticationTypeAwsAd is a AuthenticationType enum value
+	AuthenticationTypeAwsAd = "AWS_AD"
 )
 
 // AuthenticationType_Values returns all elements of the AuthenticationType enum
@@ -17838,6 +17961,27 @@ func AuthenticationType_Values() []string {
 		AuthenticationTypeApi,
 		AuthenticationTypeSaml,
 		AuthenticationTypeUserpool,
+		AuthenticationTypeAwsAd,
+	}
+}
+
+const (
+	// CertificateBasedAuthStatusDisabled is a CertificateBasedAuthStatus enum value
+	CertificateBasedAuthStatusDisabled = "DISABLED"
+
+	// CertificateBasedAuthStatusEnabled is a CertificateBasedAuthStatus enum value
+	CertificateBasedAuthStatusEnabled = "ENABLED"
+
+	// CertificateBasedAuthStatusEnabledNoDirectoryLoginFallback is a CertificateBasedAuthStatus enum value
+	CertificateBasedAuthStatusEnabledNoDirectoryLoginFallback = "ENABLED_NO_DIRECTORY_LOGIN_FALLBACK"
+)
+
+// CertificateBasedAuthStatus_Values returns all elements of the CertificateBasedAuthStatus enum
+func CertificateBasedAuthStatus_Values() []string {
+	return []string{
+		CertificateBasedAuthStatusDisabled,
+		CertificateBasedAuthStatusEnabled,
+		CertificateBasedAuthStatusEnabledNoDirectoryLoginFallback,
 	}
 }
 

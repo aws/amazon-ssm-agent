@@ -112,6 +112,13 @@ type WellArchitectedAPI interface {
 	GetAnswerWithContext(aws.Context, *wellarchitected.GetAnswerInput, ...request.Option) (*wellarchitected.GetAnswerOutput, error)
 	GetAnswerRequest(*wellarchitected.GetAnswerInput) (*request.Request, *wellarchitected.GetAnswerOutput)
 
+	GetConsolidatedReport(*wellarchitected.GetConsolidatedReportInput) (*wellarchitected.GetConsolidatedReportOutput, error)
+	GetConsolidatedReportWithContext(aws.Context, *wellarchitected.GetConsolidatedReportInput, ...request.Option) (*wellarchitected.GetConsolidatedReportOutput, error)
+	GetConsolidatedReportRequest(*wellarchitected.GetConsolidatedReportInput) (*request.Request, *wellarchitected.GetConsolidatedReportOutput)
+
+	GetConsolidatedReportPages(*wellarchitected.GetConsolidatedReportInput, func(*wellarchitected.GetConsolidatedReportOutput, bool) bool) error
+	GetConsolidatedReportPagesWithContext(aws.Context, *wellarchitected.GetConsolidatedReportInput, func(*wellarchitected.GetConsolidatedReportOutput, bool) bool, ...request.Option) error
+
 	GetLens(*wellarchitected.GetLensInput) (*wellarchitected.GetLensOutput, error)
 	GetLensWithContext(aws.Context, *wellarchitected.GetLensInput, ...request.Option) (*wellarchitected.GetLensOutput, error)
 	GetLensRequest(*wellarchitected.GetLensInput) (*request.Request, *wellarchitected.GetLensOutput)
@@ -146,6 +153,20 @@ type WellArchitectedAPI interface {
 
 	ListAnswersPages(*wellarchitected.ListAnswersInput, func(*wellarchitected.ListAnswersOutput, bool) bool) error
 	ListAnswersPagesWithContext(aws.Context, *wellarchitected.ListAnswersInput, func(*wellarchitected.ListAnswersOutput, bool) bool, ...request.Option) error
+
+	ListCheckDetails(*wellarchitected.ListCheckDetailsInput) (*wellarchitected.ListCheckDetailsOutput, error)
+	ListCheckDetailsWithContext(aws.Context, *wellarchitected.ListCheckDetailsInput, ...request.Option) (*wellarchitected.ListCheckDetailsOutput, error)
+	ListCheckDetailsRequest(*wellarchitected.ListCheckDetailsInput) (*request.Request, *wellarchitected.ListCheckDetailsOutput)
+
+	ListCheckDetailsPages(*wellarchitected.ListCheckDetailsInput, func(*wellarchitected.ListCheckDetailsOutput, bool) bool) error
+	ListCheckDetailsPagesWithContext(aws.Context, *wellarchitected.ListCheckDetailsInput, func(*wellarchitected.ListCheckDetailsOutput, bool) bool, ...request.Option) error
+
+	ListCheckSummaries(*wellarchitected.ListCheckSummariesInput) (*wellarchitected.ListCheckSummariesOutput, error)
+	ListCheckSummariesWithContext(aws.Context, *wellarchitected.ListCheckSummariesInput, ...request.Option) (*wellarchitected.ListCheckSummariesOutput, error)
+	ListCheckSummariesRequest(*wellarchitected.ListCheckSummariesInput) (*request.Request, *wellarchitected.ListCheckSummariesOutput)
+
+	ListCheckSummariesPages(*wellarchitected.ListCheckSummariesInput, func(*wellarchitected.ListCheckSummariesOutput, bool) bool) error
+	ListCheckSummariesPagesWithContext(aws.Context, *wellarchitected.ListCheckSummariesInput, func(*wellarchitected.ListCheckSummariesOutput, bool) bool, ...request.Option) error
 
 	ListLensReviewImprovements(*wellarchitected.ListLensReviewImprovementsInput) (*wellarchitected.ListLensReviewImprovementsOutput, error)
 	ListLensReviewImprovementsWithContext(aws.Context, *wellarchitected.ListLensReviewImprovementsInput, ...request.Option) (*wellarchitected.ListLensReviewImprovementsOutput, error)

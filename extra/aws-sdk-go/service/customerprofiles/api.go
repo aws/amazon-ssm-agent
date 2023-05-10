@@ -57,8 +57,8 @@ func (c *CustomerProfiles) AddProfileKeyRequest(input *AddProfileKeyInput) (req 
 
 // AddProfileKey API operation for Amazon Connect Customer Profiles.
 //
-// Associates a new key value with a specific profile, such as a Contact Trace
-// Record (CTR) ContactId.
+// Associates a new key value with a specific profile, such as a Contact Record
+// ContactId.
 //
 // A profile object can have a single unique key and any number of additional
 // keys that can be used to identify the profile that it belongs to.
@@ -2903,6 +2903,9 @@ func (c *CustomerProfiles) PutIntegrationRequest(input *PutIntegrationInput) (re
 //
 // An integration can belong to only one domain.
 //
+// To add or remove tags on an existing Integration, see TagResource (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_TagResource.html)/
+// UntagResource (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_UntagResource.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2994,10 +2997,10 @@ func (c *CustomerProfiles) PutProfileObjectRequest(input *PutProfileObjectInput)
 //
 // Adds additional objects to customer profiles of a given ObjectType.
 //
-// When adding a specific profile object, like a Contact Trace Record (CTR),
-// an inferred profile can get created if it is not mapped to an existing profile.
-// The resulting profile will only have a phone number populated in the standard
-// ProfileObject. Any additional CTRs with the same phone number will be mapped
+// When adding a specific profile object, like a Contact Record, an inferred
+// profile can get created if it is not mapped to an existing profile. The resulting
+// profile will only have a phone number populated in the standard ProfileObject.
+// Any additional Contact Records with the same phone number will be mapped
 // to the same inferred profile.
 //
 // When a ProfileObject is created and if a ProfileObjectType already exists
@@ -3097,6 +3100,9 @@ func (c *CustomerProfiles) PutProfileObjectTypeRequest(input *PutProfileObjectTy
 //
 // Defines a ProfileObjectType.
 //
+// To add or remove tags on an existing ObjectType, see TagResource (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_TagResource.html)/UntagResource
+// (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_UntagResource.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3186,8 +3192,13 @@ func (c *CustomerProfiles) SearchProfilesRequest(input *SearchProfilesInput) (re
 
 // SearchProfiles API operation for Amazon Connect Customer Profiles.
 //
-// Searches for profiles within a specific domain name using name, phone number,
-// email address, account number, or a custom defined index.
+// Searches for profiles within a specific domain using one or more predefined
+// search keys (e.g., _fullName, _phone, _email, _account, etc.) and/or custom-defined
+// search keys. A search key is a data type pair that consists of a KeyName
+// and Values list.
+//
+// This operation supports searching for profiles with a minimum of 1 key-value(s)
+// pair and up to 5 key-value(s) pairs using either AND or OR logic.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3480,6 +3491,9 @@ func (c *CustomerProfiles) UpdateDomainRequest(input *UpdateDomainInput) (req *r
 // To prevent cross-service impersonation when you call this API, see Cross-service
 // confused deputy prevention (https://docs.aws.amazon.com/connect/latest/adminguide/cross-service-confused-deputy-prevention.html)
 // for sample policies that you should apply.
+//
+// To add or remove tags on an existing Domain, see TagResource (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_TagResource.html)/UntagResource
+// (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_UntagResource.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3821,6 +3835,74 @@ func (s *AddProfileKeyOutput) SetKeyName(v string) *AddProfileKeyOutput {
 
 // SetValues sets the Values field's value.
 func (s *AddProfileKeyOutput) SetValues(v []*string) *AddProfileKeyOutput {
+	s.Values = v
+	return s
+}
+
+// A data type pair that consists of a KeyName and Values list that is used
+// in conjunction with the KeyName (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_SearchProfiles.html#customerprofiles-SearchProfiles-request-KeyName)
+// and Values (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_SearchProfiles.html#customerprofiles-SearchProfiles-request-Values)
+// parameters to search for profiles using the SearchProfiles (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_SearchProfiles.html)
+// API.
+type AdditionalSearchKey struct {
+	_ struct{} `type:"structure"`
+
+	// A searchable identifier of a customer profile.
+	//
+	// KeyName is a required field
+	KeyName *string `min:"1" type:"string" required:"true"`
+
+	// A list of key values.
+	//
+	// Values is a required field
+	Values []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdditionalSearchKey) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdditionalSearchKey) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AdditionalSearchKey) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AdditionalSearchKey"}
+	if s.KeyName == nil {
+		invalidParams.Add(request.NewErrParamRequired("KeyName"))
+	}
+	if s.KeyName != nil && len(*s.KeyName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KeyName", 1))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKeyName sets the KeyName field's value.
+func (s *AdditionalSearchKey) SetKeyName(v string) *AdditionalSearchKey {
+	s.KeyName = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *AdditionalSearchKey) SetValues(v []*string) *AdditionalSearchKey {
 	s.Values = v
 	return s
 }
@@ -5131,7 +5213,10 @@ type CreateProfileInput struct {
 	FirstName *string `min:"1" type:"string"`
 
 	// The gender with which the customer identifies.
-	Gender *string `type:"string" enum:"Gender"`
+	Gender *string `deprecated:"true" type:"string" enum:"Gender"`
+
+	// An alternative to Gender which accepts any string as input.
+	GenderString *string `min:"1" type:"string"`
 
 	// The customer’s home phone number.
 	HomePhoneNumber *string `min:"1" type:"string"`
@@ -5149,7 +5234,10 @@ type CreateProfileInput struct {
 	MobilePhoneNumber *string `min:"1" type:"string"`
 
 	// The type of profile used to describe the customer.
-	PartyType *string `type:"string" enum:"PartyType"`
+	PartyType *string `deprecated:"true" type:"string" enum:"PartyType"`
+
+	// An alternative to PartyType which accepts any string as input.
+	PartyTypeString *string `min:"1" type:"string"`
 
 	// The customer’s personal email address.
 	PersonalEmailAddress *string `min:"1" type:"string"`
@@ -5213,6 +5301,9 @@ func (s *CreateProfileInput) Validate() error {
 	if s.FirstName != nil && len(*s.FirstName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("FirstName", 1))
 	}
+	if s.GenderString != nil && len(*s.GenderString) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GenderString", 1))
+	}
 	if s.HomePhoneNumber != nil && len(*s.HomePhoneNumber) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("HomePhoneNumber", 1))
 	}
@@ -5224,6 +5315,9 @@ func (s *CreateProfileInput) Validate() error {
 	}
 	if s.MobilePhoneNumber != nil && len(*s.MobilePhoneNumber) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("MobilePhoneNumber", 1))
+	}
+	if s.PartyTypeString != nil && len(*s.PartyTypeString) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PartyTypeString", 1))
 	}
 	if s.PersonalEmailAddress != nil && len(*s.PersonalEmailAddress) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("PersonalEmailAddress", 1))
@@ -5336,6 +5430,12 @@ func (s *CreateProfileInput) SetGender(v string) *CreateProfileInput {
 	return s
 }
 
+// SetGenderString sets the GenderString field's value.
+func (s *CreateProfileInput) SetGenderString(v string) *CreateProfileInput {
+	s.GenderString = &v
+	return s
+}
+
 // SetHomePhoneNumber sets the HomePhoneNumber field's value.
 func (s *CreateProfileInput) SetHomePhoneNumber(v string) *CreateProfileInput {
 	s.HomePhoneNumber = &v
@@ -5369,6 +5469,12 @@ func (s *CreateProfileInput) SetMobilePhoneNumber(v string) *CreateProfileInput 
 // SetPartyType sets the PartyType field's value.
 func (s *CreateProfileInput) SetPartyType(v string) *CreateProfileInput {
 	s.PartyType = &v
+	return s
+}
+
+// SetPartyTypeString sets the PartyTypeString field's value.
+func (s *CreateProfileInput) SetPartyTypeString(v string) *CreateProfileInput {
+	s.PartyTypeString = &v
 	return s
 }
 
@@ -6639,6 +6745,49 @@ func (s *FlowDefinition) SetTriggerConfig(v *TriggerConfig) *FlowDefinition {
 	return s
 }
 
+// A data type pair that consists of a KeyName and Values list that were used
+// to find a profile returned in response to a SearchProfiles (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_SearchProfiles.html)
+// request.
+type FoundByKeyValue struct {
+	_ struct{} `type:"structure"`
+
+	// A searchable identifier of a customer profile.
+	KeyName *string `min:"1" type:"string"`
+
+	// A list of key values.
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FoundByKeyValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FoundByKeyValue) GoString() string {
+	return s.String()
+}
+
+// SetKeyName sets the KeyName field's value.
+func (s *FoundByKeyValue) SetKeyName(v string) *FoundByKeyValue {
+	s.KeyName = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *FoundByKeyValue) SetValues(v []*string) *FoundByKeyValue {
+	s.Values = v
+	return s
+}
+
 type GetAutoMergingPreviewInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7254,6 +7403,11 @@ type GetIntegrationOutput struct {
 	// DomainName is a required field
 	DomainName *string `min:"1" type:"string" required:"true"`
 
+	// Boolean that shows if the Flow that's associated with the Integration is
+	// created in Amazon Appflow, or with ObjectTypeName equals _unstructured via
+	// API/CLI in flowDefinition.
+	IsUnstructured *bool `type:"boolean"`
+
 	// The timestamp of when the domain was most recently edited.
 	//
 	// LastUpdatedAt is a required field
@@ -7308,6 +7462,12 @@ func (s *GetIntegrationOutput) SetCreatedAt(v time.Time) *GetIntegrationOutput {
 // SetDomainName sets the DomainName field's value.
 func (s *GetIntegrationOutput) SetDomainName(v string) *GetIntegrationOutput {
 	s.DomainName = &v
+	return s
+}
+
+// SetIsUnstructured sets the IsUnstructured field's value.
+func (s *GetIntegrationOutput) SetIsUnstructured(v bool) *GetIntegrationOutput {
+	s.IsUnstructured = &v
 	return s
 }
 
@@ -8920,6 +9080,11 @@ type ListIntegrationItem struct {
 	// DomainName is a required field
 	DomainName *string `min:"1" type:"string" required:"true"`
 
+	// Boolean that shows if the Flow that's associated with the Integration is
+	// created in Amazon Appflow, or with ObjectTypeName equals _unstructured via
+	// API/CLI in flowDefinition.
+	IsUnstructured *bool `type:"boolean"`
+
 	// The timestamp of when the domain was most recently edited.
 	//
 	// LastUpdatedAt is a required field
@@ -8974,6 +9139,12 @@ func (s *ListIntegrationItem) SetCreatedAt(v time.Time) *ListIntegrationItem {
 // SetDomainName sets the DomainName field's value.
 func (s *ListIntegrationItem) SetDomainName(v string) *ListIntegrationItem {
 	s.DomainName = &v
+	return s
+}
+
+// SetIsUnstructured sets the IsUnstructured field's value.
+func (s *ListIntegrationItem) SetIsUnstructured(v bool) *ListIntegrationItem {
+	s.IsUnstructured = &v
 	return s
 }
 
@@ -10603,8 +10774,34 @@ type Profile struct {
 	// The customer’s first name.
 	FirstName *string `min:"1" type:"string"`
 
+	// A list of items used to find a profile returned in a SearchProfiles (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_SearchProfiles.html)
+	// response. An item is a key-value(s) pair that matches an attribute in the
+	// profile.
+	//
+	// If the optional AdditionalSearchKeys parameter was included in the SearchProfiles
+	// (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_SearchProfiles.html)
+	// request, the FoundByItems list should be interpreted based on the LogicalOperator
+	// used in the request:
+	//
+	//    * AND - The profile included in the response matched all of the search
+	//    keys specified in the request. The FoundByItems will include all of the
+	//    key-value(s) pairs that were specified in the request (as this is a requirement
+	//    of AND search logic).
+	//
+	//    * OR - The profile included in the response matched at least one of the
+	//    search keys specified in the request. The FoundByItems will include each
+	//    of the key-value(s) pairs that the profile was found by.
+	//
+	// The OR relationship is the default behavior if the LogicalOperator parameter
+	// is not included in the SearchProfiles (https://docs.aws.amazon.com/customerprofiles/latest/APIReference/API_SearchProfiles.html)
+	// request.
+	FoundByItems []*FoundByKeyValue `min:"1" type:"list"`
+
 	// The gender with which the customer identifies.
-	Gender *string `type:"string" enum:"Gender"`
+	Gender *string `deprecated:"true" type:"string" enum:"Gender"`
+
+	// An alternative to Gender which accepts any string as input.
+	GenderString *string `min:"1" type:"string"`
 
 	// The customer’s home phone number.
 	HomePhoneNumber *string `min:"1" type:"string"`
@@ -10622,7 +10819,10 @@ type Profile struct {
 	MobilePhoneNumber *string `min:"1" type:"string"`
 
 	// The type of profile used to describe the customer.
-	PartyType *string `type:"string" enum:"PartyType"`
+	PartyType *string `deprecated:"true" type:"string" enum:"PartyType"`
+
+	// An alternative to PartyType which accepts any string as input.
+	PartyTypeString *string `min:"1" type:"string"`
 
 	// The customer’s personal email address.
 	PersonalEmailAddress *string `min:"1" type:"string"`
@@ -10722,9 +10922,21 @@ func (s *Profile) SetFirstName(v string) *Profile {
 	return s
 }
 
+// SetFoundByItems sets the FoundByItems field's value.
+func (s *Profile) SetFoundByItems(v []*FoundByKeyValue) *Profile {
+	s.FoundByItems = v
+	return s
+}
+
 // SetGender sets the Gender field's value.
 func (s *Profile) SetGender(v string) *Profile {
 	s.Gender = &v
+	return s
+}
+
+// SetGenderString sets the GenderString field's value.
+func (s *Profile) SetGenderString(v string) *Profile {
+	s.GenderString = &v
 	return s
 }
 
@@ -10761,6 +10973,12 @@ func (s *Profile) SetMobilePhoneNumber(v string) *Profile {
 // SetPartyType sets the PartyType field's value.
 func (s *Profile) SetPartyType(v string) *Profile {
 	s.PartyType = &v
+	return s
+}
+
+// SetPartyTypeString sets the PartyTypeString field's value.
+func (s *Profile) SetPartyTypeString(v string) *Profile {
+	s.PartyTypeString = &v
 	return s
 }
 
@@ -10914,6 +11132,11 @@ type PutIntegrationOutput struct {
 	// DomainName is a required field
 	DomainName *string `min:"1" type:"string" required:"true"`
 
+	// Boolean that shows if the Flow that's associated with the Integration is
+	// created in Amazon Appflow, or with ObjectTypeName equals _unstructured via
+	// API/CLI in flowDefinition.
+	IsUnstructured *bool `type:"boolean"`
+
 	// The timestamp of when the domain was most recently edited.
 	//
 	// LastUpdatedAt is a required field
@@ -10968,6 +11191,12 @@ func (s *PutIntegrationOutput) SetCreatedAt(v time.Time) *PutIntegrationOutput {
 // SetDomainName sets the DomainName field's value.
 func (s *PutIntegrationOutput) SetDomainName(v string) *PutIntegrationOutput {
 	s.DomainName = &v
+	return s
+}
+
+// SetIsUnstructured sets the IsUnstructured field's value.
+func (s *PutIntegrationOutput) SetIsUnstructured(v bool) *PutIntegrationOutput {
+	s.IsUnstructured = &v
 	return s
 }
 
@@ -11858,6 +12087,14 @@ func (s *ScheduledTriggerProperties) SetTimezone(v string) *ScheduledTriggerProp
 type SearchProfilesInput struct {
 	_ struct{} `type:"structure"`
 
+	// A list of AdditionalSearchKey objects that are each searchable identifiers
+	// of a profile. Each AdditionalSearchKey object contains a KeyName and a list
+	// of Values associated with that specific key (i.e., a key-value(s) pair).
+	// These additional search keys will be used in conjunction with the LogicalOperator
+	// and the required KeyName and Values parameters to search for profiles that
+	// satisfy the search criteria.
+	AdditionalSearchKeys []*AdditionalSearchKey `min:"1" type:"list"`
+
 	// The unique name of the domain.
 	//
 	// DomainName is a required field
@@ -11873,7 +12110,26 @@ type SearchProfilesInput struct {
 	// KeyName is a required field
 	KeyName *string `min:"1" type:"string" required:"true"`
 
+	// Relationship between all specified search keys that will be used to search
+	// for profiles. This includes the required KeyName and Values parameters as
+	// well as any key-value(s) pairs specified in the AdditionalSearchKeys list.
+	//
+	// This parameter influences which profiles will be returned in the response
+	// in the following manner:
+	//
+	//    * AND - The response only includes profiles that match all of the search
+	//    keys.
+	//
+	//    * OR - The response includes profiles that match at least one of the search
+	//    keys.
+	//
+	// The OR relationship is the default behavior if this parameter is not included
+	// in the request.
+	LogicalOperator *string `type:"string" enum:"LogicalOperator"`
+
 	// The maximum number of objects returned per page.
+	//
+	// The default is 20 if this parameter is not included in the request.
 	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
 
 	// The pagination token from the previous SearchProfiles API call.
@@ -11906,6 +12162,9 @@ func (s SearchProfilesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *SearchProfilesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "SearchProfilesInput"}
+	if s.AdditionalSearchKeys != nil && len(s.AdditionalSearchKeys) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AdditionalSearchKeys", 1))
+	}
 	if s.DomainName == nil {
 		invalidParams.Add(request.NewErrParamRequired("DomainName"))
 	}
@@ -11927,11 +12186,27 @@ func (s *SearchProfilesInput) Validate() error {
 	if s.Values == nil {
 		invalidParams.Add(request.NewErrParamRequired("Values"))
 	}
+	if s.AdditionalSearchKeys != nil {
+		for i, v := range s.AdditionalSearchKeys {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdditionalSearchKeys", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAdditionalSearchKeys sets the AdditionalSearchKeys field's value.
+func (s *SearchProfilesInput) SetAdditionalSearchKeys(v []*AdditionalSearchKey) *SearchProfilesInput {
+	s.AdditionalSearchKeys = v
+	return s
 }
 
 // SetDomainName sets the DomainName field's value.
@@ -11943,6 +12218,12 @@ func (s *SearchProfilesInput) SetDomainName(v string) *SearchProfilesInput {
 // SetKeyName sets the KeyName field's value.
 func (s *SearchProfilesInput) SetKeyName(v string) *SearchProfilesInput {
 	s.KeyName = &v
+	return s
+}
+
+// SetLogicalOperator sets the LogicalOperator field's value.
+func (s *SearchProfilesInput) SetLogicalOperator(v string) *SearchProfilesInput {
+	s.LogicalOperator = &v
 	return s
 }
 
@@ -11967,7 +12248,7 @@ func (s *SearchProfilesInput) SetValues(v []*string) *SearchProfilesInput {
 type SearchProfilesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of SearchProfiles instances.
+	// The list of Profiles matching the search criteria.
 	Items []*Profile `type:"list"`
 
 	// The pagination token from the previous SearchProfiles API call.
@@ -13076,7 +13357,10 @@ type UpdateProfileInput struct {
 	FirstName *string `type:"string"`
 
 	// The gender with which the customer identifies.
-	Gender *string `type:"string" enum:"Gender"`
+	Gender *string `deprecated:"true" type:"string" enum:"Gender"`
+
+	// An alternative to Gender which accepts any string as input.
+	GenderString *string `type:"string"`
 
 	// The customer’s home phone number.
 	HomePhoneNumber *string `type:"string"`
@@ -13094,7 +13378,10 @@ type UpdateProfileInput struct {
 	MobilePhoneNumber *string `type:"string"`
 
 	// The type of profile used to describe the customer.
-	PartyType *string `type:"string" enum:"PartyType"`
+	PartyType *string `deprecated:"true" type:"string" enum:"PartyType"`
+
+	// An alternative to PartyType which accepts any string as input.
+	PartyTypeString *string `type:"string"`
 
 	// The customer’s personal email address.
 	PersonalEmailAddress *string `type:"string"`
@@ -13227,6 +13514,12 @@ func (s *UpdateProfileInput) SetGender(v string) *UpdateProfileInput {
 	return s
 }
 
+// SetGenderString sets the GenderString field's value.
+func (s *UpdateProfileInput) SetGenderString(v string) *UpdateProfileInput {
+	s.GenderString = &v
+	return s
+}
+
 // SetHomePhoneNumber sets the HomePhoneNumber field's value.
 func (s *UpdateProfileInput) SetHomePhoneNumber(v string) *UpdateProfileInput {
 	s.HomePhoneNumber = &v
@@ -13260,6 +13553,12 @@ func (s *UpdateProfileInput) SetMobilePhoneNumber(v string) *UpdateProfileInput 
 // SetPartyType sets the PartyType field's value.
 func (s *UpdateProfileInput) SetPartyType(v string) *UpdateProfileInput {
 	s.PartyType = &v
+	return s
+}
+
+// SetPartyTypeString sets the PartyTypeString field's value.
+func (s *UpdateProfileInput) SetPartyTypeString(v string) *UpdateProfileInput {
+	s.PartyTypeString = &v
 	return s
 }
 
@@ -13612,6 +13911,22 @@ func JobScheduleDayOfTheWeek_Values() []string {
 		JobScheduleDayOfTheWeekThursday,
 		JobScheduleDayOfTheWeekFriday,
 		JobScheduleDayOfTheWeekSaturday,
+	}
+}
+
+const (
+	// LogicalOperatorAnd is a LogicalOperator enum value
+	LogicalOperatorAnd = "AND"
+
+	// LogicalOperatorOr is a LogicalOperator enum value
+	LogicalOperatorOr = "OR"
+)
+
+// LogicalOperator_Values returns all elements of the LogicalOperator enum
+func LogicalOperator_Values() []string {
+	return []string{
+		LogicalOperatorAnd,
+		LogicalOperatorOr,
 	}
 }
 

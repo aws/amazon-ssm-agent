@@ -10086,7 +10086,9 @@ func (c *Redshift) ModifyAquaConfigurationRequest(input *ModifyAquaConfiguration
 
 // ModifyAquaConfiguration API operation for Amazon Redshift.
 //
-// Modifies whether a cluster can use AQUA (Advanced Query Accelerator).
+// This operation is retired. Calling this operation does not change AQUA configuration.
+// Amazon Redshift automatically determines whether to use AQUA (Advanced Query
+// Accelerator).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -12386,6 +12388,9 @@ func (c *Redshift) RestoreTableFromClusterSnapshotRequest(input *RestoreTableFro
 // This way, you can replace the original table with the table created from
 // the snapshot.
 //
+// You can't use this operation to restore tables with interleaved sort keys
+// (https://docs.aws.amazon.com/redshift/latest/dg/t_Sorting_data.html#t_Sorting_data-interleaved).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -13289,29 +13294,17 @@ func (s *AddPartnerOutput) SetPartnerName(v string) *AddPartnerOutput {
 	return s
 }
 
-// The AQUA (Advanced Query Accelerator) configuration of the cluster.
+// The operation that uses this structure is retired. Amazon Redshift automatically
+// determines whether to use AQUA (Advanced Query Accelerator).
 type AquaConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The value represents how the cluster is configured to use AQUA. Possible
-	// values include the following.
-	//
-	//    * enabled - Use AQUA if it is available for the current Amazon Web Services
-	//    Region and Amazon Redshift node type.
-	//
-	//    * disabled - Don't use AQUA.
-	//
-	//    * auto - Amazon Redshift determines whether to use AQUA.
+	// This field is retired. Amazon Redshift automatically determines whether to
+	// use AQUA (Advanced Query Accelerator).
 	AquaConfigurationStatus *string `type:"string" enum:"AquaConfigurationStatus"`
 
-	// The value indicates the status of AQUA on the cluster. Possible values include
-	// the following.
-	//
-	//    * enabled - AQUA is enabled.
-	//
-	//    * disabled - AQUA is not enabled.
-	//
-	//    * applying - AQUA status is being applied.
+	// This field is retired. Amazon Redshift automatically determines whether to
+	// use AQUA (Advanced Query Accelerator).
 	AquaStatus *string `type:"string" enum:"AquaStatus"`
 }
 
@@ -13996,7 +13989,7 @@ type AuthorizeSnapshotAccessInput struct {
 	SnapshotArn *string `type:"string"`
 
 	// The identifier of the cluster the snapshot was created from. This parameter
-	// is required if your IAM user has a policy containing a snapshot resource
+	// is required if your IAM user or role has a policy containing a snapshot resource
 	// element that specifies anything other than * for the cluster name.
 	SnapshotClusterIdentifier *string `type:"string"`
 
@@ -14587,7 +14580,8 @@ type Cluster struct {
 	// be applied automatically to the cluster during the maintenance window.
 	AllowVersionUpgrade *bool `type:"boolean"`
 
-	// The AQUA (Advanced Query Accelerator) configuration of the cluster.
+	// This field is retired. Amazon Redshift automatically determines whether to
+	// use AQUA (Advanced Query Accelerator).
 	AquaConfiguration *AquaConfiguration `type:"structure"`
 
 	// The number of days that automatic cluster snapshots are retained.
@@ -15922,8 +15916,9 @@ type CopyClusterSnapshotInput struct {
 	ManualSnapshotRetentionPeriod *int64 `type:"integer"`
 
 	// The identifier of the cluster the source snapshot was created from. This
-	// parameter is required if your IAM user has a policy containing a snapshot
-	// resource element that specifies anything other than * for the cluster name.
+	// parameter is required if your IAM user or role has a policy containing a
+	// snapshot resource element that specifies anything other than * for the cluster
+	// name.
 	//
 	// Constraints:
 	//
@@ -16165,15 +16160,9 @@ type CreateClusterInput struct {
 	// Default: true
 	AllowVersionUpgrade *bool `type:"boolean"`
 
-	// The value represents how the cluster is configured to use AQUA (Advanced
-	// Query Accelerator) when it is created. Possible values include the following.
-	//
-	//    * enabled - Use AQUA if it is available for the current Amazon Web Services
-	//    Region and Amazon Redshift node type.
-	//
-	//    * disabled - Don't use AQUA.
-	//
-	//    * auto - Amazon Redshift determines whether to use AQUA.
+	// This parameter is retired. It does not set the AQUA configuration status.
+	// Amazon Redshift automatically determines whether to use AQUA (Advanced Query
+	// Accelerator).
 	AquaConfigurationStatus *string `type:"string" enum:"AquaConfigurationStatus"`
 
 	// The number of days that automated snapshots are retained. If the value is
@@ -16298,13 +16287,13 @@ type CreateClusterInput struct {
 	// the cluster when the cluster was created.
 	DefaultIamRoleArn *string `type:"string"`
 
-	// The Elastic IP (EIP) address for the cluster. You don't have to specify the
-	// EIP for a publicly accessible cluster with AvailabilityZoneRelocation turned
-	// on.
+	// The Elastic IP (EIP) address for the cluster.
 	//
 	// Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible
-	// through an Internet gateway. For more information about provisioning clusters
-	// in EC2-VPC, go to Supported Platforms to Launch Your Cluster (https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms)
+	// through an Internet gateway. Don't specify the Elastic IP address for a publicly
+	// accessible cluster with availability zone relocation turned on. For more
+	// information about provisioning clusters in EC2-VPC, go to Supported Platforms
+	// to Launch Your Cluster (https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms)
 	// in the Amazon Redshift Cluster Management Guide.
 	ElasticIp *string `type:"string"`
 
@@ -16360,8 +16349,8 @@ type CreateClusterInput struct {
 	// The value must be either -1 or an integer between 1 and 3,653.
 	ManualSnapshotRetentionPeriod *int64 `type:"integer"`
 
-	// The password associated with the admin user account for the cluster that
-	// is being created.
+	// The password associated with the admin user for the cluster that is being
+	// created.
 	//
 	// Constraints:
 	//
@@ -16379,14 +16368,20 @@ type CreateClusterInput struct {
 	// MasterUserPassword is a required field
 	MasterUserPassword *string `type:"string" required:"true"`
 
-	// The user name associated with the admin user account for the cluster that
-	// is being created.
+	// The user name associated with the admin user for the cluster that is being
+	// created.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 - 128 alphanumeric characters. The user name can't be PUBLIC.
+	//    * Must be 1 - 128 alphanumeric characters or hyphens. The user name can't
+	//    be PUBLIC.
 	//
-	//    * First character must be a letter.
+	//    * Must contain only lowercase letters, numbers, underscore, plus sign,
+	//    period (dot), at symbol (@), or hyphen.
+	//
+	//    * The first character must be a letter.
+	//
+	//    * Must not contain a colon (:) or a slash (/).
 	//
 	//    * Cannot be a reserved word. A list of reserved words can be found in
 	//    Reserved Words (https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html)
@@ -19547,8 +19542,9 @@ type DeleteClusterSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier of the cluster the snapshot was created from. This
-	// parameter is required if your IAM user has a policy containing a snapshot
-	// resource element that specifies anything other than * for the cluster name.
+	// parameter is required if your IAM user or role has a policy containing a
+	// snapshot resource element that specifies anything other than * for the cluster
+	// name.
 	//
 	// Constraints: Must be the name of valid cluster.
 	SnapshotClusterIdentifier *string `type:"string"`
@@ -19609,8 +19605,9 @@ type DeleteClusterSnapshotMessage struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier of the cluster the snapshot was created from. This
-	// parameter is required if your IAM user has a policy containing a snapshot
-	// resource element that specifies anything other than * for the cluster name.
+	// parameter is required if your IAM user or role has a policy containing a
+	// snapshot resource element that specifies anything other than * for the cluster
+	// name.
 	//
 	// Constraints: Must be the name of valid cluster.
 	SnapshotClusterIdentifier *string `type:"string"`
@@ -21130,7 +21127,7 @@ type DescribeClusterSecurityGroupsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The name of a cluster security group for which you are requesting details.
-	// You can specify either the Marker parameter or a ClusterSecurityGroupName
+	// You must specify either the Marker parameter or a ClusterSecurityGroupName
 	// parameter, but not both.
 	//
 	// Example: securitygroup1
@@ -21143,7 +21140,7 @@ type DescribeClusterSecurityGroupsInput struct {
 	// records by providing the returned marker value in the Marker parameter and
 	// retrying the request.
 	//
-	// Constraints: You can specify either the ClusterSecurityGroupName parameter
+	// Constraints: You must specify either the ClusterSecurityGroupName parameter
 	// or the Marker parameter, but not both.
 	Marker *string `type:"string"`
 
@@ -21312,7 +21309,7 @@ type DescribeClusterSnapshotsInput struct {
 	//
 	// Default: 100
 	//
-	// Constraints: minimum 20, maximum 100.
+	// Constraints: minimum 20, maximum 500.
 	MaxRecords *int64 `type:"integer"`
 
 	// The Amazon Web Services account used to create or copy the snapshot. Use
@@ -22578,7 +22575,7 @@ func (s *DescribeEndpointAccessOutput) SetMarker(v string) *DescribeEndpointAcce
 type DescribeEndpointAuthorizationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The AAmazon Web Services account ID of either the cluster owner (grantor)
+	// The Amazon Web Services account ID of either the cluster owner (grantor)
 	// or grantee. If Grantee parameter is true, then the Account value is of the
 	// grantor.
 	Account *string `type:"string"`
@@ -25688,8 +25685,8 @@ type EnableLoggingInput struct {
 	// The log destination type. An enum with possible values of s3 and cloudwatch.
 	LogDestinationType *string `type:"string" enum:"LogDestinationType"`
 
-	// The collection of exported log types. Log types include the connection log,
-	// user log and user activity log.
+	// The collection of exported log types. Possible values are connectionlog,
+	// useractivitylog, and userlog.
 	LogExports []*string `type:"list"`
 
 	// The prefix applied to the log file names.
@@ -26547,8 +26544,8 @@ type GetClusterCredentialsInput struct {
 	//
 	//    * Must be 1 to 64 alphanumeric characters or hyphens
 	//
-	//    * Must contain only lowercase letters, numbers, underscore, plus sign,
-	//    period (dot), at symbol (@), or hyphen.
+	//    * Must contain uppercase or lowercase letters, numbers, underscore, plus
+	//    sign, period (dot), at symbol (@), or hyphen.
 	//
 	//    * First character must be a letter.
 	//
@@ -26575,8 +26572,8 @@ type GetClusterCredentialsInput struct {
 	//    * Must be 1 to 64 alphanumeric characters or hyphens. The user name can't
 	//    be PUBLIC.
 	//
-	//    * Must contain only lowercase letters, numbers, underscore, plus sign,
-	//    period (dot), at symbol (@), or hyphen.
+	//    * Must contain uppercase or lowercase letters, numbers, underscore, plus
+	//    sign, period (dot), at symbol (@), or hyphen.
 	//
 	//    * First character must be a letter.
 	//
@@ -27354,8 +27351,8 @@ type LoggingStatus struct {
 	// The log destination type. An enum with possible values of s3 and cloudwatch.
 	LogDestinationType *string `type:"string" enum:"LogDestinationType"`
 
-	// The collection of exported log types. Log types include the connection log,
-	// user log and user activity log.
+	// The collection of exported log types. Possible values are connectionlog,
+	// useractivitylog, and userlog.
 	LogExports []*string `type:"list"`
 
 	// true if logging is on, false if logging is off.
@@ -27488,14 +27485,8 @@ func (s *MaintenanceTrack) SetUpdateTargets(v []*UpdateTarget) *MaintenanceTrack
 type ModifyAquaConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The new value of AQUA configuration status. Possible values include the following.
-	//
-	//    * enabled - Use AQUA if it is available for the current Amazon Web Services
-	//    Region and Amazon Redshift node type.
-	//
-	//    * disabled - Don't use AQUA.
-	//
-	//    * auto - Amazon Redshift determines whether to use AQUA.
+	// This parameter is retired. Amazon Redshift automatically determines whether
+	// to use AQUA (Advanced Query Accelerator).
 	AquaConfigurationStatus *string `type:"string" enum:"AquaConfigurationStatus"`
 
 	// The identifier of the cluster to be modified.
@@ -27550,7 +27541,8 @@ func (s *ModifyAquaConfigurationInput) SetClusterIdentifier(v string) *ModifyAqu
 type ModifyAquaConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The updated AQUA configuration of the cluster.
+	// This parameter is retired. Amazon Redshift automatically determines whether
+	// to use AQUA (Advanced Query Accelerator).
 	AquaConfiguration *AquaConfiguration `type:"structure"`
 }
 
@@ -28029,8 +28021,7 @@ type ModifyClusterInput struct {
 	// element of the operation response.
 	//
 	// Operations never return the password, so this operation provides a way to
-	// regain access to the admin user account for a cluster if the password is
-	// lost.
+	// regain access to the admin user for a cluster if the password is lost.
 	//
 	// Default: Uses existing setting.
 	//
@@ -31622,16 +31613,9 @@ type RestoreFromClusterSnapshotInput struct {
 	// Default: true
 	AllowVersionUpgrade *bool `type:"boolean"`
 
-	// The value represents how the cluster is configured to use AQUA (Advanced
-	// Query Accelerator) after the cluster is restored. Possible values include
-	// the following.
-	//
-	//    * enabled - Use AQUA if it is available for the current Amazon Web Services
-	//    Region and Amazon Redshift node type.
-	//
-	//    * disabled - Don't use AQUA.
-	//
-	//    * auto - Amazon Redshift determines whether to use AQUA.
+	// This parameter is retired. It does not set the AQUA configuration status.
+	// Amazon Redshift automatically determines whether to use AQUA (Advanced Query
+	// Accelerator).
 	AquaConfigurationStatus *string `type:"string" enum:"AquaConfigurationStatus"`
 
 	// The number of days that automated snapshots are retained. If the value is
@@ -31707,9 +31691,9 @@ type RestoreFromClusterSnapshotInput struct {
 	// a snapshot.
 	DefaultIamRoleArn *string `type:"string"`
 
-	// The elastic IP (EIP) address for the cluster. You don't have to specify the
-	// EIP for a publicly accessible cluster with AvailabilityZoneRelocation turned
-	// on.
+	// The Elastic IP (EIP) address for the cluster. Don't specify the Elastic IP
+	// address for a publicly accessible cluster with availability zone relocation
+	// turned on.
 	ElasticIp *string `type:"string"`
 
 	// Enables support for restoring an unencrypted snapshot to a cluster encrypted
@@ -31820,16 +31804,18 @@ type RestoreFromClusterSnapshotInput struct {
 	ReservedNodeId *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the snapshot associated with the message
-	// to restore from a cluster.
+	// to restore from a cluster. You must specify this parameter or snapshotIdentifier,
+	// but not both.
 	SnapshotArn *string `type:"string"`
 
 	// The name of the cluster the source snapshot was created from. This parameter
-	// is required if your IAM user has a policy containing a snapshot resource
+	// is required if your IAM user or role has a policy containing a snapshot resource
 	// element that specifies anything other than * for the cluster name.
 	SnapshotClusterIdentifier *string `type:"string"`
 
 	// The name of the snapshot from which to create the new cluster. This parameter
-	// isn't case sensitive.
+	// isn't case sensitive. You must specify this parameter or snapshotArn, but
+	// not both.
 	//
 	// Example: my-snapshot-id
 	SnapshotIdentifier *string `type:"string"`
@@ -32841,7 +32827,7 @@ type RevokeSnapshotAccessInput struct {
 	SnapshotArn *string `type:"string"`
 
 	// The identifier of the cluster the snapshot was created from. This parameter
-	// is required if your IAM user has a policy containing a snapshot resource
+	// is required if your IAM user or role has a policy containing a snapshot resource
 	// element that specifies anything other than * for the cluster name.
 	SnapshotClusterIdentifier *string `type:"string"`
 

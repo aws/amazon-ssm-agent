@@ -57,14 +57,6 @@ const (
 	// Each association has a limit of 1,000 versions.
 	ErrCodeAssociationVersionLimitExceeded = "AssociationVersionLimitExceeded"
 
-	// ErrCodeAuthRuntimeException for service response error code
-	// "AuthRuntimeException".
-	ErrCodeAuthRuntimeException = "AuthRuntimeException"
-
-	// ErrCodeAuthorizationException for service response error code
-	// "AuthorizationException".
-	ErrCodeAuthorizationException = "AuthorizationException"
-
 	// ErrCodeAutomationActionNotFoundException for service response error code
 	// "AutomationActionNotFoundException".
 	ErrCodeAutomationActionNotFoundException = "AutomationActionNotFoundException"
@@ -154,10 +146,15 @@ const (
 	// ErrCodeDocumentPermissionLimit for service response error code
 	// "DocumentPermissionLimit".
 	//
-	// The document can't be shared with more Amazon Web Services user accounts.
-	// You can share a document with a maximum of 20 accounts. You can publicly
-	// share up to five documents. If you need to increase this limit, contact Amazon
-	// Web Services Support.
+	// The document can't be shared with more Amazon Web Services accounts. You
+	// can specify a maximum of 20 accounts per API operation to share a private
+	// document.
+	//
+	// By default, you can share a private document with a maximum of 1,000 accounts
+	// and publicly share up to five documents.
+	//
+	// If you need to increase the quota for privately or publicly shared Systems
+	// Manager documents, contact Amazon Web Services Support.
 	ErrCodeDocumentPermissionLimit = "DocumentPermissionLimit"
 
 	// ErrCodeDocumentVersionLimitExceeded for service response error code
@@ -201,6 +198,26 @@ const (
 	//
 	// You can't specify a managed node ID in more than one association.
 	ErrCodeDuplicateInstanceId = "DuplicateInstanceId"
+
+	// ErrCodeExecuteApiAccessDeniedException for service response error code
+	// "ExecuteApiAccessDeniedException".
+	ErrCodeExecuteApiAccessDeniedException = "ExecuteApiAccessDeniedException"
+
+	// ErrCodeExecuteApiIncompletePermissionException for service response error code
+	// "ExecuteApiIncompletePermissionException".
+	ErrCodeExecuteApiIncompletePermissionException = "ExecuteApiIncompletePermissionException"
+
+	// ErrCodeExecuteApiInvalidParameterException for service response error code
+	// "ExecuteApiInvalidParameterException".
+	ErrCodeExecuteApiInvalidParameterException = "ExecuteApiInvalidParameterException"
+
+	// ErrCodeExecuteApiSourceServiceExecutionException for service response error code
+	// "ExecuteApiSourceServiceExecutionException".
+	ErrCodeExecuteApiSourceServiceExecutionException = "ExecuteApiSourceServiceExecutionException"
+
+	// ErrCodeExecuteApiUnknownOperationException for service response error code
+	// "ExecuteApiUnknownOperationException".
+	ErrCodeExecuteApiUnknownOperationException = "ExecuteApiUnknownOperationException"
 
 	// ErrCodeFeatureNotAvailableException for service response error code
 	// "FeatureNotAvailableException".
@@ -573,6 +590,8 @@ const (
 
 	// ErrCodeInvalidTag for service response error code
 	// "InvalidTag".
+	//
+	// The specified tag key or value isn't valid.
 	ErrCodeInvalidTag = "InvalidTag"
 
 	// ErrCodeInvalidTarget for service response error code
@@ -623,14 +642,6 @@ const (
 	// "MachineFingerprintDoesNotMatch".
 	ErrCodeMachineFingerprintDoesNotMatch = "MachineFingerprintDoesNotMatch"
 
-	// ErrCodeMalformedRequestException for service response error code
-	// "MalformedRequestException".
-	ErrCodeMalformedRequestException = "MalformedRequestException"
-
-	// ErrCodeMalformedResourcePolicyDocumentException for service response error code
-	// "MalformedResourcePolicyDocumentException".
-	ErrCodeMalformedResourcePolicyDocumentException = "MalformedResourcePolicyDocumentException"
-
 	// ErrCodeMaxDocumentSizeExceeded for service response error code
 	// "MaxDocumentSizeExceeded".
 	//
@@ -640,6 +651,14 @@ const (
 	// ErrCodeOpsCenterInvalidArgumentException for service response error code
 	// "OpsCenterInvalidArgumentException".
 	ErrCodeOpsCenterInvalidArgumentException = "OpsCenterInvalidArgumentException"
+
+	// ErrCodeOpsItemAccessDeniedException for service response error code
+	// "OpsItemAccessDeniedException".
+	//
+	// You don't have permission to view OpsItems in the specified account. Verify
+	// that your account is configured either as a Systems Manager delegated administrator
+	// or that you are logged into the Organizations management account.
+	ErrCodeOpsItemAccessDeniedException = "OpsItemAccessDeniedException"
 
 	// ErrCodeOpsItemAlreadyExistsException for service response error code
 	// "OpsItemAlreadyExistsException".
@@ -799,6 +818,12 @@ const (
 	// InternalId provided by RAM does not match current Internal ID in ROS
 	ErrCodeRAMInternalIdMismatchException = "RAMInternalIdMismatchException"
 
+	// ErrCodeRAMInvalidParameterException for service response error code
+	// "RAMInvalidParameterException".
+	//
+	// RAM call contains invalid parameter
+	ErrCodeRAMInvalidParameterException = "RAMInvalidParameterException"
+
 	// ErrCodeRAMInvalidSequenceNumberException for service response error code
 	// "RAMInvalidSequenceNumberException".
 	//
@@ -874,9 +899,20 @@ const (
 	// "ResourceNotFoundException".
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
-	// ErrCodeResourcePolicyNotFoundException for service response error code
-	// "ResourcePolicyNotFoundException".
-	ErrCodeResourcePolicyNotFoundException = "ResourcePolicyNotFoundException"
+	// ErrCodeResourcePolicyConflictException for service response error code
+	// "ResourcePolicyConflictException".
+	//
+	// The hash provided in the call doesn't match the stored hash. This exception
+	// is thrown when trying to update an obsolete policy version or when multiple
+	// requests to update a policy are sent.
+	ErrCodeResourcePolicyConflictException = "ResourcePolicyConflictException"
+
+	// ErrCodeResourcePolicyInvalidParameterException for service response error code
+	// "ResourcePolicyInvalidParameterException".
+	//
+	// One or more parameters specified for the call aren't valid. Verify the parameters
+	// and their values and try again.
+	ErrCodeResourcePolicyInvalidParameterException = "ResourcePolicyInvalidParameterException"
 
 	// ErrCodeServiceLinkedRoleLockClientException for service response error code
 	// "ServiceLinkedRoleLockClientException".
@@ -892,10 +928,6 @@ const (
 	// The specified service setting wasn't found. Either the service name or the
 	// setting hasn't been provisioned by the Amazon Web Services service team.
 	ErrCodeServiceSettingNotFound = "ServiceSettingNotFound"
-
-	// ErrCodeSourceServiceExecutionException for service response error code
-	// "SourceServiceExecutionException".
-	ErrCodeSourceServiceExecutionException = "SourceServiceExecutionException"
 
 	// ErrCodeStatusUnchanged for service response error code
 	// "StatusUnchanged".
@@ -1010,8 +1042,6 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"AssociationExecutionDoesNotExist":               newErrorAssociationExecutionDoesNotExist,
 	"AssociationLimitExceeded":                       newErrorAssociationLimitExceeded,
 	"AssociationVersionLimitExceeded":                newErrorAssociationVersionLimitExceeded,
-	"AuthRuntimeException":                           newErrorAuthRuntimeException,
-	"AuthorizationException":                         newErrorAuthorizationException,
 	"AutomationActionNotFoundException":              newErrorAutomationActionNotFoundException,
 	"AutomationDefinitionNotApprovedException":       newErrorAutomationDefinitionNotApprovedException,
 	"AutomationDefinitionNotFoundException":          newErrorAutomationDefinitionNotFoundException,
@@ -1034,6 +1064,11 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"DuplicateDocumentContent":                       newErrorDuplicateDocumentContent,
 	"DuplicateDocumentVersionName":                   newErrorDuplicateDocumentVersionName,
 	"DuplicateInstanceId":                            newErrorDuplicateInstanceId,
+	"ExecuteApiAccessDeniedException":                newErrorExecuteApiAccessDeniedException,
+	"ExecuteApiIncompletePermissionException":        newErrorExecuteApiIncompletePermissionException,
+	"ExecuteApiInvalidParameterException":            newErrorExecuteApiInvalidParameterException,
+	"ExecuteApiSourceServiceExecutionException":      newErrorExecuteApiSourceServiceExecutionException,
+	"ExecuteApiUnknownOperationException":            newErrorExecuteApiUnknownOperationException,
 	"FeatureNotAvailableException":                   newErrorFeatureNotAvailableException,
 	"HierarchyLevelLimitExceededException":           newErrorHierarchyLevelLimitExceededException,
 	"HierarchyTypeMismatchException":                 newErrorHierarchyTypeMismatchException,
@@ -1099,10 +1134,9 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ItemContentMismatchException":                   newErrorItemContentMismatchException,
 	"ItemSizeLimitExceededException":                 newErrorItemSizeLimitExceededException,
 	"MachineFingerprintDoesNotMatch":                 newErrorMachineFingerprintDoesNotMatch,
-	"MalformedRequestException":                      newErrorMalformedRequestException,
-	"MalformedResourcePolicyDocumentException":       newErrorMalformedResourcePolicyDocumentException,
 	"MaxDocumentSizeExceeded":                        newErrorMaxDocumentSizeExceeded,
 	"OpsCenterInvalidArgumentException":              newErrorOpsCenterInvalidArgumentException,
+	"OpsItemAccessDeniedException":                   newErrorOpsItemAccessDeniedException,
 	"OpsItemAlreadyExistsException":                  newErrorOpsItemAlreadyExistsException,
 	"OpsItemInvalidParameterException":               newErrorOpsItemInvalidParameterException,
 	"OpsItemLimitExceededException":                  newErrorOpsItemLimitExceededException,
@@ -1125,6 +1159,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"PoliciesLimitExceededException":                 newErrorPoliciesLimitExceededException,
 	"PublicKeyAlreadyRegistered":                     newErrorPublicKeyAlreadyRegistered,
 	"RAMInternalIdMismatchException":                 newErrorRAMInternalIdMismatchException,
+	"RAMInvalidParameterException":                   newErrorRAMInvalidParameterException,
 	"RAMInvalidSequenceNumberException":              newErrorRAMInvalidSequenceNumberException,
 	"RAMResourceNotFoundException":                   newErrorRAMResourceNotFoundException,
 	"RAMResourceNotSharedException":                  newErrorRAMResourceNotSharedException,
@@ -1137,11 +1172,11 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ResourceInUseException":                         newErrorResourceInUseException,
 	"ResourceLimitExceededException":                 newErrorResourceLimitExceededException,
 	"ResourceNotFoundException":                      newErrorResourceNotFoundException,
-	"ResourcePolicyNotFoundException":                newErrorResourcePolicyNotFoundException,
+	"ResourcePolicyConflictException":                newErrorResourcePolicyConflictException,
+	"ResourcePolicyInvalidParameterException":        newErrorResourcePolicyInvalidParameterException,
 	"ServiceLinkedRoleLockClientException":           newErrorServiceLinkedRoleLockClientException,
 	"ServiceLinkedRoleLockServiceException":          newErrorServiceLinkedRoleLockServiceException,
 	"ServiceSettingNotFound":                         newErrorServiceSettingNotFound,
-	"SourceServiceExecutionException":                newErrorSourceServiceExecutionException,
 	"StatusUnchanged":                                newErrorStatusUnchanged,
 	"SubTypeCountLimitExceededException":             newErrorSubTypeCountLimitExceededException,
 	"TargetInUseException":                           newErrorTargetInUseException,

@@ -69,6 +69,9 @@ func (c *Kinesis) AddTagsToStreamRequest(input *AddTagsToStreamInput) (req *requ
 // Adds or updates tags for the specified Kinesis data stream. You can assign
 // up to 50 tags to a data stream.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // If tags have already been assigned to the stream, AddTagsToStream overwrites
 // any existing tags that correspond to the specified tag keys.
 //
@@ -97,6 +100,9 @@ func (c *Kinesis) AddTagsToStreamRequest(input *AddTagsToStreamInput) (req *requ
 //   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/AddTagsToStream
 func (c *Kinesis) AddTagsToStream(input *AddTagsToStreamInput) (*AddTagsToStreamOutput, error) {
@@ -170,12 +176,17 @@ func (c *Kinesis) CreateStreamRequest(input *CreateStreamInput) (req *request.Re
 // within a stream is explicitly supported by means of shards, which are uniquely
 // identified groups of data records in a stream.
 //
-// You specify and control the number of shards that a stream is composed of.
-// Each shard can support reads up to five transactions per second, up to a
-// maximum data read total of 2 MiB per second. Each shard can support writes
-// up to 1,000 records per second, up to a maximum data write total of 1 MiB
-// per second. If the amount of data input increases or decreases, you can add
-// or remove shards.
+// You can create your data stream using either on-demand or provisioned capacity
+// mode. Data streams with an on-demand mode require no capacity planning and
+// automatically scale to handle gigabytes of write and read throughput per
+// minute. With the on-demand mode, Kinesis Data Streams automatically manages
+// the shards in order to provide the necessary throughput. For the data streams
+// with a provisioned mode, you must specify the number of shards for the data
+// stream. Each shard can support reads up to five transactions per second,
+// up to a maximum data read total of 2 MiB per second. Each shard can support
+// writes up to 1,000 records per second, up to a maximum data write total of
+// 1 MiB per second. If the amount of data input increases or decreases, you
+// can add or remove shards.
 //
 // The stream name identifies the stream. The name is scoped to the Amazon Web
 // Services account used by the application. It is also scoped by Amazon Web
@@ -297,6 +308,9 @@ func (c *Kinesis) DecreaseStreamRetentionPeriodRequest(input *DecreaseStreamRete
 // of time data records are accessible after they are added to the stream. The
 // minimum value of a stream's retention period is 24 hours.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // This operation may result in lost data. For example, if the stream's retention
 // period is 48 hours and is decreased to 24 hours, any data already in the
 // stream that is older than 24 hours is inaccessible.
@@ -324,6 +338,9 @@ func (c *Kinesis) DecreaseStreamRetentionPeriodRequest(input *DecreaseStreamRete
 //   * InvalidArgumentException
 //   A specified parameter exceeds its restrictions, is not supported, or can't
 //   be used. For more information, see the returned message.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/DecreaseStreamRetentionPeriod
 func (c *Kinesis) DecreaseStreamRetentionPeriod(input *DecreaseStreamRetentionPeriodInput) (*DecreaseStreamRetentionPeriodOutput, error) {
@@ -397,6 +414,9 @@ func (c *Kinesis) DeleteStreamRequest(input *DeleteStreamInput) (req *request.Re
 // the stream. If an application attempts to operate on a deleted stream, it
 // receives the exception ResourceNotFoundException.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // If the stream is in the ACTIVE state, you can delete it. After a DeleteStream
 // request, the specified stream is in the DELETING state until Kinesis Data
 // Streams completes the deletion.
@@ -432,6 +452,13 @@ func (c *Kinesis) DeleteStreamRequest(input *DeleteStreamInput) (req *request.Re
 //   * ResourceInUseException
 //   The resource is not available for this operation. For successful operation,
 //   the resource must be in the ACTIVE state.
+//
+//   * InvalidArgumentException
+//   A specified parameter exceeds its restrictions, is not supported, or can't
+//   be used. For more information, see the returned message.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/DeleteStream
 func (c *Kinesis) DeleteStream(input *DeleteStreamInput) (*DeleteStreamOutput, error) {
@@ -695,6 +722,9 @@ func (c *Kinesis) DescribeStreamRequest(input *DescribeStreamInput) (req *reques
 // and the ListShards API to list the shards in a specified data stream and
 // obtain information about each shard.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // The information returned includes the stream name, Amazon Resource Name (ARN),
 // creation time, enhanced metric configuration, and shard map. The shard map
 // is an array of shard objects. For each shard object, there is the hash key
@@ -728,6 +758,13 @@ func (c *Kinesis) DescribeStreamRequest(input *DescribeStreamInput) (req *reques
 //   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * InvalidArgumentException
+//   A specified parameter exceeds its restrictions, is not supported, or can't
+//   be used. For more information, see the returned message.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/DescribeStream
 func (c *Kinesis) DescribeStream(input *DescribeStreamInput) (*DescribeStreamOutput, error) {
@@ -946,6 +983,9 @@ func (c *Kinesis) DescribeStreamSummaryRequest(input *DescribeStreamSummaryInput
 // Provides a summarized description of the specified Kinesis data stream without
 // the shard list.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // The information returned includes the stream name, Amazon Resource Name (ARN),
 // status, record retention period, approximate creation time, monitoring, encryption
 // details, and open shard count.
@@ -967,6 +1007,13 @@ func (c *Kinesis) DescribeStreamSummaryRequest(input *DescribeStreamSummaryInput
 //   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * InvalidArgumentException
+//   A specified parameter exceeds its restrictions, is not supported, or can't
+//   be used. For more information, see the returned message.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/DescribeStreamSummary
 func (c *Kinesis) DescribeStreamSummary(input *DescribeStreamSummaryInput) (*DescribeStreamSummaryOutput, error) {
@@ -1036,6 +1083,9 @@ func (c *Kinesis) DisableEnhancedMonitoringRequest(input *DisableEnhancedMonitor
 //
 // Disables enhanced monitoring.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1059,6 +1109,9 @@ func (c *Kinesis) DisableEnhancedMonitoringRequest(input *DisableEnhancedMonitor
 //   * ResourceNotFoundException
 //   The requested resource could not be found. The stream might not be specified
 //   correctly.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/DisableEnhancedMonitoring
 func (c *Kinesis) DisableEnhancedMonitoring(input *DisableEnhancedMonitoringInput) (*EnhancedMonitoringOutput, error) {
@@ -1128,6 +1181,9 @@ func (c *Kinesis) EnableEnhancedMonitoringRequest(input *EnableEnhancedMonitorin
 //
 // Enables enhanced Kinesis data stream monitoring for shard-level metrics.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1151,6 +1207,9 @@ func (c *Kinesis) EnableEnhancedMonitoringRequest(input *EnableEnhancedMonitorin
 //   * ResourceNotFoundException
 //   The requested resource could not be found. The stream might not be specified
 //   correctly.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/EnableEnhancedMonitoring
 func (c *Kinesis) EnableEnhancedMonitoring(input *EnableEnhancedMonitoringInput) (*EnhancedMonitoringOutput, error) {
@@ -1219,6 +1278,9 @@ func (c *Kinesis) GetRecordsRequest(input *GetRecordsInput) (req *request.Reques
 // GetRecords API operation for Amazon Kinesis.
 //
 // Gets data records from a Kinesis data stream's shard.
+//
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// in addition to the ShardIterator parameter.
 //
 // Specify a shard iterator using the ShardIterator parameter. The shard iterator
 // specifies the position in the shard from which you want to start reading
@@ -1331,6 +1393,9 @@ func (c *Kinesis) GetRecordsRequest(input *GetRecordsInput) (req *request.Reques
 //   throttling, see Limits (https://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second)
 //   in the Amazon Web Services Key Management Service Developer Guide.
 //
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/GetRecords
 func (c *Kinesis) GetRecords(input *GetRecordsInput) (*GetRecordsOutput, error) {
 	req, out := c.GetRecordsRequest(input)
@@ -1400,6 +1465,9 @@ func (c *Kinesis) GetShardIteratorRequest(input *GetShardIteratorInput) (req *re
 // Gets an Amazon Kinesis shard iterator. A shard iterator expires 5 minutes
 // after it is returned to the requester.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // A shard iterator specifies the shard position from which to start reading
 // data records sequentially. The position is specified using the sequence number
 // of a data record in a shard. A sequence number is the identifier associated
@@ -1460,6 +1528,9 @@ func (c *Kinesis) GetShardIteratorRequest(input *GetShardIteratorInput) (req *re
 //   in the Amazon Kinesis Data Streams Developer Guide, and Error Retries and
 //   Exponential Backoff in Amazon Web Services (https://docs.aws.amazon.com/general/latest/gr/api-retries.html)
 //   in the Amazon Web Services General Reference.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/GetShardIterator
 func (c *Kinesis) GetShardIterator(input *GetShardIteratorInput) (*GetShardIteratorOutput, error) {
@@ -1532,6 +1603,9 @@ func (c *Kinesis) IncreaseStreamRetentionPeriodRequest(input *IncreaseStreamRete
 // of time data records are accessible after they are added to the stream. The
 // maximum value of a stream's retention period is 8760 hours (365 days).
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // If you choose a longer stream retention period, this operation increases
 // the time period during which records that have not yet expired are accessible.
 // However, it does not make previous, expired data (older than the stream's
@@ -1563,6 +1637,9 @@ func (c *Kinesis) IncreaseStreamRetentionPeriodRequest(input *IncreaseStreamRete
 //   * InvalidArgumentException
 //   A specified parameter exceeds its restrictions, is not supported, or can't
 //   be used. For more information, see the returned message.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/IncreaseStreamRetentionPeriod
 func (c *Kinesis) IncreaseStreamRetentionPeriod(input *IncreaseStreamRetentionPeriodInput) (*IncreaseStreamRetentionPeriodOutput, error) {
@@ -1633,6 +1710,9 @@ func (c *Kinesis) ListShardsRequest(input *ListShardsInput) (req *request.Reques
 // Lists the shards in a stream and provides information about each shard. This
 // operation has a limit of 1000 transactions per second per data stream.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // This action does not list expired shards. For information about expired shards,
 // see Data Routing, Data Persistence, and Shard State after a Reshard (https://docs.aws.amazon.com/streams/latest/dev/kinesis-using-sdk-java-after-resharding.html#kinesis-using-sdk-java-resharding-data-routing).
 //
@@ -1668,6 +1748,9 @@ func (c *Kinesis) ListShardsRequest(input *ListShardsInput) (req *request.Reques
 //   * ResourceInUseException
 //   The resource is not available for this operation. For successful operation,
 //   the resource must be in the ACTIVE state.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/ListShards
 func (c *Kinesis) ListShards(input *ListShardsInput) (*ListShardsOutput, error) {
@@ -1879,8 +1962,8 @@ func (c *Kinesis) ListStreamsRequest(input *ListStreamsInput) (req *request.Requ
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
 		Paginator: &request.Paginator{
-			InputTokens:     []string{"ExclusiveStartStreamName"},
-			OutputTokens:    []string{"StreamNames[-1]"},
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
 			LimitToken:      "Limit",
 			TruncationToken: "HasMoreStreams",
 		},
@@ -1925,6 +2008,13 @@ func (c *Kinesis) ListStreamsRequest(input *ListStreamsInput) (req *request.Requ
 //   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * ExpiredNextTokenException
+//   The pagination token passed to the operation is expired.
+//
+//   * InvalidArgumentException
+//   A specified parameter exceeds its restrictions, is not supported, or can't
+//   be used. For more information, see the returned message.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/ListStreams
 func (c *Kinesis) ListStreams(input *ListStreamsInput) (*ListStreamsOutput, error) {
@@ -2047,6 +2137,9 @@ func (c *Kinesis) ListTagsForStreamRequest(input *ListTagsForStreamInput) (req *
 // Lists the tags for the specified Kinesis data stream. This operation has
 // a limit of five transactions per second per account.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2066,6 +2159,9 @@ func (c *Kinesis) ListTagsForStreamRequest(input *ListTagsForStreamInput) (req *
 //   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/ListTagsForStream
 func (c *Kinesis) ListTagsForStream(input *ListTagsForStreamInput) (*ListTagsForStreamOutput, error) {
@@ -2136,13 +2232,17 @@ func (c *Kinesis) MergeShardsRequest(input *MergeShardsInput) (req *request.Requ
 //
 // Merges two adjacent shards in a Kinesis data stream and combines them into
 // a single shard to reduce the stream's capacity to ingest and transport data.
-// Two shards are considered adjacent if the union of the hash key ranges for
-// the two shards form a contiguous set with no gaps. For example, if you have
-// two shards, one with a hash key range of 276...381 and the other with a hash
-// key range of 382...454, then you could merge these two shards into a single
-// shard that would have a hash key range of 276...454. After the merge, the
-// single child shard receives data for all hash key values covered by the two
-// parent shards.
+// This API is only supported for the data streams with the provisioned capacity
+// mode. Two shards are considered adjacent if the union of the hash key ranges
+// for the two shards form a contiguous set with no gaps. For example, if you
+// have two shards, one with a hash key range of 276...381 and the other with
+// a hash key range of 382...454, then you could merge these two shards into
+// a single shard that would have a hash key range of 276...454. After the merge,
+// the single child shard receives data for all hash key values covered by the
+// two parent shards.
+//
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
 //
 // MergeShards is called when there is a need to reduce the overall capacity
 // of a stream because of excess capacity that is not being used. You must specify
@@ -2196,6 +2296,12 @@ func (c *Kinesis) MergeShardsRequest(input *MergeShardsInput) (req *request.Requ
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
 //   * ValidationException
+//   Specifies that you tried to invoke this API for a data stream with the on-demand
+//   capacity mode. This API is only supported for data streams with the provisioned
+//   capacity mode.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/MergeShards
 func (c *Kinesis) MergeShards(input *MergeShardsInput) (*MergeShardsOutput, error) {
@@ -2267,6 +2373,9 @@ func (c *Kinesis) PutRecordRequest(input *PutRecordInput) (req *request.Request,
 // to send data into the stream for real-time ingestion and subsequent processing,
 // one record at a time. Each shard can support writes up to 1,000 records per
 // second, up to a maximum data write total of 1 MiB per second.
+//
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
 //
 // You must specify the name of the stream that captures, stores, and transports
 // the data; a partition key; and the data blob itself.
@@ -2356,6 +2465,9 @@ func (c *Kinesis) PutRecordRequest(input *PutRecordInput) (req *request.Request,
 //   throttling, see Limits (https://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second)
 //   in the Amazon Web Services Key Management Service Developer Guide.
 //
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/PutRecord
 func (c *Kinesis) PutRecord(input *PutRecordInput) (*PutRecordOutput, error) {
 	req, out := c.PutRecordRequest(input)
@@ -2425,6 +2537,9 @@ func (c *Kinesis) PutRecordsRequest(input *PutRecordsInput) (req *request.Reques
 // Writes multiple data records into a Kinesis data stream in a single call
 // (also referred to as a PutRecords request). Use this operation to send data
 // into the stream for data ingestion and processing.
+//
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
 //
 // Each PutRecords request can support up to 500 records. Each record in the
 // request can be as large as 1 MiB, up to a limit of 5 MiB for the entire request,
@@ -2537,6 +2652,9 @@ func (c *Kinesis) PutRecordsRequest(input *PutRecordsInput) (req *request.Reques
 //   The request was denied due to request throttling. For more information about
 //   throttling, see Limits (https://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second)
 //   in the Amazon Web Services Key Management Service Developer Guide.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/PutRecords
 func (c *Kinesis) PutRecords(input *PutRecordsInput) (*PutRecordsOutput, error) {
@@ -2716,6 +2834,9 @@ func (c *Kinesis) RemoveTagsFromStreamRequest(input *RemoveTagsFromStreamInput) 
 // Removes tags from the specified Kinesis data stream. Removed tags are deleted
 // and cannot be recovered after this operation successfully completes.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // If you specify a tag that does not exist, it is ignored.
 //
 // RemoveTagsFromStream has a limit of five transactions per second per account.
@@ -2743,6 +2864,9 @@ func (c *Kinesis) RemoveTagsFromStreamRequest(input *RemoveTagsFromStreamInput) 
 //   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/RemoveTagsFromStream
 func (c *Kinesis) RemoveTagsFromStream(input *RemoveTagsFromStreamInput) (*RemoveTagsFromStreamOutput, error) {
@@ -2814,7 +2938,12 @@ func (c *Kinesis) SplitShardRequest(input *SplitShardInput) (req *request.Reques
 // Splits a shard into two new shards in the Kinesis data stream, to increase
 // the stream's capacity to ingest and transport data. SplitShard is called
 // when there is a need to increase the overall capacity of a stream because
-// of an expected increase in the volume of data records being ingested.
+// of an expected increase in the volume of data records being ingested. This
+// API is only supported for the data streams with the provisioned capacity
+// mode.
+//
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
 //
 // You can also use SplitShard when a shard appears to be approaching its maximum
 // utilization; for example, the producers sending data into the specific shard
@@ -2882,6 +3011,12 @@ func (c *Kinesis) SplitShardRequest(input *SplitShardInput) (req *request.Reques
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
 //   * ValidationException
+//   Specifies that you tried to invoke this API for a data stream with the on-demand
+//   capacity mode. This API is only supported for data streams with the provisioned
+//   capacity mode.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/SplitShard
 func (c *Kinesis) SplitShard(input *SplitShardInput) (*SplitShardOutput, error) {
@@ -2970,6 +3105,9 @@ func (c *Kinesis) StartStreamEncryptionRequest(input *StartStreamEncryptionInput
 // encryption, you can verify that encryption is applied by inspecting the API
 // response from PutRecord or PutRecords.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3019,6 +3157,9 @@ func (c *Kinesis) StartStreamEncryptionRequest(input *StartStreamEncryptionInput
 //   The request was denied due to request throttling. For more information about
 //   throttling, see Limits (https://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second)
 //   in the Amazon Web Services Key Management Service Developer Guide.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/StartStreamEncryption
 func (c *Kinesis) StartStreamEncryption(input *StartStreamEncryptionInput) (*StartStreamEncryptionOutput, error) {
@@ -3089,6 +3230,9 @@ func (c *Kinesis) StopStreamEncryptionRequest(input *StopStreamEncryptionInput) 
 //
 // Disables server-side encryption for a specified stream.
 //
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
+//
 // Stopping encryption is an asynchronous operation. Upon receiving the request,
 // Kinesis Data Streams returns immediately and sets the status of the stream
 // to UPDATING. After the update is complete, Kinesis Data Streams sets the
@@ -3129,6 +3273,9 @@ func (c *Kinesis) StopStreamEncryptionRequest(input *StopStreamEncryptionInput) 
 //   * ResourceNotFoundException
 //   The requested resource could not be found. The stream might not be specified
 //   correctly.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/StopStreamEncryption
 func (c *Kinesis) StopStreamEncryption(input *StopStreamEncryptionInput) (*StopStreamEncryptionOutput, error) {
@@ -3257,6 +3404,9 @@ func (c *Kinesis) SubscribeToShardRequest(input *SubscribeToShardInput) (req *re
 //   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/SubscribeToShard
 func (c *Kinesis) SubscribeToShard(input *SubscribeToShardInput) (*SubscribeToShardOutput, error) {
@@ -3530,7 +3680,11 @@ func (c *Kinesis) UpdateShardCountRequest(input *UpdateShardCountInput) (req *re
 // UpdateShardCount API operation for Amazon Kinesis.
 //
 // Updates the shard count of the specified stream to the specified number of
-// shards.
+// shards. This API is only supported for the data streams with the provisioned
+// capacity mode.
+//
+// When invoking this API, it is recommended you use the StreamARN input parameter
+// rather than the StreamName input parameter.
 //
 // Updating the shard count is an asynchronous operation. Upon receiving the
 // request, Kinesis Data Streams returns immediately and sets the status of
@@ -3596,6 +3750,12 @@ func (c *Kinesis) UpdateShardCountRequest(input *UpdateShardCountInput) (req *re
 //   correctly.
 //
 //   * ValidationException
+//   Specifies that you tried to invoke this API for a data stream with the on-demand
+//   capacity mode. This API is only supported for data streams with the provisioned
+//   capacity mode.
+//
+//   * AccessDeniedException
+//   Specifies that you do not have the permissions required to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-2013-12-02/UpdateShardCount
 func (c *Kinesis) UpdateShardCount(input *UpdateShardCountInput) (*UpdateShardCountOutput, error) {
@@ -3714,14 +3874,79 @@ func (c *Kinesis) UpdateStreamModeWithContext(ctx aws.Context, input *UpdateStre
 	return out, req.Send()
 }
 
+// Specifies that you do not have the permissions required to perform this operation.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Represents the input for AddTagsToStream.
 type AddTagsToStreamInput struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 
 	// A set of up to 10 key-value pairs to use to create the tags.
 	//
@@ -3750,8 +3975,8 @@ func (s AddTagsToStreamInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *AddTagsToStreamInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AddTagsToStreamInput"}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -3767,6 +3992,12 @@ func (s *AddTagsToStreamInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *AddTagsToStreamInput) SetStreamARN(v string) *AddTagsToStreamInput {
+	s.StreamARN = &v
+	return s
 }
 
 // SetStreamName sets the StreamName field's value.
@@ -4133,10 +4364,11 @@ type DecreaseStreamRetentionPeriodInput struct {
 	// RetentionPeriodHours is a required field
 	RetentionPeriodHours *int64 `type:"integer" required:"true"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream to modify.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -4163,8 +4395,8 @@ func (s *DecreaseStreamRetentionPeriodInput) Validate() error {
 	if s.RetentionPeriodHours == nil {
 		invalidParams.Add(request.NewErrParamRequired("RetentionPeriodHours"))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -4179,6 +4411,12 @@ func (s *DecreaseStreamRetentionPeriodInput) Validate() error {
 // SetRetentionPeriodHours sets the RetentionPeriodHours field's value.
 func (s *DecreaseStreamRetentionPeriodInput) SetRetentionPeriodHours(v int64) *DecreaseStreamRetentionPeriodInput {
 	s.RetentionPeriodHours = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *DecreaseStreamRetentionPeriodInput) SetStreamARN(v string) *DecreaseStreamRetentionPeriodInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -4218,10 +4456,11 @@ type DeleteStreamInput struct {
 	// has registered consumers, the call to DeleteStream fails with a ResourceInUseException.
 	EnforceConsumerDeletion *bool `type:"boolean"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream to delete.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -4245,8 +4484,8 @@ func (s DeleteStreamInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteStreamInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteStreamInput"}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -4261,6 +4500,12 @@ func (s *DeleteStreamInput) Validate() error {
 // SetEnforceConsumerDeletion sets the EnforceConsumerDeletion field's value.
 func (s *DeleteStreamInput) SetEnforceConsumerDeletion(v bool) *DeleteStreamInput {
 	s.EnforceConsumerDeletion = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *DeleteStreamInput) SetStreamARN(v string) *DeleteStreamInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -4597,10 +4842,11 @@ type DescribeStreamInput struct {
 	// returned.
 	Limit *int64 `min:"1" type:"integer"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream to describe.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -4630,8 +4876,8 @@ func (s *DescribeStreamInput) Validate() error {
 	if s.Limit != nil && *s.Limit < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Limit", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -4652,6 +4898,12 @@ func (s *DescribeStreamInput) SetExclusiveStartShardId(v string) *DescribeStream
 // SetLimit sets the Limit field's value.
 func (s *DescribeStreamInput) SetLimit(v int64) *DescribeStreamInput {
 	s.Limit = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *DescribeStreamInput) SetStreamARN(v string) *DescribeStreamInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -4700,10 +4952,11 @@ func (s *DescribeStreamOutput) SetStreamDescription(v *StreamDescription) *Descr
 type DescribeStreamSummaryInput struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream to describe.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -4727,8 +4980,8 @@ func (s DescribeStreamSummaryInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeStreamSummaryInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeStreamSummaryInput"}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -4738,6 +4991,12 @@ func (s *DescribeStreamSummaryInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *DescribeStreamSummaryInput) SetStreamARN(v string) *DescribeStreamSummaryInput {
+	s.StreamARN = &v
+	return s
 }
 
 // SetStreamName sets the StreamName field's value.
@@ -4811,10 +5070,11 @@ type DisableEnhancedMonitoringInput struct {
 	// ShardLevelMetrics is a required field
 	ShardLevelMetrics []*string `min:"1" type:"list" required:"true" enum:"MetricsName"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the Kinesis data stream for which to disable enhanced monitoring.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -4844,8 +5104,8 @@ func (s *DisableEnhancedMonitoringInput) Validate() error {
 	if s.ShardLevelMetrics != nil && len(s.ShardLevelMetrics) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ShardLevelMetrics", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -4860,6 +5120,12 @@ func (s *DisableEnhancedMonitoringInput) Validate() error {
 // SetShardLevelMetrics sets the ShardLevelMetrics field's value.
 func (s *DisableEnhancedMonitoringInput) SetShardLevelMetrics(v []*string) *DisableEnhancedMonitoringInput {
 	s.ShardLevelMetrics = v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *DisableEnhancedMonitoringInput) SetStreamARN(v string) *DisableEnhancedMonitoringInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -4901,10 +5167,11 @@ type EnableEnhancedMonitoringInput struct {
 	// ShardLevelMetrics is a required field
 	ShardLevelMetrics []*string `min:"1" type:"list" required:"true" enum:"MetricsName"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream for which to enable enhanced monitoring.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -4934,8 +5201,8 @@ func (s *EnableEnhancedMonitoringInput) Validate() error {
 	if s.ShardLevelMetrics != nil && len(s.ShardLevelMetrics) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ShardLevelMetrics", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -4950,6 +5217,12 @@ func (s *EnableEnhancedMonitoringInput) Validate() error {
 // SetShardLevelMetrics sets the ShardLevelMetrics field's value.
 func (s *EnableEnhancedMonitoringInput) SetShardLevelMetrics(v []*string) *EnableEnhancedMonitoringInput {
 	s.ShardLevelMetrics = v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *EnableEnhancedMonitoringInput) SetStreamARN(v string) *EnableEnhancedMonitoringInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -5026,6 +5299,9 @@ type EnhancedMonitoringOutput struct {
 	// after the operation.
 	DesiredShardLevelMetrics []*string `min:"1" type:"list" enum:"MetricsName"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the Kinesis data stream.
 	StreamName *string `min:"1" type:"string"`
 }
@@ -5057,6 +5333,12 @@ func (s *EnhancedMonitoringOutput) SetCurrentShardLevelMetrics(v []*string) *Enh
 // SetDesiredShardLevelMetrics sets the DesiredShardLevelMetrics field's value.
 func (s *EnhancedMonitoringOutput) SetDesiredShardLevelMetrics(v []*string) *EnhancedMonitoringOutput {
 	s.DesiredShardLevelMetrics = v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *EnhancedMonitoringOutput) SetStreamARN(v string) *EnhancedMonitoringOutput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -5210,6 +5492,9 @@ type GetRecordsInput struct {
 	//
 	// ShardIterator is a required field
 	ShardIterator *string `min:"1" type:"string" required:"true"`
+
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5242,6 +5527,9 @@ func (s *GetRecordsInput) Validate() error {
 	if s.ShardIterator != nil && len(*s.ShardIterator) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ShardIterator", 1))
 	}
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5258,6 +5546,12 @@ func (s *GetRecordsInput) SetLimit(v int64) *GetRecordsInput {
 // SetShardIterator sets the ShardIterator field's value.
 func (s *GetRecordsInput) SetShardIterator(v string) *GetRecordsInput {
 	s.ShardIterator = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *GetRecordsInput) SetStreamARN(v string) *GetRecordsInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -5364,10 +5658,11 @@ type GetShardIteratorInput struct {
 	// Used with shard iterator type AT_SEQUENCE_NUMBER and AFTER_SEQUENCE_NUMBER.
 	StartingSequenceNumber *string `type:"string"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the Amazon Kinesis data stream.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 
 	// The time stamp of the data record from which to start reading. Used with
 	// shard iterator type AT_TIMESTAMP. A time stamp is the Unix epoch date with
@@ -5409,8 +5704,8 @@ func (s *GetShardIteratorInput) Validate() error {
 	if s.ShardIteratorType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ShardIteratorType"))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -5437,6 +5732,12 @@ func (s *GetShardIteratorInput) SetShardIteratorType(v string) *GetShardIterator
 // SetStartingSequenceNumber sets the StartingSequenceNumber field's value.
 func (s *GetShardIteratorInput) SetStartingSequenceNumber(v string) *GetShardIteratorInput {
 	s.StartingSequenceNumber = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *GetShardIteratorInput) SetStreamARN(v string) *GetShardIteratorInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -5542,10 +5843,11 @@ type IncreaseStreamRetentionPeriodInput struct {
 	// RetentionPeriodHours is a required field
 	RetentionPeriodHours *int64 `type:"integer" required:"true"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream to modify.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5572,8 +5874,8 @@ func (s *IncreaseStreamRetentionPeriodInput) Validate() error {
 	if s.RetentionPeriodHours == nil {
 		invalidParams.Add(request.NewErrParamRequired("RetentionPeriodHours"))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -5588,6 +5890,12 @@ func (s *IncreaseStreamRetentionPeriodInput) Validate() error {
 // SetRetentionPeriodHours sets the RetentionPeriodHours field's value.
 func (s *IncreaseStreamRetentionPeriodInput) SetRetentionPeriodHours(v int64) *IncreaseStreamRetentionPeriodInput {
 	s.RetentionPeriodHours = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *IncreaseStreamRetentionPeriodInput) SetStreamARN(v string) *IncreaseStreamRetentionPeriodInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -6481,6 +6789,9 @@ type ListShardsInput struct {
 	// from the provided timestamp to TIP are returned.
 	ShardFilter *ShardFilter `type:"structure"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// Specify this input parameter to distinguish data streams that have the same
 	// name. For example, if you create a data stream and then delete it, and you
 	// later create another data stream with the same name, you can use this input
@@ -6526,6 +6837,9 @@ func (s *ListShardsInput) Validate() error {
 	if s.NextToken != nil && len(*s.NextToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
 	}
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
+	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
 	}
@@ -6562,6 +6876,12 @@ func (s *ListShardsInput) SetNextToken(v string) *ListShardsInput {
 // SetShardFilter sets the ShardFilter field's value.
 func (s *ListShardsInput) SetShardFilter(v *ShardFilter) *ListShardsInput {
 	s.ShardFilter = v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *ListShardsInput) SetStreamARN(v string) *ListShardsInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -6804,6 +7124,8 @@ type ListStreamsInput struct {
 	// The maximum number of streams to list. The default value is 100. If you specify
 	// a value greater than 100, at most 100 results are returned.
 	Limit *int64 `min:"1" type:"integer"`
+
+	NextToken *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -6833,6 +7155,9 @@ func (s *ListStreamsInput) Validate() error {
 	if s.Limit != nil && *s.Limit < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Limit", 1))
 	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6852,6 +7177,12 @@ func (s *ListStreamsInput) SetLimit(v int64) *ListStreamsInput {
 	return s
 }
 
+// SetNextToken sets the NextToken field's value.
+func (s *ListStreamsInput) SetNextToken(v string) *ListStreamsInput {
+	s.NextToken = &v
+	return s
+}
+
 // Represents the output for ListStreams.
 type ListStreamsOutput struct {
 	_ struct{} `type:"structure"`
@@ -6861,11 +7192,15 @@ type ListStreamsOutput struct {
 	// HasMoreStreams is a required field
 	HasMoreStreams *bool `type:"boolean" required:"true"`
 
+	NextToken *string `min:"1" type:"string"`
+
 	// The names of the streams that are associated with the Amazon Web Services
 	// account making the ListStreams request.
 	//
 	// StreamNames is a required field
 	StreamNames []*string `type:"list" required:"true"`
+
+	StreamSummaries []*StreamSummary `type:"list"`
 }
 
 // String returns the string representation.
@@ -6892,9 +7227,21 @@ func (s *ListStreamsOutput) SetHasMoreStreams(v bool) *ListStreamsOutput {
 	return s
 }
 
+// SetNextToken sets the NextToken field's value.
+func (s *ListStreamsOutput) SetNextToken(v string) *ListStreamsOutput {
+	s.NextToken = &v
+	return s
+}
+
 // SetStreamNames sets the StreamNames field's value.
 func (s *ListStreamsOutput) SetStreamNames(v []*string) *ListStreamsOutput {
 	s.StreamNames = v
+	return s
+}
+
+// SetStreamSummaries sets the StreamSummaries field's value.
+func (s *ListStreamsOutput) SetStreamSummaries(v []*StreamSummary) *ListStreamsOutput {
+	s.StreamSummaries = v
 	return s
 }
 
@@ -6911,10 +7258,11 @@ type ListTagsForStreamInput struct {
 	// tags, set ExclusiveStartTagKey to the last key in the response.
 	Limit *int64 `min:"1" type:"integer"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -6944,8 +7292,8 @@ func (s *ListTagsForStreamInput) Validate() error {
 	if s.Limit != nil && *s.Limit < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Limit", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -6966,6 +7314,12 @@ func (s *ListTagsForStreamInput) SetExclusiveStartTagKey(v string) *ListTagsForS
 // SetLimit sets the Limit field's value.
 func (s *ListTagsForStreamInput) SetLimit(v int64) *ListTagsForStreamInput {
 	s.Limit = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *ListTagsForStreamInput) SetStreamARN(v string) *ListTagsForStreamInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -7036,10 +7390,11 @@ type MergeShardsInput struct {
 	// ShardToMerge is a required field
 	ShardToMerge *string `min:"1" type:"string" required:"true"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream for the merge.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7075,8 +7430,8 @@ func (s *MergeShardsInput) Validate() error {
 	if s.ShardToMerge != nil && len(*s.ShardToMerge) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ShardToMerge", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -7097,6 +7452,12 @@ func (s *MergeShardsInput) SetAdjacentShardToMerge(v string) *MergeShardsInput {
 // SetShardToMerge sets the ShardToMerge field's value.
 func (s *MergeShardsInput) SetShardToMerge(v string) *MergeShardsInput {
 	s.ShardToMerge = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *MergeShardsInput) SetStreamARN(v string) *MergeShardsInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -7234,10 +7595,11 @@ type PutRecordInput struct {
 	// ordered based on arrival time.
 	SequenceNumberForOrdering *string `type:"string"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream to put the data record into.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7270,8 +7632,8 @@ func (s *PutRecordInput) Validate() error {
 	if s.PartitionKey != nil && len(*s.PartitionKey) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("PartitionKey", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -7304,6 +7666,12 @@ func (s *PutRecordInput) SetPartitionKey(v string) *PutRecordInput {
 // SetSequenceNumberForOrdering sets the SequenceNumberForOrdering field's value.
 func (s *PutRecordInput) SetSequenceNumberForOrdering(v string) *PutRecordInput {
 	s.SequenceNumberForOrdering = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *PutRecordInput) SetStreamARN(v string) *PutRecordInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -7385,10 +7753,11 @@ type PutRecordsInput struct {
 	// Records is a required field
 	Records []*PutRecordsRequestEntry `min:"1" type:"list" required:"true"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The stream name associated with the request.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7418,8 +7787,8 @@ func (s *PutRecordsInput) Validate() error {
 	if s.Records != nil && len(s.Records) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Records", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -7444,6 +7813,12 @@ func (s *PutRecordsInput) Validate() error {
 // SetRecords sets the Records field's value.
 func (s *PutRecordsInput) SetRecords(v []*PutRecordsRequestEntry) *PutRecordsInput {
 	s.Records = v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *PutRecordsInput) SetStreamARN(v string) *PutRecordsInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -7859,10 +8234,11 @@ func (s *RegisterStreamConsumerOutput) SetConsumer(v *Consumer) *RegisterStreamC
 type RemoveTagsFromStreamInput struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 
 	// A list of tag keys. Each corresponding tag is removed from the stream.
 	//
@@ -7891,8 +8267,8 @@ func (s RemoveTagsFromStreamInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RemoveTagsFromStreamInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RemoveTagsFromStreamInput"}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -7908,6 +8284,12 @@ func (s *RemoveTagsFromStreamInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *RemoveTagsFromStreamInput) SetStreamARN(v string) *RemoveTagsFromStreamInput {
+	s.StreamARN = &v
+	return s
 }
 
 // SetStreamName sets the StreamName field's value.
@@ -8369,10 +8751,11 @@ type SplitShardInput struct {
 	// ShardToSplit is a required field
 	ShardToSplit *string `min:"1" type:"string" required:"true"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream for the shard split.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8405,8 +8788,8 @@ func (s *SplitShardInput) Validate() error {
 	if s.ShardToSplit != nil && len(*s.ShardToSplit) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ShardToSplit", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -8427,6 +8810,12 @@ func (s *SplitShardInput) SetNewStartingHashKey(v string) *SplitShardInput {
 // SetShardToSplit sets the ShardToSplit field's value.
 func (s *SplitShardInput) SetShardToSplit(v string) *SplitShardInput {
 	s.ShardToSplit = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *SplitShardInput) SetStreamARN(v string) *SplitShardInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -8485,10 +8874,11 @@ type StartStreamEncryptionInput struct {
 	// KeyId is a required field
 	KeyId *string `min:"1" type:"string" required:"true"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream for which to start encrypting records.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8521,8 +8911,8 @@ func (s *StartStreamEncryptionInput) Validate() error {
 	if s.KeyId != nil && len(*s.KeyId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("KeyId", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -8543,6 +8933,12 @@ func (s *StartStreamEncryptionInput) SetEncryptionType(v string) *StartStreamEnc
 // SetKeyId sets the KeyId field's value.
 func (s *StartStreamEncryptionInput) SetKeyId(v string) *StartStreamEncryptionInput {
 	s.KeyId = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *StartStreamEncryptionInput) SetStreamARN(v string) *StartStreamEncryptionInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -8689,10 +9085,11 @@ type StopStreamEncryptionInput struct {
 	// KeyId is a required field
 	KeyId *string `min:"1" type:"string" required:"true"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream on which to stop encrypting records.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8725,8 +9122,8 @@ func (s *StopStreamEncryptionInput) Validate() error {
 	if s.KeyId != nil && len(*s.KeyId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("KeyId", 1))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -8747,6 +9144,12 @@ func (s *StopStreamEncryptionInput) SetEncryptionType(v string) *StopStreamEncry
 // SetKeyId sets the KeyId field's value.
 func (s *StopStreamEncryptionInput) SetKeyId(v string) *StopStreamEncryptionInput {
 	s.KeyId = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *StopStreamEncryptionInput) SetStreamARN(v string) *StopStreamEncryptionInput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -9173,6 +9576,82 @@ func (s *StreamModeDetails) Validate() error {
 // SetStreamMode sets the StreamMode field's value.
 func (s *StreamModeDetails) SetStreamMode(v string) *StreamModeDetails {
 	s.StreamMode = &v
+	return s
+}
+
+// The summary of a stream.
+type StreamSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the stream.
+	//
+	// StreamARN is a required field
+	StreamARN *string `min:"1" type:"string" required:"true"`
+
+	// The timestamp at which the stream was created.
+	StreamCreationTimestamp *time.Time `type:"timestamp"`
+
+	// Specifies the capacity mode to which you want to set your data stream. Currently,
+	// in Kinesis Data Streams, you can choose between an on-demand capacity mode
+	// and a provisioned capacity mode for your data streams.
+	StreamModeDetails *StreamModeDetails `type:"structure"`
+
+	// The name of a stream.
+	//
+	// StreamName is a required field
+	StreamName *string `min:"1" type:"string" required:"true"`
+
+	// The status of the stream.
+	//
+	// StreamStatus is a required field
+	StreamStatus *string `type:"string" required:"true" enum:"StreamStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamSummary) GoString() string {
+	return s.String()
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *StreamSummary) SetStreamARN(v string) *StreamSummary {
+	s.StreamARN = &v
+	return s
+}
+
+// SetStreamCreationTimestamp sets the StreamCreationTimestamp field's value.
+func (s *StreamSummary) SetStreamCreationTimestamp(v time.Time) *StreamSummary {
+	s.StreamCreationTimestamp = &v
+	return s
+}
+
+// SetStreamModeDetails sets the StreamModeDetails field's value.
+func (s *StreamSummary) SetStreamModeDetails(v *StreamModeDetails) *StreamSummary {
+	s.StreamModeDetails = v
+	return s
+}
+
+// SetStreamName sets the StreamName field's value.
+func (s *StreamSummary) SetStreamName(v string) *StreamSummary {
+	s.StreamName = &v
+	return s
+}
+
+// SetStreamStatus sets the StreamStatus field's value.
+func (s *StreamSummary) SetStreamStatus(v string) *StreamSummary {
+	s.StreamStatus = &v
 	return s
 }
 
@@ -9652,10 +10131,11 @@ type UpdateShardCountInput struct {
 	// ScalingType is a required field
 	ScalingType *string `type:"string" required:"true" enum:"ScalingType"`
 
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
+
 	// The name of the stream.
-	//
-	// StreamName is a required field
-	StreamName *string `min:"1" type:"string" required:"true"`
+	StreamName *string `min:"1" type:"string"`
 
 	// The new number of shards. This value has the following default limits. By
 	// default, you cannot do the following:
@@ -9699,8 +10179,8 @@ func (s *UpdateShardCountInput) Validate() error {
 	if s.ScalingType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ScalingType"))
 	}
-	if s.StreamName == nil {
-		invalidParams.Add(request.NewErrParamRequired("StreamName"))
+	if s.StreamARN != nil && len(*s.StreamARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamARN", 1))
 	}
 	if s.StreamName != nil && len(*s.StreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StreamName", 1))
@@ -9724,6 +10204,12 @@ func (s *UpdateShardCountInput) SetScalingType(v string) *UpdateShardCountInput 
 	return s
 }
 
+// SetStreamARN sets the StreamARN field's value.
+func (s *UpdateShardCountInput) SetStreamARN(v string) *UpdateShardCountInput {
+	s.StreamARN = &v
+	return s
+}
+
 // SetStreamName sets the StreamName field's value.
 func (s *UpdateShardCountInput) SetStreamName(v string) *UpdateShardCountInput {
 	s.StreamName = &v
@@ -9741,6 +10227,9 @@ type UpdateShardCountOutput struct {
 
 	// The current number of shards.
 	CurrentShardCount *int64 `min:"1" type:"integer"`
+
+	// The ARN of the stream.
+	StreamARN *string `min:"1" type:"string"`
 
 	// The name of the stream.
 	StreamName *string `min:"1" type:"string"`
@@ -9770,6 +10259,12 @@ func (s UpdateShardCountOutput) GoString() string {
 // SetCurrentShardCount sets the CurrentShardCount field's value.
 func (s *UpdateShardCountOutput) SetCurrentShardCount(v int64) *UpdateShardCountOutput {
 	s.CurrentShardCount = &v
+	return s
+}
+
+// SetStreamARN sets the StreamARN field's value.
+func (s *UpdateShardCountOutput) SetStreamARN(v string) *UpdateShardCountOutput {
+	s.StreamARN = &v
 	return s
 }
 
@@ -9877,6 +10372,9 @@ func (s UpdateStreamModeOutput) GoString() string {
 	return s.String()
 }
 
+// Specifies that you tried to invoke this API for a data stream with the on-demand
+// capacity mode. This API is only supported for data streams with the provisioned
+// capacity mode.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`

@@ -5389,9 +5389,8 @@ func (c *ElastiCache) FailoverGlobalReplicationGroupRequest(input *FailoverGloba
 
 // FailoverGlobalReplicationGroup API operation for Amazon ElastiCache.
 //
-// Used to failover the primary region to a selected secondary region. The selected
-// secondary region will become primary, and all other clusters will become
-// secondary.
+// Used to failover the primary region to a secondary region. The secondary
+// region will become primary, and all other clusters will become secondary.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7623,6 +7622,61 @@ func (s *Authentication) SetType(v string) *Authentication {
 	return s
 }
 
+// Specifies the authentication mode to use.
+type AuthenticationMode struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the passwords to use for authentication if Type is set to password.
+	Passwords []*string `min:"1" type:"list"`
+
+	// Specifies the authentication type. Possible options are IAM authentication,
+	// password and no password.
+	Type *string `type:"string" enum:"InputAuthenticationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthenticationMode) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthenticationMode) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AuthenticationMode) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AuthenticationMode"}
+	if s.Passwords != nil && len(s.Passwords) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Passwords", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPasswords sets the Passwords field's value.
+func (s *AuthenticationMode) SetPasswords(v []*string) *AuthenticationMode {
+	s.Passwords = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AuthenticationMode) SetType(v string) *AuthenticationMode {
+	s.Type = &v
+	return s
+}
+
 // Represents the input of an AuthorizeCacheSecurityGroupIngress operation.
 type AuthorizeCacheSecurityGroupIngressInput struct {
 	_ struct{} `type:"structure"`
@@ -8028,7 +8082,7 @@ type CacheCluster struct {
 	// the current generation types provide more memory and computational power
 	// at lower cost when compared to their equivalent previous generation counterparts.
 	//
-	//    * General purpose: Current generation: M6g node types: (available only
+	//    * General purpose: Current generation: M6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
 	//    1.5.16 onward): cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
 	//    cache.m6g.4xlarge, cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge
@@ -8036,7 +8090,7 @@ type CacheCluster struct {
 	//    M5 node types: cache.m5.large, cache.m5.xlarge, cache.m5.2xlarge, cache.m5.4xlarge,
 	//    cache.m5.12xlarge, cache.m5.24xlarge M4 node types: cache.m4.large, cache.m4.xlarge,
 	//    cache.m4.2xlarge, cache.m4.4xlarge, cache.m4.10xlarge T4g node types (available
-	//    only for Redis engine version 5.0.6 onward and for Memcached engine version
+	//    only for Redis engine version 5.0.6 onward and Memcached engine version
 	//    1.5.16 onward): cache.t4g.micro, cache.t4g.small, cache.t4g.medium T3
 	//    node types: cache.t3.micro, cache.t3.small, cache.t3.medium T2 node types:
 	//    cache.t2.micro, cache.t2.small, cache.t2.medium Previous generation: (not
@@ -8048,11 +8102,6 @@ type CacheCluster struct {
 	//    * Compute optimized: Previous generation: (not recommended. Existing clusters
 	//    are still supported but creation of new clusters is not supported for
 	//    these types.) C1 node types: cache.c1.xlarge
-	//
-	//    * Memory optimized with data tiering: Current generation: R6gd node types
-	//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-	//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-	//    cache.r6gd.16xlarge
 	//
 	//    * Memory optimized: Current generation: R6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
@@ -8108,8 +8157,18 @@ type CacheCluster struct {
 	// The version of the cache engine that is used in this cluster.
 	EngineVersion *string `type:"string"`
 
+	// The network type associated with the cluster, either ipv4 | ipv6. IPv6 is
+	// supported for workloads using Redis engine version 6.2 onward or Memcached
+	// engine version 1.6.6 on all instances built on the Nitro system (https://aws.amazon.com/ec2/nitro/).
+	IpDiscovery *string `type:"string" enum:"IpDiscovery"`
+
 	// Returns the destination, format and type of the logs.
 	LogDeliveryConfigurations []*LogDeliveryConfiguration `locationNameList:"LogDeliveryConfiguration" type:"list"`
+
+	// Must be either ipv4 | ipv6 | dual_stack. IPv6 is supported for workloads
+	// using Redis engine version 6.2 onward or Memcached engine version 1.6.6 on
+	// all instances built on the Nitro system (https://aws.amazon.com/ec2/nitro/).
+	NetworkType *string `type:"string" enum:"NetworkType"`
 
 	// Describes a notification topic and its status. Notification topics are used
 	// for publishing ElastiCache events to subscribers using Amazon Simple Notification
@@ -8183,15 +8242,15 @@ type CacheCluster struct {
 
 	// A flag that enables in-transit encryption when set to true.
 	//
-	// You cannot modify the value of TransitEncryptionEnabled after the cluster
-	// is created. To enable in-transit encryption on a cluster you must set TransitEncryptionEnabled
-	// to true when you create a cluster.
-	//
 	// Required: Only available when creating a replication group in an Amazon VPC
 	// using redis version 3.2.6, 4.x or later.
 	//
 	// Default: false
 	TransitEncryptionEnabled *bool `type:"boolean"`
+
+	// A setting that allows you to migrate your clients to use in-transit encryption,
+	// with no downtime.
+	TransitEncryptionMode *string `type:"string" enum:"TransitEncryptionMode"`
 }
 
 // String returns the string representation.
@@ -8314,9 +8373,21 @@ func (s *CacheCluster) SetEngineVersion(v string) *CacheCluster {
 	return s
 }
 
+// SetIpDiscovery sets the IpDiscovery field's value.
+func (s *CacheCluster) SetIpDiscovery(v string) *CacheCluster {
+	s.IpDiscovery = &v
+	return s
+}
+
 // SetLogDeliveryConfigurations sets the LogDeliveryConfigurations field's value.
 func (s *CacheCluster) SetLogDeliveryConfigurations(v []*LogDeliveryConfiguration) *CacheCluster {
 	s.LogDeliveryConfigurations = v
+	return s
+}
+
+// SetNetworkType sets the NetworkType field's value.
+func (s *CacheCluster) SetNetworkType(v string) *CacheCluster {
+	s.NetworkType = &v
 	return s
 }
 
@@ -8389,6 +8460,12 @@ func (s *CacheCluster) SetSnapshotWindow(v string) *CacheCluster {
 // SetTransitEncryptionEnabled sets the TransitEncryptionEnabled field's value.
 func (s *CacheCluster) SetTransitEncryptionEnabled(v bool) *CacheCluster {
 	s.TransitEncryptionEnabled = &v
+	return s
+}
+
+// SetTransitEncryptionMode sets the TransitEncryptionMode field's value.
+func (s *CacheCluster) SetTransitEncryptionMode(v string) *CacheCluster {
+	s.TransitEncryptionMode = &v
 	return s
 }
 
@@ -8471,7 +8548,7 @@ func (s *CacheEngineVersion) SetEngineVersion(v string) *CacheEngineVersion {
 // the current generation types provide more memory and computational power
 // at lower cost when compared to their equivalent previous generation counterparts.
 //
-//    * General purpose: Current generation: M6g node types: (available only
+//    * General purpose: Current generation: M6g node types (available only
 //    for Redis engine version 5.0.6 onward and for Memcached engine version
 //    1.5.16 onward): cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
 //    cache.m6g.4xlarge, cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge
@@ -8479,7 +8556,7 @@ func (s *CacheEngineVersion) SetEngineVersion(v string) *CacheEngineVersion {
 //    M5 node types: cache.m5.large, cache.m5.xlarge, cache.m5.2xlarge, cache.m5.4xlarge,
 //    cache.m5.12xlarge, cache.m5.24xlarge M4 node types: cache.m4.large, cache.m4.xlarge,
 //    cache.m4.2xlarge, cache.m4.4xlarge, cache.m4.10xlarge T4g node types (available
-//    only for Redis engine version 5.0.6 onward and for Memcached engine version
+//    only for Redis engine version 5.0.6 onward and Memcached engine version
 //    1.5.16 onward): cache.t4g.micro, cache.t4g.small, cache.t4g.medium T3
 //    node types: cache.t3.micro, cache.t3.small, cache.t3.medium T2 node types:
 //    cache.t2.micro, cache.t2.small, cache.t2.medium Previous generation: (not
@@ -8491,11 +8568,6 @@ func (s *CacheEngineVersion) SetEngineVersion(v string) *CacheEngineVersion {
 //    * Compute optimized: Previous generation: (not recommended. Existing clusters
 //    are still supported but creation of new clusters is not supported for
 //    these types.) C1 node types: cache.c1.xlarge
-//
-//    * Memory optimized with data tiering: Current generation: R6gd node types
-//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-//    cache.r6gd.16xlarge
 //
 //    * Memory optimized: Current generation: R6g node types (available only
 //    for Redis engine version 5.0.6 onward and for Memcached engine version
@@ -9163,6 +9235,11 @@ type CacheSubnetGroup struct {
 	// A list of subnets associated with the cache subnet group.
 	Subnets []*Subnet `locationNameList:"Subnet" type:"list"`
 
+	// Either ipv4 | ipv6 | dual_stack. IPv6 is supported for workloads using Redis
+	// engine version 6.2 onward or Memcached engine version 1.6.6 on all instances
+	// built on the Nitro system (https://aws.amazon.com/ec2/nitro/).
+	SupportedNetworkTypes []*string `type:"list" enum:"NetworkType"`
+
 	// The Amazon Virtual Private Cloud identifier (VPC ID) of the cache subnet
 	// group.
 	VpcId *string `type:"string"`
@@ -9207,6 +9284,12 @@ func (s *CacheSubnetGroup) SetCacheSubnetGroupName(v string) *CacheSubnetGroup {
 // SetSubnets sets the Subnets field's value.
 func (s *CacheSubnetGroup) SetSubnets(v []*Subnet) *CacheSubnetGroup {
 	s.Subnets = v
+	return s
+}
+
+// SetSupportedNetworkTypes sets the SupportedNetworkTypes field's value.
+func (s *CacheSubnetGroup) SetSupportedNetworkTypes(v []*string) *CacheSubnetGroup {
+	s.SupportedNetworkTypes = v
 	return s
 }
 
@@ -9707,8 +9790,19 @@ type CreateCacheClusterInput struct {
 	// group and create it anew with the earlier engine version.
 	EngineVersion *string `type:"string"`
 
+	// The network type you choose when modifying a cluster, either ipv4 | ipv6.
+	// IPv6 is supported for workloads using Redis engine version 6.2 onward or
+	// Memcached engine version 1.6.6 on all instances built on the Nitro system
+	// (https://aws.amazon.com/ec2/nitro/).
+	IpDiscovery *string `type:"string" enum:"IpDiscovery"`
+
 	// Specifies the destination, format and type of the logs.
 	LogDeliveryConfigurations []*LogDeliveryConfigurationRequest `locationNameList:"LogDeliveryConfigurationRequest" type:"list"`
+
+	// Must be either ipv4 | ipv6 | dual_stack. IPv6 is supported for workloads
+	// using Redis engine version 6.2 onward or Memcached engine version 1.6.6 on
+	// all instances built on the Nitro system (https://aws.amazon.com/ec2/nitro/).
+	NetworkType *string `type:"string" enum:"NetworkType"`
 
 	// The Amazon Resource Name (ARN) of the Amazon Simple Notification Service
 	// (SNS) topic to which notifications are sent.
@@ -9828,13 +9922,10 @@ type CreateCacheClusterInput struct {
 	// A list of tags to be added to this resource.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
-	// A flag that enables in-transit encryption when set to true. You cannot modify
-	// the value of TransitEncryptionEnabled after the cluster is created. To enable
-	// in-transit encryption on a cluster you must set TransitEncryptionEnabled
-	// to true when you create a cluster.
+	// A flag that enables in-transit encryption when set to true.
 	//
-	// Required: Only available when creating a cache cluster in an Amazon VPC using
-	// Memcached version 1.6.12 or later.
+	// Only available when creating a cache cluster in an Amazon VPC using Memcached
+	// version 1.6.12 or later.
 	TransitEncryptionEnabled *bool `type:"boolean"`
 }
 
@@ -9929,9 +10020,21 @@ func (s *CreateCacheClusterInput) SetEngineVersion(v string) *CreateCacheCluster
 	return s
 }
 
+// SetIpDiscovery sets the IpDiscovery field's value.
+func (s *CreateCacheClusterInput) SetIpDiscovery(v string) *CreateCacheClusterInput {
+	s.IpDiscovery = &v
+	return s
+}
+
 // SetLogDeliveryConfigurations sets the LogDeliveryConfigurations field's value.
 func (s *CreateCacheClusterInput) SetLogDeliveryConfigurations(v []*LogDeliveryConfigurationRequest) *CreateCacheClusterInput {
 	s.LogDeliveryConfigurations = v
+	return s
+}
+
+// SetNetworkType sets the NetworkType field's value.
+func (s *CreateCacheClusterInput) SetNetworkType(v string) *CreateCacheClusterInput {
+	s.NetworkType = &v
 	return s
 }
 
@@ -10621,11 +10724,6 @@ type CreateReplicationGroupInput struct {
 	//    are still supported but creation of new clusters is not supported for
 	//    these types.) C1 node types: cache.c1.xlarge
 	//
-	//    * Memory optimized with data tiering: Current generation: R6gd node types
-	//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-	//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-	//    cache.r6gd.16xlarge
-	//
 	//    * Memory optimized: Current generation: R6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
 	//    1.5.16 onward). cache.r6g.large, cache.r6g.xlarge, cache.r6g.2xlarge,
@@ -10680,7 +10778,7 @@ type CreateReplicationGroupInput struct {
 	DataTieringEnabled *bool `type:"boolean"`
 
 	// The name of the cache engine to be used for the clusters in this replication
-	// group. Must be Redis.
+	// group. The value must be set to Redis.
 	Engine *string `type:"string"`
 
 	// The version number of the cache engine to be used for the clusters in this
@@ -10698,6 +10796,12 @@ type CreateReplicationGroupInput struct {
 	// The name of the Global datastore
 	GlobalReplicationGroupId *string `type:"string"`
 
+	// The network type you choose when creating a replication group, either ipv4
+	// | ipv6. IPv6 is supported for workloads using Redis engine version 6.2 onward
+	// or Memcached engine version 1.6.6 on all instances built on the Nitro system
+	// (https://aws.amazon.com/ec2/nitro/).
+	IpDiscovery *string `type:"string" enum:"IpDiscovery"`
+
 	// The ID of the KMS key used to encrypt the disk in the cluster.
 	KmsKeyId *string `type:"string"`
 
@@ -10707,6 +10811,11 @@ type CreateReplicationGroupInput struct {
 	// A flag indicating if you have Multi-AZ enabled to enhance fault tolerance.
 	// For more information, see Minimizing Downtime: Multi-AZ (http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html).
 	MultiAZEnabled *bool `type:"boolean"`
+
+	// Must be either ipv4 | ipv6 | dual_stack. IPv6 is supported for workloads
+	// using Redis engine version 6.2 onward or Memcached engine version 1.6.6 on
+	// all instances built on the Nitro system (https://aws.amazon.com/ec2/nitro/).
+	NetworkType *string `type:"string" enum:"NetworkType"`
 
 	// A list of node group (shard) configuration options. Each node group (shard)
 	// configuration has the following members: PrimaryAvailabilityZone, ReplicaAvailabilityZones,
@@ -10870,10 +10979,6 @@ type CreateReplicationGroupInput struct {
 
 	// A flag that enables in-transit encryption when set to true.
 	//
-	// You cannot modify the value of TransitEncryptionEnabled after the cluster
-	// is created. To enable in-transit encryption on a cluster you must set TransitEncryptionEnabled
-	// to true when you create a cluster.
-	//
 	// This parameter is valid only if the Engine parameter is redis, the EngineVersion
 	// parameter is 3.2.6, 4.x or later, and the cluster is being created in an
 	// Amazon VPC.
@@ -10888,6 +10993,20 @@ type CreateReplicationGroupInput struct {
 	// For HIPAA compliance, you must specify TransitEncryptionEnabled as true,
 	// an AuthToken, and a CacheSubnetGroup.
 	TransitEncryptionEnabled *bool `type:"boolean"`
+
+	// A setting that allows you to migrate your clients to use in-transit encryption,
+	// with no downtime.
+	//
+	// When setting TransitEncryptionEnabled to true, you can set your TransitEncryptionMode
+	// to preferred in the same request, to allow both encrypted and unencrypted
+	// connections at the same time. Once you migrate all your Redis clients to
+	// use encrypted connections you can modify the value to required to allow encrypted
+	// connections only.
+	//
+	// Setting TransitEncryptionMode to required is a two-step process that requires
+	// you to first set the TransitEncryptionMode to preferred first, after that
+	// you can set TransitEncryptionMode to required.
+	TransitEncryptionMode *string `type:"string" enum:"TransitEncryptionMode"`
 
 	// The user group to associate with the replication group.
 	UserGroupIds []*string `min:"1" type:"list"`
@@ -11012,6 +11131,12 @@ func (s *CreateReplicationGroupInput) SetGlobalReplicationGroupId(v string) *Cre
 	return s
 }
 
+// SetIpDiscovery sets the IpDiscovery field's value.
+func (s *CreateReplicationGroupInput) SetIpDiscovery(v string) *CreateReplicationGroupInput {
+	s.IpDiscovery = &v
+	return s
+}
+
 // SetKmsKeyId sets the KmsKeyId field's value.
 func (s *CreateReplicationGroupInput) SetKmsKeyId(v string) *CreateReplicationGroupInput {
 	s.KmsKeyId = &v
@@ -11027,6 +11152,12 @@ func (s *CreateReplicationGroupInput) SetLogDeliveryConfigurations(v []*LogDeliv
 // SetMultiAZEnabled sets the MultiAZEnabled field's value.
 func (s *CreateReplicationGroupInput) SetMultiAZEnabled(v bool) *CreateReplicationGroupInput {
 	s.MultiAZEnabled = &v
+	return s
+}
+
+// SetNetworkType sets the NetworkType field's value.
+func (s *CreateReplicationGroupInput) SetNetworkType(v string) *CreateReplicationGroupInput {
+	s.NetworkType = &v
 	return s
 }
 
@@ -11135,6 +11266,12 @@ func (s *CreateReplicationGroupInput) SetTags(v []*Tag) *CreateReplicationGroupI
 // SetTransitEncryptionEnabled sets the TransitEncryptionEnabled field's value.
 func (s *CreateReplicationGroupInput) SetTransitEncryptionEnabled(v bool) *CreateReplicationGroupInput {
 	s.TransitEncryptionEnabled = &v
+	return s
+}
+
+// SetTransitEncryptionMode sets the TransitEncryptionMode field's value.
+func (s *CreateReplicationGroupInput) SetTransitEncryptionMode(v string) *CreateReplicationGroupInput {
+	s.TransitEncryptionMode = &v
 	return s
 }
 
@@ -11477,6 +11614,9 @@ type CreateUserInput struct {
 	// AccessString is a required field
 	AccessString *string `type:"string" required:"true"`
 
+	// Specifies how to authenticate the user.
+	AuthenticationMode *AuthenticationMode `type:"structure"`
+
 	// The current supported value is Redis.
 	//
 	// Engine is a required field
@@ -11546,6 +11686,11 @@ func (s *CreateUserInput) Validate() error {
 	if s.UserName != nil && len(*s.UserName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UserName", 1))
 	}
+	if s.AuthenticationMode != nil {
+		if err := s.AuthenticationMode.Validate(); err != nil {
+			invalidParams.AddNested("AuthenticationMode", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11556,6 +11701,12 @@ func (s *CreateUserInput) Validate() error {
 // SetAccessString sets the AccessString field's value.
 func (s *CreateUserInput) SetAccessString(v string) *CreateUserInput {
 	s.AccessString = &v
+	return s
+}
+
+// SetAuthenticationMode sets the AuthenticationMode field's value.
+func (s *CreateUserInput) SetAuthenticationMode(v *AuthenticationMode) *CreateUserInput {
+	s.AuthenticationMode = v
 	return s
 }
 
@@ -13024,7 +13175,7 @@ type DescribeCacheEngineVersionsInput struct {
 	// The name of a specific cache parameter group family to return details for.
 	//
 	// Valid values are: memcached1.4 | memcached1.5 | memcached1.6 | redis2.6 |
-	// redis2.8 | redis3.2 | redis4.0 | redis5.0 | redis6.x | redis6.2
+	// redis2.8 | redis3.2 | redis4.0 | redis5.0 | redis6.x | redis6.2 | redis7
 	//
 	// Constraints:
 	//
@@ -13600,7 +13751,7 @@ type DescribeEngineDefaultParametersInput struct {
 	// The name of the cache parameter group family.
 	//
 	// Valid values are: memcached1.4 | memcached1.5 | memcached1.6 | redis2.6 |
-	// redis2.8 | redis3.2 | redis4.0 | redis5.0 | redis6.x | redis6.2
+	// redis2.8 | redis3.2 | redis4.0 | redis5.0 | redis6.x | redis6.2 | redis7
 	//
 	// CacheParameterGroupFamily is a required field
 	CacheParameterGroupFamily *string `type:"string" required:"true"`
@@ -14064,7 +14215,7 @@ type DescribeReservedCacheNodesInput struct {
 	// the current generation types provide more memory and computational power
 	// at lower cost when compared to their equivalent previous generation counterparts.
 	//
-	//    * General purpose: Current generation: M6g node types: (available only
+	//    * General purpose: Current generation: M6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
 	//    1.5.16 onward): cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
 	//    cache.m6g.4xlarge, cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge
@@ -14072,7 +14223,7 @@ type DescribeReservedCacheNodesInput struct {
 	//    M5 node types: cache.m5.large, cache.m5.xlarge, cache.m5.2xlarge, cache.m5.4xlarge,
 	//    cache.m5.12xlarge, cache.m5.24xlarge M4 node types: cache.m4.large, cache.m4.xlarge,
 	//    cache.m4.2xlarge, cache.m4.4xlarge, cache.m4.10xlarge T4g node types (available
-	//    only for Redis engine version 5.0.6 onward and for Memcached engine version
+	//    only for Redis engine version 5.0.6 onward and Memcached engine version
 	//    1.5.16 onward): cache.t4g.micro, cache.t4g.small, cache.t4g.medium T3
 	//    node types: cache.t3.micro, cache.t3.small, cache.t3.medium T2 node types:
 	//    cache.t2.micro, cache.t2.small, cache.t2.medium Previous generation: (not
@@ -14084,11 +14235,6 @@ type DescribeReservedCacheNodesInput struct {
 	//    * Compute optimized: Previous generation: (not recommended. Existing clusters
 	//    are still supported but creation of new clusters is not supported for
 	//    these types.) C1 node types: cache.c1.xlarge
-	//
-	//    * Memory optimized with data tiering: Current generation: R6gd node types
-	//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-	//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-	//    cache.r6gd.16xlarge
 	//
 	//    * Memory optimized: Current generation: R6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
@@ -14232,15 +14378,15 @@ type DescribeReservedCacheNodesOfferingsInput struct {
 	// the current generation types provide more memory and computational power
 	// at lower cost when compared to their equivalent previous generation counterparts.
 	//
-	//    * General purpose: Current generation: M6g node types: (available only
+	//    * General purpose: Current generation: M6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
-	//    1.5.16 onward) cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge, cache.m6g.4xlarge,
-	//    cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge For region availability,
-	//    see Supported Node Types (https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheNodes.SupportedTypes.html#CacheNodes.SupportedTypesByRegion)
+	//    1.5.16 onward): cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
+	//    cache.m6g.4xlarge, cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge
+	//    For region availability, see Supported Node Types (https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheNodes.SupportedTypes.html#CacheNodes.SupportedTypesByRegion)
 	//    M5 node types: cache.m5.large, cache.m5.xlarge, cache.m5.2xlarge, cache.m5.4xlarge,
 	//    cache.m5.12xlarge, cache.m5.24xlarge M4 node types: cache.m4.large, cache.m4.xlarge,
 	//    cache.m4.2xlarge, cache.m4.4xlarge, cache.m4.10xlarge T4g node types (available
-	//    only for Redis engine version 5.0.6 onward and for Memcached engine version
+	//    only for Redis engine version 5.0.6 onward and Memcached engine version
 	//    1.5.16 onward): cache.t4g.micro, cache.t4g.small, cache.t4g.medium T3
 	//    node types: cache.t3.micro, cache.t3.small, cache.t3.medium T2 node types:
 	//    cache.t2.micro, cache.t2.small, cache.t2.medium Previous generation: (not
@@ -14252,11 +14398,6 @@ type DescribeReservedCacheNodesOfferingsInput struct {
 	//    * Compute optimized: Previous generation: (not recommended. Existing clusters
 	//    are still supported but creation of new clusters is not supported for
 	//    these types.) C1 node types: cache.c1.xlarge
-	//
-	//    * Memory optimized with data tiering: Current generation: R6gd node types
-	//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-	//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-	//    cache.r6gd.16xlarge
 	//
 	//    * Memory optimized: Current generation: R6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
@@ -15749,10 +15890,7 @@ type GlobalReplicationGroup struct {
 	// The status of the Global datastore
 	Status *string `type:"string"`
 
-	// A flag that enables in-transit encryption when set to true. You cannot modify
-	// the value of TransitEncryptionEnabled after the cluster is created. To enable
-	// in-transit encryption on a cluster you must set TransitEncryptionEnabled
-	// to true when you create a cluster.
+	// A flag that enables in-transit encryption when set to true.
 	//
 	// Required: Only available when creating a replication group in an Amazon VPC
 	// using redis version 3.2.6, 4.x or later.
@@ -16662,6 +16800,12 @@ type ModifyCacheClusterInput struct {
 	// it anew with the earlier engine version.
 	EngineVersion *string `type:"string"`
 
+	// The network type you choose when modifying a cluster, either ipv4 | ipv6.
+	// IPv6 is supported for workloads using Redis engine version 6.2 onward or
+	// Memcached engine version 1.6.6 on all instances built on the Nitro system
+	// (https://aws.amazon.com/ec2/nitro/).
+	IpDiscovery *string `type:"string" enum:"IpDiscovery"`
+
 	// Specifies the destination, format and type of the logs.
 	LogDeliveryConfigurations []*LogDeliveryConfigurationRequest `locationNameList:"LogDeliveryConfigurationRequest" type:"list"`
 
@@ -16897,6 +17041,12 @@ func (s *ModifyCacheClusterInput) SetCacheSecurityGroupNames(v []*string) *Modif
 // SetEngineVersion sets the EngineVersion field's value.
 func (s *ModifyCacheClusterInput) SetEngineVersion(v string) *ModifyCacheClusterInput {
 	s.EngineVersion = &v
+	return s
+}
+
+// SetIpDiscovery sets the IpDiscovery field's value.
+func (s *ModifyCacheClusterInput) SetIpDiscovery(v string) *ModifyCacheClusterInput {
+	s.IpDiscovery = &v
 	return s
 }
 
@@ -17380,6 +17530,12 @@ type ModifyReplicationGroupInput struct {
 	// and create it anew with the earlier engine version.
 	EngineVersion *string `type:"string"`
 
+	// The network type you choose when modifying a cluster, either ipv4 | ipv6.
+	// IPv6 is supported for workloads using Redis engine version 6.2 onward or
+	// Memcached engine version 1.6.6 on all instances built on the Nitro system
+	// (https://aws.amazon.com/ec2/nitro/).
+	IpDiscovery *string `type:"string" enum:"IpDiscovery"`
+
 	// Specifies the destination, format and type of the logs.
 	LogDeliveryConfigurations []*LogDeliveryConfigurationRequest `locationNameList:"LogDeliveryConfigurationRequest" type:"list"`
 
@@ -17472,6 +17628,25 @@ type ModifyReplicationGroupInput struct {
 	// group. This parameter cannot be set for Redis (cluster mode enabled) replication
 	// groups.
 	SnapshottingClusterId *string `type:"string"`
+
+	// A flag that enables in-transit encryption when set to true. If you are enabling
+	// in-transit encryption for an existing cluster, you must also set TransitEncryptionMode
+	// to preferred.
+	TransitEncryptionEnabled *bool `type:"boolean"`
+
+	// A setting that allows you to migrate your clients to use in-transit encryption,
+	// with no downtime.
+	//
+	// You must set TransitEncryptionEnabled to true, for your existing cluster,
+	// and set TransitEncryptionMode to preferred in the same request to allow both
+	// encrypted and unencrypted connections at the same time. Once you migrate
+	// all your Redis clients to use encrypted connections you can set the value
+	// to required to allow encrypted connections only.
+	//
+	// Setting TransitEncryptionMode to required is a two-step process that requires
+	// you to first set the TransitEncryptionMode to preferred first, after that
+	// you can set TransitEncryptionMode to required.
+	TransitEncryptionMode *string `type:"string" enum:"TransitEncryptionMode"`
 
 	// The ID of the user group you are associating with the replication group.
 	UserGroupIdsToAdd []*string `type:"list"`
@@ -17566,6 +17741,12 @@ func (s *ModifyReplicationGroupInput) SetEngineVersion(v string) *ModifyReplicat
 	return s
 }
 
+// SetIpDiscovery sets the IpDiscovery field's value.
+func (s *ModifyReplicationGroupInput) SetIpDiscovery(v string) *ModifyReplicationGroupInput {
+	s.IpDiscovery = &v
+	return s
+}
+
 // SetLogDeliveryConfigurations sets the LogDeliveryConfigurations field's value.
 func (s *ModifyReplicationGroupInput) SetLogDeliveryConfigurations(v []*LogDeliveryConfigurationRequest) *ModifyReplicationGroupInput {
 	s.LogDeliveryConfigurations = v
@@ -17647,6 +17828,18 @@ func (s *ModifyReplicationGroupInput) SetSnapshotWindow(v string) *ModifyReplica
 // SetSnapshottingClusterId sets the SnapshottingClusterId field's value.
 func (s *ModifyReplicationGroupInput) SetSnapshottingClusterId(v string) *ModifyReplicationGroupInput {
 	s.SnapshottingClusterId = &v
+	return s
+}
+
+// SetTransitEncryptionEnabled sets the TransitEncryptionEnabled field's value.
+func (s *ModifyReplicationGroupInput) SetTransitEncryptionEnabled(v bool) *ModifyReplicationGroupInput {
+	s.TransitEncryptionEnabled = &v
+	return s
+}
+
+// SetTransitEncryptionMode sets the TransitEncryptionMode field's value.
+func (s *ModifyReplicationGroupInput) SetTransitEncryptionMode(v string) *ModifyReplicationGroupInput {
+	s.TransitEncryptionMode = &v
 	return s
 }
 
@@ -18031,6 +18224,9 @@ type ModifyUserInput struct {
 	// Adds additional user permissions to the access string.
 	AppendAccessString *string `type:"string"`
 
+	// Specifies how to authenticate the user.
+	AuthenticationMode *AuthenticationMode `type:"structure"`
+
 	// Indicates no password is required for the user.
 	NoPasswordRequired *bool `type:"boolean"`
 
@@ -18073,6 +18269,11 @@ func (s *ModifyUserInput) Validate() error {
 	if s.UserId != nil && len(*s.UserId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
+	if s.AuthenticationMode != nil {
+		if err := s.AuthenticationMode.Validate(); err != nil {
+			invalidParams.AddNested("AuthenticationMode", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -18089,6 +18290,12 @@ func (s *ModifyUserInput) SetAccessString(v string) *ModifyUserInput {
 // SetAppendAccessString sets the AppendAccessString field's value.
 func (s *ModifyUserInput) SetAppendAccessString(v string) *ModifyUserInput {
 	s.AppendAccessString = &v
+	return s
+}
+
+// SetAuthenticationMode sets the AuthenticationMode field's value.
+func (s *ModifyUserInput) SetAuthenticationMode(v *AuthenticationMode) *ModifyUserInput {
+	s.AuthenticationMode = v
 	return s
 }
 
@@ -19000,6 +19207,13 @@ type PendingModifiedValues struct {
 	// For clusters running Redis, this value must be 1. For clusters running Memcached,
 	// this value must be between 1 and 40.
 	NumCacheNodes *int64 `type:"integer"`
+
+	// A flag that enables in-transit encryption when set to true.
+	TransitEncryptionEnabled *bool `type:"boolean"`
+
+	// A setting that allows you to migrate your clients to use in-transit encryption,
+	// with no downtime.
+	TransitEncryptionMode *string `type:"string" enum:"TransitEncryptionMode"`
 }
 
 // String returns the string representation.
@@ -19053,6 +19267,18 @@ func (s *PendingModifiedValues) SetLogDeliveryConfigurations(v []*PendingLogDeli
 // SetNumCacheNodes sets the NumCacheNodes field's value.
 func (s *PendingModifiedValues) SetNumCacheNodes(v int64) *PendingModifiedValues {
 	s.NumCacheNodes = &v
+	return s
+}
+
+// SetTransitEncryptionEnabled sets the TransitEncryptionEnabled field's value.
+func (s *PendingModifiedValues) SetTransitEncryptionEnabled(v bool) *PendingModifiedValues {
+	s.TransitEncryptionEnabled = &v
+	return s
+}
+
+// SetTransitEncryptionMode sets the TransitEncryptionMode field's value.
+func (s *PendingModifiedValues) SetTransitEncryptionMode(v string) *PendingModifiedValues {
+	s.TransitEncryptionMode = &v
 	return s
 }
 
@@ -19677,6 +19903,12 @@ type ReplicationGroup struct {
 	// Global datastore.
 	GlobalReplicationGroupInfo *GlobalReplicationGroupInfo `type:"structure"`
 
+	// The network type you choose when modifying a cluster, either ipv4 | ipv6.
+	// IPv6 is supported for workloads using Redis engine version 6.2 onward or
+	// Memcached engine version 1.6.6 on all instances built on the Nitro system
+	// (https://aws.amazon.com/ec2/nitro/).
+	IpDiscovery *string `type:"string" enum:"IpDiscovery"`
+
 	// The ID of the KMS key used to encrypt the disk in the cluster.
 	KmsKeyId *string `type:"string"`
 
@@ -19692,6 +19924,11 @@ type ReplicationGroup struct {
 	// A flag indicating if you have Multi-AZ enabled to enhance fault tolerance.
 	// For more information, see Minimizing Downtime: Multi-AZ (http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html)
 	MultiAZ *string `type:"string" enum:"MultiAZStatus"`
+
+	// Must be either ipv4 | ipv6 | dual_stack. IPv6 is supported for workloads
+	// using Redis engine version 6.2 onward or Memcached engine version 1.6.6 on
+	// all instances built on the Nitro system (https://aws.amazon.com/ec2/nitro/).
+	NetworkType *string `type:"string" enum:"NetworkType"`
 
 	// A list of node groups in this replication group. For Redis (cluster mode
 	// disabled) replication groups, this is a single-element list. For Redis (cluster
@@ -19738,15 +19975,15 @@ type ReplicationGroup struct {
 
 	// A flag that enables in-transit encryption when set to true.
 	//
-	// You cannot modify the value of TransitEncryptionEnabled after the cluster
-	// is created. To enable in-transit encryption on a cluster you must set TransitEncryptionEnabled
-	// to true when you create a cluster.
-	//
 	// Required: Only available when creating a replication group in an Amazon VPC
 	// using redis version 3.2.6, 4.x or later.
 	//
 	// Default: false
 	TransitEncryptionEnabled *bool `type:"boolean"`
+
+	// A setting that allows you to migrate your clients to use in-transit encryption,
+	// with no downtime.
+	TransitEncryptionMode *string `type:"string" enum:"TransitEncryptionMode"`
 
 	// The ID of the user group associated to the replication group.
 	UserGroupIds []*string `type:"list"`
@@ -19842,6 +20079,12 @@ func (s *ReplicationGroup) SetGlobalReplicationGroupInfo(v *GlobalReplicationGro
 	return s
 }
 
+// SetIpDiscovery sets the IpDiscovery field's value.
+func (s *ReplicationGroup) SetIpDiscovery(v string) *ReplicationGroup {
+	s.IpDiscovery = &v
+	return s
+}
+
 // SetKmsKeyId sets the KmsKeyId field's value.
 func (s *ReplicationGroup) SetKmsKeyId(v string) *ReplicationGroup {
 	s.KmsKeyId = &v
@@ -19869,6 +20112,12 @@ func (s *ReplicationGroup) SetMemberClustersOutpostArns(v []*string) *Replicatio
 // SetMultiAZ sets the MultiAZ field's value.
 func (s *ReplicationGroup) SetMultiAZ(v string) *ReplicationGroup {
 	s.MultiAZ = &v
+	return s
+}
+
+// SetNetworkType sets the NetworkType field's value.
+func (s *ReplicationGroup) SetNetworkType(v string) *ReplicationGroup {
+	s.NetworkType = &v
 	return s
 }
 
@@ -19926,6 +20175,12 @@ func (s *ReplicationGroup) SetTransitEncryptionEnabled(v bool) *ReplicationGroup
 	return s
 }
 
+// SetTransitEncryptionMode sets the TransitEncryptionMode field's value.
+func (s *ReplicationGroup) SetTransitEncryptionMode(v string) *ReplicationGroup {
+	s.TransitEncryptionMode = &v
+	return s
+}
+
 // SetUserGroupIds sets the UserGroupIds field's value.
 func (s *ReplicationGroup) SetUserGroupIds(v []*string) *ReplicationGroup {
 	s.UserGroupIds = v
@@ -19952,6 +20207,13 @@ type ReplicationGroupPendingModifiedValues struct {
 
 	// The status of an online resharding operation.
 	Resharding *ReshardingStatus `type:"structure"`
+
+	// A flag that enables in-transit encryption when set to true.
+	TransitEncryptionEnabled *bool `type:"boolean"`
+
+	// A setting that allows you to migrate your clients to use in-transit encryption,
+	// with no downtime.
+	TransitEncryptionMode *string `type:"string" enum:"TransitEncryptionMode"`
 
 	// The user group being modified.
 	UserGroups *UserGroupsUpdateStatus `type:"structure"`
@@ -20005,6 +20267,18 @@ func (s *ReplicationGroupPendingModifiedValues) SetResharding(v *ReshardingStatu
 	return s
 }
 
+// SetTransitEncryptionEnabled sets the TransitEncryptionEnabled field's value.
+func (s *ReplicationGroupPendingModifiedValues) SetTransitEncryptionEnabled(v bool) *ReplicationGroupPendingModifiedValues {
+	s.TransitEncryptionEnabled = &v
+	return s
+}
+
+// SetTransitEncryptionMode sets the TransitEncryptionMode field's value.
+func (s *ReplicationGroupPendingModifiedValues) SetTransitEncryptionMode(v string) *ReplicationGroupPendingModifiedValues {
+	s.TransitEncryptionMode = &v
+	return s
+}
+
 // SetUserGroups sets the UserGroups field's value.
 func (s *ReplicationGroupPendingModifiedValues) SetUserGroups(v *UserGroupsUpdateStatus) *ReplicationGroupPendingModifiedValues {
 	s.UserGroups = v
@@ -20024,7 +20298,7 @@ type ReservedCacheNode struct {
 	// the current generation types provide more memory and computational power
 	// at lower cost when compared to their equivalent previous generation counterparts.
 	//
-	//    * General purpose: Current generation: M6g node types: (available only
+	//    * General purpose: Current generation: M6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
 	//    1.5.16 onward): cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
 	//    cache.m6g.4xlarge, cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge
@@ -20044,11 +20318,6 @@ type ReservedCacheNode struct {
 	//    * Compute optimized: Previous generation: (not recommended. Existing clusters
 	//    are still supported but creation of new clusters is not supported for
 	//    these types.) C1 node types: cache.c1.xlarge
-	//
-	//    * Memory optimized with data tiering: Current generation: R6gd node types
-	//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-	//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-	//    cache.r6gd.16xlarge
 	//
 	//    * Memory optimized: Current generation: R6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
@@ -20217,7 +20486,7 @@ type ReservedCacheNodesOffering struct {
 	// the current generation types provide more memory and computational power
 	// at lower cost when compared to their equivalent previous generation counterparts.
 	//
-	//    * General purpose: Current generation: M6g node types: (available only
+	//    * General purpose: Current generation: M6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
 	//    1.5.16 onward): cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
 	//    cache.m6g.4xlarge, cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge
@@ -20237,11 +20506,6 @@ type ReservedCacheNodesOffering struct {
 	//    * Compute optimized: Previous generation: (not recommended. Existing clusters
 	//    are still supported but creation of new clusters is not supported for
 	//    these types.) C1 node types: cache.c1.xlarge
-	//
-	//    * Memory optimized with data tiering: Current generation: R6gd node types
-	//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-	//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-	//    cache.r6gd.16xlarge
 	//
 	//    * Memory optimized: Current generation: R6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
@@ -20870,7 +21134,7 @@ type Snapshot struct {
 	//
 	//    * General purpose: Current generation: M6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
-	//    1.5.16 onward). cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
+	//    1.5.16 onward): cache.m6g.large, cache.m6g.xlarge, cache.m6g.2xlarge,
 	//    cache.m6g.4xlarge, cache.m6g.8xlarge, cache.m6g.12xlarge, cache.m6g.16xlarge
 	//    For region availability, see Supported Node Types (https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheNodes.SupportedTypes.html#CacheNodes.SupportedTypesByRegion)
 	//    M5 node types: cache.m5.large, cache.m5.xlarge, cache.m5.2xlarge, cache.m5.4xlarge,
@@ -20889,16 +21153,10 @@ type Snapshot struct {
 	//    are still supported but creation of new clusters is not supported for
 	//    these types.) C1 node types: cache.c1.xlarge
 	//
-	//    * Memory optimized with data tiering: Current generation: R6gd node types
-	//    (available only for Redis engine version 6.2 onward). cache.r6gd.xlarge,
-	//    cache.r6gd.2xlarge, cache.r6gd.4xlarge, cache.r6gd.8xlarge, cache.r6gd.12xlarge,
-	//    cache.r6gd.16xlarge
-	//
 	//    * Memory optimized: Current generation: R6g node types (available only
 	//    for Redis engine version 5.0.6 onward and for Memcached engine version
 	//    1.5.16 onward). cache.r6g.large, cache.r6g.xlarge, cache.r6g.2xlarge,
 	//    cache.r6g.4xlarge, cache.r6g.8xlarge, cache.r6g.12xlarge, cache.r6g.16xlarge
-	//    For region availability, see Supported Node Types (https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheNodes.SupportedTypes.html#CacheNodes.SupportedTypesByRegion)
 	//    For region availability, see Supported Node Types (https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheNodes.SupportedTypes.html#CacheNodes.SupportedTypesByRegion)
 	//    R5 node types: cache.r5.large, cache.r5.xlarge, cache.r5.2xlarge, cache.r5.4xlarge,
 	//    cache.r5.12xlarge, cache.r5.24xlarge R4 node types: cache.r4.large, cache.r4.xlarge,
@@ -21321,6 +21579,11 @@ type Subnet struct {
 
 	// The outpost ARN of the subnet.
 	SubnetOutpost *SubnetOutpost `type:"structure"`
+
+	// Either ipv4 | ipv6 | dual_stack. IPv6 is supported for workloads using Redis
+	// engine version 6.2 onward or Memcached engine version 1.6.6 on all instances
+	// built on the Nitro system (https://aws.amazon.com/ec2/nitro/).
+	SupportedNetworkTypes []*string `type:"list" enum:"NetworkType"`
 }
 
 // String returns the string representation.
@@ -21356,6 +21619,12 @@ func (s *Subnet) SetSubnetIdentifier(v string) *Subnet {
 // SetSubnetOutpost sets the SubnetOutpost field's value.
 func (s *Subnet) SetSubnetOutpost(v *SubnetOutpost) *Subnet {
 	s.SubnetOutpost = v
+	return s
+}
+
+// SetSupportedNetworkTypes sets the SupportedNetworkTypes field's value.
+func (s *Subnet) SetSupportedNetworkTypes(v []*string) *Subnet {
+	s.SupportedNetworkTypes = v
 	return s
 }
 
@@ -22196,6 +22465,9 @@ const (
 
 	// AuthenticationTypeNoPassword is a AuthenticationType enum value
 	AuthenticationTypeNoPassword = "no-password"
+
+	// AuthenticationTypeIam is a AuthenticationType enum value
+	AuthenticationTypeIam = "iam"
 )
 
 // AuthenticationType_Values returns all elements of the AuthenticationType enum
@@ -22203,6 +22475,7 @@ func AuthenticationType_Values() []string {
 	return []string{
 		AuthenticationTypePassword,
 		AuthenticationTypeNoPassword,
+		AuthenticationTypeIam,
 	}
 }
 
@@ -22279,6 +22552,42 @@ func DestinationType_Values() []string {
 }
 
 const (
+	// InputAuthenticationTypePassword is a InputAuthenticationType enum value
+	InputAuthenticationTypePassword = "password"
+
+	// InputAuthenticationTypeNoPasswordRequired is a InputAuthenticationType enum value
+	InputAuthenticationTypeNoPasswordRequired = "no-password-required"
+
+	// InputAuthenticationTypeIam is a InputAuthenticationType enum value
+	InputAuthenticationTypeIam = "iam"
+)
+
+// InputAuthenticationType_Values returns all elements of the InputAuthenticationType enum
+func InputAuthenticationType_Values() []string {
+	return []string{
+		InputAuthenticationTypePassword,
+		InputAuthenticationTypeNoPasswordRequired,
+		InputAuthenticationTypeIam,
+	}
+}
+
+const (
+	// IpDiscoveryIpv4 is a IpDiscovery enum value
+	IpDiscoveryIpv4 = "ipv4"
+
+	// IpDiscoveryIpv6 is a IpDiscovery enum value
+	IpDiscoveryIpv6 = "ipv6"
+)
+
+// IpDiscovery_Values returns all elements of the IpDiscovery enum
+func IpDiscovery_Values() []string {
+	return []string{
+		IpDiscoveryIpv4,
+		IpDiscoveryIpv6,
+	}
+}
+
+const (
 	// LogDeliveryConfigurationStatusActive is a LogDeliveryConfigurationStatus enum value
 	LogDeliveryConfigurationStatusActive = "active"
 
@@ -22351,6 +22660,26 @@ func MultiAZStatus_Values() []string {
 	return []string{
 		MultiAZStatusEnabled,
 		MultiAZStatusDisabled,
+	}
+}
+
+const (
+	// NetworkTypeIpv4 is a NetworkType enum value
+	NetworkTypeIpv4 = "ipv4"
+
+	// NetworkTypeIpv6 is a NetworkType enum value
+	NetworkTypeIpv6 = "ipv6"
+
+	// NetworkTypeDualStack is a NetworkType enum value
+	NetworkTypeDualStack = "dual_stack"
+)
+
+// NetworkType_Values returns all elements of the NetworkType enum
+func NetworkType_Values() []string {
+	return []string{
+		NetworkTypeIpv4,
+		NetworkTypeIpv6,
+		NetworkTypeDualStack,
 	}
 }
 
@@ -22543,6 +22872,22 @@ func SourceType_Values() []string {
 		SourceTypeReplicationGroup,
 		SourceTypeUser,
 		SourceTypeUserGroup,
+	}
+}
+
+const (
+	// TransitEncryptionModePreferred is a TransitEncryptionMode enum value
+	TransitEncryptionModePreferred = "preferred"
+
+	// TransitEncryptionModeRequired is a TransitEncryptionMode enum value
+	TransitEncryptionModeRequired = "required"
+)
+
+// TransitEncryptionMode_Values returns all elements of the TransitEncryptionMode enum
+func TransitEncryptionMode_Values() []string {
+	return []string{
+		TransitEncryptionModePreferred,
+		TransitEncryptionModeRequired,
 	}
 }
 

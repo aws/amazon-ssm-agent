@@ -2666,9 +2666,6 @@ func (c *ELBV2) ModifyTargetGroupRequest(input *ModifyTargetGroupInput) (req *re
 // Modifies the health checks used when evaluating the health state of the targets
 // in the specified target group.
 //
-// If the protocol of the target group is TCP, TLS, UDP, or TCP_UDP, you can't
-// modify the health check protocol, interval, timeout, or success codes.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3113,8 +3110,7 @@ func (c *ELBV2) SetIpAddressTypeRequest(input *SetIpAddressTypeInput) (req *requ
 
 // SetIpAddressType API operation for Elastic Load Balancing.
 //
-// Sets the type of IP addresses used by the subnets of the specified Application
-// Load Balancer or Network Load Balancer.
+// Sets the type of IP addresses used by the subnets of the specified load balancer.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4816,11 +4812,10 @@ type CreateTargetGroupInput struct {
 	HealthCheckEnabled *bool `type:"boolean"`
 
 	// The approximate amount of time, in seconds, between health checks of an individual
-	// target. If the target group protocol is HTTP or HTTPS, the default is 30
-	// seconds. If the target group protocol is TCP, TLS, UDP, or TCP_UDP, the supported
-	// values are 10 and 30 seconds and the default is 30 seconds. If the target
-	// group protocol is GENEVE, the default is 10 seconds. If the target type is
-	// lambda, the default is 35 seconds.
+	// target. The range is 5-300. If the target group protocol is TCP, TLS, UDP,
+	// TCP_UDP, HTTP or HTTPS, the default is 30 seconds. If the target group protocol
+	// is GENEVE, the default is 10 seconds. If the target type is lambda, the default
+	// is 35 seconds.
 	HealthCheckIntervalSeconds *int64 `min:"5" type:"integer"`
 
 	// [HTTP/HTTPS health checks] The destination for health checks on the targets.
@@ -4845,17 +4840,18 @@ type CreateTargetGroupInput struct {
 	HealthCheckProtocol *string `type:"string" enum:"ProtocolEnum"`
 
 	// The amount of time, in seconds, during which no response from a target means
-	// a failed health check. For target groups with a protocol of HTTP, HTTPS,
-	// or GENEVE, the default is 5 seconds. For target groups with a protocol of
-	// TCP or TLS, this value must be 6 seconds for HTTP health checks and 10 seconds
-	// for TCP and HTTPS health checks. If the target type is lambda, the default
-	// is 30 seconds.
+	// a failed health check. The range is 2–120 seconds. For target groups with
+	// a protocol of HTTP, the default is 6 seconds. For target groups with a protocol
+	// of TCP, TLS or HTTPS, the default is 10 seconds. For target groups with a
+	// protocol of GENEVE, the default is 5 seconds. If the target type is lambda,
+	// the default is 30 seconds.
 	HealthCheckTimeoutSeconds *int64 `min:"2" type:"integer"`
 
-	// The number of consecutive health checks successes required before considering
-	// an unhealthy target healthy. For target groups with a protocol of HTTP or
-	// HTTPS, the default is 5. For target groups with a protocol of TCP, TLS, or
-	// GENEVE, the default is 3. If the target type is lambda, the default is 5.
+	// The number of consecutive health check successes required before considering
+	// a target healthy. The range is 2-10. If the target group protocol is TCP,
+	// TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 5. For target groups with
+	// a protocol of GENEVE, the default is 5. If the target type is lambda, the
+	// default is 5.
 	HealthyThresholdCount *int64 `min:"2" type:"integer"`
 
 	// The type of IP address used for this target group. The possible values are
@@ -4864,7 +4860,10 @@ type CreateTargetGroupInput struct {
 	IpAddressType *string `type:"string" enum:"TargetGroupIpAddressTypeEnum"`
 
 	// [HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for
-	// a successful response from a target.
+	// a successful response from a target. For target groups with a protocol of
+	// TCP, TCP_UDP, UDP or TLS the range is 200-599. For target groups with a protocol
+	// of HTTP or HTTPS, the range is 200-499. For target groups with a protocol
+	// of GENEVE, the range is 200-399.
 	Matcher *Matcher `type:"structure"`
 
 	// The name of the target group.
@@ -4916,10 +4915,10 @@ type CreateTargetGroupInput struct {
 	TargetType *string `type:"string" enum:"TargetTypeEnum"`
 
 	// The number of consecutive health check failures required before considering
-	// a target unhealthy. If the target group protocol is HTTP or HTTPS, the default
-	// is 2. If the target group protocol is TCP or TLS, this value must be the
-	// same as the healthy threshold count. If the target group protocol is GENEVE,
-	// the default is 3. If the target type is lambda, the default is 2.
+	// a target unhealthy. The range is 2-10. If the target group protocol is TCP,
+	// TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 2. For target groups with
+	// a protocol of GENEVE, the default is 2. If the target type is lambda, the
+	// default is 5.
 	UnhealthyThresholdCount *int64 `min:"2" type:"integer"`
 
 	// The identifier of the virtual private cloud (VPC). If the target is a Lambda
@@ -6670,8 +6669,8 @@ type ForwardActionConfig struct {
 	// The target group stickiness for the rule.
 	TargetGroupStickinessConfig *TargetGroupStickinessConfig `type:"structure"`
 
-	// One or more target groups. For Network Load Balancers, you can specify a
-	// single target group.
+	// The target groups. For Network Load Balancers, you can specify a single target
+	// group.
 	TargetGroups []*TargetGroupTuple `type:"list"`
 }
 
@@ -6709,9 +6708,9 @@ func (s *ForwardActionConfig) SetTargetGroups(v []*TargetGroupTuple) *ForwardAct
 type HostHeaderConditionConfig struct {
 	_ struct{} `type:"structure"`
 
-	// One or more host names. The maximum size of each name is 128 characters.
-	// The comparison is case insensitive. The following wildcard characters are
-	// supported: * (matches 0 or more characters) and ? (matches exactly 1 character).
+	// The host names. The maximum size of each name is 128 characters. The comparison
+	// is case insensitive. The following wildcard characters are supported: * (matches
+	// 0 or more characters) and ? (matches exactly 1 character).
 	//
 	// If you specify multiple strings, the condition is satisfied if one of the
 	// strings matches the host name.
@@ -6757,10 +6756,10 @@ type HttpHeaderConditionConfig struct {
 	// to specify a host header condition.
 	HttpHeaderName *string `type:"string"`
 
-	// One or more strings to compare against the value of the HTTP header. The
-	// maximum size of each string is 128 characters. The comparison strings are
-	// case insensitive. The following wildcard characters are supported: * (matches
-	// 0 or more characters) and ? (matches exactly 1 character).
+	// The strings to compare against the value of the HTTP header. The maximum
+	// size of each string is 128 characters. The comparison strings are case insensitive.
+	// The following wildcard characters are supported: * (matches 0 or more characters)
+	// and ? (matches exactly 1 character).
 	//
 	// If the same header appears multiple times in the request, we search them
 	// in order until a match is found.
@@ -7237,10 +7236,15 @@ type LoadBalancerAttribute struct {
 
 	// The name of the attribute.
 	//
-	// The following attribute is supported by all load balancers:
+	// The following attributes are supported by all load balancers:
 	//
 	//    * deletion_protection.enabled - Indicates whether deletion protection
 	//    is enabled. The value is true or false. The default is false.
+	//
+	//    * load_balancing.cross_zone.enabled - Indicates whether cross-zone load
+	//    balancing is enabled. The possible values are true and false. The default
+	//    for Network Load Balancers and Gateway Load Balancers is false. The default
+	//    for Application Load Balancers is true, and cannot be changed.
 	//
 	// The following attributes are supported by both Application Load Balancers
 	// and Network Load Balancers:
@@ -7316,13 +7320,6 @@ type LoadBalancerAttribute struct {
 	//    balancer to route requests to targets if it is unable to forward the request
 	//    to Amazon Web Services WAF. The possible values are true and false. The
 	//    default is false.
-	//
-	// The following attribute is supported by Network Load Balancers and Gateway
-	// Load Balancers:
-	//
-	//    * load_balancing.cross_zone.enabled - Indicates whether cross-zone load
-	//    balancing is enabled. The possible values are true and false. The default
-	//    is false.
 	Key *string `type:"string"`
 
 	// The value of the attribute.
@@ -7416,10 +7413,14 @@ type Matcher struct {
 	GrpcCode *string `type:"string"`
 
 	// For Application Load Balancers, you can specify values between 200 and 499,
-	// and the default value is 200. You can specify multiple values (for example,
+	// with the default value being 200. You can specify multiple values (for example,
 	// "200,202") or a range of values (for example, "200-299").
 	//
-	// For Network Load Balancers and Gateway Load Balancers, this must be "200–399".
+	// For Network Load Balancers, you can specify values between 200 and 599, with
+	// the default value being 200-399. You can specify multiple values (for example,
+	// "200,202") or a range of values (for example, "200-299").
+	//
+	// For Gateway Load Balancers, this must be "200–399".
 	//
 	// Note that when using shorthand syntax, some values such as commas need to
 	// be escaped.
@@ -7920,7 +7921,7 @@ type ModifyTargetGroupInput struct {
 	HealthCheckEnabled *bool `type:"boolean"`
 
 	// The approximate amount of time, in seconds, between health checks of an individual
-	// target. For TCP health checks, the supported values are 10 or 30 seconds.
+	// target.
 	HealthCheckIntervalSeconds *int64 `min:"5" type:"integer"`
 
 	// [HTTP/HTTPS health checks] The destination for health checks on the targets.
@@ -7952,7 +7953,10 @@ type ModifyTargetGroupInput struct {
 	HealthyThresholdCount *int64 `min:"2" type:"integer"`
 
 	// [HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for
-	// a successful response from a target.
+	// a successful response from a target. For target groups with a protocol of
+	// TCP, TCP_UDP, UDP or TLS the range is 200-599. For target groups with a protocol
+	// of HTTP or HTTPS, the range is 200-499. For target groups with a protocol
+	// of GENEVE, the range is 200-399.
 	Matcher *Matcher `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the target group.
@@ -7961,8 +7965,7 @@ type ModifyTargetGroupInput struct {
 	TargetGroupArn *string `type:"string" required:"true"`
 
 	// The number of consecutive health check failures required before considering
-	// the target unhealthy. For target groups with a protocol of TCP or TLS, this
-	// value must be the same as the healthy threshold count.
+	// the target unhealthy.
 	UnhealthyThresholdCount *int64 `min:"2" type:"integer"`
 }
 
@@ -8107,10 +8110,10 @@ func (s *ModifyTargetGroupOutput) SetTargetGroups(v []*TargetGroup) *ModifyTarge
 type PathPatternConditionConfig struct {
 	_ struct{} `type:"structure"`
 
-	// One or more path patterns to compare against the request URL. The maximum
-	// size of each string is 128 characters. The comparison is case sensitive.
-	// The following wildcard characters are supported: * (matches 0 or more characters)
-	// and ? (matches exactly 1 character).
+	// The path patterns to compare against the request URL. The maximum size of
+	// each string is 128 characters. The comparison is case sensitive. The following
+	// wildcard characters are supported: * (matches 0 or more characters) and ?
+	// (matches exactly 1 character).
 	//
 	// If you specify multiple strings, the condition is satisfied if one of them
 	// matches the request URL. The path pattern is compared only to the path of
@@ -8152,9 +8155,9 @@ func (s *PathPatternConditionConfig) SetValues(v []*string) *PathPatternConditio
 type QueryStringConditionConfig struct {
 	_ struct{} `type:"structure"`
 
-	// One or more key/value pairs or values to find in the query string. The maximum
-	// size of each string is 128 characters. The comparison is case insensitive.
-	// The following wildcard characters are supported: * (matches 0 or more characters)
+	// The key/value pairs or values to find in the query string. The maximum size
+	// of each string is 128 characters. The comparison is case insensitive. The
+	// following wildcard characters are supported: * (matches 0 or more characters)
 	// and ? (matches exactly 1 character). To search for a literal '*' or '?' character
 	// in a query string, you must escape these characters in Values using a '\'
 	// character.
@@ -9303,8 +9306,8 @@ func (s *SetSubnetsOutput) SetIpAddressType(v string) *SetSubnetsOutput {
 type SourceIpConditionConfig struct {
 	_ struct{} `type:"structure"`
 
-	// One or more source IP addresses, in CIDR format. You can use both IPv4 and
-	// IPv6 addresses. Wildcards are not supported.
+	// The source IP addresses, in CIDR format. You can use both IPv4 and IPv6 addresses.
+	// Wildcards are not supported.
 	//
 	// If you specify multiple addresses, the condition is satisfied if the source
 	// IP address of the request matches one of the CIDR blocks. This condition
@@ -9564,6 +9567,10 @@ type TargetDescription struct {
 	// traffic from the load balancer nodes in the specified Availability Zone or
 	// from all enabled Availability Zones for the load balancer.
 	//
+	// For Application Load Balancer target groups, the specified Availability Zone
+	// value is only applicable when cross-zone load balancing is off. Otherwise
+	// the parameter is ignored and treated as all.
+	//
 	// This parameter is not supported if the target type of the target group is
 	// instance or alb.
 	//
@@ -9572,8 +9579,10 @@ type TargetDescription struct {
 	// parameter is optional. If the IP address is outside the VPC, this parameter
 	// is required.
 	//
-	// With an Application Load Balancer, if the target type is ip and the IP address
-	// is outside the VPC for the target group, the only supported value is all.
+	// For Application Load Balancer target groups with cross-zone load balancing
+	// off, if the target type is ip and the IP address is outside of the VPC for
+	// the target group, this should be an Availability Zone inside the VPC for
+	// the target group.
 	//
 	// If the target type is lambda, this parameter is optional and the only supported
 	// value is all.
@@ -9853,7 +9862,7 @@ type TargetGroupAttribute struct {
 
 	// The name of the attribute.
 	//
-	// The following attribute is supported by all load balancers:
+	// The following attributes are supported by all load balancers:
 	//
 	//    * deregistration_delay.timeout_seconds - The amount of time, in seconds,
 	//    for Elastic Load Balancing to wait before changing the state of a deregistering
@@ -9861,15 +9870,44 @@ type TargetGroupAttribute struct {
 	//    value is 300 seconds. If the target is a Lambda function, this attribute
 	//    is not supported.
 	//
-	// The following attributes are supported by both Application Load Balancers
-	// and Network Load Balancers:
-	//
-	//    * stickiness.enabled - Indicates whether sticky sessions are enabled.
+	//    * stickiness.enabled - Indicates whether target stickiness is enabled.
 	//    The value is true or false. The default is false.
 	//
-	//    * stickiness.type - The type of sticky sessions. The possible values are
-	//    lb_cookie and app_cookie for Application Load Balancers or source_ip for
-	//    Network Load Balancers.
+	//    * stickiness.type - Indicates the type of stickiness. The possible values
+	//    are: lb_cookie and app_cookie for Application Load Balancers. source_ip
+	//    for Network Load Balancers. source_ip_dest_ip and source_ip_dest_ip_proto
+	//    for Gateway Load Balancers.
+	//
+	// The following attributes are supported by Application Load Balancers and
+	// Network Load Balancers:
+	//
+	//    * load_balancing.cross_zone.enabled - Indicates whether cross zone load
+	//    balancing is enabled. The value is true, false or use_load_balancer_configuration.
+	//    The default is use_load_balancer_configuration.
+	//
+	//    * target_group_health.dns_failover.minimum_healthy_targets.count - The
+	//    minimum number of targets that must be healthy. If the number of healthy
+	//    targets is below this value, mark the zone as unhealthy in DNS, so that
+	//    traffic is routed only to healthy zones. The possible values are off or
+	//    an integer from 1 to the maximum number of targets. The default is off.
+	//
+	//    * target_group_health.dns_failover.minimum_healthy_targets.percentage
+	//    - The minimum percentage of targets that must be healthy. If the percentage
+	//    of healthy targets is below this value, mark the zone as unhealthy in
+	//    DNS, so that traffic is routed only to healthy zones. The possible values
+	//    are off or an integer from 1 to 100. The default is off.
+	//
+	//    * target_group_health.unhealthy_state_routing.minimum_healthy_targets.count
+	//    - The minimum number of targets that must be healthy. If the number of
+	//    healthy targets is below this value, send traffic to all targets, including
+	//    unhealthy targets. The possible values are 1 to the maximum number of
+	//    targets. The default is 1.
+	//
+	//    * target_group_health.unhealthy_state_routing.minimum_healthy_targets.percentage
+	//    - The minimum percentage of targets that must be healthy. If the percentage
+	//    of healthy targets is below this value, send traffic to all targets, including
+	//    unhealthy targets. The possible values are off or an integer from 1 to
+	//    100. The default is off.
 	//
 	// The following attributes are supported only if the load balancer is an Application
 	// Load Balancer and the target is an instance or an IP address:
@@ -9925,6 +9963,22 @@ type TargetGroupAttribute struct {
 	//
 	//    * proxy_protocol_v2.enabled - Indicates whether Proxy Protocol version
 	//    2 is enabled. The value is true or false. The default is false.
+	//
+	// The following attributes are supported only by Gateway Load Balancers:
+	//
+	//    * target_failover.on_deregistration - Indicates how the Gateway Load Balancer
+	//    handles existing flows when a target is deregistered. The possible values
+	//    are rebalance and no_rebalance. The default is no_rebalance. The two attributes
+	//    (target_failover.on_deregistration and target_failover.on_unhealthy) can't
+	//    be set independently. The value you set for both attributes must be the
+	//    same.
+	//
+	//    * target_failover.on_unhealthy - Indicates how the Gateway Load Balancer
+	//    handles existing flows when a target is unhealthy. The possible values
+	//    are rebalance and no_rebalance. The default is no_rebalance. The two attributes
+	//    (target_failover.on_deregistration and target_failover.on_unhealthy) cannot
+	//    be set independently. The value you set for both attributes must be the
+	//    same.
 	Key *string `type:"string"`
 
 	// The value of the attribute.

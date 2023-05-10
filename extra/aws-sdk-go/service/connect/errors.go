@@ -17,13 +17,14 @@ const (
 	// ErrCodeContactFlowNotPublishedException for service response error code
 	// "ContactFlowNotPublishedException".
 	//
-	// The contact flow has not been published.
+	// The flow has not been published.
 	ErrCodeContactFlowNotPublishedException = "ContactFlowNotPublishedException"
 
 	// ErrCodeContactNotFoundException for service response error code
 	// "ContactNotFoundException".
 	//
-	// The contact with the specified ID is not active or does not exist.
+	// The contact with the specified ID is not active or does not exist. Applies
+	// to Voice calls only, not to Chat, Task, or Voice Callback.
 	ErrCodeContactNotFoundException = "ContactNotFoundException"
 
 	// ErrCodeDestinationNotAllowedException for service response error code
@@ -53,7 +54,7 @@ const (
 	// ErrCodeInvalidContactFlowException for service response error code
 	// "InvalidContactFlowException".
 	//
-	// The contact flow is not valid.
+	// The flow is not valid.
 	ErrCodeInvalidContactFlowException = "InvalidContactFlowException"
 
 	// ErrCodeInvalidContactFlowModuleException for service response error code
@@ -88,6 +89,8 @@ const (
 
 	// ErrCodePropertyValidationException for service response error code
 	// "PropertyValidationException".
+	//
+	// The property is not valid.
 	ErrCodePropertyValidationException = "PropertyValidationException"
 
 	// ErrCodeResourceConflictException for service response error code
@@ -107,6 +110,12 @@ const (
 	//
 	// The specified resource was not found.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
+
+	// ErrCodeResourceNotReadyException for service response error code
+	// "ResourceNotReadyException".
+	//
+	// The resource is not ready.
+	ErrCodeResourceNotReadyException = "ResourceNotReadyException"
 
 	// ErrCodeServiceQuotaExceededException for service response error code
 	// "ServiceQuotaExceededException".
@@ -145,6 +154,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ResourceConflictException":            newErrorResourceConflictException,
 	"ResourceInUseException":               newErrorResourceInUseException,
 	"ResourceNotFoundException":            newErrorResourceNotFoundException,
+	"ResourceNotReadyException":            newErrorResourceNotReadyException,
 	"ServiceQuotaExceededException":        newErrorServiceQuotaExceededException,
 	"ThrottlingException":                  newErrorThrottlingException,
 	"UserNotFoundException":                newErrorUserNotFoundException,

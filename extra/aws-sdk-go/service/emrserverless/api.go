@@ -68,7 +68,8 @@ func (c *EMRServerless) CancelJobRunRequest(input *CancelJobRunInput) (req *requ
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -153,7 +154,11 @@ func (c *EMRServerless) CreateApplicationRequest(input *CreateApplicationInput) 
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
 //
 //   * InternalServerException
 //   Request processing failed because of an error or failure with the service.
@@ -241,7 +246,8 @@ func (c *EMRServerless) DeleteApplicationRequest(input *DeleteApplicationInput) 
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -326,7 +332,8 @@ func (c *EMRServerless) GetApplicationRequest(input *GetApplicationInput) (req *
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -351,6 +358,94 @@ func (c *EMRServerless) GetApplication(input *GetApplicationInput) (*GetApplicat
 // for more information on using Contexts.
 func (c *EMRServerless) GetApplicationWithContext(ctx aws.Context, input *GetApplicationInput, opts ...request.Option) (*GetApplicationOutput, error) {
 	req, out := c.GetApplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetDashboardForJobRun = "GetDashboardForJobRun"
+
+// GetDashboardForJobRunRequest generates a "aws/request.Request" representing the
+// client's request for the GetDashboardForJobRun operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetDashboardForJobRun for more information on using the GetDashboardForJobRun
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetDashboardForJobRunRequest method.
+//    req, resp := client.GetDashboardForJobRunRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/emr-serverless-2021-07-13/GetDashboardForJobRun
+func (c *EMRServerless) GetDashboardForJobRunRequest(input *GetDashboardForJobRunInput) (req *request.Request, output *GetDashboardForJobRunOutput) {
+	op := &request.Operation{
+		Name:       opGetDashboardForJobRun,
+		HTTPMethod: "GET",
+		HTTPPath:   "/applications/{applicationId}/jobruns/{jobRunId}/dashboard",
+	}
+
+	if input == nil {
+		input = &GetDashboardForJobRunInput{}
+	}
+
+	output = &GetDashboardForJobRunOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetDashboardForJobRun API operation for EMR Serverless.
+//
+// Returns a URL to access the job run dashboard. The generated URL is valid
+// for one hour, after which you must invoke the API again to generate a new
+// URL.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for EMR Serverless's
+// API operation GetDashboardForJobRun for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalServerException
+//   Request processing failed because of an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/emr-serverless-2021-07-13/GetDashboardForJobRun
+func (c *EMRServerless) GetDashboardForJobRun(input *GetDashboardForJobRunInput) (*GetDashboardForJobRunOutput, error) {
+	req, out := c.GetDashboardForJobRunRequest(input)
+	return out, req.Send()
+}
+
+// GetDashboardForJobRunWithContext is the same as GetDashboardForJobRun with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetDashboardForJobRun for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EMRServerless) GetDashboardForJobRunWithContext(ctx aws.Context, input *GetDashboardForJobRunInput, opts ...request.Option) (*GetDashboardForJobRunOutput, error) {
+	req, out := c.GetDashboardForJobRunRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -411,7 +506,8 @@ func (c *EMRServerless) GetJobRunRequest(input *GetJobRunInput) (req *request.Re
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -502,7 +598,8 @@ func (c *EMRServerless) ListApplicationsRequest(input *ListApplicationsInput) (r
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   Request processing failed because of an error or failure with the service.
@@ -642,7 +739,8 @@ func (c *EMRServerless) ListJobRunsRequest(input *ListJobRunsInput) (req *reques
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * InternalServerException
 //   Request processing failed because of an error or failure with the service.
@@ -776,7 +874,8 @@ func (c *EMRServerless) ListTagsForResourceRequest(input *ListTagsForResourceInp
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -862,7 +961,8 @@ func (c *EMRServerless) StartApplicationRequest(input *StartApplicationInput) (r
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -950,7 +1050,8 @@ func (c *EMRServerless) StartJobRunRequest(input *StartJobRunInput) (req *reques
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -1042,7 +1143,8 @@ func (c *EMRServerless) StopApplicationRequest(input *StopApplicationInput) (req
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -1117,12 +1219,12 @@ func (c *EMRServerless) TagResourceRequest(input *TagResourceInput) (req *reques
 
 // TagResource API operation for EMR Serverless.
 //
-// Assigns tags to resources. A tag is a label that you assign to an AWS resource.
-// Each tag consists of a key and an optional value, both of which you define.
-// Tags enable you to categorize your AWS resources by attributes such as purpose,
-// owner, or environment. When you have many resources of the same type, you
-// can quickly identify a specific resource based on the tags you've assigned
-// to it.
+// Assigns tags to resources. A tag is a label that you assign to an Amazon
+// Web Services resource. Each tag consists of a key and an optional value,
+// both of which you define. Tags enable you to categorize your Amazon Web Services
+// resources by attributes such as purpose, owner, or environment. When you
+// have many resources of the same type, you can quickly identify a specific
+// resource based on the tags you've assigned to it.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1133,7 +1235,8 @@ func (c *EMRServerless) TagResourceRequest(input *TagResourceInput) (req *reques
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -1219,7 +1322,8 @@ func (c *EMRServerless) UntagResourceRequest(input *UntagResourceInput) (req *re
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -1305,7 +1409,8 @@ func (c *EMRServerless) UpdateApplicationRequest(input *UpdateApplicationInput) 
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by an Amazon Web Services
+//   service.
 //
 //   * ResourceNotFoundException
 //   The specified resource was not found.
@@ -1345,6 +1450,9 @@ type Application struct {
 	// ApplicationId is a required field
 	ApplicationId *string `locationName:"applicationId" min:"1" type:"string" required:"true"`
 
+	// The CPU architecture of an application.
+	Architecture *string `locationName:"architecture" type:"string" enum:"Architecture"`
+
 	// The ARN of the application.
 	//
 	// Arn is a required field
@@ -1362,6 +1470,9 @@ type Application struct {
 	// CreatedAt is a required field
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
 
+	// The image configuration applied to all worker types.
+	ImageConfiguration *ImageConfiguration `locationName:"imageConfiguration" type:"structure"`
+
 	// The initial capacity of the application.
 	InitialCapacity map[string]*InitialCapacityConfig `locationName:"initialCapacity" type:"map"`
 
@@ -1376,7 +1487,7 @@ type Application struct {
 	// The network configuration for customer VPC connectivity for the application.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
-	// The EMR release version associated with the application.
+	// The EMR release associated with the application.
 	//
 	// ReleaseLabel is a required field
 	ReleaseLabel *string `locationName:"releaseLabel" min:"1" type:"string" required:"true"`
@@ -1401,6 +1512,9 @@ type Application struct {
 	//
 	// UpdatedAt is a required field
 	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp" required:"true"`
+
+	// The specification applied to each worker type.
+	WorkerTypeSpecifications map[string]*WorkerTypeSpecification `locationName:"workerTypeSpecifications" type:"map"`
 }
 
 // String returns the string representation.
@@ -1427,6 +1541,12 @@ func (s *Application) SetApplicationId(v string) *Application {
 	return s
 }
 
+// SetArchitecture sets the Architecture field's value.
+func (s *Application) SetArchitecture(v string) *Application {
+	s.Architecture = &v
+	return s
+}
+
 // SetArn sets the Arn field's value.
 func (s *Application) SetArn(v string) *Application {
 	s.Arn = &v
@@ -1448,6 +1568,12 @@ func (s *Application) SetAutoStopConfiguration(v *AutoStopConfig) *Application {
 // SetCreatedAt sets the CreatedAt field's value.
 func (s *Application) SetCreatedAt(v time.Time) *Application {
 	s.CreatedAt = &v
+	return s
+}
+
+// SetImageConfiguration sets the ImageConfiguration field's value.
+func (s *Application) SetImageConfiguration(v *ImageConfiguration) *Application {
+	s.ImageConfiguration = v
 	return s
 }
 
@@ -1511,9 +1637,18 @@ func (s *Application) SetUpdatedAt(v time.Time) *Application {
 	return s
 }
 
+// SetWorkerTypeSpecifications sets the WorkerTypeSpecifications field's value.
+func (s *Application) SetWorkerTypeSpecifications(v map[string]*WorkerTypeSpecification) *Application {
+	s.WorkerTypeSpecifications = v
+	return s
+}
+
 // The summary of attributes associated with an application.
 type ApplicationSummary struct {
 	_ struct{} `type:"structure"`
+
+	// The CPU architecture of an application.
+	Architecture *string `locationName:"architecture" type:"string" enum:"Architecture"`
 
 	// The ARN of the application.
 	//
@@ -1533,7 +1668,7 @@ type ApplicationSummary struct {
 	// The name of the application.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
-	// The EMR release version associated with the application.
+	// The EMR release associated with the application.
 	//
 	// ReleaseLabel is a required field
 	ReleaseLabel *string `locationName:"releaseLabel" min:"1" type:"string" required:"true"`
@@ -1573,6 +1708,12 @@ func (s ApplicationSummary) String() string {
 // value will be replaced with "sensitive".
 func (s ApplicationSummary) GoString() string {
 	return s.String()
+}
+
+// SetArchitecture sets the Architecture field's value.
+func (s *ApplicationSummary) SetArchitecture(v string) *ApplicationSummary {
+	s.Architecture = &v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -2048,6 +2189,9 @@ func (s *ConflictException) RequestID() string {
 type CreateApplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// The CPU architecture of an application.
+	Architecture *string `locationName:"architecture" type:"string" enum:"Architecture"`
+
 	// The configuration for an application to automatically start on job submission.
 	AutoStartConfiguration *AutoStartConfig `locationName:"autoStartConfiguration" type:"structure"`
 
@@ -2058,6 +2202,10 @@ type CreateApplicationInput struct {
 	// The client idempotency token of the application to create. Its value must
 	// be unique for each request.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The image configuration for all worker types. You can either set this parameter
+	// or imageConfiguration for each worker type in workerTypeSpecifications.
+	ImageConfiguration *ImageConfigurationInput_ `locationName:"imageConfiguration" type:"structure"`
 
 	// The capacity to initialize when the application is created.
 	InitialCapacity map[string]*InitialCapacityConfig `locationName:"initialCapacity" type:"map"`
@@ -2074,7 +2222,7 @@ type CreateApplicationInput struct {
 	// The network configuration for customer VPC connectivity.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
-	// The EMR release version associated with the application.
+	// The EMR release associated with the application.
 	//
 	// ReleaseLabel is a required field
 	ReleaseLabel *string `locationName:"releaseLabel" min:"1" type:"string" required:"true"`
@@ -2086,6 +2234,14 @@ type CreateApplicationInput struct {
 	//
 	// Type is a required field
 	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+
+	// The key-value pairs that specify worker type to WorkerTypeSpecificationInput.
+	// This parameter must contain all valid worker types for a Spark or Hive application.
+	// Valid worker types include Driver and Executor for Spark applications and
+	// HiveDriver and TezTask for Hive applications. You can either set image details
+	// in this parameter for each worker type, or in imageConfiguration for all
+	// worker types.
+	WorkerTypeSpecifications map[string]*WorkerTypeSpecificationInput_ `locationName:"workerTypeSpecifications" type:"map"`
 }
 
 // String returns the string representation.
@@ -2132,6 +2288,11 @@ func (s *CreateApplicationInput) Validate() error {
 			invalidParams.AddNested("AutoStopConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ImageConfiguration != nil {
+		if err := s.ImageConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ImageConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.InitialCapacity != nil {
 		for i, v := range s.InitialCapacity {
 			if v == nil {
@@ -2147,11 +2308,27 @@ func (s *CreateApplicationInput) Validate() error {
 			invalidParams.AddNested("MaximumCapacity", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.WorkerTypeSpecifications != nil {
+		for i, v := range s.WorkerTypeSpecifications {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "WorkerTypeSpecifications", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetArchitecture sets the Architecture field's value.
+func (s *CreateApplicationInput) SetArchitecture(v string) *CreateApplicationInput {
+	s.Architecture = &v
+	return s
 }
 
 // SetAutoStartConfiguration sets the AutoStartConfiguration field's value.
@@ -2169,6 +2346,12 @@ func (s *CreateApplicationInput) SetAutoStopConfiguration(v *AutoStopConfig) *Cr
 // SetClientToken sets the ClientToken field's value.
 func (s *CreateApplicationInput) SetClientToken(v string) *CreateApplicationInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetImageConfiguration sets the ImageConfiguration field's value.
+func (s *CreateApplicationInput) SetImageConfiguration(v *ImageConfigurationInput_) *CreateApplicationInput {
+	s.ImageConfiguration = v
 	return s
 }
 
@@ -2211,6 +2394,12 @@ func (s *CreateApplicationInput) SetTags(v map[string]*string) *CreateApplicatio
 // SetType sets the Type field's value.
 func (s *CreateApplicationInput) SetType(v string) *CreateApplicationInput {
 	s.Type = &v
+	return s
+}
+
+// SetWorkerTypeSpecifications sets the WorkerTypeSpecifications field's value.
+func (s *CreateApplicationInput) SetWorkerTypeSpecifications(v map[string]*WorkerTypeSpecificationInput_) *CreateApplicationInput {
+	s.WorkerTypeSpecifications = v
 	return s
 }
 
@@ -2420,6 +2609,103 @@ func (s *GetApplicationOutput) SetApplication(v *Application) *GetApplicationOut
 	return s
 }
 
+type GetDashboardForJobRunInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID of the application.
+	//
+	// ApplicationId is a required field
+	ApplicationId *string `location:"uri" locationName:"applicationId" min:"1" type:"string" required:"true"`
+
+	// The ID of the job run.
+	//
+	// JobRunId is a required field
+	JobRunId *string `location:"uri" locationName:"jobRunId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDashboardForJobRunInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDashboardForJobRunInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDashboardForJobRunInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDashboardForJobRunInput"}
+	if s.ApplicationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApplicationId"))
+	}
+	if s.ApplicationId != nil && len(*s.ApplicationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApplicationId", 1))
+	}
+	if s.JobRunId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobRunId"))
+	}
+	if s.JobRunId != nil && len(*s.JobRunId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobRunId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApplicationId sets the ApplicationId field's value.
+func (s *GetDashboardForJobRunInput) SetApplicationId(v string) *GetDashboardForJobRunInput {
+	s.ApplicationId = &v
+	return s
+}
+
+// SetJobRunId sets the JobRunId field's value.
+func (s *GetDashboardForJobRunInput) SetJobRunId(v string) *GetDashboardForJobRunInput {
+	s.JobRunId = &v
+	return s
+}
+
+type GetDashboardForJobRunOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The URL to view job run's dashboard.
+	Url *string `locationName:"url" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDashboardForJobRunOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDashboardForJobRunOutput) GoString() string {
+	return s.String()
+}
+
+// SetUrl sets the Url field's value.
+func (s *GetDashboardForJobRunOutput) SetUrl(v string) *GetDashboardForJobRunOutput {
+	s.Url = &v
+	return s
+}
+
 type GetJobRunInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -2602,6 +2888,98 @@ func (s *Hive) SetParameters(v string) *Hive {
 // SetQuery sets the Query field's value.
 func (s *Hive) SetQuery(v string) *Hive {
 	s.Query = &v
+	return s
+}
+
+// The applied image configuration.
+type ImageConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The image URI.
+	//
+	// ImageUri is a required field
+	ImageUri *string `locationName:"imageUri" min:"1" type:"string" required:"true"`
+
+	// The SHA256 digest of the image URI. This indicates which specific image the
+	// application is configured for. The image digest doesn't exist until an application
+	// has started.
+	ResolvedImageDigest *string `locationName:"resolvedImageDigest" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImageConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImageConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetImageUri sets the ImageUri field's value.
+func (s *ImageConfiguration) SetImageUri(v string) *ImageConfiguration {
+	s.ImageUri = &v
+	return s
+}
+
+// SetResolvedImageDigest sets the ResolvedImageDigest field's value.
+func (s *ImageConfiguration) SetResolvedImageDigest(v string) *ImageConfiguration {
+	s.ResolvedImageDigest = &v
+	return s
+}
+
+// The image configuration.
+type ImageConfigurationInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The URI of an image in the Amazon ECR registry. This field is required when
+	// you create a new application. If you leave this field blank in an update,
+	// Amazon EMR will remove the image configuration.
+	ImageUri *string `locationName:"imageUri" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImageConfigurationInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ImageConfigurationInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ImageConfigurationInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ImageConfigurationInput_"}
+	if s.ImageUri != nil && len(*s.ImageUri) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ImageUri", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetImageUri sets the ImageUri field's value.
+func (s *ImageConfigurationInput_) SetImageUri(v string) *ImageConfigurationInput_ {
+	s.ImageUri = &v
 	return s
 }
 
@@ -2810,6 +3188,12 @@ type JobRun struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" min:"60" type:"string" required:"true"`
 
+	// The aggregate vCPU, memory, and storage that AWS has billed for the job run.
+	// The billed resources include a 1-minute minimum usage for workers, plus additional
+	// storage over 20 GB per worker. Note that billed resources do not include
+	// usage for idle pre-initialized workers.
+	BilledResourceUtilization *ResourceUtilization `locationName:"billedResourceUtilization" type:"structure"`
+
 	// The configuration settings that are used to override default configuration.
 	ConfigurationOverrides *ConfigurationOverrides `locationName:"configurationOverrides" type:"structure"`
 
@@ -2828,6 +3212,10 @@ type JobRun struct {
 	// ExecutionRole is a required field
 	ExecutionRole *string `locationName:"executionRole" min:"20" type:"string" required:"true"`
 
+	// Returns the job run timeout value from the StartJobRun call. If no timeout
+	// was specified, then it returns the default timeout of 720 minutes.
+	ExecutionTimeoutMinutes *int64 `locationName:"executionTimeoutMinutes" type:"long"`
+
 	// The job driver for the job run.
 	//
 	// JobDriver is a required field
@@ -2844,8 +3232,7 @@ type JobRun struct {
 	// The network configuration for customer VPC connectivity.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
-	// The EMR release version associated with the application your job is running
-	// on.
+	// The EMR release associated with the application your job is running on.
 	//
 	// ReleaseLabel is a required field
 	ReleaseLabel *string `locationName:"releaseLabel" min:"1" type:"string" required:"true"`
@@ -2867,9 +3254,9 @@ type JobRun struct {
 	// for job runs in a COMPLETED, FAILED, or CANCELLED state.
 	TotalExecutionDurationSeconds *int64 `locationName:"totalExecutionDurationSeconds" type:"integer"`
 
-	// The aggregate vCPU, memory, and storage resources used from the time job
-	// start executing till the time job is terminated, rounded up to the nearest
-	// second.
+	// The aggregate vCPU, memory, and storage resources used from the time the
+	// job starts to execute, until the time the job terminates, rounded up to the
+	// nearest second.
 	TotalResourceUtilization *TotalResourceUtilization `locationName:"totalResourceUtilization" type:"structure"`
 
 	// The date and time when the job run was updated.
@@ -2908,6 +3295,12 @@ func (s *JobRun) SetArn(v string) *JobRun {
 	return s
 }
 
+// SetBilledResourceUtilization sets the BilledResourceUtilization field's value.
+func (s *JobRun) SetBilledResourceUtilization(v *ResourceUtilization) *JobRun {
+	s.BilledResourceUtilization = v
+	return s
+}
+
 // SetConfigurationOverrides sets the ConfigurationOverrides field's value.
 func (s *JobRun) SetConfigurationOverrides(v *ConfigurationOverrides) *JobRun {
 	s.ConfigurationOverrides = v
@@ -2929,6 +3322,12 @@ func (s *JobRun) SetCreatedBy(v string) *JobRun {
 // SetExecutionRole sets the ExecutionRole field's value.
 func (s *JobRun) SetExecutionRole(v string) *JobRun {
 	s.ExecutionRole = &v
+	return s
+}
+
+// SetExecutionTimeoutMinutes sets the ExecutionTimeoutMinutes field's value.
+func (s *JobRun) SetExecutionTimeoutMinutes(v int64) *JobRun {
+	s.ExecutionTimeoutMinutes = &v
 	return s
 }
 
@@ -3035,8 +3434,7 @@ type JobRunSummary struct {
 	// The optional job run name. This doesn't have to be unique.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
-	// The EMR release version associated with the application your job is running
-	// on.
+	// The EMR release associated with the application your job is running on.
 	//
 	// ReleaseLabel is a required field
 	ReleaseLabel *string `locationName:"releaseLabel" min:"1" type:"string" required:"true"`
@@ -3790,6 +4188,59 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The resource utilization for memory, storage, and vCPU for jobs.
+type ResourceUtilization struct {
+	_ struct{} `type:"structure"`
+
+	// The aggregated memory used per hour from the time the job starts executing
+	// until the job is terminated.
+	MemoryGBHour *float64 `locationName:"memoryGBHour" type:"double"`
+
+	// The aggregated storage used per hour from the time the job starts executing
+	// until the job is terminated.
+	StorageGBHour *float64 `locationName:"storageGBHour" type:"double"`
+
+	// The aggregated vCPU used per hour from the time the job starts executing
+	// until the job is terminated.
+	VCPUHour *float64 `locationName:"vCPUHour" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceUtilization) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceUtilization) GoString() string {
+	return s.String()
+}
+
+// SetMemoryGBHour sets the MemoryGBHour field's value.
+func (s *ResourceUtilization) SetMemoryGBHour(v float64) *ResourceUtilization {
+	s.MemoryGBHour = &v
+	return s
+}
+
+// SetStorageGBHour sets the StorageGBHour field's value.
+func (s *ResourceUtilization) SetStorageGBHour(v float64) *ResourceUtilization {
+	s.StorageGBHour = &v
+	return s
+}
+
+// SetVCPUHour sets the VCPUHour field's value.
+func (s *ResourceUtilization) SetVCPUHour(v float64) *ResourceUtilization {
+	s.VCPUHour = &v
+	return s
+}
+
 // The Amazon S3 configuration for monitoring log publishing. You can configure
 // your jobs to send log information to Amazon S3.
 type S3MonitoringConfiguration struct {
@@ -4208,7 +4659,7 @@ type StartJobRunOutput struct {
 	// ApplicationId is a required field
 	ApplicationId *string `locationName:"applicationId" min:"1" type:"string" required:"true"`
 
-	// The output lists the execution role ARN of the job run.
+	// This output displays the ARN of the job run..
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" min:"60" type:"string" required:"true"`
@@ -4566,6 +5017,9 @@ type UpdateApplicationInput struct {
 	// ApplicationId is a required field
 	ApplicationId *string `location:"uri" locationName:"applicationId" min:"1" type:"string" required:"true"`
 
+	// The CPU architecture of an application.
+	Architecture *string `locationName:"architecture" type:"string" enum:"Architecture"`
+
 	// The configuration for an application to automatically start on job submission.
 	AutoStartConfiguration *AutoStartConfig `locationName:"autoStartConfiguration" type:"structure"`
 
@@ -4576,6 +5030,10 @@ type UpdateApplicationInput struct {
 	// The client idempotency token of the application to update. Its value must
 	// be unique for each request.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The image configuration to be used for all worker types. You can either set
+	// this parameter or imageConfiguration for each worker type in WorkerTypeSpecificationInput.
+	ImageConfiguration *ImageConfigurationInput_ `locationName:"imageConfiguration" type:"structure"`
 
 	// The capacity to initialize when the application is updated.
 	InitialCapacity map[string]*InitialCapacityConfig `locationName:"initialCapacity" type:"map"`
@@ -4588,6 +5046,14 @@ type UpdateApplicationInput struct {
 
 	// The network configuration for customer VPC connectivity.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
+
+	// The key-value pairs that specify worker type to WorkerTypeSpecificationInput.
+	// This parameter must contain all valid worker types for a Spark or Hive application.
+	// Valid worker types include Driver and Executor for Spark applications and
+	// HiveDriver and TezTask for Hive applications. You can either set image details
+	// in this parameter for each worker type, or in imageConfiguration for all
+	// worker types.
+	WorkerTypeSpecifications map[string]*WorkerTypeSpecificationInput_ `locationName:"workerTypeSpecifications" type:"map"`
 }
 
 // String returns the string representation.
@@ -4625,6 +5091,11 @@ func (s *UpdateApplicationInput) Validate() error {
 			invalidParams.AddNested("AutoStopConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ImageConfiguration != nil {
+		if err := s.ImageConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ImageConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.InitialCapacity != nil {
 		for i, v := range s.InitialCapacity {
 			if v == nil {
@@ -4640,6 +5111,16 @@ func (s *UpdateApplicationInput) Validate() error {
 			invalidParams.AddNested("MaximumCapacity", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.WorkerTypeSpecifications != nil {
+		for i, v := range s.WorkerTypeSpecifications {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "WorkerTypeSpecifications", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4650,6 +5131,12 @@ func (s *UpdateApplicationInput) Validate() error {
 // SetApplicationId sets the ApplicationId field's value.
 func (s *UpdateApplicationInput) SetApplicationId(v string) *UpdateApplicationInput {
 	s.ApplicationId = &v
+	return s
+}
+
+// SetArchitecture sets the Architecture field's value.
+func (s *UpdateApplicationInput) SetArchitecture(v string) *UpdateApplicationInput {
+	s.Architecture = &v
 	return s
 }
 
@@ -4671,6 +5158,12 @@ func (s *UpdateApplicationInput) SetClientToken(v string) *UpdateApplicationInpu
 	return s
 }
 
+// SetImageConfiguration sets the ImageConfiguration field's value.
+func (s *UpdateApplicationInput) SetImageConfiguration(v *ImageConfigurationInput_) *UpdateApplicationInput {
+	s.ImageConfiguration = v
+	return s
+}
+
 // SetInitialCapacity sets the InitialCapacity field's value.
 func (s *UpdateApplicationInput) SetInitialCapacity(v map[string]*InitialCapacityConfig) *UpdateApplicationInput {
 	s.InitialCapacity = v
@@ -4686,6 +5179,12 @@ func (s *UpdateApplicationInput) SetMaximumCapacity(v *MaximumAllowedResources) 
 // SetNetworkConfiguration sets the NetworkConfiguration field's value.
 func (s *UpdateApplicationInput) SetNetworkConfiguration(v *NetworkConfiguration) *UpdateApplicationInput {
 	s.NetworkConfiguration = v
+	return s
+}
+
+// SetWorkerTypeSpecifications sets the WorkerTypeSpecifications field's value.
+func (s *UpdateApplicationInput) SetWorkerTypeSpecifications(v map[string]*WorkerTypeSpecificationInput_) *UpdateApplicationInput {
+	s.WorkerTypeSpecifications = v
 	return s
 }
 
@@ -4722,7 +5221,8 @@ func (s *UpdateApplicationOutput) SetApplication(v *Application) *UpdateApplicat
 	return s
 }
 
-// The input fails to satisfy the constraints specified by an AWS service.
+// The input fails to satisfy the constraints specified by an Amazon Web Services
+// service.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4866,6 +5366,85 @@ func (s *WorkerResourceConfig) SetMemory(v string) *WorkerResourceConfig {
 	return s
 }
 
+// The specifications for a worker type.
+type WorkerTypeSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The image configuration for a worker type.
+	ImageConfiguration *ImageConfiguration `locationName:"imageConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkerTypeSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkerTypeSpecification) GoString() string {
+	return s.String()
+}
+
+// SetImageConfiguration sets the ImageConfiguration field's value.
+func (s *WorkerTypeSpecification) SetImageConfiguration(v *ImageConfiguration) *WorkerTypeSpecification {
+	s.ImageConfiguration = v
+	return s
+}
+
+// The specifications for a worker type.
+type WorkerTypeSpecificationInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The image configuration for a worker type.
+	ImageConfiguration *ImageConfigurationInput_ `locationName:"imageConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkerTypeSpecificationInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkerTypeSpecificationInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *WorkerTypeSpecificationInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "WorkerTypeSpecificationInput_"}
+	if s.ImageConfiguration != nil {
+		if err := s.ImageConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ImageConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetImageConfiguration sets the ImageConfiguration field's value.
+func (s *WorkerTypeSpecificationInput_) SetImageConfiguration(v *ImageConfigurationInput_) *WorkerTypeSpecificationInput_ {
+	s.ImageConfiguration = v
+	return s
+}
+
 const (
 	// ApplicationStateCreating is a ApplicationState enum value
 	ApplicationStateCreating = "CREATING"
@@ -4899,6 +5478,22 @@ func ApplicationState_Values() []string {
 		ApplicationStateStopping,
 		ApplicationStateStopped,
 		ApplicationStateTerminated,
+	}
+}
+
+const (
+	// ArchitectureArm64 is a Architecture enum value
+	ArchitectureArm64 = "ARM64"
+
+	// ArchitectureX8664 is a Architecture enum value
+	ArchitectureX8664 = "X86_64"
+)
+
+// Architecture_Values returns all elements of the Architecture enum
+func Architecture_Values() []string {
+	return []string{
+		ArchitectureArm64,
+		ArchitectureX8664,
 	}
 }
 

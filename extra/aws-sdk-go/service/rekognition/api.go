@@ -240,6 +240,9 @@ func (c *Rekognition) CopyProjectVersionRequest(input *CopyProjectVersionInput) 
 // call DescribeProjectVersions and check the value of Status in the ProjectVersionDescription
 // object. The copy operation has finished when the value of Status is COPYING_COMPLETED.
 //
+// This operation requires permissions to perform the rekognition:CopyProjectVersion
+// action.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -550,6 +553,104 @@ func (c *Rekognition) CreateDatasetWithContext(ctx aws.Context, input *CreateDat
 	return out, req.Send()
 }
 
+const opCreateFaceLivenessSession = "CreateFaceLivenessSession"
+
+// CreateFaceLivenessSessionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateFaceLivenessSession operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateFaceLivenessSession for more information on using the CreateFaceLivenessSession
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateFaceLivenessSessionRequest method.
+//    req, resp := client.CreateFaceLivenessSessionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *Rekognition) CreateFaceLivenessSessionRequest(input *CreateFaceLivenessSessionInput) (req *request.Request, output *CreateFaceLivenessSessionOutput) {
+	op := &request.Operation{
+		Name:       opCreateFaceLivenessSession,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateFaceLivenessSessionInput{}
+	}
+
+	output = &CreateFaceLivenessSessionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateFaceLivenessSession API operation for Amazon Rekognition.
+//
+// This API operation initiates a Face Liveness session. It returns a SessionId,
+// which you can use to start streaming Face Liveness video and get the results
+// for a Face Liveness session. You can use the OutputConfig option in the Settings
+// parameter to provide an Amazon S3 bucket location. The Amazon S3 bucket stores
+// reference images and audit images. You can use AuditImagesLimit to limit
+// the number of audit images returned. This number is between 0 and 4. By default,
+// it is set to 0. The limit is best effort and based on the duration of the
+// selfie-video.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation CreateFaceLivenessSession for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You are not authorized to perform the action.
+//
+//   * InternalServerError
+//   Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   * InvalidParameterException
+//   Input parameter violated a constraint. Validate your parameter before calling
+//   the API operation again.
+//
+//   * ThrottlingException
+//   Amazon Rekognition is temporarily unable to process the request. Try your
+//   call again.
+//
+//   * ProvisionedThroughputExceededException
+//   The number of requests exceeded your throughput limit. If you want to increase
+//   this limit, contact Amazon Rekognition.
+//
+func (c *Rekognition) CreateFaceLivenessSession(input *CreateFaceLivenessSessionInput) (*CreateFaceLivenessSessionOutput, error) {
+	req, out := c.CreateFaceLivenessSessionRequest(input)
+	return out, req.Send()
+}
+
+// CreateFaceLivenessSessionWithContext is the same as CreateFaceLivenessSession with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateFaceLivenessSession for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) CreateFaceLivenessSessionWithContext(ctx aws.Context, input *CreateFaceLivenessSessionInput, opts ...request.Option) (*CreateFaceLivenessSessionOutput, error) {
+	req, out := c.CreateFaceLivenessSessionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateProject = "CreateProject"
 
 // CreateProjectRequest generates a "aws/request.Request" representing the
@@ -852,21 +953,21 @@ func (c *Rekognition) CreateStreamProcessorRequest(input *CreateStreamProcessorI
 //
 //    * If you are creating a stream processor for detecting faces, you provide
 //    as input a Kinesis video stream (Input) and a Kinesis data stream (Output)
-//    stream. You also specify the face recognition criteria in Settings. For
-//    example, the collection containing faces that you want to recognize. After
-//    you have finished analyzing a streaming video, use StopStreamProcessor
+//    stream for receiving the output. You must use the FaceSearch option in
+//    Settings, specifying the collection that contains the faces you want to
+//    recognize. After you have finished analyzing a streaming video, use StopStreamProcessor
 //    to stop processing.
 //
 //    * If you are creating a stream processor to detect labels, you provide
 //    as input a Kinesis video stream (Input), Amazon S3 bucket information
 //    (Output), and an Amazon SNS topic ARN (NotificationChannel). You can also
 //    provide a KMS key ID to encrypt the data sent to your Amazon S3 bucket.
-//    You specify what you want to detect in ConnectedHomeSettings, such as
-//    people, packages and people, or pets, people, and packages. You can also
-//    specify where in the frame you want Amazon Rekognition to monitor with
-//    RegionsOfInterest. When you run the StartStreamProcessor operation on
-//    a label detection stream processor, you input start and stop information
-//    to determine the length of the processing time.
+//    You specify what you want to detect by using the ConnectedHome option
+//    in settings, and selecting one of the following: PERSON, PET, PACKAGE,
+//    ALL You can also specify where in the frame you want Amazon Rekognition
+//    to monitor with RegionsOfInterest. When you run the StartStreamProcessor
+//    operation on a label detection stream processor, you input start and stop
+//    information to determine the length of the processing time.
 //
 // Use Name to assign an identifier for the stream processor. You use Name to
 // manage the stream processor. For example, you can start processing the source
@@ -1403,6 +1504,9 @@ func (c *Rekognition) DeleteProjectPolicyRequest(input *DeleteProjectPolicyInput
 //
 // To get a list of project policies attached to a project, call ListProjectPolicies.
 // To attach a project policy to a project, call PutProjectPolicy.
+//
+// This operation requires permissions to perform the rekognition:DeleteProjectPolicy
+// action.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2478,7 +2582,7 @@ func (c *Rekognition) DetectFacesRequest(input *DetectFacesInput) (req *request.
 // the operation returns face details. These details include a bounding box
 // of the face, a confidence value (that the bounding box contains a face),
 // and a fixed set of attributes such as facial landmarks (for example, coordinates
-// of eye and mouth), presence of beard, sunglasses, and so on.
+// of eye and mouth), pose, presence of facial occlusion, and so on.
 //
 // The face-detection algorithm is most effective on frontal faces. For non-frontal
 // or obscured faces, the algorithm might not detect the faces or might detect
@@ -2604,20 +2708,78 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 // For an example, see Analyzing images stored in an Amazon S3 bucket in the
 // Amazon Rekognition Developer Guide.
 //
-// DetectLabels does not support the detection of activities. However, activity
-// detection is supported for label detection in videos. For more information,
-// see StartLabelDetection in the Amazon Rekognition Developer Guide.
-//
 // You pass the input image as base64-encoded image bytes or as a reference
 // to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon
 // Rekognition operations, passing image bytes is not supported. The image must
 // be either a PNG or JPEG formatted file.
 //
-// For each object, scene, and concept the API returns one or more labels. Each
-// label provides the object name, and the level of confidence that the image
-// contains the object. For example, suppose the input image has a lighthouse,
-// the sea, and a rock. The response includes all three labels, one for each
-// object.
+// Optional Parameters
+//
+// You can specify one or both of the GENERAL_LABELS and IMAGE_PROPERTIES feature
+// types when calling the DetectLabels API. Including GENERAL_LABELS will ensure
+// the response includes the labels detected in the input image, while including
+// IMAGE_PROPERTIES will ensure the response includes information about the
+// image quality and color.
+//
+// When using GENERAL_LABELS and/or IMAGE_PROPERTIES you can provide filtering
+// criteria to the Settings parameter. You can filter with sets of individual
+// labels or with label categories. You can specify inclusive filters, exclusive
+// filters, or a combination of inclusive and exclusive filters. For more information
+// on filtering see Detecting Labels in an Image (https://docs.aws.amazon.com/rekognition/latest/dg/labels-detect-labels-image.html).
+//
+// You can specify MinConfidence to control the confidence threshold for the
+// labels returned. The default is 55%. You can also add the MaxLabels parameter
+// to limit the number of labels returned. The default and upper limit is 1000
+// labels.
+//
+// Response Elements
+//
+// For each object, scene, and concept the API returns one or more labels. The
+// API returns the following types of information about labels:
+//
+//    * Name - The name of the detected label.
+//
+//    * Confidence - The level of confidence in the label assigned to a detected
+//    object.
+//
+//    * Parents - The ancestor labels for a detected label. DetectLabels returns
+//    a hierarchical taxonomy of detected labels. For example, a detected car
+//    might be assigned the label car. The label car has two parent labels:
+//    Vehicle (its parent) and Transportation (its grandparent). The response
+//    includes the all ancestors for a label, where every ancestor is a unique
+//    label. In the previous example, Car, Vehicle, and Transportation are returned
+//    as unique labels in the response.
+//
+//    * Aliases - Possible Aliases for the label.
+//
+//    * Categories - The label categories that the detected label belongs to.
+//
+//    * BoundingBox — Bounding boxes are described for all instances of detected
+//    common object labels, returned in an array of Instance objects. An Instance
+//    object contains a BoundingBox object, describing the location of the label
+//    on the input image. It also includes the confidence for the accuracy of
+//    the detected bounding box.
+//
+// The API returns the following information regarding the image, as part of
+// the ImageProperties structure:
+//
+//    * Quality - Information about the Sharpness, Brightness, and Contrast
+//    of the input image, scored between 0 to 100. Image quality is returned
+//    for the entire image, as well as the background and the foreground.
+//
+//    * Dominant Color - An array of the dominant colors in the image.
+//
+//    * Foreground - Information about the sharpness, brightness, and dominant
+//    colors of the input image’s foreground.
+//
+//    * Background - Information about the sharpness, brightness, and dominant
+//    colors of the input image’s background.
+//
+// The list of returned labels will include at least one label for every detected
+// object, along with information about that label. In the following example,
+// suppose the input image has a lighthouse, the sea, and a rock. The response
+// includes all three labels, one for each object, as well as the confidence
+// in the label:
 //
 // {Name: lighthouse, Confidence: 98.4629}
 //
@@ -2625,10 +2787,9 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 //
 // {Name: sea,Confidence: 75.061}
 //
-// In the preceding example, the operation returns one label for each of the
-// three objects. The operation can also return multiple labels for the same
-// object in the image. For example, if the input image shows a flower (for
-// example, a tulip), the operation might return the following three labels.
+// The list of labels can include multiple labels for the same object. For example,
+// if the input image shows a flower (for example, a tulip), the operation might
+// return the following three labels.
 //
 // {Name: flower,Confidence: 99.0562}
 //
@@ -2639,29 +2800,10 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 // In this example, the detection algorithm more precisely identifies the flower
 // as a tulip.
 //
-// In response, the API returns an array of labels. In addition, the response
-// also includes the orientation correction. Optionally, you can specify MinConfidence
-// to control the confidence threshold for the labels returned. The default
-// is 55%. You can also add the MaxLabels parameter to limit the number of labels
-// returned.
-//
 // If the object detected is a person, the operation doesn't provide the same
 // facial details that the DetectFaces operation provides.
 //
-// DetectLabels returns bounding boxes for instances of common object labels
-// in an array of Instance objects. An Instance object contains a BoundingBox
-// object, for the location of the label on the image. It also includes the
-// confidence by which the bounding box was detected.
-//
-// DetectLabels also returns a hierarchical taxonomy of detected labels. For
-// example, a detected car might be assigned the label car. The label car has
-// two parent labels: Vehicle (its parent) and Transportation (its grandparent).
-// The response returns the entire list of ancestors for a label. Each ancestor
-// is a unique label in the response. In the previous example, Car, Vehicle,
-// and Transportation are returned as unique labels in the response.
-//
-// This is a stateless API operation. That is, the operation does not persist
-// any data.
+// This is a stateless API operation that doesn't return any data.
 //
 // This operation requires permissions to perform the rekognition:DetectLabels
 // action.
@@ -3902,6 +4044,105 @@ func (c *Rekognition) GetFaceDetectionPagesWithContext(ctx aws.Context, input *G
 	return p.Err()
 }
 
+const opGetFaceLivenessSessionResults = "GetFaceLivenessSessionResults"
+
+// GetFaceLivenessSessionResultsRequest generates a "aws/request.Request" representing the
+// client's request for the GetFaceLivenessSessionResults operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetFaceLivenessSessionResults for more information on using the GetFaceLivenessSessionResults
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetFaceLivenessSessionResultsRequest method.
+//    req, resp := client.GetFaceLivenessSessionResultsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *Rekognition) GetFaceLivenessSessionResultsRequest(input *GetFaceLivenessSessionResultsInput) (req *request.Request, output *GetFaceLivenessSessionResultsOutput) {
+	op := &request.Operation{
+		Name:       opGetFaceLivenessSessionResults,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetFaceLivenessSessionResultsInput{}
+	}
+
+	output = &GetFaceLivenessSessionResultsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetFaceLivenessSessionResults API operation for Amazon Rekognition.
+//
+// Retrieves the results of a specific Face Liveness session. It requires the
+// sessionId as input, which was created using CreateFaceLivenessSession. Returns
+// the corresponding Face Liveness confidence score, a reference image that
+// includes a face bounding box, and audit images that also contain face bounding
+// boxes. The Face Liveness confidence score ranges from 0 to 100. The reference
+// image can optionally be returned.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation GetFaceLivenessSessionResults for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You are not authorized to perform the action.
+//
+//   * InternalServerError
+//   Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   * InvalidParameterException
+//   Input parameter violated a constraint. Validate your parameter before calling
+//   the API operation again.
+//
+//   * SessionNotFoundException
+//   Occurs when a given sessionId is not found.
+//
+//   * ThrottlingException
+//   Amazon Rekognition is temporarily unable to process the request. Try your
+//   call again.
+//
+//   * ProvisionedThroughputExceededException
+//   The number of requests exceeded your throughput limit. If you want to increase
+//   this limit, contact Amazon Rekognition.
+//
+func (c *Rekognition) GetFaceLivenessSessionResults(input *GetFaceLivenessSessionResultsInput) (*GetFaceLivenessSessionResultsOutput, error) {
+	req, out := c.GetFaceLivenessSessionResultsRequest(input)
+	return out, req.Send()
+}
+
+// GetFaceLivenessSessionResultsWithContext is the same as GetFaceLivenessSessionResults with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetFaceLivenessSessionResults for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) GetFaceLivenessSessionResultsWithContext(ctx aws.Context, input *GetFaceLivenessSessionResultsInput, opts ...request.Option) (*GetFaceLivenessSessionResultsOutput, error) {
+	req, out := c.GetFaceLivenessSessionResultsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetFaceSearch = "GetFaceSearch"
 
 // GetFaceSearchRequest generates a "aws/request.Request" representing the
@@ -4142,6 +4383,7 @@ func (c *Rekognition) GetLabelDetectionRequest(input *GetLabelDetectionInput) (r
 // which returns a job identifier (JobId). When the label detection operation
 // finishes, Amazon Rekognition publishes a completion status to the Amazon
 // Simple Notification Service topic registered in the initial call to StartlabelDetection.
+//
 // To get the results of the label detection operation, first check that the
 // status value published to the Amazon SNS topic is SUCCEEDED. If so, call
 // GetLabelDetection and pass the job identifier (JobId) from the initial call
@@ -4149,15 +4391,53 @@ func (c *Rekognition) GetLabelDetectionRequest(input *GetLabelDetectionInput) (r
 //
 // GetLabelDetection returns an array of detected labels (Labels) sorted by
 // the time the labels were detected. You can also sort by the label name by
-// specifying NAME for the SortBy input parameter.
+// specifying NAME for the SortBy input parameter. If there is no NAME specified,
+// the default sort is by timestamp.
 //
-// The labels returned include the label name, the percentage confidence in
-// the accuracy of the detected label, and the time the label was detected in
-// the video.
+// You can select how results are aggregated by using the AggregateBy input
+// parameter. The default aggregation method is TIMESTAMPS. You can also aggregate
+// by SEGMENTS, which aggregates all instances of labels detected in a given
+// segment.
 //
-// The returned labels also include bounding box information for common objects,
-// a hierarchical taxonomy of detected labels, and the version of the label
-// model used for detection.
+// The returned Labels array may include the following attributes:
+//
+//    * Name - The name of the detected label.
+//
+//    * Confidence - The level of confidence in the label assigned to a detected
+//    object.
+//
+//    * Parents - The ancestor labels for a detected label. GetLabelDetection
+//    returns a hierarchical taxonomy of detected labels. For example, a detected
+//    car might be assigned the label car. The label car has two parent labels:
+//    Vehicle (its parent) and Transportation (its grandparent). The response
+//    includes the all ancestors for a label, where every ancestor is a unique
+//    label. In the previous example, Car, Vehicle, and Transportation are returned
+//    as unique labels in the response.
+//
+//    * Aliases - Possible Aliases for the label.
+//
+//    * Categories - The label categories that the detected label belongs to.
+//
+//    * BoundingBox — Bounding boxes are described for all instances of detected
+//    common object labels, returned in an array of Instance objects. An Instance
+//    object contains a BoundingBox object, describing the location of the label
+//    on the input image. It also includes the confidence for the accuracy of
+//    the detected bounding box.
+//
+//    * Timestamp - Time, in milliseconds from the start of the video, that
+//    the label was detected. For aggregation by SEGMENTS, the StartTimestampMillis,
+//    EndTimestampMillis, and DurationMillis structures are what define a segment.
+//    Although the “Timestamp” structure is still returned with each label,
+//    its value is set to be the same as StartTimestampMillis.
+//
+// Timestamp and Bounding box information are returned for detected Instances,
+// only if aggregation is done by TIMESTAMPS. If aggregating by SEGMENTS, information
+// about detected instances isn’t returned.
+//
+// The version of the label model used for the detection is also returned.
+//
+// Note DominantColors isn't returned for Instances, although it is shown as
+// part of the response in the sample seen below.
 //
 // Use MaxResults parameter to limit the number of labels returned. If there
 // are more results than specified in MaxResults, the value of NextToken in
@@ -4947,10 +5227,12 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 //
 //    * An image ID, ImageId, assigned by the service for the input image.
 //
-// If you request all facial attributes (by using the detectionAttributes parameter),
-// Amazon Rekognition returns detailed facial attributes, such as facial landmarks
-// (for example, location of eye and mouth) and other facial attributes. If
-// you provide the same image, specify the same collection, and use the same
+// If you request ALL or specific facial attributes (e.g., FACE_OCCLUDED) by
+// using the detectionAttributes parameter, Amazon Rekognition returns detailed
+// facial attributes, such as facial landmarks (for example, location of eye
+// and mouth), facial occlusion, and other facial attributes.
+//
+// If you provide the same image, specify the same collection, and use the same
 // external ID in the IndexFaces operation, Amazon Rekognition doesn't save
 // duplicate face metadata.
 //
@@ -5750,6 +6032,9 @@ func (c *Rekognition) ListProjectPoliciesRequest(input *ListProjectPoliciesInput
 // To attach a project policy to a project, call PutProjectPolicy. To remove
 // a project policy from a project, call DeleteProjectPolicy.
 //
+// This operation requires permissions to perform the rekognition:ListProjectPolicies
+// action.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -6166,6 +6451,9 @@ func (c *Rekognition) PutProjectPolicyRequest(input *PutProjectPolicyInput) (req
 // a list of project policies attached to a project, call ListProjectPolicies.
 //
 // You copy a model version by calling CopyProjectVersion.
+//
+// This operation requires permissions to perform the rekognition:PutProjectPolicy
+// action.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7194,6 +7482,18 @@ func (c *Rekognition) StartLabelDetectionRequest(input *StartLabelDetectionInput
 // GetLabelDetection and pass the job identifier (JobId) from the initial call
 // to StartLabelDetection.
 //
+// Optional Parameters
+//
+// StartLabelDetection has the GENERAL_LABELS Feature applied by default. This
+// feature allows you to provide filtering criteria to the Settings parameter.
+// You can filter with sets of individual labels or with label categories. You
+// can specify inclusive filters, exclusive filters, or a combination of inclusive
+// and exclusive filters. For more information on filtering, see Detecting labels
+// in a video (https://docs.aws.amazon.com/rekognition/latest/dg/labels-detecting-labels-video.html).
+//
+// You can specify MinConfidence to control the confidence threshold for the
+// labels returned. The default is 50.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -7900,6 +8200,9 @@ func (c *Rekognition) StopProjectVersionRequest(input *StopProjectVersionInput) 
 // Stops a running model. The operation might take a while to complete. To check
 // the current status, call DescribeProjectVersions.
 //
+// This operation requires permissions to perform the rekognition:StopProjectVersion
+// action.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -8461,6 +8764,9 @@ func (c *Rekognition) UpdateStreamProcessorRequest(input *UpdateStreamProcessorI
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
+//   * ResourceInUseException
+//   The specified resource is already being used.
+//
 func (c *Rekognition) UpdateStreamProcessor(input *UpdateStreamProcessorInput) (*UpdateStreamProcessorOutput, error) {
 	req, out := c.UpdateStreamProcessorRequest(input)
 	return out, req.Send()
@@ -8699,6 +9005,90 @@ func (s *AudioMetadata) SetNumberOfChannels(v int64) *AudioMetadata {
 // SetSampleRate sets the SampleRate field's value.
 func (s *AudioMetadata) SetSampleRate(v int64) *AudioMetadata {
 	s.SampleRate = &v
+	return s
+}
+
+// An image that is picked from the Face Liveness video and returned for audit
+// trail purposes, returned as Base64-encoded bytes.
+type AuditImage struct {
+	_ struct{} `type:"structure"`
+
+	// Identifies the bounding box around the label, face, text, object of interest,
+	// or personal protective equipment. The left (x-coordinate) and top (y-coordinate)
+	// are coordinates representing the top and left sides of the bounding box.
+	// Note that the upper-left corner of the image is the origin (0,0).
+	//
+	// The top and left values returned are ratios of the overall image size. For
+	// example, if the input image is 700x200 pixels, and the top-left coordinate
+	// of the bounding box is 350x50 pixels, the API returns a left value of 0.5
+	// (350/700) and a top value of 0.25 (50/200).
+	//
+	// The width and height values represent the dimensions of the bounding box
+	// as a ratio of the overall image dimension. For example, if the input image
+	// is 700x200 pixels, and the bounding box width is 70 pixels, the width returned
+	// is 0.1.
+	//
+	// The bounding box coordinates can have negative values. For example, if Amazon
+	// Rekognition is able to detect a face that is at the image edge and is only
+	// partially visible, the service can return coordinates that are outside the
+	// image bounds and, depending on the image edge, you might get negative values
+	// or values greater than 1 for the left or top values.
+	BoundingBox *BoundingBox `type:"structure"`
+
+	// The Base64-encoded bytes representing an image selected from the Face Liveness
+	// video and returned for audit purposes.
+	//
+	// Bytes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AuditImage's
+	// String and GoString methods.
+	//
+	// Bytes is automatically base64 encoded/decoded by the SDK.
+	Bytes []byte `min:"1" type:"blob" sensitive:"true"`
+
+	// Provides the S3 bucket name and object name.
+	//
+	// The region for the S3 bucket containing the S3 object must match the region
+	// you use for Amazon Rekognition operations.
+	//
+	// For Amazon Rekognition to process an S3 object, the user must have permission
+	// to access the S3 object. For more information, see How Amazon Rekognition
+	// works with IAM in the Amazon Rekognition Developer Guide.
+	S3Object *S3Object `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditImage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditImage) GoString() string {
+	return s.String()
+}
+
+// SetBoundingBox sets the BoundingBox field's value.
+func (s *AuditImage) SetBoundingBox(v *BoundingBox) *AuditImage {
+	s.BoundingBox = v
+	return s
+}
+
+// SetBytes sets the Bytes field's value.
+func (s *AuditImage) SetBytes(v []byte) *AuditImage {
+	s.Bytes = v
+	return s
+}
+
+// SetS3Object sets the S3Object field's value.
+func (s *AuditImage) SetS3Object(v *S3Object) *AuditImage {
+	s.S3Object = v
 	return s
 }
 
@@ -9063,7 +9453,8 @@ type CelebrityRecognition struct {
 	Celebrity *CelebrityDetail `type:"structure"`
 
 	// The time, in milliseconds from the start of the video, that the celebrity
-	// was recognized.
+	// was recognized. Note that Timestamp is not guaranteed to be accurate to the
+	// individual frame where the celebrity first appears.
 	Timestamp *int64 `type:"long"`
 }
 
@@ -9615,11 +10006,24 @@ func (s *ConnectedHomeSettingsForUpdate) SetMinConfidence(v float64) *ConnectedH
 type ContentModerationDetection struct {
 	_ struct{} `type:"structure"`
 
+	// The time duration of a segment in milliseconds, I.e. time elapsed from StartTimestampMillis
+	// to EndTimestampMillis.
+	DurationMillis *int64 `type:"long"`
+
+	// The time in milliseconds defining the end of the timeline segment containing
+	// a continuously detected moderation label.
+	EndTimestampMillis *int64 `type:"long"`
+
 	// The content moderation label detected by in the stored video.
 	ModerationLabel *ModerationLabel `type:"structure"`
 
+	// The time in milliseconds defining the start of the timeline segment containing
+	// a continuously detected moderation label.
+	StartTimestampMillis *int64 `type:"long"`
+
 	// Time, in milliseconds from the beginning of the video, that the content moderation
-	// label was detected.
+	// label was detected. Note that Timestamp is not guaranteed to be accurate
+	// to the individual frame where the moderated content first appears.
 	Timestamp *int64 `type:"long"`
 }
 
@@ -9641,9 +10045,27 @@ func (s ContentModerationDetection) GoString() string {
 	return s.String()
 }
 
+// SetDurationMillis sets the DurationMillis field's value.
+func (s *ContentModerationDetection) SetDurationMillis(v int64) *ContentModerationDetection {
+	s.DurationMillis = &v
+	return s
+}
+
+// SetEndTimestampMillis sets the EndTimestampMillis field's value.
+func (s *ContentModerationDetection) SetEndTimestampMillis(v int64) *ContentModerationDetection {
+	s.EndTimestampMillis = &v
+	return s
+}
+
 // SetModerationLabel sets the ModerationLabel field's value.
 func (s *ContentModerationDetection) SetModerationLabel(v *ModerationLabel) *ContentModerationDetection {
 	s.ModerationLabel = v
+	return s
+}
+
+// SetStartTimestampMillis sets the StartTimestampMillis field's value.
+func (s *ContentModerationDetection) SetStartTimestampMillis(v int64) *ContentModerationDetection {
+	s.StartTimestampMillis = &v
 	return s
 }
 
@@ -10106,6 +10528,179 @@ func (s CreateDatasetOutput) GoString() string {
 // SetDatasetArn sets the DatasetArn field's value.
 func (s *CreateDatasetOutput) SetDatasetArn(v string) *CreateDatasetOutput {
 	s.DatasetArn = &v
+	return s
+}
+
+type CreateFaceLivenessSessionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotent token is used to recognize the Face Liveness request. If the same
+	// token is used with multiple CreateFaceLivenessSession requests, the same
+	// session is returned. This token is employed to avoid unintentionally creating
+	// the same session multiple times.
+	ClientRequestToken *string `min:"1" type:"string"`
+
+	// The identifier for your AWS Key Management Service key (AWS KMS key). Used
+	// to encrypt audit images and reference images.
+	KmsKeyId *string `min:"1" type:"string"`
+
+	// A session settings object. It contains settings for the operation to be performed.
+	// For Face Liveness, it accepts OutputConfig and AuditImagesLimit.
+	Settings *CreateFaceLivenessSessionRequestSettings `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFaceLivenessSessionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFaceLivenessSessionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateFaceLivenessSessionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateFaceLivenessSessionInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.KmsKeyId != nil && len(*s.KmsKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyId", 1))
+	}
+	if s.Settings != nil {
+		if err := s.Settings.Validate(); err != nil {
+			invalidParams.AddNested("Settings", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateFaceLivenessSessionInput) SetClientRequestToken(v string) *CreateFaceLivenessSessionInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *CreateFaceLivenessSessionInput) SetKmsKeyId(v string) *CreateFaceLivenessSessionInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetSettings sets the Settings field's value.
+func (s *CreateFaceLivenessSessionInput) SetSettings(v *CreateFaceLivenessSessionRequestSettings) *CreateFaceLivenessSessionInput {
+	s.Settings = v
+	return s
+}
+
+type CreateFaceLivenessSessionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique 128-bit UUID identifying a Face Liveness session.
+	//
+	// SessionId is a required field
+	SessionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFaceLivenessSessionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFaceLivenessSessionOutput) GoString() string {
+	return s.String()
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *CreateFaceLivenessSessionOutput) SetSessionId(v string) *CreateFaceLivenessSessionOutput {
+	s.SessionId = &v
+	return s
+}
+
+// A session settings object. It contains settings for the operation to be performed.
+// It accepts arguments for OutputConfig and AuditImagesLimit.
+type CreateFaceLivenessSessionRequestSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Number of audit images to be returned back. Takes an integer between 0-4.
+	// Any integer less than 0 will return 0, any integer above 4 will return 4
+	// images in the response. By default, it is set to 0. The limit is best effort
+	// and is based on the actual duration of the selfie-video.
+	AuditImagesLimit *int64 `type:"integer"`
+
+	// Can specify the location of an Amazon S3 bucket, where reference and audit
+	// images will be stored. Note that the Amazon S3 bucket must be located in
+	// the caller's AWS account and in the same region as the Face Liveness end-point.
+	// Additionally, the Amazon S3 object keys are auto-generated by the Face Liveness
+	// system. Requires that the caller has the s3:PutObject permission on the Amazon
+	// S3 bucket.
+	OutputConfig *LivenessOutputConfig `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFaceLivenessSessionRequestSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFaceLivenessSessionRequestSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateFaceLivenessSessionRequestSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateFaceLivenessSessionRequestSettings"}
+	if s.OutputConfig != nil {
+		if err := s.OutputConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuditImagesLimit sets the AuditImagesLimit field's value.
+func (s *CreateFaceLivenessSessionRequestSettings) SetAuditImagesLimit(v int64) *CreateFaceLivenessSessionRequestSettings {
+	s.AuditImagesLimit = &v
+	return s
+}
+
+// SetOutputConfig sets the OutputConfig field's value.
+func (s *CreateFaceLivenessSessionRequestSettings) SetOutputConfig(v *LivenessOutputConfig) *CreateFaceLivenessSessionRequestSettings {
+	s.OutputConfig = v
 	return s
 }
 
@@ -12507,15 +13102,15 @@ func (s *DetectCustomLabelsOutput) SetCustomLabels(v []*CustomLabel) *DetectCust
 type DetectFacesInput struct {
 	_ struct{} `type:"structure"`
 
-	// An array of facial attributes you want to be returned. This can be the default
-	// list of attributes or all attributes. If you don't specify a value for Attributes
-	// or if you specify ["DEFAULT"], the API returns the following subset of facial
-	// attributes: BoundingBox, Confidence, Pose, Quality, and Landmarks. If you
-	// provide ["ALL"], all facial attributes are returned, but the operation takes
-	// longer to complete.
+	// An array of facial attributes you want to be returned. A DEFAULT subset of
+	// facial attributes - BoundingBox, Confidence, Pose, Quality, and Landmarks
+	// - will always be returned. You can request for specific facial attributes
+	// (in addition to the default list) - by using ["DEFAULT", "FACE_OCCLUDED"]
+	// or just ["FACE_OCCLUDED"]. You can request for all facial attributes by using
+	// ["ALL"]. Requesting more attributes may increase response time.
 	//
-	// If you provide both, ["ALL", "DEFAULT"], the service uses a logical AND operator
-	// to determine which attributes to return (in this case, all attributes).
+	// If you provide both, ["ALL", "DEFAULT"], the service uses a logical "AND"
+	// operator to determine which attributes to return (in this case, all attributes).
 	Attributes []*string `type:"list" enum:"Attribute"`
 
 	// The input image as base64-encoded bytes or an S3 object. If you use the AWS
@@ -12630,8 +13225,252 @@ func (s *DetectFacesOutput) SetOrientationCorrection(v string) *DetectFacesOutpu
 	return s
 }
 
+// The background of the image with regard to image quality and dominant colors.
+type DetectLabelsImageBackground struct {
+	_ struct{} `type:"structure"`
+
+	// The dominant colors found in the background of an image, defined with RGB
+	// values, CSS color name, simplified color name, and PixelPercentage (the percentage
+	// of image pixels that have a particular color).
+	DominantColors []*DominantColor `type:"list"`
+
+	// The quality of the image background as defined by brightness and sharpness.
+	Quality *DetectLabelsImageQuality `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageBackground) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageBackground) GoString() string {
+	return s.String()
+}
+
+// SetDominantColors sets the DominantColors field's value.
+func (s *DetectLabelsImageBackground) SetDominantColors(v []*DominantColor) *DetectLabelsImageBackground {
+	s.DominantColors = v
+	return s
+}
+
+// SetQuality sets the Quality field's value.
+func (s *DetectLabelsImageBackground) SetQuality(v *DetectLabelsImageQuality) *DetectLabelsImageBackground {
+	s.Quality = v
+	return s
+}
+
+// The foreground of the image with regard to image quality and dominant colors.
+type DetectLabelsImageForeground struct {
+	_ struct{} `type:"structure"`
+
+	// The dominant colors found in the foreground of an image, defined with RGB
+	// values, CSS color name, simplified color name, and PixelPercentage (the percentage
+	// of image pixels that have a particular color).
+	DominantColors []*DominantColor `type:"list"`
+
+	// The quality of the image foreground as defined by brightness and sharpness.
+	Quality *DetectLabelsImageQuality `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageForeground) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageForeground) GoString() string {
+	return s.String()
+}
+
+// SetDominantColors sets the DominantColors field's value.
+func (s *DetectLabelsImageForeground) SetDominantColors(v []*DominantColor) *DetectLabelsImageForeground {
+	s.DominantColors = v
+	return s
+}
+
+// SetQuality sets the Quality field's value.
+func (s *DetectLabelsImageForeground) SetQuality(v *DetectLabelsImageQuality) *DetectLabelsImageForeground {
+	s.Quality = v
+	return s
+}
+
+// Information about the quality and dominant colors of an input image. Quality
+// and color information is returned for the entire image, foreground, and background.
+type DetectLabelsImageProperties struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the properties of an image’s background, including the
+	// background’s quality and dominant colors, including the quality and dominant
+	// colors of the image.
+	Background *DetectLabelsImageBackground `type:"structure"`
+
+	// Information about the dominant colors found in an image, described with RGB
+	// values, CSS color name, simplified color name, and PixelPercentage (the percentage
+	// of image pixels that have a particular color).
+	DominantColors []*DominantColor `type:"list"`
+
+	// Information about the properties of an image’s foreground, including the
+	// foreground’s quality and dominant colors, including the quality and dominant
+	// colors of the image.
+	Foreground *DetectLabelsImageForeground `type:"structure"`
+
+	// Information about the quality of the image foreground as defined by brightness,
+	// sharpness, and contrast. The higher the value the greater the brightness,
+	// sharpness, and contrast respectively.
+	Quality *DetectLabelsImageQuality `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageProperties) GoString() string {
+	return s.String()
+}
+
+// SetBackground sets the Background field's value.
+func (s *DetectLabelsImageProperties) SetBackground(v *DetectLabelsImageBackground) *DetectLabelsImageProperties {
+	s.Background = v
+	return s
+}
+
+// SetDominantColors sets the DominantColors field's value.
+func (s *DetectLabelsImageProperties) SetDominantColors(v []*DominantColor) *DetectLabelsImageProperties {
+	s.DominantColors = v
+	return s
+}
+
+// SetForeground sets the Foreground field's value.
+func (s *DetectLabelsImageProperties) SetForeground(v *DetectLabelsImageForeground) *DetectLabelsImageProperties {
+	s.Foreground = v
+	return s
+}
+
+// SetQuality sets the Quality field's value.
+func (s *DetectLabelsImageProperties) SetQuality(v *DetectLabelsImageQuality) *DetectLabelsImageProperties {
+	s.Quality = v
+	return s
+}
+
+// Settings for the IMAGE_PROPERTIES feature type.
+type DetectLabelsImagePropertiesSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of dominant colors to return when detecting labels in
+	// an image. The default value is 10.
+	MaxDominantColors *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImagePropertiesSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImagePropertiesSettings) GoString() string {
+	return s.String()
+}
+
+// SetMaxDominantColors sets the MaxDominantColors field's value.
+func (s *DetectLabelsImagePropertiesSettings) SetMaxDominantColors(v int64) *DetectLabelsImagePropertiesSettings {
+	s.MaxDominantColors = &v
+	return s
+}
+
+// The quality of an image provided for label detection, with regard to brightness,
+// sharpness, and contrast.
+type DetectLabelsImageQuality struct {
+	_ struct{} `type:"structure"`
+
+	// The brightness of an image provided for label detection.
+	Brightness *float64 `type:"float"`
+
+	// The contrast of an image provided for label detection.
+	Contrast *float64 `type:"float"`
+
+	// The sharpness of an image provided for label detection.
+	Sharpness *float64 `type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageQuality) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsImageQuality) GoString() string {
+	return s.String()
+}
+
+// SetBrightness sets the Brightness field's value.
+func (s *DetectLabelsImageQuality) SetBrightness(v float64) *DetectLabelsImageQuality {
+	s.Brightness = &v
+	return s
+}
+
+// SetContrast sets the Contrast field's value.
+func (s *DetectLabelsImageQuality) SetContrast(v float64) *DetectLabelsImageQuality {
+	s.Contrast = &v
+	return s
+}
+
+// SetSharpness sets the Sharpness field's value.
+func (s *DetectLabelsImageQuality) SetSharpness(v float64) *DetectLabelsImageQuality {
+	s.Sharpness = &v
+	return s
+}
+
 type DetectLabelsInput struct {
 	_ struct{} `type:"structure"`
+
+	// A list of the types of analysis to perform. Specifying GENERAL_LABELS uses
+	// the label detection feature, while specifying IMAGE_PROPERTIES returns information
+	// regarding image color and quality. If no option is specified GENERAL_LABELS
+	// is used by default.
+	Features []*string `type:"list" enum:"DetectLabelsFeatureName"`
 
 	// The input image as base64-encoded bytes or an S3 object. If you use the AWS
 	// CLI to call Amazon Rekognition operations, passing image bytes is not supported.
@@ -12654,6 +13493,13 @@ type DetectLabelsInput struct {
 	// If MinConfidence is not specified, the operation returns labels with a confidence
 	// values greater than or equal to 55 percent.
 	MinConfidence *float64 `type:"float"`
+
+	// A list of the filters to be applied to returned detected labels and image
+	// properties. Specified filters can be inclusive, exclusive, or a combination
+	// of both. Filters can be used for individual labels or label categories. The
+	// exact label names or label categories must be supplied. For a full list of
+	// labels and label categories, see Detecting labels (https://docs.aws.amazon.com/rekognition/latest/dg/labels.html).
+	Settings *DetectLabelsSettings `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12692,6 +13538,12 @@ func (s *DetectLabelsInput) Validate() error {
 	return nil
 }
 
+// SetFeatures sets the Features field's value.
+func (s *DetectLabelsInput) SetFeatures(v []*string) *DetectLabelsInput {
+	s.Features = v
+	return s
+}
+
 // SetImage sets the Image field's value.
 func (s *DetectLabelsInput) SetImage(v *Image) *DetectLabelsInput {
 	s.Image = v
@@ -12710,8 +13562,18 @@ func (s *DetectLabelsInput) SetMinConfidence(v float64) *DetectLabelsInput {
 	return s
 }
 
+// SetSettings sets the Settings field's value.
+func (s *DetectLabelsInput) SetSettings(v *DetectLabelsSettings) *DetectLabelsInput {
+	s.Settings = v
+	return s
+}
+
 type DetectLabelsOutput struct {
 	_ struct{} `type:"structure"`
+
+	// Information about the properties of the input image, such as brightness,
+	// sharpness, contrast, and dominant colors.
+	ImageProperties *DetectLabelsImageProperties `type:"structure"`
 
 	// Version number of the label detection model that was used to detect labels.
 	LabelModelVersion *string `type:"string"`
@@ -12753,6 +13615,12 @@ func (s DetectLabelsOutput) GoString() string {
 	return s.String()
 }
 
+// SetImageProperties sets the ImageProperties field's value.
+func (s *DetectLabelsOutput) SetImageProperties(v *DetectLabelsImageProperties) *DetectLabelsOutput {
+	s.ImageProperties = v
+	return s
+}
+
 // SetLabelModelVersion sets the LabelModelVersion field's value.
 func (s *DetectLabelsOutput) SetLabelModelVersion(v string) *DetectLabelsOutput {
 	s.LabelModelVersion = &v
@@ -12768,6 +13636,50 @@ func (s *DetectLabelsOutput) SetLabels(v []*Label) *DetectLabelsOutput {
 // SetOrientationCorrection sets the OrientationCorrection field's value.
 func (s *DetectLabelsOutput) SetOrientationCorrection(v string) *DetectLabelsOutput {
 	s.OrientationCorrection = &v
+	return s
+}
+
+// Settings for the DetectLabels request. Settings can include filters for both
+// GENERAL_LABELS and IMAGE_PROPERTIES. GENERAL_LABELS filters can be inclusive
+// or exclusive and applied to individual labels or label categories. IMAGE_PROPERTIES
+// filters allow specification of a maximum number of dominant colors.
+type DetectLabelsSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the specified filters for GENERAL_LABELS.
+	GeneralLabels *GeneralLabelsSettings `type:"structure"`
+
+	// Contains the chosen number of maximum dominant colors in an image.
+	ImageProperties *DetectLabelsImagePropertiesSettings `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectLabelsSettings) GoString() string {
+	return s.String()
+}
+
+// SetGeneralLabels sets the GeneralLabels field's value.
+func (s *DetectLabelsSettings) SetGeneralLabels(v *GeneralLabelsSettings) *DetectLabelsSettings {
+	s.GeneralLabels = v
+	return s
+}
+
+// SetImageProperties sets the ImageProperties field's value.
+func (s *DetectLabelsSettings) SetImageProperties(v *DetectLabelsImagePropertiesSettings) *DetectLabelsSettings {
+	s.ImageProperties = v
 	return s
 }
 
@@ -13368,6 +14280,92 @@ func (s DistributeDatasetEntriesOutput) GoString() string {
 	return s.String()
 }
 
+// A description of the dominant colors in an image.
+type DominantColor struct {
+	_ struct{} `type:"structure"`
+
+	// The Blue RGB value for a dominant color.
+	Blue *int64 `type:"integer"`
+
+	// The CSS color name of a dominant color.
+	CSSColor *string `type:"string"`
+
+	// The Green RGB value for a dominant color.
+	Green *int64 `type:"integer"`
+
+	// The Hex code equivalent of the RGB values for a dominant color.
+	HexCode *string `type:"string"`
+
+	// The percentage of image pixels that have a given dominant color.
+	PixelPercent *float64 `type:"float"`
+
+	// The Red RGB value for a dominant color.
+	Red *int64 `type:"integer"`
+
+	// One of 12 simplified color names applied to a dominant color.
+	SimplifiedColor *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DominantColor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DominantColor) GoString() string {
+	return s.String()
+}
+
+// SetBlue sets the Blue field's value.
+func (s *DominantColor) SetBlue(v int64) *DominantColor {
+	s.Blue = &v
+	return s
+}
+
+// SetCSSColor sets the CSSColor field's value.
+func (s *DominantColor) SetCSSColor(v string) *DominantColor {
+	s.CSSColor = &v
+	return s
+}
+
+// SetGreen sets the Green field's value.
+func (s *DominantColor) SetGreen(v int64) *DominantColor {
+	s.Green = &v
+	return s
+}
+
+// SetHexCode sets the HexCode field's value.
+func (s *DominantColor) SetHexCode(v string) *DominantColor {
+	s.HexCode = &v
+	return s
+}
+
+// SetPixelPercent sets the PixelPercent field's value.
+func (s *DominantColor) SetPixelPercent(v float64) *DominantColor {
+	s.PixelPercent = &v
+	return s
+}
+
+// SetRed sets the Red field's value.
+func (s *DominantColor) SetRed(v int64) *DominantColor {
+	s.Red = &v
+	return s
+}
+
+// SetSimplifiedColor sets the SimplifiedColor field's value.
+func (s *DominantColor) SetSimplifiedColor(v string) *DominantColor {
+	s.SimplifiedColor = &v
+	return s
+}
+
 // The emotions that appear to be expressed on the face, and the confidence
 // level in the determination. The API is only making a determination of the
 // physical appearance of a person's face. It is not a determination of the
@@ -13693,7 +14691,7 @@ func (s *Face) SetIndexFacesModelVersion(v string) *Face {
 // attributes to return, use the FaceAttributes input parameter for StartFaceDetection.
 // The following Amazon Rekognition Video operations return only the default
 // attributes. The corresponding Start operations don't have a FaceAttributes
-// input parameter.
+// input parameter:
 //
 //    * GetCelebrityRecognition
 //
@@ -13737,6 +14735,14 @@ type FaceDetail struct {
 	// Indicates whether or not the eyes on the face are open, and the confidence
 	// level in the determination.
 	EyesOpen *EyeOpen `type:"structure"`
+
+	// FaceOccluded should return "true" with a high confidence score if a detected
+	// face’s eyes, nose, and mouth are partially captured or if they are covered
+	// by masks, dark sunglasses, cell phones, hands, or other objects. FaceOccluded
+	// should return "false" with a high confidence score if common occurrences
+	// that do not impact face verification are detected, such as eye glasses, lightly
+	// tinted sunglasses, strands of hair, and others.
+	FaceOccluded *FaceOccluded `type:"structure"`
 
 	// The predicted gender of a detected face.
 	Gender *Gender `type:"structure"`
@@ -13828,6 +14834,12 @@ func (s *FaceDetail) SetEyesOpen(v *EyeOpen) *FaceDetail {
 	return s
 }
 
+// SetFaceOccluded sets the FaceOccluded field's value.
+func (s *FaceDetail) SetFaceOccluded(v *FaceOccluded) *FaceDetail {
+	s.FaceOccluded = v
+	return s
+}
+
 // SetGender sets the Gender field's value.
 func (s *FaceDetail) SetGender(v *Gender) *FaceDetail {
 	s.Gender = v
@@ -13885,6 +14897,8 @@ type FaceDetection struct {
 	Face *FaceDetail `type:"structure"`
 
 	// Time, in milliseconds from the start of the video, that the face was detected.
+	// Note that Timestamp is not guaranteed to be accurate to the individual frame
+	// where the face first appears.
 	Timestamp *int64 `type:"long"`
 }
 
@@ -13958,6 +14972,59 @@ func (s *FaceMatch) SetFace(v *Face) *FaceMatch {
 // SetSimilarity sets the Similarity field's value.
 func (s *FaceMatch) SetSimilarity(v float64) *FaceMatch {
 	s.Similarity = &v
+	return s
+}
+
+// FaceOccluded should return "true" with a high confidence score if a detected
+// face’s eyes, nose, and mouth are partially captured or if they are covered
+// by masks, dark sunglasses, cell phones, hands, or other objects. FaceOccluded
+// should return "false" with a high confidence score if common occurrences
+// that do not impact face verification are detected, such as eye glasses, lightly
+// tinted sunglasses, strands of hair, and others.
+//
+// You can use FaceOccluded to determine if an obstruction on a face negatively
+// impacts using the image for face matching.
+type FaceOccluded struct {
+	_ struct{} `type:"structure"`
+
+	// The confidence that the service has detected the presence of a face occlusion.
+	Confidence *float64 `type:"float"`
+
+	// True if a detected face’s eyes, nose, and mouth are partially captured
+	// or if they are covered by masks, dark sunglasses, cell phones, hands, or
+	// other objects. False if common occurrences that do not impact face verification
+	// are detected, such as eye glasses, lightly tinted sunglasses, strands of
+	// hair, and others.
+	Value *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FaceOccluded) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FaceOccluded) GoString() string {
+	return s.String()
+}
+
+// SetConfidence sets the Confidence field's value.
+func (s *FaceOccluded) SetConfidence(v float64) *FaceOccluded {
+	s.Confidence = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *FaceOccluded) SetValue(v bool) *FaceOccluded {
+	s.Value = &v
 	return s
 }
 
@@ -14117,6 +15184,68 @@ func (s *Gender) SetConfidence(v float64) *Gender {
 // SetValue sets the Value field's value.
 func (s *Gender) SetValue(v string) *Gender {
 	s.Value = &v
+	return s
+}
+
+// Contains filters for the object labels returned by DetectLabels. Filters
+// can be inclusive, exclusive, or a combination of both and can be applied
+// to individual labels or entire label categories. To see a list of label categories,
+// see Detecting Labels (https://docs.aws.amazon.com/rekognition/latest/dg/labels.html).
+type GeneralLabelsSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The label categories that should be excluded from the return from DetectLabels.
+	LabelCategoryExclusionFilters []*string `type:"list"`
+
+	// The label categories that should be included in the return from DetectLabels.
+	LabelCategoryInclusionFilters []*string `type:"list"`
+
+	// The labels that should be excluded from the return from DetectLabels.
+	LabelExclusionFilters []*string `type:"list"`
+
+	// The labels that should be included in the return from DetectLabels.
+	LabelInclusionFilters []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneralLabelsSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeneralLabelsSettings) GoString() string {
+	return s.String()
+}
+
+// SetLabelCategoryExclusionFilters sets the LabelCategoryExclusionFilters field's value.
+func (s *GeneralLabelsSettings) SetLabelCategoryExclusionFilters(v []*string) *GeneralLabelsSettings {
+	s.LabelCategoryExclusionFilters = v
+	return s
+}
+
+// SetLabelCategoryInclusionFilters sets the LabelCategoryInclusionFilters field's value.
+func (s *GeneralLabelsSettings) SetLabelCategoryInclusionFilters(v []*string) *GeneralLabelsSettings {
+	s.LabelCategoryInclusionFilters = v
+	return s
+}
+
+// SetLabelExclusionFilters sets the LabelExclusionFilters field's value.
+func (s *GeneralLabelsSettings) SetLabelExclusionFilters(v []*string) *GeneralLabelsSettings {
+	s.LabelExclusionFilters = v
+	return s
+}
+
+// SetLabelInclusionFilters sets the LabelInclusionFilters field's value.
+func (s *GeneralLabelsSettings) SetLabelInclusionFilters(v []*string) *GeneralLabelsSettings {
+	s.LabelInclusionFilters = v
 	return s
 }
 
@@ -14352,8 +15481,17 @@ type GetCelebrityRecognitionOutput struct {
 	// Array of celebrities recognized in the video.
 	Celebrities []*CelebrityRecognition `type:"list"`
 
+	// Job identifier for the celebrity recognition operation for which you want
+	// to obtain results. The job identifer is returned by an initial call to StartCelebrityRecognition.
+	JobId *string `min:"1" type:"string"`
+
 	// The current status of the celebrity recognition job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartCelebrityRecognition and returned
+	// in the job completion notification sent to your Amazon Simple Notification
+	// Service topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// If the response is truncated, Amazon Rekognition Video returns this token
 	// that you can use in the subsequent request to retrieve the next set of celebrities.
@@ -14361,6 +15499,11 @@ type GetCelebrityRecognitionOutput struct {
 
 	// If the job fails, StatusMessage provides a descriptive error message.
 	StatusMessage *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Information about a video that Amazon Rekognition Video analyzed. Videometadata
 	// is returned in every page of paginated responses from a Amazon Rekognition
@@ -14392,9 +15535,21 @@ func (s *GetCelebrityRecognitionOutput) SetCelebrities(v []*CelebrityRecognition
 	return s
 }
 
+// SetJobId sets the JobId field's value.
+func (s *GetCelebrityRecognitionOutput) SetJobId(v string) *GetCelebrityRecognitionOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetCelebrityRecognitionOutput) SetJobStatus(v string) *GetCelebrityRecognitionOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetCelebrityRecognitionOutput) SetJobTag(v string) *GetCelebrityRecognitionOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -14410,6 +15565,12 @@ func (s *GetCelebrityRecognitionOutput) SetStatusMessage(v string) *GetCelebrity
 	return s
 }
 
+// SetVideo sets the Video field's value.
+func (s *GetCelebrityRecognitionOutput) SetVideo(v *Video) *GetCelebrityRecognitionOutput {
+	s.Video = v
+	return s
+}
+
 // SetVideoMetadata sets the VideoMetadata field's value.
 func (s *GetCelebrityRecognitionOutput) SetVideoMetadata(v *VideoMetadata) *GetCelebrityRecognitionOutput {
 	s.VideoMetadata = v
@@ -14418,6 +15579,11 @@ func (s *GetCelebrityRecognitionOutput) SetVideoMetadata(v *VideoMetadata) *GetC
 
 type GetContentModerationInput struct {
 	_ struct{} `type:"structure"`
+
+	// Defines how to aggregate results of the StartContentModeration request. Default
+	// aggregation option is TIMESTAMPS. SEGMENTS mode aggregates moderation labels
+	// over time.
+	AggregateBy *string `type:"string" enum:"ContentModerationAggregateBy"`
 
 	// The identifier for the inappropriate, unwanted, or offensive content moderation
 	// job. Use JobId to identify the job in a subsequent call to GetContentModeration.
@@ -14479,6 +15645,12 @@ func (s *GetContentModerationInput) Validate() error {
 	return nil
 }
 
+// SetAggregateBy sets the AggregateBy field's value.
+func (s *GetContentModerationInput) SetAggregateBy(v string) *GetContentModerationInput {
+	s.AggregateBy = &v
+	return s
+}
+
 // SetJobId sets the JobId field's value.
 func (s *GetContentModerationInput) SetJobId(v string) *GetContentModerationInput {
 	s.JobId = &v
@@ -14506,8 +15678,21 @@ func (s *GetContentModerationInput) SetSortBy(v string) *GetContentModerationInp
 type GetContentModerationOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Information about the paramters used when getting a response. Includes information
+	// on aggregation and sorting methods.
+	GetRequestMetadata *GetContentModerationRequestMetadata `type:"structure"`
+
+	// Job identifier for the content moderation operation for which you want to
+	// obtain results. The job identifer is returned by an initial call to StartContentModeration.
+	JobId *string `min:"1" type:"string"`
+
 	// The current status of the content moderation analysis job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartContentModeration and returned
+	// in the job completion notification sent to your Amazon Simple Notification
+	// Service topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// The detected inappropriate, unwanted, or offensive content moderation labels
 	// and the time(s) they were detected.
@@ -14524,6 +15709,11 @@ type GetContentModerationOutput struct {
 
 	// If the job fails, StatusMessage provides a descriptive error message.
 	StatusMessage *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Information about a video that Amazon Rekognition analyzed. Videometadata
 	// is returned in every page of paginated responses from GetContentModeration.
@@ -14548,9 +15738,27 @@ func (s GetContentModerationOutput) GoString() string {
 	return s.String()
 }
 
+// SetGetRequestMetadata sets the GetRequestMetadata field's value.
+func (s *GetContentModerationOutput) SetGetRequestMetadata(v *GetContentModerationRequestMetadata) *GetContentModerationOutput {
+	s.GetRequestMetadata = v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetContentModerationOutput) SetJobId(v string) *GetContentModerationOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetContentModerationOutput) SetJobStatus(v string) *GetContentModerationOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetContentModerationOutput) SetJobTag(v string) *GetContentModerationOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -14578,9 +15786,57 @@ func (s *GetContentModerationOutput) SetStatusMessage(v string) *GetContentModer
 	return s
 }
 
+// SetVideo sets the Video field's value.
+func (s *GetContentModerationOutput) SetVideo(v *Video) *GetContentModerationOutput {
+	s.Video = v
+	return s
+}
+
 // SetVideoMetadata sets the VideoMetadata field's value.
 func (s *GetContentModerationOutput) SetVideoMetadata(v *VideoMetadata) *GetContentModerationOutput {
 	s.VideoMetadata = v
+	return s
+}
+
+// Contains metadata about a content moderation request, including the SortBy
+// and AggregateBy options.
+type GetContentModerationRequestMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The aggregation method chosen for a GetContentModeration request.
+	AggregateBy *string `type:"string" enum:"ContentModerationAggregateBy"`
+
+	// The sorting method chosen for a GetContentModeration request.
+	SortBy *string `type:"string" enum:"ContentModerationSortBy"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContentModerationRequestMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetContentModerationRequestMetadata) GoString() string {
+	return s.String()
+}
+
+// SetAggregateBy sets the AggregateBy field's value.
+func (s *GetContentModerationRequestMetadata) SetAggregateBy(v string) *GetContentModerationRequestMetadata {
+	s.AggregateBy = &v
+	return s
+}
+
+// SetSortBy sets the SortBy field's value.
+func (s *GetContentModerationRequestMetadata) SetSortBy(v string) *GetContentModerationRequestMetadata {
+	s.SortBy = &v
 	return s
 }
 
@@ -14667,8 +15923,17 @@ type GetFaceDetectionOutput struct {
 	// the face was detected.
 	Faces []*FaceDetection `type:"list"`
 
+	// Job identifier for the face detection operation for which you want to obtain
+	// results. The job identifer is returned by an initial call to StartFaceDetection.
+	JobId *string `min:"1" type:"string"`
+
 	// The current status of the face detection job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartFaceDetection and returned
+	// in the job completion notification sent to your Amazon Simple Notification
+	// Service topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// If the response is truncated, Amazon Rekognition returns this token that
 	// you can use in the subsequent request to retrieve the next set of faces.
@@ -14676,6 +15941,11 @@ type GetFaceDetectionOutput struct {
 
 	// If the job fails, StatusMessage provides a descriptive error message.
 	StatusMessage *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Information about a video that Amazon Rekognition Video analyzed. Videometadata
 	// is returned in every page of paginated responses from a Amazon Rekognition
@@ -14707,9 +15977,21 @@ func (s *GetFaceDetectionOutput) SetFaces(v []*FaceDetection) *GetFaceDetectionO
 	return s
 }
 
+// SetJobId sets the JobId field's value.
+func (s *GetFaceDetectionOutput) SetJobId(v string) *GetFaceDetectionOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetFaceDetectionOutput) SetJobStatus(v string) *GetFaceDetectionOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetFaceDetectionOutput) SetJobTag(v string) *GetFaceDetectionOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -14725,9 +16007,148 @@ func (s *GetFaceDetectionOutput) SetStatusMessage(v string) *GetFaceDetectionOut
 	return s
 }
 
+// SetVideo sets the Video field's value.
+func (s *GetFaceDetectionOutput) SetVideo(v *Video) *GetFaceDetectionOutput {
+	s.Video = v
+	return s
+}
+
 // SetVideoMetadata sets the VideoMetadata field's value.
 func (s *GetFaceDetectionOutput) SetVideoMetadata(v *VideoMetadata) *GetFaceDetectionOutput {
 	s.VideoMetadata = v
+	return s
+}
+
+type GetFaceLivenessSessionResultsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique 128-bit UUID. This is used to uniquely identify the session and
+	// also acts as an idempotency token for all operations associated with the
+	// session.
+	//
+	// SessionId is a required field
+	SessionId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetFaceLivenessSessionResultsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetFaceLivenessSessionResultsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetFaceLivenessSessionResultsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetFaceLivenessSessionResultsInput"}
+	if s.SessionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SessionId"))
+	}
+	if s.SessionId != nil && len(*s.SessionId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("SessionId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *GetFaceLivenessSessionResultsInput) SetSessionId(v string) *GetFaceLivenessSessionResultsInput {
+	s.SessionId = &v
+	return s
+}
+
+type GetFaceLivenessSessionResultsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A set of images from the Face Liveness video that can be used for audit purposes.
+	// It includes a bounding box of the face and the Base64-encoded bytes that
+	// return an image. If the CreateFaceLivenessSession request included an OutputConfig
+	// argument, the image will be uploaded to an S3Object specified in the output
+	// configuration.
+	AuditImages []*AuditImage `type:"list"`
+
+	// Probabalistic confidence score for if the person in the given video was live,
+	// represented as a float value between 0 to 100.
+	Confidence *float64 `type:"float"`
+
+	// A high-quality image from the Face Liveness video that can be used for face
+	// comparison or search. It includes a bounding box of the face and the Base64-encoded
+	// bytes that return an image. If the CreateFaceLivenessSession request included
+	// an OutputConfig argument, the image will be uploaded to an S3Object specified
+	// in the output configuration. In case the reference image is not returned,
+	// it's recommended to retry the Liveness check.
+	ReferenceImage *AuditImage `type:"structure"`
+
+	// The sessionId for which this request was called.
+	//
+	// SessionId is a required field
+	SessionId *string `min:"36" type:"string" required:"true"`
+
+	// Represents a status corresponding to the state of the session. Possible statuses
+	// are: CREATED, IN_PROGRESS, SUCCEEDED, FAILED, EXPIRED.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"LivenessSessionStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetFaceLivenessSessionResultsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetFaceLivenessSessionResultsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAuditImages sets the AuditImages field's value.
+func (s *GetFaceLivenessSessionResultsOutput) SetAuditImages(v []*AuditImage) *GetFaceLivenessSessionResultsOutput {
+	s.AuditImages = v
+	return s
+}
+
+// SetConfidence sets the Confidence field's value.
+func (s *GetFaceLivenessSessionResultsOutput) SetConfidence(v float64) *GetFaceLivenessSessionResultsOutput {
+	s.Confidence = &v
+	return s
+}
+
+// SetReferenceImage sets the ReferenceImage field's value.
+func (s *GetFaceLivenessSessionResultsOutput) SetReferenceImage(v *AuditImage) *GetFaceLivenessSessionResultsOutput {
+	s.ReferenceImage = v
+	return s
+}
+
+// SetSessionId sets the SessionId field's value.
+func (s *GetFaceLivenessSessionResultsOutput) SetSessionId(v string) *GetFaceLivenessSessionResultsOutput {
+	s.SessionId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetFaceLivenessSessionResultsOutput) SetStatus(v string) *GetFaceLivenessSessionResultsOutput {
+	s.Status = &v
 	return s
 }
 
@@ -14820,8 +16241,17 @@ func (s *GetFaceSearchInput) SetSortBy(v string) *GetFaceSearchInput {
 type GetFaceSearchOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Job identifier for the face search operation for which you want to obtain
+	// results. The job identifer is returned by an initial call to StartFaceSearch.
+	JobId *string `min:"1" type:"string"`
+
 	// The current status of the face search job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartFaceSearch and returned in
+	// the job completion notification sent to your Amazon Simple Notification Service
+	// topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// If the response is truncated, Amazon Rekognition Video returns this token
 	// that you can use in the subsequent request to retrieve the next set of search
@@ -14838,6 +16268,11 @@ type GetFaceSearchOutput struct {
 
 	// If the job fails, StatusMessage provides a descriptive error message.
 	StatusMessage *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Information about a video that Amazon Rekognition analyzed. Videometadata
 	// is returned in every page of paginated responses from a Amazon Rekognition
@@ -14863,9 +16298,21 @@ func (s GetFaceSearchOutput) GoString() string {
 	return s.String()
 }
 
+// SetJobId sets the JobId field's value.
+func (s *GetFaceSearchOutput) SetJobId(v string) *GetFaceSearchOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetFaceSearchOutput) SetJobStatus(v string) *GetFaceSearchOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetFaceSearchOutput) SetJobTag(v string) *GetFaceSearchOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -14887,6 +16334,12 @@ func (s *GetFaceSearchOutput) SetStatusMessage(v string) *GetFaceSearchOutput {
 	return s
 }
 
+// SetVideo sets the Video field's value.
+func (s *GetFaceSearchOutput) SetVideo(v *Video) *GetFaceSearchOutput {
+	s.Video = v
+	return s
+}
+
 // SetVideoMetadata sets the VideoMetadata field's value.
 func (s *GetFaceSearchOutput) SetVideoMetadata(v *VideoMetadata) *GetFaceSearchOutput {
 	s.VideoMetadata = v
@@ -14895,6 +16348,10 @@ func (s *GetFaceSearchOutput) SetVideoMetadata(v *VideoMetadata) *GetFaceSearchO
 
 type GetLabelDetectionInput struct {
 	_ struct{} `type:"structure"`
+
+	// Defines how to aggregate the returned results. Results can be aggregated
+	// by timestamps or segments.
+	AggregateBy *string `type:"string" enum:"LabelDetectionAggregateBy"`
 
 	// Job identifier for the label detection operation for which you want results
 	// returned. You get the job identifer from an initial call to StartlabelDetection.
@@ -14956,6 +16413,12 @@ func (s *GetLabelDetectionInput) Validate() error {
 	return nil
 }
 
+// SetAggregateBy sets the AggregateBy field's value.
+func (s *GetLabelDetectionInput) SetAggregateBy(v string) *GetLabelDetectionInput {
+	s.AggregateBy = &v
+	return s
+}
+
 // SetJobId sets the JobId field's value.
 func (s *GetLabelDetectionInput) SetJobId(v string) *GetLabelDetectionInput {
 	s.JobId = &v
@@ -14983,8 +16446,21 @@ func (s *GetLabelDetectionInput) SetSortBy(v string) *GetLabelDetectionInput {
 type GetLabelDetectionOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Information about the paramters used when getting a response. Includes information
+	// on aggregation and sorting methods.
+	GetRequestMetadata *GetLabelDetectionRequestMetadata `type:"structure"`
+
+	// Job identifier for the label detection operation for which you want to obtain
+	// results. The job identifer is returned by an initial call to StartLabelDetection.
+	JobId *string `min:"1" type:"string"`
+
 	// The current status of the label detection job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartLabelDetection and returned
+	// in the job completion notification sent to your Amazon Simple Notification
+	// Service topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// Version number of the label detection model that was used to detect labels.
 	LabelModelVersion *string `type:"string"`
@@ -15000,6 +16476,11 @@ type GetLabelDetectionOutput struct {
 
 	// If the job fails, StatusMessage provides a descriptive error message.
 	StatusMessage *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Information about a video that Amazon Rekognition Video analyzed. Videometadata
 	// is returned in every page of paginated responses from a Amazon Rekognition
@@ -15025,9 +16506,27 @@ func (s GetLabelDetectionOutput) GoString() string {
 	return s.String()
 }
 
+// SetGetRequestMetadata sets the GetRequestMetadata field's value.
+func (s *GetLabelDetectionOutput) SetGetRequestMetadata(v *GetLabelDetectionRequestMetadata) *GetLabelDetectionOutput {
+	s.GetRequestMetadata = v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetLabelDetectionOutput) SetJobId(v string) *GetLabelDetectionOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetLabelDetectionOutput) SetJobStatus(v string) *GetLabelDetectionOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetLabelDetectionOutput) SetJobTag(v string) *GetLabelDetectionOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -15055,9 +16554,57 @@ func (s *GetLabelDetectionOutput) SetStatusMessage(v string) *GetLabelDetectionO
 	return s
 }
 
+// SetVideo sets the Video field's value.
+func (s *GetLabelDetectionOutput) SetVideo(v *Video) *GetLabelDetectionOutput {
+	s.Video = v
+	return s
+}
+
 // SetVideoMetadata sets the VideoMetadata field's value.
 func (s *GetLabelDetectionOutput) SetVideoMetadata(v *VideoMetadata) *GetLabelDetectionOutput {
 	s.VideoMetadata = v
+	return s
+}
+
+// Contains metadata about a label detection request, including the SortBy and
+// AggregateBy options.
+type GetLabelDetectionRequestMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The aggregation method chosen for a GetLabelDetection request.
+	AggregateBy *string `type:"string" enum:"LabelDetectionAggregateBy"`
+
+	// The sorting method chosen for a GetLabelDetection request.
+	SortBy *string `type:"string" enum:"LabelDetectionSortBy"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLabelDetectionRequestMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetLabelDetectionRequestMetadata) GoString() string {
+	return s.String()
+}
+
+// SetAggregateBy sets the AggregateBy field's value.
+func (s *GetLabelDetectionRequestMetadata) SetAggregateBy(v string) *GetLabelDetectionRequestMetadata {
+	s.AggregateBy = &v
+	return s
+}
+
+// SetSortBy sets the SortBy field's value.
+func (s *GetLabelDetectionRequestMetadata) SetSortBy(v string) *GetLabelDetectionRequestMetadata {
+	s.SortBy = &v
 	return s
 }
 
@@ -15151,8 +16698,17 @@ func (s *GetPersonTrackingInput) SetSortBy(v string) *GetPersonTrackingInput {
 type GetPersonTrackingOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Job identifier for the person tracking operation for which you want to obtain
+	// results. The job identifer is returned by an initial call to StartPersonTracking.
+	JobId *string `min:"1" type:"string"`
+
 	// The current status of the person tracking job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartCelebrityRecognition and returned
+	// in the job completion notification sent to your Amazon Simple Notification
+	// Service topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// If the response is truncated, Amazon Rekognition Video returns this token
 	// that you can use in the subsequent request to retrieve the next set of persons.
@@ -15165,6 +16721,11 @@ type GetPersonTrackingOutput struct {
 
 	// If the job fails, StatusMessage provides a descriptive error message.
 	StatusMessage *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Information about a video that Amazon Rekognition Video analyzed. Videometadata
 	// is returned in every page of paginated responses from a Amazon Rekognition
@@ -15190,9 +16751,21 @@ func (s GetPersonTrackingOutput) GoString() string {
 	return s.String()
 }
 
+// SetJobId sets the JobId field's value.
+func (s *GetPersonTrackingOutput) SetJobId(v string) *GetPersonTrackingOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetPersonTrackingOutput) SetJobStatus(v string) *GetPersonTrackingOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetPersonTrackingOutput) SetJobTag(v string) *GetPersonTrackingOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -15211,6 +16784,12 @@ func (s *GetPersonTrackingOutput) SetPersons(v []*PersonDetection) *GetPersonTra
 // SetStatusMessage sets the StatusMessage field's value.
 func (s *GetPersonTrackingOutput) SetStatusMessage(v string) *GetPersonTrackingOutput {
 	s.StatusMessage = &v
+	return s
+}
+
+// SetVideo sets the Video field's value.
+func (s *GetPersonTrackingOutput) SetVideo(v *Video) *GetPersonTrackingOutput {
+	s.Video = v
 	return s
 }
 
@@ -15303,8 +16882,17 @@ type GetSegmentDetectionOutput struct {
 	// returned in each page of information returned by GetSegmentDetection.
 	AudioMetadata []*AudioMetadata `type:"list"`
 
+	// Job identifier for the segment detection operation for which you want to
+	// obtain results. The job identifer is returned by an initial call to StartSegmentDetection.
+	JobId *string `min:"1" type:"string"`
+
 	// Current status of the segment detection job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartSegmentDetection and returned
+	// in the job completion notification sent to your Amazon Simple Notification
+	// Service topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// If the previous response was incomplete (because there are more labels to
 	// retrieve), Amazon Rekognition Video returns a pagination token in the response.
@@ -15322,6 +16910,11 @@ type GetSegmentDetectionOutput struct {
 
 	// If the job fails, StatusMessage provides a descriptive error message.
 	StatusMessage *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Currently, Amazon Rekognition Video returns a single object in the VideoMetadata
 	// array. The object contains information about the video stream in the input
@@ -15355,9 +16948,21 @@ func (s *GetSegmentDetectionOutput) SetAudioMetadata(v []*AudioMetadata) *GetSeg
 	return s
 }
 
+// SetJobId sets the JobId field's value.
+func (s *GetSegmentDetectionOutput) SetJobId(v string) *GetSegmentDetectionOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetSegmentDetectionOutput) SetJobStatus(v string) *GetSegmentDetectionOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetSegmentDetectionOutput) SetJobTag(v string) *GetSegmentDetectionOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -15382,6 +16987,12 @@ func (s *GetSegmentDetectionOutput) SetSelectedSegmentTypes(v []*SegmentTypeInfo
 // SetStatusMessage sets the StatusMessage field's value.
 func (s *GetSegmentDetectionOutput) SetStatusMessage(v string) *GetSegmentDetectionOutput {
 	s.StatusMessage = &v
+	return s
+}
+
+// SetVideo sets the Video field's value.
+func (s *GetSegmentDetectionOutput) SetVideo(v *Video) *GetSegmentDetectionOutput {
+	s.Video = v
 	return s
 }
 
@@ -15468,8 +17079,17 @@ func (s *GetTextDetectionInput) SetNextToken(v string) *GetTextDetectionInput {
 type GetTextDetectionOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Job identifier for the text detection operation for which you want to obtain
+	// results. The job identifer is returned by an initial call to StartTextDetection.
+	JobId *string `min:"1" type:"string"`
+
 	// Current status of the text detection job.
 	JobStatus *string `type:"string" enum:"VideoJobStatus"`
+
+	// A job identifier specified in the call to StartTextDetection and returned
+	// in the job completion notification sent to your Amazon Simple Notification
+	// Service topic.
+	JobTag *string `min:"1" type:"string"`
 
 	// If the response is truncated, Amazon Rekognition Video returns this token
 	// that you can use in the subsequent request to retrieve the next set of text.
@@ -15485,6 +17105,11 @@ type GetTextDetectionOutput struct {
 
 	// Version number of the text detection model that was used to detect text.
 	TextModelVersion *string `type:"string"`
+
+	// Video file stored in an Amazon S3 bucket. Amazon Rekognition video start
+	// operations such as StartLabelDetection use Video to specify a video for analysis.
+	// The supported file formats are .mp4, .mov and .avi.
+	Video *Video `type:"structure"`
 
 	// Information about a video that Amazon Rekognition analyzed. Videometadata
 	// is returned in every page of paginated responses from a Amazon Rekognition
@@ -15510,9 +17135,21 @@ func (s GetTextDetectionOutput) GoString() string {
 	return s.String()
 }
 
+// SetJobId sets the JobId field's value.
+func (s *GetTextDetectionOutput) SetJobId(v string) *GetTextDetectionOutput {
+	s.JobId = &v
+	return s
+}
+
 // SetJobStatus sets the JobStatus field's value.
 func (s *GetTextDetectionOutput) SetJobStatus(v string) *GetTextDetectionOutput {
 	s.JobStatus = &v
+	return s
+}
+
+// SetJobTag sets the JobTag field's value.
+func (s *GetTextDetectionOutput) SetJobTag(v string) *GetTextDetectionOutput {
+	s.JobTag = &v
 	return s
 }
 
@@ -15537,6 +17174,12 @@ func (s *GetTextDetectionOutput) SetTextDetections(v []*TextDetectionResult) *Ge
 // SetTextModelVersion sets the TextModelVersion field's value.
 func (s *GetTextDetectionOutput) SetTextModelVersion(v string) *GetTextDetectionOutput {
 	s.TextModelVersion = &v
+	return s
+}
+
+// SetVideo sets the Video field's value.
+func (s *GetTextDetectionOutput) SetVideo(v *Video) *GetTextDetectionOutput {
+	s.Video = v
 	return s
 }
 
@@ -15932,7 +17575,8 @@ func (s *IdempotentParameterMismatchException) RequestID() string {
 type Image struct {
 	_ struct{} `type:"structure"`
 
-	// Blob of image bytes up to 5 MBs.
+	// Blob of image bytes up to 5 MBs. Note that the maximum image size you can
+	// pass to DetectCustomLabels is 4MB.
 	// Bytes is automatically base64 encoded/decoded by the SDK.
 	Bytes []byte `min:"1" type:"blob"`
 
@@ -16107,12 +17751,12 @@ type IndexFacesInput struct {
 	// CollectionId is a required field
 	CollectionId *string `min:"1" type:"string" required:"true"`
 
-	// An array of facial attributes that you want to be returned. This can be the
-	// default list of attributes or all attributes. If you don't specify a value
-	// for Attributes or if you specify ["DEFAULT"], the API returns the following
-	// subset of facial attributes: BoundingBox, Confidence, Pose, Quality, and
-	// Landmarks. If you provide ["ALL"], all facial attributes are returned, but
-	// the operation takes longer to complete.
+	// An array of facial attributes you want to be returned. A DEFAULT subset of
+	// facial attributes - BoundingBox, Confidence, Pose, Quality, and Landmarks
+	// - will always be returned. You can request for specific facial attributes
+	// (in addition to the default list) - by using ["DEFAULT", "FACE_OCCLUDED"]
+	// or just ["FACE_OCCLUDED"]. You can request for all facial attributes by using
+	// ["ALL"]. Requesting more attributes may increase response time.
 	//
 	// If you provide both, ["ALL", "DEFAULT"], the service uses a logical AND operator
 	// to determine which attributes to return (in this case, all attributes).
@@ -16344,6 +17988,9 @@ type Instance struct {
 	// The confidence that Amazon Rekognition has in the accuracy of the bounding
 	// box.
 	Confidence *float64 `type:"float"`
+
+	// The dominant colors found in an individual instance of a label.
+	DominantColors []*DominantColor `type:"list"`
 }
 
 // String returns the string representation.
@@ -16373,6 +18020,12 @@ func (s *Instance) SetBoundingBox(v *BoundingBox) *Instance {
 // SetConfidence sets the Confidence field's value.
 func (s *Instance) SetConfidence(v float64) *Instance {
 	s.Confidence = &v
+	return s
+}
+
+// SetDominantColors sets the DominantColors field's value.
+func (s *Instance) SetDominantColors(v []*DominantColor) *Instance {
+	s.DominantColors = v
 	return s
 }
 
@@ -16830,8 +18483,10 @@ func (s *KinesisVideoStream) SetArn(v string) *KinesisVideoStream {
 }
 
 // Specifies the starting point in a Kinesis stream to start processing. You
-// can use the producer timestamp or the fragment number. For more information,
-// see Fragment (https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_reader_Fragment.html).
+// can use the producer timestamp or the fragment number. One of either producer
+// timestamp or fragment number is required. If you use the producer timestamp,
+// you must put the time in milliseconds. For more information about fragment
+// numbers, see Fragment (https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_reader_Fragment.html).
 type KinesisVideoStreamStartSelector struct {
 	_ struct{} `type:"structure"`
 
@@ -16839,7 +18494,8 @@ type KinesisVideoStreamStartSelector struct {
 	// based on the ingestion order.
 	FragmentNumber *string `min:"1" type:"string"`
 
-	// The timestamp from the producer corresponding to the fragment.
+	// The timestamp from the producer corresponding to the fragment, in milliseconds,
+	// expressed in unix time format.
 	ProducerTimestamp *int64 `type:"long"`
 }
 
@@ -16924,6 +18580,12 @@ func (s *KnownGender) SetType(v string) *KnownGender {
 type Label struct {
 	_ struct{} `type:"structure"`
 
+	// A list of potential aliases for a given label.
+	Aliases []*LabelAlias `type:"list"`
+
+	// A list of the categories associated with a given label.
+	Categories []*LabelCategory `type:"list"`
+
 	// Level of confidence.
 	Confidence *float64 `type:"float"`
 
@@ -16957,6 +18619,18 @@ func (s Label) GoString() string {
 	return s.String()
 }
 
+// SetAliases sets the Aliases field's value.
+func (s *Label) SetAliases(v []*LabelAlias) *Label {
+	s.Aliases = v
+	return s
+}
+
+// SetCategories sets the Categories field's value.
+func (s *Label) SetCategories(v []*LabelCategory) *Label {
+	s.Categories = v
+	return s
+}
+
 // SetConfidence sets the Confidence field's value.
 func (s *Label) SetConfidence(v float64) *Label {
 	s.Confidence = &v
@@ -16981,15 +18655,93 @@ func (s *Label) SetParents(v []*Parent) *Label {
 	return s
 }
 
+// A potential alias of for a given label.
+type LabelAlias struct {
+	_ struct{} `type:"structure"`
+
+	// The name of an alias for a given label.
+	Name *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LabelAlias) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LabelAlias) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *LabelAlias) SetName(v string) *LabelAlias {
+	s.Name = &v
+	return s
+}
+
+// The category that applies to a given label.
+type LabelCategory struct {
+	_ struct{} `type:"structure"`
+
+	// The name of a category that applies to a given label.
+	Name *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LabelCategory) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LabelCategory) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *LabelCategory) SetName(v string) *LabelCategory {
+	s.Name = &v
+	return s
+}
+
 // Information about a label detected in a video analysis request and the time
 // the label was detected in the video.
 type LabelDetection struct {
 	_ struct{} `type:"structure"`
 
+	// The time duration of a segment in milliseconds, I.e. time elapsed from StartTimestampMillis
+	// to EndTimestampMillis.
+	DurationMillis *int64 `type:"long"`
+
+	// The time in milliseconds defining the end of the timeline segment containing
+	// a continuously detected label.
+	EndTimestampMillis *int64 `type:"long"`
+
 	// Details about the detected label.
 	Label *Label `type:"structure"`
 
+	// The time in milliseconds defining the start of the timeline segment containing
+	// a continuously detected label.
+	StartTimestampMillis *int64 `type:"long"`
+
 	// Time, in milliseconds from the start of the video, that the label was detected.
+	// Note that Timestamp is not guaranteed to be accurate to the individual frame
+	// where the label first appears.
 	Timestamp *int64 `type:"long"`
 }
 
@@ -17011,15 +18763,69 @@ func (s LabelDetection) GoString() string {
 	return s.String()
 }
 
+// SetDurationMillis sets the DurationMillis field's value.
+func (s *LabelDetection) SetDurationMillis(v int64) *LabelDetection {
+	s.DurationMillis = &v
+	return s
+}
+
+// SetEndTimestampMillis sets the EndTimestampMillis field's value.
+func (s *LabelDetection) SetEndTimestampMillis(v int64) *LabelDetection {
+	s.EndTimestampMillis = &v
+	return s
+}
+
 // SetLabel sets the Label field's value.
 func (s *LabelDetection) SetLabel(v *Label) *LabelDetection {
 	s.Label = v
 	return s
 }
 
+// SetStartTimestampMillis sets the StartTimestampMillis field's value.
+func (s *LabelDetection) SetStartTimestampMillis(v int64) *LabelDetection {
+	s.StartTimestampMillis = &v
+	return s
+}
+
 // SetTimestamp sets the Timestamp field's value.
 func (s *LabelDetection) SetTimestamp(v int64) *LabelDetection {
 	s.Timestamp = &v
+	return s
+}
+
+// Contains the specified filters that should be applied to a list of returned
+// GENERAL_LABELS.
+type LabelDetectionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Contains filters for the object labels returned by DetectLabels. Filters
+	// can be inclusive, exclusive, or a combination of both and can be applied
+	// to individual labels or entire label categories. To see a list of label categories,
+	// see Detecting Labels (https://docs.aws.amazon.com/rekognition/latest/dg/labels.html).
+	GeneralLabels *GeneralLabelsSettings `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LabelDetectionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LabelDetectionSettings) GoString() string {
+	return s.String()
+}
+
+// SetGeneralLabels sets the GeneralLabels field's value.
+func (s *LabelDetectionSettings) SetGeneralLabels(v *GeneralLabelsSettings) *LabelDetectionSettings {
+	s.GeneralLabels = v
 	return s
 }
 
@@ -17944,6 +19750,69 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
+// Contains settings that specify the location of an Amazon S3 bucket used to
+// store the output of a Face Liveness session. Note that the S3 bucket must
+// be located in the caller's AWS account and in the same region as the Face
+// Liveness end-point. Additionally, the Amazon S3 object keys are auto-generated
+// by the Face Liveness system.
+type LivenessOutputConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The path to an AWS Amazon S3 bucket used to store Face Liveness session results.
+	//
+	// S3Bucket is a required field
+	S3Bucket *string `min:"3" type:"string" required:"true"`
+
+	// The prefix prepended to the output files for the Face Liveness session results.
+	S3KeyPrefix *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LivenessOutputConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LivenessOutputConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LivenessOutputConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LivenessOutputConfig"}
+	if s.S3Bucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Bucket"))
+	}
+	if s.S3Bucket != nil && len(*s.S3Bucket) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Bucket", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *LivenessOutputConfig) SetS3Bucket(v string) *LivenessOutputConfig {
+	s.S3Bucket = &v
+	return s
+}
+
+// SetS3KeyPrefix sets the S3KeyPrefix field's value.
+func (s *LivenessOutputConfig) SetS3KeyPrefix(v string) *LivenessOutputConfig {
+	s.S3KeyPrefix = &v
+	return s
+}
+
 // The format of the project policy document that you supplied to PutProjectPolicy
 // is incorrect.
 type MalformedPolicyDocumentException struct {
@@ -18372,7 +20241,8 @@ type PersonDetection struct {
 	Person *PersonDetail `type:"structure"`
 
 	// The time, in milliseconds from the start of the video, that the person's
-	// path was tracked.
+	// path was tracked. Note that Timestamp is not guaranteed to be accurate to
+	// the individual frame where the person's path first appears.
 	Timestamp *int64 `type:"long"`
 }
 
@@ -20456,6 +22326,70 @@ func (s *ServiceQuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Occurs when a given sessionId is not found.
+type SessionNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SessionNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SessionNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorSessionNotFoundException(v protocol.ResponseMetadata) error {
+	return &SessionNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *SessionNotFoundException) Code() string {
+	return "SessionNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *SessionNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *SessionNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *SessionNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *SessionNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *SessionNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Information about a shot detection segment detected in a video. For more
 // information, see SegmentDetection.
 type ShotSegment struct {
@@ -21130,6 +23064,10 @@ type StartLabelDetectionInput struct {
 	// more than once.
 	ClientRequestToken *string `min:"1" type:"string"`
 
+	// The features to return after video analysis. You can specify that GENERAL_LABELS
+	// are returned.
+	Features []*string `type:"list" enum:"LabelDetectionFeatureName"`
+
 	// An identifier you specify that's returned in the completion notification
 	// that's published to your Amazon Simple Notification Service topic. For example,
 	// you can use JobTag to group related jobs and identify them in the completion
@@ -21142,8 +23080,8 @@ type StartLabelDetectionInput struct {
 	// 100 is the highest confidence. Amazon Rekognition Video doesn't return any
 	// labels with a confidence level lower than this specified value.
 	//
-	// If you don't specify MinConfidence, the operation returns labels with confidence
-	// values greater than or equal to 50 percent.
+	// If you don't specify MinConfidence, the operation returns labels and bounding
+	// boxes (if detected) with confidence values greater than or equal to 50 percent.
 	MinConfidence *float64 `type:"float"`
 
 	// The Amazon SNS topic ARN you want Amazon Rekognition Video to publish the
@@ -21151,6 +23089,11 @@ type StartLabelDetectionInput struct {
 	// must have a topic name that begins with AmazonRekognition if you are using
 	// the AmazonRekognitionServiceRole permissions policy.
 	NotificationChannel *NotificationChannel `type:"structure"`
+
+	// The settings for a StartLabelDetection request.Contains the specified parameters
+	// for the label detection request of an asynchronous label analysis operation.
+	// Settings can include filters for GENERAL_LABELS.
+	Settings *LabelDetectionSettings `type:"structure"`
 
 	// The video in which you want to detect labels. The video must be stored in
 	// an Amazon S3 bucket.
@@ -21212,6 +23155,12 @@ func (s *StartLabelDetectionInput) SetClientRequestToken(v string) *StartLabelDe
 	return s
 }
 
+// SetFeatures sets the Features field's value.
+func (s *StartLabelDetectionInput) SetFeatures(v []*string) *StartLabelDetectionInput {
+	s.Features = v
+	return s
+}
+
 // SetJobTag sets the JobTag field's value.
 func (s *StartLabelDetectionInput) SetJobTag(v string) *StartLabelDetectionInput {
 	s.JobTag = &v
@@ -21227,6 +23176,12 @@ func (s *StartLabelDetectionInput) SetMinConfidence(v float64) *StartLabelDetect
 // SetNotificationChannel sets the NotificationChannel field's value.
 func (s *StartLabelDetectionInput) SetNotificationChannel(v *NotificationChannel) *StartLabelDetectionInput {
 	s.NotificationChannel = v
+	return s
+}
+
+// SetSettings sets the Settings field's value.
+func (s *StartLabelDetectionInput) SetSettings(v *LabelDetectionSettings) *StartLabelDetectionInput {
+	s.Settings = v
 	return s
 }
 
@@ -21807,8 +23762,9 @@ type StartStreamProcessorInput struct {
 	Name *string `min:"1" type:"string" required:"true"`
 
 	// Specifies the starting point in the Kinesis stream to start processing. You
-	// can use the producer timestamp or the fragment number. For more information,
-	// see Fragment (https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_reader_Fragment.html).
+	// can use the producer timestamp or the fragment number. If you use the producer
+	// timestamp, you must put the time in milliseconds. For more information about
+	// fragment numbers, see Fragment (https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_reader_Fragment.html).
 	//
 	// This is a required parameter for label detection stream processors and should
 	// not be used to start a face search stream processor.
@@ -22323,11 +24279,13 @@ func (s StopStreamProcessorOutput) GoString() string {
 	return s.String()
 }
 
+// This is a required parameter for label detection stream processors and should
+// not be used to start a face search stream processor.
 type StreamProcessingStartSelector struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the starting point in the stream to start processing. This can
-	// be done with a timestamp or a fragment number in a Kinesis stream.
+	// be done with a producer timestamp or a fragment number in a Kinesis stream.
 	KVSStreamStartSelector *KinesisVideoStreamStartSelector `type:"structure"`
 }
 
@@ -23220,7 +25178,8 @@ type TextDetectionResult struct {
 	TextDetection *TextDetection `type:"structure"`
 
 	// The time, in milliseconds from the start of the video, that the text was
-	// detected.
+	// detected. Note that Timestamp is not guaranteed to be accurate to the individual
+	// frame where the text first appears.
 	Timestamp *int64 `type:"long"`
 }
 
@@ -24032,6 +25991,39 @@ const (
 
 	// AttributeAll is a Attribute enum value
 	AttributeAll = "ALL"
+
+	// AttributeAgeRange is a Attribute enum value
+	AttributeAgeRange = "AGE_RANGE"
+
+	// AttributeBeard is a Attribute enum value
+	AttributeBeard = "BEARD"
+
+	// AttributeEmotions is a Attribute enum value
+	AttributeEmotions = "EMOTIONS"
+
+	// AttributeEyeglasses is a Attribute enum value
+	AttributeEyeglasses = "EYEGLASSES"
+
+	// AttributeEyesOpen is a Attribute enum value
+	AttributeEyesOpen = "EYES_OPEN"
+
+	// AttributeGender is a Attribute enum value
+	AttributeGender = "GENDER"
+
+	// AttributeMouthOpen is a Attribute enum value
+	AttributeMouthOpen = "MOUTH_OPEN"
+
+	// AttributeMustache is a Attribute enum value
+	AttributeMustache = "MUSTACHE"
+
+	// AttributeFaceOccluded is a Attribute enum value
+	AttributeFaceOccluded = "FACE_OCCLUDED"
+
+	// AttributeSmile is a Attribute enum value
+	AttributeSmile = "SMILE"
+
+	// AttributeSunglasses is a Attribute enum value
+	AttributeSunglasses = "SUNGLASSES"
 )
 
 // Attribute_Values returns all elements of the Attribute enum
@@ -24039,6 +26031,17 @@ func Attribute_Values() []string {
 	return []string{
 		AttributeDefault,
 		AttributeAll,
+		AttributeAgeRange,
+		AttributeBeard,
+		AttributeEmotions,
+		AttributeEyeglasses,
+		AttributeEyesOpen,
+		AttributeGender,
+		AttributeMouthOpen,
+		AttributeMustache,
+		AttributeFaceOccluded,
+		AttributeSmile,
+		AttributeSunglasses,
 	}
 }
 
@@ -24095,6 +26098,22 @@ func ContentClassifier_Values() []string {
 	return []string{
 		ContentClassifierFreeOfPersonallyIdentifiableInformation,
 		ContentClassifierFreeOfAdultContent,
+	}
+}
+
+const (
+	// ContentModerationAggregateByTimestamps is a ContentModerationAggregateBy enum value
+	ContentModerationAggregateByTimestamps = "TIMESTAMPS"
+
+	// ContentModerationAggregateBySegments is a ContentModerationAggregateBy enum value
+	ContentModerationAggregateBySegments = "SEGMENTS"
+)
+
+// ContentModerationAggregateBy_Values returns all elements of the ContentModerationAggregateBy enum
+func ContentModerationAggregateBy_Values() []string {
+	return []string{
+		ContentModerationAggregateByTimestamps,
+		ContentModerationAggregateBySegments,
 	}
 }
 
@@ -24183,6 +26202,22 @@ func DatasetType_Values() []string {
 	return []string{
 		DatasetTypeTrain,
 		DatasetTypeTest,
+	}
+}
+
+const (
+	// DetectLabelsFeatureNameGeneralLabels is a DetectLabelsFeatureName enum value
+	DetectLabelsFeatureNameGeneralLabels = "GENERAL_LABELS"
+
+	// DetectLabelsFeatureNameImageProperties is a DetectLabelsFeatureName enum value
+	DetectLabelsFeatureNameImageProperties = "IMAGE_PROPERTIES"
+)
+
+// DetectLabelsFeatureName_Values returns all elements of the DetectLabelsFeatureName enum
+func DetectLabelsFeatureName_Values() []string {
+	return []string{
+		DetectLabelsFeatureNameGeneralLabels,
+		DetectLabelsFeatureNameImageProperties,
 	}
 }
 
@@ -24300,6 +26335,34 @@ func KnownGenderType_Values() []string {
 		KnownGenderTypeFemale,
 		KnownGenderTypeNonbinary,
 		KnownGenderTypeUnlisted,
+	}
+}
+
+const (
+	// LabelDetectionAggregateByTimestamps is a LabelDetectionAggregateBy enum value
+	LabelDetectionAggregateByTimestamps = "TIMESTAMPS"
+
+	// LabelDetectionAggregateBySegments is a LabelDetectionAggregateBy enum value
+	LabelDetectionAggregateBySegments = "SEGMENTS"
+)
+
+// LabelDetectionAggregateBy_Values returns all elements of the LabelDetectionAggregateBy enum
+func LabelDetectionAggregateBy_Values() []string {
+	return []string{
+		LabelDetectionAggregateByTimestamps,
+		LabelDetectionAggregateBySegments,
+	}
+}
+
+const (
+	// LabelDetectionFeatureNameGeneralLabels is a LabelDetectionFeatureName enum value
+	LabelDetectionFeatureNameGeneralLabels = "GENERAL_LABELS"
+)
+
+// LabelDetectionFeatureName_Values returns all elements of the LabelDetectionFeatureName enum
+func LabelDetectionFeatureName_Values() []string {
+	return []string{
+		LabelDetectionFeatureNameGeneralLabels,
 	}
 }
 
@@ -24444,6 +26507,34 @@ func LandmarkType_Values() []string {
 		LandmarkTypeChinBottom,
 		LandmarkTypeMidJawlineRight,
 		LandmarkTypeUpperJawlineRight,
+	}
+}
+
+const (
+	// LivenessSessionStatusCreated is a LivenessSessionStatus enum value
+	LivenessSessionStatusCreated = "CREATED"
+
+	// LivenessSessionStatusInProgress is a LivenessSessionStatus enum value
+	LivenessSessionStatusInProgress = "IN_PROGRESS"
+
+	// LivenessSessionStatusSucceeded is a LivenessSessionStatus enum value
+	LivenessSessionStatusSucceeded = "SUCCEEDED"
+
+	// LivenessSessionStatusFailed is a LivenessSessionStatus enum value
+	LivenessSessionStatusFailed = "FAILED"
+
+	// LivenessSessionStatusExpired is a LivenessSessionStatus enum value
+	LivenessSessionStatusExpired = "EXPIRED"
+)
+
+// LivenessSessionStatus_Values returns all elements of the LivenessSessionStatus enum
+func LivenessSessionStatus_Values() []string {
+	return []string{
+		LivenessSessionStatusCreated,
+		LivenessSessionStatusInProgress,
+		LivenessSessionStatusSucceeded,
+		LivenessSessionStatusFailed,
+		LivenessSessionStatusExpired,
 	}
 }
 

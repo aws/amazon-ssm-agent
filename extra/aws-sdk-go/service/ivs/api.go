@@ -488,9 +488,8 @@ func (c *IVS) DeleteChannelRequest(input *DeleteChannelInput) (req *request.Requ
 //
 // If you try to delete a live channel, you will get an error (409 ConflictException).
 // To delete a channel that is live, call StopStream, wait for the Amazon EventBridge
-// "Stream End" event (to verify that the stream's state was changed from Live
-// to Offline), then call DeleteChannel. (See Using EventBridge with Amazon
-// IVS (https://docs.aws.amazon.com/ivs/latest/userguide/eventbridge.html).)
+// "Stream End" event (to verify that the stream's state is no longer Live),
+// then call DeleteChannel. (See Using EventBridge with Amazon IVS (https://docs.aws.amazon.com/ivs/latest/userguide/eventbridge.html).)
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3023,7 +3022,7 @@ func (s *BatchGetChannelOutput) SetErrors(v []*BatchError) *BatchGetChannelOutpu
 type BatchGetStreamKeyInput struct {
 	_ struct{} `type:"structure"`
 
-	// Array of ARNs, one per channel.
+	// Array of ARNs, one per stream key.
 	//
 	// Arns is a required field
 	Arns []*string `locationName:"arns" min:"1" type:"list" required:"true"`
@@ -3122,6 +3121,9 @@ type Channel struct {
 	// when you set up streaming software.
 	IngestEndpoint *string `locationName:"ingestEndpoint" type:"string"`
 
+	// Whether the channel allows insecure RTMP ingest. Default: false.
+	InsecureIngest *bool `locationName:"insecureIngest" type:"boolean"`
+
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
 	// Full HD. Use LOW for near-real-time interaction with viewers. Default: LOW.
 	// (Note: In the Amazon IVS console, LOW and NORMAL correspond to Ultra-low
@@ -3138,8 +3140,8 @@ type Channel struct {
 	// that recording is enabled. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -3149,15 +3151,17 @@ type Channel struct {
 	// exceed the allowable resolution or bitrate, the stream probably will disconnect
 	// immediately. Default: STANDARD. Valid values:
 	//
-	//    * STANDARD: Multiple qualities are generated from the original input,
-	//    to automatically give viewers the best experience for their devices and
-	//    network conditions. Resolution can be up to 1080p and bitrate can be up
-	//    to 8.5 Mbps. Audio is transcoded only for renditions 360p and below; above
-	//    that, audio is passed through.
+	//    * STANDARD: Video is transcoded: multiple qualities are generated from
+	//    the original input, to automatically give viewers the best experience
+	//    for their devices and network conditions. Transcoding allows higher playback
+	//    quality across a range of download speeds. Resolution can be up to 1080p
+	//    and bitrate can be up to 8.5 Mbps. Audio is transcoded only for renditions
+	//    360p and below; above that, audio is passed through. This is the default.
 	//
-	//    * BASIC: Amazon IVS delivers the original input to viewers. The viewer’s
-	//    video-quality choice is limited to the original input. Resolution can
-	//    be up to 480p and bitrate can be up to 1.5 Mbps.
+	//    * BASIC: Video is transmuxed: Amazon IVS delivers the original input to
+	//    viewers. The viewer’s video-quality choice is limited to the original
+	//    input. Resolution can be up to 1080p and bitrate can be up to 1.5 Mbps
+	//    for 480p and up to 3.5 Mbps for resolutions between 480p and 1080p.
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -3194,6 +3198,12 @@ func (s *Channel) SetAuthorized(v bool) *Channel {
 // SetIngestEndpoint sets the IngestEndpoint field's value.
 func (s *Channel) SetIngestEndpoint(v string) *Channel {
 	s.IngestEndpoint = &v
+	return s
+}
+
+// SetInsecureIngest sets the InsecureIngest field's value.
+func (s *Channel) SetInsecureIngest(v bool) *Channel {
+	s.InsecureIngest = &v
 	return s
 }
 
@@ -3310,6 +3320,9 @@ type ChannelSummary struct {
 	// false.
 	Authorized *bool `locationName:"authorized" type:"boolean"`
 
+	// Whether the channel allows insecure RTMP ingest. Default: false.
+	InsecureIngest *bool `locationName:"insecureIngest" type:"boolean"`
+
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
 	// Full HD. Use LOW for near-real-time interaction with viewers. Default: LOW.
 	// (Note: In the Amazon IVS console, LOW and NORMAL correspond to Ultra-low
@@ -3323,8 +3336,8 @@ type ChannelSummary struct {
 	// that recording is enabled. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -3358,6 +3371,12 @@ func (s *ChannelSummary) SetArn(v string) *ChannelSummary {
 // SetAuthorized sets the Authorized field's value.
 func (s *ChannelSummary) SetAuthorized(v bool) *ChannelSummary {
 	s.Authorized = &v
+	return s
+}
+
+// SetInsecureIngest sets the InsecureIngest field's value.
+func (s *ChannelSummary) SetInsecureIngest(v bool) *ChannelSummary {
+	s.InsecureIngest = &v
 	return s
 }
 
@@ -3458,6 +3477,9 @@ type CreateChannelInput struct {
 	// false.
 	Authorized *bool `locationName:"authorized" type:"boolean"`
 
+	// Whether the channel allows insecure RTMP ingest. Default: false.
+	InsecureIngest *bool `locationName:"insecureIngest" type:"boolean"`
+
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
 	// Full HD. Use LOW for near-real-time interaction with viewers. (Note: In the
 	// Amazon IVS console, LOW and NORMAL correspond to Ultra-low and Standard,
@@ -3481,15 +3503,17 @@ type CreateChannelInput struct {
 	// exceed the allowable resolution or bitrate, the stream probably will disconnect
 	// immediately. Default: STANDARD. Valid values:
 	//
-	//    * STANDARD: Multiple qualities are generated from the original input,
-	//    to automatically give viewers the best experience for their devices and
-	//    network conditions. Resolution can be up to 1080p and bitrate can be up
-	//    to 8.5 Mbps. Audio is transcoded only for renditions 360p and below; above
-	//    that, audio is passed through.
+	//    * STANDARD: Video is transcoded: multiple qualities are generated from
+	//    the original input, to automatically give viewers the best experience
+	//    for their devices and network conditions. Transcoding allows higher playback
+	//    quality across a range of download speeds. Resolution can be up to 1080p
+	//    and bitrate can be up to 8.5 Mbps. Audio is transcoded only for renditions
+	//    360p and below; above that, audio is passed through. This is the default.
 	//
-	//    * BASIC: Amazon IVS delivers the original input to viewers. The viewer’s
-	//    video-quality choice is limited to the original input. Resolution can
-	//    be up to 480p and bitrate can be up to 1.5 Mbps.
+	//    * BASIC: Video is transmuxed: Amazon IVS delivers the original input to
+	//    viewers. The viewer’s video-quality choice is limited to the original
+	//    input. Resolution can be up to 1080p and bitrate can be up to 1.5 Mbps
+	//    for 480p and up to 3.5 Mbps for resolutions between 480p and 1080p.
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -3514,6 +3538,12 @@ func (s CreateChannelInput) GoString() string {
 // SetAuthorized sets the Authorized field's value.
 func (s *CreateChannelInput) SetAuthorized(v bool) *CreateChannelInput {
 	s.Authorized = &v
+	return s
+}
+
+// SetInsecureIngest sets the InsecureIngest field's value.
+func (s *CreateChannelInput) SetInsecureIngest(v bool) *CreateChannelInput {
+	s.InsecureIngest = &v
 	return s
 }
 
@@ -3599,6 +3629,11 @@ type CreateRecordingConfigurationInput struct {
 	// Recording-configuration name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
+	// If a broadcast disconnects and then reconnects within the specified interval,
+	// the multiple streams will be considered a single broadcast and merged together.
+	// Default: 0.
+	RecordingReconnectWindowSeconds *int64 `locationName:"recordingReconnectWindowSeconds" type:"integer"`
+
 	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
 	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
@@ -3662,6 +3697,12 @@ func (s *CreateRecordingConfigurationInput) SetDestinationConfiguration(v *Desti
 // SetName sets the Name field's value.
 func (s *CreateRecordingConfigurationInput) SetName(v string) *CreateRecordingConfigurationInput {
 	s.Name = &v
+	return s
+}
+
+// SetRecordingReconnectWindowSeconds sets the RecordingReconnectWindowSeconds field's value.
+func (s *CreateRecordingConfigurationInput) SetRecordingReconnectWindowSeconds(v int64) *CreateRecordingConfigurationInput {
+	s.RecordingReconnectWindowSeconds = &v
 	return s
 }
 
@@ -5526,6 +5567,9 @@ func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResource
 type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Tags attached to the resource. Array of maps, each of the form string:string
+	// (key:value).
+	//
 	// Tags is a required field
 	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
 }
@@ -5633,8 +5677,8 @@ type PlaybackKeyPair struct {
 	// Playback-key-pair name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -5693,8 +5737,8 @@ type PlaybackKeyPairSummary struct {
 	// Playback-key-pair name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -5848,14 +5892,19 @@ type RecordingConfiguration struct {
 	// Recording-configuration name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
+	// If a broadcast disconnects and then reconnects within the specified interval,
+	// the multiple streams will be considered a single broadcast and merged together.
+	// Default: 0.
+	RecordingReconnectWindowSeconds *int64 `locationName:"recordingReconnectWindowSeconds" type:"integer"`
+
 	// Indicates the current state of the recording configuration. When the state
 	// is ACTIVE, the configuration is ready for recording a channel stream.
 	//
 	// State is a required field
 	State *string `locationName:"state" type:"string" required:"true" enum:"RecordingConfigurationState"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -5903,6 +5952,12 @@ func (s *RecordingConfiguration) SetName(v string) *RecordingConfiguration {
 	return s
 }
 
+// SetRecordingReconnectWindowSeconds sets the RecordingReconnectWindowSeconds field's value.
+func (s *RecordingConfiguration) SetRecordingReconnectWindowSeconds(v int64) *RecordingConfiguration {
+	s.RecordingReconnectWindowSeconds = &v
+	return s
+}
+
 // SetState sets the State field's value.
 func (s *RecordingConfiguration) SetState(v string) *RecordingConfiguration {
 	s.State = &v
@@ -5945,8 +6000,8 @@ type RecordingConfigurationSummary struct {
 	// State is a required field
 	State *string `locationName:"state" type:"string" required:"true" enum:"RecordingConfigurationState"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -6273,7 +6328,9 @@ type Stream struct {
 	// is returned as a string.
 	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601"`
 
-	// The stream’s state.
+	// The stream’s state. Do not rely on the OFFLINE state, as the API may not
+	// return it; instead, a "NotBroadcasting" error will indicate that the stream
+	// is not live.
 	State *string `locationName:"state" type:"string" enum:"StreamState"`
 
 	// Unique identifier for a live or previously live stream in the specified channel.
@@ -6440,8 +6497,8 @@ type StreamKey struct {
 	// Channel ARN for the stream.
 	ChannelArn *string `locationName:"channelArn" min:"1" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -6507,8 +6564,8 @@ type StreamKeySummary struct {
 	// Channel ARN for the stream.
 	ChannelArn *string `locationName:"channelArn" min:"1" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
-	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -6718,7 +6775,9 @@ type StreamSummary struct {
 	// is returned as a string.
 	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601"`
 
-	// The stream’s state.
+	// The stream’s state. Do not rely on the OFFLINE state, as the API may not
+	// return it; instead, a "NotBroadcasting" error will indicate that the stream
+	// is not live.
 	State *string `locationName:"state" type:"string" enum:"StreamState"`
 
 	// Unique identifier for a live or previously live stream in the specified channel.
@@ -6860,11 +6919,11 @@ type TagResourceInput struct {
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 
-	// Array of tags to be added or updated. See Tagging Amazon Web Services Resources
-	// (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) for more
-	// information, including restrictions that apply to tags and "Tag naming limits
-	// and requirements"; Amazon IVS has no service-specific constraints beyond
-	// what is documented there.
+	// Array of tags to be added or updated. Array of maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	//
 	// Tags is a required field
 	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
@@ -7024,7 +7083,7 @@ type ThumbnailConfiguration struct {
 	// IVS Streaming Configuration (https://docs.aws.amazon.com/ivs/latest/userguide/streaming-config.html)
 	// for information on setting IDR/Keyframe to the recommended value in video-encoder
 	// settings.
-	TargetIntervalSeconds *int64 `locationName:"targetIntervalSeconds" min:"5" type:"long"`
+	TargetIntervalSeconds *int64 `locationName:"targetIntervalSeconds" min:"1" type:"long"`
 }
 
 // String returns the string representation.
@@ -7048,8 +7107,8 @@ func (s ThumbnailConfiguration) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ThumbnailConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ThumbnailConfiguration"}
-	if s.TargetIntervalSeconds != nil && *s.TargetIntervalSeconds < 5 {
-		invalidParams.Add(request.NewErrParamMinValue("TargetIntervalSeconds", 5))
+	if s.TargetIntervalSeconds != nil && *s.TargetIntervalSeconds < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("TargetIntervalSeconds", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7078,7 +7137,8 @@ type UntagResourceInput struct {
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 
-	// Array of tags to be removed. See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// Array of tags to be removed. Array of maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
 	// for more information, including restrictions that apply to tags and "Tag
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
@@ -7169,6 +7229,9 @@ type UpdateChannelInput struct {
 	// Whether the channel is private (enabled for playback authorization).
 	Authorized *bool `locationName:"authorized" type:"boolean"`
 
+	// Whether the channel allows insecure RTMP ingest. Default: false.
+	InsecureIngest *bool `locationName:"insecureIngest" type:"boolean"`
+
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
 	// Full HD. Use LOW for near-real-time interaction with viewers. (Note: In the
 	// Amazon IVS console, LOW and NORMAL correspond to Ultra-low and Standard,
@@ -7187,15 +7250,17 @@ type UpdateChannelInput struct {
 	// exceed the allowable resolution or bitrate, the stream probably will disconnect
 	// immediately. Valid values:
 	//
-	//    * STANDARD: Multiple qualities are generated from the original input,
-	//    to automatically give viewers the best experience for their devices and
-	//    network conditions. Resolution can be up to 1080p and bitrate can be up
-	//    to 8.5 Mbps. Audio is transcoded only for renditions 360p and below; above
-	//    that, audio is passed through.
+	//    * STANDARD: Video is transcoded: multiple qualities are generated from
+	//    the original input, to automatically give viewers the best experience
+	//    for their devices and network conditions. Transcoding allows higher playback
+	//    quality across a range of download speeds. Resolution can be up to 1080p
+	//    and bitrate can be up to 8.5 Mbps. Audio is transcoded only for renditions
+	//    360p and below; above that, audio is passed through. This is the default.
 	//
-	//    * BASIC: Amazon IVS delivers the original input to viewers. The viewer’s
-	//    video-quality choice is limited to the original input. Resolution can
-	//    be up to 480p and bitrate can be up to 1.5 Mbps.
+	//    * BASIC: Video is transmuxed: Amazon IVS delivers the original input to
+	//    viewers. The viewer’s video-quality choice is limited to the original
+	//    input. Resolution can be up to 1080p and bitrate can be up to 1.5 Mbps
+	//    for 480p and up to 3.5 Mbps for resolutions between 480p and 1080p.
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -7242,6 +7307,12 @@ func (s *UpdateChannelInput) SetArn(v string) *UpdateChannelInput {
 // SetAuthorized sets the Authorized field's value.
 func (s *UpdateChannelInput) SetAuthorized(v bool) *UpdateChannelInput {
 	s.Authorized = &v
+	return s
+}
+
+// SetInsecureIngest sets the InsecureIngest field's value.
+func (s *UpdateChannelInput) SetInsecureIngest(v bool) *UpdateChannelInput {
+	s.InsecureIngest = &v
 	return s
 }
 

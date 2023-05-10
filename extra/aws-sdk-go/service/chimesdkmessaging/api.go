@@ -63,8 +63,8 @@ func (c *ChimeSDKMessaging) AssociateChannelFlowRequest(input *AssociateChannelF
 // the DisassociateChannelFlow API.
 //
 // Only administrators or channel moderators can associate a channel flow. The
-// x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -165,7 +165,7 @@ func (c *ChimeSDKMessaging) BatchCreateChannelMembershipRequest(input *BatchCrea
 
 // BatchCreateChannelMembership API operation for Amazon Chime SDK Messaging.
 //
-// Adds a specified number of users to a channel.
+// Adds a specified number of users and bots to a channel.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -376,8 +376,8 @@ func (c *ChimeSDKMessaging) CreateChannelRequest(input *CreateChannelInput) (req
 //
 // Restriction: You can't change a channel's privacy.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -485,8 +485,8 @@ func (c *ChimeSDKMessaging) CreateChannelBanRequest(input *CreateChannelBanInput
 // If you ban a user who is already part of a channel, that user is automatically
 // kicked from the channel.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -705,7 +705,7 @@ func (c *ChimeSDKMessaging) CreateChannelMembershipRequest(input *CreateChannelM
 
 // CreateChannelMembership API operation for Amazon Chime SDK Messaging.
 //
-// Adds a user to a channel. The InvitedBy field in ChannelMembership is derived
+// Adds a member to a channel. The InvitedBy field in ChannelMembership is derived
 // from the request header. A channel member can:
 //
 //    * List messages
@@ -725,8 +725,8 @@ func (c *ChimeSDKMessaging) CreateChannelMembershipRequest(input *CreateChannelM
 //
 //    * Private Channels: You must be a member to list or send messages.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUserArn
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -842,8 +842,9 @@ func (c *ChimeSDKMessaging) CreateChannelModeratorRequest(input *CreateChannelMo
 //
 //    * List messages in the channel.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBotof the user that makes the API call as the value in the
+// header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -948,8 +949,8 @@ func (c *ChimeSDKMessaging) DeleteChannelRequest(input *DeleteChannelInput) (req
 // Immediately makes a channel and its memberships inaccessible and marks them
 // for deletion. This is an irreversible process.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUserArn
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -964,6 +965,10 @@ func (c *ChimeSDKMessaging) DeleteChannelRequest(input *DeleteChannelInput) (req
 //
 //   * ForbiddenException
 //   The client is permanently forbidden from making the request.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
 //
 //   * UnauthorizedClientException
 //   The client is not currently authorized to make the request.
@@ -1044,10 +1049,10 @@ func (c *ChimeSDKMessaging) DeleteChannelBanRequest(input *DeleteChannelBanInput
 
 // DeleteChannelBan API operation for Amazon Chime SDK Messaging.
 //
-// Removes a user from a channel's ban list.
+// Removes a member from a channel's ban list.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1352,8 +1357,8 @@ func (c *ChimeSDKMessaging) DeleteChannelMessageRequest(input *DeleteChannelMess
 // makes messages inaccessible immediately. A background process deletes any
 // revisions created by UpdateChannelMessage.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1450,8 +1455,8 @@ func (c *ChimeSDKMessaging) DeleteChannelModeratorRequest(input *DeleteChannelMo
 //
 // Deletes a channel moderator.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1496,6 +1501,103 @@ func (c *ChimeSDKMessaging) DeleteChannelModerator(input *DeleteChannelModerator
 // for more information on using Contexts.
 func (c *ChimeSDKMessaging) DeleteChannelModeratorWithContext(ctx aws.Context, input *DeleteChannelModeratorInput, opts ...request.Option) (*DeleteChannelModeratorOutput, error) {
 	req, out := c.DeleteChannelModeratorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteMessagingStreamingConfigurations = "DeleteMessagingStreamingConfigurations"
+
+// DeleteMessagingStreamingConfigurationsRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteMessagingStreamingConfigurations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteMessagingStreamingConfigurations for more information on using the DeleteMessagingStreamingConfigurations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteMessagingStreamingConfigurationsRequest method.
+//    req, resp := client.DeleteMessagingStreamingConfigurationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DeleteMessagingStreamingConfigurations
+func (c *ChimeSDKMessaging) DeleteMessagingStreamingConfigurationsRequest(input *DeleteMessagingStreamingConfigurationsInput) (req *request.Request, output *DeleteMessagingStreamingConfigurationsOutput) {
+	op := &request.Operation{
+		Name:       opDeleteMessagingStreamingConfigurations,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/app-instances/{appInstanceArn}/streaming-configurations",
+	}
+
+	if input == nil {
+		input = &DeleteMessagingStreamingConfigurationsInput{}
+	}
+
+	output = &DeleteMessagingStreamingConfigurationsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteMessagingStreamingConfigurations API operation for Amazon Chime SDK Messaging.
+//
+// Deletes the streaming configurations for an AppInstance. For more information,
+// see Streaming messaging data (https://docs.aws.amazon.com/chime-sdk/latest/dg/streaming-export.html)
+// in the Amazon Chime SDK Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation DeleteMessagingStreamingConfigurations for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/DeleteMessagingStreamingConfigurations
+func (c *ChimeSDKMessaging) DeleteMessagingStreamingConfigurations(input *DeleteMessagingStreamingConfigurationsInput) (*DeleteMessagingStreamingConfigurationsOutput, error) {
+	req, out := c.DeleteMessagingStreamingConfigurationsRequest(input)
+	return out, req.Send()
+}
+
+// DeleteMessagingStreamingConfigurationsWithContext is the same as DeleteMessagingStreamingConfigurations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteMessagingStreamingConfigurations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) DeleteMessagingStreamingConfigurationsWithContext(ctx aws.Context, input *DeleteMessagingStreamingConfigurationsInput, opts ...request.Option) (*DeleteMessagingStreamingConfigurationsOutput, error) {
+	req, out := c.DeleteMessagingStreamingConfigurationsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1547,8 +1649,8 @@ func (c *ChimeSDKMessaging) DescribeChannelRequest(input *DescribeChannelInput) 
 //
 // Returns the full details of a channel in an Amazon Chime AppInstance.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1644,8 +1746,8 @@ func (c *ChimeSDKMessaging) DescribeChannelBanRequest(input *DescribeChannelBanI
 //
 // Returns the full details of a channel ban.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1839,8 +1941,8 @@ func (c *ChimeSDKMessaging) DescribeChannelMembershipRequest(input *DescribeChan
 //
 // Returns the full details of a user's channel membership.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1938,10 +2040,10 @@ func (c *ChimeSDKMessaging) DescribeChannelMembershipForAppInstanceUserRequest(i
 // DescribeChannelMembershipForAppInstanceUser API operation for Amazon Chime SDK Messaging.
 //
 // Returns the details of a channel based on the membership of the specified
-// AppInstanceUser.
+// AppInstanceUser or AppInstanceBot.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2035,10 +2137,11 @@ func (c *ChimeSDKMessaging) DescribeChannelModeratedByAppInstanceUserRequest(inp
 
 // DescribeChannelModeratedByAppInstanceUser API operation for Amazon Chime SDK Messaging.
 //
-// Returns the full details of a channel moderated by the specified AppInstanceUser.
+// Returns the full details of a channel moderated by the specified AppInstanceUser
+// or AppInstanceBot.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2237,8 +2340,9 @@ func (c *ChimeSDKMessaging) DisassociateChannelFlowRequest(input *DisassociateCh
 // messages to that channel stop going through the channel flow processor.
 //
 // Only administrators or channel moderators can disassociate a channel flow.
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+//
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2339,12 +2443,15 @@ func (c *ChimeSDKMessaging) GetChannelMembershipPreferencesRequest(input *GetCha
 
 // GetChannelMembershipPreferences API operation for Amazon Chime SDK Messaging.
 //
-// Gets the membership preferences of an AppInstanceUser for the specified channel.
-// The AppInstanceUser must be a member of the channel. Only the AppInstanceUser
-// who owns the membership can retrieve preferences. Users in the AppInstanceAdmin
-// and channel moderator roles can't retrieve preferences for other users. Banned
-// users can't retrieve membership preferences for the channel from which they
-// are banned.
+// Gets the membership preferences of an AppInstanceUser or AppInstanceBot for
+// the specified channel. A user or a bot must be a member of the channel and
+// own the membership to be able to retrieve membership preferences. Users or
+// bots in the AppInstanceAdmin and channel moderator roles can't retrieve preferences
+// for other users or bots. Banned users or bots can't retrieve membership preferences
+// for the channel from which they are banned.
+//
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2440,8 +2547,8 @@ func (c *ChimeSDKMessaging) GetChannelMessageRequest(input *GetChannelMessageInp
 //
 // Gets the full details of a channel message.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2566,8 +2673,9 @@ func (c *ChimeSDKMessaging) GetChannelMessageStatusRequest(input *GetChannelMess
 //
 //    * Only the message sender can invoke this API.
 //
-//    * The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-//    of the user that makes the API call as the value in the header
+//    * The x-amz-chime-bearer request header is mandatory. Use the ARN of the
+//    AppInstanceUser or AppInstanceBot that makes the API call as the value
+//    in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2708,6 +2816,105 @@ func (c *ChimeSDKMessaging) GetMessagingSessionEndpointWithContext(ctx aws.Conte
 	return out, req.Send()
 }
 
+const opGetMessagingStreamingConfigurations = "GetMessagingStreamingConfigurations"
+
+// GetMessagingStreamingConfigurationsRequest generates a "aws/request.Request" representing the
+// client's request for the GetMessagingStreamingConfigurations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetMessagingStreamingConfigurations for more information on using the GetMessagingStreamingConfigurations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetMessagingStreamingConfigurationsRequest method.
+//    req, resp := client.GetMessagingStreamingConfigurationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/GetMessagingStreamingConfigurations
+func (c *ChimeSDKMessaging) GetMessagingStreamingConfigurationsRequest(input *GetMessagingStreamingConfigurationsInput) (req *request.Request, output *GetMessagingStreamingConfigurationsOutput) {
+	op := &request.Operation{
+		Name:       opGetMessagingStreamingConfigurations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/app-instances/{appInstanceArn}/streaming-configurations",
+	}
+
+	if input == nil {
+		input = &GetMessagingStreamingConfigurationsInput{}
+	}
+
+	output = &GetMessagingStreamingConfigurationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetMessagingStreamingConfigurations API operation for Amazon Chime SDK Messaging.
+//
+// Retrieves the data streaming configuration for an AppInstance. For more information,
+// see Streaming messaging data (https://docs.aws.amazon.com/chime-sdk/latest/dg/streaming-export.html)
+// in the Amazon Chime SDK Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation GetMessagingStreamingConfigurations for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * NotFoundException
+//   One or more of the resources in the request does not exist in the system.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/GetMessagingStreamingConfigurations
+func (c *ChimeSDKMessaging) GetMessagingStreamingConfigurations(input *GetMessagingStreamingConfigurationsInput) (*GetMessagingStreamingConfigurationsOutput, error) {
+	req, out := c.GetMessagingStreamingConfigurationsRequest(input)
+	return out, req.Send()
+}
+
+// GetMessagingStreamingConfigurationsWithContext is the same as GetMessagingStreamingConfigurations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetMessagingStreamingConfigurations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) GetMessagingStreamingConfigurationsWithContext(ctx aws.Context, input *GetMessagingStreamingConfigurationsInput, opts ...request.Option) (*GetMessagingStreamingConfigurationsOutput, error) {
+	req, out := c.GetMessagingStreamingConfigurationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListChannelBans = "ListChannelBans"
 
 // ListChannelBansRequest generates a "aws/request.Request" representing the
@@ -2758,10 +2965,10 @@ func (c *ChimeSDKMessaging) ListChannelBansRequest(input *ListChannelBansInput) 
 
 // ListChannelBans API operation for Amazon Chime SDK Messaging.
 //
-// Lists all the users banned from a particular channel.
+// Lists all the users and bots banned from a particular channel.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3068,8 +3275,8 @@ func (c *ChimeSDKMessaging) ListChannelMembershipsRequest(input *ListChannelMemb
 //
 // Lists all channel memberships in a channel.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // If you want to list the channels to which a specific app instance user belongs,
 // see the ListChannelMembershipsForAppInstanceUser (https://docs.aws.amazon.com/chime/latest/APIReference/API_messaging-chime_ListChannelMembershipsForAppInstanceUser.html)
@@ -3225,11 +3432,12 @@ func (c *ChimeSDKMessaging) ListChannelMembershipsForAppInstanceUserRequest(inpu
 
 // ListChannelMembershipsForAppInstanceUser API operation for Amazon Chime SDK Messaging.
 //
-// Lists all channels that a particular AppInstanceUser is a part of. Only an
-// AppInstanceAdmin can call the API with a user ARN that is not their own.
+// Lists all channels that anr AppInstanceUser or AppInstanceBot is a part of.
+// Only an AppInstanceAdmin can call the API with a user ARN that is not their
+// own.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3388,8 +3596,9 @@ func (c *ChimeSDKMessaging) ListChannelMessagesRequest(input *ListChannelMessage
 // not deleted. Deleted messages do not appear in the results. This action always
 // returns the latest version of an edited message.
 //
-// Also, the x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// Also, the x-amz-chime-bearer request header is mandatory. Use the ARN of
+// the AppInstanceUser or AppInstanceBot that makes the API call as the value
+// in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3543,8 +3752,8 @@ func (c *ChimeSDKMessaging) ListChannelModeratorsRequest(input *ListChannelModer
 //
 // Lists all the moderators for a channel.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3706,8 +3915,8 @@ func (c *ChimeSDKMessaging) ListChannelsRequest(input *ListChannelsInput) (req *
 //    * Only an AppInstanceAdmin can set privacy = PRIVATE to list the private
 //    channels in an account.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4015,8 +4224,8 @@ func (c *ChimeSDKMessaging) ListChannelsModeratedByAppInstanceUserRequest(input 
 //
 // A list of the channels moderated by an AppInstanceUser.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4366,6 +4575,114 @@ func (c *ChimeSDKMessaging) ListTagsForResourceWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opPutChannelExpirationSettings = "PutChannelExpirationSettings"
+
+// PutChannelExpirationSettingsRequest generates a "aws/request.Request" representing the
+// client's request for the PutChannelExpirationSettings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutChannelExpirationSettings for more information on using the PutChannelExpirationSettings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutChannelExpirationSettingsRequest method.
+//    req, resp := client.PutChannelExpirationSettingsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/PutChannelExpirationSettings
+func (c *ChimeSDKMessaging) PutChannelExpirationSettingsRequest(input *PutChannelExpirationSettingsInput) (req *request.Request, output *PutChannelExpirationSettingsOutput) {
+	op := &request.Operation{
+		Name:       opPutChannelExpirationSettings,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/channels/{channelArn}/expiration-settings",
+	}
+
+	if input == nil {
+		input = &PutChannelExpirationSettingsInput{}
+	}
+
+	output = &PutChannelExpirationSettingsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutChannelExpirationSettings API operation for Amazon Chime SDK Messaging.
+//
+// Sets the number of days before the channel is automatically deleted.
+//
+//    * A background process deletes expired channels within 6 hours of expiration.
+//    Actual deletion times may vary.
+//
+//    * Expired channels that have not yet been deleted appear as active, and
+//    you can update their expiration settings. The system honors the new settings.
+//
+//    * The x-amz-chime-bearer request header is mandatory. Use the ARN of the
+//    AppInstanceUser or AppInstanceBot that makes the API call as the value
+//    in the header.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation PutChannelExpirationSettings for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/PutChannelExpirationSettings
+func (c *ChimeSDKMessaging) PutChannelExpirationSettings(input *PutChannelExpirationSettingsInput) (*PutChannelExpirationSettingsOutput, error) {
+	req, out := c.PutChannelExpirationSettingsRequest(input)
+	return out, req.Send()
+}
+
+// PutChannelExpirationSettingsWithContext is the same as PutChannelExpirationSettings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutChannelExpirationSettings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) PutChannelExpirationSettingsWithContext(ctx aws.Context, input *PutChannelExpirationSettingsInput, opts ...request.Option) (*PutChannelExpirationSettingsOutput, error) {
+	req, out := c.PutChannelExpirationSettingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutChannelMembershipPreferences = "PutChannelMembershipPreferences"
 
 // PutChannelMembershipPreferencesRequest generates a "aws/request.Request" representing the
@@ -4410,12 +4727,15 @@ func (c *ChimeSDKMessaging) PutChannelMembershipPreferencesRequest(input *PutCha
 
 // PutChannelMembershipPreferences API operation for Amazon Chime SDK Messaging.
 //
-// Sets the membership preferences of an AppInstanceUser for the specified channel.
-// The AppInstanceUser must be a member of the channel. Only the AppInstanceUser
-// who owns the membership can set preferences. Users in the AppInstanceAdmin
-// and channel moderator roles can't set preferences for other users. Banned
-// users can't set membership preferences for the channel from which they are
-// banned.
+// Sets the membership preferences of an AppInstanceUser or AppIntanceBot for
+// the specified channel. The user or bot must be a member of the channel. Only
+// the user or bot who owns the membership can set preferences. Users or bots
+// in the AppInstanceAdmin and channel moderator roles can't set preferences
+// for other users or users. Banned users or bots can't set membership preferences
+// for the channel from which they are banned.
+//
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of an AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4469,6 +4789,109 @@ func (c *ChimeSDKMessaging) PutChannelMembershipPreferencesWithContext(ctx aws.C
 	return out, req.Send()
 }
 
+const opPutMessagingStreamingConfigurations = "PutMessagingStreamingConfigurations"
+
+// PutMessagingStreamingConfigurationsRequest generates a "aws/request.Request" representing the
+// client's request for the PutMessagingStreamingConfigurations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutMessagingStreamingConfigurations for more information on using the PutMessagingStreamingConfigurations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutMessagingStreamingConfigurationsRequest method.
+//    req, resp := client.PutMessagingStreamingConfigurationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/PutMessagingStreamingConfigurations
+func (c *ChimeSDKMessaging) PutMessagingStreamingConfigurationsRequest(input *PutMessagingStreamingConfigurationsInput) (req *request.Request, output *PutMessagingStreamingConfigurationsOutput) {
+	op := &request.Operation{
+		Name:       opPutMessagingStreamingConfigurations,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/app-instances/{appInstanceArn}/streaming-configurations",
+	}
+
+	if input == nil {
+		input = &PutMessagingStreamingConfigurationsInput{}
+	}
+
+	output = &PutMessagingStreamingConfigurationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutMessagingStreamingConfigurations API operation for Amazon Chime SDK Messaging.
+//
+// Sets the data streaming configuration for an AppInstance. For more information,
+// see Streaming messaging data (https://docs.aws.amazon.com/chime-sdk/latest/dg/streaming-export.html)
+// in the Amazon Chime SDK Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime SDK Messaging's
+// API operation PutMessagingStreamingConfigurations for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   One or more of the resources in the request does not exist in the system.
+//
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ConflictException
+//   The request could not be processed because of conflict in the current state
+//   of the resource.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-messaging-2021-05-15/PutMessagingStreamingConfigurations
+func (c *ChimeSDKMessaging) PutMessagingStreamingConfigurations(input *PutMessagingStreamingConfigurationsInput) (*PutMessagingStreamingConfigurationsOutput, error) {
+	req, out := c.PutMessagingStreamingConfigurationsRequest(input)
+	return out, req.Send()
+}
+
+// PutMessagingStreamingConfigurationsWithContext is the same as PutMessagingStreamingConfigurations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutMessagingStreamingConfigurations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ChimeSDKMessaging) PutMessagingStreamingConfigurationsWithContext(ctx aws.Context, input *PutMessagingStreamingConfigurationsInput, opts ...request.Option) (*PutMessagingStreamingConfigurationsOutput, error) {
+	req, out := c.PutMessagingStreamingConfigurationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRedactChannelMessage = "RedactChannelMessage"
 
 // RedactChannelMessageRequest generates a "aws/request.Request" representing the
@@ -4516,8 +4939,8 @@ func (c *ChimeSDKMessaging) RedactChannelMessageRequest(input *RedactChannelMess
 // Redacts message content, but not metadata. The message exists in the back
 // end, but the action returns null content, and the state shows as redacted.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4621,9 +5044,12 @@ func (c *ChimeSDKMessaging) SearchChannelsRequest(input *SearchChannelsInput) (r
 
 // SearchChannels API operation for Amazon Chime SDK Messaging.
 //
-// Allows an AppInstanceUser to search the channels that they belong to. The
-// AppInstanceUser can search by membership or external ID. An AppInstanceAdmin
-// can search across all channels within the AppInstance.
+// Allows the ChimeBearer to search channels by channel members. Users or bots
+// can search across the channels that they belong to. Users in the AppInstanceAdmin
+// role can search across all channels.
+//
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4771,8 +5197,8 @@ func (c *ChimeSDKMessaging) SendChannelMessageRequest(input *SendChannelMessageI
 //
 // Sends a message to a particular channel that the member is a part of.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Also, STANDARD messages can contain 4KB of data and the 1KB of metadata.
 // CONTROL messages can contain 30 bytes of data and no metadata.
@@ -5071,8 +5497,8 @@ func (c *ChimeSDKMessaging) UpdateChannelRequest(input *UpdateChannelInput) (req
 //
 // Restriction: You can't change a channel's privacy.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5270,8 +5696,8 @@ func (c *ChimeSDKMessaging) UpdateChannelMessageRequest(input *UpdateChannelMess
 //
 // Updates the content of a message.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5371,8 +5797,8 @@ func (c *ChimeSDKMessaging) UpdateChannelReadMarkerRequest(input *UpdateChannelR
 //
 // The details of the time when a user last read messages in a channel.
 //
-// The x-amz-chime-bearer request header is mandatory. Use the AppInstanceUserArn
-// of the user that makes the API call as the value in the header.
+// The x-amz-chime-bearer request header is mandatory. Use the ARN of the AppInstanceUser
+// or AppInstanceBot that makes the API call as the value in the header.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5652,7 +6078,7 @@ func (s *BadRequestException) RequestID() string {
 type BatchChannelMemberships struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the channel to which you're adding users.
+	// The ARN of the channel to which you're adding members.
 	ChannelArn *string `min:"5" type:"string"`
 
 	// The identifier of the member who invited another member.
@@ -5664,7 +6090,7 @@ type BatchChannelMemberships struct {
 	// The ID of the SubChannel.
 	SubChannelId *string `min:"1" type:"string"`
 
-	// The membership types set for the channel users.
+	// The membership types set for the channel members.
 	Type *string `type:"string" enum:"ChannelMembershipType"`
 }
 
@@ -5769,17 +6195,18 @@ func (s *BatchCreateChannelMembershipError) SetMemberArn(v string) *BatchCreateC
 type BatchCreateChannelMembershipInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the channel to which you're adding users.
+	// The ARN of the channel to which you're adding users or bots.
 	//
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArns of the members you want to add to the channel.
+	// The ARNs of the members you want to add to the channel. Only AppInstanceUsers
+	// and AppInstanceBots can be added as a channel member.
 	//
 	// MemberArns is a required field
 	MemberArns []*string `min:"1" type:"list" required:"true"`
@@ -5937,6 +6364,9 @@ type Channel struct {
 	// channel can support a maximum of 1-million members.
 	ElasticChannelConfiguration *ElasticChannelConfiguration `type:"structure"`
 
+	// Settings that control when a channel expires.
+	ExpirationSettings *ExpirationSettings `type:"structure"`
+
 	// The time at which a member sent the last message in the channel.
 	LastMessageTimestamp *time.Time `type:"timestamp"`
 
@@ -6009,6 +6439,12 @@ func (s *Channel) SetCreatedTimestamp(v time.Time) *Channel {
 // SetElasticChannelConfiguration sets the ElasticChannelConfiguration field's value.
 func (s *Channel) SetElasticChannelConfiguration(v *ElasticChannelConfiguration) *Channel {
 	s.ElasticChannelConfiguration = v
+	return s
+}
+
+// SetExpirationSettings sets the ExpirationSettings field's value.
+func (s *Channel) SetExpirationSettings(v *ExpirationSettings) *Channel {
+	s.ExpirationSettings = v
 	return s
 }
 
@@ -6692,6 +7128,13 @@ type ChannelMessage struct {
 	// String and GoString methods.
 	Content *string `type:"string" sensitive:"true"`
 
+	// The content type of the channel message.
+	//
+	// ContentType is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelMessage's
+	// String and GoString methods.
+	ContentType *string `type:"string" sensitive:"true"`
+
 	// The time at which the message was created.
 	CreatedTimestamp *time.Time `type:"timestamp"`
 
@@ -6761,6 +7204,12 @@ func (s *ChannelMessage) SetChannelArn(v string) *ChannelMessage {
 // SetContent sets the Content field's value.
 func (s *ChannelMessage) SetContent(v string) *ChannelMessage {
 	s.Content = &v
+	return s
+}
+
+// SetContentType sets the ContentType field's value.
+func (s *ChannelMessage) SetContentType(v string) *ChannelMessage {
+	s.ContentType = &v
 	return s
 }
 
@@ -6847,6 +7296,13 @@ type ChannelMessageCallback struct {
 	// String and GoString methods.
 	Content *string `min:"1" type:"string" sensitive:"true"`
 
+	// The content type of the call-back message.
+	//
+	// ContentType is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelMessageCallback's
+	// String and GoString methods.
+	ContentType *string `type:"string" sensitive:"true"`
+
 	// The attributes for the message, used for message filtering along with a FilterRule
 	// defined in the PushNotificationPreferences.
 	MessageAttributes map[string]*MessageAttributeValue `type:"map"`
@@ -6903,6 +7359,11 @@ func (s *ChannelMessageCallback) Validate() error {
 	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
 	}
+	if s.PushNotification != nil {
+		if err := s.PushNotification.Validate(); err != nil {
+			invalidParams.AddNested("PushNotification", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6913,6 +7374,12 @@ func (s *ChannelMessageCallback) Validate() error {
 // SetContent sets the Content field's value.
 func (s *ChannelMessageCallback) SetContent(v string) *ChannelMessageCallback {
 	s.Content = &v
+	return s
+}
+
+// SetContentType sets the ContentType field's value.
+func (s *ChannelMessageCallback) SetContentType(v string) *ChannelMessageCallback {
+	s.ContentType = &v
 	return s
 }
 
@@ -6998,6 +7465,13 @@ type ChannelMessageSummary struct {
 	// String and GoString methods.
 	Content *string `type:"string" sensitive:"true"`
 
+	// The content type of the channel messsage listed in the summary.
+	//
+	// ContentType is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ChannelMessageSummary's
+	// String and GoString methods.
+	ContentType *string `type:"string" sensitive:"true"`
+
 	// The time at which the message summary was created.
 	CreatedTimestamp *time.Time `type:"timestamp"`
 
@@ -7056,6 +7530,12 @@ func (s ChannelMessageSummary) GoString() string {
 // SetContent sets the Content field's value.
 func (s *ChannelMessageSummary) SetContent(v string) *ChannelMessageSummary {
 	s.Content = &v
+	return s
+}
+
+// SetContentType sets the ContentType field's value.
+func (s *ChannelMessageSummary) SetContentType(v string) *ChannelMessageSummary {
+	s.ContentType = &v
 	return s
 }
 
@@ -7249,7 +7729,7 @@ type ChannelSummary struct {
 	// The ARN of the channel.
 	ChannelArn *string `min:"5" type:"string"`
 
-	// The time at which the last message in a channel was sent.
+	// The time at which the last persistent message in a channel was sent.
 	LastMessageTimestamp *time.Time `type:"timestamp"`
 
 	// The metadata of the channel.
@@ -7402,7 +7882,7 @@ type CreateChannelBanInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -7530,9 +8010,7 @@ type CreateChannelFlowInput struct {
 	// ClientRequestToken is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateChannelFlowInput's
 	// String and GoString methods.
-	//
-	// ClientRequestToken is a required field
-	ClientRequestToken *string `min:"2" type:"string" required:"true" sensitive:"true"`
+	ClientRequestToken *string `min:"2" type:"string" idempotencyToken:"true" sensitive:"true"`
 
 	// The name of the channel flow.
 	//
@@ -7578,9 +8056,6 @@ func (s *CreateChannelFlowInput) Validate() error {
 	}
 	if s.AppInstanceArn != nil && len(*s.AppInstanceArn) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("AppInstanceArn", 5))
-	}
-	if s.ClientRequestToken == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClientRequestToken"))
 	}
 	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 2 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 2))
@@ -7703,7 +8178,7 @@ type CreateChannelInput struct {
 	// String and GoString methods.
 	ChannelId *string `min:"1" type:"string" sensitive:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -7718,6 +8193,10 @@ type CreateChannelInput struct {
 	// The attributes required to configure and create an elastic channel. An elastic
 	// channel can support a maximum of 1-million users, excluding moderators.
 	ElasticChannelConfiguration *ElasticChannelConfiguration `type:"structure"`
+
+	// Settings that control the interval after which the channel is automatically
+	// deleted.
+	ExpirationSettings *ExpirationSettings `type:"structure"`
 
 	// The ARNs of the channel members in the request.
 	MemberArns []*string `min:"1" type:"list"`
@@ -7815,6 +8294,11 @@ func (s *CreateChannelInput) Validate() error {
 			invalidParams.AddNested("ElasticChannelConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ExpirationSettings != nil {
+		if err := s.ExpirationSettings.Validate(); err != nil {
+			invalidParams.AddNested("ExpirationSettings", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -7859,6 +8343,12 @@ func (s *CreateChannelInput) SetClientRequestToken(v string) *CreateChannelInput
 // SetElasticChannelConfiguration sets the ElasticChannelConfiguration field's value.
 func (s *CreateChannelInput) SetElasticChannelConfiguration(v *ElasticChannelConfiguration) *CreateChannelInput {
 	s.ElasticChannelConfiguration = v
+	return s
+}
+
+// SetExpirationSettings sets the ExpirationSettings field's value.
+func (s *CreateChannelInput) SetExpirationSettings(v *ExpirationSettings) *CreateChannelInput {
+	s.ExpirationSettings = v
 	return s
 }
 
@@ -7912,7 +8402,7 @@ type CreateChannelMembershipInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -8081,7 +8571,7 @@ type CreateChannelModeratorInput struct {
 	// ChannelModeratorArn is a required field
 	ChannelModeratorArn *string `min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -8230,7 +8720,7 @@ type DeleteChannelBanInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -8406,13 +8896,10 @@ type DeleteChannelInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
-
-	// The ID of the SubChannel in the request.
-	SubChannelId *string `location:"querystring" locationName:"sub-channel-id" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8448,9 +8935,6 @@ func (s *DeleteChannelInput) Validate() error {
 	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
 	}
-	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8470,12 +8954,6 @@ func (s *DeleteChannelInput) SetChimeBearer(v string) *DeleteChannelInput {
 	return s
 }
 
-// SetSubChannelId sets the SubChannelId field's value.
-func (s *DeleteChannelInput) SetSubChannelId(v string) *DeleteChannelInput {
-	s.SubChannelId = &v
-	return s
-}
-
 type DeleteChannelMembershipInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -8484,7 +8962,7 @@ type DeleteChannelMembershipInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -8603,7 +9081,7 @@ type DeleteChannelMessageInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -8728,7 +9206,7 @@ type DeleteChannelModeratorInput struct {
 	// ChannelModeratorArn is a required field
 	ChannelModeratorArn *string `location:"uri" locationName:"channelModeratorArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -8842,6 +9320,77 @@ func (s DeleteChannelOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteMessagingStreamingConfigurationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the streaming configurations being deleted.
+	//
+	// AppInstanceArn is a required field
+	AppInstanceArn *string `location:"uri" locationName:"appInstanceArn" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteMessagingStreamingConfigurationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteMessagingStreamingConfigurationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteMessagingStreamingConfigurationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteMessagingStreamingConfigurationsInput"}
+	if s.AppInstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AppInstanceArn"))
+	}
+	if s.AppInstanceArn != nil && len(*s.AppInstanceArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("AppInstanceArn", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAppInstanceArn sets the AppInstanceArn field's value.
+func (s *DeleteMessagingStreamingConfigurationsInput) SetAppInstanceArn(v string) *DeleteMessagingStreamingConfigurationsInput {
+	s.AppInstanceArn = &v
+	return s
+}
+
+type DeleteMessagingStreamingConfigurationsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteMessagingStreamingConfigurationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteMessagingStreamingConfigurationsOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeChannelBanInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -8850,7 +9399,7 @@ type DescribeChannelBanInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -9044,7 +9593,7 @@ type DescribeChannelInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -9105,7 +9654,7 @@ func (s *DescribeChannelInput) SetChimeBearer(v string) *DescribeChannelInput {
 type DescribeChannelMembershipForAppInstanceUserInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the user in a channel.
+	// The ARN of the user or bot in a channel.
 	//
 	// AppInstanceUserArn is a required field
 	AppInstanceUserArn *string `location:"querystring" locationName:"app-instance-user-arn" min:"5" type:"string" required:"true"`
@@ -9115,7 +9664,7 @@ type DescribeChannelMembershipForAppInstanceUserInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -9224,7 +9773,7 @@ type DescribeChannelMembershipInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -9348,7 +9897,7 @@ func (s *DescribeChannelMembershipOutput) SetChannelMembership(v *ChannelMembers
 type DescribeChannelModeratedByAppInstanceUserInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the AppInstanceUser in the moderated channel.
+	// The ARN of the user or bot in the moderated channel.
 	//
 	// AppInstanceUserArn is a required field
 	AppInstanceUserArn *string `location:"querystring" locationName:"app-instance-user-arn" min:"5" type:"string" required:"true"`
@@ -9358,7 +9907,7 @@ type DescribeChannelModeratedByAppInstanceUserInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -9472,7 +10021,7 @@ type DescribeChannelModeratorInput struct {
 	// ChannelModeratorArn is a required field
 	ChannelModeratorArn *string `location:"uri" locationName:"channelModeratorArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -9796,6 +10345,70 @@ func (s *ElasticChannelConfiguration) SetTargetMembershipsPerSubChannel(v int64)
 	return s
 }
 
+// Settings that control the interval after which a channel is deleted.
+type ExpirationSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The conditions that must be met for a channel to expire.
+	//
+	// ExpirationCriterion is a required field
+	ExpirationCriterion *string `type:"string" required:"true" enum:"ExpirationCriterion"`
+
+	// The period in days after which the system automatically deletes a channel.
+	//
+	// ExpirationDays is a required field
+	ExpirationDays *int64 `min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExpirationSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExpirationSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExpirationSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExpirationSettings"}
+	if s.ExpirationCriterion == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExpirationCriterion"))
+	}
+	if s.ExpirationDays == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExpirationDays"))
+	}
+	if s.ExpirationDays != nil && *s.ExpirationDays < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("ExpirationDays", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExpirationCriterion sets the ExpirationCriterion field's value.
+func (s *ExpirationSettings) SetExpirationCriterion(v string) *ExpirationSettings {
+	s.ExpirationCriterion = &v
+	return s
+}
+
+// SetExpirationDays sets the ExpirationDays field's value.
+func (s *ExpirationSettings) SetExpirationDays(v int64) *ExpirationSettings {
+	s.ExpirationDays = &v
+	return s
+}
+
 // The client is permanently forbidden from making the request.
 type ForbiddenException struct {
 	_            struct{}                  `type:"structure"`
@@ -9870,7 +10483,7 @@ type GetChannelMembershipPreferencesInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserARN of the user making the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -10002,7 +10615,7 @@ type GetChannelMessageInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -10305,7 +10918,87 @@ func (s *GetMessagingSessionEndpointOutput) SetEndpoint(v *MessagingSessionEndpo
 	return s
 }
 
-// The details of a user.
+type GetMessagingStreamingConfigurationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ARN of the streaming configurations.
+	//
+	// AppInstanceArn is a required field
+	AppInstanceArn *string `location:"uri" locationName:"appInstanceArn" min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMessagingStreamingConfigurationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMessagingStreamingConfigurationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMessagingStreamingConfigurationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMessagingStreamingConfigurationsInput"}
+	if s.AppInstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AppInstanceArn"))
+	}
+	if s.AppInstanceArn != nil && len(*s.AppInstanceArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("AppInstanceArn", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAppInstanceArn sets the AppInstanceArn field's value.
+func (s *GetMessagingStreamingConfigurationsInput) SetAppInstanceArn(v string) *GetMessagingStreamingConfigurationsInput {
+	s.AppInstanceArn = &v
+	return s
+}
+
+type GetMessagingStreamingConfigurationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The streaming settings.
+	StreamingConfigurations []*StreamingConfiguration `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMessagingStreamingConfigurationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMessagingStreamingConfigurationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetStreamingConfigurations sets the StreamingConfigurations field's value.
+func (s *GetMessagingStreamingConfigurationsOutput) SetStreamingConfigurations(v []*StreamingConfiguration) *GetMessagingStreamingConfigurationsOutput {
+	s.StreamingConfigurations = v
+	return s
+}
+
+// The details of a user or bot.
 type Identity struct {
 	_ struct{} `type:"structure"`
 
@@ -10422,7 +11115,7 @@ type ListChannelBansInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -10680,10 +11373,10 @@ func (s *ListChannelFlowsOutput) SetNextToken(v string) *ListChannelFlowsOutput 
 type ListChannelMembershipsForAppInstanceUserInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the AppInstanceUsers
+	// The ARN of the user or bot.
 	AppInstanceUserArn *string `location:"querystring" locationName:"app-instance-user-arn" min:"5" type:"string"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -10816,7 +11509,7 @@ type ListChannelMembershipsInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -10988,7 +11681,7 @@ type ListChannelMessagesInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -11184,7 +11877,7 @@ type ListChannelModeratorsInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -11448,7 +12141,7 @@ type ListChannelsInput struct {
 	// AppInstanceArn is a required field
 	AppInstanceArn *string `location:"querystring" locationName:"app-instance-arn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -11544,10 +12237,10 @@ func (s *ListChannelsInput) SetPrivacy(v string) *ListChannelsInput {
 type ListChannelsModeratedByAppInstanceUserInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the user in the moderated channel.
+	// The ARN of the user or bot in the moderated channel.
 	AppInstanceUserArn *string `location:"querystring" locationName:"app-instance-user-arn" min:"5" type:"string"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -12248,14 +12941,14 @@ type PushNotificationConfiguration struct {
 	// Body is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by PushNotificationConfiguration's
 	// String and GoString methods.
-	Body *string `type:"string" sensitive:"true"`
+	Body *string `min:"1" type:"string" sensitive:"true"`
 
 	// The title of the push notification.
 	//
 	// Title is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by PushNotificationConfiguration's
 	// String and GoString methods.
-	Title *string `type:"string" sensitive:"true"`
+	Title *string `min:"1" type:"string" sensitive:"true"`
 
 	// Enum value that indicates the type of the push notification for a message.
 	// DEFAULT: Normal mobile push notification. VOIP: VOIP mobile push notification.
@@ -12278,6 +12971,22 @@ func (s PushNotificationConfiguration) String() string {
 // value will be replaced with "sensitive".
 func (s PushNotificationConfiguration) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PushNotificationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PushNotificationConfiguration"}
+	if s.Body != nil && len(*s.Body) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Body", 1))
+	}
+	if s.Title != nil && len(*s.Title) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Title", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetBody sets the Body field's value.
@@ -12364,6 +13073,121 @@ func (s *PushNotificationPreferences) SetFilterRule(v string) *PushNotificationP
 	return s
 }
 
+type PutChannelExpirationSettingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
+
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
+	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string"`
+
+	// Settings that control the interval after which a channel is deleted.
+	ExpirationSettings *ExpirationSettings `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelExpirationSettingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelExpirationSettingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutChannelExpirationSettingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutChannelExpirationSettingsInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 5))
+	}
+	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
+	}
+	if s.ExpirationSettings != nil {
+		if err := s.ExpirationSettings.Validate(); err != nil {
+			invalidParams.AddNested("ExpirationSettings", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *PutChannelExpirationSettingsInput) SetChannelArn(v string) *PutChannelExpirationSettingsInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChimeBearer sets the ChimeBearer field's value.
+func (s *PutChannelExpirationSettingsInput) SetChimeBearer(v string) *PutChannelExpirationSettingsInput {
+	s.ChimeBearer = &v
+	return s
+}
+
+// SetExpirationSettings sets the ExpirationSettings field's value.
+func (s *PutChannelExpirationSettingsInput) SetExpirationSettings(v *ExpirationSettings) *PutChannelExpirationSettingsInput {
+	s.ExpirationSettings = v
+	return s
+}
+
+type PutChannelExpirationSettingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The channel ARN.
+	ChannelArn *string `min:"5" type:"string"`
+
+	// Settings that control the interval after which a channel is deleted.
+	ExpirationSettings *ExpirationSettings `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelExpirationSettingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutChannelExpirationSettingsOutput) GoString() string {
+	return s.String()
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *PutChannelExpirationSettingsOutput) SetChannelArn(v string) *PutChannelExpirationSettingsOutput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetExpirationSettings sets the ExpirationSettings field's value.
+func (s *PutChannelExpirationSettingsOutput) SetExpirationSettings(v *ExpirationSettings) *PutChannelExpirationSettingsOutput {
+	s.ExpirationSettings = v
+	return s
+}
+
 type PutChannelMembershipPreferencesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12372,12 +13196,12 @@ type PutChannelMembershipPreferencesInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserARN of the user making the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the member setting the preferences.
+	// The ARN of the member setting the preferences.
 	//
 	// MemberArn is a required field
 	MemberArn *string `location:"uri" locationName:"memberArn" min:"5" type:"string" required:"true"`
@@ -12515,6 +13339,113 @@ func (s *PutChannelMembershipPreferencesOutput) SetPreferences(v *ChannelMembers
 	return s
 }
 
+type PutMessagingStreamingConfigurationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the streaming configuration.
+	//
+	// AppInstanceArn is a required field
+	AppInstanceArn *string `location:"uri" locationName:"appInstanceArn" min:"5" type:"string" required:"true"`
+
+	// The streaming configurations.
+	//
+	// StreamingConfigurations is a required field
+	StreamingConfigurations []*StreamingConfiguration `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutMessagingStreamingConfigurationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutMessagingStreamingConfigurationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutMessagingStreamingConfigurationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutMessagingStreamingConfigurationsInput"}
+	if s.AppInstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AppInstanceArn"))
+	}
+	if s.AppInstanceArn != nil && len(*s.AppInstanceArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("AppInstanceArn", 5))
+	}
+	if s.StreamingConfigurations == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreamingConfigurations"))
+	}
+	if s.StreamingConfigurations != nil && len(s.StreamingConfigurations) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamingConfigurations", 1))
+	}
+	if s.StreamingConfigurations != nil {
+		for i, v := range s.StreamingConfigurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "StreamingConfigurations", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAppInstanceArn sets the AppInstanceArn field's value.
+func (s *PutMessagingStreamingConfigurationsInput) SetAppInstanceArn(v string) *PutMessagingStreamingConfigurationsInput {
+	s.AppInstanceArn = &v
+	return s
+}
+
+// SetStreamingConfigurations sets the StreamingConfigurations field's value.
+func (s *PutMessagingStreamingConfigurationsInput) SetStreamingConfigurations(v []*StreamingConfiguration) *PutMessagingStreamingConfigurationsInput {
+	s.StreamingConfigurations = v
+	return s
+}
+
+type PutMessagingStreamingConfigurationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The requested streaming configurations.
+	StreamingConfigurations []*StreamingConfiguration `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutMessagingStreamingConfigurationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutMessagingStreamingConfigurationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetStreamingConfigurations sets the StreamingConfigurations field's value.
+func (s *PutMessagingStreamingConfigurationsOutput) SetStreamingConfigurations(v []*StreamingConfiguration) *PutMessagingStreamingConfigurationsOutput {
+	s.StreamingConfigurations = v
+	return s
+}
+
 type RedactChannelMessageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12523,7 +13454,7 @@ type RedactChannelMessageInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -12967,7 +13898,7 @@ type SendChannelMessageInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -12987,6 +13918,13 @@ type SendChannelMessageInput struct {
 	//
 	// Content is a required field
 	Content *string `min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// The content type of the channel message.
+	//
+	// ContentType is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SendChannelMessageInput's
+	// String and GoString methods.
+	ContentType *string `type:"string" sensitive:"true"`
 
 	// The attributes for the message, used for message filtering along with a FilterRule
 	// defined in the PushNotificationPreferences.
@@ -13067,6 +14005,11 @@ func (s *SendChannelMessageInput) Validate() error {
 	if s.Type == nil {
 		invalidParams.Add(request.NewErrParamRequired("Type"))
 	}
+	if s.PushNotification != nil {
+		if err := s.PushNotification.Validate(); err != nil {
+			invalidParams.AddNested("PushNotification", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -13095,6 +14038,12 @@ func (s *SendChannelMessageInput) SetClientRequestToken(v string) *SendChannelMe
 // SetContent sets the Content field's value.
 func (s *SendChannelMessageInput) SetContent(v string) *SendChannelMessageInput {
 	s.Content = &v
+	return s
+}
+
+// SetContentType sets the ContentType field's value.
+func (s *SendChannelMessageInput) SetContentType(v string) *SendChannelMessageInput {
+	s.ContentType = &v
 	return s
 }
 
@@ -13322,6 +14271,70 @@ func (s *ServiceUnavailableException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ServiceUnavailableException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The configuration for connecting a messaging stream to Amazon Kinesis.
+type StreamingConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The data type of the configuration.
+	//
+	// DataType is a required field
+	DataType *string `type:"string" required:"true" enum:"MessagingDataType"`
+
+	// The ARN of the resource in the configuration.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `min:"5" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamingConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamingConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StreamingConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StreamingConfiguration"}
+	if s.DataType == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataType sets the DataType field's value.
+func (s *StreamingConfiguration) SetDataType(v string) *StreamingConfiguration {
+	s.DataType = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *StreamingConfiguration) SetResourceArn(v string) *StreamingConfiguration {
+	s.ResourceArn = &v
+	return s
 }
 
 // Summary of the sub-channels associated with the elastic channel.
@@ -13894,7 +14907,7 @@ type UpdateChannelInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -13998,7 +15011,7 @@ type UpdateChannelMessageInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
@@ -14008,7 +15021,16 @@ type UpdateChannelMessageInput struct {
 	// Content is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by UpdateChannelMessageInput's
 	// String and GoString methods.
-	Content *string `type:"string" sensitive:"true"`
+	//
+	// Content is a required field
+	Content *string `min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// The content type of the channel message.
+	//
+	// ContentType is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateChannelMessageInput's
+	// String and GoString methods.
+	ContentType *string `type:"string" sensitive:"true"`
 
 	// The ID string of the message being updated.
 	//
@@ -14062,6 +15084,12 @@ func (s *UpdateChannelMessageInput) Validate() error {
 	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
 	}
+	if s.Content == nil {
+		invalidParams.Add(request.NewErrParamRequired("Content"))
+	}
+	if s.Content != nil && len(*s.Content) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Content", 1))
+	}
 	if s.MessageId == nil {
 		invalidParams.Add(request.NewErrParamRequired("MessageId"))
 	}
@@ -14093,6 +15121,12 @@ func (s *UpdateChannelMessageInput) SetChimeBearer(v string) *UpdateChannelMessa
 // SetContent sets the Content field's value.
 func (s *UpdateChannelMessageInput) SetContent(v string) *UpdateChannelMessageInput {
 	s.Content = &v
+	return s
+}
+
+// SetContentType sets the ContentType field's value.
+func (s *UpdateChannelMessageInput) SetContentType(v string) *UpdateChannelMessageInput {
+	s.ContentType = &v
 	return s
 }
 
@@ -14204,20 +15238,17 @@ func (s *UpdateChannelOutput) SetChannelArn(v string) *UpdateChannelOutput {
 }
 
 type UpdateChannelReadMarkerInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The ARN of the channel.
 	//
 	// ChannelArn is a required field
 	ChannelArn *string `location:"uri" locationName:"channelArn" min:"5" type:"string" required:"true"`
 
-	// The AppInstanceUserArn of the user that makes the API call.
+	// The ARN of the AppInstanceUser or AppInstanceBot that makes the API call.
 	//
 	// ChimeBearer is a required field
 	ChimeBearer *string `location:"header" locationName:"x-amz-chime-bearer" min:"5" type:"string" required:"true"`
-
-	// The ID of the SubChannel in the request.
-	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -14253,9 +15284,6 @@ func (s *UpdateChannelReadMarkerInput) Validate() error {
 	if s.ChimeBearer != nil && len(*s.ChimeBearer) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("ChimeBearer", 5))
 	}
-	if s.SubChannelId != nil && len(*s.SubChannelId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("SubChannelId", 1))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -14275,20 +15303,11 @@ func (s *UpdateChannelReadMarkerInput) SetChimeBearer(v string) *UpdateChannelRe
 	return s
 }
 
-// SetSubChannelId sets the SubChannelId field's value.
-func (s *UpdateChannelReadMarkerInput) SetSubChannelId(v string) *UpdateChannelReadMarkerInput {
-	s.SubChannelId = &v
-	return s
-}
-
 type UpdateChannelReadMarkerOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the channel.
 	ChannelArn *string `min:"5" type:"string"`
-
-	// The ID of the SubChannel in the response.
-	SubChannelId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -14312,12 +15331,6 @@ func (s UpdateChannelReadMarkerOutput) GoString() string {
 // SetChannelArn sets the ChannelArn field's value.
 func (s *UpdateChannelReadMarkerOutput) SetChannelArn(v string) *UpdateChannelReadMarkerOutput {
 	s.ChannelArn = &v
-	return s
-}
-
-// SetSubChannelId sets the SubChannelId field's value.
-func (s *UpdateChannelReadMarkerOutput) SetSubChannelId(v string) *UpdateChannelReadMarkerOutput {
-	s.SubChannelId = &v
 	return s
 }
 
@@ -14514,6 +15527,22 @@ func ErrorCode_Values() []string {
 }
 
 const (
+	// ExpirationCriterionCreatedTimestamp is a ExpirationCriterion enum value
+	ExpirationCriterionCreatedTimestamp = "CREATED_TIMESTAMP"
+
+	// ExpirationCriterionLastMessageTimestamp is a ExpirationCriterion enum value
+	ExpirationCriterionLastMessageTimestamp = "LAST_MESSAGE_TIMESTAMP"
+)
+
+// ExpirationCriterion_Values returns all elements of the ExpirationCriterion enum
+func ExpirationCriterion_Values() []string {
+	return []string{
+		ExpirationCriterionCreatedTimestamp,
+		ExpirationCriterionLastMessageTimestamp,
+	}
+}
+
+const (
 	// FallbackActionContinue is a FallbackAction enum value
 	FallbackActionContinue = "CONTINUE"
 
@@ -14538,6 +15567,22 @@ const (
 func InvocationType_Values() []string {
 	return []string{
 		InvocationTypeAsync,
+	}
+}
+
+const (
+	// MessagingDataTypeChannel is a MessagingDataType enum value
+	MessagingDataTypeChannel = "Channel"
+
+	// MessagingDataTypeChannelMessage is a MessagingDataType enum value
+	MessagingDataTypeChannelMessage = "ChannelMessage"
+)
+
+// MessagingDataType_Values returns all elements of the MessagingDataType enum
+func MessagingDataType_Values() []string {
+	return []string{
+		MessagingDataTypeChannel,
+		MessagingDataTypeChannelMessage,
 	}
 }
 

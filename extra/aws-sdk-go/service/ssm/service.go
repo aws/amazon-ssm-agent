@@ -13,7 +13,7 @@ import (
 )
 
 // SSM provides the API operation methods for making requests to
-// Amazon Simple Systems Management Service. See this package's package overview docs
+// Amazon Simple Systems Manager (SSM). See this package's package overview docs
 // for details on the service.
 //
 // SSM methods are safe to use concurrently. It is not safe to

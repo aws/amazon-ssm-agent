@@ -13,6 +13,288 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opBatchCreateCustomVocabularyItem = "BatchCreateCustomVocabularyItem"
+
+// BatchCreateCustomVocabularyItemRequest generates a "aws/request.Request" representing the
+// client's request for the BatchCreateCustomVocabularyItem operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchCreateCustomVocabularyItem for more information on using the BatchCreateCustomVocabularyItem
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchCreateCustomVocabularyItemRequest method.
+//    req, resp := client.BatchCreateCustomVocabularyItemRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/BatchCreateCustomVocabularyItem
+func (c *LexModelsV2) BatchCreateCustomVocabularyItemRequest(input *BatchCreateCustomVocabularyItemInput) (req *request.Request, output *BatchCreateCustomVocabularyItemOutput) {
+	op := &request.Operation{
+		Name:       opBatchCreateCustomVocabularyItem,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/customvocabulary/DEFAULT/batchcreate",
+	}
+
+	if input == nil {
+		input = &BatchCreateCustomVocabularyItemInput{}
+	}
+
+	output = &BatchCreateCustomVocabularyItemOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchCreateCustomVocabularyItem API operation for Amazon Lex Model Building V2.
+//
+// Create a batch of custom vocabulary items for a given bot locale's custom
+// vocabulary.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation BatchCreateCustomVocabularyItem for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/BatchCreateCustomVocabularyItem
+func (c *LexModelsV2) BatchCreateCustomVocabularyItem(input *BatchCreateCustomVocabularyItemInput) (*BatchCreateCustomVocabularyItemOutput, error) {
+	req, out := c.BatchCreateCustomVocabularyItemRequest(input)
+	return out, req.Send()
+}
+
+// BatchCreateCustomVocabularyItemWithContext is the same as BatchCreateCustomVocabularyItem with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchCreateCustomVocabularyItem for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) BatchCreateCustomVocabularyItemWithContext(ctx aws.Context, input *BatchCreateCustomVocabularyItemInput, opts ...request.Option) (*BatchCreateCustomVocabularyItemOutput, error) {
+	req, out := c.BatchCreateCustomVocabularyItemRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opBatchDeleteCustomVocabularyItem = "BatchDeleteCustomVocabularyItem"
+
+// BatchDeleteCustomVocabularyItemRequest generates a "aws/request.Request" representing the
+// client's request for the BatchDeleteCustomVocabularyItem operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchDeleteCustomVocabularyItem for more information on using the BatchDeleteCustomVocabularyItem
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchDeleteCustomVocabularyItemRequest method.
+//    req, resp := client.BatchDeleteCustomVocabularyItemRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/BatchDeleteCustomVocabularyItem
+func (c *LexModelsV2) BatchDeleteCustomVocabularyItemRequest(input *BatchDeleteCustomVocabularyItemInput) (req *request.Request, output *BatchDeleteCustomVocabularyItemOutput) {
+	op := &request.Operation{
+		Name:       opBatchDeleteCustomVocabularyItem,
+		HTTPMethod: "POST",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/customvocabulary/DEFAULT/batchdelete",
+	}
+
+	if input == nil {
+		input = &BatchDeleteCustomVocabularyItemInput{}
+	}
+
+	output = &BatchDeleteCustomVocabularyItemOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchDeleteCustomVocabularyItem API operation for Amazon Lex Model Building V2.
+//
+// Delete a batch of custom vocabulary items for a given bot locale's custom
+// vocabulary.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation BatchDeleteCustomVocabularyItem for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/BatchDeleteCustomVocabularyItem
+func (c *LexModelsV2) BatchDeleteCustomVocabularyItem(input *BatchDeleteCustomVocabularyItemInput) (*BatchDeleteCustomVocabularyItemOutput, error) {
+	req, out := c.BatchDeleteCustomVocabularyItemRequest(input)
+	return out, req.Send()
+}
+
+// BatchDeleteCustomVocabularyItemWithContext is the same as BatchDeleteCustomVocabularyItem with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchDeleteCustomVocabularyItem for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) BatchDeleteCustomVocabularyItemWithContext(ctx aws.Context, input *BatchDeleteCustomVocabularyItemInput, opts ...request.Option) (*BatchDeleteCustomVocabularyItemOutput, error) {
+	req, out := c.BatchDeleteCustomVocabularyItemRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opBatchUpdateCustomVocabularyItem = "BatchUpdateCustomVocabularyItem"
+
+// BatchUpdateCustomVocabularyItemRequest generates a "aws/request.Request" representing the
+// client's request for the BatchUpdateCustomVocabularyItem operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchUpdateCustomVocabularyItem for more information on using the BatchUpdateCustomVocabularyItem
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchUpdateCustomVocabularyItemRequest method.
+//    req, resp := client.BatchUpdateCustomVocabularyItemRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/BatchUpdateCustomVocabularyItem
+func (c *LexModelsV2) BatchUpdateCustomVocabularyItemRequest(input *BatchUpdateCustomVocabularyItemInput) (req *request.Request, output *BatchUpdateCustomVocabularyItemOutput) {
+	op := &request.Operation{
+		Name:       opBatchUpdateCustomVocabularyItem,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/customvocabulary/DEFAULT/batchupdate",
+	}
+
+	if input == nil {
+		input = &BatchUpdateCustomVocabularyItemInput{}
+	}
+
+	output = &BatchUpdateCustomVocabularyItemOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchUpdateCustomVocabularyItem API operation for Amazon Lex Model Building V2.
+//
+// Update a batch of custom vocabulary items for a given bot locale's custom
+// vocabulary.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation BatchUpdateCustomVocabularyItem for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/BatchUpdateCustomVocabularyItem
+func (c *LexModelsV2) BatchUpdateCustomVocabularyItem(input *BatchUpdateCustomVocabularyItemInput) (*BatchUpdateCustomVocabularyItemOutput, error) {
+	req, out := c.BatchUpdateCustomVocabularyItemRequest(input)
+	return out, req.Send()
+}
+
+// BatchUpdateCustomVocabularyItemWithContext is the same as BatchUpdateCustomVocabularyItem with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchUpdateCustomVocabularyItem for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) BatchUpdateCustomVocabularyItemWithContext(ctx aws.Context, input *BatchUpdateCustomVocabularyItemInput, opts ...request.Option) (*BatchUpdateCustomVocabularyItemOutput, error) {
+	req, out := c.BatchUpdateCustomVocabularyItemRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBuildBotLocale = "BuildBotLocale"
 
 // BuildBotLocaleRequest generates a "aws/request.Request" representing the
@@ -1602,8 +1884,8 @@ func (c *LexModelsV2) DeleteBotVersionRequest(input *DeleteBotVersionInput) (req
 
 // DeleteBotVersion API operation for Amazon Lex Model Building V2.
 //
-// Deletes a specific version of a bot. To delete all version of a bot, use
-// the DeleteBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_DeleteBot.html)
+// Deletes a specific version of a bot. To delete all versions of a bot, use
+// the DeleteBot (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_DeleteBot.html)
 // operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2477,7 +2759,7 @@ func (c *LexModelsV2) DeleteUtterancesRequest(input *DeleteUtterancesInput) (req
 // Deletes stored utterances.
 //
 // Amazon Lex stores the utterances that users send to your bot. Utterances
-// are stored for 15 days for use with the ListAggregatedUtterances (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListAggregatedUtterances.html)
+// are stored for 15 days for use with the ListAggregatedUtterances (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListAggregatedUtterances.html)
 // operation, and then stored indefinitely for use in improving the ability
 // of your bot to respond to user input..
 //
@@ -4597,7 +4879,7 @@ func (c *LexModelsV2) ListBuiltInIntentsRequest(input *ListBuiltInIntentsInput) 
 //
 // To use a built-in intent as a the base for your own intent, include the built-in
 // intent signature in the parentIntentSignature parameter when you call the
-// CreateIntent operation. For more information, see CreateIntent (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateIntent.html).
+// CreateIntent operation. For more information, see CreateIntent (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_CreateIntent.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4834,6 +5116,158 @@ func (c *LexModelsV2) ListBuiltInSlotTypesPagesWithContext(ctx aws.Context, inpu
 
 	for p.Next() {
 		if !fn(p.Page().(*ListBuiltInSlotTypesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCustomVocabularyItems = "ListCustomVocabularyItems"
+
+// ListCustomVocabularyItemsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCustomVocabularyItems operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCustomVocabularyItems for more information on using the ListCustomVocabularyItems
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListCustomVocabularyItemsRequest method.
+//    req, resp := client.ListCustomVocabularyItemsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/ListCustomVocabularyItems
+func (c *LexModelsV2) ListCustomVocabularyItemsRequest(input *ListCustomVocabularyItemsInput) (req *request.Request, output *ListCustomVocabularyItemsOutput) {
+	op := &request.Operation{
+		Name:       opListCustomVocabularyItems,
+		HTTPMethod: "POST",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/customvocabulary/DEFAULT/list",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCustomVocabularyItemsInput{}
+	}
+
+	output = &ListCustomVocabularyItemsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCustomVocabularyItems API operation for Amazon Lex Model Building V2.
+//
+// Paginated list of custom vocabulary items for a given bot locale's custom
+// vocabulary.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation ListCustomVocabularyItems for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/ListCustomVocabularyItems
+func (c *LexModelsV2) ListCustomVocabularyItems(input *ListCustomVocabularyItemsInput) (*ListCustomVocabularyItemsOutput, error) {
+	req, out := c.ListCustomVocabularyItemsRequest(input)
+	return out, req.Send()
+}
+
+// ListCustomVocabularyItemsWithContext is the same as ListCustomVocabularyItems with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCustomVocabularyItems for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) ListCustomVocabularyItemsWithContext(ctx aws.Context, input *ListCustomVocabularyItemsInput, opts ...request.Option) (*ListCustomVocabularyItemsOutput, error) {
+	req, out := c.ListCustomVocabularyItemsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCustomVocabularyItemsPages iterates over the pages of a ListCustomVocabularyItems operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCustomVocabularyItems method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCustomVocabularyItems operation.
+//    pageNum := 0
+//    err := client.ListCustomVocabularyItemsPages(params,
+//        func(page *lexmodelsv2.ListCustomVocabularyItemsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *LexModelsV2) ListCustomVocabularyItemsPages(input *ListCustomVocabularyItemsInput, fn func(*ListCustomVocabularyItemsOutput, bool) bool) error {
+	return c.ListCustomVocabularyItemsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCustomVocabularyItemsPagesWithContext same as ListCustomVocabularyItemsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) ListCustomVocabularyItemsPagesWithContext(ctx aws.Context, input *ListCustomVocabularyItemsInput, fn func(*ListCustomVocabularyItemsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCustomVocabularyItemsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCustomVocabularyItemsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCustomVocabularyItemsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -5329,7 +5763,7 @@ func (c *LexModelsV2) ListRecommendedIntentsRequest(input *ListRecommendedIntent
 // ListRecommendedIntents API operation for Amazon Lex Model Building V2.
 //
 // Gets a list of recommended intents provided by the bot recommendation that
-// you can use in your bot.
+// you can use in your bot. Intents in the response are ordered by relevance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6115,6 +6549,113 @@ func (c *LexModelsV2) StartImportWithContext(ctx aws.Context, input *StartImport
 	return out, req.Send()
 }
 
+const opStopBotRecommendation = "StopBotRecommendation"
+
+// StopBotRecommendationRequest generates a "aws/request.Request" representing the
+// client's request for the StopBotRecommendation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopBotRecommendation for more information on using the StopBotRecommendation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopBotRecommendationRequest method.
+//    req, resp := client.StopBotRecommendationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/StopBotRecommendation
+func (c *LexModelsV2) StopBotRecommendationRequest(input *StopBotRecommendationInput) (req *request.Request, output *StopBotRecommendationOutput) {
+	op := &request.Operation{
+		Name:       opStopBotRecommendation,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/botrecommendations/{botRecommendationId}/stopbotrecommendation",
+	}
+
+	if input == nil {
+		input = &StopBotRecommendationInput{}
+	}
+
+	output = &StopBotRecommendationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopBotRecommendation API operation for Amazon Lex Model Building V2.
+//
+// Stop an already running Bot Recommendation request.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation StopBotRecommendation for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * ConflictException
+//   The action that you tried to perform couldn't be completed because the resource
+//   is in a conflicting state. For example, deleting a bot that is in the CREATING
+//   state. Try your request again.
+//
+//   * PreconditionFailedException
+//   Your request couldn't be completed because one or more request fields aren't
+//   valid. Check the fields in your request and try again.
+//
+//   * ConflictException
+//   The action that you tried to perform couldn't be completed because the resource
+//   is in a conflicting state. For example, deleting a bot that is in the CREATING
+//   state. Try your request again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/StopBotRecommendation
+func (c *LexModelsV2) StopBotRecommendation(input *StopBotRecommendationInput) (*StopBotRecommendationOutput, error) {
+	req, out := c.StopBotRecommendationRequest(input)
+	return out, req.Send()
+}
+
+// StopBotRecommendationWithContext is the same as StopBotRecommendation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopBotRecommendation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) StopBotRecommendationWithContext(ctx aws.Context, input *StopBotRecommendationInput, opts ...request.Option) (*StopBotRecommendationOutput, error) {
+	req, out := c.StopBotRecommendationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -6748,7 +7289,8 @@ func (c *LexModelsV2) UpdateExportRequest(input *UpdateExportInput) (req *reques
 // The password is not required. If you don't supply a password, Amazon Lex
 // generates a zip file that is not protected by a password. This is the archive
 // that is available at the pre-signed S3 URL provided by the DescribeExport
-// (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeExport.html) operation.
+// (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_DescribeExport.html)
+// operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7459,6 +8001,67 @@ func (s *AggregatedUtterancesSummary) SetUtteranceLastRecordedInAggregationDurat
 	return s
 }
 
+// Specifies the allowed input types.
+type AllowedInputTypes struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether audio input is allowed.
+	//
+	// AllowAudioInput is a required field
+	AllowAudioInput *bool `locationName:"allowAudioInput" type:"boolean" required:"true"`
+
+	// Indicates whether DTMF input is allowed.
+	//
+	// AllowDTMFInput is a required field
+	AllowDTMFInput *bool `locationName:"allowDTMFInput" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AllowedInputTypes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AllowedInputTypes) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AllowedInputTypes) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AllowedInputTypes"}
+	if s.AllowAudioInput == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowAudioInput"))
+	}
+	if s.AllowDTMFInput == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowDTMFInput"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowAudioInput sets the AllowAudioInput field's value.
+func (s *AllowedInputTypes) SetAllowAudioInput(v bool) *AllowedInputTypes {
+	s.AllowAudioInput = &v
+	return s
+}
+
+// SetAllowDTMFInput sets the AllowDTMFInput field's value.
+func (s *AllowedInputTypes) SetAllowDTMFInput(v bool) *AllowedInputTypes {
+	s.AllowDTMFInput = &v
+	return s
+}
+
 // The object containing information that associates the recommended intent/slot
 // type with a conversation.
 type AssociatedTranscript struct {
@@ -7558,13 +8161,92 @@ func (s *AssociatedTranscriptFilter) SetValues(v []*string) *AssociatedTranscrip
 	return s
 }
 
+// Specifies the audio and DTMF input specification.
+type AudioAndDTMFInputSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the settings on audio input.
+	AudioSpecification *AudioSpecification `locationName:"audioSpecification" type:"structure"`
+
+	// Specifies the settings on DTMF input.
+	DtmfSpecification *DTMFSpecification `locationName:"dtmfSpecification" type:"structure"`
+
+	// Time for which a bot waits before assuming that the customer isn't going
+	// to speak or press a key. This timeout is shared between Audio and DTMF inputs.
+	//
+	// StartTimeoutMs is a required field
+	StartTimeoutMs *int64 `locationName:"startTimeoutMs" min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudioAndDTMFInputSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudioAndDTMFInputSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AudioAndDTMFInputSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AudioAndDTMFInputSpecification"}
+	if s.StartTimeoutMs == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTimeoutMs"))
+	}
+	if s.StartTimeoutMs != nil && *s.StartTimeoutMs < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("StartTimeoutMs", 1))
+	}
+	if s.AudioSpecification != nil {
+		if err := s.AudioSpecification.Validate(); err != nil {
+			invalidParams.AddNested("AudioSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DtmfSpecification != nil {
+		if err := s.DtmfSpecification.Validate(); err != nil {
+			invalidParams.AddNested("DtmfSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAudioSpecification sets the AudioSpecification field's value.
+func (s *AudioAndDTMFInputSpecification) SetAudioSpecification(v *AudioSpecification) *AudioAndDTMFInputSpecification {
+	s.AudioSpecification = v
+	return s
+}
+
+// SetDtmfSpecification sets the DtmfSpecification field's value.
+func (s *AudioAndDTMFInputSpecification) SetDtmfSpecification(v *DTMFSpecification) *AudioAndDTMFInputSpecification {
+	s.DtmfSpecification = v
+	return s
+}
+
+// SetStartTimeoutMs sets the StartTimeoutMs field's value.
+func (s *AudioAndDTMFInputSpecification) SetStartTimeoutMs(v int64) *AudioAndDTMFInputSpecification {
+	s.StartTimeoutMs = &v
+	return s
+}
+
 // The location of audio log files collected when conversation logging is enabled
 // for a bot.
 type AudioLogDestination struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon S3 bucket where the audio log files are stored. The IAM role specified
-	// in the roleArn parameter of the CreateBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateBot.html)
+	// in the roleArn parameter of the CreateBot (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_CreateBot.html)
 	// operation must have permission to write to this bucket.
 	//
 	// S3Bucket is a required field
@@ -7682,6 +8364,627 @@ func (s *AudioLogSetting) SetEnabled(v bool) *AudioLogSetting {
 	return s
 }
 
+// Specifies the audio input specifications.
+type AudioSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Time for which a bot waits after the customer stops speaking to assume the
+	// utterance is finished.
+	//
+	// EndTimeoutMs is a required field
+	EndTimeoutMs *int64 `locationName:"endTimeoutMs" min:"1" type:"integer" required:"true"`
+
+	// Time for how long Amazon Lex waits before speech input is truncated and the
+	// speech is returned to application.
+	//
+	// MaxLengthMs is a required field
+	MaxLengthMs *int64 `locationName:"maxLengthMs" min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudioSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudioSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AudioSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AudioSpecification"}
+	if s.EndTimeoutMs == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTimeoutMs"))
+	}
+	if s.EndTimeoutMs != nil && *s.EndTimeoutMs < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("EndTimeoutMs", 1))
+	}
+	if s.MaxLengthMs == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxLengthMs"))
+	}
+	if s.MaxLengthMs != nil && *s.MaxLengthMs < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxLengthMs", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTimeoutMs sets the EndTimeoutMs field's value.
+func (s *AudioSpecification) SetEndTimeoutMs(v int64) *AudioSpecification {
+	s.EndTimeoutMs = &v
+	return s
+}
+
+// SetMaxLengthMs sets the MaxLengthMs field's value.
+func (s *AudioSpecification) SetMaxLengthMs(v int64) *AudioSpecification {
+	s.MaxLengthMs = &v
+	return s
+}
+
+type BatchCreateCustomVocabularyItemInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with this custom vocabulary.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"1" type:"string" required:"true"`
+
+	// A list of new custom vocabulary items. Each entry must contain a phrase and
+	// can optionally contain a displayAs and/or a weight.
+	//
+	// CustomVocabularyItemList is a required field
+	CustomVocabularyItemList []*NewCustomVocabularyItem `locationName:"customVocabularyItemList" min:"1" type:"list" required:"true"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported Languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchCreateCustomVocabularyItemInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchCreateCustomVocabularyItemInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchCreateCustomVocabularyItemInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchCreateCustomVocabularyItemInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 1))
+	}
+	if s.CustomVocabularyItemList == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomVocabularyItemList"))
+	}
+	if s.CustomVocabularyItemList != nil && len(s.CustomVocabularyItemList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CustomVocabularyItemList", 1))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.CustomVocabularyItemList != nil {
+		for i, v := range s.CustomVocabularyItemList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CustomVocabularyItemList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *BatchCreateCustomVocabularyItemInput) SetBotId(v string) *BatchCreateCustomVocabularyItemInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *BatchCreateCustomVocabularyItemInput) SetBotVersion(v string) *BatchCreateCustomVocabularyItemInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCustomVocabularyItemList sets the CustomVocabularyItemList field's value.
+func (s *BatchCreateCustomVocabularyItemInput) SetCustomVocabularyItemList(v []*NewCustomVocabularyItem) *BatchCreateCustomVocabularyItemInput {
+	s.CustomVocabularyItemList = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *BatchCreateCustomVocabularyItemInput) SetLocaleId(v string) *BatchCreateCustomVocabularyItemInput {
+	s.LocaleId = &v
+	return s
+}
+
+type BatchCreateCustomVocabularyItemOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with this custom vocabulary.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
+
+	// A list of custom vocabulary items that failed to create during the operation.
+	// The reason for the error is contained within each error object.
+	Errors []*FailedCustomVocabularyItem `locationName:"errors" type:"list"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported Languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// A list of custom vocabulary items that were successfully created during the
+	// operation.
+	Resources []*CustomVocabularyItem `locationName:"resources" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchCreateCustomVocabularyItemOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchCreateCustomVocabularyItemOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *BatchCreateCustomVocabularyItemOutput) SetBotId(v string) *BatchCreateCustomVocabularyItemOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *BatchCreateCustomVocabularyItemOutput) SetBotVersion(v string) *BatchCreateCustomVocabularyItemOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchCreateCustomVocabularyItemOutput) SetErrors(v []*FailedCustomVocabularyItem) *BatchCreateCustomVocabularyItemOutput {
+	s.Errors = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *BatchCreateCustomVocabularyItemOutput) SetLocaleId(v string) *BatchCreateCustomVocabularyItemOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *BatchCreateCustomVocabularyItemOutput) SetResources(v []*CustomVocabularyItem) *BatchCreateCustomVocabularyItemOutput {
+	s.Resources = v
+	return s
+}
+
+type BatchDeleteCustomVocabularyItemInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with this custom vocabulary.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"1" type:"string" required:"true"`
+
+	// A list of custom vocabulary items requested to be deleted. Each entry must
+	// contain the unique custom vocabulary entry identifier.
+	//
+	// CustomVocabularyItemList is a required field
+	CustomVocabularyItemList []*CustomVocabularyEntryId `locationName:"customVocabularyItemList" min:"1" type:"list" required:"true"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported Languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteCustomVocabularyItemInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteCustomVocabularyItemInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchDeleteCustomVocabularyItemInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchDeleteCustomVocabularyItemInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 1))
+	}
+	if s.CustomVocabularyItemList == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomVocabularyItemList"))
+	}
+	if s.CustomVocabularyItemList != nil && len(s.CustomVocabularyItemList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CustomVocabularyItemList", 1))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.CustomVocabularyItemList != nil {
+		for i, v := range s.CustomVocabularyItemList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CustomVocabularyItemList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *BatchDeleteCustomVocabularyItemInput) SetBotId(v string) *BatchDeleteCustomVocabularyItemInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *BatchDeleteCustomVocabularyItemInput) SetBotVersion(v string) *BatchDeleteCustomVocabularyItemInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCustomVocabularyItemList sets the CustomVocabularyItemList field's value.
+func (s *BatchDeleteCustomVocabularyItemInput) SetCustomVocabularyItemList(v []*CustomVocabularyEntryId) *BatchDeleteCustomVocabularyItemInput {
+	s.CustomVocabularyItemList = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *BatchDeleteCustomVocabularyItemInput) SetLocaleId(v string) *BatchDeleteCustomVocabularyItemInput {
+	s.LocaleId = &v
+	return s
+}
+
+type BatchDeleteCustomVocabularyItemOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with this custom vocabulary.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
+
+	// A list of custom vocabulary items that failed to delete during the operation.
+	// The reason for the error is contained within each error object.
+	Errors []*FailedCustomVocabularyItem `locationName:"errors" type:"list"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// A list of custom vocabulary items that were successfully deleted during the
+	// operation.
+	Resources []*CustomVocabularyItem `locationName:"resources" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteCustomVocabularyItemOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchDeleteCustomVocabularyItemOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *BatchDeleteCustomVocabularyItemOutput) SetBotId(v string) *BatchDeleteCustomVocabularyItemOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *BatchDeleteCustomVocabularyItemOutput) SetBotVersion(v string) *BatchDeleteCustomVocabularyItemOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchDeleteCustomVocabularyItemOutput) SetErrors(v []*FailedCustomVocabularyItem) *BatchDeleteCustomVocabularyItemOutput {
+	s.Errors = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *BatchDeleteCustomVocabularyItemOutput) SetLocaleId(v string) *BatchDeleteCustomVocabularyItemOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *BatchDeleteCustomVocabularyItemOutput) SetResources(v []*CustomVocabularyItem) *BatchDeleteCustomVocabularyItemOutput {
+	s.Resources = v
+	return s
+}
+
+type BatchUpdateCustomVocabularyItemInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with this custom vocabulary
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"1" type:"string" required:"true"`
+
+	// A list of custom vocabulary items with updated fields. Each entry must contain
+	// a phrase and can optionally contain a displayAs and/or a weight.
+	//
+	// CustomVocabularyItemList is a required field
+	CustomVocabularyItemList []*CustomVocabularyItem `locationName:"customVocabularyItemList" min:"1" type:"list" required:"true"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported Languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchUpdateCustomVocabularyItemInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchUpdateCustomVocabularyItemInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchUpdateCustomVocabularyItemInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchUpdateCustomVocabularyItemInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 1))
+	}
+	if s.CustomVocabularyItemList == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomVocabularyItemList"))
+	}
+	if s.CustomVocabularyItemList != nil && len(s.CustomVocabularyItemList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CustomVocabularyItemList", 1))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.CustomVocabularyItemList != nil {
+		for i, v := range s.CustomVocabularyItemList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CustomVocabularyItemList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *BatchUpdateCustomVocabularyItemInput) SetBotId(v string) *BatchUpdateCustomVocabularyItemInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *BatchUpdateCustomVocabularyItemInput) SetBotVersion(v string) *BatchUpdateCustomVocabularyItemInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCustomVocabularyItemList sets the CustomVocabularyItemList field's value.
+func (s *BatchUpdateCustomVocabularyItemInput) SetCustomVocabularyItemList(v []*CustomVocabularyItem) *BatchUpdateCustomVocabularyItemInput {
+	s.CustomVocabularyItemList = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *BatchUpdateCustomVocabularyItemInput) SetLocaleId(v string) *BatchUpdateCustomVocabularyItemInput {
+	s.LocaleId = &v
+	return s
+}
+
+type BatchUpdateCustomVocabularyItemOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with this custom vocabulary.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
+
+	// A list of custom vocabulary items that failed to update during the operation.
+	// The reason for the error is contained within each error object.
+	Errors []*FailedCustomVocabularyItem `locationName:"errors" type:"list"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported Languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// A list of custom vocabulary items that were successfully updated during the
+	// operation.
+	Resources []*CustomVocabularyItem `locationName:"resources" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchUpdateCustomVocabularyItemOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchUpdateCustomVocabularyItemOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *BatchUpdateCustomVocabularyItemOutput) SetBotId(v string) *BatchUpdateCustomVocabularyItemOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *BatchUpdateCustomVocabularyItemOutput) SetBotVersion(v string) *BatchUpdateCustomVocabularyItemOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchUpdateCustomVocabularyItemOutput) SetErrors(v []*FailedCustomVocabularyItem) *BatchUpdateCustomVocabularyItemOutput {
+	s.Errors = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *BatchUpdateCustomVocabularyItemOutput) SetLocaleId(v string) *BatchUpdateCustomVocabularyItemOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *BatchUpdateCustomVocabularyItemOutput) SetResources(v []*CustomVocabularyItem) *BatchUpdateCustomVocabularyItemOutput {
+	s.Resources = v
+	return s
+}
+
 // Provides a record of an event that affects a bot alias. For example, when
 // the version of a bot that the alias points to changes.
 type BotAliasHistoryEvent struct {
@@ -7796,13 +9099,13 @@ func (s *BotAliasLocaleSettings) SetEnabled(v bool) *BotAliasLocaleSettings {
 	return s
 }
 
-// Summary information about bot aliases returned from the ListBotAliases (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBotAliases.html)
+// Summary information about bot aliases returned from the ListBotAliases (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListBotAliases.html)
 // operation.
 type BotAliasSummary struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier assigned to the bot alias. You can use this ID to get
-	// detailed information about the alias using the DescribeBotAlias (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeBotAlias.html)
+	// detailed information about the alias using the DescribeBotAlias (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_DescribeBotAlias.html)
 	// operation.
 	BotAliasId *string `locationName:"botAliasId" min:"10" type:"string"`
 
@@ -8557,7 +9860,7 @@ func (s *BotLocaleSortBy) SetOrder(v string) *BotLocaleSortBy {
 	return s
 }
 
-// Summary information about bot locales returned by the ListBotLocales (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBotLocales.html)
+// Summary information about bot locales returned by the ListBotLocales (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListBotLocales.html)
 // operation.
 type BotLocaleSummary struct {
 	_ struct{} `type:"structure"`
@@ -8633,6 +9936,124 @@ func (s *BotLocaleSummary) SetLocaleId(v string) *BotLocaleSummary {
 // SetLocaleName sets the LocaleName field's value.
 func (s *BotLocaleSummary) SetLocaleName(v string) *BotLocaleSummary {
 	s.LocaleName = &v
+	return s
+}
+
+// A bot that is a member of a network of bots.
+type BotMember struct {
+	_ struct{} `type:"structure"`
+
+	// The alias ID of a bot that is a member of this network of bots.
+	//
+	// BotMemberAliasId is a required field
+	BotMemberAliasId *string `locationName:"botMemberAliasId" min:"10" type:"string" required:"true"`
+
+	// The alias name of a bot that is a member of this network of bots.
+	//
+	// BotMemberAliasName is a required field
+	BotMemberAliasName *string `locationName:"botMemberAliasName" min:"1" type:"string" required:"true"`
+
+	// The unique ID of a bot that is a member of this network of bots.
+	//
+	// BotMemberId is a required field
+	BotMemberId *string `locationName:"botMemberId" min:"10" type:"string" required:"true"`
+
+	// The unique name of a bot that is a member of this network of bots.
+	//
+	// BotMemberName is a required field
+	BotMemberName *string `locationName:"botMemberName" min:"1" type:"string" required:"true"`
+
+	// The version of a bot that is a member of this network of bots.
+	//
+	// BotMemberVersion is a required field
+	BotMemberVersion *string `locationName:"botMemberVersion" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotMember) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotMember) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BotMember) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BotMember"}
+	if s.BotMemberAliasId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotMemberAliasId"))
+	}
+	if s.BotMemberAliasId != nil && len(*s.BotMemberAliasId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotMemberAliasId", 10))
+	}
+	if s.BotMemberAliasName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotMemberAliasName"))
+	}
+	if s.BotMemberAliasName != nil && len(*s.BotMemberAliasName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotMemberAliasName", 1))
+	}
+	if s.BotMemberId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotMemberId"))
+	}
+	if s.BotMemberId != nil && len(*s.BotMemberId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotMemberId", 10))
+	}
+	if s.BotMemberName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotMemberName"))
+	}
+	if s.BotMemberName != nil && len(*s.BotMemberName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotMemberName", 1))
+	}
+	if s.BotMemberVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotMemberVersion"))
+	}
+	if s.BotMemberVersion != nil && len(*s.BotMemberVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotMemberVersion", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotMemberAliasId sets the BotMemberAliasId field's value.
+func (s *BotMember) SetBotMemberAliasId(v string) *BotMember {
+	s.BotMemberAliasId = &v
+	return s
+}
+
+// SetBotMemberAliasName sets the BotMemberAliasName field's value.
+func (s *BotMember) SetBotMemberAliasName(v string) *BotMember {
+	s.BotMemberAliasName = &v
+	return s
+}
+
+// SetBotMemberId sets the BotMemberId field's value.
+func (s *BotMember) SetBotMemberId(v string) *BotMember {
+	s.BotMemberId = &v
+	return s
+}
+
+// SetBotMemberName sets the BotMemberName field's value.
+func (s *BotMember) SetBotMemberName(v string) *BotMember {
+	s.BotMemberName = &v
+	return s
+}
+
+// SetBotMemberVersion sets the BotMemberVersion field's value.
+func (s *BotMember) SetBotMemberVersion(v string) *BotMember {
+	s.BotMemberVersion = &v
 	return s
 }
 
@@ -8857,13 +10278,13 @@ func (s *BotSortBy) SetOrder(v string) *BotSortBy {
 	return s
 }
 
-// Summary information about a bot returned by the ListBots (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBots.html)
+// Summary information about a bot returned by the ListBots (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListBots.html)
 // operation.
 type BotSummary struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier assigned to the bot. Use this ID to get detailed information
-	// about the bot with the DescribeBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeBot.html)
+	// about the bot with the DescribeBot (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_DescribeBot.html)
 	// operation.
 	BotId *string `locationName:"botId" min:"10" type:"string"`
 
@@ -8873,6 +10294,9 @@ type BotSummary struct {
 	// The current status of the bot. When the status is Available the bot is ready
 	// for use.
 	BotStatus *string `locationName:"botStatus" type:"string" enum:"BotStatus"`
+
+	// The type of the bot.
+	BotType *string `locationName:"botType" type:"string" enum:"BotType"`
 
 	// The description of the bot.
 	Description *string `locationName:"description" type:"string"`
@@ -8917,6 +10341,12 @@ func (s *BotSummary) SetBotName(v string) *BotSummary {
 // SetBotStatus sets the BotStatus field's value.
 func (s *BotSummary) SetBotStatus(v string) *BotSummary {
 	s.BotStatus = &v
+	return s
+}
+
+// SetBotType sets the BotType field's value.
+func (s *BotSummary) SetBotType(v string) *BotSummary {
+	s.BotType = &v
 	return s
 }
 
@@ -9049,7 +10479,7 @@ func (s *BotVersionSortBy) SetOrder(v string) *BotVersionSortBy {
 	return s
 }
 
-// Summary information about a bot version returned by the ListBotVersions (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBotVersions.html)
+// Summary information about a bot version returned by the ListBotVersions (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListBotVersions.html)
 // operation.
 type BotVersionSummary struct {
 	_ struct{} `type:"structure"`
@@ -9124,7 +10554,7 @@ type BuildBotLocaleInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The identifier of the bot to build. The identifier is returned in the response
-	// from the CreateBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateBot.html)
+	// from the CreateBot (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_CreateBot.html)
 	// operation.
 	//
 	// BotId is a required field
@@ -9343,7 +10773,7 @@ func (s *BuiltInIntentSortBy) SetOrder(v string) *BuiltInIntentSortBy {
 }
 
 // Provides summary information about a built-in intent for the ListBuiltInIntents
-// (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBuiltInIntents.html)
+// (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListBuiltInIntents.html)
 // operation.
 type BuiltInIntentSummary struct {
 	_ struct{} `type:"structure"`
@@ -9448,7 +10878,7 @@ func (s *BuiltInSlotTypeSortBy) SetOrder(v string) *BuiltInSlotTypeSortBy {
 }
 
 // Provides summary information about a built-in slot type for the ListBuiltInSlotTypes
-// (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBuiltInSlotTypes.html)
+// (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListBuiltInSlotTypes.html)
 // operation.
 type BuiltInSlotTypeSummary struct {
 	_ struct{} `type:"structure"`
@@ -9680,6 +11110,315 @@ func (s *CodeHookSpecification) SetLambdaCodeHook(v *LambdaCodeHook) *CodeHookSp
 	return s
 }
 
+// A composite slot is a combination of two or more slots that capture multiple
+// pieces of information in a single user input.
+type CompositeSlotTypeSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Subslots in the composite slot.
+	SubSlots []*SubSlotTypeComposition `locationName:"subSlots" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeSlotTypeSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeSlotTypeSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CompositeSlotTypeSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CompositeSlotTypeSetting"}
+	if s.SubSlots != nil {
+		for i, v := range s.SubSlots {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SubSlots", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSubSlots sets the SubSlots field's value.
+func (s *CompositeSlotTypeSetting) SetSubSlots(v []*SubSlotTypeComposition) *CompositeSlotTypeSetting {
+	s.SubSlots = v
+	return s
+}
+
+// Provides an expression that evaluates to true or false.
+type Condition struct {
+	_ struct{} `type:"structure"`
+
+	// The expression string that is evaluated.
+	//
+	// ExpressionString is a required field
+	ExpressionString *string `locationName:"expressionString" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Condition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Condition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Condition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Condition"}
+	if s.ExpressionString == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExpressionString"))
+	}
+	if s.ExpressionString != nil && len(*s.ExpressionString) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ExpressionString", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExpressionString sets the ExpressionString field's value.
+func (s *Condition) SetExpressionString(v string) *Condition {
+	s.ExpressionString = &v
+	return s
+}
+
+// A set of actions that Amazon Lex should run if the condition is matched.
+type ConditionalBranch struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the expression to evaluate. If the condition is true, the branch's
+	// actions are taken.
+	//
+	// Condition is a required field
+	Condition *Condition `locationName:"condition" type:"structure" required:"true"`
+
+	// The name of the branch.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The next step in the conversation.
+	//
+	// NextStep is a required field
+	NextStep *DialogState `locationName:"nextStep" type:"structure" required:"true"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	Response *ResponseSpecification `locationName:"response" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConditionalBranch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConditionalBranch) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConditionalBranch) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConditionalBranch"}
+	if s.Condition == nil {
+		invalidParams.Add(request.NewErrParamRequired("Condition"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.NextStep == nil {
+		invalidParams.Add(request.NewErrParamRequired("NextStep"))
+	}
+	if s.Condition != nil {
+		if err := s.Condition.Validate(); err != nil {
+			invalidParams.AddNested("Condition", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.NextStep != nil {
+		if err := s.NextStep.Validate(); err != nil {
+			invalidParams.AddNested("NextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Response != nil {
+		if err := s.Response.Validate(); err != nil {
+			invalidParams.AddNested("Response", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCondition sets the Condition field's value.
+func (s *ConditionalBranch) SetCondition(v *Condition) *ConditionalBranch {
+	s.Condition = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ConditionalBranch) SetName(v string) *ConditionalBranch {
+	s.Name = &v
+	return s
+}
+
+// SetNextStep sets the NextStep field's value.
+func (s *ConditionalBranch) SetNextStep(v *DialogState) *ConditionalBranch {
+	s.NextStep = v
+	return s
+}
+
+// SetResponse sets the Response field's value.
+func (s *ConditionalBranch) SetResponse(v *ResponseSpecification) *ConditionalBranch {
+	s.Response = v
+	return s
+}
+
+// Provides a list of conditional branches. Branches are evaluated in the order
+// that they are entered in the list. The first branch with a condition that
+// evaluates to true is executed. The last branch in the list is the default
+// branch. The default branch should not have any condition expression. The
+// default branch is executed if no other branch has a matching condition.
+type ConditionalSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Determines whether a conditional branch is active. When active is false,
+	// the conditions are not evaluated.
+	//
+	// Active is a required field
+	Active *bool `locationName:"active" type:"boolean" required:"true"`
+
+	// A list of conditional branches. A conditional branch is made up of a condition,
+	// a response and a next step. The response and next step are executed when
+	// the condition is true.
+	//
+	// ConditionalBranches is a required field
+	ConditionalBranches []*ConditionalBranch `locationName:"conditionalBranches" min:"1" type:"list" required:"true"`
+
+	// The conditional branch that should be followed when the conditions for other
+	// branches are not satisfied. A conditional branch is made up of a condition,
+	// a response and a next step.
+	//
+	// DefaultBranch is a required field
+	DefaultBranch *DefaultConditionalBranch `locationName:"defaultBranch" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConditionalSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConditionalSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConditionalSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConditionalSpecification"}
+	if s.Active == nil {
+		invalidParams.Add(request.NewErrParamRequired("Active"))
+	}
+	if s.ConditionalBranches == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConditionalBranches"))
+	}
+	if s.ConditionalBranches != nil && len(s.ConditionalBranches) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConditionalBranches", 1))
+	}
+	if s.DefaultBranch == nil {
+		invalidParams.Add(request.NewErrParamRequired("DefaultBranch"))
+	}
+	if s.ConditionalBranches != nil {
+		for i, v := range s.ConditionalBranches {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ConditionalBranches", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.DefaultBranch != nil {
+		if err := s.DefaultBranch.Validate(); err != nil {
+			invalidParams.AddNested("DefaultBranch", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetActive sets the Active field's value.
+func (s *ConditionalSpecification) SetActive(v bool) *ConditionalSpecification {
+	s.Active = &v
+	return s
+}
+
+// SetConditionalBranches sets the ConditionalBranches field's value.
+func (s *ConditionalSpecification) SetConditionalBranches(v []*ConditionalBranch) *ConditionalSpecification {
+	s.ConditionalBranches = v
+	return s
+}
+
+// SetDefaultBranch sets the DefaultBranch field's value.
+func (s *ConditionalSpecification) SetDefaultBranch(v *DefaultConditionalBranch) *ConditionalSpecification {
+	s.DefaultBranch = v
+	return s
+}
+
 // The action that you tried to perform couldn't be completed because the resource
 // is in a conflicting state. For example, deleting a bot that is in the CREATING
 // state. Try your request again.
@@ -9843,8 +11582,8 @@ type CreateBotAliasInput struct {
 	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
 
 	// The version of the bot that this alias points to. You can use the UpdateBotAlias
-	// (https://docs.aws.amazon.com/lexv2/latest/dg/API_UpdateBotAlias.html) operation
-	// to change the bot version associated with the alias.
+	// (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_UpdateBotAlias.html)
+	// operation to change the bot version associated with the alias.
 	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
 
 	// Specifies whether Amazon Lex logs text and audio for a conversation with
@@ -10108,6 +11847,9 @@ func (s *CreateBotAliasOutput) SetTags(v map[string]*string) *CreateBotAliasOutp
 type CreateBotInput struct {
 	_ struct{} `type:"structure"`
 
+	// The list of bot members in a network to be created.
+	BotMembers []*BotMember `locationName:"botMembers" type:"list"`
+
 	// The name of the bot. The bot name must be unique in the account that creates
 	// the bot.
 	//
@@ -10118,6 +11860,9 @@ type CreateBotInput struct {
 	// bot. You can't use the UpdateBot operation to update tags. To update tags,
 	// use the TagResource operation.
 	BotTags map[string]*string `locationName:"botTags" type:"map"`
+
+	// The type of a bot to create.
+	BotType *string `locationName:"botType" type:"string" enum:"BotType"`
 
 	// Provides information on additional privacy protections Amazon Lex should
 	// use with the bot's data.
@@ -10195,6 +11940,16 @@ func (s *CreateBotInput) Validate() error {
 	if s.RoleArn != nil && len(*s.RoleArn) < 32 {
 		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 32))
 	}
+	if s.BotMembers != nil {
+		for i, v := range s.BotMembers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BotMembers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.DataPrivacy != nil {
 		if err := s.DataPrivacy.Validate(); err != nil {
 			invalidParams.AddNested("DataPrivacy", err.(request.ErrInvalidParams))
@@ -10207,6 +11962,12 @@ func (s *CreateBotInput) Validate() error {
 	return nil
 }
 
+// SetBotMembers sets the BotMembers field's value.
+func (s *CreateBotInput) SetBotMembers(v []*BotMember) *CreateBotInput {
+	s.BotMembers = v
+	return s
+}
+
 // SetBotName sets the BotName field's value.
 func (s *CreateBotInput) SetBotName(v string) *CreateBotInput {
 	s.BotName = &v
@@ -10216,6 +11977,12 @@ func (s *CreateBotInput) SetBotName(v string) *CreateBotInput {
 // SetBotTags sets the BotTags field's value.
 func (s *CreateBotInput) SetBotTags(v map[string]*string) *CreateBotInput {
 	s.BotTags = v
+	return s
+}
+
+// SetBotType sets the BotType field's value.
+func (s *CreateBotInput) SetBotType(v string) *CreateBotInput {
+	s.BotType = &v
 	return s
 }
 
@@ -10510,16 +12277,22 @@ type CreateBotOutput struct {
 	// when you call other Amazon Lex API operations.
 	BotId *string `locationName:"botId" min:"10" type:"string"`
 
+	// The list of bots in a network that was created.
+	BotMembers []*BotMember `locationName:"botMembers" type:"list"`
+
 	// The name specified for the bot.
 	BotName *string `locationName:"botName" min:"1" type:"string"`
 
 	// Shows the current status of the bot. The bot is first in the Creating status.
 	// Once the bot is read for use, it changes to the Available status. After the
-	// bot is created, you can use the Draft version of the bot.
+	// bot is created, you can use the DRAFT version of the bot.
 	BotStatus *string `locationName:"botStatus" type:"string" enum:"BotStatus"`
 
 	// A list of tags associated with the bot.
 	BotTags map[string]*string `locationName:"botTags" type:"map"`
+
+	// The type of a bot that was created.
+	BotType *string `locationName:"botType" type:"string" enum:"BotType"`
 
 	// A timestamp indicating the date and time that the bot was created.
 	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
@@ -10564,6 +12337,12 @@ func (s *CreateBotOutput) SetBotId(v string) *CreateBotOutput {
 	return s
 }
 
+// SetBotMembers sets the BotMembers field's value.
+func (s *CreateBotOutput) SetBotMembers(v []*BotMember) *CreateBotOutput {
+	s.BotMembers = v
+	return s
+}
+
 // SetBotName sets the BotName field's value.
 func (s *CreateBotOutput) SetBotName(v string) *CreateBotOutput {
 	s.BotName = &v
@@ -10579,6 +12358,12 @@ func (s *CreateBotOutput) SetBotStatus(v string) *CreateBotOutput {
 // SetBotTags sets the BotTags field's value.
 func (s *CreateBotOutput) SetBotTags(v map[string]*string) *CreateBotOutput {
 	s.BotTags = v
+	return s
+}
+
+// SetBotType sets the BotType field's value.
+func (s *CreateBotOutput) SetBotType(v string) *CreateBotOutput {
+	s.BotType = &v
 	return s
 }
 
@@ -10879,8 +12664,8 @@ type CreateExportOutput struct {
 	ExportId *string `locationName:"exportId" min:"10" type:"string"`
 
 	// The status of the export. When the status is Completed, you can use the DescribeExport
-	// (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeExport.html) operation
-	// to get the pre-signed S3 URL link to your exported bot or bot locale.
+	// (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_DescribeExport.html)
+	// operation to get the pre-signed S3 URL link to your exported bot or bot locale.
 	ExportStatus *string `locationName:"exportStatus" type:"string" enum:"ExportStatus"`
 
 	// The file format used for the bot or bot locale definition files.
@@ -10975,6 +12760,10 @@ type CreateIntentInput struct {
 	// closest pizza restaurant to the customer's location and then place an order
 	// on the customer's behalf.
 	FulfillmentCodeHook *FulfillmentCodeHookSettings `locationName:"fulfillmentCodeHook" type:"structure"`
+
+	// Configuration settings for the response that is sent to the user at the beginning
+	// of a conversation, before eliciting slot values.
+	InitialResponseSetting *InitialResponseSetting `locationName:"initialResponseSetting" type:"structure"`
 
 	// A list of contexts that must be active for this intent to be considered by
 	// Amazon Lex.
@@ -11099,6 +12888,11 @@ func (s *CreateIntentInput) Validate() error {
 			invalidParams.AddNested("FulfillmentCodeHook", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.InitialResponseSetting != nil {
+		if err := s.InitialResponseSetting.Validate(); err != nil {
+			invalidParams.AddNested("InitialResponseSetting", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.InputContexts != nil {
 		for i, v := range s.InputContexts {
 			if v == nil {
@@ -11181,6 +12975,12 @@ func (s *CreateIntentInput) SetFulfillmentCodeHook(v *FulfillmentCodeHookSetting
 	return s
 }
 
+// SetInitialResponseSetting sets the InitialResponseSetting field's value.
+func (s *CreateIntentInput) SetInitialResponseSetting(v *InitialResponseSetting) *CreateIntentInput {
+	s.InitialResponseSetting = v
+	return s
+}
+
 // SetInputContexts sets the InputContexts field's value.
 func (s *CreateIntentInput) SetInputContexts(v []*InputContext) *CreateIntentInput {
 	s.InputContexts = v
@@ -11255,6 +13055,10 @@ type CreateIntentOutput struct {
 
 	// The fulfillment Lambda function specified for the intent.
 	FulfillmentCodeHook *FulfillmentCodeHookSettings `locationName:"fulfillmentCodeHook" type:"structure"`
+
+	// Configuration settings for the response that is sent to the user at the beginning
+	// of a conversation, before eliciting slot values.
+	InitialResponseSetting *InitialResponseSetting `locationName:"initialResponseSetting" type:"structure"`
 
 	// The list of input contexts specified for the intent.
 	InputContexts []*InputContext `locationName:"inputContexts" type:"list"`
@@ -11338,6 +13142,12 @@ func (s *CreateIntentOutput) SetDialogCodeHook(v *DialogCodeHookSettings) *Creat
 // SetFulfillmentCodeHook sets the FulfillmentCodeHook field's value.
 func (s *CreateIntentOutput) SetFulfillmentCodeHook(v *FulfillmentCodeHookSettings) *CreateIntentOutput {
 	s.FulfillmentCodeHook = v
+	return s
+}
+
+// SetInitialResponseSetting sets the InitialResponseSetting field's value.
+func (s *CreateIntentOutput) SetInitialResponseSetting(v *InitialResponseSetting) *CreateIntentOutput {
+	s.InitialResponseSetting = v
 	return s
 }
 
@@ -11770,6 +13580,10 @@ type CreateSlotInput struct {
 	// type determines the values that can be entered into the slot.
 	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string"`
 
+	// Specifications for the constituent sub slots and the expression for the composite
+	// slot.
+	SubSlotSetting *SubSlotSetting `locationName:"subSlotSetting" type:"structure"`
+
 	// Specifies prompts that Amazon Lex sends to the user to elicit a response
 	// that provides the value for the slot.
 	//
@@ -11839,6 +13653,11 @@ func (s *CreateSlotInput) Validate() error {
 			invalidParams.AddNested("ObfuscationSetting", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.SubSlotSetting != nil {
+		if err := s.SubSlotSetting.Validate(); err != nil {
+			invalidParams.AddNested("SubSlotSetting", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ValueElicitationSetting != nil {
 		if err := s.ValueElicitationSetting.Validate(); err != nil {
 			invalidParams.AddNested("ValueElicitationSetting", err.(request.ErrInvalidParams))
@@ -11905,6 +13724,12 @@ func (s *CreateSlotInput) SetSlotTypeId(v string) *CreateSlotInput {
 	return s
 }
 
+// SetSubSlotSetting sets the SubSlotSetting field's value.
+func (s *CreateSlotInput) SetSubSlotSetting(v *SubSlotSetting) *CreateSlotInput {
+	s.SubSlotSetting = v
+	return s
+}
+
 // SetValueElicitationSetting sets the ValueElicitationSetting field's value.
 func (s *CreateSlotInput) SetValueElicitationSetting(v *SlotValueElicitationSetting) *CreateSlotInput {
 	s.ValueElicitationSetting = v
@@ -11948,6 +13773,10 @@ type CreateSlotOutput struct {
 
 	// The unique identifier of the slot type associated with this slot.
 	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string"`
+
+	// Specifications for the constituent sub slots and the expression for the composite
+	// slot.
+	SubSlotSetting *SubSlotSetting `locationName:"subSlotSetting" type:"structure"`
 
 	// The value elicitation settings specified for the slot.
 	ValueElicitationSetting *SlotValueElicitationSetting `locationName:"valueElicitationSetting" type:"structure"`
@@ -12037,6 +13866,12 @@ func (s *CreateSlotOutput) SetSlotTypeId(v string) *CreateSlotOutput {
 	return s
 }
 
+// SetSubSlotSetting sets the SubSlotSetting field's value.
+func (s *CreateSlotOutput) SetSubSlotSetting(v *SubSlotSetting) *CreateSlotOutput {
+	s.SubSlotSetting = v
+	return s
+}
+
 // SetValueElicitationSetting sets the ValueElicitationSetting field's value.
 func (s *CreateSlotOutput) SetValueElicitationSetting(v *SlotValueElicitationSetting) *CreateSlotOutput {
 	s.ValueElicitationSetting = v
@@ -12055,6 +13890,9 @@ type CreateSlotTypeInput struct {
 	//
 	// BotVersion is a required field
 	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// Specifications for a composite slot type.
+	CompositeSlotTypeSetting *CompositeSlotTypeSetting `locationName:"compositeSlotTypeSetting" type:"structure"`
 
 	// A description of the slot type. Use the description to help identify the
 	// slot type in lists.
@@ -12152,6 +13990,11 @@ func (s *CreateSlotTypeInput) Validate() error {
 	if s.SlotTypeValues != nil && len(s.SlotTypeValues) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotTypeValues", 1))
 	}
+	if s.CompositeSlotTypeSetting != nil {
+		if err := s.CompositeSlotTypeSetting.Validate(); err != nil {
+			invalidParams.AddNested("CompositeSlotTypeSetting", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ExternalSourceSetting != nil {
 		if err := s.ExternalSourceSetting.Validate(); err != nil {
 			invalidParams.AddNested("ExternalSourceSetting", err.(request.ErrInvalidParams))
@@ -12188,6 +14031,12 @@ func (s *CreateSlotTypeInput) SetBotId(v string) *CreateSlotTypeInput {
 // SetBotVersion sets the BotVersion field's value.
 func (s *CreateSlotTypeInput) SetBotVersion(v string) *CreateSlotTypeInput {
 	s.BotVersion = &v
+	return s
+}
+
+// SetCompositeSlotTypeSetting sets the CompositeSlotTypeSetting field's value.
+func (s *CreateSlotTypeInput) SetCompositeSlotTypeSetting(v *CompositeSlotTypeSetting) *CreateSlotTypeInput {
+	s.CompositeSlotTypeSetting = v
 	return s
 }
 
@@ -12241,6 +14090,9 @@ type CreateSlotTypeOutput struct {
 
 	// The version of the bot associated with the slot type.
 	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// Specifications for a composite slot type.
+	CompositeSlotTypeSetting *CompositeSlotTypeSetting `locationName:"compositeSlotTypeSetting" type:"structure"`
 
 	// A timestamp of the date and time that the slot type was created.
 	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
@@ -12299,6 +14151,12 @@ func (s *CreateSlotTypeOutput) SetBotId(v string) *CreateSlotTypeOutput {
 // SetBotVersion sets the BotVersion field's value.
 func (s *CreateSlotTypeOutput) SetBotVersion(v string) *CreateSlotTypeOutput {
 	s.BotVersion = &v
+	return s
+}
+
+// SetCompositeSlotTypeSetting sets the CompositeSlotTypeSetting field's value.
+func (s *CreateSlotTypeOutput) SetCompositeSlotTypeSetting(v *CompositeSlotTypeSetting) *CreateSlotTypeOutput {
+	s.CompositeSlotTypeSetting = v
 	return s
 }
 
@@ -12382,7 +14240,8 @@ type CreateUploadUrlOutput struct {
 	_ struct{} `type:"structure"`
 
 	// An identifier for a unique import job. Use it when you call the StartImport
-	// (https://docs.aws.amazon.com/lexv2/latest/dg/API_StartImport.html) operation.
+	// (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_StartImport.html)
+	// operation.
 	ImportId *string `locationName:"importId" min:"10" type:"string"`
 
 	// A pre-signed S3 write URL. Upload the zip archive file that contains the
@@ -12468,6 +14327,56 @@ func (s *CustomPayload) Validate() error {
 // SetValue sets the Value field's value.
 func (s *CustomPayload) SetValue(v string) *CustomPayload {
 	s.Value = &v
+	return s
+}
+
+// The unique entry identifier for the custom vocabulary items.
+type CustomVocabularyEntryId struct {
+	_ struct{} `type:"structure"`
+
+	// The unique item identifier for the custom vocabulary items.
+	//
+	// ItemId is a required field
+	ItemId *string `locationName:"itemId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyEntryId) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyEntryId) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomVocabularyEntryId) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomVocabularyEntryId"}
+	if s.ItemId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ItemId"))
+	}
+	if s.ItemId != nil && len(*s.ItemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ItemId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetItemId sets the ItemId field's value.
+func (s *CustomVocabularyEntryId) SetItemId(v string) *CustomVocabularyEntryId {
+	s.ItemId = &v
 	return s
 }
 
@@ -12634,6 +14543,199 @@ func (s *CustomVocabularyImportSpecification) SetLocaleId(v string) *CustomVocab
 	return s
 }
 
+// The unique custom vocabulary item from the custom vocabulary list.
+type CustomVocabularyItem struct {
+	_ struct{} `type:"structure"`
+
+	// The DisplayAs value for the custom vocabulary item from the custom vocabulary
+	// list.
+	DisplayAs *string `locationName:"displayAs" min:"1" type:"string"`
+
+	// The unique item identifer for the custom vocabulary item from the custom
+	// vocabulary list.
+	//
+	// ItemId is a required field
+	ItemId *string `locationName:"itemId" min:"1" type:"string" required:"true"`
+
+	// The unique phrase for the custom vocabulary item from the custom vocabulary
+	// list.
+	//
+	// Phrase is a required field
+	Phrase *string `locationName:"phrase" min:"1" type:"string" required:"true"`
+
+	// The weight assigned for the custom vocabulary item from the custom vocabulary
+	// list.
+	Weight *int64 `locationName:"weight" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyItem) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomVocabularyItem) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomVocabularyItem"}
+	if s.DisplayAs != nil && len(*s.DisplayAs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DisplayAs", 1))
+	}
+	if s.ItemId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ItemId"))
+	}
+	if s.ItemId != nil && len(*s.ItemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ItemId", 1))
+	}
+	if s.Phrase == nil {
+		invalidParams.Add(request.NewErrParamRequired("Phrase"))
+	}
+	if s.Phrase != nil && len(*s.Phrase) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Phrase", 1))
+	}
+	if s.Weight != nil && *s.Weight < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Weight", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDisplayAs sets the DisplayAs field's value.
+func (s *CustomVocabularyItem) SetDisplayAs(v string) *CustomVocabularyItem {
+	s.DisplayAs = &v
+	return s
+}
+
+// SetItemId sets the ItemId field's value.
+func (s *CustomVocabularyItem) SetItemId(v string) *CustomVocabularyItem {
+	s.ItemId = &v
+	return s
+}
+
+// SetPhrase sets the Phrase field's value.
+func (s *CustomVocabularyItem) SetPhrase(v string) *CustomVocabularyItem {
+	s.Phrase = &v
+	return s
+}
+
+// SetWeight sets the Weight field's value.
+func (s *CustomVocabularyItem) SetWeight(v int64) *CustomVocabularyItem {
+	s.Weight = &v
+	return s
+}
+
+// Specifies the DTMF input specifications.
+type DTMFSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The DTMF character that clears the accumulated DTMF digits and immediately
+	// ends the input.
+	//
+	// DeletionCharacter is a required field
+	DeletionCharacter *string `locationName:"deletionCharacter" type:"string" required:"true"`
+
+	// The DTMF character that immediately ends input. If the user does not press
+	// this character, the input ends after the end timeout.
+	//
+	// EndCharacter is a required field
+	EndCharacter *string `locationName:"endCharacter" type:"string" required:"true"`
+
+	// How long the bot should wait after the last DTMF character input before assuming
+	// that the input has concluded.
+	//
+	// EndTimeoutMs is a required field
+	EndTimeoutMs *int64 `locationName:"endTimeoutMs" min:"1" type:"integer" required:"true"`
+
+	// The maximum number of DTMF digits allowed in an utterance.
+	//
+	// MaxLength is a required field
+	MaxLength *int64 `locationName:"maxLength" min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DTMFSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DTMFSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DTMFSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DTMFSpecification"}
+	if s.DeletionCharacter == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeletionCharacter"))
+	}
+	if s.EndCharacter == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndCharacter"))
+	}
+	if s.EndTimeoutMs == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTimeoutMs"))
+	}
+	if s.EndTimeoutMs != nil && *s.EndTimeoutMs < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("EndTimeoutMs", 1))
+	}
+	if s.MaxLength == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxLength"))
+	}
+	if s.MaxLength != nil && *s.MaxLength < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxLength", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeletionCharacter sets the DeletionCharacter field's value.
+func (s *DTMFSpecification) SetDeletionCharacter(v string) *DTMFSpecification {
+	s.DeletionCharacter = &v
+	return s
+}
+
+// SetEndCharacter sets the EndCharacter field's value.
+func (s *DTMFSpecification) SetEndCharacter(v string) *DTMFSpecification {
+	s.EndCharacter = &v
+	return s
+}
+
+// SetEndTimeoutMs sets the EndTimeoutMs field's value.
+func (s *DTMFSpecification) SetEndTimeoutMs(v int64) *DTMFSpecification {
+	s.EndTimeoutMs = &v
+	return s
+}
+
+// SetMaxLength sets the MaxLength field's value.
+func (s *DTMFSpecification) SetMaxLength(v int64) *DTMFSpecification {
+	s.MaxLength = &v
+	return s
+}
+
 // By default, data stored by Amazon Lex is encrypted. The DataPrivacy structure
 // provides settings that determine how Amazon Lex handles special cases of
 // securing the data for your bot.
@@ -12765,6 +14867,69 @@ func (s *DateRangeFilter) SetStartDateTime(v time.Time) *DateRangeFilter {
 	return s
 }
 
+// A set of actions that Amazon Lex should run if none of the other conditions
+// are met.
+type DefaultConditionalBranch struct {
+	_ struct{} `type:"structure"`
+
+	// The next step in the conversation.
+	NextStep *DialogState `locationName:"nextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	Response *ResponseSpecification `locationName:"response" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultConditionalBranch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DefaultConditionalBranch) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DefaultConditionalBranch) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DefaultConditionalBranch"}
+	if s.NextStep != nil {
+		if err := s.NextStep.Validate(); err != nil {
+			invalidParams.AddNested("NextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Response != nil {
+		if err := s.Response.Validate(); err != nil {
+			invalidParams.AddNested("Response", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNextStep sets the NextStep field's value.
+func (s *DefaultConditionalBranch) SetNextStep(v *DialogState) *DefaultConditionalBranch {
+	s.NextStep = v
+	return s
+}
+
+// SetResponse sets the Response field's value.
+func (s *DefaultConditionalBranch) SetResponse(v *ResponseSpecification) *DefaultConditionalBranch {
+	s.Response = v
+	return s
+}
+
 type DeleteBotAliasInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -12778,8 +14943,11 @@ type DeleteBotAliasInput struct {
 	// BotId is a required field
 	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
 
-	// When this parameter is true, Amazon Lex doesn't check to see if any other
-	// resource is using the alias before it is deleted.
+	// By default, Amazon Lex checks if any other resource, such as a bot network,
+	// is using the bot alias before it is deleted and throws a ResourceInUseException
+	// exception if the alias is being used by another resource. Set this parameter
+	// to true to skip this check and remove the alias even if it is being used
+	// by another resource.
 	SkipResourceInUseCheck *bool `location:"querystring" locationName:"skipResourceInUseCheck" type:"boolean"`
 }
 
@@ -12900,8 +15068,11 @@ type DeleteBotInput struct {
 	// BotId is a required field
 	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
 
-	// When true, Amazon Lex doesn't check to see if another resource, such as an
-	// alias, is using the bot before it is deleted.
+	// By default, Amazon Lex checks if any other resource, such as an alias or
+	// bot network, is using the bot version before it is deleted and throws a ResourceInUseException
+	// exception if the bot is being used by another resource. Set this parameter
+	// to true to skip this check and remove the bot even if it is being used by
+	// another resource.
 	SkipResourceInUseCheck *bool `location:"querystring" locationName:"skipResourceInUseCheck" type:"boolean"`
 }
 
@@ -13150,10 +15321,11 @@ type DeleteBotVersionInput struct {
 	// BotVersion is a required field
 	BotVersion *string `location:"uri" locationName:"botVersion" min:"1" type:"string" required:"true"`
 
-	// By default, the DeleteBotVersion operations throws a ResourceInUseException
-	// exception if you try to delete a bot version that has an alias pointing at
-	// it. Set the skipResourceInUseCheck parameter to true to skip this check and
-	// remove the version even if an alias points to it.
+	// By default, Amazon Lex checks if any other resource, such as an alias or
+	// bot network, is using the bot version before it is deleted and throws a ResourceInUseException
+	// exception if the version is being used by another resource. Set this parameter
+	// to true to skip this check and remove the version even if it is being used
+	// by another resource.
 	SkipResourceInUseCheck *bool `location:"querystring" locationName:"skipResourceInUseCheck" type:"boolean"`
 }
 
@@ -13463,8 +15635,8 @@ type DeleteExportOutput struct {
 	ExportId *string `locationName:"exportId" min:"10" type:"string"`
 
 	// The current status of the deletion. When the deletion is complete, the export
-	// will no longer be returned by the ListExports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListExports.html)
-	// operation and calls to the DescribeExport (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeExport.html)
+	// will no longer be returned by the ListExports (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListExports.html)
+	// operation and calls to the DescribeExport (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_DescribeExport.html)
 	// operation with the export identifier will fail.
 	ExportStatus *string `locationName:"exportStatus" type:"string" enum:"ExportStatus"`
 }
@@ -13555,8 +15727,8 @@ type DeleteImportOutput struct {
 	ImportId *string `locationName:"importId" min:"10" type:"string"`
 
 	// The current status of the deletion. When the deletion is complete, the import
-	// will no longer be returned by the ListImports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListImports.html)
-	// operation and calls to the DescribeImport (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeImport.html)
+	// will no longer be returned by the ListImports (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListImports.html)
+	// operation and calls to the DescribeImport (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_DescribeImport.html)
 	// operation with the import identifier will fail.
 	ImportStatus *string `locationName:"importStatus" type:"string" enum:"ImportStatus"`
 }
@@ -14243,8 +16415,8 @@ type DeleteUtterancesInput struct {
 	LocaleId *string `location:"querystring" locationName:"localeId" type:"string"`
 
 	// The unique identifier of the session with the user. The ID is returned in
-	// the response from the RecognizeText (https://docs.aws.amazon.com/lexv2/latest/dg/API_runtime_RecognizeText.html)
-	// and RecognizeUtterance (https://docs.aws.amazon.com/lexv2/latest/dg/API_runtime_RecognizeUtterance.html)
+	// the response from the RecognizeText (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_runtime_RecognizeText.html)
+	// and RecognizeUtterance (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_runtime_RecognizeUtterance.html)
 	// operations.
 	SessionId *string `location:"querystring" locationName:"sessionId" min:"2" type:"string"`
 }
@@ -14431,6 +16603,9 @@ type DescribeBotAliasOutput struct {
 	// A timestamp of the date and time that the alias was last updated.
 	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
 
+	// A list of the networks to which the bot alias you described belongs.
+	ParentBotNetworks []*ParentBotNetwork `locationName:"parentBotNetworks" type:"list"`
+
 	// Determines whether Amazon Lex will use Amazon Comprehend to detect the sentiment
 	// of user utterances.
 	SentimentAnalysisSettings *SentimentAnalysisSettings `locationName:"sentimentAnalysisSettings" type:"structure"`
@@ -14517,6 +16692,12 @@ func (s *DescribeBotAliasOutput) SetDescription(v string) *DescribeBotAliasOutpu
 // SetLastUpdatedDateTime sets the LastUpdatedDateTime field's value.
 func (s *DescribeBotAliasOutput) SetLastUpdatedDateTime(v time.Time) *DescribeBotAliasOutput {
 	s.LastUpdatedDateTime = &v
+	return s
+}
+
+// SetParentBotNetworks sets the ParentBotNetworks field's value.
+func (s *DescribeBotAliasOutput) SetParentBotNetworks(v []*ParentBotNetwork) *DescribeBotAliasOutput {
+	s.ParentBotNetworks = v
 	return s
 }
 
@@ -14836,12 +17017,18 @@ type DescribeBotOutput struct {
 	// The unique identifier of the bot.
 	BotId *string `locationName:"botId" min:"10" type:"string"`
 
+	// The list of bots in the network that was described.
+	BotMembers []*BotMember `locationName:"botMembers" type:"list"`
+
 	// The name of the bot.
 	BotName *string `locationName:"botName" min:"1" type:"string"`
 
 	// The current status of the bot. When the status is Available the bot is ready
 	// to be used in conversations with users.
 	BotStatus *string `locationName:"botStatus" type:"string" enum:"BotStatus"`
+
+	// The type of the bot that was described.
+	BotType *string `locationName:"botType" type:"string" enum:"BotType"`
 
 	// A timestamp of the date and time that the bot was created.
 	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
@@ -14852,6 +17039,10 @@ type DescribeBotOutput struct {
 
 	// The description of the bot.
 	Description *string `locationName:"description" type:"string"`
+
+	// If the botStatus is Failed, this contains a list of reasons that the bot
+	// couldn't be built.
+	FailureReasons []*string `locationName:"failureReasons" type:"list"`
 
 	// The maximum time in seconds that Amazon Lex retains the data gathered in
 	// a conversation.
@@ -14889,6 +17080,12 @@ func (s *DescribeBotOutput) SetBotId(v string) *DescribeBotOutput {
 	return s
 }
 
+// SetBotMembers sets the BotMembers field's value.
+func (s *DescribeBotOutput) SetBotMembers(v []*BotMember) *DescribeBotOutput {
+	s.BotMembers = v
+	return s
+}
+
 // SetBotName sets the BotName field's value.
 func (s *DescribeBotOutput) SetBotName(v string) *DescribeBotOutput {
 	s.BotName = &v
@@ -14898,6 +17095,12 @@ func (s *DescribeBotOutput) SetBotName(v string) *DescribeBotOutput {
 // SetBotStatus sets the BotStatus field's value.
 func (s *DescribeBotOutput) SetBotStatus(v string) *DescribeBotOutput {
 	s.BotStatus = &v
+	return s
+}
+
+// SetBotType sets the BotType field's value.
+func (s *DescribeBotOutput) SetBotType(v string) *DescribeBotOutput {
+	s.BotType = &v
 	return s
 }
 
@@ -14916,6 +17119,12 @@ func (s *DescribeBotOutput) SetDataPrivacy(v *DataPrivacy) *DescribeBotOutput {
 // SetDescription sets the Description field's value.
 func (s *DescribeBotOutput) SetDescription(v string) *DescribeBotOutput {
 	s.Description = &v
+	return s
+}
+
+// SetFailureReasons sets the FailureReasons field's value.
+func (s *DescribeBotOutput) SetFailureReasons(v []*string) *DescribeBotOutput {
+	s.FailureReasons = v
 	return s
 }
 
@@ -15237,6 +17446,9 @@ type DescribeBotVersionOutput struct {
 	// The identifier of the bot that contains the version.
 	BotId *string `locationName:"botId" min:"10" type:"string"`
 
+	// The members of bot network in the version that was described.
+	BotMembers []*BotMember `locationName:"botMembers" type:"list"`
+
 	// The name of the bot that contains the version.
 	BotName *string `locationName:"botName" min:"1" type:"string"`
 
@@ -15244,7 +17456,10 @@ type DescribeBotVersionOutput struct {
 	// is ready for use.
 	BotStatus *string `locationName:"botStatus" type:"string" enum:"BotStatus"`
 
-	// The version of the bot to describe.
+	// The type of the bot in the version that was described.
+	BotType *string `locationName:"botType" type:"string" enum:"BotType"`
+
+	// The version of the bot that was described.
 	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
 
 	// A timestamp of the date and time that the bot version was created.
@@ -15263,6 +17478,9 @@ type DescribeBotVersionOutput struct {
 	// The number of seconds that a session with the bot remains active before it
 	// is discarded by Amazon Lex.
 	IdleSessionTTLInSeconds *int64 `locationName:"idleSessionTTLInSeconds" min:"60" type:"integer"`
+
+	// A list of the networks to which the bot version you described belongs.
+	ParentBotNetworks []*ParentBotNetwork `locationName:"parentBotNetworks" type:"list"`
 
 	// The Amazon Resource Name (ARN) of an IAM role that has permission to access
 	// the bot version.
@@ -15293,6 +17511,12 @@ func (s *DescribeBotVersionOutput) SetBotId(v string) *DescribeBotVersionOutput 
 	return s
 }
 
+// SetBotMembers sets the BotMembers field's value.
+func (s *DescribeBotVersionOutput) SetBotMembers(v []*BotMember) *DescribeBotVersionOutput {
+	s.BotMembers = v
+	return s
+}
+
 // SetBotName sets the BotName field's value.
 func (s *DescribeBotVersionOutput) SetBotName(v string) *DescribeBotVersionOutput {
 	s.BotName = &v
@@ -15302,6 +17526,12 @@ func (s *DescribeBotVersionOutput) SetBotName(v string) *DescribeBotVersionOutpu
 // SetBotStatus sets the BotStatus field's value.
 func (s *DescribeBotVersionOutput) SetBotStatus(v string) *DescribeBotVersionOutput {
 	s.BotStatus = &v
+	return s
+}
+
+// SetBotType sets the BotType field's value.
+func (s *DescribeBotVersionOutput) SetBotType(v string) *DescribeBotVersionOutput {
+	s.BotType = &v
 	return s
 }
 
@@ -15338,6 +17568,12 @@ func (s *DescribeBotVersionOutput) SetFailureReasons(v []*string) *DescribeBotVe
 // SetIdleSessionTTLInSeconds sets the IdleSessionTTLInSeconds field's value.
 func (s *DescribeBotVersionOutput) SetIdleSessionTTLInSeconds(v int64) *DescribeBotVersionOutput {
 	s.IdleSessionTTLInSeconds = &v
+	return s
+}
+
+// SetParentBotNetworks sets the ParentBotNetworks field's value.
+func (s *DescribeBotVersionOutput) SetParentBotNetworks(v []*ParentBotNetwork) *DescribeBotVersionOutput {
+	s.ParentBotNetworks = v
 	return s
 }
 
@@ -15934,6 +18170,10 @@ type DescribeIntentOutput struct {
 	// The Lambda function called when the intent is complete and ready for fulfillment.
 	FulfillmentCodeHook *FulfillmentCodeHookSettings `locationName:"fulfillmentCodeHook" type:"structure"`
 
+	// Configuration setting for a response sent to the user before Amazon Lex starts
+	// eliciting slots.
+	InitialResponseSetting *InitialResponseSetting `locationName:"initialResponseSetting" type:"structure"`
+
 	// A list of contexts that must be active for the intent to be considered for
 	// sending to the user.
 	InputContexts []*InputContext `locationName:"inputContexts" type:"list"`
@@ -16025,6 +18265,12 @@ func (s *DescribeIntentOutput) SetDialogCodeHook(v *DialogCodeHookSettings) *Des
 // SetFulfillmentCodeHook sets the FulfillmentCodeHook field's value.
 func (s *DescribeIntentOutput) SetFulfillmentCodeHook(v *FulfillmentCodeHookSettings) *DescribeIntentOutput {
 	s.FulfillmentCodeHook = v
+	return s
+}
+
+// SetInitialResponseSetting sets the InitialResponseSetting field's value.
+func (s *DescribeIntentOutput) SetInitialResponseSetting(v *InitialResponseSetting) *DescribeIntentOutput {
+	s.InitialResponseSetting = v
 	return s
 }
 
@@ -16367,6 +18613,10 @@ type DescribeSlotOutput struct {
 	// slot.
 	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string"`
 
+	// Specifications for the constituent sub slots and the expression for the composite
+	// slot.
+	SubSlotSetting *SubSlotSetting `locationName:"subSlotSetting" type:"structure"`
+
 	// Prompts that Amazon Lex uses to elicit a value for the slot.
 	ValueElicitationSetting *SlotValueElicitationSetting `locationName:"valueElicitationSetting" type:"structure"`
 }
@@ -16458,6 +18708,12 @@ func (s *DescribeSlotOutput) SetSlotName(v string) *DescribeSlotOutput {
 // SetSlotTypeId sets the SlotTypeId field's value.
 func (s *DescribeSlotOutput) SetSlotTypeId(v string) *DescribeSlotOutput {
 	s.SlotTypeId = &v
+	return s
+}
+
+// SetSubSlotSetting sets the SubSlotSetting field's value.
+func (s *DescribeSlotOutput) SetSubSlotSetting(v *SubSlotSetting) *DescribeSlotOutput {
+	s.SubSlotSetting = v
 	return s
 }
 
@@ -16578,6 +18834,9 @@ type DescribeSlotTypeOutput struct {
 	// The version of the bot associated with the slot type.
 	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
 
+	// Specifications for a composite slot type.
+	CompositeSlotTypeSetting *CompositeSlotTypeSetting `locationName:"compositeSlotTypeSetting" type:"structure"`
+
 	// A timestamp of the date and time that the slot type was created.
 	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
 
@@ -16641,6 +18900,12 @@ func (s *DescribeSlotTypeOutput) SetBotVersion(v string) *DescribeSlotTypeOutput
 	return s
 }
 
+// SetCompositeSlotTypeSetting sets the CompositeSlotTypeSetting field's value.
+func (s *DescribeSlotTypeOutput) SetCompositeSlotTypeSetting(v *CompositeSlotTypeSetting) *DescribeSlotTypeOutput {
+	s.CompositeSlotTypeSetting = v
+	return s
+}
+
 // SetCreationDateTime sets the CreationDateTime field's value.
 func (s *DescribeSlotTypeOutput) SetCreationDateTime(v time.Time) *DescribeSlotTypeOutput {
 	s.CreationDateTime = &v
@@ -16701,6 +18966,170 @@ func (s *DescribeSlotTypeOutput) SetValueSelectionSetting(v *SlotValueSelectionS
 	return s
 }
 
+// Defines the action that the bot executes at runtime when the conversation
+// reaches this step.
+type DialogAction struct {
+	_ struct{} `type:"structure"`
+
+	// If the dialog action is ElicitSlot, defines the slot to elicit from the user.
+	SlotToElicit *string `locationName:"slotToElicit" min:"1" type:"string"`
+
+	// When true the next message for the intent is not used.
+	SuppressNextMessage *bool `locationName:"suppressNextMessage" type:"boolean"`
+
+	// The action that the bot should execute.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"DialogActionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DialogAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DialogAction) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DialogAction) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DialogAction"}
+	if s.SlotToElicit != nil && len(*s.SlotToElicit) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SlotToElicit", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSlotToElicit sets the SlotToElicit field's value.
+func (s *DialogAction) SetSlotToElicit(v string) *DialogAction {
+	s.SlotToElicit = &v
+	return s
+}
+
+// SetSuppressNextMessage sets the SuppressNextMessage field's value.
+func (s *DialogAction) SetSuppressNextMessage(v bool) *DialogAction {
+	s.SuppressNextMessage = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DialogAction) SetType(v string) *DialogAction {
+	s.Type = &v
+	return s
+}
+
+// Settings that specify the dialog code hook that is called by Amazon Lex at
+// a step of the conversation.
+type DialogCodeHookInvocationSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Determines whether a dialog code hook is used when the intent is activated.
+	//
+	// Active is a required field
+	Active *bool `locationName:"active" type:"boolean" required:"true"`
+
+	// Indicates whether a Lambda function should be invoked for the dialog.
+	//
+	// EnableCodeHookInvocation is a required field
+	EnableCodeHookInvocation *bool `locationName:"enableCodeHookInvocation" type:"boolean" required:"true"`
+
+	// A label that indicates the dialog step from which the dialog code hook is
+	// happening.
+	InvocationLabel *string `locationName:"invocationLabel" min:"1" type:"string"`
+
+	// Contains the responses and actions that Amazon Lex takes after the Lambda
+	// function is complete.
+	//
+	// PostCodeHookSpecification is a required field
+	PostCodeHookSpecification *PostDialogCodeHookInvocationSpecification `locationName:"postCodeHookSpecification" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DialogCodeHookInvocationSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DialogCodeHookInvocationSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DialogCodeHookInvocationSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DialogCodeHookInvocationSetting"}
+	if s.Active == nil {
+		invalidParams.Add(request.NewErrParamRequired("Active"))
+	}
+	if s.EnableCodeHookInvocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("EnableCodeHookInvocation"))
+	}
+	if s.InvocationLabel != nil && len(*s.InvocationLabel) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InvocationLabel", 1))
+	}
+	if s.PostCodeHookSpecification == nil {
+		invalidParams.Add(request.NewErrParamRequired("PostCodeHookSpecification"))
+	}
+	if s.PostCodeHookSpecification != nil {
+		if err := s.PostCodeHookSpecification.Validate(); err != nil {
+			invalidParams.AddNested("PostCodeHookSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetActive sets the Active field's value.
+func (s *DialogCodeHookInvocationSetting) SetActive(v bool) *DialogCodeHookInvocationSetting {
+	s.Active = &v
+	return s
+}
+
+// SetEnableCodeHookInvocation sets the EnableCodeHookInvocation field's value.
+func (s *DialogCodeHookInvocationSetting) SetEnableCodeHookInvocation(v bool) *DialogCodeHookInvocationSetting {
+	s.EnableCodeHookInvocation = &v
+	return s
+}
+
+// SetInvocationLabel sets the InvocationLabel field's value.
+func (s *DialogCodeHookInvocationSetting) SetInvocationLabel(v string) *DialogCodeHookInvocationSetting {
+	s.InvocationLabel = &v
+	return s
+}
+
+// SetPostCodeHookSpecification sets the PostCodeHookSpecification field's value.
+func (s *DialogCodeHookInvocationSetting) SetPostCodeHookSpecification(v *PostDialogCodeHookInvocationSpecification) *DialogCodeHookInvocationSetting {
+	s.PostCodeHookSpecification = v
+	return s
+}
+
 // Settings that determine the Lambda function that Amazon Lex uses for processing
 // user responses.
 type DialogCodeHookSettings struct {
@@ -16746,6 +19175,140 @@ func (s *DialogCodeHookSettings) Validate() error {
 // SetEnabled sets the Enabled field's value.
 func (s *DialogCodeHookSettings) SetEnabled(v bool) *DialogCodeHookSettings {
 	s.Enabled = &v
+	return s
+}
+
+// The current state of the conversation with the user.
+type DialogState struct {
+	_ struct{} `type:"structure"`
+
+	// Defines the action that the bot executes at runtime when the conversation
+	// reaches this step.
+	DialogAction *DialogAction `locationName:"dialogAction" type:"structure"`
+
+	// Override settings to configure the intent state.
+	Intent *IntentOverride `locationName:"intent" type:"structure"`
+
+	// Map of key/value pairs representing session-specific context information.
+	// It contains application information passed between Amazon Lex and a client
+	// application.
+	SessionAttributes map[string]*string `locationName:"sessionAttributes" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DialogState) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DialogState) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DialogState) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DialogState"}
+	if s.DialogAction != nil {
+		if err := s.DialogAction.Validate(); err != nil {
+			invalidParams.AddNested("DialogAction", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Intent != nil {
+		if err := s.Intent.Validate(); err != nil {
+			invalidParams.AddNested("Intent", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDialogAction sets the DialogAction field's value.
+func (s *DialogState) SetDialogAction(v *DialogAction) *DialogState {
+	s.DialogAction = v
+	return s
+}
+
+// SetIntent sets the Intent field's value.
+func (s *DialogState) SetIntent(v *IntentOverride) *DialogState {
+	s.Intent = v
+	return s
+}
+
+// SetSessionAttributes sets the SessionAttributes field's value.
+func (s *DialogState) SetSessionAttributes(v map[string]*string) *DialogState {
+	s.SessionAttributes = v
+	return s
+}
+
+// Settings that specify the dialog code hook that is called by Amazon Lex between
+// eliciting slot values.
+type ElicitationCodeHookInvocationSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether a Lambda function should be invoked for the dialog.
+	//
+	// EnableCodeHookInvocation is a required field
+	EnableCodeHookInvocation *bool `locationName:"enableCodeHookInvocation" type:"boolean" required:"true"`
+
+	// A label that indicates the dialog step from which the dialog code hook is
+	// happening.
+	InvocationLabel *string `locationName:"invocationLabel" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ElicitationCodeHookInvocationSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ElicitationCodeHookInvocationSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ElicitationCodeHookInvocationSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ElicitationCodeHookInvocationSetting"}
+	if s.EnableCodeHookInvocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("EnableCodeHookInvocation"))
+	}
+	if s.InvocationLabel != nil && len(*s.InvocationLabel) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InvocationLabel", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnableCodeHookInvocation sets the EnableCodeHookInvocation field's value.
+func (s *ElicitationCodeHookInvocationSetting) SetEnableCodeHookInvocation(v bool) *ElicitationCodeHookInvocationSetting {
+	s.EnableCodeHookInvocation = &v
+	return s
+}
+
+// SetInvocationLabel sets the InvocationLabel field's value.
+func (s *ElicitationCodeHookInvocationSetting) SetInvocationLabel(v string) *ElicitationCodeHookInvocationSetting {
+	s.InvocationLabel = &v
 	return s
 }
 
@@ -16822,7 +19385,7 @@ func (s *EncryptionSetting) SetKmsKeyArn(v string) *EncryptionSetting {
 	return s
 }
 
-// Filters the response form the ListExports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListExports.html)
+// Filters the response form the ListExports (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListExports.html)
 // operation
 type ExportFilter struct {
 	_ struct{} `type:"structure"`
@@ -17168,9 +19731,66 @@ func (s *ExternalSourceSetting) SetGrammarSlotTypeSetting(v *GrammarSlotTypeSett
 	return s
 }
 
+// The unique failed custom vocabulary item from the custom vocabulary list.
+type FailedCustomVocabularyItem struct {
+	_ struct{} `type:"structure"`
+
+	// The unique error code for the failed custom vocabulary item from the custom
+	// vocabulary list.
+	ErrorCode *string `locationName:"errorCode" type:"string" enum:"ErrorCode"`
+
+	// The error message for the failed custom vocabulary item from the custom vocabulary
+	// list.
+	ErrorMessage *string `locationName:"errorMessage" type:"string"`
+
+	// The unique item identifer for the failed custom vocabulary item from the
+	// custom vocabulary list.
+	ItemId *string `locationName:"itemId" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FailedCustomVocabularyItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FailedCustomVocabularyItem) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *FailedCustomVocabularyItem) SetErrorCode(v string) *FailedCustomVocabularyItem {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *FailedCustomVocabularyItem) SetErrorMessage(v string) *FailedCustomVocabularyItem {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetItemId sets the ItemId field's value.
+func (s *FailedCustomVocabularyItem) SetItemId(v string) *FailedCustomVocabularyItem {
+	s.ItemId = &v
+	return s
+}
+
 // Determines if a Lambda function should be invoked for a specific intent.
 type FulfillmentCodeHookSettings struct {
 	_ struct{} `type:"structure"`
+
+	// Determines whether the fulfillment code hook is used. When active is false,
+	// the code hook doesn't run.
+	Active *bool `locationName:"active" type:"boolean"`
 
 	// Indicates whether a Lambda function should be invoked to fulfill a specific
 	// intent.
@@ -17228,6 +19848,12 @@ func (s *FulfillmentCodeHookSettings) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetActive sets the Active field's value.
+func (s *FulfillmentCodeHookSettings) SetActive(v bool) *FulfillmentCodeHookSettings {
+	s.Active = &v
+	return s
 }
 
 // SetEnabled sets the Enabled field's value.
@@ -17753,7 +20379,7 @@ func (s *ImageResponseCard) SetTitle(v string) *ImageResponseCard {
 	return s
 }
 
-// Filters the response from the ListImports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListImports.html)
+// Filters the response from the ListImports (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_ListImports.html)
 // operation.
 type ImportFilter struct {
 	_ struct{} `type:"structure"`
@@ -18071,6 +20697,102 @@ func (s *ImportSummary) SetMergeStrategy(v string) *ImportSummary {
 	return s
 }
 
+// Configuration setting for a response sent to the user before Amazon Lex starts
+// eliciting slots.
+type InitialResponseSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Settings that specify the dialog code hook that is called by Amazon Lex at
+	// a step of the conversation.
+	CodeHook *DialogCodeHookInvocationSetting `locationName:"codeHook" type:"structure"`
+
+	// Provides a list of conditional branches. Branches are evaluated in the order
+	// that they are entered in the list. The first branch with a condition that
+	// evaluates to true is executed. The last branch in the list is the default
+	// branch. The default branch should not have any condition expression. The
+	// default branch is executed if no other branch has a matching condition.
+	Conditional *ConditionalSpecification `locationName:"conditional" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	InitialResponse *ResponseSpecification `locationName:"initialResponse" type:"structure"`
+
+	// The next step in the conversation.
+	NextStep *DialogState `locationName:"nextStep" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InitialResponseSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InitialResponseSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InitialResponseSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InitialResponseSetting"}
+	if s.CodeHook != nil {
+		if err := s.CodeHook.Validate(); err != nil {
+			invalidParams.AddNested("CodeHook", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Conditional != nil {
+		if err := s.Conditional.Validate(); err != nil {
+			invalidParams.AddNested("Conditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.InitialResponse != nil {
+		if err := s.InitialResponse.Validate(); err != nil {
+			invalidParams.AddNested("InitialResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.NextStep != nil {
+		if err := s.NextStep.Validate(); err != nil {
+			invalidParams.AddNested("NextStep", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCodeHook sets the CodeHook field's value.
+func (s *InitialResponseSetting) SetCodeHook(v *DialogCodeHookInvocationSetting) *InitialResponseSetting {
+	s.CodeHook = v
+	return s
+}
+
+// SetConditional sets the Conditional field's value.
+func (s *InitialResponseSetting) SetConditional(v *ConditionalSpecification) *InitialResponseSetting {
+	s.Conditional = v
+	return s
+}
+
+// SetInitialResponse sets the InitialResponse field's value.
+func (s *InitialResponseSetting) SetInitialResponse(v *ResponseSpecification) *InitialResponseSetting {
+	s.InitialResponse = v
+	return s
+}
+
+// SetNextStep sets the NextStep field's value.
+func (s *InitialResponseSetting) SetNextStep(v *DialogState) *InitialResponseSetting {
+	s.NextStep = v
+	return s
+}
+
 // The name of a context that must be active for an intent to be selected by
 // Amazon Lex.
 type InputContext struct {
@@ -18133,9 +20855,15 @@ type IntentClosingSetting struct {
 	Active *bool `locationName:"active" type:"boolean"`
 
 	// The response that Amazon Lex sends to the user when the intent is complete.
-	//
-	// ClosingResponse is a required field
-	ClosingResponse *ResponseSpecification `locationName:"closingResponse" type:"structure" required:"true"`
+	ClosingResponse *ResponseSpecification `locationName:"closingResponse" type:"structure"`
+
+	// A list of conditional branches associated with the intent's closing response.
+	// These branches are executed when the nextStep attribute is set to EvalutateConditional.
+	Conditional *ConditionalSpecification `locationName:"conditional" type:"structure"`
+
+	// Specifies the next step that the bot executes after playing the intent's
+	// closing response.
+	NextStep *DialogState `locationName:"nextStep" type:"structure"`
 }
 
 // String returns the string representation.
@@ -18159,12 +20887,19 @@ func (s IntentClosingSetting) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *IntentClosingSetting) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "IntentClosingSetting"}
-	if s.ClosingResponse == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClosingResponse"))
-	}
 	if s.ClosingResponse != nil {
 		if err := s.ClosingResponse.Validate(); err != nil {
 			invalidParams.AddNested("ClosingResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Conditional != nil {
+		if err := s.Conditional.Validate(); err != nil {
+			invalidParams.AddNested("Conditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.NextStep != nil {
+		if err := s.NextStep.Validate(); err != nil {
+			invalidParams.AddNested("NextStep", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -18186,6 +20921,18 @@ func (s *IntentClosingSetting) SetClosingResponse(v *ResponseSpecification) *Int
 	return s
 }
 
+// SetConditional sets the Conditional field's value.
+func (s *IntentClosingSetting) SetConditional(v *ConditionalSpecification) *IntentClosingSetting {
+	s.Conditional = v
+	return s
+}
+
+// SetNextStep sets the NextStep field's value.
+func (s *IntentClosingSetting) SetNextStep(v *DialogState) *IntentClosingSetting {
+	s.NextStep = v
+	return s
+}
+
 // Provides a prompt for making sure that the user is ready for the intent to
 // be fulfilled.
 type IntentConfirmationSetting struct {
@@ -18196,12 +20943,52 @@ type IntentConfirmationSetting struct {
 	// active field isn't specified, the default is true.
 	Active *bool `locationName:"active" type:"boolean"`
 
+	// The DialogCodeHookInvocationSetting object associated with intent's confirmation
+	// step. The dialog code hook is triggered based on these invocation settings
+	// when the confirmation next step or declination next step or failure next
+	// step is InvokeDialogCodeHook.
+	CodeHook *DialogCodeHookInvocationSetting `locationName:"codeHook" type:"structure"`
+
+	// A list of conditional branches to evaluate after the intent is closed.
+	ConfirmationConditional *ConditionalSpecification `locationName:"confirmationConditional" type:"structure"`
+
+	// Specifies the next step that the bot executes when the customer confirms
+	// the intent.
+	ConfirmationNextStep *DialogState `locationName:"confirmationNextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	ConfirmationResponse *ResponseSpecification `locationName:"confirmationResponse" type:"structure"`
+
+	// A list of conditional branches to evaluate after the intent is declined.
+	DeclinationConditional *ConditionalSpecification `locationName:"declinationConditional" type:"structure"`
+
+	// Specifies the next step that the bot executes when the customer declines
+	// the intent.
+	DeclinationNextStep *DialogState `locationName:"declinationNextStep" type:"structure"`
+
 	// When the user answers "no" to the question defined in promptSpecification,
 	// Amazon Lex responds with this response to acknowledge that the intent was
 	// canceled.
-	//
-	// DeclinationResponse is a required field
-	DeclinationResponse *ResponseSpecification `locationName:"declinationResponse" type:"structure" required:"true"`
+	DeclinationResponse *ResponseSpecification `locationName:"declinationResponse" type:"structure"`
+
+	// The DialogCodeHookInvocationSetting used when the code hook is invoked during
+	// confirmation prompt retries.
+	ElicitationCodeHook *ElicitationCodeHookInvocationSetting `locationName:"elicitationCodeHook" type:"structure"`
+
+	// Provides a list of conditional branches. Branches are evaluated in the order
+	// that they are entered in the list. The first branch with a condition that
+	// evaluates to true is executed. The last branch in the list is the default
+	// branch. The default branch should not have any condition expression. The
+	// default branch is executed if no other branch has a matching condition.
+	FailureConditional *ConditionalSpecification `locationName:"failureConditional" type:"structure"`
+
+	// The next step to take in the conversation if the confirmation step fails.
+	FailureNextStep *DialogState `locationName:"failureNextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	FailureResponse *ResponseSpecification `locationName:"failureResponse" type:"structure"`
 
 	// Prompts the user to confirm the intent. This question should have a yes or
 	// no answer.
@@ -18237,15 +21024,62 @@ func (s IntentConfirmationSetting) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *IntentConfirmationSetting) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "IntentConfirmationSetting"}
-	if s.DeclinationResponse == nil {
-		invalidParams.Add(request.NewErrParamRequired("DeclinationResponse"))
-	}
 	if s.PromptSpecification == nil {
 		invalidParams.Add(request.NewErrParamRequired("PromptSpecification"))
+	}
+	if s.CodeHook != nil {
+		if err := s.CodeHook.Validate(); err != nil {
+			invalidParams.AddNested("CodeHook", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ConfirmationConditional != nil {
+		if err := s.ConfirmationConditional.Validate(); err != nil {
+			invalidParams.AddNested("ConfirmationConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ConfirmationNextStep != nil {
+		if err := s.ConfirmationNextStep.Validate(); err != nil {
+			invalidParams.AddNested("ConfirmationNextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ConfirmationResponse != nil {
+		if err := s.ConfirmationResponse.Validate(); err != nil {
+			invalidParams.AddNested("ConfirmationResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DeclinationConditional != nil {
+		if err := s.DeclinationConditional.Validate(); err != nil {
+			invalidParams.AddNested("DeclinationConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DeclinationNextStep != nil {
+		if err := s.DeclinationNextStep.Validate(); err != nil {
+			invalidParams.AddNested("DeclinationNextStep", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.DeclinationResponse != nil {
 		if err := s.DeclinationResponse.Validate(); err != nil {
 			invalidParams.AddNested("DeclinationResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ElicitationCodeHook != nil {
+		if err := s.ElicitationCodeHook.Validate(); err != nil {
+			invalidParams.AddNested("ElicitationCodeHook", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureConditional != nil {
+		if err := s.FailureConditional.Validate(); err != nil {
+			invalidParams.AddNested("FailureConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureNextStep != nil {
+		if err := s.FailureNextStep.Validate(); err != nil {
+			invalidParams.AddNested("FailureNextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureResponse != nil {
+		if err := s.FailureResponse.Validate(); err != nil {
+			invalidParams.AddNested("FailureResponse", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.PromptSpecification != nil {
@@ -18266,9 +21100,69 @@ func (s *IntentConfirmationSetting) SetActive(v bool) *IntentConfirmationSetting
 	return s
 }
 
+// SetCodeHook sets the CodeHook field's value.
+func (s *IntentConfirmationSetting) SetCodeHook(v *DialogCodeHookInvocationSetting) *IntentConfirmationSetting {
+	s.CodeHook = v
+	return s
+}
+
+// SetConfirmationConditional sets the ConfirmationConditional field's value.
+func (s *IntentConfirmationSetting) SetConfirmationConditional(v *ConditionalSpecification) *IntentConfirmationSetting {
+	s.ConfirmationConditional = v
+	return s
+}
+
+// SetConfirmationNextStep sets the ConfirmationNextStep field's value.
+func (s *IntentConfirmationSetting) SetConfirmationNextStep(v *DialogState) *IntentConfirmationSetting {
+	s.ConfirmationNextStep = v
+	return s
+}
+
+// SetConfirmationResponse sets the ConfirmationResponse field's value.
+func (s *IntentConfirmationSetting) SetConfirmationResponse(v *ResponseSpecification) *IntentConfirmationSetting {
+	s.ConfirmationResponse = v
+	return s
+}
+
+// SetDeclinationConditional sets the DeclinationConditional field's value.
+func (s *IntentConfirmationSetting) SetDeclinationConditional(v *ConditionalSpecification) *IntentConfirmationSetting {
+	s.DeclinationConditional = v
+	return s
+}
+
+// SetDeclinationNextStep sets the DeclinationNextStep field's value.
+func (s *IntentConfirmationSetting) SetDeclinationNextStep(v *DialogState) *IntentConfirmationSetting {
+	s.DeclinationNextStep = v
+	return s
+}
+
 // SetDeclinationResponse sets the DeclinationResponse field's value.
 func (s *IntentConfirmationSetting) SetDeclinationResponse(v *ResponseSpecification) *IntentConfirmationSetting {
 	s.DeclinationResponse = v
+	return s
+}
+
+// SetElicitationCodeHook sets the ElicitationCodeHook field's value.
+func (s *IntentConfirmationSetting) SetElicitationCodeHook(v *ElicitationCodeHookInvocationSetting) *IntentConfirmationSetting {
+	s.ElicitationCodeHook = v
+	return s
+}
+
+// SetFailureConditional sets the FailureConditional field's value.
+func (s *IntentConfirmationSetting) SetFailureConditional(v *ConditionalSpecification) *IntentConfirmationSetting {
+	s.FailureConditional = v
+	return s
+}
+
+// SetFailureNextStep sets the FailureNextStep field's value.
+func (s *IntentConfirmationSetting) SetFailureNextStep(v *DialogState) *IntentConfirmationSetting {
+	s.FailureNextStep = v
+	return s
+}
+
+// SetFailureResponse sets the FailureResponse field's value.
+func (s *IntentConfirmationSetting) SetFailureResponse(v *ResponseSpecification) *IntentConfirmationSetting {
+	s.FailureResponse = v
 	return s
 }
 
@@ -18356,6 +21250,72 @@ func (s *IntentFilter) SetOperator(v string) *IntentFilter {
 // SetValues sets the Values field's value.
 func (s *IntentFilter) SetValues(v []*string) *IntentFilter {
 	s.Values = v
+	return s
+}
+
+// Override settings to configure the intent state.
+type IntentOverride struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the intent. Only required when you're switching intents.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// A map of all of the slot value overrides for the intent. The name of the
+	// slot maps to the value of the slot. Slots that are not included in the map
+	// aren't overridden.,
+	Slots map[string]*SlotValueOverride `locationName:"slots" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntentOverride) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntentOverride) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IntentOverride) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IntentOverride"}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Slots != nil {
+		for i, v := range s.Slots {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Slots", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *IntentOverride) SetName(v string) *IntentOverride {
+	s.Name = &v
+	return s
+}
+
+// SetSlots sets the Slots field's value.
+func (s *IntentOverride) SetSlots(v map[string]*SlotValueOverride) *IntentOverride {
+	s.Slots = v
 	return s
 }
 
@@ -20196,6 +23156,181 @@ func (s *ListBuiltInSlotTypesOutput) SetNextToken(v string) *ListBuiltInSlotType
 	return s
 }
 
+type ListCustomVocabularyItemsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The bot version of the bot to the list custom vocabulary request.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"1" type:"string" required:"true"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+
+	// The maximum number of items returned by the list operation.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The nextToken identifier to the list custom vocabulary request.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomVocabularyItemsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomVocabularyItemsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCustomVocabularyItemsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCustomVocabularyItemsInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 1))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *ListCustomVocabularyItemsInput) SetBotId(v string) *ListCustomVocabularyItemsInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *ListCustomVocabularyItemsInput) SetBotVersion(v string) *ListCustomVocabularyItemsInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListCustomVocabularyItemsInput) SetLocaleId(v string) *ListCustomVocabularyItemsInput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCustomVocabularyItemsInput) SetMaxResults(v int64) *ListCustomVocabularyItemsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCustomVocabularyItemsInput) SetNextToken(v string) *ListCustomVocabularyItemsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCustomVocabularyItemsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with this custom vocabulary.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The identifier of the version of the bot associated with this custom vocabulary.
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
+
+	// The custom vocabulary items from the list custom vocabulary response.
+	CustomVocabularyItems []*CustomVocabularyItem `locationName:"customVocabularyItems" type:"list"`
+
+	// The identifier of the language and locale where this custom vocabulary is
+	// used. The string must match one of the supported locales. For more information,
+	// see Supported Languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// The nextToken identifier to the list custom vocabulary response.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomVocabularyItemsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCustomVocabularyItemsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *ListCustomVocabularyItemsOutput) SetBotId(v string) *ListCustomVocabularyItemsOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *ListCustomVocabularyItemsOutput) SetBotVersion(v string) *ListCustomVocabularyItemsOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCustomVocabularyItems sets the CustomVocabularyItems field's value.
+func (s *ListCustomVocabularyItemsOutput) SetCustomVocabularyItems(v []*CustomVocabularyItem) *ListCustomVocabularyItemsOutput {
+	s.CustomVocabularyItems = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListCustomVocabularyItemsOutput) SetLocaleId(v string) *ListCustomVocabularyItemsOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCustomVocabularyItemsOutput) SetNextToken(v string) *ListCustomVocabularyItemsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListExportsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -21798,6 +24933,83 @@ func (s *MultipleValuesSetting) SetAllowMultipleValues(v bool) *MultipleValuesSe
 	return s
 }
 
+// The new custom vocabulary item from the custom vocabulary list.
+type NewCustomVocabularyItem struct {
+	_ struct{} `type:"structure"`
+
+	// The display as value assigned to the new custom vocabulary item from the
+	// custom vocabulary list.
+	DisplayAs *string `locationName:"displayAs" min:"1" type:"string"`
+
+	// The unique phrase for the new custom vocabulary item from the custom vocabulary
+	// list.
+	//
+	// Phrase is a required field
+	Phrase *string `locationName:"phrase" min:"1" type:"string" required:"true"`
+
+	// The weight assigned to the new custom vocabulary item from the custom vocabulary
+	// list.
+	Weight *int64 `locationName:"weight" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NewCustomVocabularyItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NewCustomVocabularyItem) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NewCustomVocabularyItem) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NewCustomVocabularyItem"}
+	if s.DisplayAs != nil && len(*s.DisplayAs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DisplayAs", 1))
+	}
+	if s.Phrase == nil {
+		invalidParams.Add(request.NewErrParamRequired("Phrase"))
+	}
+	if s.Phrase != nil && len(*s.Phrase) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Phrase", 1))
+	}
+	if s.Weight != nil && *s.Weight < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Weight", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDisplayAs sets the DisplayAs field's value.
+func (s *NewCustomVocabularyItem) SetDisplayAs(v string) *NewCustomVocabularyItem {
+	s.DisplayAs = &v
+	return s
+}
+
+// SetPhrase sets the Phrase field's value.
+func (s *NewCustomVocabularyItem) SetPhrase(v string) *NewCustomVocabularyItem {
+	s.Phrase = &v
+	return s
+}
+
+// SetWeight sets the Weight field's value.
+func (s *NewCustomVocabularyItem) SetWeight(v int64) *NewCustomVocabularyItem {
+	s.Weight = &v
+	return s
+}
+
 // Determines whether Amazon Lex obscures slot values in conversation logs.
 type ObfuscationSetting struct {
 	_ struct{} `type:"structure"`
@@ -21933,6 +25145,51 @@ func (s *OutputContext) SetTurnsToLive(v int64) *OutputContext {
 	return s
 }
 
+// A network of bots.
+type ParentBotNetwork struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the network of bots assigned by Amazon Lex.
+	//
+	// BotId is a required field
+	BotId *string `locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The version of the network of bots.
+	//
+	// BotVersion is a required field
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ParentBotNetwork) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ParentBotNetwork) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *ParentBotNetwork) SetBotId(v string) *ParentBotNetwork {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *ParentBotNetwork) SetBotVersion(v string) *ParentBotNetwork {
+	s.BotVersion = &v
+	return s
+}
+
 // The object that contains a path format that will be applied when Amazon Lex
 // reads the transcript file in the bucket you provide. Specify this object
 // if you only want Lex to read a subset of files in your Amazon S3 bucket.
@@ -22032,19 +25289,212 @@ func (s *PlainTextMessage) SetValue(v string) *PlainTextMessage {
 	return s
 }
 
+// Specifies next steps to run after the dialog code hook finishes.
+type PostDialogCodeHookInvocationSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// A list of conditional branches to evaluate after the dialog code hook throws
+	// an exception or returns with the State field of the Intent object set to
+	// Failed.
+	FailureConditional *ConditionalSpecification `locationName:"failureConditional" type:"structure"`
+
+	// Specifies the next step the bot runs after the dialog code hook throws an
+	// exception or returns with the State field of the Intent object set to Failed.
+	FailureNextStep *DialogState `locationName:"failureNextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	FailureResponse *ResponseSpecification `locationName:"failureResponse" type:"structure"`
+
+	// A list of conditional branches to evaluate after the dialog code hook finishes
+	// successfully.
+	SuccessConditional *ConditionalSpecification `locationName:"successConditional" type:"structure"`
+
+	// Specifics the next step the bot runs after the dialog code hook finishes
+	// successfully.
+	SuccessNextStep *DialogState `locationName:"successNextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	SuccessResponse *ResponseSpecification `locationName:"successResponse" type:"structure"`
+
+	// A list of conditional branches to evaluate if the code hook times out.
+	TimeoutConditional *ConditionalSpecification `locationName:"timeoutConditional" type:"structure"`
+
+	// Specifies the next step that the bot runs when the code hook times out.
+	TimeoutNextStep *DialogState `locationName:"timeoutNextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	TimeoutResponse *ResponseSpecification `locationName:"timeoutResponse" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostDialogCodeHookInvocationSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostDialogCodeHookInvocationSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PostDialogCodeHookInvocationSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PostDialogCodeHookInvocationSpecification"}
+	if s.FailureConditional != nil {
+		if err := s.FailureConditional.Validate(); err != nil {
+			invalidParams.AddNested("FailureConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureNextStep != nil {
+		if err := s.FailureNextStep.Validate(); err != nil {
+			invalidParams.AddNested("FailureNextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureResponse != nil {
+		if err := s.FailureResponse.Validate(); err != nil {
+			invalidParams.AddNested("FailureResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SuccessConditional != nil {
+		if err := s.SuccessConditional.Validate(); err != nil {
+			invalidParams.AddNested("SuccessConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SuccessNextStep != nil {
+		if err := s.SuccessNextStep.Validate(); err != nil {
+			invalidParams.AddNested("SuccessNextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SuccessResponse != nil {
+		if err := s.SuccessResponse.Validate(); err != nil {
+			invalidParams.AddNested("SuccessResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TimeoutConditional != nil {
+		if err := s.TimeoutConditional.Validate(); err != nil {
+			invalidParams.AddNested("TimeoutConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TimeoutNextStep != nil {
+		if err := s.TimeoutNextStep.Validate(); err != nil {
+			invalidParams.AddNested("TimeoutNextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TimeoutResponse != nil {
+		if err := s.TimeoutResponse.Validate(); err != nil {
+			invalidParams.AddNested("TimeoutResponse", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFailureConditional sets the FailureConditional field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetFailureConditional(v *ConditionalSpecification) *PostDialogCodeHookInvocationSpecification {
+	s.FailureConditional = v
+	return s
+}
+
+// SetFailureNextStep sets the FailureNextStep field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetFailureNextStep(v *DialogState) *PostDialogCodeHookInvocationSpecification {
+	s.FailureNextStep = v
+	return s
+}
+
+// SetFailureResponse sets the FailureResponse field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetFailureResponse(v *ResponseSpecification) *PostDialogCodeHookInvocationSpecification {
+	s.FailureResponse = v
+	return s
+}
+
+// SetSuccessConditional sets the SuccessConditional field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetSuccessConditional(v *ConditionalSpecification) *PostDialogCodeHookInvocationSpecification {
+	s.SuccessConditional = v
+	return s
+}
+
+// SetSuccessNextStep sets the SuccessNextStep field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetSuccessNextStep(v *DialogState) *PostDialogCodeHookInvocationSpecification {
+	s.SuccessNextStep = v
+	return s
+}
+
+// SetSuccessResponse sets the SuccessResponse field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetSuccessResponse(v *ResponseSpecification) *PostDialogCodeHookInvocationSpecification {
+	s.SuccessResponse = v
+	return s
+}
+
+// SetTimeoutConditional sets the TimeoutConditional field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetTimeoutConditional(v *ConditionalSpecification) *PostDialogCodeHookInvocationSpecification {
+	s.TimeoutConditional = v
+	return s
+}
+
+// SetTimeoutNextStep sets the TimeoutNextStep field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetTimeoutNextStep(v *DialogState) *PostDialogCodeHookInvocationSpecification {
+	s.TimeoutNextStep = v
+	return s
+}
+
+// SetTimeoutResponse sets the TimeoutResponse field's value.
+func (s *PostDialogCodeHookInvocationSpecification) SetTimeoutResponse(v *ResponseSpecification) *PostDialogCodeHookInvocationSpecification {
+	s.TimeoutResponse = v
+	return s
+}
+
 // Provides a setting that determines whether the post-fulfillment response
 // is sent to the user. For more information, see https://docs.aws.amazon.com/lexv2/latest/dg/streaming-progress.html#progress-complete
 // (https://docs.aws.amazon.com/lexv2/latest/dg/streaming-progress.html#progress-complete)
 type PostFulfillmentStatusSpecification struct {
 	_ struct{} `type:"structure"`
 
+	// A list of conditional branches to evaluate after the fulfillment code hook
+	// throws an exception or returns with the State field of the Intent object
+	// set to Failed.
+	FailureConditional *ConditionalSpecification `locationName:"failureConditional" type:"structure"`
+
+	// Specifies the next step the bot runs after the fulfillment code hook throws
+	// an exception or returns with the State field of the Intent object set to
+	// Failed.
+	FailureNextStep *DialogState `locationName:"failureNextStep" type:"structure"`
+
 	// Specifies a list of message groups that Amazon Lex uses to respond the user
 	// input.
 	FailureResponse *ResponseSpecification `locationName:"failureResponse" type:"structure"`
 
+	// A list of conditional branches to evaluate after the fulfillment code hook
+	// finishes successfully.
+	SuccessConditional *ConditionalSpecification `locationName:"successConditional" type:"structure"`
+
+	// Specifies the next step in the conversation that Amazon Lex invokes when
+	// the fulfillment code hook completes successfully.
+	SuccessNextStep *DialogState `locationName:"successNextStep" type:"structure"`
+
 	// Specifies a list of message groups that Amazon Lex uses to respond the user
 	// input.
 	SuccessResponse *ResponseSpecification `locationName:"successResponse" type:"structure"`
+
+	// A list of conditional branches to evaluate if the fulfillment code hook times
+	// out.
+	TimeoutConditional *ConditionalSpecification `locationName:"timeoutConditional" type:"structure"`
+
+	// Specifies the next step that the bot runs when the fulfillment code hook
+	// times out.
+	TimeoutNextStep *DialogState `locationName:"timeoutNextStep" type:"structure"`
 
 	// Specifies a list of message groups that Amazon Lex uses to respond the user
 	// input.
@@ -22072,14 +25522,44 @@ func (s PostFulfillmentStatusSpecification) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PostFulfillmentStatusSpecification) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PostFulfillmentStatusSpecification"}
+	if s.FailureConditional != nil {
+		if err := s.FailureConditional.Validate(); err != nil {
+			invalidParams.AddNested("FailureConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureNextStep != nil {
+		if err := s.FailureNextStep.Validate(); err != nil {
+			invalidParams.AddNested("FailureNextStep", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.FailureResponse != nil {
 		if err := s.FailureResponse.Validate(); err != nil {
 			invalidParams.AddNested("FailureResponse", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.SuccessConditional != nil {
+		if err := s.SuccessConditional.Validate(); err != nil {
+			invalidParams.AddNested("SuccessConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SuccessNextStep != nil {
+		if err := s.SuccessNextStep.Validate(); err != nil {
+			invalidParams.AddNested("SuccessNextStep", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.SuccessResponse != nil {
 		if err := s.SuccessResponse.Validate(); err != nil {
 			invalidParams.AddNested("SuccessResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TimeoutConditional != nil {
+		if err := s.TimeoutConditional.Validate(); err != nil {
+			invalidParams.AddNested("TimeoutConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TimeoutNextStep != nil {
+		if err := s.TimeoutNextStep.Validate(); err != nil {
+			invalidParams.AddNested("TimeoutNextStep", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.TimeoutResponse != nil {
@@ -22094,15 +25574,51 @@ func (s *PostFulfillmentStatusSpecification) Validate() error {
 	return nil
 }
 
+// SetFailureConditional sets the FailureConditional field's value.
+func (s *PostFulfillmentStatusSpecification) SetFailureConditional(v *ConditionalSpecification) *PostFulfillmentStatusSpecification {
+	s.FailureConditional = v
+	return s
+}
+
+// SetFailureNextStep sets the FailureNextStep field's value.
+func (s *PostFulfillmentStatusSpecification) SetFailureNextStep(v *DialogState) *PostFulfillmentStatusSpecification {
+	s.FailureNextStep = v
+	return s
+}
+
 // SetFailureResponse sets the FailureResponse field's value.
 func (s *PostFulfillmentStatusSpecification) SetFailureResponse(v *ResponseSpecification) *PostFulfillmentStatusSpecification {
 	s.FailureResponse = v
 	return s
 }
 
+// SetSuccessConditional sets the SuccessConditional field's value.
+func (s *PostFulfillmentStatusSpecification) SetSuccessConditional(v *ConditionalSpecification) *PostFulfillmentStatusSpecification {
+	s.SuccessConditional = v
+	return s
+}
+
+// SetSuccessNextStep sets the SuccessNextStep field's value.
+func (s *PostFulfillmentStatusSpecification) SetSuccessNextStep(v *DialogState) *PostFulfillmentStatusSpecification {
+	s.SuccessNextStep = v
+	return s
+}
+
 // SetSuccessResponse sets the SuccessResponse field's value.
 func (s *PostFulfillmentStatusSpecification) SetSuccessResponse(v *ResponseSpecification) *PostFulfillmentStatusSpecification {
 	s.SuccessResponse = v
+	return s
+}
+
+// SetTimeoutConditional sets the TimeoutConditional field's value.
+func (s *PostFulfillmentStatusSpecification) SetTimeoutConditional(v *ConditionalSpecification) *PostFulfillmentStatusSpecification {
+	s.TimeoutConditional = v
+	return s
+}
+
+// SetTimeoutNextStep sets the TimeoutNextStep field's value.
+func (s *PostFulfillmentStatusSpecification) SetTimeoutNextStep(v *DialogState) *PostFulfillmentStatusSpecification {
+	s.TimeoutNextStep = v
 	return s
 }
 
@@ -22237,6 +25753,96 @@ func (s *Principal) SetService(v string) *Principal {
 	return s
 }
 
+// Specifies the settings on a prompt attempt.
+type PromptAttemptSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the user can interrupt a speech prompt attempt from the
+	// bot.
+	AllowInterrupt *bool `locationName:"allowInterrupt" type:"boolean"`
+
+	// Indicates the allowed input types of the prompt attempt.
+	//
+	// AllowedInputTypes is a required field
+	AllowedInputTypes *AllowedInputTypes `locationName:"allowedInputTypes" type:"structure" required:"true"`
+
+	// Specifies the settings on audio and DTMF input.
+	AudioAndDTMFInputSpecification *AudioAndDTMFInputSpecification `locationName:"audioAndDTMFInputSpecification" type:"structure"`
+
+	// Specifies the settings on text input.
+	TextInputSpecification *TextInputSpecification `locationName:"textInputSpecification" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PromptAttemptSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PromptAttemptSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PromptAttemptSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PromptAttemptSpecification"}
+	if s.AllowedInputTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowedInputTypes"))
+	}
+	if s.AllowedInputTypes != nil {
+		if err := s.AllowedInputTypes.Validate(); err != nil {
+			invalidParams.AddNested("AllowedInputTypes", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.AudioAndDTMFInputSpecification != nil {
+		if err := s.AudioAndDTMFInputSpecification.Validate(); err != nil {
+			invalidParams.AddNested("AudioAndDTMFInputSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TextInputSpecification != nil {
+		if err := s.TextInputSpecification.Validate(); err != nil {
+			invalidParams.AddNested("TextInputSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowInterrupt sets the AllowInterrupt field's value.
+func (s *PromptAttemptSpecification) SetAllowInterrupt(v bool) *PromptAttemptSpecification {
+	s.AllowInterrupt = &v
+	return s
+}
+
+// SetAllowedInputTypes sets the AllowedInputTypes field's value.
+func (s *PromptAttemptSpecification) SetAllowedInputTypes(v *AllowedInputTypes) *PromptAttemptSpecification {
+	s.AllowedInputTypes = v
+	return s
+}
+
+// SetAudioAndDTMFInputSpecification sets the AudioAndDTMFInputSpecification field's value.
+func (s *PromptAttemptSpecification) SetAudioAndDTMFInputSpecification(v *AudioAndDTMFInputSpecification) *PromptAttemptSpecification {
+	s.AudioAndDTMFInputSpecification = v
+	return s
+}
+
+// SetTextInputSpecification sets the TextInputSpecification field's value.
+func (s *PromptAttemptSpecification) SetTextInputSpecification(v *TextInputSpecification) *PromptAttemptSpecification {
+	s.TextInputSpecification = v
+	return s
+}
+
 // Specifies a list of message groups that Amazon Lex sends to a user to elicit
 // a response.
 type PromptSpecification struct {
@@ -22259,6 +25865,9 @@ type PromptSpecification struct {
 
 	// Indicates how a message is selected from a message group among retries.
 	MessageSelectionStrategy *string `locationName:"messageSelectionStrategy" type:"string" enum:"MessageSelectionStrategy"`
+
+	// Specifies the advanced settings on each attempt of the prompt.
+	PromptAttemptsSpecification map[string]*PromptAttemptSpecification `locationName:"promptAttemptsSpecification" type:"map"`
 }
 
 // String returns the string representation.
@@ -22301,6 +25910,16 @@ func (s *PromptSpecification) Validate() error {
 			}
 		}
 	}
+	if s.PromptAttemptsSpecification != nil {
+		for i, v := range s.PromptAttemptsSpecification {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PromptAttemptsSpecification", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -22329,6 +25948,12 @@ func (s *PromptSpecification) SetMessageGroups(v []*MessageGroup) *PromptSpecifi
 // SetMessageSelectionStrategy sets the MessageSelectionStrategy field's value.
 func (s *PromptSpecification) SetMessageSelectionStrategy(v string) *PromptSpecification {
 	s.MessageSelectionStrategy = &v
+	return s
+}
+
+// SetPromptAttemptsSpecification sets the PromptAttemptsSpecification field's value.
+func (s *PromptSpecification) SetPromptAttemptsSpecification(v map[string]*PromptAttemptSpecification) *PromptSpecification {
+	s.PromptAttemptsSpecification = v
 	return s
 }
 
@@ -23320,6 +26945,155 @@ func (s *ServiceQuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Settings used when Amazon Lex successfully captures a slot value from a user.
+type SlotCaptureSetting struct {
+	_ struct{} `type:"structure"`
+
+	// A list of conditional branches to evaluate after the slot value is captured.
+	CaptureConditional *ConditionalSpecification `locationName:"captureConditional" type:"structure"`
+
+	// Specifies the next step that the bot runs when the slot value is captured
+	// before the code hook times out.
+	CaptureNextStep *DialogState `locationName:"captureNextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	CaptureResponse *ResponseSpecification `locationName:"captureResponse" type:"structure"`
+
+	// Code hook called after Amazon Lex successfully captures a slot value.
+	CodeHook *DialogCodeHookInvocationSetting `locationName:"codeHook" type:"structure"`
+
+	// Code hook called when Amazon Lex doesn't capture a slot value.
+	ElicitationCodeHook *ElicitationCodeHookInvocationSetting `locationName:"elicitationCodeHook" type:"structure"`
+
+	// A list of conditional branches to evaluate when the slot value isn't captured.
+	FailureConditional *ConditionalSpecification `locationName:"failureConditional" type:"structure"`
+
+	// Specifies the next step that the bot runs when the slot value code is not
+	// recognized.
+	FailureNextStep *DialogState `locationName:"failureNextStep" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex uses to respond the user
+	// input.
+	FailureResponse *ResponseSpecification `locationName:"failureResponse" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotCaptureSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotCaptureSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SlotCaptureSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SlotCaptureSetting"}
+	if s.CaptureConditional != nil {
+		if err := s.CaptureConditional.Validate(); err != nil {
+			invalidParams.AddNested("CaptureConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CaptureNextStep != nil {
+		if err := s.CaptureNextStep.Validate(); err != nil {
+			invalidParams.AddNested("CaptureNextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CaptureResponse != nil {
+		if err := s.CaptureResponse.Validate(); err != nil {
+			invalidParams.AddNested("CaptureResponse", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CodeHook != nil {
+		if err := s.CodeHook.Validate(); err != nil {
+			invalidParams.AddNested("CodeHook", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ElicitationCodeHook != nil {
+		if err := s.ElicitationCodeHook.Validate(); err != nil {
+			invalidParams.AddNested("ElicitationCodeHook", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureConditional != nil {
+		if err := s.FailureConditional.Validate(); err != nil {
+			invalidParams.AddNested("FailureConditional", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureNextStep != nil {
+		if err := s.FailureNextStep.Validate(); err != nil {
+			invalidParams.AddNested("FailureNextStep", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FailureResponse != nil {
+		if err := s.FailureResponse.Validate(); err != nil {
+			invalidParams.AddNested("FailureResponse", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCaptureConditional sets the CaptureConditional field's value.
+func (s *SlotCaptureSetting) SetCaptureConditional(v *ConditionalSpecification) *SlotCaptureSetting {
+	s.CaptureConditional = v
+	return s
+}
+
+// SetCaptureNextStep sets the CaptureNextStep field's value.
+func (s *SlotCaptureSetting) SetCaptureNextStep(v *DialogState) *SlotCaptureSetting {
+	s.CaptureNextStep = v
+	return s
+}
+
+// SetCaptureResponse sets the CaptureResponse field's value.
+func (s *SlotCaptureSetting) SetCaptureResponse(v *ResponseSpecification) *SlotCaptureSetting {
+	s.CaptureResponse = v
+	return s
+}
+
+// SetCodeHook sets the CodeHook field's value.
+func (s *SlotCaptureSetting) SetCodeHook(v *DialogCodeHookInvocationSetting) *SlotCaptureSetting {
+	s.CodeHook = v
+	return s
+}
+
+// SetElicitationCodeHook sets the ElicitationCodeHook field's value.
+func (s *SlotCaptureSetting) SetElicitationCodeHook(v *ElicitationCodeHookInvocationSetting) *SlotCaptureSetting {
+	s.ElicitationCodeHook = v
+	return s
+}
+
+// SetFailureConditional sets the FailureConditional field's value.
+func (s *SlotCaptureSetting) SetFailureConditional(v *ConditionalSpecification) *SlotCaptureSetting {
+	s.FailureConditional = v
+	return s
+}
+
+// SetFailureNextStep sets the FailureNextStep field's value.
+func (s *SlotCaptureSetting) SetFailureNextStep(v *DialogState) *SlotCaptureSetting {
+	s.FailureNextStep = v
+	return s
+}
+
+// SetFailureResponse sets the FailureResponse field's value.
+func (s *SlotCaptureSetting) SetFailureResponse(v *ResponseSpecification) *SlotCaptureSetting {
+	s.FailureResponse = v
+	return s
+}
+
 // Specifies the default value to use when a user doesn't provide a value for
 // a slot.
 type SlotDefaultValue struct {
@@ -24056,7 +27830,56 @@ func (s *SlotTypeValue) SetSynonyms(v []*SampleValue) *SlotTypeValue {
 	return s
 }
 
-// Settings that you can use for eliciting a slot value.
+// The value to set in a slot.
+type SlotValue struct {
+	_ struct{} `type:"structure"`
+
+	// The value that Amazon Lex determines for the slot. The actual value depends
+	// on the setting of the value selection strategy for the bot. You can choose
+	// to use the value entered by the user, or you can have Amazon Lex choose the
+	// first value in the resolvedValues list.
+	InterpretedValue *string `locationName:"interpretedValue" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotValue) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SlotValue) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SlotValue"}
+	if s.InterpretedValue != nil && len(*s.InterpretedValue) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InterpretedValue", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInterpretedValue sets the InterpretedValue field's value.
+func (s *SlotValue) SetInterpretedValue(v string) *SlotValue {
+	s.InterpretedValue = &v
+	return s
+}
+
+// Specifies the elicitation setting details for constituent sub slots of a
+// composite slot.
 type SlotValueElicitationSetting struct {
 	_ struct{} `type:"structure"`
 
@@ -24073,6 +27896,10 @@ type SlotValueElicitationSetting struct {
 	// This is optional. In most cases, Amazon Lex is capable of understanding user
 	// utterances.
 	SampleUtterances []*SampleUtterance `locationName:"sampleUtterances" type:"list"`
+
+	// Specifies the settings that Amazon Lex uses when a slot value is successfully
+	// entered by a user.
+	SlotCaptureSetting *SlotCaptureSetting `locationName:"slotCaptureSetting" type:"structure"`
 
 	// Specifies whether the slot is required or optional.
 	//
@@ -24128,6 +27955,11 @@ func (s *SlotValueElicitationSetting) Validate() error {
 			}
 		}
 	}
+	if s.SlotCaptureSetting != nil {
+		if err := s.SlotCaptureSetting.Validate(); err != nil {
+			invalidParams.AddNested("SlotCaptureSetting", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.WaitAndContinueSpecification != nil {
 		if err := s.WaitAndContinueSpecification.Validate(); err != nil {
 			invalidParams.AddNested("WaitAndContinueSpecification", err.(request.ErrInvalidParams))
@@ -24158,6 +27990,12 @@ func (s *SlotValueElicitationSetting) SetSampleUtterances(v []*SampleUtterance) 
 	return s
 }
 
+// SetSlotCaptureSetting sets the SlotCaptureSetting field's value.
+func (s *SlotValueElicitationSetting) SetSlotCaptureSetting(v *SlotCaptureSetting) *SlotValueElicitationSetting {
+	s.SlotCaptureSetting = v
+	return s
+}
+
 // SetSlotConstraint sets the SlotConstraint field's value.
 func (s *SlotValueElicitationSetting) SetSlotConstraint(v string) *SlotValueElicitationSetting {
 	s.SlotConstraint = &v
@@ -24167,6 +28005,86 @@ func (s *SlotValueElicitationSetting) SetSlotConstraint(v string) *SlotValueElic
 // SetWaitAndContinueSpecification sets the WaitAndContinueSpecification field's value.
 func (s *SlotValueElicitationSetting) SetWaitAndContinueSpecification(v *WaitAndContinueSpecification) *SlotValueElicitationSetting {
 	s.WaitAndContinueSpecification = v
+	return s
+}
+
+// The slot values that Amazon Lex uses when it sets slot values in a dialog
+// step.
+type SlotValueOverride struct {
+	_ struct{} `type:"structure"`
+
+	// When the shape value is List, it indicates that the values field contains
+	// a list of slot values. When the value is Scalar, it indicates that the value
+	// field contains a single value.
+	Shape *string `locationName:"shape" type:"string" enum:"SlotShape"`
+
+	// The current value of the slot.
+	Value *SlotValue `locationName:"value" type:"structure"`
+
+	// A list of one or more values that the user provided for the slot. For example,
+	// for a slot that elicits pizza toppings, the values might be "pepperoni" and
+	// "pineapple."
+	Values []*SlotValueOverride `locationName:"values" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotValueOverride) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotValueOverride) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SlotValueOverride) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SlotValueOverride"}
+	if s.Value != nil {
+		if err := s.Value.Validate(); err != nil {
+			invalidParams.AddNested("Value", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Values != nil {
+		for i, v := range s.Values {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Values", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetShape sets the Shape field's value.
+func (s *SlotValueOverride) SetShape(v string) *SlotValueOverride {
+	s.Shape = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *SlotValueOverride) SetValue(v *SlotValue) *SlotValueOverride {
+	s.Value = v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *SlotValueOverride) SetValues(v []*SlotValueOverride) *SlotValueOverride {
+	s.Values = v
 	return s
 }
 
@@ -24314,6 +28232,76 @@ func (s *SlotValueSelectionSetting) SetRegexFilter(v *SlotValueRegexFilter) *Slo
 // SetResolutionStrategy sets the ResolutionStrategy field's value.
 func (s *SlotValueSelectionSetting) SetResolutionStrategy(v string) *SlotValueSelectionSetting {
 	s.ResolutionStrategy = &v
+	return s
+}
+
+// Subslot specifications.
+type Specifications struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier assigned to the slot type.
+	//
+	// SlotTypeId is a required field
+	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string" required:"true"`
+
+	// Specifies the elicitation setting details for constituent sub slots of a
+	// composite slot.
+	//
+	// ValueElicitationSetting is a required field
+	ValueElicitationSetting *SubSlotValueElicitationSetting `locationName:"valueElicitationSetting" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Specifications) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Specifications) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Specifications) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Specifications"}
+	if s.SlotTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SlotTypeId"))
+	}
+	if s.SlotTypeId != nil && len(*s.SlotTypeId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SlotTypeId", 1))
+	}
+	if s.ValueElicitationSetting == nil {
+		invalidParams.Add(request.NewErrParamRequired("ValueElicitationSetting"))
+	}
+	if s.ValueElicitationSetting != nil {
+		if err := s.ValueElicitationSetting.Validate(); err != nil {
+			invalidParams.AddNested("ValueElicitationSetting", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSlotTypeId sets the SlotTypeId field's value.
+func (s *Specifications) SetSlotTypeId(v string) *Specifications {
+	s.SlotTypeId = &v
+	return s
+}
+
+// SetValueElicitationSetting sets the ValueElicitationSetting field's value.
+func (s *Specifications) SetValueElicitationSetting(v *SubSlotValueElicitationSetting) *Specifications {
+	s.ValueElicitationSetting = v
 	return s
 }
 
@@ -24553,7 +28541,7 @@ type StartImportInput struct {
 	FilePassword *string `locationName:"filePassword" min:"1" type:"string" sensitive:"true"`
 
 	// The unique identifier for the import. It is included in the response from
-	// the CreateUploadUrl (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateUploadUrl.html)
+	// the CreateUploadUrl (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_CreateUploadUrl.html)
 	// operation.
 	//
 	// ImportId is a required field
@@ -24822,6 +28810,425 @@ func (s *StillWaitingResponseSpecification) SetTimeoutInSeconds(v int64) *StillW
 	return s
 }
 
+type StopBotRecommendationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique identifier of the bot containing the bot recommendation to be
+	// stopped.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The unique identifier of the bot recommendation to be stopped.
+	//
+	// BotRecommendationId is a required field
+	BotRecommendationId *string `location:"uri" locationName:"botRecommendationId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot containing the bot recommendation.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The identifier of the language and locale of the bot recommendation to stop.
+	// The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopBotRecommendationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopBotRecommendationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopBotRecommendationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopBotRecommendationInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotRecommendationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotRecommendationId"))
+	}
+	if s.BotRecommendationId != nil && len(*s.BotRecommendationId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotRecommendationId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *StopBotRecommendationInput) SetBotId(v string) *StopBotRecommendationInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *StopBotRecommendationInput) SetBotRecommendationId(v string) *StopBotRecommendationInput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *StopBotRecommendationInput) SetBotVersion(v string) *StopBotRecommendationInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *StopBotRecommendationInput) SetLocaleId(v string) *StopBotRecommendationInput {
+	s.LocaleId = &v
+	return s
+}
+
+type StopBotRecommendationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot containing the bot recommendation that is
+	// being stopped.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The unique identifier of the bot recommendation that is being stopped.
+	BotRecommendationId *string `locationName:"botRecommendationId" min:"10" type:"string"`
+
+	// The status of the bot recommendation. If the status is Failed, then the reasons
+	// for the failure are listed in the failureReasons field.
+	BotRecommendationStatus *string `locationName:"botRecommendationStatus" type:"string" enum:"BotRecommendationStatus"`
+
+	// The version of the bot containing the recommendation that is being stopped.
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// The identifier of the language and locale of the bot response to stop. The
+	// string must match one of the supported locales. For more information, see
+	// Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	LocaleId *string `locationName:"localeId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopBotRecommendationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopBotRecommendationOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *StopBotRecommendationOutput) SetBotId(v string) *StopBotRecommendationOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *StopBotRecommendationOutput) SetBotRecommendationId(v string) *StopBotRecommendationOutput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotRecommendationStatus sets the BotRecommendationStatus field's value.
+func (s *StopBotRecommendationOutput) SetBotRecommendationStatus(v string) *StopBotRecommendationOutput {
+	s.BotRecommendationStatus = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *StopBotRecommendationOutput) SetBotVersion(v string) *StopBotRecommendationOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *StopBotRecommendationOutput) SetLocaleId(v string) *StopBotRecommendationOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// Specifications for the constituent sub slots and the expression for the composite
+// slot.
+type SubSlotSetting struct {
+	_ struct{} `type:"structure"`
+
+	// The expression text for defining the constituent sub slots in the composite
+	// slot using logical AND and OR operators.
+	Expression *string `locationName:"expression" type:"string"`
+
+	// Specifications for the constituent sub slots of a composite slot.
+	SlotSpecifications map[string]*Specifications `locationName:"slotSpecifications" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubSlotSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubSlotSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SubSlotSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SubSlotSetting"}
+	if s.SlotSpecifications != nil {
+		for i, v := range s.SlotSpecifications {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SlotSpecifications", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExpression sets the Expression field's value.
+func (s *SubSlotSetting) SetExpression(v string) *SubSlotSetting {
+	s.Expression = &v
+	return s
+}
+
+// SetSlotSpecifications sets the SlotSpecifications field's value.
+func (s *SubSlotSetting) SetSlotSpecifications(v map[string]*Specifications) *SubSlotSetting {
+	s.SlotSpecifications = v
+	return s
+}
+
+// Subslot type composition.
+type SubSlotTypeComposition struct {
+	_ struct{} `type:"structure"`
+
+	// Name of a constituent sub slot inside a composite slot.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The unique identifier assigned to a slot type. This refers to either a built-in
+	// slot type or the unique slotTypeId of a custom slot type.
+	//
+	// SlotTypeId is a required field
+	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubSlotTypeComposition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubSlotTypeComposition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SubSlotTypeComposition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SubSlotTypeComposition"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.SlotTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SlotTypeId"))
+	}
+	if s.SlotTypeId != nil && len(*s.SlotTypeId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SlotTypeId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *SubSlotTypeComposition) SetName(v string) *SubSlotTypeComposition {
+	s.Name = &v
+	return s
+}
+
+// SetSlotTypeId sets the SlotTypeId field's value.
+func (s *SubSlotTypeComposition) SetSlotTypeId(v string) *SubSlotTypeComposition {
+	s.SlotTypeId = &v
+	return s
+}
+
+// Subslot elicitation settings.
+//
+// DefaultValueSpecification is a list of default values for a constituent sub
+// slot in a composite slot. Default values are used when Amazon Lex hasn't
+// determined a value for a slot. You can specify default values from context
+// variables, session attributes, and defined values. This is similar to DefaultValueSpecification
+// for slots.
+//
+// PromptSpecification is the prompt that Amazon Lex uses to elicit the sub
+// slot value from the user. This is similar to PromptSpecification for slots.
+type SubSlotValueElicitationSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Defines a list of values that Amazon Lex should use as the default value
+	// for a slot.
+	DefaultValueSpecification *SlotDefaultValueSpecification `locationName:"defaultValueSpecification" type:"structure"`
+
+	// Specifies a list of message groups that Amazon Lex sends to a user to elicit
+	// a response.
+	//
+	// PromptSpecification is a required field
+	PromptSpecification *PromptSpecification `locationName:"promptSpecification" type:"structure" required:"true"`
+
+	// If you know a specific pattern that users might respond to an Amazon Lex
+	// request for a sub slot value, you can provide those utterances to improve
+	// accuracy. This is optional. In most cases Amazon Lex is capable of understanding
+	// user utterances. This is similar to SampleUtterances for slots.
+	SampleUtterances []*SampleUtterance `locationName:"sampleUtterances" type:"list"`
+
+	// Specifies the prompts that Amazon Lex uses while a bot is waiting for customer
+	// input.
+	WaitAndContinueSpecification *WaitAndContinueSpecification `locationName:"waitAndContinueSpecification" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubSlotValueElicitationSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SubSlotValueElicitationSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SubSlotValueElicitationSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SubSlotValueElicitationSetting"}
+	if s.PromptSpecification == nil {
+		invalidParams.Add(request.NewErrParamRequired("PromptSpecification"))
+	}
+	if s.DefaultValueSpecification != nil {
+		if err := s.DefaultValueSpecification.Validate(); err != nil {
+			invalidParams.AddNested("DefaultValueSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PromptSpecification != nil {
+		if err := s.PromptSpecification.Validate(); err != nil {
+			invalidParams.AddNested("PromptSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SampleUtterances != nil {
+		for i, v := range s.SampleUtterances {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SampleUtterances", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.WaitAndContinueSpecification != nil {
+		if err := s.WaitAndContinueSpecification.Validate(); err != nil {
+			invalidParams.AddNested("WaitAndContinueSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultValueSpecification sets the DefaultValueSpecification field's value.
+func (s *SubSlotValueElicitationSetting) SetDefaultValueSpecification(v *SlotDefaultValueSpecification) *SubSlotValueElicitationSetting {
+	s.DefaultValueSpecification = v
+	return s
+}
+
+// SetPromptSpecification sets the PromptSpecification field's value.
+func (s *SubSlotValueElicitationSetting) SetPromptSpecification(v *PromptSpecification) *SubSlotValueElicitationSetting {
+	s.PromptSpecification = v
+	return s
+}
+
+// SetSampleUtterances sets the SampleUtterances field's value.
+func (s *SubSlotValueElicitationSetting) SetSampleUtterances(v []*SampleUtterance) *SubSlotValueElicitationSetting {
+	s.SampleUtterances = v
+	return s
+}
+
+// SetWaitAndContinueSpecification sets the WaitAndContinueSpecification field's value.
+func (s *SubSlotValueElicitationSetting) SetWaitAndContinueSpecification(v *WaitAndContinueSpecification) *SubSlotValueElicitationSetting {
+	s.WaitAndContinueSpecification = v
+	return s
+}
+
 type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24906,6 +29313,56 @@ func (s TagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Specifies the text input specifications.
+type TextInputSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Time for which a bot waits before re-prompting a customer for text input.
+	//
+	// StartTimeoutMs is a required field
+	StartTimeoutMs *int64 `locationName:"startTimeoutMs" min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TextInputSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TextInputSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TextInputSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TextInputSpecification"}
+	if s.StartTimeoutMs == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTimeoutMs"))
+	}
+	if s.StartTimeoutMs != nil && *s.StartTimeoutMs < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("StartTimeoutMs", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStartTimeoutMs sets the StartTimeoutMs field's value.
+func (s *TextInputSpecification) SetStartTimeoutMs(v int64) *TextInputSpecification {
+	s.StartTimeoutMs = &v
+	return s
 }
 
 // Defines the Amazon CloudWatch Logs destination log group for conversation
@@ -25036,6 +29493,7 @@ type ThrottlingException struct {
 
 	Message_ *string `locationName:"message" type:"string"`
 
+	// The number of seconds after which the user can invoke the API again.
 	RetryAfterSeconds *int64 `location:"header" locationName:"Retry-After" type:"integer"`
 }
 
@@ -25561,17 +30019,23 @@ type UpdateBotInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier of the bot to update. This identifier is returned by
-	// the CreateBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateBot.html)
+	// the CreateBot (https://docs.aws.amazon.com/lexv2/latest/APIReference/API_CreateBot.html)
 	// operation.
 	//
 	// BotId is a required field
 	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The list of bot members in the network associated with the update action.
+	BotMembers []*BotMember `locationName:"botMembers" type:"list"`
 
 	// The new name of the bot. The name must be unique in the account that creates
 	// the bot.
 	//
 	// BotName is a required field
 	BotName *string `locationName:"botName" min:"1" type:"string" required:"true"`
+
+	// The type of the bot to be updated.
+	BotType *string `locationName:"botType" type:"string" enum:"BotType"`
 
 	// Provides information on additional privacy protections Amazon Lex should
 	// use with the bot's data.
@@ -25649,6 +30113,16 @@ func (s *UpdateBotInput) Validate() error {
 	if s.RoleArn != nil && len(*s.RoleArn) < 32 {
 		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 32))
 	}
+	if s.BotMembers != nil {
+		for i, v := range s.BotMembers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BotMembers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.DataPrivacy != nil {
 		if err := s.DataPrivacy.Validate(); err != nil {
 			invalidParams.AddNested("DataPrivacy", err.(request.ErrInvalidParams))
@@ -25667,9 +30141,21 @@ func (s *UpdateBotInput) SetBotId(v string) *UpdateBotInput {
 	return s
 }
 
+// SetBotMembers sets the BotMembers field's value.
+func (s *UpdateBotInput) SetBotMembers(v []*BotMember) *UpdateBotInput {
+	s.BotMembers = v
+	return s
+}
+
 // SetBotName sets the BotName field's value.
 func (s *UpdateBotInput) SetBotName(v string) *UpdateBotInput {
 	s.BotName = &v
+	return s
+}
+
+// SetBotType sets the BotType field's value.
+func (s *UpdateBotInput) SetBotType(v string) *UpdateBotInput {
+	s.BotType = &v
 	return s
 }
 
@@ -25963,6 +30449,9 @@ type UpdateBotOutput struct {
 	// The unique identifier of the bot that was updated.
 	BotId *string `locationName:"botId" min:"10" type:"string"`
 
+	// The list of bot members in the network that was updated.
+	BotMembers []*BotMember `locationName:"botMembers" type:"list"`
+
 	// The name of the bot after the update.
 	BotName *string `locationName:"botName" min:"1" type:"string"`
 
@@ -25970,6 +30459,9 @@ type UpdateBotOutput struct {
 	// Once the bot is read for use, it changes to the Available status. After the
 	// bot is created, you can use the DRAFT version of the bot.
 	BotStatus *string `locationName:"botStatus" type:"string" enum:"BotStatus"`
+
+	// The type of the bot that was updated.
+	BotType *string `locationName:"botType" type:"string" enum:"BotType"`
 
 	// A timestamp of the date and time that the bot was created.
 	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
@@ -26015,6 +30507,12 @@ func (s *UpdateBotOutput) SetBotId(v string) *UpdateBotOutput {
 	return s
 }
 
+// SetBotMembers sets the BotMembers field's value.
+func (s *UpdateBotOutput) SetBotMembers(v []*BotMember) *UpdateBotOutput {
+	s.BotMembers = v
+	return s
+}
+
 // SetBotName sets the BotName field's value.
 func (s *UpdateBotOutput) SetBotName(v string) *UpdateBotOutput {
 	s.BotName = &v
@@ -26024,6 +30522,12 @@ func (s *UpdateBotOutput) SetBotName(v string) *UpdateBotOutput {
 // SetBotStatus sets the BotStatus field's value.
 func (s *UpdateBotOutput) SetBotStatus(v string) *UpdateBotOutput {
 	s.BotStatus = &v
+	return s
+}
+
+// SetBotType sets the BotType field's value.
+func (s *UpdateBotOutput) SetBotType(v string) *UpdateBotOutput {
+	s.BotType = &v
 	return s
 }
 
@@ -26467,6 +30971,10 @@ type UpdateIntentInput struct {
 	// provided and the intent is ready for fulfillment.
 	FulfillmentCodeHook *FulfillmentCodeHookSettings `locationName:"fulfillmentCodeHook" type:"structure"`
 
+	// Configuration setting for a response sent to the user before Amazon Lex starts
+	// eliciting slots.
+	InitialResponseSetting *InitialResponseSetting `locationName:"initialResponseSetting" type:"structure"`
+
 	// A new list of contexts that must be active in order for Amazon Lex to consider
 	// the intent.
 	InputContexts []*InputContext `locationName:"inputContexts" type:"list"`
@@ -26572,6 +31080,11 @@ func (s *UpdateIntentInput) Validate() error {
 			invalidParams.AddNested("FulfillmentCodeHook", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.InitialResponseSetting != nil {
+		if err := s.InitialResponseSetting.Validate(); err != nil {
+			invalidParams.AddNested("InitialResponseSetting", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.InputContexts != nil {
 		for i, v := range s.InputContexts {
 			if v == nil {
@@ -26664,6 +31177,12 @@ func (s *UpdateIntentInput) SetFulfillmentCodeHook(v *FulfillmentCodeHookSetting
 	return s
 }
 
+// SetInitialResponseSetting sets the InitialResponseSetting field's value.
+func (s *UpdateIntentInput) SetInitialResponseSetting(v *InitialResponseSetting) *UpdateIntentInput {
+	s.InitialResponseSetting = v
+	return s
+}
+
 // SetInputContexts sets the InputContexts field's value.
 func (s *UpdateIntentInput) SetInputContexts(v []*InputContext) *UpdateIntentInput {
 	s.InputContexts = v
@@ -26751,6 +31270,10 @@ type UpdateIntentOutput struct {
 
 	// The updated Lambda function called when the intent is ready for fulfillment.
 	FulfillmentCodeHook *FulfillmentCodeHookSettings `locationName:"fulfillmentCodeHook" type:"structure"`
+
+	// Configuration setting for a response sent to the user before Amazon Lex starts
+	// eliciting slots.
+	InitialResponseSetting *InitialResponseSetting `locationName:"initialResponseSetting" type:"structure"`
 
 	// The updated list of contexts that must be active for the intent to be considered
 	// by Amazon Lex.
@@ -26845,6 +31368,12 @@ func (s *UpdateIntentOutput) SetDialogCodeHook(v *DialogCodeHookSettings) *Updat
 // SetFulfillmentCodeHook sets the FulfillmentCodeHook field's value.
 func (s *UpdateIntentOutput) SetFulfillmentCodeHook(v *FulfillmentCodeHookSettings) *UpdateIntentOutput {
 	s.FulfillmentCodeHook = v
+	return s
+}
+
+// SetInitialResponseSetting sets the InitialResponseSetting field's value.
+func (s *UpdateIntentOutput) SetInitialResponseSetting(v *InitialResponseSetting) *UpdateIntentOutput {
+	s.InitialResponseSetting = v
 	return s
 }
 
@@ -27104,6 +31633,10 @@ type UpdateSlotInput struct {
 	// The unique identifier of the new slot type to associate with this slot.
 	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string"`
 
+	// Specifications for the constituent sub slots and the expression for the composite
+	// slot.
+	SubSlotSetting *SubSlotSetting `locationName:"subSlotSetting" type:"structure"`
+
 	// A new set of prompts that Amazon Lex sends to the user to elicit a response
 	// the provides a value for the slot.
 	//
@@ -27179,6 +31712,11 @@ func (s *UpdateSlotInput) Validate() error {
 			invalidParams.AddNested("ObfuscationSetting", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.SubSlotSetting != nil {
+		if err := s.SubSlotSetting.Validate(); err != nil {
+			invalidParams.AddNested("SubSlotSetting", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ValueElicitationSetting != nil {
 		if err := s.ValueElicitationSetting.Validate(); err != nil {
 			invalidParams.AddNested("ValueElicitationSetting", err.(request.ErrInvalidParams))
@@ -27251,6 +31789,12 @@ func (s *UpdateSlotInput) SetSlotTypeId(v string) *UpdateSlotInput {
 	return s
 }
 
+// SetSubSlotSetting sets the SubSlotSetting field's value.
+func (s *UpdateSlotInput) SetSubSlotSetting(v *SubSlotSetting) *UpdateSlotInput {
+	s.SubSlotSetting = v
+	return s
+}
+
 // SetValueElicitationSetting sets the ValueElicitationSetting field's value.
 func (s *UpdateSlotInput) SetValueElicitationSetting(v *SlotValueElicitationSetting) *UpdateSlotInput {
 	s.ValueElicitationSetting = v
@@ -27297,6 +31841,10 @@ type UpdateSlotOutput struct {
 
 	// The updated identifier of the slot type that provides values for the slot.
 	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string"`
+
+	// Specifications for the constituent sub slots and the expression for the composite
+	// slot.
+	SubSlotSetting *SubSlotSetting `locationName:"subSlotSetting" type:"structure"`
 
 	// The updated prompts that Amazon Lex sends to the user to elicit a response
 	// that provides a value for the slot.
@@ -27393,6 +31941,12 @@ func (s *UpdateSlotOutput) SetSlotTypeId(v string) *UpdateSlotOutput {
 	return s
 }
 
+// SetSubSlotSetting sets the SubSlotSetting field's value.
+func (s *UpdateSlotOutput) SetSubSlotSetting(v *SubSlotSetting) *UpdateSlotOutput {
+	s.SubSlotSetting = v
+	return s
+}
+
 // SetValueElicitationSetting sets the ValueElicitationSetting field's value.
 func (s *UpdateSlotOutput) SetValueElicitationSetting(v *SlotValueElicitationSetting) *UpdateSlotOutput {
 	s.ValueElicitationSetting = v
@@ -27411,6 +31965,9 @@ type UpdateSlotTypeInput struct {
 	//
 	// BotVersion is a required field
 	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// Specifications for a composite slot type.
+	CompositeSlotTypeSetting *CompositeSlotTypeSetting `locationName:"compositeSlotTypeSetting" type:"structure"`
 
 	// The new description of the slot type.
 	Description *string `locationName:"description" type:"string"`
@@ -27502,6 +32059,11 @@ func (s *UpdateSlotTypeInput) Validate() error {
 	if s.SlotTypeValues != nil && len(s.SlotTypeValues) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotTypeValues", 1))
 	}
+	if s.CompositeSlotTypeSetting != nil {
+		if err := s.CompositeSlotTypeSetting.Validate(); err != nil {
+			invalidParams.AddNested("CompositeSlotTypeSetting", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ExternalSourceSetting != nil {
 		if err := s.ExternalSourceSetting.Validate(); err != nil {
 			invalidParams.AddNested("ExternalSourceSetting", err.(request.ErrInvalidParams))
@@ -27538,6 +32100,12 @@ func (s *UpdateSlotTypeInput) SetBotId(v string) *UpdateSlotTypeInput {
 // SetBotVersion sets the BotVersion field's value.
 func (s *UpdateSlotTypeInput) SetBotVersion(v string) *UpdateSlotTypeInput {
 	s.BotVersion = &v
+	return s
+}
+
+// SetCompositeSlotTypeSetting sets the CompositeSlotTypeSetting field's value.
+func (s *UpdateSlotTypeInput) SetCompositeSlotTypeSetting(v *CompositeSlotTypeSetting) *UpdateSlotTypeInput {
+	s.CompositeSlotTypeSetting = v
 	return s
 }
 
@@ -27597,6 +32165,9 @@ type UpdateSlotTypeOutput struct {
 
 	// The version of the bot that contains the slot type. This is always DRAFT.
 	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// Specifications for a composite slot type.
+	CompositeSlotTypeSetting *CompositeSlotTypeSetting `locationName:"compositeSlotTypeSetting" type:"structure"`
 
 	// The timestamp of the date and time that the slot type was created.
 	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
@@ -27658,6 +32229,12 @@ func (s *UpdateSlotTypeOutput) SetBotId(v string) *UpdateSlotTypeOutput {
 // SetBotVersion sets the BotVersion field's value.
 func (s *UpdateSlotTypeOutput) SetBotVersion(v string) *UpdateSlotTypeOutput {
 	s.BotVersion = &v
+	return s
+}
+
+// SetCompositeSlotTypeSetting sets the CompositeSlotTypeSetting field's value.
+func (s *UpdateSlotTypeOutput) SetCompositeSlotTypeSetting(v *CompositeSlotTypeSetting) *UpdateSlotTypeOutput {
+	s.CompositeSlotTypeSetting = v
 	return s
 }
 
@@ -28099,12 +32676,16 @@ func BotAliasStatus_Values() []string {
 const (
 	// BotFilterNameBotName is a BotFilterName enum value
 	BotFilterNameBotName = "BotName"
+
+	// BotFilterNameBotType is a BotFilterName enum value
+	BotFilterNameBotType = "BotType"
 )
 
 // BotFilterName_Values returns all elements of the BotFilterName enum
 func BotFilterName_Values() []string {
 	return []string{
 		BotFilterNameBotName,
+		BotFilterNameBotType,
 	}
 }
 
@@ -28114,6 +32695,9 @@ const (
 
 	// BotFilterOperatorEq is a BotFilterOperator enum value
 	BotFilterOperatorEq = "EQ"
+
+	// BotFilterOperatorNe is a BotFilterOperator enum value
+	BotFilterOperatorNe = "NE"
 )
 
 // BotFilterOperator_Values returns all elements of the BotFilterOperator enum
@@ -28121,6 +32705,7 @@ func BotFilterOperator_Values() []string {
 	return []string{
 		BotFilterOperatorCo,
 		BotFilterOperatorEq,
+		BotFilterOperatorNe,
 	}
 }
 
@@ -28229,6 +32814,12 @@ const (
 
 	// BotRecommendationStatusFailed is a BotRecommendationStatus enum value
 	BotRecommendationStatusFailed = "Failed"
+
+	// BotRecommendationStatusStopping is a BotRecommendationStatus enum value
+	BotRecommendationStatusStopping = "Stopping"
+
+	// BotRecommendationStatusStopped is a BotRecommendationStatus enum value
+	BotRecommendationStatusStopped = "Stopped"
 )
 
 // BotRecommendationStatus_Values returns all elements of the BotRecommendationStatus enum
@@ -28241,6 +32832,8 @@ func BotRecommendationStatus_Values() []string {
 		BotRecommendationStatusUpdating,
 		BotRecommendationStatusAvailable,
 		BotRecommendationStatusFailed,
+		BotRecommendationStatusStopping,
+		BotRecommendationStatusStopped,
 	}
 }
 
@@ -28277,6 +32870,9 @@ const (
 
 	// BotStatusImporting is a BotStatus enum value
 	BotStatusImporting = "Importing"
+
+	// BotStatusUpdating is a BotStatus enum value
+	BotStatusUpdating = "Updating"
 )
 
 // BotStatus_Values returns all elements of the BotStatus enum
@@ -28289,6 +32885,23 @@ func BotStatus_Values() []string {
 		BotStatusFailed,
 		BotStatusVersioning,
 		BotStatusImporting,
+		BotStatusUpdating,
+	}
+}
+
+const (
+	// BotTypeBot is a BotType enum value
+	BotTypeBot = "Bot"
+
+	// BotTypeBotNetwork is a BotType enum value
+	BotTypeBotNetwork = "BotNetwork"
+)
+
+// BotType_Values returns all elements of the BotType enum
+func BotType_Values() []string {
+	return []string{
+		BotTypeBot,
+		BotTypeBotNetwork,
 	}
 }
 
@@ -28357,6 +32970,50 @@ func CustomVocabularyStatus_Values() []string {
 }
 
 const (
+	// DialogActionTypeElicitIntent is a DialogActionType enum value
+	DialogActionTypeElicitIntent = "ElicitIntent"
+
+	// DialogActionTypeStartIntent is a DialogActionType enum value
+	DialogActionTypeStartIntent = "StartIntent"
+
+	// DialogActionTypeElicitSlot is a DialogActionType enum value
+	DialogActionTypeElicitSlot = "ElicitSlot"
+
+	// DialogActionTypeEvaluateConditional is a DialogActionType enum value
+	DialogActionTypeEvaluateConditional = "EvaluateConditional"
+
+	// DialogActionTypeInvokeDialogCodeHook is a DialogActionType enum value
+	DialogActionTypeInvokeDialogCodeHook = "InvokeDialogCodeHook"
+
+	// DialogActionTypeConfirmIntent is a DialogActionType enum value
+	DialogActionTypeConfirmIntent = "ConfirmIntent"
+
+	// DialogActionTypeFulfillIntent is a DialogActionType enum value
+	DialogActionTypeFulfillIntent = "FulfillIntent"
+
+	// DialogActionTypeCloseIntent is a DialogActionType enum value
+	DialogActionTypeCloseIntent = "CloseIntent"
+
+	// DialogActionTypeEndConversation is a DialogActionType enum value
+	DialogActionTypeEndConversation = "EndConversation"
+)
+
+// DialogActionType_Values returns all elements of the DialogActionType enum
+func DialogActionType_Values() []string {
+	return []string{
+		DialogActionTypeElicitIntent,
+		DialogActionTypeStartIntent,
+		DialogActionTypeElicitSlot,
+		DialogActionTypeEvaluateConditional,
+		DialogActionTypeInvokeDialogCodeHook,
+		DialogActionTypeConfirmIntent,
+		DialogActionTypeFulfillIntent,
+		DialogActionTypeCloseIntent,
+		DialogActionTypeEndConversation,
+	}
+}
+
+const (
 	// EffectAllow is a Effect enum value
 	EffectAllow = "Allow"
 
@@ -28369,6 +33026,30 @@ func Effect_Values() []string {
 	return []string{
 		EffectAllow,
 		EffectDeny,
+	}
+}
+
+const (
+	// ErrorCodeDuplicateInput is a ErrorCode enum value
+	ErrorCodeDuplicateInput = "DUPLICATE_INPUT"
+
+	// ErrorCodeResourceDoesNotExist is a ErrorCode enum value
+	ErrorCodeResourceDoesNotExist = "RESOURCE_DOES_NOT_EXIST"
+
+	// ErrorCodeResourceAlreadyExists is a ErrorCode enum value
+	ErrorCodeResourceAlreadyExists = "RESOURCE_ALREADY_EXISTS"
+
+	// ErrorCodeInternalServerFailure is a ErrorCode enum value
+	ErrorCodeInternalServerFailure = "INTERNAL_SERVER_FAILURE"
+)
+
+// ErrorCode_Values returns all elements of the ErrorCode enum
+func ErrorCode_Values() []string {
+	return []string{
+		ErrorCodeDuplicateInput,
+		ErrorCodeResourceDoesNotExist,
+		ErrorCodeResourceAlreadyExists,
+		ErrorCodeInternalServerFailure,
 	}
 }
 
@@ -28632,6 +33313,39 @@ func ObfuscationSettingType_Values() []string {
 	}
 }
 
+// The attempt name of attempts of a prompt.
+const (
+	// PromptAttemptInitial is a PromptAttempt enum value
+	PromptAttemptInitial = "Initial"
+
+	// PromptAttemptRetry1 is a PromptAttempt enum value
+	PromptAttemptRetry1 = "Retry1"
+
+	// PromptAttemptRetry2 is a PromptAttempt enum value
+	PromptAttemptRetry2 = "Retry2"
+
+	// PromptAttemptRetry3 is a PromptAttempt enum value
+	PromptAttemptRetry3 = "Retry3"
+
+	// PromptAttemptRetry4 is a PromptAttempt enum value
+	PromptAttemptRetry4 = "Retry4"
+
+	// PromptAttemptRetry5 is a PromptAttempt enum value
+	PromptAttemptRetry5 = "Retry5"
+)
+
+// PromptAttempt_Values returns all elements of the PromptAttempt enum
+func PromptAttempt_Values() []string {
+	return []string{
+		PromptAttemptInitial,
+		PromptAttemptRetry1,
+		PromptAttemptRetry2,
+		PromptAttemptRetry3,
+		PromptAttemptRetry4,
+		PromptAttemptRetry5,
+	}
+}
+
 const (
 	// SearchOrderAscending is a SearchOrder enum value
 	SearchOrderAscending = "Ascending"
@@ -28693,6 +33407,22 @@ func SlotFilterOperator_Values() []string {
 }
 
 const (
+	// SlotShapeScalar is a SlotShape enum value
+	SlotShapeScalar = "Scalar"
+
+	// SlotShapeList is a SlotShape enum value
+	SlotShapeList = "List"
+)
+
+// SlotShape_Values returns all elements of the SlotShape enum
+func SlotShape_Values() []string {
+	return []string{
+		SlotShapeScalar,
+		SlotShapeList,
+	}
+}
+
+const (
 	// SlotSortAttributeSlotName is a SlotSortAttribute enum value
 	SlotSortAttributeSlotName = "SlotName"
 
@@ -28717,6 +33447,9 @@ const (
 
 	// SlotTypeCategoryExternalGrammar is a SlotTypeCategory enum value
 	SlotTypeCategoryExternalGrammar = "ExternalGrammar"
+
+	// SlotTypeCategoryComposite is a SlotTypeCategory enum value
+	SlotTypeCategoryComposite = "Composite"
 )
 
 // SlotTypeCategory_Values returns all elements of the SlotTypeCategory enum
@@ -28725,6 +33458,7 @@ func SlotTypeCategory_Values() []string {
 		SlotTypeCategoryCustom,
 		SlotTypeCategoryExtended,
 		SlotTypeCategoryExternalGrammar,
+		SlotTypeCategoryComposite,
 	}
 }
 
@@ -28782,6 +33516,9 @@ const (
 
 	// SlotValueResolutionStrategyTopResolution is a SlotValueResolutionStrategy enum value
 	SlotValueResolutionStrategyTopResolution = "TopResolution"
+
+	// SlotValueResolutionStrategyConcatenation is a SlotValueResolutionStrategy enum value
+	SlotValueResolutionStrategyConcatenation = "Concatenation"
 )
 
 // SlotValueResolutionStrategy_Values returns all elements of the SlotValueResolutionStrategy enum
@@ -28789,6 +33526,7 @@ func SlotValueResolutionStrategy_Values() []string {
 	return []string{
 		SlotValueResolutionStrategyOriginalValue,
 		SlotValueResolutionStrategyTopResolution,
+		SlotValueResolutionStrategyConcatenation,
 	}
 }
 

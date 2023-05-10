@@ -253,9 +253,9 @@ func (c *SSMIncidents) CreateTimelineEventRequest(input *CreateTimelineEventInpu
 // CreateTimelineEvent API operation for AWS Systems Manager Incident Manager.
 //
 // Creates a custom timeline event on the incident details page of an incident
-// record. Timeline events are automatically created by Incident Manager, marking
-// key moment during an incident. You can create custom timeline events to mark
-// important events that are automatically detected by Incident Manager.
+// record. Incident Manager automatically creates timeline events that mark
+// key moments during an incident. You can create custom timeline events to
+// mark important events that Incident Manager can detect automatically.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2175,8 +2175,8 @@ func (c *SSMIncidents) PutResourcePolicyRequest(input *PutResourcePolicyInput) (
 //
 // Adds a resource policy to the specified response plan. The resource policy
 // is used to share the response plan using Resource Access Manager (RAM). For
-// more information about cross-account sharing, see Setting up cross-account
-// functionality (https://docs.aws.amazon.com/incident-manager/latest/userguide/xa.html).
+// more information about cross-account sharing, see Cross-Region and cross-account
+// incident management (https://docs.aws.amazon.com/incident-manager/latest/userguide/incident-manager-cross-account-cross-region.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3530,7 +3530,7 @@ func (s *ConflictException) RequestID() string {
 type CreateReplicationSetInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the operation is called only once with the specified
+	// A token that ensures that the operation is called only once with the specified
 	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
@@ -3539,6 +3539,9 @@ type CreateReplicationSetInput struct {
 	//
 	// Regions is a required field
 	Regions map[string]*RegionMapInputValue `locationName:"regions" min:"1" type:"map" required:"true"`
+
+	// A list of tags to add to the replication set.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
 // String returns the string representation.
@@ -3568,6 +3571,9 @@ func (s *CreateReplicationSetInput) Validate() error {
 	if s.Regions != nil && len(s.Regions) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Regions", 1))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3584,6 +3590,12 @@ func (s *CreateReplicationSetInput) SetClientToken(v string) *CreateReplicationS
 // SetRegions sets the Regions field's value.
 func (s *CreateReplicationSetInput) SetRegions(v map[string]*RegionMapInputValue) *CreateReplicationSetInput {
 	s.Regions = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateReplicationSetInput) SetTags(v map[string]*string) *CreateReplicationSetInput {
+	s.Tags = v
 	return s
 }
 
@@ -3636,14 +3648,17 @@ type CreateResponsePlanInput struct {
 	// The long format of the response plan name. This field can contain spaces.
 	DisplayName *string `locationName:"displayName" type:"string"`
 
-	// The contacts and escalation plans that the response plan engages during an
-	// incident.
+	// The Amazon Resource Name (ARN) for the contacts and escalation plans that
+	// the response plan engages during an incident.
 	Engagements []*string `locationName:"engagements" type:"list"`
 
 	// Details used to create an incident when using this response plan.
 	//
 	// IncidentTemplate is a required field
 	IncidentTemplate *IncidentTemplate `locationName:"incidentTemplate" type:"structure" required:"true"`
+
+	// Information about third-party services integrated into the response plan.
+	Integrations []*Integration `locationName:"integrations" type:"list"`
 
 	// The short format name of the response plan. Can't include spaces.
 	//
@@ -3707,6 +3722,16 @@ func (s *CreateResponsePlanInput) Validate() error {
 			invalidParams.AddNested("IncidentTemplate", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Integrations != nil {
+		for i, v := range s.Integrations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Integrations", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3747,6 +3772,12 @@ func (s *CreateResponsePlanInput) SetEngagements(v []*string) *CreateResponsePla
 // SetIncidentTemplate sets the IncidentTemplate field's value.
 func (s *CreateResponsePlanInput) SetIncidentTemplate(v *IncidentTemplate) *CreateResponsePlanInput {
 	s.IncidentTemplate = v
+	return s
+}
+
+// SetIntegrations sets the Integrations field's value.
+func (s *CreateResponsePlanInput) SetIntegrations(v []*Integration) *CreateResponsePlanInput {
+	s.Integrations = v
 	return s
 }
 
@@ -3798,7 +3829,8 @@ func (s *CreateResponsePlanOutput) SetArn(v string) *CreateResponsePlanOutput {
 type CreateTimelineEventInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the action is called only once with the specified details.
+	// A token that ensures that a client calls the action only once with the specified
+	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
 	// A short description of the event.
@@ -3806,18 +3838,27 @@ type CreateTimelineEventInput struct {
 	// EventData is a required field
 	EventData *string `locationName:"eventData" type:"string" required:"true"`
 
+	// Adds one or more references to the TimelineEvent. A reference is an Amazon
+	// Web Services resource involved or associated with the incident. To specify
+	// a reference, enter its Amazon Resource Name (ARN). You can also specify a
+	// related item associated with a resource. For example, to specify an Amazon
+	// DynamoDB (DynamoDB) table as a resource, use the table's ARN. You can also
+	// specify an Amazon CloudWatch metric associated with the DynamoDB table as
+	// a related item.
+	EventReferences []*EventReference `locationName:"eventReferences" type:"list"`
+
 	// The time that the event occurred.
 	//
 	// EventTime is a required field
 	EventTime *time.Time `locationName:"eventTime" type:"timestamp" required:"true"`
 
-	// The type of the event. You can create timeline events of type Custom Event.
+	// The type of event. You can create timeline events of type Custom Event.
 	//
 	// EventType is a required field
 	EventType *string `locationName:"eventType" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of the incident record to which the event
-	// will be added.
+	// The Amazon Resource Name (ARN) of the incident record that the action adds
+	// the incident to.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
@@ -3872,6 +3913,12 @@ func (s *CreateTimelineEventInput) SetClientToken(v string) *CreateTimelineEvent
 // SetEventData sets the EventData field's value.
 func (s *CreateTimelineEventInput) SetEventData(v string) *CreateTimelineEventInput {
 	s.EventData = &v
+	return s
+}
+
+// SetEventReferences sets the EventReferences field's value.
+func (s *CreateTimelineEventInput) SetEventReferences(v []*EventReference) *CreateTimelineEventInput {
+	s.EventReferences = v
 	return s
 }
 
@@ -4276,7 +4323,8 @@ func (s DeleteResponsePlanOutput) GoString() string {
 type DeleteTimelineEventInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the event you are updating. You can find this by using ListTimelineEvents.
+	// The ID of the event to update. You can use ListTimelineEvents to find an
+	// event's ID.
 	//
 	// EventId is a required field
 	EventId *string `locationName:"eventId" type:"string" required:"true"`
@@ -4412,6 +4460,50 @@ func (s EmptyChatChannel) GoString() string {
 	return s.String()
 }
 
+// An item referenced in a TimelineEvent that is involved in or somehow associated
+// with an incident. You can specify an Amazon Resource Name (ARN) for an Amazon
+// Web Services resource or a RelatedItem ID.
+type EventReference struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of a RelatedItem referenced in a TimelineEvent.
+	RelatedItemId *string `locationName:"relatedItemId" type:"string"`
+
+	// The Amazon Resource Name (ARN) of an Amazon Web Services resource referenced
+	// in a TimelineEvent.
+	Resource *string `locationName:"resource" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventReference) GoString() string {
+	return s.String()
+}
+
+// SetRelatedItemId sets the RelatedItemId field's value.
+func (s *EventReference) SetRelatedItemId(v string) *EventReference {
+	s.RelatedItemId = &v
+	return s
+}
+
+// SetResource sets the Resource field's value.
+func (s *EventReference) SetResource(v string) *EventReference {
+	s.Resource = &v
+	return s
+}
+
 // Details about a timeline event during an incident.
 type EventSummary struct {
 	_ struct{} `type:"structure"`
@@ -4420,6 +4512,9 @@ type EventSummary struct {
 	//
 	// EventId is a required field
 	EventId *string `locationName:"eventId" type:"string" required:"true"`
+
+	// A list of references in a TimelineEvent.
+	EventReferences []*EventReference `locationName:"eventReferences" type:"list"`
 
 	// The time that the event occurred.
 	//
@@ -4463,6 +4558,12 @@ func (s EventSummary) GoString() string {
 // SetEventId sets the EventId field's value.
 func (s *EventSummary) SetEventId(v string) *EventSummary {
 	s.EventId = &v
+	return s
+}
+
+// SetEventReferences sets the EventReferences field's value.
+func (s *EventSummary) SetEventReferences(v []*EventReference) *EventSummary {
+	s.EventReferences = v
 	return s
 }
 
@@ -4713,7 +4814,7 @@ func (s *GetReplicationSetOutput) SetReplicationSet(v *ReplicationSet) *GetRepli
 type GetResourcePoliciesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of resource policies to display per page of results.
+	// The maximum number of resource policies to display for each page of results.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The pagination token to continue to the next page of results.
@@ -4883,14 +4984,18 @@ type GetResponsePlanOutput struct {
 	// The long format name of the response plan. Can contain spaces.
 	DisplayName *string `locationName:"displayName" type:"string"`
 
-	// The contacts and escalation plans that the response plan engages during an
-	// incident.
+	// The Amazon Resource Name (ARN) for the contacts and escalation plans that
+	// the response plan engages during an incident.
 	Engagements []*string `locationName:"engagements" type:"list"`
 
 	// Details used to create the incident when using this response plan.
 	//
 	// IncidentTemplate is a required field
 	IncidentTemplate *IncidentTemplate `locationName:"incidentTemplate" type:"structure" required:"true"`
+
+	// Information about third-party services integrated into the Incident Manager
+	// response plan.
+	Integrations []*Integration `locationName:"integrations" type:"list"`
 
 	// The short format name of the response plan. The name can't contain spaces.
 	//
@@ -4949,6 +5054,12 @@ func (s *GetResponsePlanOutput) SetEngagements(v []*string) *GetResponsePlanOutp
 // SetIncidentTemplate sets the IncidentTemplate field's value.
 func (s *GetResponsePlanOutput) SetIncidentTemplate(v *IncidentTemplate) *GetResponsePlanOutput {
 	s.IncidentTemplate = v
+	return s
+}
+
+// SetIntegrations sets the Integrations field's value.
+func (s *GetResponsePlanOutput) SetIntegrations(v []*Integration) *GetResponsePlanOutput {
+	s.Integrations = v
 	return s
 }
 
@@ -5401,7 +5512,8 @@ type IncidentTemplate struct {
 	// Impact is a required field
 	Impact *int64 `locationName:"impact" min:"1" type:"integer" required:"true"`
 
-	// Tags to apply to an incident when calling the StartIncident API action.
+	// Tags to assign to the template. When the StartIncident API action is called,
+	// Incident Manager assigns the tags specified in the template to the incident.
 	IncidentTags map[string]*string `locationName:"incidentTags" min:"1" type:"map"`
 
 	// The Amazon SNS targets that are notified when updates are made to an incident.
@@ -5490,6 +5602,54 @@ func (s *IncidentTemplate) SetSummary(v string) *IncidentTemplate {
 // SetTitle sets the Title field's value.
 func (s *IncidentTemplate) SetTitle(v string) *IncidentTemplate {
 	s.Title = &v
+	return s
+}
+
+// Information about third-party services integrated into a response plan.
+type Integration struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the PagerDuty service where the response plan creates an
+	// incident.
+	PagerDutyConfiguration *PagerDutyConfiguration `locationName:"pagerDutyConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Integration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Integration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Integration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Integration"}
+	if s.PagerDutyConfiguration != nil {
+		if err := s.PagerDutyConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("PagerDutyConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPagerDutyConfiguration sets the PagerDutyConfiguration field's value.
+func (s *Integration) SetPagerDutyConfiguration(v *PagerDutyConfiguration) *Integration {
+	s.PagerDutyConfiguration = v
 	return s
 }
 
@@ -5600,6 +5760,11 @@ func (s *ItemIdentifier) Validate() error {
 	if s.Value == nil {
 		invalidParams.Add(request.NewErrParamRequired("Value"))
 	}
+	if s.Value != nil {
+		if err := s.Value.Validate(); err != nil {
+			invalidParams.AddNested("Value", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5630,6 +5795,9 @@ type ItemValue struct {
 	// The metric definition, if the related item is a metric in Amazon CloudWatch.
 	MetricDefinition *string `locationName:"metricDefinition" type:"string"`
 
+	// Details about an incident that is associated with a PagerDuty incident.
+	PagerDutyIncidentDetail *PagerDutyIncidentDetail `locationName:"pagerDutyIncidentDetail" type:"structure"`
+
 	// The URL, if the related item is a non-Amazon Web Services resource.
 	Url *string `locationName:"url" type:"string"`
 }
@@ -5652,6 +5820,21 @@ func (s ItemValue) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ItemValue) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ItemValue"}
+	if s.PagerDutyIncidentDetail != nil {
+		if err := s.PagerDutyIncidentDetail.Validate(); err != nil {
+			invalidParams.AddNested("PagerDutyIncidentDetail", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetArn sets the Arn field's value.
 func (s *ItemValue) SetArn(v string) *ItemValue {
 	s.Arn = &v
@@ -5664,6 +5847,12 @@ func (s *ItemValue) SetMetricDefinition(v string) *ItemValue {
 	return s
 }
 
+// SetPagerDutyIncidentDetail sets the PagerDutyIncidentDetail field's value.
+func (s *ItemValue) SetPagerDutyIncidentDetail(v *PagerDutyIncidentDetail) *ItemValue {
+	s.PagerDutyIncidentDetail = v
+	return s
+}
+
 // SetUrl sets the Url field's value.
 func (s *ItemValue) SetUrl(v string) *ItemValue {
 	s.Url = &v
@@ -5673,8 +5862,8 @@ func (s *ItemValue) SetUrl(v string) *ItemValue {
 type ListIncidentRecordsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Filters the list of incident records through which you are searching. You
-	// can filter on the following keys:
+	// Filters the list of incident records you want to search through. You can
+	// filter on the following keys:
 	//
 	//    * creationTime
 	//
@@ -5684,7 +5873,7 @@ type ListIncidentRecordsInput struct {
 	//
 	//    * createdBy
 	//
-	// Note the following when deciding how to use Filters:
+	// Note the following when when you use Filters:
 	//
 	//    * If you don't specify a Filter, the response includes all incident records.
 	//
@@ -6189,7 +6378,7 @@ type ListTimelineEventsInput struct {
 	_ struct{} `type:"structure"`
 
 	// Filters the timeline events based on the provided conditional values. You
-	// can filter timeline events using the following keys:
+	// can filter timeline events with the following keys:
 	//
 	//    * eventTime
 	//
@@ -6218,7 +6407,7 @@ type ListTimelineEventsInput struct {
 	// The pagination token to continue to the next page of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// Sort by the specified key value pair.
+	// Sort timeline events by the specified key value pair.
 	SortBy *string `locationName:"sortBy" type:"string" enum:"TimelineEventSort"`
 
 	// Sorts the order of timeline events by the value specified in the sortBy field.
@@ -6379,6 +6568,221 @@ func (s *NotificationTargetItem) SetSnsTopicArn(v string) *NotificationTargetIte
 	return s
 }
 
+// Details about the PagerDuty configuration for a response plan.
+type PagerDutyConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the PagerDuty configuration.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Details about the PagerDuty service associated with the configuration.
+	//
+	// PagerDutyIncidentConfiguration is a required field
+	PagerDutyIncidentConfiguration *PagerDutyIncidentConfiguration `locationName:"pagerDutyIncidentConfiguration" type:"structure" required:"true"`
+
+	// The ID of the Amazon Web Services Secrets Manager secret that stores your
+	// PagerDuty key, either a General Access REST API Key or User Token REST API
+	// Key, and other user credentials.
+	//
+	// SecretId is a required field
+	SecretId *string `locationName:"secretId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PagerDutyConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PagerDutyConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PagerDutyConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PagerDutyConfiguration"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.PagerDutyIncidentConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("PagerDutyIncidentConfiguration"))
+	}
+	if s.SecretId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretId"))
+	}
+	if s.SecretId != nil && len(*s.SecretId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretId", 1))
+	}
+	if s.PagerDutyIncidentConfiguration != nil {
+		if err := s.PagerDutyIncidentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("PagerDutyIncidentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *PagerDutyConfiguration) SetName(v string) *PagerDutyConfiguration {
+	s.Name = &v
+	return s
+}
+
+// SetPagerDutyIncidentConfiguration sets the PagerDutyIncidentConfiguration field's value.
+func (s *PagerDutyConfiguration) SetPagerDutyIncidentConfiguration(v *PagerDutyIncidentConfiguration) *PagerDutyConfiguration {
+	s.PagerDutyIncidentConfiguration = v
+	return s
+}
+
+// SetSecretId sets the SecretId field's value.
+func (s *PagerDutyConfiguration) SetSecretId(v string) *PagerDutyConfiguration {
+	s.SecretId = &v
+	return s
+}
+
+// Details about the PagerDuty service where the response plan creates an incident.
+type PagerDutyIncidentConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the PagerDuty service that the response plan associates with an
+	// incident when it launches.
+	//
+	// ServiceId is a required field
+	ServiceId *string `locationName:"serviceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PagerDutyIncidentConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PagerDutyIncidentConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PagerDutyIncidentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PagerDutyIncidentConfiguration"}
+	if s.ServiceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceId"))
+	}
+	if s.ServiceId != nil && len(*s.ServiceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetServiceId sets the ServiceId field's value.
+func (s *PagerDutyIncidentConfiguration) SetServiceId(v string) *PagerDutyIncidentConfiguration {
+	s.ServiceId = &v
+	return s
+}
+
+// Details about the PagerDuty incident associated with an incident created
+// by an Incident Manager response plan.
+type PagerDutyIncidentDetail struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether to resolve the PagerDuty incident when you resolve the
+	// associated Incident Manager incident.
+	AutoResolve *bool `locationName:"autoResolve" type:"boolean"`
+
+	// The ID of the incident associated with the PagerDuty service for the response
+	// plan.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"1" type:"string" required:"true"`
+
+	// The ID of the Amazon Web Services Secrets Manager secret that stores your
+	// PagerDuty key, either a General Access REST API Key or User Token REST API
+	// Key, and other user credentials.
+	SecretId *string `locationName:"secretId" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PagerDutyIncidentDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PagerDutyIncidentDetail) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PagerDutyIncidentDetail) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PagerDutyIncidentDetail"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.SecretId != nil && len(*s.SecretId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAutoResolve sets the AutoResolve field's value.
+func (s *PagerDutyIncidentDetail) SetAutoResolve(v bool) *PagerDutyIncidentDetail {
+	s.AutoResolve = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *PagerDutyIncidentDetail) SetId(v string) *PagerDutyIncidentDetail {
+	s.Id = &v
+	return s
+}
+
+// SetSecretId sets the SecretId field's value.
+func (s *PagerDutyIncidentDetail) SetSecretId(v string) *PagerDutyIncidentDetail {
+	s.SecretId = &v
+	return s
+}
+
 type PutResourcePolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6387,8 +6791,8 @@ type PutResourcePolicyInput struct {
 	// Policy is a required field
 	Policy *string `locationName:"policy" type:"string" required:"true"`
 
-	// The Amazon Resource Name (ARN) of the response plan you're adding the resource
-	// policy to.
+	// The Amazon Resource Name (ARN) of the response plan to add the resource policy
+	// to.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
@@ -6575,6 +6979,12 @@ func (s *RegionMapInputValue) SetSseKmsKeyId(v string) *RegionMapInputValue {
 type RelatedItem struct {
 	_ struct{} `type:"structure"`
 
+	// A unique ID for a RelatedItem.
+	//
+	// Don't specify this parameter when you add a RelatedItem by using the UpdateRelatedItems
+	// API action.
+	GeneratedId *string `locationName:"generatedId" type:"string"`
+
 	// Details about the related item.
 	//
 	// Identifier is a required field
@@ -6618,6 +7028,12 @@ func (s *RelatedItem) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetGeneratedId sets the GeneratedId field's value.
+func (s *RelatedItem) SetGeneratedId(v string) *RelatedItem {
+	s.GeneratedId = &v
+	return s
 }
 
 // SetIdentifier sets the Identifier field's value.
@@ -7201,7 +7617,8 @@ type StartIncidentInput struct {
 	Impact *int64 `locationName:"impact" min:"1" type:"integer"`
 
 	// Add related items to the incident for other responders to use. Related items
-	// are AWS resources, external links, or files uploaded to an Amazon S3 bucket.
+	// are Amazon Web Services resources, external links, or files uploaded to an
+	// Amazon S3 bucket.
 	RelatedItems []*RelatedItem `locationName:"relatedItems" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the response plan that pre-defines summary,
@@ -7345,7 +7762,7 @@ type TagResourceInput struct {
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
 
-	// A list of tags that you are adding to the response plan.
+	// A list of tags to add to the response plan.
 	//
 	// Tags is a required field
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map" required:"true"`
@@ -7513,6 +7930,9 @@ type TimelineEvent struct {
 	// EventId is a required field
 	EventId *string `locationName:"eventId" type:"string" required:"true"`
 
+	// A list of references in a TimelineEvent.
+	EventReferences []*EventReference `locationName:"eventReferences" type:"list"`
+
 	// The time that the event occurred.
 	//
 	// EventTime is a required field
@@ -7562,6 +7982,12 @@ func (s *TimelineEvent) SetEventData(v string) *TimelineEvent {
 // SetEventId sets the EventId field's value.
 func (s *TimelineEvent) SetEventId(v string) *TimelineEvent {
 	s.EventId = &v
+	return s
+}
+
+// SetEventReferences sets the EventReferences field's value.
+func (s *TimelineEvent) SetEventReferences(v []*EventReference) *TimelineEvent {
+	s.EventReferences = v
 	return s
 }
 
@@ -7681,7 +8107,7 @@ type UntagResourceInput struct {
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
 
-	// The name of the tag you're removing from the response plan.
+	// The name of the tag to remove from the response plan.
 	//
 	// TagKeys is a required field
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" min:"1" type:"list" required:"true"`
@@ -7764,16 +8190,16 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateDeletionProtectionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the replication set you're updating.
+	// The Amazon Resource Name (ARN) of the replication set to update.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// A token ensuring that the operation is called only once with the specified
+	// A token that ensures that the operation is called only once with the specified
 	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// Details if deletion protection is enabled or disabled in your account.
+	// Specifies if deletion protection is turned on or off in your account.
 	//
 	// DeletionProtected is a required field
 	DeletionProtected *bool `locationName:"deletionProtected" type:"boolean" required:"true"`
@@ -7864,12 +8290,13 @@ type UpdateIncidentRecordInput struct {
 	// The Chatbot chat channel where responders can collaborate.
 	ChatChannel *ChatChannel `locationName:"chatChannel" type:"structure"`
 
-	// A token that ensures that the operation is called only once with the specified
-	// details.
+	// A token that ensures that a client calls the operation only once with the
+	// specified details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// Defines the impact of the incident to customers and applications. Providing
-	// an impact overwrites the impact provided by the response plan.
+	// Defines the impact of the incident to customers and applications. If you
+	// provide an impact for an incident, it overwrites the impact provided by the
+	// response plan.
 	//
 	// Possible impacts:
 	//
@@ -7886,13 +8313,14 @@ type UpdateIncidentRecordInput struct {
 	//    is needed to avoid impact.
 	Impact *int64 `locationName:"impact" min:"1" type:"integer"`
 
-	// The Amazon SNS targets that are notified when updates are made to an incident.
+	// The Amazon SNS targets that Incident Manager notifies when a client updates
+	// an incident.
 	//
 	// Using multiple SNS topics creates redundancy in the event that a Region is
 	// down during the incident.
 	NotificationTargets []*NotificationTargetItem `locationName:"notificationTargets" type:"list"`
 
-	// The status of the incident. An incident can be Open or Resolved.
+	// The status of the incident. Possible statuses are Open or Resolved.
 	Status *string `locationName:"status" type:"string" enum:"IncidentRecordStatus"`
 
 	// A longer description of what occurred during the incident.
@@ -8014,17 +8442,17 @@ func (s UpdateIncidentRecordOutput) GoString() string {
 type UpdateRelatedItemsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the operation is called only once with the specified
-	// details.
+	// A token that ensures that a client calls the operation only once with the
+	// specified details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// The Amazon Resource Name (ARN) of the incident record containing the related
-	// items you are updating.
+	// The Amazon Resource Name (ARN) of the incident record that contains the related
+	// items that you update.
 	//
 	// IncidentRecordArn is a required field
 	IncidentRecordArn *string `locationName:"incidentRecordArn" type:"string" required:"true"`
 
-	// Details about the item you are adding or deleting.
+	// Details about the item that you are add to, or delete from, an incident.
 	//
 	// RelatedItemsUpdate is a required field
 	RelatedItemsUpdate *RelatedItemsUpdate `locationName:"relatedItemsUpdate" type:"structure" required:"true"`
@@ -8185,7 +8613,7 @@ type UpdateReplicationSetInput struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// A token ensuring that the operation is called only once with the specified
+	// A token that ensures that the operation is called only once with the specified
 	// details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 }
@@ -8301,8 +8729,8 @@ type UpdateResponsePlanInput struct {
 	// spaces.
 	DisplayName *string `locationName:"displayName" type:"string"`
 
-	// The contacts and escalation plans that Incident Manager engages at the start
-	// of the incident.
+	// The Amazon Resource Name (ARN) for the contacts and escalation plans that
+	// the response plan engages during an incident.
 	Engagements []*string `locationName:"engagements" type:"list"`
 
 	// The string Incident Manager uses to prevent duplicate incidents from being
@@ -8332,13 +8760,17 @@ type UpdateResponsePlanInput struct {
 	// what's currently happening, and next steps.
 	IncidentTemplateSummary *string `locationName:"incidentTemplateSummary" type:"string"`
 
-	// Tags to apply to an incident when calling the StartIncident API action. To
-	// call this action, you must also have permission to call the TagResource API
-	// action for the incident record resource.
+	// Tags to assign to the template. When the StartIncident API action is called,
+	// Incident Manager assigns the tags specified in the template to the incident.
+	// To call this action, you must also have permission to call the TagResource
+	// API action for the incident record resource.
 	IncidentTemplateTags map[string]*string `locationName:"incidentTemplateTags" type:"map"`
 
 	// The short format name of the incident. The title can't contain spaces.
 	IncidentTemplateTitle *string `locationName:"incidentTemplateTitle" type:"string"`
+
+	// Information about third-party services integrated into the response plan.
+	Integrations []*Integration `locationName:"integrations" type:"list"`
 }
 
 // String returns the string representation.
@@ -8381,6 +8813,16 @@ func (s *UpdateResponsePlanInput) Validate() error {
 	if s.ChatChannel != nil {
 		if err := s.ChatChannel.Validate(); err != nil {
 			invalidParams.AddNested("ChatChannel", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Integrations != nil {
+		for i, v := range s.Integrations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Integrations", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -8462,6 +8904,12 @@ func (s *UpdateResponsePlanInput) SetIncidentTemplateTitle(v string) *UpdateResp
 	return s
 }
 
+// SetIntegrations sets the Integrations field's value.
+func (s *UpdateResponsePlanInput) SetIntegrations(v []*Integration) *UpdateResponsePlanInput {
+	s.Integrations = v
+	return s
+}
+
 type UpdateResponsePlanOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -8487,22 +8935,36 @@ func (s UpdateResponsePlanOutput) GoString() string {
 type UpdateTimelineEventInput struct {
 	_ struct{} `type:"structure"`
 
-	// A token ensuring that the operation is called only once with the specified
-	// details.
+	// A token that ensures that a client calls the operation only once with the
+	// specified details.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
 	// A short description of the event.
 	EventData *string `locationName:"eventData" type:"string"`
 
-	// The ID of the event you are updating. You can find this by using ListTimelineEvents.
+	// The ID of the event to update. You can use ListTimelineEvents to find an
+	// event's ID.
 	//
 	// EventId is a required field
 	EventId *string `locationName:"eventId" type:"string" required:"true"`
 
+	// Updates all existing references in a TimelineEvent. A reference is an Amazon
+	// Web Services resource involved or associated with the incident. To specify
+	// a reference, enter its Amazon Resource Name (ARN). You can also specify a
+	// related item associated with that resource. For example, to specify an Amazon
+	// DynamoDB (DynamoDB) table as a resource, use its ARN. You can also specify
+	// an Amazon CloudWatch metric associated with the DynamoDB table as a related
+	// item.
+	//
+	// This update action overrides all existing references. If you want to keep
+	// existing references, you must specify them in the call. If you don't, this
+	// action removes any existing references and enters only new references.
+	EventReferences []*EventReference `locationName:"eventReferences" type:"list"`
+
 	// The time that the event occurred.
 	EventTime *time.Time `locationName:"eventTime" type:"timestamp"`
 
-	// The type of the event. You can update events of type Custom Event.
+	// The type of event. You can update events of type Custom Event.
 	EventType *string `locationName:"eventType" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the incident that includes the timeline
@@ -8561,6 +9023,12 @@ func (s *UpdateTimelineEventInput) SetEventData(v string) *UpdateTimelineEventIn
 // SetEventId sets the EventId field's value.
 func (s *UpdateTimelineEventInput) SetEventId(v string) *UpdateTimelineEventInput {
 	s.EventId = &v
+	return s
+}
+
+// SetEventReferences sets the EventReferences field's value.
+func (s *UpdateTimelineEventInput) SetEventReferences(v []*EventReference) *UpdateTimelineEventInput {
+	s.EventReferences = v
 	return s
 }
 
@@ -8709,6 +9177,9 @@ const (
 
 	// ItemTypeInvolvedResource is a ItemType enum value
 	ItemTypeInvolvedResource = "INVOLVED_RESOURCE"
+
+	// ItemTypeTask is a ItemType enum value
+	ItemTypeTask = "TASK"
 )
 
 // ItemType_Values returns all elements of the ItemType enum
@@ -8722,6 +9193,7 @@ func ItemType_Values() []string {
 		ItemTypeOther,
 		ItemTypeAutomation,
 		ItemTypeInvolvedResource,
+		ItemTypeTask,
 	}
 }
 

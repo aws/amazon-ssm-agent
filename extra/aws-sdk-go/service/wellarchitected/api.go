@@ -85,7 +85,7 @@ func (c *WellArchitected) AssociateLensesRequest(input *AssociateLensesInput) (r
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -164,9 +164,18 @@ func (c *WellArchitected) CreateLensShareRequest(input *CreateLensShareInput) (r
 //
 // Create a lens share.
 //
-// The owner of a lens can share it with other Amazon Web Services accounts
-// and IAM users in the same Amazon Web Services Region. Shared access to a
-// lens is not removed until the lens invitation is deleted.
+// The owner of a lens can share it with other Amazon Web Services accounts,
+// users, an organization, and organizational units (OUs) in the same Amazon
+// Web Services Region. Lenses provided by Amazon Web Services (Amazon Web Services
+// Official Content) cannot be shared.
+//
+// Shared access to a lens is not removed until the lens invitation is deleted.
+//
+// If you share a lens with an organization or OU, all accounts in the organization
+// or OU are granted access to the lens.
+//
+// For more information, see Sharing a custom lens (https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-sharing.html)
+// in the Well-Architected Tool User Guide.
 //
 // Disclaimer
 //
@@ -188,7 +197,7 @@ func (c *WellArchitected) CreateLensShareRequest(input *CreateLensShareInput) (r
 //   The user input is not valid.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -275,10 +284,11 @@ func (c *WellArchitected) CreateLensVersionRequest(input *CreateLensVersionInput
 //
 // A lens can have up to 100 versions.
 //
-// After a lens has been imported, create a new lens version to publish it.
-// The owner of a lens can share the lens with other Amazon Web Services accounts
-// and IAM users in the same Amazon Web Services Region. Only the owner of a
-// lens can delete it.
+// Use this operation to publish a new lens version after you have imported
+// a lens. The LensAlias is used to identify the lens to be published. The owner
+// of a lens can share the lens with other Amazon Web Services accounts and
+// users in the same Amazon Web Services Region. Only the owner of a lens can
+// delete it.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -298,7 +308,7 @@ func (c *WellArchitected) CreateLensVersionRequest(input *CreateLensVersionInput
 //   The user has reached their resource quota.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -389,7 +399,7 @@ func (c *WellArchitected) CreateMilestoneRequest(input *CreateMilestoneInput) (r
 //   The user input is not valid.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -475,11 +485,17 @@ func (c *WellArchitected) CreateWorkloadRequest(input *CreateWorkloadInput) (req
 // Create a new workload.
 //
 // The owner of a workload can share the workload with other Amazon Web Services
-// accounts and IAM users in the same Amazon Web Services Region. Only the owner
-// of a workload can delete it.
+// accounts, users, an organization, and organizational units (OUs) in the same
+// Amazon Web Services Region. Only the owner of a workload can delete it.
 //
 // For more information, see Defining a Workload (https://docs.aws.amazon.com/wellarchitected/latest/userguide/define-workload.html)
 // in the Well-Architected Tool User Guide.
+//
+// Either AwsRegions, NonAwsRegions, or both must be specified when creating
+// a workload.
+//
+// You also must specify ReviewOwner, even though the parameter is listed as
+// not being required in the following section.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -493,7 +509,7 @@ func (c *WellArchitected) CreateWorkloadRequest(input *CreateWorkloadInput) (req
 //   The user input is not valid.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * ServiceQuotaExceededException
 //   The user has reached their resource quota.
@@ -503,6 +519,9 @@ func (c *WellArchitected) CreateWorkloadRequest(input *CreateWorkloadInput) (req
 //
 //   * AccessDeniedException
 //   User does not have sufficient access to perform this action.
+//
+//   * ResourceNotFoundException
+//   The requested resource was not found.
 //
 //   * ThrottlingException
 //   Request was denied due to request throttling.
@@ -576,10 +595,13 @@ func (c *WellArchitected) CreateWorkloadShareRequest(input *CreateWorkloadShareI
 // Create a workload share.
 //
 // The owner of a workload can share it with other Amazon Web Services accounts
-// and IAM users in the same Amazon Web Services Region. Shared access to a
-// workload is not removed until the workload invitation is deleted.
+// and users in the same Amazon Web Services Region. Shared access to a workload
+// is not removed until the workload invitation is deleted.
 //
-// For more information, see Sharing a Workload (https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads-sharing.html)
+// If you share a workload with an organization or OU, all accounts in the organization
+// or OU are granted access to the workload.
+//
+// For more information, see Sharing a workload (https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads-sharing.html)
 // in the Well-Architected Tool User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -594,7 +616,7 @@ func (c *WellArchitected) CreateWorkloadShareRequest(input *CreateWorkloadShareI
 //   The user input is not valid.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -681,7 +703,7 @@ func (c *WellArchitected) DeleteLensRequest(input *DeleteLensInput) (req *reques
 // Delete an existing lens.
 //
 // Only the owner of a lens can delete it. After the lens is deleted, Amazon
-// Web Services accounts and IAM users that you shared the lens with can continue
+// Web Services accounts and users that you shared the lens with can continue
 // to use it, but they will no longer be able to apply it to new workloads.
 //
 // Disclaimer
@@ -707,7 +729,7 @@ func (c *WellArchitected) DeleteLensRequest(input *DeleteLensInput) (req *reques
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -787,9 +809,9 @@ func (c *WellArchitected) DeleteLensShareRequest(input *DeleteLensShareInput) (r
 //
 // Delete a lens share.
 //
-// After the lens share is deleted, Amazon Web Services accounts and IAM users
-// that you shared the lens with can continue to use it, but they will no longer
-// be able to apply it to new workloads.
+// After the lens share is deleted, Amazon Web Services accounts, users, organizations,
+// and organizational units (OUs) that you shared the lens with can continue
+// to use it, but they will no longer be able to apply it to new workloads.
 //
 // Disclaimer
 //
@@ -817,7 +839,7 @@ func (c *WellArchitected) DeleteLensShareRequest(input *DeleteLensShareInput) (r
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * AccessDeniedException
 //   User does not have sufficient access to perform this action.
@@ -909,7 +931,7 @@ func (c *WellArchitected) DeleteWorkloadRequest(input *DeleteWorkloadInput) (req
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -1007,7 +1029,7 @@ func (c *WellArchitected) DeleteWorkloadShareRequest(input *DeleteWorkloadShareI
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * AccessDeniedException
 //   User does not have sufficient access to perform this action.
@@ -1104,7 +1126,7 @@ func (c *WellArchitected) DisassociateLensesRequest(input *DisassociateLensesInp
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -1183,10 +1205,12 @@ func (c *WellArchitected) ExportLensRequest(input *ExportLensInput) (req *reques
 //
 // Export an existing lens.
 //
+// Only the owner of a lens can export it. Lenses provided by Amazon Web Services
+// (Amazon Web Services Official Content) cannot be exported.
+//
 // Lenses are defined in JSON. For more information, see JSON format specification
 // (https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html)
-// in the Well-Architected Tool User Guide. Only the owner of a lens can export
-// it.
+// in the Well-Architected Tool User Guide.
 //
 // Disclaimer
 //
@@ -1331,6 +1355,158 @@ func (c *WellArchitected) GetAnswerWithContext(ctx aws.Context, input *GetAnswer
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opGetConsolidatedReport = "GetConsolidatedReport"
+
+// GetConsolidatedReportRequest generates a "aws/request.Request" representing the
+// client's request for the GetConsolidatedReport operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetConsolidatedReport for more information on using the GetConsolidatedReport
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetConsolidatedReportRequest method.
+//    req, resp := client.GetConsolidatedReportRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetConsolidatedReport
+func (c *WellArchitected) GetConsolidatedReportRequest(input *GetConsolidatedReportInput) (req *request.Request, output *GetConsolidatedReportOutput) {
+	op := &request.Operation{
+		Name:       opGetConsolidatedReport,
+		HTTPMethod: "GET",
+		HTTPPath:   "/consolidatedReport",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetConsolidatedReportInput{}
+	}
+
+	output = &GetConsolidatedReportOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetConsolidatedReport API operation for AWS Well-Architected Tool.
+//
+// Get a consolidated report of your workloads.
+//
+// You can optionally choose to include workloads that have been shared with
+// you.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation GetConsolidatedReport for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The user input is not valid.
+//
+//   * InternalServerException
+//   There is a problem with the Well-Architected Tool API service.
+//
+//   * AccessDeniedException
+//   User does not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   Request was denied due to request throttling.
+//
+//   * ConflictException
+//   The resource has already been processed, was deleted, or is too large.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetConsolidatedReport
+func (c *WellArchitected) GetConsolidatedReport(input *GetConsolidatedReportInput) (*GetConsolidatedReportOutput, error) {
+	req, out := c.GetConsolidatedReportRequest(input)
+	return out, req.Send()
+}
+
+// GetConsolidatedReportWithContext is the same as GetConsolidatedReport with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetConsolidatedReport for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) GetConsolidatedReportWithContext(ctx aws.Context, input *GetConsolidatedReportInput, opts ...request.Option) (*GetConsolidatedReportOutput, error) {
+	req, out := c.GetConsolidatedReportRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetConsolidatedReportPages iterates over the pages of a GetConsolidatedReport operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetConsolidatedReport method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetConsolidatedReport operation.
+//    pageNum := 0
+//    err := client.GetConsolidatedReportPages(params,
+//        func(page *wellarchitected.GetConsolidatedReportOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *WellArchitected) GetConsolidatedReportPages(input *GetConsolidatedReportInput, fn func(*GetConsolidatedReportOutput, bool) bool) error {
+	return c.GetConsolidatedReportPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetConsolidatedReportPagesWithContext same as GetConsolidatedReportPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) GetConsolidatedReportPagesWithContext(ctx aws.Context, input *GetConsolidatedReportInput, fn func(*GetConsolidatedReportOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetConsolidatedReportInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetConsolidatedReportRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetConsolidatedReportOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opGetLens = "GetLens"
@@ -1923,10 +2099,14 @@ func (c *WellArchitected) ImportLensRequest(input *ImportLensInput) (req *reques
 
 // ImportLens API operation for AWS Well-Architected Tool.
 //
-// Import a new lens.
+// Import a new custom lens or update an existing custom lens.
 //
-// The lens cannot be applied to workloads or shared with other Amazon Web Services
-// accounts until it's published with CreateLensVersion
+// To update an existing custom lens, specify its ARN as the LensAlias. If no
+// ARN is specified, a new custom lens is created.
+//
+// The new or updated lens will have a status of DRAFT. The lens cannot be applied
+// to workloads or shared with other Amazon Web Services accounts until it's
+// published with CreateLensVersion.
 //
 // Lenses are defined in JSON. For more information, see JSON format specification
 // (https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html)
@@ -1955,7 +2135,7 @@ func (c *WellArchitected) ImportLensRequest(input *ImportLensInput) (req *reques
 //   The user input is not valid.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * ResourceNotFoundException
 //   The requested resource was not found.
@@ -2044,7 +2224,7 @@ func (c *WellArchitected) ListAnswersRequest(input *ListAnswersInput) (req *requ
 
 // ListAnswers API operation for AWS Well-Architected Tool.
 //
-// List of answers.
+// List of answers for a particular workload and lens.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2136,6 +2316,305 @@ func (c *WellArchitected) ListAnswersPagesWithContext(ctx aws.Context, input *Li
 
 	for p.Next() {
 		if !fn(p.Page().(*ListAnswersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCheckDetails = "ListCheckDetails"
+
+// ListCheckDetailsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCheckDetails operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCheckDetails for more information on using the ListCheckDetails
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListCheckDetailsRequest method.
+//    req, resp := client.ListCheckDetailsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckDetails
+func (c *WellArchitected) ListCheckDetailsRequest(input *ListCheckDetailsInput) (req *request.Request, output *ListCheckDetailsOutput) {
+	op := &request.Operation{
+		Name:       opListCheckDetails,
+		HTTPMethod: "POST",
+		HTTPPath:   "/workloads/{WorkloadId}/checks",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCheckDetailsInput{}
+	}
+
+	output = &ListCheckDetailsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCheckDetails API operation for AWS Well-Architected Tool.
+//
+// List of Trusted Advisor check details by account related to the workload.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListCheckDetails for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The user input is not valid.
+//
+//   * ResourceNotFoundException
+//   The requested resource was not found.
+//
+//   * InternalServerException
+//   There is a problem with the Well-Architected Tool API service.
+//
+//   * AccessDeniedException
+//   User does not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckDetails
+func (c *WellArchitected) ListCheckDetails(input *ListCheckDetailsInput) (*ListCheckDetailsOutput, error) {
+	req, out := c.ListCheckDetailsRequest(input)
+	return out, req.Send()
+}
+
+// ListCheckDetailsWithContext is the same as ListCheckDetails with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCheckDetails for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListCheckDetailsWithContext(ctx aws.Context, input *ListCheckDetailsInput, opts ...request.Option) (*ListCheckDetailsOutput, error) {
+	req, out := c.ListCheckDetailsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCheckDetailsPages iterates over the pages of a ListCheckDetails operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCheckDetails method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCheckDetails operation.
+//    pageNum := 0
+//    err := client.ListCheckDetailsPages(params,
+//        func(page *wellarchitected.ListCheckDetailsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *WellArchitected) ListCheckDetailsPages(input *ListCheckDetailsInput, fn func(*ListCheckDetailsOutput, bool) bool) error {
+	return c.ListCheckDetailsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCheckDetailsPagesWithContext same as ListCheckDetailsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListCheckDetailsPagesWithContext(ctx aws.Context, input *ListCheckDetailsInput, fn func(*ListCheckDetailsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCheckDetailsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCheckDetailsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCheckDetailsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCheckSummaries = "ListCheckSummaries"
+
+// ListCheckSummariesRequest generates a "aws/request.Request" representing the
+// client's request for the ListCheckSummaries operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCheckSummaries for more information on using the ListCheckSummaries
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListCheckSummariesRequest method.
+//    req, resp := client.ListCheckSummariesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckSummaries
+func (c *WellArchitected) ListCheckSummariesRequest(input *ListCheckSummariesInput) (req *request.Request, output *ListCheckSummariesOutput) {
+	op := &request.Operation{
+		Name:       opListCheckSummaries,
+		HTTPMethod: "POST",
+		HTTPPath:   "/workloads/{WorkloadId}/checkSummaries",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCheckSummariesInput{}
+	}
+
+	output = &ListCheckSummariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCheckSummaries API operation for AWS Well-Architected Tool.
+//
+// List of Trusted Advisor checks summarized for all accounts related to the
+// workload.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListCheckSummaries for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The user input is not valid.
+//
+//   * ResourceNotFoundException
+//   The requested resource was not found.
+//
+//   * InternalServerException
+//   There is a problem with the Well-Architected Tool API service.
+//
+//   * AccessDeniedException
+//   User does not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckSummaries
+func (c *WellArchitected) ListCheckSummaries(input *ListCheckSummariesInput) (*ListCheckSummariesOutput, error) {
+	req, out := c.ListCheckSummariesRequest(input)
+	return out, req.Send()
+}
+
+// ListCheckSummariesWithContext is the same as ListCheckSummaries with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCheckSummaries for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListCheckSummariesWithContext(ctx aws.Context, input *ListCheckSummariesInput, opts ...request.Option) (*ListCheckSummariesOutput, error) {
+	req, out := c.ListCheckSummariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCheckSummariesPages iterates over the pages of a ListCheckSummaries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCheckSummaries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCheckSummaries operation.
+//    pageNum := 0
+//    err := client.ListCheckSummariesPages(params,
+//        func(page *wellarchitected.ListCheckSummariesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *WellArchitected) ListCheckSummariesPages(input *ListCheckSummariesInput, fn func(*ListCheckSummariesOutput, bool) bool) error {
+	return c.ListCheckSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCheckSummariesPagesWithContext same as ListCheckSummariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListCheckSummariesPagesWithContext(ctx aws.Context, input *ListCheckSummariesInput, fn func(*ListCheckSummariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCheckSummariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCheckSummariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCheckSummariesOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -2342,7 +2821,7 @@ func (c *WellArchitected) ListLensReviewsRequest(input *ListLensReviewsInput) (r
 
 // ListLensReviews API operation for AWS Well-Architected Tool.
 //
-// List lens reviews.
+// List lens reviews for a particular workload.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3460,7 +3939,7 @@ func (c *WellArchitected) ListWorkloadsRequest(input *ListWorkloadsInput) (req *
 
 // ListWorkloads API operation for AWS Well-Architected Tool.
 //
-// List workloads. Paginated.
+// Paginated list of workloads.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3791,7 +4270,7 @@ func (c *WellArchitected) UpdateAnswerRequest(input *UpdateAnswerInput) (req *re
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -3870,7 +4349,7 @@ func (c *WellArchitected) UpdateGlobalSettingsRequest(input *UpdateGlobalSetting
 // UpdateGlobalSettings API operation for AWS Well-Architected Tool.
 //
 // Updates whether the Amazon Web Services account is opted into organization
-// sharing features.
+// sharing and discovery integration features.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3884,7 +4363,7 @@ func (c *WellArchitected) UpdateGlobalSettingsRequest(input *UpdateGlobalSetting
 //   The user input is not valid.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -3961,7 +4440,7 @@ func (c *WellArchitected) UpdateLensReviewRequest(input *UpdateLensReviewInput) 
 
 // UpdateLensReview API operation for AWS Well-Architected Tool.
 //
-// Update lens review.
+// Update lens review for a particular workload.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3978,7 +4457,7 @@ func (c *WellArchitected) UpdateLensReviewRequest(input *UpdateLensReviewInput) 
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -4055,7 +4534,10 @@ func (c *WellArchitected) UpdateShareInvitationRequest(input *UpdateShareInvitat
 
 // UpdateShareInvitation API operation for AWS Well-Architected Tool.
 //
-// Update a workload invitation.
+// Update a workload or custom lens share invitation.
+//
+// This API operation can be called independently of any resource. Previous
+// documentation implied that a workload ARN must be specified.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4075,7 +4557,7 @@ func (c *WellArchitected) UpdateShareInvitationRequest(input *UpdateShareInvitat
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * AccessDeniedException
 //   User does not have sufficient access to perform this action.
@@ -4166,7 +4648,7 @@ func (c *WellArchitected) UpdateWorkloadRequest(input *UpdateWorkloadInput) (req
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -4263,7 +4745,7 @@ func (c *WellArchitected) UpdateWorkloadShareRequest(input *UpdateWorkloadShareI
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * AccessDeniedException
 //   User does not have sufficient access to perform this action.
@@ -4338,7 +4820,7 @@ func (c *WellArchitected) UpgradeLensReviewRequest(input *UpgradeLensReviewInput
 
 // UpgradeLensReview API operation for AWS Well-Architected Tool.
 //
-// Upgrade lens review.
+// Upgrade lens review for a particular workload.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4355,7 +4837,7 @@ func (c *WellArchitected) UpgradeLensReviewRequest(input *UpgradeLensReviewInput
 //   The requested resource was not found.
 //
 //   * ConflictException
-//   The resource already exists.
+//   The resource has already been processed, was deleted, or is too large.
 //
 //   * InternalServerException
 //   There is a problem with the Well-Architected Tool API service.
@@ -4453,15 +4935,17 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The choice level additional resources.
+// The choice level additional resources for a custom lens.
+//
+// This field does not apply to Amazon Web Services official lenses.
 type AdditionalResources struct {
 	_ struct{} `type:"structure"`
 
 	// The URLs for additional resources, either helpful resources or improvement
-	// plans. Up to five additional URLs can be specified.
+	// plans, for a custom lens. Up to five additional URLs can be specified.
 	Content []*ChoiceContent `type:"list"`
 
-	// Type of additional resource.
+	// Type of additional resource for a custom lens.
 	Type *string `type:"string" enum:"AdditionalResourceType"`
 }
 
@@ -4505,15 +4989,26 @@ type Answer struct {
 	// List of choices available for a question.
 	Choices []*Choice `type:"list"`
 
-	// The helpful resource text to be displayed.
+	// The helpful resource text to be displayed for a custom lens.
+	//
+	// This field does not apply to Amazon Web Services official lenses.
 	HelpfulResourceDisplayText *string `min:"1" type:"string"`
 
-	// The helpful resource URL for a question.
+	// The helpful resource URL.
+	//
+	// For Amazon Web Services official lenses, this is the helpful resource URL
+	// for a question or choice.
+	//
+	// For custom lenses, this is the helpful resource URL for a question and is
+	// only provided if HelpfulResourceDisplayText was specified for the question.
 	HelpfulResourceUrl *string `min:"1" type:"string"`
 
-	// The improvement plan URL for a question.
+	// The improvement plan URL for a question in an Amazon Web Services official
+	// lenses.
 	//
 	// This value is only available if the question has been answered.
+	//
+	// This value does not apply to custom lenses.
 	ImprovementPlanUrl *string `min:"1" type:"string"`
 
 	// Defines whether this question is applicable to a lens review.
@@ -4851,13 +5346,323 @@ func (s AssociateLensesOutput) GoString() string {
 	return s.String()
 }
 
+// A best practice, or question choice, that has been identified as a risk in
+// this question.
+type BestPractice struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of a choice.
+	ChoiceId *string `min:"1" type:"string"`
+
+	// The title of a choice.
+	ChoiceTitle *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BestPractice) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BestPractice) GoString() string {
+	return s.String()
+}
+
+// SetChoiceId sets the ChoiceId field's value.
+func (s *BestPractice) SetChoiceId(v string) *BestPractice {
+	s.ChoiceId = &v
+	return s
+}
+
+// SetChoiceTitle sets the ChoiceTitle field's value.
+func (s *BestPractice) SetChoiceTitle(v string) *BestPractice {
+	s.ChoiceTitle = &v
+	return s
+}
+
+// Account details for a Well-Architected best practice in relation to Trusted
+// Advisor checks.
+type CheckDetail struct {
+	_ struct{} `type:"structure"`
+
+	// An Amazon Web Services account ID.
+	AccountId *string `type:"string"`
+
+	// The ID of a choice.
+	ChoiceId *string `min:"1" type:"string"`
+
+	// Trusted Advisor check description.
+	Description *string `type:"string"`
+
+	// Count of flagged resources associated to the check.
+	FlaggedResources *int64 `min:"1" type:"integer"`
+
+	// Trusted Advisor check ID.
+	Id *string `type:"string"`
+
+	// Well-Architected Lens ARN associated to the check.
+	LensArn *string `type:"string"`
+
+	// Trusted Advisor check name.
+	Name *string `type:"string"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	PillarId *string `min:"1" type:"string"`
+
+	// Provider of the check related to the best practice.
+	Provider *string `type:"string" enum:"CheckProvider"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// Reason associated to the check.
+	Reason *string `type:"string" enum:"CheckFailureReason"`
+
+	// Status associated to the check.
+	Status *string `type:"string" enum:"CheckStatus"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckDetail) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *CheckDetail) SetAccountId(v string) *CheckDetail {
+	s.AccountId = &v
+	return s
+}
+
+// SetChoiceId sets the ChoiceId field's value.
+func (s *CheckDetail) SetChoiceId(v string) *CheckDetail {
+	s.ChoiceId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CheckDetail) SetDescription(v string) *CheckDetail {
+	s.Description = &v
+	return s
+}
+
+// SetFlaggedResources sets the FlaggedResources field's value.
+func (s *CheckDetail) SetFlaggedResources(v int64) *CheckDetail {
+	s.FlaggedResources = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CheckDetail) SetId(v string) *CheckDetail {
+	s.Id = &v
+	return s
+}
+
+// SetLensArn sets the LensArn field's value.
+func (s *CheckDetail) SetLensArn(v string) *CheckDetail {
+	s.LensArn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CheckDetail) SetName(v string) *CheckDetail {
+	s.Name = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *CheckDetail) SetPillarId(v string) *CheckDetail {
+	s.PillarId = &v
+	return s
+}
+
+// SetProvider sets the Provider field's value.
+func (s *CheckDetail) SetProvider(v string) *CheckDetail {
+	s.Provider = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *CheckDetail) SetQuestionId(v string) *CheckDetail {
+	s.QuestionId = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *CheckDetail) SetReason(v string) *CheckDetail {
+	s.Reason = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CheckDetail) SetStatus(v string) *CheckDetail {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *CheckDetail) SetUpdatedAt(v time.Time) *CheckDetail {
+	s.UpdatedAt = &v
+	return s
+}
+
+// Trusted Advisor check summary.
+type CheckSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Account summary associated to the check.
+	AccountSummary map[string]*int64 `type:"map"`
+
+	// The ID of a choice.
+	ChoiceId *string `min:"1" type:"string"`
+
+	// Trusted Advisor check description.
+	Description *string `type:"string"`
+
+	// Trusted Advisor check ID.
+	Id *string `type:"string"`
+
+	// Well-Architected Lens ARN associated to the check.
+	LensArn *string `type:"string"`
+
+	// Trusted Advisor check name.
+	Name *string `type:"string"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	PillarId *string `min:"1" type:"string"`
+
+	// Provider of the check related to the best practice.
+	Provider *string `type:"string" enum:"CheckProvider"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// Status associated to the check.
+	Status *string `type:"string" enum:"CheckStatus"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CheckSummary) GoString() string {
+	return s.String()
+}
+
+// SetAccountSummary sets the AccountSummary field's value.
+func (s *CheckSummary) SetAccountSummary(v map[string]*int64) *CheckSummary {
+	s.AccountSummary = v
+	return s
+}
+
+// SetChoiceId sets the ChoiceId field's value.
+func (s *CheckSummary) SetChoiceId(v string) *CheckSummary {
+	s.ChoiceId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CheckSummary) SetDescription(v string) *CheckSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CheckSummary) SetId(v string) *CheckSummary {
+	s.Id = &v
+	return s
+}
+
+// SetLensArn sets the LensArn field's value.
+func (s *CheckSummary) SetLensArn(v string) *CheckSummary {
+	s.LensArn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CheckSummary) SetName(v string) *CheckSummary {
+	s.Name = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *CheckSummary) SetPillarId(v string) *CheckSummary {
+	s.PillarId = &v
+	return s
+}
+
+// SetProvider sets the Provider field's value.
+func (s *CheckSummary) SetProvider(v string) *CheckSummary {
+	s.Provider = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *CheckSummary) SetQuestionId(v string) *CheckSummary {
+	s.QuestionId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CheckSummary) SetStatus(v string) *CheckSummary {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *CheckSummary) SetUpdatedAt(v time.Time) *CheckSummary {
+	s.UpdatedAt = &v
+	return s
+}
+
 // A choice available to answer question.
 type Choice struct {
 	_ struct{} `type:"structure"`
 
-	// The additional resources for a choice. A choice can have up to two additional
-	// resources: one of type HELPFUL_RESOURCE, one of type IMPROVEMENT_PLAN, or
-	// both.
+	// The additional resources for a choice in a custom lens.
+	//
+	// A choice can have up to two additional resources: one of type HELPFUL_RESOURCE,
+	// one of type IMPROVEMENT_PLAN, or both.
 	AdditionalResources []*AdditionalResources `type:"list"`
 
 	// The ID of a choice.
@@ -4866,10 +5671,16 @@ type Choice struct {
 	// The description of a choice.
 	Description *string `min:"1" type:"string"`
 
-	// The choice level helpful resource.
+	// The helpful resource (both text and URL) for a particular choice.
+	//
+	// This field only applies to custom lenses. Each choice can have only one helpful
+	// resource.
 	HelpfulResource *ChoiceContent `type:"structure"`
 
-	// The choice level improvement plan.
+	// The improvement plan (both text and URL) for a particular choice.
+	//
+	// This field only applies to custom lenses. Each choice can have only one improvement
+	// plan.
 	ImprovementPlan *ChoiceContent `type:"structure"`
 
 	// The title of a choice.
@@ -5090,9 +5901,12 @@ type ChoiceImprovementPlan struct {
 	// The display text for the improvement plan.
 	DisplayText *string `min:"1" type:"string"`
 
-	// The improvement plan URL for a question.
+	// The improvement plan URL for a question in an Amazon Web Services official
+	// lenses.
 	//
 	// This value is only available if the question has been answered.
+	//
+	// This value does not apply to custom lenses.
 	ImprovementPlanUrl *string `min:"1" type:"string"`
 }
 
@@ -5197,7 +6011,7 @@ func (s *ChoiceUpdate) SetStatus(v string) *ChoiceUpdate {
 	return s
 }
 
-// The resource already exists.
+// The resource has already been processed, was deleted, or is too large.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5272,6 +6086,106 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// A metric that contributes to the consolidated report.
+type ConsolidatedReportMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The metrics for the lenses in the workload.
+	Lenses []*LensMetric `type:"list"`
+
+	// The total number of lenses applied to the workload.
+	LensesAppliedCount *int64 `type:"integer"`
+
+	// The metric type of a metric in the consolidated report. Currently only WORKLOAD
+	// metric types are supported.
+	MetricType *string `type:"string" enum:"MetricType"`
+
+	// A map from risk names to the count of how many questions have that rating.
+	RiskCounts map[string]*int64 `type:"map"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+
+	// The ARN for the workload.
+	WorkloadArn *string `type:"string"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	WorkloadId *string `type:"string"`
+
+	// The name of the workload.
+	//
+	// The name must be unique within an account within an Amazon Web Services Region.
+	// Spaces and capitalization are ignored when checking for uniqueness.
+	WorkloadName *string `min:"3" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConsolidatedReportMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConsolidatedReportMetric) GoString() string {
+	return s.String()
+}
+
+// SetLenses sets the Lenses field's value.
+func (s *ConsolidatedReportMetric) SetLenses(v []*LensMetric) *ConsolidatedReportMetric {
+	s.Lenses = v
+	return s
+}
+
+// SetLensesAppliedCount sets the LensesAppliedCount field's value.
+func (s *ConsolidatedReportMetric) SetLensesAppliedCount(v int64) *ConsolidatedReportMetric {
+	s.LensesAppliedCount = &v
+	return s
+}
+
+// SetMetricType sets the MetricType field's value.
+func (s *ConsolidatedReportMetric) SetMetricType(v string) *ConsolidatedReportMetric {
+	s.MetricType = &v
+	return s
+}
+
+// SetRiskCounts sets the RiskCounts field's value.
+func (s *ConsolidatedReportMetric) SetRiskCounts(v map[string]*int64) *ConsolidatedReportMetric {
+	s.RiskCounts = v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ConsolidatedReportMetric) SetUpdatedAt(v time.Time) *ConsolidatedReportMetric {
+	s.UpdatedAt = &v
+	return s
+}
+
+// SetWorkloadArn sets the WorkloadArn field's value.
+func (s *ConsolidatedReportMetric) SetWorkloadArn(v string) *ConsolidatedReportMetric {
+	s.WorkloadArn = &v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *ConsolidatedReportMetric) SetWorkloadId(v string) *ConsolidatedReportMetric {
+	s.WorkloadId = &v
+	return s
+}
+
+// SetWorkloadName sets the WorkloadName field's value.
+func (s *ConsolidatedReportMetric) SetWorkloadName(v string) *ConsolidatedReportMetric {
+	s.WorkloadName = &v
+	return s
+}
+
 type CreateLensShareInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5279,8 +6193,9 @@ type CreateLensShareInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -5291,17 +6206,19 @@ type CreateLensShareInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
 	// LensAlias is a required field
 	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
 
-	// The Amazon Web Services account ID or IAM role with which the workload is
-	// shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the workload is shared.
 	//
 	// SharedWith is a required field
 	SharedWith *string `min:"12" type:"string" required:"true"`
@@ -5403,8 +6320,9 @@ type CreateLensVersionInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -5418,9 +6336,11 @@ type CreateLensVersionInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -5545,8 +6465,9 @@ type CreateMilestoneInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -5677,6 +6598,9 @@ type CreateWorkloadInput struct {
 	// The list of Amazon Web Services account IDs associated with the workload.
 	AccountIds []*string `type:"list"`
 
+	// List of AppRegistry application ARNs associated to the workload.
+	Applications []*string `type:"list"`
+
 	// The URL of the architectural design for the workload.
 	ArchitecturalDesign *string `type:"string"`
 
@@ -5688,8 +6612,9 @@ type CreateWorkloadInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -5701,6 +6626,9 @@ type CreateWorkloadInput struct {
 	//
 	// Description is a required field
 	Description *string `min:"3" type:"string" required:"true"`
+
+	// Well-Architected discovery configuration settings associated to the workload.
+	DiscoveryConfig *WorkloadDiscoveryConfig `type:"structure"`
 
 	// The environment for the workload.
 	//
@@ -5859,6 +6787,12 @@ func (s *CreateWorkloadInput) SetAccountIds(v []*string) *CreateWorkloadInput {
 	return s
 }
 
+// SetApplications sets the Applications field's value.
+func (s *CreateWorkloadInput) SetApplications(v []*string) *CreateWorkloadInput {
+	s.Applications = v
+	return s
+}
+
 // SetArchitecturalDesign sets the ArchitecturalDesign field's value.
 func (s *CreateWorkloadInput) SetArchitecturalDesign(v string) *CreateWorkloadInput {
 	s.ArchitecturalDesign = &v
@@ -5880,6 +6814,12 @@ func (s *CreateWorkloadInput) SetClientRequestToken(v string) *CreateWorkloadInp
 // SetDescription sets the Description field's value.
 func (s *CreateWorkloadInput) SetDescription(v string) *CreateWorkloadInput {
 	s.Description = &v
+	return s
+}
+
+// SetDiscoveryConfig sets the DiscoveryConfig field's value.
+func (s *CreateWorkloadInput) SetDiscoveryConfig(v *WorkloadDiscoveryConfig) *CreateWorkloadInput {
+	s.DiscoveryConfig = v
 	return s
 }
 
@@ -5993,8 +6933,9 @@ type CreateWorkloadShareInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -6007,8 +6948,8 @@ type CreateWorkloadShareInput struct {
 	// PermissionType is a required field
 	PermissionType *string `type:"string" required:"true" enum:"PermissionType"`
 
-	// The Amazon Web Services account ID or IAM role with which the workload is
-	// shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the workload is shared.
 	//
 	// SharedWith is a required field
 	SharedWith *string `min:"12" type:"string" required:"true"`
@@ -6136,8 +7077,9 @@ type DeleteLensInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -6148,9 +7090,11 @@ type DeleteLensInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -6247,8 +7191,9 @@ type DeleteLensShareInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -6259,9 +7204,11 @@ type DeleteLensShareInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -6362,8 +7309,9 @@ type DeleteWorkloadInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -6454,8 +7402,9 @@ type DeleteWorkloadShareInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -6654,9 +7603,11 @@ type ExportLensInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -6719,7 +7670,7 @@ func (s *ExportLensInput) SetLensVersion(v string) *ExportLensInput {
 type ExportLensOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The JSON for the lens.
+	// The JSON representation of a lens.
 	LensJSON *string `min:"2" type:"string"`
 }
 
@@ -6754,9 +7705,11 @@ type GetAnswerInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -6863,9 +7816,11 @@ type GetAnswerOutput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -6931,15 +7886,150 @@ func (s *GetAnswerOutput) SetWorkloadId(v string) *GetAnswerOutput {
 	return s
 }
 
+type GetConsolidatedReportInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The format of the consolidated report.
+	//
+	// For PDF, Base64String is returned. For JSON, Metrics is returned.
+	//
+	// Format is a required field
+	Format *string `location:"querystring" locationName:"Format" type:"string" required:"true" enum:"ReportFormat"`
+
+	// Set to true to have shared resources included in the report.
+	IncludeSharedResources *bool `location:"querystring" locationName:"IncludeSharedResources" type:"boolean"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConsolidatedReportInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConsolidatedReportInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetConsolidatedReportInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetConsolidatedReportInput"}
+	if s.Format == nil {
+		invalidParams.Add(request.NewErrParamRequired("Format"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFormat sets the Format field's value.
+func (s *GetConsolidatedReportInput) SetFormat(v string) *GetConsolidatedReportInput {
+	s.Format = &v
+	return s
+}
+
+// SetIncludeSharedResources sets the IncludeSharedResources field's value.
+func (s *GetConsolidatedReportInput) SetIncludeSharedResources(v bool) *GetConsolidatedReportInput {
+	s.IncludeSharedResources = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetConsolidatedReportInput) SetMaxResults(v int64) *GetConsolidatedReportInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetConsolidatedReportInput) SetNextToken(v string) *GetConsolidatedReportInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetConsolidatedReportOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Base64-encoded string representation of a lens review report.
+	//
+	// This data can be used to create a PDF file.
+	//
+	// Only returned by GetConsolidatedReport when PDF format is requested.
+	Base64String *string `type:"string"`
+
+	// The metrics that make up the consolidated report.
+	//
+	// Only returned when JSON format is requested.
+	Metrics []*ConsolidatedReportMetric `type:"list"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConsolidatedReportOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConsolidatedReportOutput) GoString() string {
+	return s.String()
+}
+
+// SetBase64String sets the Base64String field's value.
+func (s *GetConsolidatedReportOutput) SetBase64String(v string) *GetConsolidatedReportOutput {
+	s.Base64String = &v
+	return s
+}
+
+// SetMetrics sets the Metrics field's value.
+func (s *GetConsolidatedReportOutput) SetMetrics(v []*ConsolidatedReportMetric) *GetConsolidatedReportOutput {
+	s.Metrics = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetConsolidatedReportOutput) SetNextToken(v string) *GetConsolidatedReportOutput {
+	s.NextToken = &v
+	return s
+}
+
 type GetLensInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -7037,9 +8127,11 @@ type GetLensReviewInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -7179,9 +8271,11 @@ type GetLensReviewReportInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -7323,9 +8417,11 @@ type GetLensVersionDifferenceInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -7406,9 +8502,11 @@ type GetLensVersionDifferenceOutput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -7679,8 +8777,9 @@ type ImportLensInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -7696,9 +8795,11 @@ type ImportLensInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -7774,7 +8875,7 @@ func (s *ImportLensInput) SetTags(v map[string]*string) *ImportLensInput {
 type ImportLensOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN for the lens.
+	// The ARN for the lens that was created or updated.
 	LensArn *string `type:"string"`
 
 	// The status of the imported lens.
@@ -7815,9 +8916,12 @@ func (s *ImportLensOutput) SetStatus(v string) *ImportLensOutput {
 type ImprovementSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The improvement plan URL for a question.
+	// The improvement plan URL for a question in an Amazon Web Services official
+	// lenses.
 	//
 	// This value is only available if the question has been answered.
+	//
+	// This value does not apply to custom lenses.
 	ImprovementPlanUrl *string `min:"1" type:"string"`
 
 	// The improvement plan details.
@@ -8043,6 +9147,56 @@ func (s *Lens) SetTags(v map[string]*string) *Lens {
 	return s
 }
 
+// A metric for a particular lens in a workload.
+type LensMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The lens ARN.
+	LensArn *string `type:"string"`
+
+	// The metrics for the pillars in a lens.
+	Pillars []*PillarMetric `type:"list"`
+
+	// A map from risk names to the count of how many questions have that rating.
+	RiskCounts map[string]*int64 `type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LensMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LensMetric) GoString() string {
+	return s.String()
+}
+
+// SetLensArn sets the LensArn field's value.
+func (s *LensMetric) SetLensArn(v string) *LensMetric {
+	s.LensArn = &v
+	return s
+}
+
+// SetPillars sets the Pillars field's value.
+func (s *LensMetric) SetPillars(v []*PillarMetric) *LensMetric {
+	s.Pillars = v
+	return s
+}
+
+// SetRiskCounts sets the RiskCounts field's value.
+func (s *LensMetric) SetRiskCounts(v map[string]*int64) *LensMetric {
+	s.RiskCounts = v
+	return s
+}
+
 // A lens review of a question.
 type LensReview struct {
 	_ struct{} `type:"structure"`
@@ -8050,9 +9204,11 @@ type LensReview struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -8078,7 +9234,7 @@ type LensReview struct {
 	// List of pillar review summaries of lens review in a workload.
 	PillarReviewSummaries []*PillarReviewSummary `type:"list"`
 
-	// A map from risk names to the count of how questions have that rating.
+	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
 
 	// The date and time recorded.
@@ -8170,14 +9326,18 @@ type LensReviewReport struct {
 	// The Base64-encoded string representation of a lens review report.
 	//
 	// This data can be used to create a PDF file.
+	//
+	// Only returned by GetConsolidatedReport when PDF format is requested.
 	Base64String *string `type:"string"`
 
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -8229,9 +9389,11 @@ type LensReviewSummary struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -8248,7 +9410,7 @@ type LensReviewSummary struct {
 	// The version of the lens.
 	LensVersion *string `min:"1" type:"string"`
 
-	// A map from risk names to the count of how questions have that rating.
+	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
 
 	// The date and time recorded.
@@ -8322,8 +9484,8 @@ type LensShareSummary struct {
 	// The ID associated with the workload share.
 	ShareId *string `type:"string"`
 
-	// The Amazon Web Services account ID or IAM role with which the workload is
-	// shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the workload is shared.
 	SharedWith *string `min:"12" type:"string"`
 
 	// The status of a workload share.
@@ -8388,9 +9550,11 @@ type LensSummary struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -8508,9 +9672,11 @@ type LensUpgradeSummary struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -8590,9 +9756,11 @@ type ListAnswersInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -8717,9 +9885,11 @@ type ListAnswersOutput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -8794,6 +9964,363 @@ func (s *ListAnswersOutput) SetWorkloadId(v string) *ListAnswersOutput {
 	return s
 }
 
+type ListCheckDetailsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of a choice.
+	//
+	// ChoiceId is a required field
+	ChoiceId *string `min:"1" type:"string" required:"true"`
+
+	// Well-Architected Lens ARN.
+	//
+	// LensArn is a required field
+	LensArn *string `type:"string" required:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	//
+	// PillarId is a required field
+	PillarId *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the question.
+	//
+	// QuestionId is a required field
+	QuestionId *string `min:"1" type:"string" required:"true"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	//
+	// WorkloadId is a required field
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckDetailsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckDetailsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCheckDetailsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCheckDetailsInput"}
+	if s.ChoiceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChoiceId"))
+	}
+	if s.ChoiceId != nil && len(*s.ChoiceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChoiceId", 1))
+	}
+	if s.LensArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensArn"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.PillarId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PillarId"))
+	}
+	if s.PillarId != nil && len(*s.PillarId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PillarId", 1))
+	}
+	if s.QuestionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("QuestionId"))
+	}
+	if s.QuestionId != nil && len(*s.QuestionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QuestionId", 1))
+	}
+	if s.WorkloadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
+	}
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChoiceId sets the ChoiceId field's value.
+func (s *ListCheckDetailsInput) SetChoiceId(v string) *ListCheckDetailsInput {
+	s.ChoiceId = &v
+	return s
+}
+
+// SetLensArn sets the LensArn field's value.
+func (s *ListCheckDetailsInput) SetLensArn(v string) *ListCheckDetailsInput {
+	s.LensArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCheckDetailsInput) SetMaxResults(v int64) *ListCheckDetailsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCheckDetailsInput) SetNextToken(v string) *ListCheckDetailsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *ListCheckDetailsInput) SetPillarId(v string) *ListCheckDetailsInput {
+	s.PillarId = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *ListCheckDetailsInput) SetQuestionId(v string) *ListCheckDetailsInput {
+	s.QuestionId = &v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *ListCheckDetailsInput) SetWorkloadId(v string) *ListCheckDetailsInput {
+	s.WorkloadId = &v
+	return s
+}
+
+type ListCheckDetailsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The details about the Trusted Advisor checks related to the Well-Architected
+	// best practice.
+	CheckDetails []*CheckDetail `type:"list"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckDetailsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckDetailsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCheckDetails sets the CheckDetails field's value.
+func (s *ListCheckDetailsOutput) SetCheckDetails(v []*CheckDetail) *ListCheckDetailsOutput {
+	s.CheckDetails = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCheckDetailsOutput) SetNextToken(v string) *ListCheckDetailsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCheckSummariesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of a choice.
+	//
+	// ChoiceId is a required field
+	ChoiceId *string `min:"1" type:"string" required:"true"`
+
+	// Well-Architected Lens ARN.
+	//
+	// LensArn is a required field
+	LensArn *string `type:"string" required:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	//
+	// PillarId is a required field
+	PillarId *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the question.
+	//
+	// QuestionId is a required field
+	QuestionId *string `min:"1" type:"string" required:"true"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	//
+	// WorkloadId is a required field
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckSummariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckSummariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCheckSummariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCheckSummariesInput"}
+	if s.ChoiceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChoiceId"))
+	}
+	if s.ChoiceId != nil && len(*s.ChoiceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChoiceId", 1))
+	}
+	if s.LensArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensArn"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.PillarId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PillarId"))
+	}
+	if s.PillarId != nil && len(*s.PillarId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PillarId", 1))
+	}
+	if s.QuestionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("QuestionId"))
+	}
+	if s.QuestionId != nil && len(*s.QuestionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QuestionId", 1))
+	}
+	if s.WorkloadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
+	}
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChoiceId sets the ChoiceId field's value.
+func (s *ListCheckSummariesInput) SetChoiceId(v string) *ListCheckSummariesInput {
+	s.ChoiceId = &v
+	return s
+}
+
+// SetLensArn sets the LensArn field's value.
+func (s *ListCheckSummariesInput) SetLensArn(v string) *ListCheckSummariesInput {
+	s.LensArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCheckSummariesInput) SetMaxResults(v int64) *ListCheckSummariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCheckSummariesInput) SetNextToken(v string) *ListCheckSummariesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *ListCheckSummariesInput) SetPillarId(v string) *ListCheckSummariesInput {
+	s.PillarId = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *ListCheckSummariesInput) SetQuestionId(v string) *ListCheckSummariesInput {
+	s.QuestionId = &v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *ListCheckSummariesInput) SetWorkloadId(v string) *ListCheckSummariesInput {
+	s.WorkloadId = &v
+	return s
+}
+
+type ListCheckSummariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List of Trusted Advisor summaries related to the Well-Architected best practice.
+	CheckSummaries []*CheckSummary `type:"list"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckSummariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCheckSummariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCheckSummaries sets the CheckSummaries field's value.
+func (s *ListCheckSummariesOutput) SetCheckSummaries(v []*CheckSummary) *ListCheckSummariesOutput {
+	s.CheckSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCheckSummariesOutput) SetNextToken(v string) *ListCheckSummariesOutput {
+	s.NextToken = &v
+	return s
+}
+
 // Input to list lens review improvements.
 type ListLensReviewImprovementsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
@@ -8801,9 +10328,11 @@ type ListLensReviewImprovementsInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -8928,9 +10457,11 @@ type ListLensReviewImprovementsOutput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -9159,9 +10690,11 @@ type ListLensSharesInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -9174,7 +10707,8 @@ type ListLensSharesInput struct {
 	// The token to use to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 
-	// The Amazon Web Services account ID or IAM role with which the lens is shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the lens is shared.
 	SharedWithPrefix *string `location:"querystring" locationName:"SharedWithPrefix" type:"string"`
 
 	// The status of a workload share.
@@ -9853,8 +11387,8 @@ type ListWorkloadSharesInput struct {
 	// The token to use to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 
-	// The Amazon Web Services account ID or IAM role with which the workload is
-	// shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the workload is shared.
 	SharedWithPrefix *string `location:"querystring" locationName:"SharedWithPrefix" type:"string"`
 
 	// The status of a workload share.
@@ -10318,6 +11852,58 @@ func (s *PillarDifference) SetQuestionDifferences(v []*QuestionDifference) *Pill
 	return s
 }
 
+// A metric for a particular pillar in a lens.
+type PillarMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	PillarId *string `min:"1" type:"string"`
+
+	// The questions that have been identified as risks in the pillar.
+	Questions []*QuestionMetric `type:"list"`
+
+	// A map from risk names to the count of how many questions have that rating.
+	RiskCounts map[string]*int64 `type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PillarMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PillarMetric) GoString() string {
+	return s.String()
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *PillarMetric) SetPillarId(v string) *PillarMetric {
+	s.PillarId = &v
+	return s
+}
+
+// SetQuestions sets the Questions field's value.
+func (s *PillarMetric) SetQuestions(v []*QuestionMetric) *PillarMetric {
+	s.Questions = v
+	return s
+}
+
+// SetRiskCounts sets the RiskCounts field's value.
+func (s *PillarMetric) SetRiskCounts(v map[string]*int64) *PillarMetric {
+	s.RiskCounts = v
+	return s
+}
+
 // A pillar review summary of a lens review.
 type PillarReviewSummary struct {
 	_ struct{} `type:"structure"`
@@ -10333,7 +11919,7 @@ type PillarReviewSummary struct {
 	// The name of the pillar.
 	PillarName *string `min:"1" type:"string"`
 
-	// A map from risk names to the count of how questions have that rating.
+	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
 }
 
@@ -10426,6 +12012,57 @@ func (s *QuestionDifference) SetQuestionId(v string) *QuestionDifference {
 // SetQuestionTitle sets the QuestionTitle field's value.
 func (s *QuestionDifference) SetQuestionTitle(v string) *QuestionDifference {
 	s.QuestionTitle = &v
+	return s
+}
+
+// A metric for a particular question in the pillar.
+type QuestionMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The best practices, or choices, that have been identified as contributing
+	// to risk in a question.
+	BestPractices []*BestPractice `type:"list"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// The risk for a given workload, lens review, pillar, or question.
+	Risk *string `type:"string" enum:"Risk"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuestionMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuestionMetric) GoString() string {
+	return s.String()
+}
+
+// SetBestPractices sets the BestPractices field's value.
+func (s *QuestionMetric) SetBestPractices(v []*BestPractice) *QuestionMetric {
+	s.BestPractices = v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *QuestionMetric) SetQuestionId(v string) *QuestionMetric {
+	s.QuestionId = &v
+	return s
+}
+
+// SetRisk sets the Risk field's value.
+func (s *QuestionMetric) SetRisk(v string) *QuestionMetric {
+	s.Risk = &v
 	return s
 }
 
@@ -10592,9 +12229,11 @@ type ShareInvitation struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -10683,8 +12322,8 @@ type ShareInvitationSummary struct {
 	// An Amazon Web Services account ID.
 	SharedBy *string `type:"string"`
 
-	// The Amazon Web Services account ID or IAM role with which the workload is
-	// shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the workload is shared.
 	SharedWith *string `min:"12" type:"string"`
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
@@ -11032,9 +12671,11 @@ type UpdateAnswerInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -11178,9 +12819,11 @@ type UpdateAnswerOutput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	LensAlias *string `min:"1" type:"string"`
@@ -11238,6 +12881,9 @@ func (s *UpdateAnswerOutput) SetWorkloadId(v string) *UpdateAnswerOutput {
 type UpdateGlobalSettingsInput struct {
 	_ struct{} `type:"structure"`
 
+	// The status of discovery support settings.
+	DiscoveryIntegrationStatus *string `type:"string" enum:"DiscoveryIntegrationStatus"`
+
 	// The status of organization sharing settings.
 	OrganizationSharingStatus *string `type:"string" enum:"OrganizationSharingStatus"`
 }
@@ -11258,6 +12904,12 @@ func (s UpdateGlobalSettingsInput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateGlobalSettingsInput) GoString() string {
 	return s.String()
+}
+
+// SetDiscoveryIntegrationStatus sets the DiscoveryIntegrationStatus field's value.
+func (s *UpdateGlobalSettingsInput) SetDiscoveryIntegrationStatus(v string) *UpdateGlobalSettingsInput {
+	s.DiscoveryIntegrationStatus = &v
+	return s
 }
 
 // SetOrganizationSharingStatus sets the OrganizationSharingStatus field's value.
@@ -11295,9 +12947,11 @@ type UpdateLensReviewInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -11490,7 +13144,7 @@ func (s *UpdateShareInvitationInput) SetShareInvitationId(v string) *UpdateShare
 type UpdateShareInvitationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The updated workload share invitation.
+	// The updated workload or custom lens share invitation.
 	ShareInvitation *ShareInvitation `type:"structure"`
 }
 
@@ -11525,6 +13179,9 @@ type UpdateWorkloadInput struct {
 	// The list of Amazon Web Services account IDs associated with the workload.
 	AccountIds []*string `type:"list"`
 
+	// List of AppRegistry application ARNs to associate to the workload.
+	Applications []*string `type:"list"`
+
 	// The URL of the architectural design for the workload.
 	ArchitecturalDesign *string `type:"string"`
 
@@ -11534,6 +13191,9 @@ type UpdateWorkloadInput struct {
 
 	// The description for the workload.
 	Description *string `min:"3" type:"string"`
+
+	// Well-Architected discovery configuration settings to associate to the workload.
+	DiscoveryConfig *WorkloadDiscoveryConfig `type:"structure"`
 
 	// The environment for the workload.
 	Environment *string `type:"string" enum:"WorkloadEnvironment"`
@@ -11686,6 +13346,12 @@ func (s *UpdateWorkloadInput) SetAccountIds(v []*string) *UpdateWorkloadInput {
 	return s
 }
 
+// SetApplications sets the Applications field's value.
+func (s *UpdateWorkloadInput) SetApplications(v []*string) *UpdateWorkloadInput {
+	s.Applications = v
+	return s
+}
+
 // SetArchitecturalDesign sets the ArchitecturalDesign field's value.
 func (s *UpdateWorkloadInput) SetArchitecturalDesign(v string) *UpdateWorkloadInput {
 	s.ArchitecturalDesign = &v
@@ -11701,6 +13367,12 @@ func (s *UpdateWorkloadInput) SetAwsRegions(v []*string) *UpdateWorkloadInput {
 // SetDescription sets the Description field's value.
 func (s *UpdateWorkloadInput) SetDescription(v string) *UpdateWorkloadInput {
 	s.Description = &v
+	return s
+}
+
+// SetDiscoveryConfig sets the DiscoveryConfig field's value.
+func (s *UpdateWorkloadInput) SetDiscoveryConfig(v *WorkloadDiscoveryConfig) *UpdateWorkloadInput {
+	s.DiscoveryConfig = v
 	return s
 }
 
@@ -11933,8 +13605,9 @@ type UpgradeLensReviewInput struct {
 	// (executes only once).
 	//
 	// You should not reuse the same token for other requests. If you retry a request
-	// with the same client request token and the same parameters after it has completed
-	// successfully, the result of the original request is returned.
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
 	//
 	// This token is listed as required, however, if you do not specify it, the
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
@@ -11945,9 +13618,11 @@ type UpgradeLensReviewInput struct {
 	// The alias of the lens.
 	//
 	// For Amazon Web Services official lenses, this is either the lens alias, such
-	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-west-2::lens/serverless.
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
 	//
-	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-east-1:123456789012:lens/my-lens.
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
 	//
 	// Each lens is identified by its LensSummary$LensAlias.
 	//
@@ -12216,6 +13891,9 @@ type Workload struct {
 	// The list of Amazon Web Services account IDs associated with the workload.
 	AccountIds []*string `type:"list"`
 
+	// List of AppRegistry application ARNs associated to the workload.
+	Applications []*string `type:"list"`
+
 	// The URL of the architectural design for the workload.
 	ArchitecturalDesign *string `type:"string"`
 
@@ -12225,6 +13903,9 @@ type Workload struct {
 
 	// The description for the workload.
 	Description *string `min:"3" type:"string"`
+
+	// Discovery configuration associated to the workload.
+	DiscoveryConfig *WorkloadDiscoveryConfig `type:"structure"`
 
 	// The environment for the workload.
 	Environment *string `type:"string" enum:"WorkloadEnvironment"`
@@ -12325,7 +14006,7 @@ type Workload struct {
 	// The date and time recorded.
 	ReviewRestrictionDate *time.Time `type:"timestamp"`
 
-	// A map from risk names to the count of how questions have that rating.
+	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
 
 	// The ID assigned to the share invitation.
@@ -12375,6 +14056,12 @@ func (s *Workload) SetAccountIds(v []*string) *Workload {
 	return s
 }
 
+// SetApplications sets the Applications field's value.
+func (s *Workload) SetApplications(v []*string) *Workload {
+	s.Applications = v
+	return s
+}
+
 // SetArchitecturalDesign sets the ArchitecturalDesign field's value.
 func (s *Workload) SetArchitecturalDesign(v string) *Workload {
 	s.ArchitecturalDesign = &v
@@ -12390,6 +14077,12 @@ func (s *Workload) SetAwsRegions(v []*string) *Workload {
 // SetDescription sets the Description field's value.
 func (s *Workload) SetDescription(v string) *Workload {
 	s.Description = &v
+	return s
+}
+
+// SetDiscoveryConfig sets the DiscoveryConfig field's value.
+func (s *Workload) SetDiscoveryConfig(v *WorkloadDiscoveryConfig) *Workload {
+	s.DiscoveryConfig = v
 	return s
 }
 
@@ -12507,6 +14200,49 @@ func (s *Workload) SetWorkloadName(v string) *Workload {
 	return s
 }
 
+// Discovery configuration associated to the workload.
+type WorkloadDiscoveryConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Discovery integration status in respect to Trusted Advisor for the workload.
+	TrustedAdvisorIntegrationStatus *string `type:"string" enum:"TrustedAdvisorIntegrationStatus"`
+
+	// The mode to use for identifying resources associated with the workload.
+	//
+	// You can specify WORKLOAD_METADATA, APP_REGISTRY, or both.
+	WorkloadResourceDefinition []*string `type:"list" enum:"DefinitionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkloadDiscoveryConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkloadDiscoveryConfig) GoString() string {
+	return s.String()
+}
+
+// SetTrustedAdvisorIntegrationStatus sets the TrustedAdvisorIntegrationStatus field's value.
+func (s *WorkloadDiscoveryConfig) SetTrustedAdvisorIntegrationStatus(v string) *WorkloadDiscoveryConfig {
+	s.TrustedAdvisorIntegrationStatus = &v
+	return s
+}
+
+// SetWorkloadResourceDefinition sets the WorkloadResourceDefinition field's value.
+func (s *WorkloadDiscoveryConfig) SetWorkloadResourceDefinition(v []*string) *WorkloadDiscoveryConfig {
+	s.WorkloadResourceDefinition = v
+	return s
+}
+
 // A workload share return object.
 type WorkloadShare struct {
 	_ struct{} `type:"structure"`
@@ -12520,8 +14256,8 @@ type WorkloadShare struct {
 	// An Amazon Web Services account ID.
 	SharedBy *string `type:"string"`
 
-	// The Amazon Web Services account ID or IAM role with which the workload is
-	// shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the workload is shared.
 	SharedWith *string `min:"12" type:"string"`
 
 	// The status of a workload share.
@@ -12608,8 +14344,8 @@ type WorkloadShareSummary struct {
 	// The ID associated with the workload share.
 	ShareId *string `type:"string"`
 
-	// The Amazon Web Services account ID or IAM role with which the workload is
-	// shared.
+	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
+	// unit (OU) ID with which the workload is shared.
 	SharedWith *string `min:"12" type:"string"`
 
 	// The status of a workload share.
@@ -12681,7 +14417,7 @@ type WorkloadSummary struct {
 	// An Amazon Web Services account ID.
 	Owner *string `type:"string"`
 
-	// A map from risk names to the count of how questions have that rating.
+	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
 
 	// The date and time recorded.
@@ -12812,6 +14548,70 @@ func AnswerReason_Values() []string {
 }
 
 const (
+	// CheckFailureReasonAssumeRoleError is a CheckFailureReason enum value
+	CheckFailureReasonAssumeRoleError = "ASSUME_ROLE_ERROR"
+
+	// CheckFailureReasonAccessDenied is a CheckFailureReason enum value
+	CheckFailureReasonAccessDenied = "ACCESS_DENIED"
+
+	// CheckFailureReasonUnknownError is a CheckFailureReason enum value
+	CheckFailureReasonUnknownError = "UNKNOWN_ERROR"
+
+	// CheckFailureReasonPremiumSupportRequired is a CheckFailureReason enum value
+	CheckFailureReasonPremiumSupportRequired = "PREMIUM_SUPPORT_REQUIRED"
+)
+
+// CheckFailureReason_Values returns all elements of the CheckFailureReason enum
+func CheckFailureReason_Values() []string {
+	return []string{
+		CheckFailureReasonAssumeRoleError,
+		CheckFailureReasonAccessDenied,
+		CheckFailureReasonUnknownError,
+		CheckFailureReasonPremiumSupportRequired,
+	}
+}
+
+const (
+	// CheckProviderTrustedAdvisor is a CheckProvider enum value
+	CheckProviderTrustedAdvisor = "TRUSTED_ADVISOR"
+)
+
+// CheckProvider_Values returns all elements of the CheckProvider enum
+func CheckProvider_Values() []string {
+	return []string{
+		CheckProviderTrustedAdvisor,
+	}
+}
+
+const (
+	// CheckStatusOkay is a CheckStatus enum value
+	CheckStatusOkay = "OKAY"
+
+	// CheckStatusWarning is a CheckStatus enum value
+	CheckStatusWarning = "WARNING"
+
+	// CheckStatusError is a CheckStatus enum value
+	CheckStatusError = "ERROR"
+
+	// CheckStatusNotAvailable is a CheckStatus enum value
+	CheckStatusNotAvailable = "NOT_AVAILABLE"
+
+	// CheckStatusFetchFailed is a CheckStatus enum value
+	CheckStatusFetchFailed = "FETCH_FAILED"
+)
+
+// CheckStatus_Values returns all elements of the CheckStatus enum
+func CheckStatus_Values() []string {
+	return []string{
+		CheckStatusOkay,
+		CheckStatusWarning,
+		CheckStatusError,
+		CheckStatusNotAvailable,
+		CheckStatusFetchFailed,
+	}
+}
+
+const (
 	// ChoiceReasonOutOfScope is a ChoiceReason enum value
 	ChoiceReasonOutOfScope = "OUT_OF_SCOPE"
 
@@ -12860,6 +14660,22 @@ func ChoiceStatus_Values() []string {
 }
 
 const (
+	// DefinitionTypeWorkloadMetadata is a DefinitionType enum value
+	DefinitionTypeWorkloadMetadata = "WORKLOAD_METADATA"
+
+	// DefinitionTypeAppRegistry is a DefinitionType enum value
+	DefinitionTypeAppRegistry = "APP_REGISTRY"
+)
+
+// DefinitionType_Values returns all elements of the DefinitionType enum
+func DefinitionType_Values() []string {
+	return []string{
+		DefinitionTypeWorkloadMetadata,
+		DefinitionTypeAppRegistry,
+	}
+}
+
+const (
 	// DifferenceStatusUpdated is a DifferenceStatus enum value
 	DifferenceStatusUpdated = "UPDATED"
 
@@ -12876,6 +14692,22 @@ func DifferenceStatus_Values() []string {
 		DifferenceStatusUpdated,
 		DifferenceStatusNew,
 		DifferenceStatusDeleted,
+	}
+}
+
+const (
+	// DiscoveryIntegrationStatusEnabled is a DiscoveryIntegrationStatus enum value
+	DiscoveryIntegrationStatusEnabled = "ENABLED"
+
+	// DiscoveryIntegrationStatusDisabled is a DiscoveryIntegrationStatus enum value
+	DiscoveryIntegrationStatusDisabled = "DISABLED"
+)
+
+// DiscoveryIntegrationStatus_Values returns all elements of the DiscoveryIntegrationStatus enum
+func DiscoveryIntegrationStatus_Values() []string {
+	return []string{
+		DiscoveryIntegrationStatusEnabled,
+		DiscoveryIntegrationStatusDisabled,
 	}
 }
 
@@ -12968,6 +14800,18 @@ func LensType_Values() []string {
 }
 
 const (
+	// MetricTypeWorkload is a MetricType enum value
+	MetricTypeWorkload = "WORKLOAD"
+)
+
+// MetricType_Values returns all elements of the MetricType enum
+func MetricType_Values() []string {
+	return []string{
+		MetricTypeWorkload,
+	}
+}
+
+const (
 	// NotificationTypeLensVersionUpgraded is a NotificationType enum value
 	NotificationTypeLensVersionUpgraded = "LENS_VERSION_UPGRADED"
 
@@ -13013,6 +14857,22 @@ func PermissionType_Values() []string {
 	return []string{
 		PermissionTypeReadonly,
 		PermissionTypeContributor,
+	}
+}
+
+const (
+	// ReportFormatPdf is a ReportFormat enum value
+	ReportFormatPdf = "PDF"
+
+	// ReportFormatJson is a ReportFormat enum value
+	ReportFormatJson = "JSON"
+)
+
+// ReportFormat_Values returns all elements of the ReportFormat enum
+func ReportFormat_Values() []string {
+	return []string{
+		ReportFormatPdf,
+		ReportFormatJson,
 	}
 }
 
@@ -13116,6 +14976,22 @@ func ShareStatus_Values() []string {
 		ShareStatusAssociating,
 		ShareStatusAssociated,
 		ShareStatusFailed,
+	}
+}
+
+const (
+	// TrustedAdvisorIntegrationStatusEnabled is a TrustedAdvisorIntegrationStatus enum value
+	TrustedAdvisorIntegrationStatusEnabled = "ENABLED"
+
+	// TrustedAdvisorIntegrationStatusDisabled is a TrustedAdvisorIntegrationStatus enum value
+	TrustedAdvisorIntegrationStatusDisabled = "DISABLED"
+)
+
+// TrustedAdvisorIntegrationStatus_Values returns all elements of the TrustedAdvisorIntegrationStatus enum
+func TrustedAdvisorIntegrationStatus_Values() []string {
+	return []string{
+		TrustedAdvisorIntegrationStatusEnabled,
+		TrustedAdvisorIntegrationStatusDisabled,
 	}
 }
 
