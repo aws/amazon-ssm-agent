@@ -1,5 +1,11 @@
 Latest
 ===============
+- Add Domain Join support for RHEL 8.7 and AL2022
+- Add Support to send aws:updateSSMAgent replies through MGS
+- Retrieve and set interface name dynamically in aws:domainJoin plugin for Ubuntu
+
+3.2.923.0
+===============
 - Update Dockerfile Go version to 1.19
 - Add reporting of MGS connection status
 - Add support for updating to agent version marked stable
