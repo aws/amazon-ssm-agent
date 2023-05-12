@@ -295,9 +295,10 @@ func TestDownloadArchiveInfo(t *testing.T) {
 	manifest := "manifest"
 	docVersion := "1"
 	emptystring := ""
+	latestVersion := "latest"
 	documentActive := ssm.DocumentStatusActive
 	documentInactive := ssm.DocumentStatusCreating
-	myPrettyHash := "myPrettHash"
+	myPrettyHash := "myPrettyHash"
 	data := []struct {
 		name                string
 		version             string
@@ -434,6 +435,22 @@ func TestDownloadArchiveInfo(t *testing.T) {
 				},
 			},
 			createDefaultDocumentDescription(packageName, myPrettyHash, documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
+		{
+			"version name is latest",
+			latestVersion,
+			false,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &manifest,
+					Status:          &documentActive,
+					VersionName:     nil,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(documentArn, myPrettyHash, documentActive),
 			createMemCache(myPrettyHash, manifest),
 		},
 	}

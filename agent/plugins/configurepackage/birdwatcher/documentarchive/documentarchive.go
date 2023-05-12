@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
@@ -29,6 +30,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 
 	"github.com/aws/aws-sdk-go/service/ssm"
+)
+
+const (
+	// birdwatcher packages support `latest` as a version
+	latestVersion = "latest"
 )
 
 type PackageArchive struct {
@@ -136,6 +142,12 @@ func (da *PackageArchive) GetFileDownloadLocation(file *archive.File, packageNam
 func (da *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName string, version string) (string, error) {
 	var cachedDocumentHash string
 	var err error
+
+	// SSM Documents don't support `latest` as version, convert it to empty
+	if strings.EqualFold(version, latestVersion) {
+		version = ""
+	}
+
 	versionPtr := &version
 	if version == "" {
 		versionPtr = nil
@@ -155,7 +167,7 @@ func (da *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName s
 	}
 
 	if descDocResponse == nil || descDocResponse.Document == nil {
-		return "", fmt.Errorf("Failed to retreive document description for package installation")
+		return "", fmt.Errorf("Failed to retrieve document description for package installation")
 	}
 
 	if *descDocResponse.Document.Status != ssm.DocumentStatusActive {
