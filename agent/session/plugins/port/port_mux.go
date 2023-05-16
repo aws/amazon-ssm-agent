@@ -58,7 +58,10 @@ type MuxPortSession struct {
 	portSession        IPortSession
 	clientVersion      string
 	cancelled          chan struct{}
+	host               string
+	portNumber         string
 	destinationAddress string
+	addressList        []string
 	sessionId          string
 	socketFile         string
 	muxServer          *MuxServer
@@ -76,13 +79,15 @@ func (s *MuxServer) close() {
 }
 
 // NewMuxPortSession returns a new instance of the MuxPortSession.
-func NewMuxPortSession(context agentContext.T, clientVersion string, cancelled chan struct{}, destinationAddress string, sessionId string) (IPortSession, error) {
+func NewMuxPortSession(context agentContext.T, clientVersion string, cancelled chan struct{}, host string, portNumber string, addressList []string, sessionId string) (IPortSession, error) {
 	var plugin = MuxPortSession{
-		context:            context,
-		clientVersion:      clientVersion,
-		cancelled:          cancelled,
-		destinationAddress: destinationAddress,
-		sessionId:          sessionId}
+		context:       context,
+		clientVersion: clientVersion,
+		cancelled:     cancelled,
+		host:          host,
+		portNumber:    portNumber,
+		addressList:   addressList,
+		sessionId:     sessionId}
 	return &plugin, nil
 }
 
@@ -270,7 +275,8 @@ func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChanne
 
 			log.Debugf("Started a new mux stream %d\n", stream.ID())
 
-			if conn, err := net.Dial("tcp", p.destinationAddress); err == nil {
+			var conn net.Conn
+			if p.destinationAddress, conn, err = DialCall(p.context, "tcp", p.host, p.portNumber, p.addressList); err == nil {
 				log.Tracef("Established connection to port %s", p.destinationAddress)
 				go func() {
 					defer func() {

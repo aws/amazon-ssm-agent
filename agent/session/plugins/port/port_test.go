@@ -16,7 +16,6 @@ package port
 
 import (
 	"errors"
-	"net"
 	"testing"
 	"time"
 
@@ -81,7 +80,7 @@ func TestInitializeParametersWhenPortTypeIsNil(t *testing.T) {
 	portPlugin.initializeParameters(configuration)
 	assert.IsType(t, &BasicPortSession{}, portPlugin.session)
 	basicPortSession := portPlugin.session.(*BasicPortSession)
-	assert.Equal(t, net.JoinHostPort(localhost, port), basicPortSession.destinationAddress)
+	assert.Equal(t, "", basicPortSession.destinationAddress)
 	mockDataChannel.AssertExpectations(t)
 }
 
@@ -98,7 +97,7 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwarding(t *testing.T) {
 	portPlugin.initializeParameters(configurationPF)
 	assert.IsType(t, &MuxPortSession{}, portPlugin.session)
 	muxPortSession := portPlugin.session.(*MuxPortSession)
-	assert.Equal(t, net.JoinHostPort(localhost, port), muxPortSession.destinationAddress)
+	assert.Equal(t, "", muxPortSession.destinationAddress)
 	mockDataChannel.AssertExpectations(t)
 }
 
@@ -115,7 +114,7 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwardingAndOldClient(t *te
 	portPlugin.initializeParameters(configurationPF)
 	assert.IsType(t, &BasicPortSession{}, portPlugin.session)
 	basicPortSession := portPlugin.session.(*BasicPortSession)
-	assert.Equal(t, net.JoinHostPort(localhost, port), basicPortSession.destinationAddress)
+	assert.Equal(t, "", basicPortSession.destinationAddress)
 	mockDataChannel.AssertExpectations(t)
 }
 
@@ -139,16 +138,18 @@ func TestInitializeParametersWhenHostIsProvided(t *testing.T) {
 		return mockMetadata, true
 	}
 	mockMetadata.On("VpcPrimaryCIDRBlock").Return(map[string][]string{"ipv4": {"172.31.0.0/16"}, "ipv6": {"2600:1f18:64ad::/56"}}, nil)
+	address := "127.0.0.1"
 	lookupHost = func(host string) ([]string, error) {
 		if host == remoteHost {
-			return []string{"127.0.0.1"}, nil
+			return []string{address}, nil
 		}
 		return []string{host}, nil
 	}
 	portPlugin.initializeParameters(configurationWithRemoteHost)
 	assert.IsType(t, &MuxPortSession{}, portPlugin.session)
 	muxPortSession := portPlugin.session.(*MuxPortSession)
-	assert.Equal(t, net.JoinHostPort(remoteHost, port), muxPortSession.destinationAddress)
+	assert.Equal(t, []string{address}, muxPortSession.addressList)
+	assert.Equal(t, remoteHost, muxPortSession.host)
 	mockDataChannel.AssertExpectations(t)
 }
 
@@ -251,7 +252,7 @@ func (suite *PortTestSuite) TestExecuteWhenInitializeSessionReturnsError() {
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 	suite.mockDataChannel.On("GetClientVersion").Return(clientVersion)
 
-	GetSession = func(context context.T, parameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
+	GetSession = func(context context.T, parameters PortParameters, addresses []string, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
 		return nil, errors.New("failed to initialize session")
 	}
 
@@ -276,7 +277,7 @@ func (suite *PortTestSuite) TestExecute() {
 	suite.mockPortSession.On("WritePump", suite.mockDataChannel).WaitUntil(time.After(time.Second)).Return(0)
 	suite.mockPortSession.On("Stop").Return()
 
-	GetSession = func(context context.T, parameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
+	GetSession = func(context context.T, parameters PortParameters, addresses []string, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
 		return suite.mockPortSession, nil
 	}
 

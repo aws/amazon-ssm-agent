@@ -30,17 +30,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 )
 
-var DialCall = func(network string, address string) (net.Conn, error) {
-	return net.Dial(network, address)
-}
-
 // BasicPortSession is the type for the port session.
 // It supports only one connection to the destination server.
 type BasicPortSession struct {
 	context            context.T
 	portSession        IPortSession
 	conn               net.Conn
+	host               string
+	portNumber         string
 	destinationAddress string
+	addressList        []string
 	portType           string
 	reconnectToPort    bool
 	reconnectToPortErr chan error
@@ -48,10 +47,12 @@ type BasicPortSession struct {
 }
 
 // NewBasicPortSession returns a new instance of the BasicPortSession.
-func NewBasicPortSession(context context.T, cancelled chan struct{}, destinationAddress string, portType string) (IPortSession, error) {
+func NewBasicPortSession(context context.T, cancelled chan struct{}, host string, portNumber string, addressList []string, portType string) (IPortSession, error) {
 	var plugin = BasicPortSession{
 		context:            context,
-		destinationAddress: destinationAddress,
+		host:               host,
+		portNumber:         portNumber,
+		addressList:        addressList,
 		portType:           portType,
 		reconnectToPortErr: make(chan error),
 		cancelled:          cancelled,
@@ -149,7 +150,7 @@ func (p *BasicPortSession) WritePump(dataChannel datachannel.IDataChannel) (erro
 
 // InitializeSession dials a connection to port
 func (p *BasicPortSession) InitializeSession() (err error) {
-	if p.conn, err = DialCall("tcp", p.destinationAddress); err != nil {
+	if p.destinationAddress, p.conn, err = DialCall(p.context, "tcp", p.host, p.portNumber, p.addressList); err != nil {
 		return errors.New(fmt.Sprintf("Unable to connect to specified port: %v", err))
 	}
 	return nil

@@ -26,8 +26,9 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
-	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	contextMock "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -39,7 +40,7 @@ import (
 
 type BasicPortTestSuite struct {
 	suite.Suite
-	mockContext     *context.Mock
+	mockContext     *contextMock.Mock
 	mockCancelFlag  *task.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
@@ -48,7 +49,7 @@ type BasicPortTestSuite struct {
 }
 
 func (suite *BasicPortTestSuite) SetupTest() {
-	suite.mockContext = context.NewMockDefault()
+	suite.mockContext = contextMock.NewMockDefault()
 	suite.mockDataChannel = &dataChannelMock.IDataChannel{}
 	suite.session = &BasicPortSession{
 		context:            suite.mockContext,
@@ -112,8 +113,8 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWithReconnectToPortSetTo
 	out, in := net.Pipe()
 	defer in.Close()
 	defer out.Close()
-	DialCall = func(network string, address string) (net.Conn, error) {
-		return out, nil
+	DialCall = func(context context.T, network string, host string, portNumber string, addressList []string) (string, net.Conn, error) {
+		return "", out, nil
 	}
 
 	suite.session.reconnectToPort = false
@@ -227,8 +228,9 @@ func (suite *BasicPortTestSuite) TestInitializeWithReachableEndpoint() {
 	addr, _ := suite.SpawnMockServer()
 	suite.session.destinationAddress = net.JoinHostPort(addr.IP.String(), strconv.Itoa(addr.Port))
 
-	DialCall = func(network string, address string) (net.Conn, error) {
-		return net.Dial(network, address)
+	DialCall = func(context context.T, network string, host string, portNumber string, addressList []string) (string, net.Conn, error) {
+		conn, err := net.Dial(network, suite.session.destinationAddress)
+		return suite.session.destinationAddress, conn, err
 	}
 
 	assert.Nil(suite.T(), suite.session.InitializeSession())
@@ -240,8 +242,9 @@ func (suite *BasicPortTestSuite) TestInitializeWithUnreachableEndpoint() {
 
 	suite.session.destinationAddress = net.JoinHostPort(addr.IP.String(), strconv.Itoa(addr.Port))
 
-	DialCall = func(network string, address string) (net.Conn, error) {
-		return net.Dial(network, address)
+	DialCall = func(context context.T, network string, host string, portNumber string, addressList []string) (string, net.Conn, error) {
+		conn, err := net.Dial(network, suite.session.destinationAddress)
+		return suite.session.destinationAddress, conn, err
 	}
 
 	assert.Error(suite.T(), suite.session.InitializeSession())

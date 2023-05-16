@@ -49,12 +49,13 @@ type PortParameters struct {
 	Type       string `json:"type"`
 }
 
-// Plugin is the type for the port plugin.
+// PortPlugin is the type for the port plugin.
 type PortPlugin struct {
 	context     context.T
 	dataChannel datachannel.IDataChannel
 	cancelled   chan struct{}
 	session     IPortSession
+	addresses   []string
 }
 
 // IPortSession interface represents functions that need to be implemented by all port sessions
@@ -86,39 +87,58 @@ var newECSIdentity = func(log log.T, _ *appconfig.SsmagentConfig) identity.IAgen
 
 // GetSession initializes session based on the type of the port session
 // mux for port forwarding session and if client supports multiplexing; basic otherwise
-var GetSession = func(context context.T, portParameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (session IPortSession, err error) {
-	host := "localhost"
-	if portParameters.Host != "" {
-		host = portParameters.Host
-		context.Log().Debug("Using remote host: %s", host)
-	}
-	destinationAddress := net.JoinHostPort(host, portParameters.PortNumber)
+var GetSession = func(context context.T, portParameters PortParameters, addresses []string, cancelled chan struct{}, clientVersion string, sessionId string) (session IPortSession, err error) {
 
 	if portParameters.Type == mgsConfig.LocalPortForwarding &&
 		versionutil.Compare(clientVersion, muxSupportedClientVersion, true) >= 0 {
 
-		if session, err = NewMuxPortSession(context, clientVersion, cancelled, destinationAddress, sessionId); err == nil {
+		if session, err = NewMuxPortSession(context, clientVersion, cancelled, portParameters.Host, portParameters.PortNumber, addresses, sessionId); err == nil {
 			return session, nil
 		}
 	} else {
-		if session, err = NewBasicPortSession(context, cancelled, destinationAddress, portParameters.Type); err == nil {
+		if session, err = NewBasicPortSession(context, cancelled, portParameters.Host, portParameters.PortNumber, addresses, portParameters.Type); err == nil {
 			return session, nil
 		}
 	}
 	return nil, err
 }
 
-// Returns parameters required for CLI to start session
+// DialCall connects to a list of addresses in sequence, returning either the first successful connection, or the first error
+var DialCall = func(context context.T, network string, host string, portNumber string, addressList []string) (string, net.Conn, error) {
+	if host == "" {
+		destinationAddress := net.JoinHostPort("localhost", portNumber)
+		conn, err := net.Dial(network, destinationAddress)
+		return destinationAddress, conn, err
+	}
+	context.Log().Debugf("Using remote host: %s", host)
+	var firstErr error // The error from the first address is most relevant.
+	for _, addr := range addressList {
+		destinationAddress := net.JoinHostPort(addr, portNumber)
+		conn, err := net.Dial(network, destinationAddress)
+		if err == nil {
+			return destinationAddress, conn, err
+		}
+		if firstErr == nil {
+			firstErr = err
+		}
+	}
+	if firstErr == nil {
+		firstErr = errors.New("missing address")
+	}
+	return "", nil, firstErr
+}
+
+// GetPluginParameters Returns parameters required for CLI to start session
 func (p *PortPlugin) GetPluginParameters(parameters interface{}) interface{} {
 	return parameters
 }
 
-// Port plugin requires handshake to establish session
+// RequireHandshake Port plugin requires handshake to establish session
 func (p *PortPlugin) RequireHandshake() bool {
 	return true
 }
 
-// NewPortPlugin returns a new instance of the Port Plugin.
+// NewPlugin NewPortPlugin returns a new instance of the Port Plugin.
 func NewPlugin(context context.T) (sessionplugin.ISessionPlugin, error) {
 	var plugin = PortPlugin{
 		context:   context,
@@ -276,7 +296,7 @@ func (p *PortPlugin) initializeParameters(config agentContracts.Configuration) (
 		return err
 	}
 
-	p.session, err = GetSession(p.context, portParameters, p.cancelled, p.dataChannel.GetClientVersion(), config.SessionId)
+	p.session, err = GetSession(p.context, portParameters, p.addresses, p.cancelled, p.dataChannel.GetClientVersion(), config.SessionId)
 
 	return
 }
@@ -308,6 +328,7 @@ func (p *PortPlugin) validateParameters(portParameters PortParameters, config ag
 				}
 			}
 		}
+		p.addresses = resolvedAddresses
 	}
 
 	return
