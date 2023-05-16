@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
@@ -142,10 +143,15 @@ func (h *HealthCheck) updateHealth() {
 		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
 	}
 
+	var ssmConnectionChannel = ""
+	channel := ssmconnectionchannel.GetConnectionChannel()
+	ssmConnectionChannel = string(channel)
+	log.Infof("got SSM connection channel value: %v", ssmConnectionChannel)
+
 	var err error
 	//TODO when will status become inactive?
 	// If both ssm config and command is inactive => agent is inactive.
-	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId); err != nil {
+	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel); err != nil {
 		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
 	}
 

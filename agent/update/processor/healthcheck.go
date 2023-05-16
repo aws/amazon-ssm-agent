@@ -104,7 +104,11 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 		availabilityZone, _ = ec2Identity.AvailabilityZone()
 		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
 	}
-	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName, availabilityZone, availabilityZoneId); err != nil {
+
+	//TODO populate ssmConnectionChannel if UUI call during Agent update requires data store update.
+	var ssmConnectionChannel = ""
+
+	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel); err != nil {
 		return
 	}
 

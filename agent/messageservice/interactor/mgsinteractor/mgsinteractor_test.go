@@ -16,7 +16,9 @@ package mgsinteractor
 
 import (
 	"encoding/json"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	messageHandler "github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -123,6 +125,7 @@ func (suite *MGSInteractorTestSuite) TestInitializeReportsHealthyMGSConnectionIf
 	var ableToOpenMGSConnection uint32
 	mgsInteractor.Initialize(&ableToOpenMGSConnection)
 	assert.True(suite.T(), atomic.LoadUint32(&ableToOpenMGSConnection) != 0)
+	assert.Equal(suite.T(), contracts.MGS, ssmconnectionchannel.GetConnectionChannel())
 }
 
 func (suite *MGSInteractorTestSuite) TestListenTaskAcknowledgeMsgDoesExist() {

@@ -171,6 +171,8 @@ func TestUpdateHealthCheck(t *testing.T) {
 	}
 	mockOnPremIdentity.On("IsIdentityEnvironment").Return(false)
 
+	ssmConnectionChannel := ""
+
 	mockObj := ssm2.NewMockDefault()
 	mockObj.On(
 		"UpdateInstanceInformation",
@@ -179,7 +181,8 @@ func TestUpdateHealthCheck(t *testing.T) {
 		fmt.Sprintf("%v-%v", updateInProgress, updateDetail.TargetVersion),
 		health.AgentName,
 		availabilityZone,
-		availabilityZoneId).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
+		availabilityZoneId,
+		ssmConnectionChannel).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
 	newSsmSvc = func(context context.T) ssm.Service {

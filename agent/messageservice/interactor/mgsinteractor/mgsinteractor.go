@@ -41,6 +41,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/controlchannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/gorilla/websocket"
 	"github.com/twinj/uuid"
 )
@@ -201,6 +202,7 @@ func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error
 	log.Info("Set up control channel successfully")
 	if ableToOpenMGSConnection != nil {
 		atomic.StoreUint32(ableToOpenMGSConnection, 1)
+		ssmconnectionchannel.SetConnectionChannel(ableToOpenMGSConnection)
 	}
 	return nil
 }

@@ -171,6 +171,17 @@ const (
 	ParamTypeStringMap = "StringMap"
 )
 
+type SSMConnectionChannel string
+
+const (
+	MGS SSMConnectionChannel = "ssmmessages"
+	MDS SSMConnectionChannel = "ec2messages"
+)
+
+type ConnectionChannel struct {
+	SSMConnectionChannel SSMConnectionChannel
+}
+
 // A Parameter in the DocumentContent of an MDS message.
 type Parameter struct {
 	DefaultVal     interface{} `json:"default" yaml:"default"`

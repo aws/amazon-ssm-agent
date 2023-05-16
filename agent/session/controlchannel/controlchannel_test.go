@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	serviceMock "github.com/aws/amazon-ssm-agent/agent/session/service/mocks"
 	eventlogMock "github.com/aws/amazon-ssm-agent/agent/session/telemetry/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/stretchr/testify/assert"
@@ -139,16 +140,17 @@ func TestOpenReportsBadMGSConnectionStatusIfChannelCannotBeOpened(t *testing.T) 
 
 	mockWsChannel.AssertExpectations(t)
 	assert.False(t, atomic.LoadUint32(&ableToOpenMGSConnection) != 0)
+	assert.Equal(t, contracts.MDS, ssmconnectionchannel.GetConnectionChannel())
 }
 
 func TestGetControlChannelTokenReportsBadMGSConnectionStatusIfCannotGetToken(t *testing.T) {
 	mockServiceForGetControlChannelTest := &serviceMock.Service{}
 	mockServiceForGetControlChannelTest.On("CreateControlChannel", mock.Anything, mock.Anything, mock.Anything).Return(nil, errors.New(""))
-
 	var ableToOpenMGSConnection uint32
 	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
 	getControlChannelToken(mockLog, mockServiceForGetControlChannelTest, mock.Anything, uuid.NewV4().String(), &ableToOpenMGSConnection)
 	assert.False(t, atomic.LoadUint32(&ableToOpenMGSConnection) != 0)
+	assert.Equal(t, contracts.MDS, ssmconnectionchannel.GetConnectionChannel())
 }
 
 func TestGetControlChannelTokenHandlesNilAbleToOpenMGSConnection(t *testing.T) {
@@ -192,6 +194,27 @@ func TestReconnectReportsHealthyMGSConnectionIfSuccessful(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, token, controlChannel.wsChannel.GetChannelToken())
 	assert.True(t, atomic.LoadUint32(&ableToOpenMGSConnection) != 0)
+	assert.Equal(t, contracts.MGS, ssmconnectionchannel.GetConnectionChannel())
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestReconnectUpdatesSSMConnectionChannelIfSuccessful(t *testing.T) {
+	controlChannel := getControlChannel()
+
+	mockWsChannel.On("Close", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
+	mockWsChannel.On("GetChannelToken").Return(token)
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	var ableToOpenMGSConnection uint32
+	atomic.StoreUint32(&ableToOpenMGSConnection, 0)
+	ssmconnectionchannel.SetConnectionChannel(&ableToOpenMGSConnection)
+
+	// test reconnect
+	err := controlChannel.Reconnect(mockLog, &ableToOpenMGSConnection)
+
+	assert.Nil(t, err)
+	assert.Equal(t, contracts.MGS, ssmconnectionchannel.GetConnectionChannel())
 	mockWsChannel.AssertExpectations(t)
 }
 

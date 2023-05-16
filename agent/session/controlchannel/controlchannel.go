@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	"github.com/aws/amazon-ssm-agent/agent/session/telemetry"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/gorilla/websocket"
@@ -126,6 +127,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 			// should never happen
 			if ableToOpenMGSConnection != nil {
 				atomic.StoreUint32(ableToOpenMGSConnection, 0)
+				ssmconnectionchannel.SetConnectionChannel(ableToOpenMGSConnection)
 			}
 			log.Errorf("failed to reconnect to the controlchannel with error: %v", err)
 		}
@@ -142,6 +144,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 		onErrorHandler); err != nil {
 		if ableToOpenMGSConnection != nil {
 			atomic.StoreUint32(ableToOpenMGSConnection, 0)
+			ssmconnectionchannel.SetConnectionChannel(ableToOpenMGSConnection)
 		}
 		log.Errorf("failed to initialize websocket channel for controlchannel, error: %s", err)
 		return err
@@ -174,6 +177,7 @@ func (controlChannel *ControlChannel) Reconnect(log log.T, ableToOpenMGSConnecti
 
 	if ableToOpenMGSConnection != nil {
 		atomic.StoreUint32(ableToOpenMGSConnection, 1)
+		ssmconnectionchannel.SetConnectionChannel(ableToOpenMGSConnection)
 	}
 	log.Debugf("Successfully reconnected with controlchannel with type %s", controlChannel.channelType)
 	return nil
@@ -201,6 +205,7 @@ func (controlChannel *ControlChannel) Open(log log.T, ableToOpenMGSConnection *u
 	if err := controlChannel.wsChannel.Open(log, controlChannelDialerInput); err != nil {
 		if ableToOpenMGSConnection != nil {
 			atomic.StoreUint32(ableToOpenMGSConnection, 0)
+			ssmconnectionchannel.SetConnectionChannel(ableToOpenMGSConnection)
 		}
 		return fmt.Errorf("failed to connect controlchannel with error: %s", err)
 	}
@@ -266,6 +271,7 @@ func getControlChannelToken(log log.T,
 	if err != nil || createControlChannelOutput == nil {
 		if ableToOpenMGSConnection != nil {
 			atomic.StoreUint32(ableToOpenMGSConnection, 0)
+			ssmconnectionchannel.SetConnectionChannel(ableToOpenMGSConnection)
 		}
 		return "", fmt.Errorf("CreateControlChannel failed with error: %s", err)
 	}
