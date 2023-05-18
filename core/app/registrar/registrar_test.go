@@ -1,6 +1,7 @@
 package registrar
 
 import (
+	"github.com/stretchr/testify/mock"
 	"testing"
 	"time"
 
@@ -12,7 +13,8 @@ import (
 func TestRetryableRegistrar_RegisterWithRetry_Success(t *testing.T) {
 	// Arrange
 	identityRegistrar := &identitymocks.Registrar{}
-	identityRegistrar.On("Register").Return(nil)
+	identityRegistrar.On("RegisterWithContext", mock.Anything).Return(nil)
+
 	timeAfterFunc := func(duration time.Duration) <-chan time.Time {
 		assert.Fail(t, "expected no registration retry or sleep")
 		c := make(chan time.Time, 1)
@@ -32,7 +34,7 @@ func TestRetryableRegistrar_RegisterWithRetry_Success(t *testing.T) {
 	registrar.RegisterWithRetry()
 
 	// Assert
-	assert.False(t, registrar.isRegistrarRunning)
+	assert.False(t, registrar.isRegistrarRunning.Load().(bool))
 	select {
 	case <-registrar.registrationAttemptedChan:
 		break

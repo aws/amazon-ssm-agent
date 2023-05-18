@@ -15,6 +15,7 @@
 package authregister
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -32,15 +33,15 @@ import (
 
 // IClient is an interface to the authenticated registration method of the SSM service.
 type IClient interface {
-	RegisterManagedInstance(publicKey, publicKeyType, fingerprint, iamRole, tagsJson string) (string, error)
+	RegisterManagedInstanceWithContext(ctx context.Context, publicKey, publicKeyType, fingerprint, iamRole, tagsJson string) (string, error)
 }
 
 // ISsmSdk defines the functions needed from the AWS SSM SDK
 type ISsmSdk interface {
-	RegisterManagedInstance(input *ssm.RegisterManagedInstanceInput) (*ssm.RegisterManagedInstanceOutput, error)
+	RegisterManagedInstanceWithContext(ctx context.Context, input *ssm.RegisterManagedInstanceInput, opts ...request.Option) (*ssm.RegisterManagedInstanceOutput, error)
 }
 
-// Client is an service wrapper that delegates to the ssm sdk.
+// Client is a service wrapper that delegates to the ssm sdk.
 type Client struct {
 	sdk ISsmSdk
 }
@@ -89,8 +90,8 @@ func NewClient(log logger.T, region string, imdsClient iirprovider.IEC2MdsSdkCli
 	return &Client{sdk: ssmService}
 }
 
-// RegisterManagedInstance calls the RegisterManagedInstance SSM API
-func (svc *Client) RegisterManagedInstance(publicKey, publicKeyType, fingerprint, iamRole, tagsJson string) (string, error) {
+// RegisterManagedInstanceWithContext calls the RegisterManagedInstance SSM API
+func (svc *Client) RegisterManagedInstanceWithContext(ctx context.Context, publicKey, publicKeyType, fingerprint, iamRole, tagsJson string) (string, error) {
 	params := ssm.RegisterManagedInstanceInput{
 		PublicKey:     aws.String(publicKey),
 		PublicKeyType: aws.String(publicKeyType),
@@ -126,7 +127,7 @@ func (svc *Client) RegisterManagedInstance(publicKey, publicKeyType, fingerprint
 
 	var result *ssm.RegisterManagedInstanceOutput
 	var err error
-	result, err = svc.sdk.RegisterManagedInstance(&params)
+	result, err = svc.sdk.RegisterManagedInstanceWithContext(ctx, &params)
 
 	if err != nil {
 		return "", err

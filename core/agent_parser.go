@@ -16,6 +16,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -223,7 +224,8 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 
 	if role != "" {
 		authRegisterService := authregister.NewClient(log, region, nil)
-		managedInstanceID, err = authRegisterService.RegisterManagedInstance(
+		managedInstanceID, err = authRegisterService.RegisterManagedInstanceWithContext(
+			context.Background(),
 			publicKey,
 			keyType,
 			fingerprintUUID,

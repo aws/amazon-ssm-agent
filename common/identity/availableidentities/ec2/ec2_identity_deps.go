@@ -14,6 +14,7 @@
 package ec2
 
 import (
+	"context"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -43,6 +44,9 @@ type iEC2MdsSdkClient interface {
 	GetMetadata(string) (string, error)
 	GetInstanceIdentityDocument() (ec2metadata.EC2InstanceIdentityDocument, error)
 	Region() (string, error)
+	RegionWithContext(ctx context.Context) (string, error)
+	GetMetadataWithContext(ctx context.Context, resource string) (string, error)
+	GetInstanceIdentityDocumentWithContext(ctx context.Context) (ec2metadata.EC2InstanceIdentityDocument, error)
 }
 
 // IEC2Identity defines the functions for the EC2 identity

@@ -14,6 +14,7 @@
 package identity
 
 import (
+	"context"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
@@ -33,7 +34,7 @@ type IAgentIdentity interface {
 
 // Registrar identity registers the agent on startup
 type Registrar interface {
-	Register() error
+	RegisterWithContext(context.Context) error
 }
 type IInnerIdentityGetter interface {
 	GetInner() IAgentIdentityInner

@@ -14,6 +14,7 @@
 package ec2
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"sync"
@@ -57,16 +58,25 @@ var (
 
 // InstanceID returns the managed instance id
 func (i *Identity) InstanceID() (string, error) {
-	return i.Client.GetMetadata(ec2InstanceIDResource)
+	return i.InstanceIDWithContext(context.Background())
+}
+
+// InstanceIDWithContext returns the managed instance id
+func (i *Identity) InstanceIDWithContext(ctx context.Context) (string, error) {
+	return i.Client.GetMetadataWithContext(ctx, ec2InstanceIDResource)
 }
 
 // Region returns the region of the ec2 instance
 func (i *Identity) Region() (region string, err error) {
-	if region, err = i.Client.Region(); err == nil {
+	return i.RegionWithContext(context.Background())
+}
+
+func (i *Identity) RegionWithContext(ctx context.Context) (region string, err error) {
+	if region, err = i.Client.RegionWithContext(ctx); err == nil {
 		return
 	}
 	var document ec2metadata.EC2InstanceIdentityDocument
-	if document, err = i.Client.GetInstanceIdentityDocument(); err == nil {
+	if document, err = i.Client.GetInstanceIdentityDocumentWithContext(ctx); err == nil {
 		region = document.Region
 	}
 
@@ -136,14 +146,14 @@ func (i *Identity) CredentialProvider() credentialproviders.IRemoteProvider {
 	return i.credentialsProvider
 }
 
-// Register registers the EC2 identity with Systems Manager
-func (i *Identity) Register() error {
-	region, err := i.Region()
+// RegisterWithContext registers the EC2 identity with Systems Manager
+func (i *Identity) RegisterWithContext(ctx context.Context) error {
+	region, err := i.RegionWithContext(ctx)
 	if err != nil {
 		return fmt.Errorf("unable to get region for identity %w", err)
 	}
 
-	instanceId, err := i.InstanceID()
+	instanceId, err := i.InstanceIDWithContext(ctx)
 	if err != nil {
 		return fmt.Errorf("unable to get instance id for identity %w", err)
 	}
@@ -179,7 +189,7 @@ func (i *Identity) Register() error {
 		return fmt.Errorf("unable to set up backoff config for registration. Aborting. %w", err)
 	}
 
-	_, err = i.authRegisterService.RegisterManagedInstance(publicKey, keyType, instanceId, "", "")
+	_, err = i.authRegisterService.RegisterManagedInstanceWithContext(ctx, publicKey, keyType, instanceId, "", "")
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			if aerr.Code() == ssm.ErrCodeInstanceAlreadyRegistered {

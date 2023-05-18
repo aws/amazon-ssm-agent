@@ -1,14 +1,16 @@
 package registrar
 
 import (
+	"context"
 	"math"
 	"math/rand"
 	"runtime/debug"
+	"sync/atomic"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	"github.com/aws/amazon-ssm-agent/core/app/context"
+	agentCtx "github.com/aws/amazon-ssm-agent/core/app/context"
 )
 
 const (
@@ -33,14 +35,14 @@ type RetryableRegistrar struct {
 	stopRegistrarChan         chan struct{}
 	identityRegistrar         identity.Registrar
 	timeAfterFunc             func(time.Duration) <-chan time.Time
-	isRegistrarRunning        bool
+	isRegistrarRunning        atomic.Value
 }
 
-func NewRetryableRegistrar(context context.ICoreAgentContext) *RetryableRegistrar {
-	log := context.Log().WithContext("[Registrar]")
+func NewRetryableRegistrar(agentCtx agentCtx.ICoreAgentContext) *RetryableRegistrar {
+	log := agentCtx.Log().WithContext("[Registrar]")
 	log.Debug("initializing registrar")
 	// Cast to innerIdentityGetter interface that defined getInner
-	innerGetter, ok := context.Identity().(identity.IInnerIdentityGetter)
+	innerGetter, ok := agentCtx.Identity().(identity.IInnerIdentityGetter)
 	if !ok {
 		log.Errorf("malformed identity")
 		return nil
@@ -64,7 +66,7 @@ func NewRetryableRegistrar(context context.ICoreAgentContext) *RetryableRegistra
 func (r *RetryableRegistrar) Start() error {
 	r.log.Info("Starting registrar module")
 	go r.RegisterWithRetry()
-	r.isRegistrarRunning = true
+	r.isRegistrarRunning.Store(true)
 	// Block until registration attempted at least once
 	<-r.registrationAttemptedChan
 	return nil
@@ -76,7 +78,7 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 			r.log.Errorf("registrar panic: %v", err)
 			r.log.Errorf("Stacktrace:\n%s", debug.Stack())
 			r.log.Flush()
-			r.isRegistrarRunning = false
+			r.isRegistrarRunning.Store(false)
 			select {
 			case <-r.registrationAttemptedChan:
 				//channel open, write to channel to unblock and close
@@ -88,19 +90,36 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 	}()
 
 	retryCount := 0
-	for {
-		err := r.identityRegistrar.Register()
-		if retryCount == 0 {
-			r.registrationAttemptedChan <- struct{}{}
-			close(r.registrationAttemptedChan)
-		}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-		if err == nil {
-			r.isRegistrarRunning = false
+	for {
+		errChan := make(chan error, 1)
+		go func() {
+			errChan <- r.identityRegistrar.RegisterWithContext(ctx)
+			defer close(errChan)
+		}()
+		select {
+		case err := <-errChan:
+			if retryCount == 0 {
+				r.registrationAttemptedChan <- struct{}{}
+				close(r.registrationAttemptedChan)
+			}
+
+			if err != nil {
+				r.log.Errorf("failed to register identity: %v", err)
+			} else {
+				r.isRegistrarRunning.Store(false)
+				return
+			}
+		case <-r.stopRegistrarChan:
+			cancel()
+			r.log.Info("Stopping registrar")
+			r.isRegistrarRunning.Store(false)
+			r.log.Flush()
 			return
 		}
 
-		r.log.Errorf("failed to register identity: %v", err)
 		// Default sleep duration for non-aws errors
 		sleepDuration := getBackoffRetryJitterSleepDuration(retryCount)
 		// Max retry count is 16, which will sleep for about 18-22 hours
@@ -112,8 +131,9 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 
 		select {
 		case <-r.stopRegistrarChan:
+			cancel()
 			r.log.Info("Stopping registrar")
-			r.isRegistrarRunning = false
+			r.isRegistrarRunning.Store(false)
 			r.log.Flush()
 			return
 		case <-r.timeAfterFunc(sleepDuration):
@@ -122,7 +142,7 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 }
 
 func (r *RetryableRegistrar) Stop() {
-	if !r.isRegistrarRunning {
+	if !r.isRegistrarRunning.Load().(bool) {
 		r.log.Info("Registrar is already stopped")
 		r.log.Flush()
 		return

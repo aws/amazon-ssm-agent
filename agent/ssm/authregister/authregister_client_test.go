@@ -15,6 +15,7 @@
 package authregister
 
 import (
+	"context"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister/mocks"
@@ -29,11 +30,12 @@ func TestSdkService_RegisterManagedInstance(t *testing.T) {
 	response := &ssm.RegisterManagedInstanceOutput{
 		InstanceId: aws.String("SomeInstanceId"),
 	}
-	sdk.On("RegisterManagedInstance", mock.Anything).Return(response, nil)
+	sdk.On("RegisterManagedInstanceWithContext", mock.Anything, mock.Anything).Return(response, nil)
 	authTokenService := &Client{
 		sdk: sdk,
 	}
-	result, err := authTokenService.RegisterManagedInstance("SomePublicKey", "SomePublicKeyType", "SomeFingerprint", "someIamRole", "")
+
+	result, err := authTokenService.RegisterManagedInstanceWithContext(context.Background(), "SomePublicKey", "SomePublicKeyType", "SomeFingerprint", "someIamRole", "")
 	assert.NoError(t, err)
 	assert.Equal(t, *response.InstanceId, result)
 }

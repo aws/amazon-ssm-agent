@@ -13,6 +13,7 @@
 package ec2
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"testing"
@@ -34,14 +35,14 @@ import (
 )
 
 func TestEC2IdentityType_InstanceId(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := Identity{
 		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeId"
-	client.On("GetMetadata", ec2InstanceIDResource).Return(val, nil).Once()
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(val, nil).Once()
 
 	res, err := identity.InstanceID()
 	assert.Equal(t, res, val)
@@ -49,14 +50,14 @@ func TestEC2IdentityType_InstanceId(t *testing.T) {
 }
 
 func TestEC2IdentityType_RegionFirstSuccess(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := Identity{
 		Log:    logmocks.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeRegion"
-	client.On("Region").Return(val, nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return(val, nil).Once()
 
 	res, err := identity.Region()
 	assert.Equal(t, res, val)
@@ -64,7 +65,7 @@ func TestEC2IdentityType_RegionFirstSuccess(t *testing.T) {
 }
 
 func TestEC2IdentityType_RegionFailDocumentSuccess(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := Identity{
 		Log:    logmocks.NewMockLog(),
@@ -73,8 +74,8 @@ func TestEC2IdentityType_RegionFailDocumentSuccess(t *testing.T) {
 	val := "SomeOtherRegion"
 	document := ec2metadata.EC2InstanceIdentityDocument{Region: val}
 
-	client.On("Region").Return("", fmt.Errorf("SomeError")).Once()
-	client.On("GetInstanceIdentityDocument").Return(document, nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return("", fmt.Errorf("SomeError")).Once()
+	client.On("GetInstanceIdentityDocumentWithContext", mock.Anything).Return(document, nil).Once()
 
 	res, err := identity.Region()
 	assert.Equal(t, res, val)
@@ -82,7 +83,7 @@ func TestEC2IdentityType_RegionFailDocumentSuccess(t *testing.T) {
 }
 
 func TestEC2IdentityType_AvailabilityZone(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := Identity{
 		Log:    logmocks.NewMockLog(),
@@ -112,7 +113,7 @@ func TestEC2IdentityType_AvailabilityZoneId(t *testing.T) {
 }
 
 func TestEC2IdentityType_InstanceType(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := Identity{
 		Log:    logmocks.NewMockLog(),
@@ -127,11 +128,10 @@ func TestEC2IdentityType_InstanceType(t *testing.T) {
 }
 
 func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Success(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
-	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeRegion", nil).Once()
-	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
-	client.On("GetMetadata", ec2ServiceDomainResource).Return("SomeServiceDomain", nil).Once()
-	client.On("Region").Return("SomeRegion", nil).Once()
+	client := &mocks.IEC2MdsSdkClient{}
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return("SomeRegion", nil).Once()
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return("SomeRegion", nil).Once()
 
 	runtimeConfigClientMocks := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, nil)
@@ -171,11 +171,10 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigPresent_Succe
 }
 
 func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigNotPresent_Success(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
-	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeRegion", nil).Once()
-	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
-	client.On("GetMetadata", ec2ServiceDomainResource).Return("SomeServiceDomain", nil).Once()
-	client.On("Region").Return("SomeRegion", nil).Once()
+	client := &mocks.IEC2MdsSdkClient{}
+	client.On("GetMetadataWithContext", ec2InstanceIDResource).Return("SomeRegion", nil).Once()
+	client.On("GetMetadataWithContext", ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return("SomeRegion", nil).Once()
 
 	runtimeConfigClientMocks := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
 	runtimeConfigClientMocks.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, fmt.Errorf("no config found"))
@@ -194,7 +193,7 @@ func TestEC2IdentityType_Credentials_CompatibilityTestRuntimeConfigNotPresent_Su
 }
 
 func TestEC2IdentityType_IsIdentityEnvironment(t *testing.T) {
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := Identity{
 		Log:    logmocks.NewMockLog(),
@@ -202,12 +201,11 @@ func TestEC2IdentityType_IsIdentityEnvironment(t *testing.T) {
 	}
 
 	// Success
-	client.On("GetMetadata", ec2InstanceIDResource).Return("", fmt.Errorf("SomeError")).Once()
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return("", fmt.Errorf("SomeError")).Once()
 	assert.False(t, identity.IsIdentityEnvironment())
 
-	client.On("GetMetadata", ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
-	client.On("Region").Return("SomeRegion", nil).Once()
-	client.On("GetMetadata", ec2ServiceDomainResource).Return("SomeServiceDomain", nil).Once()
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return("SomeInstanceId", nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return("SomeRegion", nil).Once()
 	assert.True(t, identity.IsIdentityEnvironment())
 
 }
@@ -223,7 +221,7 @@ func TestEC2IdentityType_IdentityType(t *testing.T) {
 
 func TestGetInstanceInfo_ReturnsError_WhenErrorGettingInstanceId(t *testing.T) {
 	// Arrange
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := &Identity{
 		Log:    logmocks.NewMockLog(),
@@ -231,7 +229,7 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingInstanceId(t *testing.T) {
 	}
 
 	instanceId := "SomeId"
-	client.On("GetMetadata", ec2InstanceIDResource).Return(instanceId, fmt.Errorf("failed to get instanceId")).Once()
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(instanceId, fmt.Errorf("failed to get instanceId")).Once()
 
 	// Act
 	result, err := getInstanceInfo(identity)
@@ -243,7 +241,7 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingInstanceId(t *testing.T) {
 
 func TestGetInstanceInfo_ReturnsError_WhenErrorGettingRegion(t *testing.T) {
 	// Arrange
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := &Identity{
 		Log:    logmocks.NewMockLog(),
@@ -251,9 +249,9 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingRegion(t *testing.T) {
 	}
 
 	instanceId := "SomeId"
-	client.On("GetMetadata", ec2InstanceIDResource).Return(instanceId, nil).Once()
-	client.On("Region").Return("", fmt.Errorf("failed to get region")).Once()
-	client.On("GetInstanceIdentityDocument").
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(instanceId, nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return("", fmt.Errorf("failed to get region")).Once()
+	client.On("GetInstanceIdentityDocumentWithContext", mock.Anything).
 		Return(ec2metadata.EC2InstanceIdentityDocument{}, fmt.Errorf("failed to get instance identity document")).
 		Once()
 
@@ -267,7 +265,7 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingRegion(t *testing.T) {
 
 func TestGetInstanceInfo_ReturnsInstanceInfo(t *testing.T) {
 	// Arrange
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 
 	identity := &Identity{
 		Log:    logmocks.NewMockLog(),
@@ -276,8 +274,8 @@ func TestGetInstanceInfo_ReturnsInstanceInfo(t *testing.T) {
 
 	instanceId := "SomeId"
 	region := "SomeRegion"
-	client.On("GetMetadata", ec2InstanceIDResource).Return(instanceId, nil).Once()
-	client.On("Region").Return(region, nil).Once()
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(instanceId, nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return(region, nil).Once()
 
 	// Act
 	result, err := getInstanceInfo(identity)
@@ -311,14 +309,14 @@ func TestEC2Identity_InitEC2RoleProvider_InitsCredentialProvider(t *testing.T) {
 
 func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *testing.T) {
 	// Arrange
-	client := &mocks.IEC2MdsSdkClientMock{}
+	client := &mocks.IEC2MdsSdkClient{}
 	region := "SomeRegion"
 	instanceId := "i-SomeInstanceId"
-	client.On("Region").Return(region, nil).Once()
+	client.On("RegionWithContext", mock.Anything).Return(region, nil).Once()
 	authRegisterService := &authregistermocks.IClient{}
-	client.On("GetMetadata", ec2InstanceIDResource).Return(instanceId, nil).Twice()
-	authRegisterService.On("RegisterManagedInstance",
-		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(instanceId, nil)
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(instanceId, nil).Twice()
+	authRegisterService.On("RegisterManagedInstanceWithContext",
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(instanceId, nil)
 	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return ""
@@ -341,7 +339,7 @@ func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *t
 	}
 
 	// Act
-	err := identity.Register()
+	err := identity.RegisterWithContext(context.Background())
 
 	//Assert
 	assert.NoError(t, err)
@@ -353,13 +351,13 @@ func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *test
 	testPrivateKey := "SomePrivateKey"
 	testPrivateKeyType := "SomePrivateKeyType"
 	liveInstanceId := "i-liveInstanceId"
-	client := &mocks.IEC2MdsSdkClientMock{}
-	client.On("Region").Return(region, nil).Once()
+	client := &mocks.IEC2MdsSdkClient{}
+	client.On("RegionWithContext", mock.Anything).Return(region, nil).Once()
 	authRegisterService := &authregistermocks.IClient{}
 	// One in Register() function and the other call in loadRegistrationInfo function
-	client.On("GetMetadata", ec2InstanceIDResource).Return(liveInstanceId, nil).Twice()
-	authRegisterService.On("RegisterManagedInstance",
-		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(liveInstanceId, nil)
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(liveInstanceId, nil).Twice()
+	authRegisterService.On("RegisterManagedInstanceWithContext",
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(liveInstanceId, nil)
 	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testPrivateKey
@@ -389,7 +387,7 @@ func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *test
 	}
 
 	// Act
-	err := identity.Register()
+	err := identity.RegisterWithContext(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -402,13 +400,13 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	testPrivateKeyType := "SomePrivateKeyType"
 	testPublicKey := "SomePublicKey"
 	liveInstanceId := "i-liveInstanceId"
-	client := &mocks.IEC2MdsSdkClientMock{}
-	client.On("Region").Return(region, nil).Once()
+	client := &mocks.IEC2MdsSdkClient{}
+	client.On("RegionWithContext", mock.Anything).Return(region, nil).Once()
 	authRegisterService := &authregistermocks.IClient{}
 	// One in Register() function and the other call in loadRegistrationInfo function
-	client.On("GetMetadata", ec2InstanceIDResource).Return(liveInstanceId, nil).Twice()
-	authRegisterService.On("RegisterManagedInstance",
-		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(liveInstanceId, nil)
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(liveInstanceId, nil).Twice()
+	authRegisterService.On("RegisterManagedInstanceWithContext",
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(liveInstanceId, nil)
 	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testPrivateKey
@@ -444,7 +442,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	}
 
 	// Act
-	err := identity.Register()
+	err := identity.RegisterWithContext(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -456,13 +454,13 @@ func TestEC2Identity_ReRegister_InfoPublicKey_Blank(t *testing.T) {
 	testPrivateKey := "SomePrivateKey"
 	testPrivateKeyType := "SomePrivateKeyType"
 	liveInstanceId := "i-liveInstanceId"
-	client := &mocks.IEC2MdsSdkClientMock{}
-	client.On("Region").Return(region, nil).Once()
+	client := &mocks.IEC2MdsSdkClient{}
+	client.On("RegionWithContext", mock.Anything).Return(region, nil).Once()
 	authRegisterService := &authregistermocks.IClient{}
 	// One in Register() function and the other call in loadRegistrationInfo function
-	client.On("GetMetadata", ec2InstanceIDResource).Return(liveInstanceId, nil).Twice()
-	authRegisterService.On("RegisterManagedInstance",
-		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(liveInstanceId, nil)
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(liveInstanceId, nil).Twice()
+	authRegisterService.On("RegisterManagedInstanceWithContext",
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(liveInstanceId, nil)
 	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testPrivateKey
@@ -495,7 +493,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_Blank(t *testing.T) {
 	}
 
 	// Act
-	err := identity.Register()
+	err := identity.RegisterWithContext(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -507,9 +505,9 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 	testPrivateKeyType := "SomePrivateKeyType"
 	testInstanceId := "i-SomeInstanceId"
 	testRegion := "SomeRegion"
-	client := &mocks.IEC2MdsSdkClientMock{}
-	client.On("Region").Return(testRegion, nil).Once()
-	client.On("GetMetadata", ec2InstanceIDResource).Return(testInstanceId, nil).Once()
+	client := &mocks.IEC2MdsSdkClient{}
+	client.On("RegionWithContext", mock.Anything).Return(testRegion, nil).Once()
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(testInstanceId, nil).Once()
 	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testPrivateKey
@@ -531,7 +529,7 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 	}
 
 	// Act
-	err := identity.Register()
+	err := identity.RegisterWithContext(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -553,13 +551,13 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 	testPrivateKeyType := "SomePrivateKeyType"
 	testInstanceId := ""
 	testRegion := "SomeRegion"
-	client := &mocks.IEC2MdsSdkClientMock{}
-	client.On("Region").Return(testRegion, nil).Once()
+	client := &mocks.IEC2MdsSdkClient{}
+	client.On("RegionWithContext", mock.Anything).Return(testRegion, nil).Once()
 	authRegisterService := &authregistermocks.IClient{}
-	client.On("GetMetadata", ec2InstanceIDResource).Return(testInstanceId, nil).Times(3)
+	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(testInstanceId, nil).Times(3)
 
-	authRegisterService.On("RegisterManagedInstance",
-		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("", &awsTestError{errCode: ssm.ErrCodeInstanceAlreadyRegistered})
+	authRegisterService.On("RegisterManagedInstanceWithContext",
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("", &awsTestError{errCode: ssm.ErrCodeInstanceAlreadyRegistered})
 	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
 		assert.Equal(t, IdentityType, manifestFileNamePrefix)
 		return testPrivateKey
@@ -587,7 +585,7 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 	}
 
 	// Act
-	err := identity.Register()
+	err := identity.RegisterWithContext(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
