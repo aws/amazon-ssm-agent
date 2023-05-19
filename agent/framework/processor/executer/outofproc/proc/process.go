@@ -23,14 +23,19 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 var (
-	getAppConfig     = appconfig.Config
-	newAgentIdentity = identity.NewAgentIdentity
+	getAppConfig                         = appconfig.Config
+	newAgentIdentity                     = identity2.NewAgentIdentity
+	runtimeConfigClientCreator           = runtimeconfig.NewIdentityRuntimeConfigClient
+	defaultAgentIdentitySelectorCreator  = identity2.NewDefaultAgentIdentitySelector
+	runtimeConfigIdentitySelectorCreator = identity2.NewRuntimeConfigIdentitySelector
 )
 
-//OSProcess is an abstracted interface of os.Process
+// OSProcess is an abstracted interface of os.Process
 type OSProcess interface {
 	//generic ssm visible fields
 	Pid() int
@@ -44,7 +49,7 @@ type OSProcess interface {
 	Wait() error
 }
 
-//impl of OSProcess with os.Process embed
+// impl of OSProcess with os.Process embed
 type WorkerProcess struct {
 	*exec.Cmd
 	startTime time.Time
@@ -58,7 +63,7 @@ func (p *WorkerProcess) StartTime() time.Time {
 	return p.startTime
 }
 
-//TODO use the kill functions provided in executes package
+// TODO use the kill functions provided in executes package
 func (p *WorkerProcess) Kill() error {
 	return p.Cmd.Process.Kill()
 }
@@ -67,7 +72,7 @@ func (p *WorkerProcess) Wait() error {
 	return p.Cmd.Wait()
 }
 
-//start a child process, with the resources attached to its parent
+// start a child process, with the resources attached to its parent
 func StartProcess(name string, argv []string) (OSProcess, error) {
 	//TODO connect stdin and stdout to avoid seelog error
 	cmd := exec.Command(name, argv...)
@@ -81,7 +86,7 @@ func StartProcess(name string, argv []string) (OSProcess, error) {
 	return &p, err
 }
 
-//TODO figure out why sometimes argv does not contain program name
+// TODO figure out why sometimes argv does not contain program name
 func parseArgv(argv []string) (channelName string, err error) {
 	if len(argv) == 1 {
 		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
@@ -93,9 +98,12 @@ func parseArgv(argv []string) (channelName string, err error) {
 			return argv[1], nil
 		}
 		return argv[0], nil
-	} else {
-		return "", errors.New("executable argument number mismatch")
+	} else if len(argv) == 3 {
+		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
+			return argv[1], nil
+		}
 	}
+	return "", fmt.Errorf("executable argument number mismatch: %v", len(argv))
 }
 
 func InitializeWorkerDependencies(log log.T, args []string) (*appconfig.SsmagentConfig, identity.IAgentIdentity, string, error) {
@@ -103,14 +111,21 @@ func InitializeWorkerDependencies(log log.T, args []string) (*appconfig.Ssmagent
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("failed to initialize config: %v", err)
 	}
-
 	channelName, err := parseArgv(args)
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("failed to parse args: %v", err)
 	}
-
-	selector := identity.NewRuntimeConfigIdentitySelector(log)
-	agentIdentity, err := newAgentIdentity(log, &config, selector)
+	var selector identity2.IAgentIdentitySelector
+	var agentIdentity identity.IAgentIdentity
+	runtimeConfigClientHandler := runtimeConfigClientCreator()
+	if ok, err := runtimeConfigClientHandler.ConfigExists(); ok && err == nil {
+		log.Info("picking up runtime config identity selector")
+		selector = runtimeConfigIdentitySelectorCreator(log)
+	} else {
+		log.Info("picking up default identity selector")
+		selector = defaultAgentIdentitySelectorCreator(log)
+	}
+	agentIdentity, err = newAgentIdentity(log, &config, selector)
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("failed to get identity: %v", err)
 	}

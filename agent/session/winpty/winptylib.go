@@ -14,7 +14,7 @@
 //go:build windows
 // +build windows
 
-//winpty package is wrapper package for calling procedures of winpty.dll
+// winpty package is wrapper package for calling procedures of winpty.dll
 package winpty
 
 import (
@@ -56,12 +56,12 @@ var (
 
 var winptyModule *syscall.LazyDLL
 
-//loadDll gets lazydll for winpty.dll which gets loaded once it's procedures are called
+// loadDll gets lazydll for winpty.dll which gets loaded once it's procedures are called
 func loadDll(winptyDllFilePath string) {
 	winptyModule = syscall.NewLazyDLL(winptyDllFilePath)
 }
 
-//defineProcedures gets lazyproc for winpty.dll procedures
+// defineProcedures gets lazyproc for winpty.dll procedures
 func defineProcedures() {
 
 	// Error handling.

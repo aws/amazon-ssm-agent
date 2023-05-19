@@ -18,10 +18,10 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	moduleMock "github.com/aws/amazon-ssm-agent/agent/contracts/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	rebootMock "github.com/aws/amazon-ssm-agent/agent/rebooter/mocks"
 	"github.com/stretchr/testify/mock"

@@ -29,7 +29,7 @@ const (
 	providerName                = "SharedCredentialsProvider"
 )
 
-// sharedCredentialsProvider implements the AWS SDK credential provider, and is used to the create AWS client.
+// sharedCredentialsProvider implements the AWS SDK credential provider, and is used to create AWS client.
 // It retrieves credentials from the shared credentials on disk, and keeps track if those credentials are expired.
 type sharedCredentialsProvider struct {
 	credentials.Expiry
@@ -40,6 +40,7 @@ type sharedCredentialsProvider struct {
 	getTimeNow            func() time.Time
 }
 
+// NewCredentialsProvider initializes a shared provider that loads credentials that were saved disk
 func NewCredentialsProvider(log log.T) (credentials.Provider, error) {
 	log = log.WithContext("[SharedCredentialsProvider]")
 	runtimeConfigClient := runtimeconfig.NewIdentityRuntimeConfigClient()
@@ -53,7 +54,7 @@ func NewCredentialsProvider(log log.T) (credentials.Provider, error) {
 
 	// Check if it is readable
 	if _, err := runtimeConfigClient.GetConfig(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get runtime config. %w", err)
 	}
 
 	return &sharedCredentialsProvider{
@@ -78,7 +79,7 @@ func (s *sharedCredentialsProvider) Retrieve() (credentials.Value, error) {
 
 	// If credentials are already expired, return error
 	if config.CredentialsExpiresAt.Before(s.getTimeNow()) {
-		return emptyCredential, fmt.Errorf("shared credentials are already expired, they were queried at %v and expired at %v", config.CredentialsRetrievedAt.Format(time.RFC3339), config.CredentialsExpiresAt.Format(time.RFC3339))
+		return emptyCredential, fmt.Errorf("shared credentials are already expired, they were retrieved at %v and expired at %v", config.CredentialsRetrievedAt.Format(time.RFC3339), config.CredentialsExpiresAt.Format(time.RFC3339))
 	}
 
 	credsProvider := newSharedCredentials(config.ShareFile, config.ShareProfile)

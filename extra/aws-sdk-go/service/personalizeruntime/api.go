@@ -141,15 +141,21 @@ func (c *PersonalizeRuntime) GetRecommendationsRequest(input *GetRecommendations
 
 // GetRecommendations API operation for Amazon Personalize Runtime.
 //
-// Returns a list of recommended items. The required input depends on the recipe
-// type used to create the solution backing the campaign, as follows:
+// Returns a list of recommended items. For campaigns, the campaign's Amazon
+// Resource Name (ARN) is required and the required user and item input depends
+// on the recipe type used to create the solution backing the campaign as follows:
+//
+//    * USER_PERSONALIZATION - userId required, itemId not used
 //
 //    * RELATED_ITEMS - itemId required, userId not used
 //
-//    * USER_PERSONALIZATION - itemId optional, userId required
-//
 // Campaigns that are backed by a solution created using a recipe of type PERSONALIZED_RANKING
 // use the API.
+//
+// For recommenders, the recommender's ARN is required and the required item
+// and user input depends on the use case (domain-based recipe) backing the
+// recommender. For information on use case requirements see Choosing recommender
+// use cases (https://docs.aws.amazon.com/personalize/latest/dg/domain-use-cases.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -351,9 +357,7 @@ type GetRecommendationsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the campaign to use for getting recommendations.
-	//
-	// CampaignArn is a required field
-	CampaignArn *string `locationName:"campaignArn" type:"string" required:"true"`
+	CampaignArn *string `locationName:"campaignArn" type:"string"`
 
 	// The contextual metadata to use when getting recommendations. Contextual metadata
 	// includes any interaction information that might be relevant when getting
@@ -377,7 +381,7 @@ type GetRecommendationsInput struct {
 	// you can omit the filter-values.In this case, Amazon Personalize doesn't use
 	// that portion of the expression to filter recommendations.
 	//
-	// For more information, see Filtering Recommendations (https://docs.aws.amazon.com/personalize/latest/dg/filter.html).
+	// For more information, see Filtering recommendations and user segments (https://docs.aws.amazon.com/personalize/latest/dg/filter.html).
 	FilterValues map[string]*string `locationName:"filterValues" type:"map"`
 
 	// The item ID to provide recommendations for.
@@ -387,6 +391,16 @@ type GetRecommendationsInput struct {
 
 	// The number of results to return. The default is 25. The maximum is 500.
 	NumResults *int64 `locationName:"numResults" type:"integer"`
+
+	// The promotions to apply to the recommendation request. A promotion defines
+	// additional business rules that apply to a configurable subset of recommended
+	// items.
+	Promotions []*Promotion `locationName:"promotions" type:"list"`
+
+	// The Amazon Resource Name (ARN) of the recommender to use to get recommendations.
+	// Provide a recommender ARN if you created a Domain dataset group with a recommender
+	// for a domain use case.
+	RecommenderArn *string `locationName:"recommenderArn" type:"string"`
 
 	// The user ID to provide recommendations for.
 	//
@@ -415,8 +429,15 @@ func (s GetRecommendationsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetRecommendationsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetRecommendationsInput"}
-	if s.CampaignArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("CampaignArn"))
+	if s.Promotions != nil {
+		for i, v := range s.Promotions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Promotions", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -461,6 +482,18 @@ func (s *GetRecommendationsInput) SetNumResults(v int64) *GetRecommendationsInpu
 	return s
 }
 
+// SetPromotions sets the Promotions field's value.
+func (s *GetRecommendationsInput) SetPromotions(v []*Promotion) *GetRecommendationsInput {
+	s.Promotions = v
+	return s
+}
+
+// SetRecommenderArn sets the RecommenderArn field's value.
+func (s *GetRecommendationsInput) SetRecommenderArn(v string) *GetRecommendationsInput {
+	s.RecommenderArn = &v
+	return s
+}
+
 // SetUserId sets the UserId field's value.
 func (s *GetRecommendationsInput) SetUserId(v string) *GetRecommendationsInput {
 	s.UserId = &v
@@ -470,7 +503,7 @@ func (s *GetRecommendationsInput) SetUserId(v string) *GetRecommendationsInput {
 type GetRecommendationsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of recommendations sorted in ascending order by prediction score.
+	// A list of recommendations sorted in descending order by prediction score.
 	// There can be a maximum of 500 items in the list.
 	ItemList []*PredictedItem `locationName:"itemList" type:"list"`
 
@@ -581,6 +614,9 @@ type PredictedItem struct {
 	// The recommended item ID.
 	ItemId *string `locationName:"itemId" type:"string"`
 
+	// The name of the promotion that included the predicted item.
+	PromotionName *string `locationName:"promotionName" min:"1" type:"string"`
+
 	// A numeric representation of the model's certainty that the item will be the
 	// next user selection. For more information on scoring logic, see how-scores-work.
 	Score *float64 `locationName:"score" type:"double"`
@@ -610,9 +646,105 @@ func (s *PredictedItem) SetItemId(v string) *PredictedItem {
 	return s
 }
 
+// SetPromotionName sets the PromotionName field's value.
+func (s *PredictedItem) SetPromotionName(v string) *PredictedItem {
+	s.PromotionName = &v
+	return s
+}
+
 // SetScore sets the Score field's value.
 func (s *PredictedItem) SetScore(v float64) *PredictedItem {
 	s.Score = &v
+	return s
+}
+
+// Contains information on a promotion. A promotion defines additional business
+// rules that apply to a configurable subset of recommended items.
+type Promotion struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the filter used by the promotion. This
+	// filter defines the criteria for promoted items. For more information, see
+	// Promotion filters (https://docs.aws.amazon.com/personalize/latest/dg/promoting-items.html#promotion-filters).
+	FilterArn *string `locationName:"filterArn" type:"string"`
+
+	// The values to use when promoting items. For each placeholder parameter in
+	// your promotion's filter expression, provide the parameter name (in matching
+	// case) as a key and the filter value(s) as the corresponding value. Separate
+	// multiple values for one parameter with a comma.
+	//
+	// For filter expressions that use an INCLUDE element to include items, you
+	// must provide values for all parameters that are defined in the expression.
+	// For filters with expressions that use an EXCLUDE element to exclude items,
+	// you can omit the filter-values. In this case, Amazon Personalize doesn't
+	// use that portion of the expression to filter recommendations.
+	//
+	// For more information on creating filters, see Filtering recommendations and
+	// user segments (https://docs.aws.amazon.com/personalize/latest/dg/filter.html).
+	FilterValues map[string]*string `locationName:"filterValues" type:"map"`
+
+	// The name of the promotion.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// The percentage of recommended items to apply the promotion to.
+	PercentPromotedItems *int64 `locationName:"percentPromotedItems" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Promotion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Promotion) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Promotion) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Promotion"}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.PercentPromotedItems != nil && *s.PercentPromotedItems < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("PercentPromotedItems", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilterArn sets the FilterArn field's value.
+func (s *Promotion) SetFilterArn(v string) *Promotion {
+	s.FilterArn = &v
+	return s
+}
+
+// SetFilterValues sets the FilterValues field's value.
+func (s *Promotion) SetFilterValues(v map[string]*string) *Promotion {
+	s.FilterValues = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Promotion) SetName(v string) *Promotion {
+	s.Name = &v
+	return s
+}
+
+// SetPercentPromotedItems sets the PercentPromotedItems field's value.
+func (s *Promotion) SetPercentPromotedItems(v int64) *Promotion {
+	s.PercentPromotedItems = &v
 	return s
 }
 

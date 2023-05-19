@@ -7,6 +7,7 @@ import (
 
 var (
 	MockAvailabilityZone      = "us-east-1a"
+	MockAvailabilityZoneId    = "use1-az2"
 	MockCredentials           = credentialproviders.GetRemoteCreds()
 	MockIdentityType          = "EC2"
 	MockInstanceID            = "i-123123123"
@@ -21,6 +22,7 @@ func NewDefaultMockAgentIdentity() *IAgentIdentity {
 	agentIdentity := IAgentIdentity{}
 
 	agentIdentity.On("AvailabilityZone").Return(MockAvailabilityZone, nil)
+	agentIdentity.On("AvailabilityZoneId").Return(MockAvailabilityZoneId, nil)
 	agentIdentity.On("Credentials").Return(MockCredentials, nil)
 	agentIdentity.On("IdentityType").Return(MockIdentityType, nil)
 	agentIdentity.On("InstanceID").Return(MockInstanceID, nil)

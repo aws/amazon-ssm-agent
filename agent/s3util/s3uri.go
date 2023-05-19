@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package s3util contains utilities for working with S3
+// Package s3util contains utilities for working with S3
 package s3util
 
 import (
@@ -71,18 +71,20 @@ func (output AmazonS3URL) IsBucketAndKeyPresent() bool {
 // S3 URLs come in two flavors: virtual hosted-style URLs and path-style URLs.
 // Virtual hosted-style URLs have the bucket name as the first component of the
 // hostname, e.g.
-//    https://mybucket.s3.us-east-1.amazonaws.com/a/b/c
+//
+//	https://mybucket.s3.us-east-1.amazonaws.com/a/b/c
 //
 // Path-style URLs have the bucket name as the first component of the path, e.g.
-//    https://s3.us-east-1.amazonaws.com/mybucket/a/b/c
+//
+//	https://s3.us-east-1.amazonaws.com/mybucket/a/b/c
 //
 // S3 supports a few features that affect how the URL is formed:
-//  * Website endpoints - "s3.$REGION" becomes "s3-website[-.]$REGION"
-//  * Transfer acceleration - "s3" becomes "s3-accelerate"
-//  * Dual-stack (IPv4/IPv6) - "s3" becomes "s3.dualstack"
-//    * Can be used with acceleration - "s3-accelerate.dualstack"
-//  * VPC endpoints - "s3.$REGION.amazonaws.com" becomes
-//    "bucket.$VPC_ENDPOINT_ID.s3.$REGION.vpce.amazonaws.com"
+//   - Website endpoints - "s3.$REGION" becomes "s3-website[-.]$REGION"
+//   - Transfer acceleration - "s3" becomes "s3-accelerate"
+//   - Dual-stack (IPv4/IPv6) - "s3" becomes "s3.dualstack"
+//   - Can be used with acceleration - "s3-accelerate.dualstack"
+//   - VPC endpoints - "s3.$REGION.amazonaws.com" becomes
+//     "bucket.$VPC_ENDPOINT_ID.s3.$REGION.vpce.amazonaws.com"
 //
 // References:
 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html

@@ -18,14 +18,15 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	sessionPluginMock "github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin/mocks"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -46,7 +47,7 @@ func (suite *NonInteractiveCommandsTestSuite) SetupTest() {
 	mockCancelFlag := &task.MockCancelFlag{}
 	mockDataChannel := &dataChannelMock.IDataChannel{}
 	mockIohandler := new(iohandlermocks.MockIOHandler)
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 
 	suite.mockContext = mockContext
 	suite.mockLog = mockLog
@@ -56,7 +57,7 @@ func (suite *NonInteractiveCommandsTestSuite) SetupTest() {
 	suite.plugin = &NonInteractiveCommandsPlugin{}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestInteractiveCommandsTestSuite(t *testing.T) {
 	suite.Run(t, new(NonInteractiveCommandsTestSuite))
 }

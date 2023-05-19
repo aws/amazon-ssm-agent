@@ -92,5 +92,5 @@ func TestMetadataResponseWithRetries(t *testing.T) {
 	_, err := metadataResponse(fakeV3Endpoint, "task")
 
 	assert.NotNil(t, err)
-	assert.Equal(t, 2, tmp)
+	assert.Equal(t, 4, tmp)
 }

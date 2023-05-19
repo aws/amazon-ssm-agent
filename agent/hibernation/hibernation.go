@@ -21,7 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/health"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/carlescere/scheduler"
 	"github.com/cihub/seelog"
 )
@@ -58,7 +58,7 @@ const (
 
 // NewHibernateMode creates an object of type NewHibernateMode
 func NewHibernateMode(healthModule health.IHealthCheck, context context.T) *Hibernate {
-	context.Log().Debug("Starting agent hibernate mode. Switching log to minimal logging...")
+	context.Log().Debug("Initializing agent hibernate mode. Switching log to minimal logging...")
 	return &Hibernate{
 		healthModule:        healthModule,
 		currentMode:         health.Passive,
@@ -72,7 +72,7 @@ func NewHibernateMode(healthModule health.IHealthCheck, context context.T) *Hibe
 
 // ExecuteHibernation Starts the hibernate mode by blocking agent start and by scheduling health pings
 func (m *Hibernate) ExecuteHibernation(context context.T) health.AgentState {
-	m.seelogger = log.GetLogger(context.Log(), getHibernateSeelogConfig())
+	m.seelogger = logger.GetLogger(context.Log(), getHibernateSeelogConfig())
 	next := time.Duration(initialPingRate) * time.Second
 	m.seelogger.Info("Agent is in hibernate mode. Reducing logging. Logging will be reduced to one log per backoff period")
 	// Wait backoff time and then schedule health pings

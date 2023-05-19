@@ -14,18 +14,27 @@
 package ec2
 
 import (
+	"sync"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 )
 
 const (
-	ec2InstanceIDResource       = "instance-id"
-	ec2InstanceTypeResource     = "instance-type"
-	ec2AvailabilityZoneResource = "placement/availability-zone"
-	ec2ServiceDomainResource    = "services/domain"
-	ec2MacsResource             = "network/interfaces/macs"
-	ec2VpcCidrBlockV4Resource   = "vpc-ipv4-cidr-block"
-	ec2VpcCidrBlockV6Resource   = "vpc-ipv6-cidr-blocks"
+	ec2InstanceIDResource         = "instance-id"
+	ec2InstanceTypeResource       = "instance-type"
+	ec2AvailabilityZoneResource   = "placement/availability-zone"
+	ec2AvailabilityZoneResourceId = "placement/availability-zone-id"
+	ec2ServiceDomainResource      = "services/domain"
+	ec2MacsResource               = "network/interfaces/macs"
+	ec2VpcCidrBlockV4Resource     = "vpc-ipv4-cidr-block"
+	ec2VpcCidrBlockV6Resource     = "vpc-ipv6-cidr-blocks"
 	// IdentityType is the identity type for EC2
 	IdentityType = "EC2"
 )
@@ -37,8 +46,29 @@ type iEC2MdsSdkClient interface {
 	Region() (string, error)
 }
 
-// Identity is the struct defining the IAgentIdentityInner for EC2 metadata service
+// IEC2Identity defines the functions for the EC2 identity
+type IEC2Identity interface {
+	InstanceID() (string, error)
+	Region() (string, error)
+	AvailabilityZone() (string, error)
+	AvailabilityZoneId() (string, error)
+	InstanceType() (string, error)
+	IsIdentityEnvironment() bool
+	Credentials() *credentials.Credentials
+	IdentityType() string
+	Register()
+}
+
+// Identity is the struct implementing the IAgentIdentityInner interface for the EC2 identity
 type Identity struct {
-	Log    log.T
-	Client iEC2MdsSdkClient
+	Log                   log.T
+	Client                iEC2MdsSdkClient
+	Config                *appconfig.SsmagentConfig
+	credentials           *credentials.Credentials
+	credentialsProvider   ec2roleprovider.IEC2RoleProvider
+	authRegisterService   authregister.IClient
+	shareLock             *sync.RWMutex
+	registrationReadyChan chan *authregister.RegistrationInfo
+	endpointHelper        endpoint.IEndpointHelper
+	runtimeConfigClient   runtimeconfig.IIdentityRuntimeConfigClient
 }

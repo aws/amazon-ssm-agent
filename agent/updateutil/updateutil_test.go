@@ -22,17 +22,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
-	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/core/executor"
-	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -224,94 +224,6 @@ func TestUnInstallerFilePath(t *testing.T) {
 		assert.Contains(t, result, test.pkgname)
 		assert.Contains(t, result, test.version)
 		assert.Contains(t, result, randomUnInstaller)
-	}
-}
-
-func TestIsServiceRunning(t *testing.T) {
-	infoRedHat65 := &updateinfomocks.T{}
-	infoRedHat65.On("GetPlatform").Return(updateconstants.PlatformRedHat)
-	infoRedHat65.On("IsPlatformUsingSystemD").Return(false, nil)
-	infoRedHat65.On("IsPlatformDarwin").Return(false)
-
-	infoRedHat71 := &updateinfomocks.T{}
-	infoRedHat71.On("GetPlatform").Return(updateconstants.PlatformRedHat)
-	infoRedHat71.On("IsPlatformUsingSystemD").Return(true, nil)
-	infoRedHat71.On("IsPlatformDarwin").Return(false)
-
-	infoDarwin := &updateinfomocks.T{}
-	infoDarwin.On("GetPlatform").Return(updateconstants.PlatformDarwin)
-	infoDarwin.On("IsPlatformUsingSystemD").Return(false, nil)
-	infoDarwin.On("IsPlatformDarwin").Return(true)
-
-	mock := &executormocks.IExecutor{}
-	mock.On("Processes").Return([]executor.OsProcess{{Executable: updateconstants.DarwinBinaryPath}}, nil)
-
-	util := Utility{
-		ProcessExecutor: mock,
-		Context:         context.NewMockDefault(),
-	}
-	testCases := []struct {
-		info   updateinfo.T
-		result bool
-	}{
-		// test system with upstart
-		{infoRedHat65, true},
-		// test system with systemD
-		{infoRedHat71, true},
-		// test system for mac os
-		{infoDarwin, true},
-	}
-
-	// Stub exec.Command
-	execCommand = fakeExecCommand
-
-	for _, test := range testCases {
-		fmt.Printf("Testing %s\n", test.info.GetPlatform())
-		result, _ := util.IsServiceRunning(logger, test.info)
-		assert.Equal(t, result, test.result)
-	}
-}
-
-func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
-	infoRedHat65 := &updateinfomocks.T{}
-	infoRedHat65.On("GetPlatform").Return(updateconstants.PlatformRedHat)
-	infoRedHat65.On("IsPlatformUsingSystemD").Return(false, nil)
-	infoRedHat65.On("IsPlatformDarwin").Return(false)
-
-	infoRedHat71 := &updateinfomocks.T{}
-	infoRedHat71.On("GetPlatform").Return(updateconstants.PlatformRedHat)
-	infoRedHat71.On("IsPlatformUsingSystemD").Return(true, nil)
-	infoRedHat71.On("IsPlatformDarwin").Return(false)
-
-	infoDarwin := &updateinfomocks.T{}
-	infoDarwin.On("GetPlatform").Return(updateconstants.PlatformDarwin)
-	infoDarwin.On("IsPlatformUsingSystemD").Return(false, nil)
-	infoDarwin.On("IsPlatformDarwin").Return(true)
-
-	mock := &executormocks.IExecutor{}
-	mock.On("Processes").Return(nil, fmt.Errorf("SomeError"))
-	util := Utility{
-		ProcessExecutor: mock,
-		Context:         context.NewMockDefault(),
-	}
-	testCases := []struct {
-		info updateinfo.T
-	}{
-		// test system with upstart
-		{infoRedHat65},
-		// test system with systemD
-		{infoRedHat71},
-		// test system for mac os
-		{infoDarwin},
-	}
-
-	// Stub exec.Command
-	execCommand = fakeExecCommandWithError
-
-	for _, test := range testCases {
-		fmt.Printf("Testing %s\n", test.info.GetPlatform())
-		_, err := util.IsServiceRunning(logger, test.info)
-		assert.Error(t, err)
 	}
 }
 
@@ -563,6 +475,33 @@ func TestCompareVersion(t *testing.T) {
 
 }
 
+func TestGetStableURLFromManifestURL(t *testing.T) {
+	// Empty URL
+	url, err := GetStableURLFromManifestURL("")
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Invalid URL
+	url, err = GetStableURLFromManifestURL("InvalidUrl")
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Invalid manifest url - artifact url
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Valid s3 manifest link bucket in Path
+	url, err = GetStableURLFromManifestURL("https://s3.region.amazonaws.com/bucket/ssm-agent-manifest.json")
+	assert.NoError(t, err)
+	assert.Equal(t, "https://s3.region.amazonaws.com/bucket/stable/VERSION", url)
+
+	// Valid s3 manifest link with bucket in url
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json")
+	assert.NoError(t, err)
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com/stable/VERSION", url)
+}
+
 func TestGetManifestURLFromSourceUrl(t *testing.T) {
 	// Empty URL
 	url, err := GetManifestURLFromSourceUrl("")
@@ -639,14 +578,14 @@ func TestUtility_setShareCredsEnvironment_SetsCommandAWSEnvironmentVariables_Whe
 	ctx.On("Identity").Return(agentIdentity)
 	ctx.On("Log").Return(log.NewMockLog())
 
-	refresherAgentIdentity := &identityMocks.ICredentialRefresherAgentIdentity{}
-	refresherAgentIdentity.On("ShouldShareCredentials").Return(true)
+	remoteProvier := &mocks.IRemoteProvider{}
+	remoteProvier.On("SharesCredentials").Return(true)
 	expectedShareProfile := "SomeShareFileLocation"
 	expectedShareFile := "SomeShareFileLocation"
-	refresherAgentIdentity.On("ShareProfile").Return(expectedShareProfile)
-	refresherAgentIdentity.On("ShareFile").Return(expectedShareFile)
-	getCredentialsRefresherIdentity = func(agentIdentity identity.IAgentIdentity) (identity.ICredentialRefresherAgentIdentity, bool) {
-		return refresherAgentIdentity, true
+	remoteProvier.On("ShareProfile").Return(expectedShareProfile)
+	remoteProvier.On("ShareFile").Return(expectedShareFile)
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvier, true
 	}
 
 	utility := &Utility{

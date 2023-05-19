@@ -16,7 +16,7 @@ const (
 	stopTypeShutdown  = 2
 )
 
-//Message types
+// Message types
 const (
 	MessageTypePluginConfig = "pluginconfig"
 	MessageTypeComplete     = "complete"
@@ -32,7 +32,7 @@ type Message struct {
 	Content string      `json:"content"`
 }
 
-//MessagingBackend defines an asycn message in/out processing pipeline
+// MessagingBackend defines an asycn message in/out processing pipeline
 type MessagingBackend interface {
 	Accept() <-chan string
 	Stop() <-chan int
@@ -44,14 +44,14 @@ type MessagingBackend interface {
 	CloseStop()
 }
 
-//GetLatestVersion retrieves the current latest message version of the agent build
+// GetLatestVersion retrieves the current latest message version of the agent build
 func GetLatestVersion() string {
 	return versions[len(versions)-1]
 }
 
-//CreateDatagram marshals a given arbitrary object to raw json string
-//Message schema is determined by the current version, content struct is indicated by type field
-//TODO add version handling
+// CreateDatagram marshals a given arbitrary object to raw json string
+// Message schema is determined by the current version, content struct is indicated by type field
+// TODO add version handling
 func CreateDatagram(t MessageType, content interface{}) (string, error) {
 	contentStr, err := jsonutil.Marshal(content)
 	if err != nil {
@@ -69,7 +69,7 @@ func CreateDatagram(t MessageType, content interface{}) (string, error) {
 	return datagram, nil
 }
 
-//TODO add version and error handling
+// TODO add version and error handling
 func ParseDatagram(datagram string) (MessageType, string) {
 	message := Message{}
 	jsonutil.Unmarshal(datagram, &message)

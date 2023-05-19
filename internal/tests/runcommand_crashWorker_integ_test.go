@@ -17,13 +17,15 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime/debug"
 	"testing"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -34,7 +36,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
-	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
@@ -135,10 +136,10 @@ func cleanUpCrashWorkerTest(suite *CrashWorkerTestSuite) {
 	suite.log.Flush()
 }
 
-//TestDocumentWorkerCrash tests the agent processes documents in isolation
-//the test sends a document that's expected to crash and another that's expected to succeed
-//then verify the first document fails when document worker crashes and sends valid results
-//and second document succeeds and sends the valid output
+// TestDocumentWorkerCrash tests the agent processes documents in isolation
+// the test sends a document that's expected to crash and another that's expected to succeed
+// then verify the first document fails when document worker crashes and sends valid results
+// and second document succeeds and sends the valid output
 func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 	//send MDS message that's expected to crash document worker
 	var idOfCrashMessage string

@@ -19,11 +19,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
-
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/twinj/uuid"
@@ -160,7 +159,7 @@ func (suite *SessionWorkerProcessorWrapperTestSuite) TestListenSessionReply_Shou
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSessionWorkerProcessorWrapperTestSuite(t *testing.T) {
 	suite.Run(t, new(SessionWorkerProcessorWrapperTestSuite))
 }

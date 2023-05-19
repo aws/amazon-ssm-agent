@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"golang.org/x/sys/windows/registry"
@@ -187,23 +188,52 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 
 	// start service
 	log.Info("Starting up agent subsystem")
-	agent, contextLog, err := start(a.log)
+	agent, contextLog, err := initializeBasicModules(a.log)
 	if err != nil {
 		contextLog.Errorf("Failed to start agent. %v", err)
 		return true, appconfig.ErrorExitCode
 	}
-	contextLog.Info("Agent subsystem has started, notifying windows service manager")
+
+	statusChannels := &contracts.StatusComm{
+		TerminationChan: make(chan struct{}, 1),
+		DoneChan:        make(chan struct{}, 1),
+	}
+
+	startCoreAgent(contextLog, agent, statusChannels)
+	contextLog.Info("Notifying windows service manager for agent subsystem start")
 
 	// update service status to Running
 	const acceptCmds = svc.AcceptStop | svc.AcceptShutdown
 	s <- svc.Status{State: svc.Running, Accepts: acceptCmds}
 	contextLog.Info("Windows service manager notified that agent service has started")
+	var (
+		incomingServiceReq         svc.ChangeRequest
+		incomingServiceReqChan     = make(chan svc.ChangeRequest, 1)
+		terminateIncomingReqThread = make(chan bool, 1)
+	)
+
+	go func() {
+	incomingReqLoop:
+		for {
+			select {
+			case <-coreAgentStartupErrChan:
+				contextLog.Error("Failed to start core agent startup module")
+				statusChannels.DoneChan <- struct{}{}
+				incomingServiceReqChan <- svc.ChangeRequest{Cmd: svc.Stop}
+			case incomingServiceReq = <-r:
+				incomingServiceReqChan <- incomingServiceReq
+			case <-terminateIncomingReqThread:
+				contextLog.Info("Incoming service request go routine ended")
+				break incomingReqLoop
+			}
+		}
+	}()
 
 loop:
 	// using an infinite loop to wait for ChangeRequests
 	for {
 		// block and wait for ChangeRequests
-		c := <-r
+		c := <-incomingServiceReqChan
 
 		// handle ChangeRequest, svc.Pause is not supported
 		switch c.Cmd {
@@ -214,9 +244,11 @@ loop:
 			time.Sleep(100 * time.Millisecond)
 			s <- c.CurrentStatus
 		case svc.Stop:
+			statusChannels.TerminationChan <- struct{}{}
 			contextLog.Info("Service received stop ChangeRequest")
 			break loop
 		case svc.Shutdown:
+			statusChannels.TerminationChan <- struct{}{}
 			contextLog.Info("Service received shutdown ChangeRequest")
 			break loop
 		default:
@@ -224,6 +256,8 @@ loop:
 		}
 	}
 	s <- svc.Status{State: svc.StopPending}
+	terminateIncomingReqThread <- true
+	<-statusChannels.DoneChan
 	agent.Stop()
 	return false, appconfig.SuccessExitCode
 }

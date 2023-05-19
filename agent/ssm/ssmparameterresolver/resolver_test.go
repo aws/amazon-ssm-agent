@@ -19,7 +19,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -30,7 +30,7 @@ func TestExtractParametersFromText(t *testing.T) {
 	}
 	serviceObject := newServiceMockedObjectWithExtraRecords(expectedResult)
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 	text := "Some text {{ ssm:/a/b/c/param1}}, some more text {{ssm-secure:param2}}."
 	resolvedParameters, err := ExtractParametersFromText(&serviceObject, log, text, ResolveOptions{
 		IgnoreSecureParameters: false,
@@ -48,7 +48,7 @@ func TestExtractParametersFromTextIgnoreSecureParams(t *testing.T) {
 		"ssm-secure:param2":        {Name: "param2", Type: secureStringType, Value: "value_param2"},
 	})
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 	text := "Some text {{ ssm:/a/b/c/param1}}, some more text {{ssm-secure:param2}} - {{ ssm-secure:/a/b/c/param1}}."
 	resolvedParameters, err := ExtractParametersFromText(&serviceObject, log, text, ResolveOptions{
 		IgnoreSecureParameters: true,
@@ -71,7 +71,7 @@ func TestExtractParametersFromTextWrongPrefix(t *testing.T) {
 
 	serviceObject := newServiceMockedObjectWithExtraRecords(expectedResult)
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 
 	text := "Some text {{ ssm:/a/b/c/param1}}, some more text {{ssm:param2}}."
 	_, err := ExtractParametersFromText(&serviceObject, log, text, ResolveOptions{
@@ -97,7 +97,7 @@ func TestResolveParameterReferenceList(t *testing.T) {
 		"ssm-secure:param4",
 	}
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 	resolvedParameters, err := ResolveParameterReferenceList(&serviceObject, log, parameterReferences, ResolveOptions{
 		IgnoreSecureParameters: false,
 	})
@@ -123,7 +123,7 @@ func TestResolveParameterReferenceListIgnoreSecureParams(t *testing.T) {
 		"ssm:param2",
 	}
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 	resolvedParameters, err := ResolveParameterReferenceList(&serviceObject, log, parameterReferences, ResolveOptions{
 		IgnoreSecureParameters: true,
 	})
@@ -172,7 +172,7 @@ func TestResolveParametersInText(t *testing.T) {
 		"ssm-secure:param2": {Name: "param2", Type: secureStringType, Value: "value_param2"},
 	})
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 	text := "Some text {{ ssm:/a/b/c/param1}}, some more text {{ssm-secure:param2}}. {{ ssm:/a/b/c/param1  }};"
 	output, err := ResolveParametersInText(&serviceObject, log, text, ResolveOptions{
 		IgnoreSecureParameters: false,
@@ -191,7 +191,7 @@ func TestResolveParametersInTextIgnoreSecureParams(t *testing.T) {
 		"ssm-secure:param2": {Name: "param2", Type: secureStringType, Value: "value_param2"},
 	})
 
-	log := log.DefaultLogger()
+	log := logger.DefaultLogger()
 	text := "Some text {{ ssm:/a/b/c/param1}}, some more text {{ssm-secure:param2}}."
 	output, err := ResolveParametersInText(&serviceObject, log, text, ResolveOptions{
 		IgnoreSecureParameters: true,

@@ -24,7 +24,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/digitalocean/go-smbios/smbios"
 )
 

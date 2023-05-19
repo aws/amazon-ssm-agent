@@ -1,5 +1,129 @@
 Latest
 ===============
+- Update Dockerfile Go version to 1.19
+- Add reporting of MGS connection status
+- Add support for updating to agent version marked stable
+- Add status code to MGS ack and send on message process failure
+- Update golangci-lint configuration
+- Add e2e tag to session shell tests
+
+3.2.815.0
+===============
+- Add EC2 credential fallback for AssumeRoleUnauthorizedAccess error
+- Add CloudWatch log upload support for document and session worker
+- Add set-hostname support in domainjoin plugin for windows 
+- Add wait time in Agent updater to avoid installation issues caused during reboots initiated by domainjoin plugin
+- Add support for AlmaLinux
+- Fix KeepHostName parameter without DNS IP address parameter in domainJoin plugin
+- Fix issue where carriage returns cause json conversion to fail in aws:softwareInventory plugin
+- Remove IMDS calls in Onprem during health check
+- Remove S3 global endpoint fallback logic
+- Update cli descriptions for registration parameters
+- Update go version to 1.19.6
+
+3.2.582.0
+===============
+- Modified EC2 credential fallback logic
+
+3.2.574.0
+===============
+- Fixed go-vet issues by passing mocks by value
+- Updated domainjoin and cloudwatch executables for windows
+
+3.2.532.0
+===============
+- Removed explicit setting of EC2 aws credential profile
+- Added public key to registration info
+- Sends non-interactive command errors that occur before command execution to data channel
+- Added instance id verification to registration process
+
+3.2.419.0
+===============
+- Added minimum retry sleep for Registrar RegisterManagedInstance calls
+- Explicitly skip AZ info check for on-prem and ECS targets
+- Fix for SSM-Agent that is unable to start on Apple Mac M1's (mac2.metal instances)
+- Ensuring powershell path is set to system directory on Windows
+- Load DLLs with using system/absolute paths on Windows
+- Added workaround for Samba limit when loading Active Directory ids
+- Dynamically get network interface name for SeamlessDomainJoin
+- Added install-yum-rpm to makefile to install agent on host from source code
+- Added logging for specifying credential source
+- Refactored tests to remove mocks from production binaries
+- Updated Windows DomainJoin plugin SharpZipLib and Newtonsoft.json dependencies
+
+3.2.345.0
+===============
+- Updated yaml.v3 dependency
+
+3.2.286.0
+===============
+- Separated EC2 identity vault manifest from OnPrem identity vault manifest
+- Fix for credential retrieval blocking os termination signals
+- Fix for agent updater using shared credentials on EC2
+- Added guards against panic for agent identity health checks
+- Added logging around agent module start/stop
+
+3.2.183.0
+===============
+- Added logging when assuming identity
+- Increased retries to ECS metadata endpoint
+- Added linux debug build to makefile
+- Implemented aws sdk logging interface
+- Updated agent minor version to 3.2
+- Added functionality to retrieve agent credentials from Systems Manager on EC2
+
+3.1.1927.0
+===============
+- Update shell for Session Manager on MacOS
+
+3.1.1856.0
+===============
+- Lower message length threshold for cloudwatch log streaming
+- Ran gofmt and goimports with golang version 1.19
+- Report AvailabilityZone and AvailabilityZoneId in health pings
+- Update AWS Go SDK to v1.44.78
+
+3.1.1767.0
+===============
+- Fix samba configuration for sub-domains
+
+3.1.1732.0
+===============
+- Add code in document/session worker to fallback to default identity selector when runtime config not present
+- Fix to handle command-line-arguments in document/session worker when launched by old agent workers
+
+3.1.1634.0
+===============
+- Fallback to file based IPC if named pipe creation times out
+- Increase tls handshake timeout in http download client
+- Log mds client timeout errors as WARN
+
+3.1.1575.0
+===============
+- Added separate metric for snapd running apps failure during update
+- Fixed idle session timeout with smux keep alive configuration based on CLI version
+- Updated AgentTaskComplete message retry
+- Updated go version to 1.18.3
+
+3.1.1511.0
+===============
+- Collect kernel version in InstanceDetailedInformation
+- Support separate output stream for non-interactive session
+- Cleanup default log group name for runcommands
+- Updated rpm spec file to include build id
+
+3.1.1476.0
+===============
+- Fix port session premature close when local server is not connected before timeout
+
+3.1.1446.0
+===============
+- Add created date to AgentJobAck message
+- Disable smux keep alive to use idle session timeout feature
+- Fix unit-tests running on windows
+
+3.1.1374.0
+===============
 - Added timeout for s3 HEAD requests
 - Added vpc address deny to port forwarding
 - Fixed for reboot scenario in configure package plugin

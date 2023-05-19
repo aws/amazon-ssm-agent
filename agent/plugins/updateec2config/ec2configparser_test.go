@@ -22,27 +22,27 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
-//Valid manifest file
+// Valid manifest file
 var testManifests = []string{
 	"testData/testManifest.json",
 }
 
-//Invalid manifest file
+// Invalid manifest file
 var errorManifests = []string{
 	"testData/invalidManifest.json",
 }
 
-//testCase is a struct depicting a test case
+// testCase is a struct depicting a test case
 type testCase struct {
 	Input  string
 	Output *Manifest
 }
 
-//TestParseManifest tests the function parse manifest file
+// TestParseManifest tests the function parse manifest file
 func TestParseManifest(t *testing.T) {
 	//generate test cases
 	var testCases []testCase
@@ -76,7 +76,7 @@ func TestParseManifest(t *testing.T) {
 
 }
 
-//Test ParseManifest With Invalid manifest files
+// Test ParseManifest With Invalid manifest files
 func TestParseManifestWithError(t *testing.T) {
 	// generate test cases
 	var testCases []testCase
@@ -98,7 +98,7 @@ func TestParseManifestWithError(t *testing.T) {
 	}
 }
 
-//loadManifestFromFile is a helper function load manifest file
+// loadManifestFromFile is a helper function load manifest file
 func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
 	b := loadFile(t, fileName)
 	if err := json.Unmarshal(b, &manifest); err != nil {
@@ -108,7 +108,7 @@ func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
 	return manifest
 }
 
-//loadfile is a helper function to load specified file from file system
+// loadfile is a helper function to load specified file from file system
 func loadFile(t *testing.T, fileName string) (result []byte) {
 	var err error
 	if result, err = ioutil.ReadFile(fileName); err != nil {

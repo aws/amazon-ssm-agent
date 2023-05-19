@@ -31,6 +31,9 @@ import (
 )
 
 var (
+	// Use powershell to get role info
+	PowershellCmd = appconfig.PowerShellPluginCommandName
+
 	startMarker    = "<start" + randomString(8) + ">"
 	endMarker      = "<end" + randomString(8) + ">"
 	roleInfoScript = `
@@ -86,8 +89,6 @@ $result = "[" + $result + "]"
 )
 
 const (
-	// Use powershell to get role info
-	PowershellCmd = "powershell"
 	QueryFileName = "roleInfo.xml"
 )
 

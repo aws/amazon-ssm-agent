@@ -61,6 +61,8 @@ const (
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
 	// SetHostName is an optional argument to set hostname name after domain join
+	KeepHostNameArgs = " --keep-hostname "
+	// KeepHostName is a flag to retain instance hostnames as assigned (by customers).
 	SetHostNameArg = " --set-hostname "
 	// SetHostNameNumAppendDigits is an optional argument to set hostname name after domain join
 	SetHostNameNumAppendDigitsArg = " --set-hostname-append-num-digits "
@@ -86,6 +88,7 @@ type DomainJoinPluginInput struct {
 	DnsIpAddresses          []string
 	HostName                string
 	HostNameNumAppendDigits string
+	KeepHostName            bool
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -219,22 +222,6 @@ func (p *Plugin) runCommands(pluginID string, pluginInput DomainJoinPluginInput,
 	return
 }
 
-func isShellInjection(arg string) bool {
-	var backtick, _ = regexp.Compile("`")
-	matched := backtick.MatchString(arg)
-	if matched == true {
-		return true
-	}
-
-	var shellCmd, _ = regexp.Compile(`\$\(`)
-	matched = shellCmd.MatchString(arg)
-	if matched == true {
-		return true
-	}
-
-	return false
-}
-
 func isMatchingIPAddress(arg string) bool {
 	// Regex from AWS-JoinDirectoryServiceDomain SSM doc
 
@@ -313,6 +300,11 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 			buffer.WriteString(SetHostNameNumAppendDigitsArg)
 			buffer.WriteString(pluginInput.HostNameNumAppendDigits)
 		}
+	}
+
+	if pluginInput.KeepHostName {
+		buffer.WriteString(KeepHostNameArgs)
+		buffer.WriteString(" ")
 	}
 
 	if len(pluginInput.DnsIpAddresses) == 0 {

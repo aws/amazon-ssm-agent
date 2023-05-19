@@ -18,15 +18,17 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/session/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/session/shell"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -48,7 +50,7 @@ func (suite *StandardStreamTestSuite) SetupTest() {
 	mockCancelFlag := &task.MockCancelFlag{}
 	mockDataChannel := &dataChannelMock.IDataChannel{}
 	mockIohandler := new(iohandlermocks.MockIOHandler)
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 
 	shellProps := mgsContracts.ShellProperties{
 		Linux: mgsContracts.ShellConfig{
@@ -72,7 +74,7 @@ func (suite *StandardStreamTestSuite) SetupTest() {
 	suite.shellProps = shellProps
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestInteractiveCommandsTestSuite(t *testing.T) {
 	suite.Run(t, new(StandardStreamTestSuite))
 }
@@ -124,7 +126,7 @@ func (suite *StandardStreamTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 // Testing Execute happy case when the exit code is 0.
 func (suite *StandardStreamTestSuite) TestExecute() {
 	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockContext, contracts.IOConfiguration{})
-	mockShellPlugin := new(shell.IShellPluginMock)
+	mockShellPlugin := new(mocks.IShellPluginMock)
 	mockShellPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel, mgsContracts.ShellProperties{}).Return()
 	suite.plugin.shell = mockShellPlugin
 
@@ -140,7 +142,7 @@ func (suite *StandardStreamTestSuite) TestExecute() {
 
 // Testing InputStreamMessageHandler base case.
 func (suite *StandardStreamTestSuite) TestInputStreamMessageHandler() {
-	mockShellPlugin := new(shell.IShellPluginMock)
+	mockShellPlugin := new(mocks.IShellPluginMock)
 	mockShellPlugin.On("InputStreamMessageHandler", suite.mockLog, mock.Anything).Return(nil)
 	suite.plugin.shell = mockShellPlugin
 

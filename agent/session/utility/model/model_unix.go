@@ -14,7 +14,7 @@
 //go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
-//Package model contains data objects for session utility
+// Package model contains data objects for session utility
 package model
 
 const (

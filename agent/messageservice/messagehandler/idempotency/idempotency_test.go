@@ -1,11 +1,13 @@
 package idempotency
 
 import (
+	"path/filepath"
 	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -23,16 +25,16 @@ var (
 		DocumentInformation: docInfo,
 		DocumentType:        contracts.SendCommand,
 	}
-	mockContext = context.NewMockDefault()
+	mockContext = contextmocks.NewMockDefault()
 )
 
 type IdeopotencyTestSuite struct {
 	suite.Suite
-	mockContext *context.Mock
+	mockContext *contextmocks.Mock
 }
 
 func (suite *IdeopotencyTestSuite) SetupTest() {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	suite.mockContext = mockContext
 	persistenceTimeoutMinutes = 0 //  set to 0 for testing to prevent a longer build time
 }
@@ -69,10 +71,10 @@ func (suite *IdeopotencyTestSuite) TestIdempotency_CleanupOldIdempotencyEntries(
 		return "c:"
 	}
 	files := make(map[string]bool)
-	files["c:/dir1/dir2"] = true
-	files["c:/dir2/dir1"] = true
-	files["c:/dir1/dir1"] = true
-	files["c:/dir2/dir2"] = true
+	files[filepath.Join("c:", "dir1", "dir2")] = true
+	files[filepath.Join("c:", "dir2", "dir1")] = true
+	files[filepath.Join("c:", "dir1", "dir1")] = true
+	files[filepath.Join("c:", "dir2", "dir2")] = true
 
 	deleteDirectory = func(dirName string) (err error) {
 		delete(files, dirName)
@@ -82,7 +84,7 @@ func (suite *IdeopotencyTestSuite) TestIdempotency_CleanupOldIdempotencyEntries(
 	assert.Equal(suite.T(), 0, len(files))
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestMessageHandlerTestSuite(t *testing.T) {
 	suite.Run(t, new(IdeopotencyTestSuite))
 }

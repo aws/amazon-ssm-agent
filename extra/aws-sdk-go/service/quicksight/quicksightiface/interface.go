@@ -68,6 +68,10 @@ type QuickSightAPI interface {
 	CreateAccountCustomizationWithContext(aws.Context, *quicksight.CreateAccountCustomizationInput, ...request.Option) (*quicksight.CreateAccountCustomizationOutput, error)
 	CreateAccountCustomizationRequest(*quicksight.CreateAccountCustomizationInput) (*request.Request, *quicksight.CreateAccountCustomizationOutput)
 
+	CreateAccountSubscription(*quicksight.CreateAccountSubscriptionInput) (*quicksight.CreateAccountSubscriptionOutput, error)
+	CreateAccountSubscriptionWithContext(aws.Context, *quicksight.CreateAccountSubscriptionInput, ...request.Option) (*quicksight.CreateAccountSubscriptionOutput, error)
+	CreateAccountSubscriptionRequest(*quicksight.CreateAccountSubscriptionInput) (*request.Request, *quicksight.CreateAccountSubscriptionOutput)
+
 	CreateAnalysis(*quicksight.CreateAnalysisInput) (*quicksight.CreateAnalysisOutput, error)
 	CreateAnalysisWithContext(aws.Context, *quicksight.CreateAnalysisInput, ...request.Option) (*quicksight.CreateAnalysisOutput, error)
 	CreateAnalysisRequest(*quicksight.CreateAnalysisInput) (*request.Request, *quicksight.CreateAnalysisOutput)
@@ -204,6 +208,10 @@ type QuickSightAPI interface {
 	DescribeAccountSettingsWithContext(aws.Context, *quicksight.DescribeAccountSettingsInput, ...request.Option) (*quicksight.DescribeAccountSettingsOutput, error)
 	DescribeAccountSettingsRequest(*quicksight.DescribeAccountSettingsInput) (*request.Request, *quicksight.DescribeAccountSettingsOutput)
 
+	DescribeAccountSubscription(*quicksight.DescribeAccountSubscriptionInput) (*quicksight.DescribeAccountSubscriptionOutput, error)
+	DescribeAccountSubscriptionWithContext(aws.Context, *quicksight.DescribeAccountSubscriptionInput, ...request.Option) (*quicksight.DescribeAccountSubscriptionOutput, error)
+	DescribeAccountSubscriptionRequest(*quicksight.DescribeAccountSubscriptionInput) (*request.Request, *quicksight.DescribeAccountSubscriptionOutput)
+
 	DescribeAnalysis(*quicksight.DescribeAnalysisInput) (*quicksight.DescribeAnalysisOutput, error)
 	DescribeAnalysisWithContext(aws.Context, *quicksight.DescribeAnalysisInput, ...request.Option) (*quicksight.DescribeAnalysisOutput, error)
 	DescribeAnalysisRequest(*quicksight.DescribeAnalysisInput) (*request.Request, *quicksight.DescribeAnalysisOutput)
@@ -252,6 +260,10 @@ type QuickSightAPI interface {
 	DescribeGroupWithContext(aws.Context, *quicksight.DescribeGroupInput, ...request.Option) (*quicksight.DescribeGroupOutput, error)
 	DescribeGroupRequest(*quicksight.DescribeGroupInput) (*request.Request, *quicksight.DescribeGroupOutput)
 
+	DescribeGroupMembership(*quicksight.DescribeGroupMembershipInput) (*quicksight.DescribeGroupMembershipOutput, error)
+	DescribeGroupMembershipWithContext(aws.Context, *quicksight.DescribeGroupMembershipInput, ...request.Option) (*quicksight.DescribeGroupMembershipOutput, error)
+	DescribeGroupMembershipRequest(*quicksight.DescribeGroupMembershipInput) (*request.Request, *quicksight.DescribeGroupMembershipOutput)
+
 	DescribeIAMPolicyAssignment(*quicksight.DescribeIAMPolicyAssignmentInput) (*quicksight.DescribeIAMPolicyAssignmentOutput, error)
 	DescribeIAMPolicyAssignmentWithContext(aws.Context, *quicksight.DescribeIAMPolicyAssignmentInput, ...request.Option) (*quicksight.DescribeIAMPolicyAssignmentOutput, error)
 	DescribeIAMPolicyAssignmentRequest(*quicksight.DescribeIAMPolicyAssignmentInput) (*request.Request, *quicksight.DescribeIAMPolicyAssignmentOutput)
@@ -259,6 +271,10 @@ type QuickSightAPI interface {
 	DescribeIngestion(*quicksight.DescribeIngestionInput) (*quicksight.DescribeIngestionOutput, error)
 	DescribeIngestionWithContext(aws.Context, *quicksight.DescribeIngestionInput, ...request.Option) (*quicksight.DescribeIngestionOutput, error)
 	DescribeIngestionRequest(*quicksight.DescribeIngestionInput) (*request.Request, *quicksight.DescribeIngestionOutput)
+
+	DescribeIpRestriction(*quicksight.DescribeIpRestrictionInput) (*quicksight.DescribeIpRestrictionOutput, error)
+	DescribeIpRestrictionWithContext(aws.Context, *quicksight.DescribeIpRestrictionInput, ...request.Option) (*quicksight.DescribeIpRestrictionOutput, error)
+	DescribeIpRestrictionRequest(*quicksight.DescribeIpRestrictionInput) (*request.Request, *quicksight.DescribeIpRestrictionOutput)
 
 	DescribeNamespace(*quicksight.DescribeNamespaceInput) (*quicksight.DescribeNamespaceOutput, error)
 	DescribeNamespaceWithContext(aws.Context, *quicksight.DescribeNamespaceInput, ...request.Option) (*quicksight.DescribeNamespaceOutput, error)
@@ -458,6 +474,10 @@ type QuickSightAPI interface {
 	SearchFoldersWithContext(aws.Context, *quicksight.SearchFoldersInput, ...request.Option) (*quicksight.SearchFoldersOutput, error)
 	SearchFoldersRequest(*quicksight.SearchFoldersInput) (*request.Request, *quicksight.SearchFoldersOutput)
 
+	SearchGroups(*quicksight.SearchGroupsInput) (*quicksight.SearchGroupsOutput, error)
+	SearchGroupsWithContext(aws.Context, *quicksight.SearchGroupsInput, ...request.Option) (*quicksight.SearchGroupsOutput, error)
+	SearchGroupsRequest(*quicksight.SearchGroupsInput) (*request.Request, *quicksight.SearchGroupsOutput)
+
 	TagResource(*quicksight.TagResourceInput) (*quicksight.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *quicksight.TagResourceInput, ...request.Option) (*quicksight.TagResourceOutput, error)
 	TagResourceRequest(*quicksight.TagResourceInput) (*request.Request, *quicksight.TagResourceOutput)
@@ -525,6 +545,14 @@ type QuickSightAPI interface {
 	UpdateIAMPolicyAssignment(*quicksight.UpdateIAMPolicyAssignmentInput) (*quicksight.UpdateIAMPolicyAssignmentOutput, error)
 	UpdateIAMPolicyAssignmentWithContext(aws.Context, *quicksight.UpdateIAMPolicyAssignmentInput, ...request.Option) (*quicksight.UpdateIAMPolicyAssignmentOutput, error)
 	UpdateIAMPolicyAssignmentRequest(*quicksight.UpdateIAMPolicyAssignmentInput) (*request.Request, *quicksight.UpdateIAMPolicyAssignmentOutput)
+
+	UpdateIpRestriction(*quicksight.UpdateIpRestrictionInput) (*quicksight.UpdateIpRestrictionOutput, error)
+	UpdateIpRestrictionWithContext(aws.Context, *quicksight.UpdateIpRestrictionInput, ...request.Option) (*quicksight.UpdateIpRestrictionOutput, error)
+	UpdateIpRestrictionRequest(*quicksight.UpdateIpRestrictionInput) (*request.Request, *quicksight.UpdateIpRestrictionOutput)
+
+	UpdatePublicSharingSettings(*quicksight.UpdatePublicSharingSettingsInput) (*quicksight.UpdatePublicSharingSettingsOutput, error)
+	UpdatePublicSharingSettingsWithContext(aws.Context, *quicksight.UpdatePublicSharingSettingsInput, ...request.Option) (*quicksight.UpdatePublicSharingSettingsOutput, error)
+	UpdatePublicSharingSettingsRequest(*quicksight.UpdatePublicSharingSettingsInput) (*request.Request, *quicksight.UpdatePublicSharingSettingsOutput)
 
 	UpdateTemplate(*quicksight.UpdateTemplateInput) (*quicksight.UpdateTemplateOutput, error)
 	UpdateTemplateWithContext(aws.Context, *quicksight.UpdateTemplateInput, ...request.Option) (*quicksight.UpdateTemplateOutput, error)

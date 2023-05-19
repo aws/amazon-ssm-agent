@@ -64,22 +64,22 @@ func (i *updateInfoImpl) IsPlatformUsingSystemD() (result bool, err error) {
 	return false, nil
 }
 
-//IsPlatformDarwin returns true for Mac OS
+// IsPlatformDarwin returns true for Mac OS
 func (i *updateInfoImpl) IsPlatformDarwin() (result bool) {
 	return 0 == strings.Compare(i.platform, updateconstants.PlatformMacOsX)
 }
 
-//GetInstallScriptName returns the name of the install script
+// GetInstallScriptName returns the name of the install script
 func (i *updateInfoImpl) GetInstallScriptName() string {
 	return i.installScriptName
 }
 
-//GetUninstallScriptName returns the name of the uninstall script
+// GetUninstallScriptName returns the name of the uninstall script
 func (i *updateInfoImpl) GetUninstallScriptName() string {
 	return i.uninstallScriptName
 }
 
-//GetPlatform returns the name of the current platform
+// GetPlatform returns the name of the current platform
 func (i *updateInfoImpl) GetPlatform() string {
 	return i.platform
 }
@@ -91,6 +91,7 @@ func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 		isUsingSystemD[updateconstants.PlatformRedHat] = "7"
 		isUsingSystemD[updateconstants.PlatformOracleLinux] = "7"
 		isUsingSystemD[updateconstants.PlatformRockyLinux] = "7"
+		isUsingSystemD[updateconstants.PlatformAlmaLinux] = "8"
 		isUsingSystemD[updateconstants.PlatformUbuntu] = "15"
 		isUsingSystemD[updateconstants.PlatformSuseOS] = "12"
 		isUsingSystemD[updateconstants.PlatformDebian] = "8"
@@ -180,6 +181,9 @@ func newInner(context context.T) (updateInfo *updateInfoImpl, err error) {
 	} else if strings.Contains(platformName, updateconstants.PlatformFlatcar) {
 		log.Info("Detected platform Flatcar")
 		platformName = updateconstants.PlatformFlatcar
+	} else if strings.Contains(platformName, updateconstants.PlatformAlmaLinux) {
+		log.Info("Detected platform AlmaLinux")
+		platformName = updateconstants.PlatformAlmaLinux
 		downloadPlatformOverride = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformSuseOS) {
 		log.Info("Detected platform SuseOS")

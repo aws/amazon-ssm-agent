@@ -116,7 +116,7 @@ func (resource *HTTPResource) adjustDownloadPath(destPath, fileSuffix string, fi
 		destPath = appconfig.DownloadRoot
 	}
 
-	// Mimicking S3 download functionality, which treats the destination path differently based on the some conditions
+	// Mimicking S3 download functionality, which treats the destination path differently based on the following conditions
 	if (fileSystem.Exists(destPath) && fileSystem.IsDirectory(destPath)) || os.IsPathSeparator(destPath[len(destPath)-1]) {
 		destPath = filepath.Join(destPath, fmt.Sprintf("%s%s", "download", fileSuffix))
 	}

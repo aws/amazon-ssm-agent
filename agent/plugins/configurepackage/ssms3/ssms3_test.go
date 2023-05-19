@@ -21,9 +21,10 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/mocks/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -54,47 +55,47 @@ func TestGetLatestVersion_None(t *testing.T) {
 }
 
 func TestEndpointEuCentral1(t *testing.T) {
-	service := New(context.NewMockDefault(), "", "eu-central-1")
+	service := New(context.NewMockDefault(), "s3.eu-central-1.amazonaws.com", "", "eu-central-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.eu-central-1.amazonaws.com/amazon-ssm-packages-eu-central-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointEuCentral1Beta(t *testing.T) {
-	service := New(context.NewMockDefault(), "beta", "eu-central-1")
+	service := New(context.NewMockDefault(), "s3.amazonaws.com", "beta", "eu-central-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-beta/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointEuCentral1Gamma(t *testing.T) {
-	service := New(context.NewMockDefault(), "gamma", "eu-central-1")
+	service := New(context.NewMockDefault(), "s3.amazonaws.com", "gamma", "eu-central-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointCnNorth1(t *testing.T) {
-	service := New(context.NewMockDefault(), "", "cn-north-1")
+	service := New(context.NewMockDefault(), "s3.cn-north-1.amazonaws.com.cn", "", "cn-north-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointCnNorth1Beta(t *testing.T) {
-	service := New(context.NewMockDefault(), "beta", "cn-north-1")
+	service := New(context.NewMockDefault(), "s3.amazonaws.com", "beta", "cn-north-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-beta/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointCnNorth1Gamma(t *testing.T) {
-	service := New(context.NewMockDefault(), "gamma", "cn-north-1")
+	service := New(context.NewMockDefault(), "s3.amazonaws.com", "gamma", "cn-north-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointUsEast1(t *testing.T) {
-	service := New(context.NewMockDefault(), "", "us-east-1")
+	service := New(context.NewMockDefault(), "s3.us-east-1.amazonaws.com", "", "us-east-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointUsEast1Beta(t *testing.T) {
-	service := New(context.NewMockDefault(), "beta", "us-east-1")
+	service := New(context.NewMockDefault(), "s3.amazonaws.com", "beta", "us-east-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-beta/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointUsEast1Gamma(t *testing.T) {
-	service := New(context.NewMockDefault(), "gamma", "us-east-1")
+	service := New(context.NewMockDefault(), "s3.amazonaws.com", "gamma", "us-east-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
@@ -145,7 +146,7 @@ func TestDownloadManifestWithLatest(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, nil)
 
 	networkdep = mockObj
@@ -163,7 +164,7 @@ func TestDownloadManifestWithError(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("ListS3Folders", mock.Anything, mock.Anything).Return([]string{"1.0.0", "2.0.0"}, errors.New("testerror"))
 
 	networkdep = mockObj
@@ -178,7 +179,7 @@ func TestSuccessfulDownloadArtifact(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, nil)
 
 	networkdep = mockObj
@@ -194,7 +195,7 @@ func TestDownloadArtifactWithError(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("Download", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{"somePath", false, true}, errors.New("testerror"))
 
 	networkdep = mockObj
@@ -209,22 +210,22 @@ func TestUseSSMS3Service_True(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(true)
 
 	networkdep = mockObj
 
-	assert.True(t, UseSSMS3Service(context.NewMockDefault(), tracer, "", "eu-central-1"))
+	assert.True(t, UseSSMS3Service(context.NewMockDefault(), tracer, "", "s3.eu-central-1.amazonaws.com", "eu-central-1"))
 }
 
 func TestUseSSMS3Service_False(t *testing.T) {
 	tracer := trace.NewTracer(log.NewMockLog())
 	tracer.BeginSection("test segment root")
 
-	mockObj := new(SSMS3Mock)
+	mockObj := new(ssms3.SSMS3Mock)
 	mockObj.On("CanGetS3Object", mock.Anything, mock.Anything).Return(false)
 
 	networkdep = mockObj
 
-	assert.False(t, UseSSMS3Service(context.NewMockDefault(), tracer, "beta", "eu-central-1"))
+	assert.False(t, UseSSMS3Service(context.NewMockDefault(), tracer, "beta", "s3.eu-central-1.amazonaws.com", "eu-central-1"))
 }

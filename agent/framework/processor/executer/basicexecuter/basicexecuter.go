@@ -26,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-//TODO currently BasicExecuter.Run() is not idempotent, we should make it so in future
+// TODO currently BasicExecuter.Run() is not idempotent, we should make it so in future
 // BasicExecuter is a thin wrapper over runPlugins().
 type BasicExecuter struct {
 	resChan chan contracts.DocumentResult

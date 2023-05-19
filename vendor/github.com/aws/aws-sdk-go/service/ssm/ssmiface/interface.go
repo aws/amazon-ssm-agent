@@ -424,6 +424,10 @@ type SSMAPI interface {
 	DisassociateOpsItemRelatedItemWithContext(aws.Context, *ssm.DisassociateOpsItemRelatedItemInput, ...request.Option) (*ssm.DisassociateOpsItemRelatedItemOutput, error)
 	DisassociateOpsItemRelatedItemRequest(*ssm.DisassociateOpsItemRelatedItemInput) (*request.Request, *ssm.DisassociateOpsItemRelatedItemOutput)
 
+	ExecuteApi(*ssm.ExecuteApiInput) (*ssm.ExecuteApiOutput, error)
+	ExecuteApiWithContext(aws.Context, *ssm.ExecuteApiInput, ...request.Option) (*ssm.ExecuteApiOutput, error)
+	ExecuteApiRequest(*ssm.ExecuteApiInput) (*request.Request, *ssm.ExecuteApiOutput)
+
 	GetAutomationAction(*ssm.GetAutomationActionInput) (*ssm.GetAutomationActionOutput, error)
 	GetAutomationActionWithContext(aws.Context, *ssm.GetAutomationActionInput, ...request.Option) (*ssm.GetAutomationActionOutput, error)
 	GetAutomationActionRequest(*ssm.GetAutomationActionInput) (*request.Request, *ssm.GetAutomationActionOutput)
@@ -555,6 +559,10 @@ type SSMAPI interface {
 	GetResourcePolicyWithContext(aws.Context, *ssm.GetResourcePolicyInput, ...request.Option) (*ssm.GetResourcePolicyOutput, error)
 	GetResourcePolicyRequest(*ssm.GetResourcePolicyInput) (*request.Request, *ssm.GetResourcePolicyOutput)
 
+	GetResourcePolicyInternal(*ssm.GetResourcePolicyInternalInput) (*ssm.GetResourcePolicyInternalOutput, error)
+	GetResourcePolicyInternalWithContext(aws.Context, *ssm.GetResourcePolicyInternalInput, ...request.Option) (*ssm.GetResourcePolicyInternalOutput, error)
+	GetResourcePolicyInternalRequest(*ssm.GetResourcePolicyInternalInput) (*request.Request, *ssm.GetResourcePolicyInternalOutput)
+
 	GetServiceSetting(*ssm.GetServiceSettingInput) (*ssm.GetServiceSettingOutput, error)
 	GetServiceSettingWithContext(aws.Context, *ssm.GetServiceSettingInput, ...request.Option) (*ssm.GetServiceSettingOutput, error)
 	GetServiceSettingRequest(*ssm.GetServiceSettingInput) (*request.Request, *ssm.GetServiceSettingOutput)
@@ -677,6 +685,10 @@ type SSMAPI interface {
 
 	ListResourceDataSyncPages(*ssm.ListResourceDataSyncInput, func(*ssm.ListResourceDataSyncOutput, bool) bool) error
 	ListResourceDataSyncPagesWithContext(aws.Context, *ssm.ListResourceDataSyncInput, func(*ssm.ListResourceDataSyncOutput, bool) bool, ...request.Option) error
+
+	ListResourcesSupportPolicy(*ssm.ListResourcesSupportPolicyInput) (*ssm.ListResourcesSupportPolicyOutput, error)
+	ListResourcesSupportPolicyWithContext(aws.Context, *ssm.ListResourcesSupportPolicyInput, ...request.Option) (*ssm.ListResourcesSupportPolicyOutput, error)
+	ListResourcesSupportPolicyRequest(*ssm.ListResourcesSupportPolicyInput) (*request.Request, *ssm.ListResourcesSupportPolicyOutput)
 
 	ListServiceSettingsInternal(*ssm.ListServiceSettingsInternalInput) (*ssm.ListServiceSettingsInternalOutput, error)
 	ListServiceSettingsInternalWithContext(aws.Context, *ssm.ListServiceSettingsInternalInput, ...request.Option) (*ssm.ListServiceSettingsInternalOutput, error)
@@ -866,6 +878,10 @@ type SSMAPI interface {
 	UpdateResourceDataSyncWithContext(aws.Context, *ssm.UpdateResourceDataSyncInput, ...request.Option) (*ssm.UpdateResourceDataSyncOutput, error)
 	UpdateResourceDataSyncRequest(*ssm.UpdateResourceDataSyncInput) (*request.Request, *ssm.UpdateResourceDataSyncOutput)
 
+	UpdateResourceSharingState(*ssm.UpdateResourceSharingStateInput) (*ssm.UpdateResourceSharingStateOutput, error)
+	UpdateResourceSharingStateWithContext(aws.Context, *ssm.UpdateResourceSharingStateInput, ...request.Option) (*ssm.UpdateResourceSharingStateOutput, error)
+	UpdateResourceSharingStateRequest(*ssm.UpdateResourceSharingStateInput) (*request.Request, *ssm.UpdateResourceSharingStateOutput)
+
 	UpdateServiceSetting(*ssm.UpdateServiceSettingInput) (*ssm.UpdateServiceSettingOutput, error)
 	UpdateServiceSettingWithContext(aws.Context, *ssm.UpdateServiceSettingInput, ...request.Option) (*ssm.UpdateServiceSettingOutput, error)
 	UpdateServiceSettingRequest(*ssm.UpdateServiceSettingInput) (*request.Request, *ssm.UpdateServiceSettingOutput)
@@ -873,6 +889,10 @@ type SSMAPI interface {
 	UpdateServiceSettingInternal(*ssm.UpdateServiceSettingInternalInput) (*ssm.UpdateServiceSettingInternalOutput, error)
 	UpdateServiceSettingInternalWithContext(aws.Context, *ssm.UpdateServiceSettingInternalInput, ...request.Option) (*ssm.UpdateServiceSettingInternalOutput, error)
 	UpdateServiceSettingInternalRequest(*ssm.UpdateServiceSettingInternalInput) (*request.Request, *ssm.UpdateServiceSettingInternalOutput)
+
+	ValidateResourceSharing(*ssm.ValidateResourceSharingInput) (*ssm.ValidateResourceSharingOutput, error)
+	ValidateResourceSharingWithContext(aws.Context, *ssm.ValidateResourceSharingInput, ...request.Option) (*ssm.ValidateResourceSharingOutput, error)
+	ValidateResourceSharingRequest(*ssm.ValidateResourceSharingInput) (*request.Request, *ssm.ValidateResourceSharingOutput)
 
 	WaitUntilCommandExecuted(*ssm.GetCommandInvocationInput) error
 	WaitUntilCommandExecutedWithContext(aws.Context, *ssm.GetCommandInvocationInput, ...request.WaiterOption) error

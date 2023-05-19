@@ -15,8 +15,8 @@ package linuxcontainerutil
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	"github.com/stretchr/testify/assert"

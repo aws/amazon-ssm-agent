@@ -37,6 +37,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/gorilla/websocket"
 	"github.com/twinj/uuid"
@@ -47,7 +48,9 @@ const (
 	sequenceNumber = 0
 	messageFlags   = 3
 	// Timeout period before a handshake operation expires on the agent.
-	handshakeTimeout = 15 * time.Second
+	handshakeTimeout                        = 15 * time.Second
+	clientVersionWithoutOutputSeparation    = "1.2.295"
+	firstVersionWithOutputSeparationFeature = "1.2.312.0"
 )
 
 type IDataChannel interface {
@@ -73,6 +76,8 @@ type IDataChannel interface {
 	GetRegion() string
 	IsActive() bool
 	PrepareToCloseChannel(log log.T)
+	GetSeparateOutputPayload() bool
+	SetSeparateOutputPayload(separateOutputPayload bool)
 }
 
 // DataChannel used for session communication between the message gateway service and the agent.
@@ -89,6 +94,9 @@ type DataChannel struct {
 	ExpectedSequenceNumber int64
 	//records sequence number of last stream data message sent over data channel
 	StreamDataSequenceNumber int64
+	//ensure only one goroutine sending message with current StreamDataSequenceNumber in data channel
+	//check carefully for deadlock when not reusing of SendStreamDataMessage
+	StreamDataSequenceNumberMutex *sync.Mutex
 	//buffer to store outgoing stream messages until acknowledged
 	//using linked list for this buffer as access to oldest message is required and it support faster deletion from any position of list
 	OutgoingMessageBuffer ListMessageBuffer
@@ -110,7 +118,8 @@ type DataChannel struct {
 	//blockCipher stores encrytion keys and provides interface for encryption/decryption functions
 	blockCipher crypto.IBlockCipher
 	// Indicates whether encryption was enabled
-	encryptionEnabled bool
+	encryptionEnabled     bool
+	separateOutputPayload bool
 }
 
 type ListMessageBuffer struct {
@@ -233,6 +242,7 @@ func (dataChannel *DataChannel) Initialize(context context.T,
 	dataChannel.Pause = false
 	dataChannel.ExpectedSequenceNumber = 0
 	dataChannel.StreamDataSequenceNumber = 0
+	dataChannel.StreamDataSequenceNumberMutex = &sync.Mutex{}
 	dataChannel.OutgoingMessageBuffer = ListMessageBuffer{
 		list.New(),
 		mgsConfig.OutgoingMessageBufferCapacity,
@@ -399,16 +409,20 @@ func (dataChannel *DataChannel) SendStreamDataMessage(log log.T, payloadType mgs
 		return nil
 	}
 
-	var flag uint64 = 0
-	if dataChannel.StreamDataSequenceNumber == 0 {
-		flag = 1
-	}
-
 	// If encryption has been enabled, encrypt the payload
-	if dataChannel.encryptionEnabled && payloadType == mgsContracts.Output {
+	if dataChannel.encryptionEnabled && (payloadType == mgsContracts.Output || payloadType == mgsContracts.StdErr || payloadType == mgsContracts.ExitCode) {
 		if inputData, err = dataChannel.blockCipher.EncryptWithAESGCM(inputData); err != nil {
 			return fmt.Errorf("error encrypting stream data message sequence %d, err: %v", dataChannel.StreamDataSequenceNumber, err)
 		}
+	}
+
+	// StreamDataSequenceNumber only changed in the code block below
+	dataChannel.StreamDataSequenceNumberMutex.Lock()
+	defer dataChannel.StreamDataSequenceNumberMutex.Unlock()
+
+	var flag uint64 = 0
+	if dataChannel.StreamDataSequenceNumber == 0 {
+		flag = 1
 	}
 
 	uuid.SwitchFormat(uuid.CleanHyphen)
@@ -539,7 +553,7 @@ func (dataChannel *DataChannel) SendAgentSessionStateMessage(log log.T, sessionS
 		return err
 	}
 
-	log.Tracef("Send %s message with session status %s", mgsContracts.AgentSessionState, string(sessionStatus))
+	log.Debugf("Send %s message with session status %s", mgsContracts.AgentSessionState, string(sessionStatus))
 	if err := dataChannel.sendAgentMessage(log, mgsContracts.AgentSessionState, agentSessionStateContentBytes); err != nil {
 		return err
 	}
@@ -866,6 +880,7 @@ func (dataChannel *DataChannel) handleHandshakeResponse(log log.T, streamDataMes
 		}
 	}
 	dataChannel.handshake.clientVersion = handshakeResponse.ClientVersion
+	log.Infof("Client side session manager plugin version is: %s", handshakeResponse.ClientVersion)
 	dataChannel.handshake.responseChan <- true
 	return nil
 }
@@ -1018,9 +1033,17 @@ func (dataChannel *DataChannel) buildHandshakeCompletePayload(log log.T) mgsCont
 	handshakeComplete.HandshakeTimeToComplete =
 		dataChannel.handshake.handshakeEndTime.Sub(dataChannel.handshake.handshakeStartTime)
 
-	if dataChannel.encryptionEnabled == true {
-		handshakeComplete.CustomerMessage = "This session is encrypted using AWS KMS."
+	clientVersion := dataChannel.GetClientVersion()
+	if dataChannel.separateOutputPayload == true && versionutil.Compare(clientVersion, clientVersionWithoutOutputSeparation, true) <= 0 {
+		handshakeComplete.CustomerMessage = "Please update session manager plugin version (minimum required version " +
+			firstVersionWithOutputSeparationFeature +
+			") for fully support of separate StdOut/StdErr output.\r\n"
 	}
+
+	if dataChannel.encryptionEnabled == true {
+		handshakeComplete.CustomerMessage += "This session is encrypted using AWS KMS."
+	}
+
 	return handshakeComplete
 }
 
@@ -1107,6 +1130,17 @@ func (dataChannel *DataChannel) GetRegion() string {
 // and communicating with service
 func (dataChannel *DataChannel) IsActive() bool {
 	return !dataChannel.Pause
+}
+
+// GetSeparateOutputPayload returns boolean value indicating separate
+// stdout/stderr output for non-interactive session or not
+func (dataChannel *DataChannel) GetSeparateOutputPayload() bool {
+	return dataChannel.separateOutputPayload
+}
+
+// SetSeparateOutputPayload set separateOutputPayload value
+func (dataChannel *DataChannel) SetSeparateOutputPayload(separateOutputPayload bool) {
+	dataChannel.separateOutputPayload = separateOutputPayload
 }
 
 // getDataChannelToken calls CreateDataChannel to get the token for this session.

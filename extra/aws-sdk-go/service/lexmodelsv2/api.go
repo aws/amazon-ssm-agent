@@ -1603,7 +1603,8 @@ func (c *LexModelsV2) DeleteBotVersionRequest(input *DeleteBotVersionInput) (req
 // DeleteBotVersion API operation for Amazon Lex Model Building V2.
 //
 // Deletes a specific version of a bot. To delete all version of a bot, use
-// the DeleteBot operation.
+// the DeleteBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_DeleteBot.html)
+// operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1652,6 +1653,104 @@ func (c *LexModelsV2) DeleteBotVersion(input *DeleteBotVersionInput) (*DeleteBot
 // for more information on using Contexts.
 func (c *LexModelsV2) DeleteBotVersionWithContext(ctx aws.Context, input *DeleteBotVersionInput, opts ...request.Option) (*DeleteBotVersionOutput, error) {
 	req, out := c.DeleteBotVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteCustomVocabulary = "DeleteCustomVocabulary"
+
+// DeleteCustomVocabularyRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteCustomVocabulary operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteCustomVocabulary for more information on using the DeleteCustomVocabulary
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteCustomVocabularyRequest method.
+//    req, resp := client.DeleteCustomVocabularyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/DeleteCustomVocabulary
+func (c *LexModelsV2) DeleteCustomVocabularyRequest(input *DeleteCustomVocabularyInput) (req *request.Request, output *DeleteCustomVocabularyOutput) {
+	op := &request.Operation{
+		Name:       opDeleteCustomVocabulary,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/customvocabulary",
+	}
+
+	if input == nil {
+		input = &DeleteCustomVocabularyInput{}
+	}
+
+	output = &DeleteCustomVocabularyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteCustomVocabulary API operation for Amazon Lex Model Building V2.
+//
+// Removes a custom vocabulary from the specified locale in the specified bot.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation DeleteCustomVocabulary for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * PreconditionFailedException
+//   Your request couldn't be completed because one or more request fields aren't
+//   valid. Check the fields in your request and try again.
+//
+//   * ConflictException
+//   The action that you tried to perform couldn't be completed because the resource
+//   is in a conflicting state. For example, deleting a bot that is in the CREATING
+//   state. Try your request again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/DeleteCustomVocabulary
+func (c *LexModelsV2) DeleteCustomVocabulary(input *DeleteCustomVocabularyInput) (*DeleteCustomVocabularyOutput, error) {
+	req, out := c.DeleteCustomVocabularyRequest(input)
+	return out, req.Send()
+}
+
+// DeleteCustomVocabularyWithContext is the same as DeleteCustomVocabulary with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteCustomVocabulary for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) DeleteCustomVocabularyWithContext(ctx aws.Context, input *DeleteCustomVocabularyInput, opts ...request.Option) (*DeleteCustomVocabularyOutput, error) {
+	req, out := c.DeleteCustomVocabularyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2378,8 +2477,9 @@ func (c *LexModelsV2) DeleteUtterancesRequest(input *DeleteUtterancesInput) (req
 // Deletes stored utterances.
 //
 // Amazon Lex stores the utterances that users send to your bot. Utterances
-// are stored for 15 days for use with the operation, and then stored indefinitely
-// for use in improving the ability of your bot to respond to user input..
+// are stored for 15 days for use with the ListAggregatedUtterances (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListAggregatedUtterances.html)
+// operation, and then stored indefinitely for use in improving the ability
+// of your bot to respond to user input..
 //
 // Use the DeleteUtterances operation to manually delete utterances for a specific
 // session. When you use the DeleteUtterances operation, utterances stored for
@@ -2706,6 +2806,99 @@ func (c *LexModelsV2) DescribeBotLocaleWithContext(ctx aws.Context, input *Descr
 	return out, req.Send()
 }
 
+const opDescribeBotRecommendation = "DescribeBotRecommendation"
+
+// DescribeBotRecommendationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeBotRecommendation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeBotRecommendation for more information on using the DescribeBotRecommendation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeBotRecommendationRequest method.
+//    req, resp := client.DescribeBotRecommendationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/DescribeBotRecommendation
+func (c *LexModelsV2) DescribeBotRecommendationRequest(input *DescribeBotRecommendationInput) (req *request.Request, output *DescribeBotRecommendationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeBotRecommendation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/botrecommendations/{botRecommendationId}/",
+	}
+
+	if input == nil {
+		input = &DescribeBotRecommendationInput{}
+	}
+
+	output = &DescribeBotRecommendationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeBotRecommendation API operation for Amazon Lex Model Building V2.
+//
+// Provides metadata information about a bot recommendation. This information
+// will enable you to get a description on the request inputs, to download associated
+// transcripts after processing is complete, and to download intents and slot-types
+// generated by the bot recommendation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation DescribeBotRecommendation for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/DescribeBotRecommendation
+func (c *LexModelsV2) DescribeBotRecommendation(input *DescribeBotRecommendationInput) (*DescribeBotRecommendationOutput, error) {
+	req, out := c.DescribeBotRecommendationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeBotRecommendationWithContext is the same as DescribeBotRecommendation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeBotRecommendation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) DescribeBotRecommendationWithContext(ctx aws.Context, input *DescribeBotRecommendationInput, opts ...request.Option) (*DescribeBotRecommendationOutput, error) {
+	req, out := c.DescribeBotRecommendationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeBotVersion = "DescribeBotVersion"
 
 // DescribeBotVersionRequest generates a "aws/request.Request" representing the
@@ -2794,6 +2987,99 @@ func (c *LexModelsV2) DescribeBotVersion(input *DescribeBotVersionInput) (*Descr
 // for more information on using Contexts.
 func (c *LexModelsV2) DescribeBotVersionWithContext(ctx aws.Context, input *DescribeBotVersionInput, opts ...request.Option) (*DescribeBotVersionOutput, error) {
 	req, out := c.DescribeBotVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeCustomVocabularyMetadata = "DescribeCustomVocabularyMetadata"
+
+// DescribeCustomVocabularyMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeCustomVocabularyMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeCustomVocabularyMetadata for more information on using the DescribeCustomVocabularyMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeCustomVocabularyMetadataRequest method.
+//    req, resp := client.DescribeCustomVocabularyMetadataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/DescribeCustomVocabularyMetadata
+func (c *LexModelsV2) DescribeCustomVocabularyMetadataRequest(input *DescribeCustomVocabularyMetadataInput) (req *request.Request, output *DescribeCustomVocabularyMetadataOutput) {
+	op := &request.Operation{
+		Name:       opDescribeCustomVocabularyMetadata,
+		HTTPMethod: "GET",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/customvocabulary/DEFAULT/metadata",
+	}
+
+	if input == nil {
+		input = &DescribeCustomVocabularyMetadataInput{}
+	}
+
+	output = &DescribeCustomVocabularyMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeCustomVocabularyMetadata API operation for Amazon Lex Model Building V2.
+//
+// Provides metadata information about a custom vocabulary.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation DescribeCustomVocabularyMetadata for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/DescribeCustomVocabularyMetadata
+func (c *LexModelsV2) DescribeCustomVocabularyMetadata(input *DescribeCustomVocabularyMetadataInput) (*DescribeCustomVocabularyMetadataOutput, error) {
+	req, out := c.DescribeCustomVocabularyMetadataRequest(input)
+	return out, req.Send()
+}
+
+// DescribeCustomVocabularyMetadataWithContext is the same as DescribeCustomVocabularyMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeCustomVocabularyMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) DescribeCustomVocabularyMetadataWithContext(ctx aws.Context, input *DescribeCustomVocabularyMetadataInput, opts ...request.Option) (*DescribeCustomVocabularyMetadataOutput, error) {
+	req, out := c.DescribeCustomVocabularyMetadataRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3806,6 +4092,154 @@ func (c *LexModelsV2) ListBotLocalesPagesWithContext(ctx aws.Context, input *Lis
 	return p.Err()
 }
 
+const opListBotRecommendations = "ListBotRecommendations"
+
+// ListBotRecommendationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListBotRecommendations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListBotRecommendations for more information on using the ListBotRecommendations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListBotRecommendationsRequest method.
+//    req, resp := client.ListBotRecommendationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/ListBotRecommendations
+func (c *LexModelsV2) ListBotRecommendationsRequest(input *ListBotRecommendationsInput) (req *request.Request, output *ListBotRecommendationsOutput) {
+	op := &request.Operation{
+		Name:       opListBotRecommendations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/botrecommendations/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListBotRecommendationsInput{}
+	}
+
+	output = &ListBotRecommendationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListBotRecommendations API operation for Amazon Lex Model Building V2.
+//
+// Get a list of bot recommendations that meet the specified criteria.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation ListBotRecommendations for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/ListBotRecommendations
+func (c *LexModelsV2) ListBotRecommendations(input *ListBotRecommendationsInput) (*ListBotRecommendationsOutput, error) {
+	req, out := c.ListBotRecommendationsRequest(input)
+	return out, req.Send()
+}
+
+// ListBotRecommendationsWithContext is the same as ListBotRecommendations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListBotRecommendations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) ListBotRecommendationsWithContext(ctx aws.Context, input *ListBotRecommendationsInput, opts ...request.Option) (*ListBotRecommendationsOutput, error) {
+	req, out := c.ListBotRecommendationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListBotRecommendationsPages iterates over the pages of a ListBotRecommendations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListBotRecommendations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListBotRecommendations operation.
+//    pageNum := 0
+//    err := client.ListBotRecommendationsPages(params,
+//        func(page *lexmodelsv2.ListBotRecommendationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *LexModelsV2) ListBotRecommendationsPages(input *ListBotRecommendationsInput, fn func(*ListBotRecommendationsOutput, bool) bool) error {
+	return c.ListBotRecommendationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListBotRecommendationsPagesWithContext same as ListBotRecommendationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) ListBotRecommendationsPagesWithContext(ctx aws.Context, input *ListBotRecommendationsInput, fn func(*ListBotRecommendationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListBotRecommendationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListBotRecommendationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListBotRecommendationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListBotVersions = "ListBotVersions"
 
 // ListBotVersionsRequest generates a "aws/request.Request" representing the
@@ -4163,7 +4597,7 @@ func (c *LexModelsV2) ListBuiltInIntentsRequest(input *ListBuiltInIntentsInput) 
 //
 // To use a built-in intent as a the base for your own intent, include the built-in
 // intent signature in the parentIntentSignature parameter when you call the
-// CreateIntent operation. For more information, see CreateIntent.
+// CreateIntent operation. For more information, see CreateIntent (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateIntent.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4457,8 +4891,8 @@ func (c *LexModelsV2) ListExportsRequest(input *ListExportsInput) (req *request.
 
 // ListExports API operation for Amazon Lex Model Building V2.
 //
-// Lists the exports for a bot or bot locale. Exports are kept in the list for
-// 7 days.
+// Lists the exports for a bot, bot locale, or custom vocabulary. Exports are
+// kept in the list for 7 days.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4602,8 +5036,8 @@ func (c *LexModelsV2) ListImportsRequest(input *ListImportsInput) (req *request.
 
 // ListImports API operation for Amazon Lex Model Building V2.
 //
-// Lists the imports for a bot or bot locale. Imports are kept in the list for
-// 7 days.
+// Lists the imports for a bot, bot locale, or custom vocabulary. Imports are
+// kept in the list for 7 days.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4837,6 +5271,158 @@ func (c *LexModelsV2) ListIntentsPagesWithContext(ctx aws.Context, input *ListIn
 
 	for p.Next() {
 		if !fn(p.Page().(*ListIntentsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListRecommendedIntents = "ListRecommendedIntents"
+
+// ListRecommendedIntentsRequest generates a "aws/request.Request" representing the
+// client's request for the ListRecommendedIntents operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListRecommendedIntents for more information on using the ListRecommendedIntents
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListRecommendedIntentsRequest method.
+//    req, resp := client.ListRecommendedIntentsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/ListRecommendedIntents
+func (c *LexModelsV2) ListRecommendedIntentsRequest(input *ListRecommendedIntentsInput) (req *request.Request, output *ListRecommendedIntentsOutput) {
+	op := &request.Operation{
+		Name:       opListRecommendedIntents,
+		HTTPMethod: "POST",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/botrecommendations/{botRecommendationId}/intents",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListRecommendedIntentsInput{}
+	}
+
+	output = &ListRecommendedIntentsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListRecommendedIntents API operation for Amazon Lex Model Building V2.
+//
+// Gets a list of recommended intents provided by the bot recommendation that
+// you can use in your bot.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation ListRecommendedIntents for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/ListRecommendedIntents
+func (c *LexModelsV2) ListRecommendedIntents(input *ListRecommendedIntentsInput) (*ListRecommendedIntentsOutput, error) {
+	req, out := c.ListRecommendedIntentsRequest(input)
+	return out, req.Send()
+}
+
+// ListRecommendedIntentsWithContext is the same as ListRecommendedIntents with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListRecommendedIntents for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) ListRecommendedIntentsWithContext(ctx aws.Context, input *ListRecommendedIntentsInput, opts ...request.Option) (*ListRecommendedIntentsOutput, error) {
+	req, out := c.ListRecommendedIntentsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListRecommendedIntentsPages iterates over the pages of a ListRecommendedIntents operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListRecommendedIntents method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListRecommendedIntents operation.
+//    pageNum := 0
+//    err := client.ListRecommendedIntentsPages(params,
+//        func(page *lexmodelsv2.ListRecommendedIntentsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *LexModelsV2) ListRecommendedIntentsPages(input *ListRecommendedIntentsInput, fn func(*ListRecommendedIntentsOutput, bool) bool) error {
+	return c.ListRecommendedIntentsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListRecommendedIntentsPagesWithContext same as ListRecommendedIntentsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) ListRecommendedIntentsPagesWithContext(ctx aws.Context, input *ListRecommendedIntentsInput, fn func(*ListRecommendedIntentsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListRecommendedIntentsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListRecommendedIntentsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListRecommendedIntentsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -5229,6 +5815,207 @@ func (c *LexModelsV2) ListTagsForResourceWithContext(ctx aws.Context, input *Lis
 	return out, req.Send()
 }
 
+const opSearchAssociatedTranscripts = "SearchAssociatedTranscripts"
+
+// SearchAssociatedTranscriptsRequest generates a "aws/request.Request" representing the
+// client's request for the SearchAssociatedTranscripts operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SearchAssociatedTranscripts for more information on using the SearchAssociatedTranscripts
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SearchAssociatedTranscriptsRequest method.
+//    req, resp := client.SearchAssociatedTranscriptsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/SearchAssociatedTranscripts
+func (c *LexModelsV2) SearchAssociatedTranscriptsRequest(input *SearchAssociatedTranscriptsInput) (req *request.Request, output *SearchAssociatedTranscriptsOutput) {
+	op := &request.Operation{
+		Name:       opSearchAssociatedTranscripts,
+		HTTPMethod: "POST",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/botrecommendations/{botRecommendationId}/associatedtranscripts",
+	}
+
+	if input == nil {
+		input = &SearchAssociatedTranscriptsInput{}
+	}
+
+	output = &SearchAssociatedTranscriptsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SearchAssociatedTranscripts API operation for Amazon Lex Model Building V2.
+//
+// Search for associated transcripts that meet the specified criteria.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation SearchAssociatedTranscripts for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/SearchAssociatedTranscripts
+func (c *LexModelsV2) SearchAssociatedTranscripts(input *SearchAssociatedTranscriptsInput) (*SearchAssociatedTranscriptsOutput, error) {
+	req, out := c.SearchAssociatedTranscriptsRequest(input)
+	return out, req.Send()
+}
+
+// SearchAssociatedTranscriptsWithContext is the same as SearchAssociatedTranscripts with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SearchAssociatedTranscripts for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) SearchAssociatedTranscriptsWithContext(ctx aws.Context, input *SearchAssociatedTranscriptsInput, opts ...request.Option) (*SearchAssociatedTranscriptsOutput, error) {
+	req, out := c.SearchAssociatedTranscriptsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartBotRecommendation = "StartBotRecommendation"
+
+// StartBotRecommendationRequest generates a "aws/request.Request" representing the
+// client's request for the StartBotRecommendation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartBotRecommendation for more information on using the StartBotRecommendation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartBotRecommendationRequest method.
+//    req, resp := client.StartBotRecommendationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/StartBotRecommendation
+func (c *LexModelsV2) StartBotRecommendationRequest(input *StartBotRecommendationInput) (req *request.Request, output *StartBotRecommendationOutput) {
+	op := &request.Operation{
+		Name:       opStartBotRecommendation,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/botrecommendations/",
+	}
+
+	if input == nil {
+		input = &StartBotRecommendationInput{}
+	}
+
+	output = &StartBotRecommendationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartBotRecommendation API operation for Amazon Lex Model Building V2.
+//
+// Use this to provide your transcript data, and to start the bot recommendation
+// process.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation StartBotRecommendation for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * ConflictException
+//   The action that you tried to perform couldn't be completed because the resource
+//   is in a conflicting state. For example, deleting a bot that is in the CREATING
+//   state. Try your request again.
+//
+//   * PreconditionFailedException
+//   Your request couldn't be completed because one or more request fields aren't
+//   valid. Check the fields in your request and try again.
+//
+//   * ConflictException
+//   The action that you tried to perform couldn't be completed because the resource
+//   is in a conflicting state. For example, deleting a bot that is in the CREATING
+//   state. Try your request again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/StartBotRecommendation
+func (c *LexModelsV2) StartBotRecommendation(input *StartBotRecommendationInput) (*StartBotRecommendationOutput, error) {
+	req, out := c.StartBotRecommendationRequest(input)
+	return out, req.Send()
+}
+
+// StartBotRecommendationWithContext is the same as StartBotRecommendation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartBotRecommendation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) StartBotRecommendationWithContext(ctx aws.Context, input *StartBotRecommendationInput, opts ...request.Option) (*StartBotRecommendationOutput, error) {
+	req, out := c.StartBotRecommendationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartImport = "StartImport"
 
 // StartImportRequest generates a "aws/request.Request" representing the
@@ -5273,8 +6060,8 @@ func (c *LexModelsV2) StartImportRequest(input *StartImportInput) (req *request.
 
 // StartImport API operation for Amazon Lex Model Building V2.
 //
-// Starts importing a bot or bot locale from a zip archive that you uploaded
-// to an S3 bucket.
+// Starts importing a bot, bot locale, or custom vocabulary from a zip archive
+// that you uploaded to an S3 bucket.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5805,6 +6592,113 @@ func (c *LexModelsV2) UpdateBotLocaleWithContext(ctx aws.Context, input *UpdateB
 	return out, req.Send()
 }
 
+const opUpdateBotRecommendation = "UpdateBotRecommendation"
+
+// UpdateBotRecommendationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateBotRecommendation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateBotRecommendation for more information on using the UpdateBotRecommendation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateBotRecommendationRequest method.
+//    req, resp := client.UpdateBotRecommendationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/UpdateBotRecommendation
+func (c *LexModelsV2) UpdateBotRecommendationRequest(input *UpdateBotRecommendationInput) (req *request.Request, output *UpdateBotRecommendationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateBotRecommendation,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/bots/{botId}/botversions/{botVersion}/botlocales/{localeId}/botrecommendations/{botRecommendationId}/",
+	}
+
+	if input == nil {
+		input = &UpdateBotRecommendationInput{}
+	}
+
+	output = &UpdateBotRecommendationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateBotRecommendation API operation for Amazon Lex Model Building V2.
+//
+// Updates an existing bot recommendation request.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lex Model Building V2's
+// API operation UpdateBotRecommendation for usage and error information.
+//
+// Returned Error Types:
+//   * ThrottlingException
+//   Your request rate is too high. Reduce the frequency of requests.
+//
+//   * ServiceQuotaExceededException
+//   You have reached a quota for your bot.
+//
+//   * ValidationException
+//   One of the input parameters in your request isn't valid. Check the parameters
+//   and try your request again.
+//
+//   * ResourceNotFoundException
+//   You asked to describe a resource that doesn't exist. Check the resource that
+//   you are requesting and try again.
+//
+//   * ConflictException
+//   The action that you tried to perform couldn't be completed because the resource
+//   is in a conflicting state. For example, deleting a bot that is in the CREATING
+//   state. Try your request again.
+//
+//   * PreconditionFailedException
+//   Your request couldn't be completed because one or more request fields aren't
+//   valid. Check the fields in your request and try again.
+//
+//   * ConflictException
+//   The action that you tried to perform couldn't be completed because the resource
+//   is in a conflicting state. For example, deleting a bot that is in the CREATING
+//   state. Try your request again.
+//
+//   * InternalServerException
+//   The service encountered an unexpected condition. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/models.lex.v2-2020-08-07/UpdateBotRecommendation
+func (c *LexModelsV2) UpdateBotRecommendation(input *UpdateBotRecommendationInput) (*UpdateBotRecommendationOutput, error) {
+	req, out := c.UpdateBotRecommendationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateBotRecommendationWithContext is the same as UpdateBotRecommendation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateBotRecommendation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LexModelsV2) UpdateBotRecommendationWithContext(ctx aws.Context, input *UpdateBotRecommendationInput, opts ...request.Option) (*UpdateBotRecommendationOutput, error) {
+	req, out := c.UpdateBotRecommendationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateExport = "UpdateExport"
 
 // UpdateExportRequest generates a "aws/request.Request" representing the
@@ -5853,7 +6747,8 @@ func (c *LexModelsV2) UpdateExportRequest(input *UpdateExportInput) (req *reques
 //
 // The password is not required. If you don't supply a password, Amazon Lex
 // generates a zip file that is not protected by a password. This is the archive
-// that is available at the pre-signed S3 URL provided by the operation.
+// that is available at the pre-signed S3 URL provided by the DescribeExport
+// (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeExport.html) operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6299,6 +7194,39 @@ func (c *LexModelsV2) UpdateSlotTypeWithContext(ctx aws.Context, input *UpdateSl
 	return out, req.Send()
 }
 
+// Provides settings that enable advanced recognition settings for slot values.
+type AdvancedRecognitionSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Enables using the slot values as a custom vocabulary for recognizing user
+	// utterances.
+	AudioRecognitionStrategy *string `locationName:"audioRecognitionStrategy" type:"string" enum:"AudioRecognitionStrategy"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdvancedRecognitionSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdvancedRecognitionSetting) GoString() string {
+	return s.String()
+}
+
+// SetAudioRecognitionStrategy sets the AudioRecognitionStrategy field's value.
+func (s *AdvancedRecognitionSetting) SetAudioRecognitionStrategy(v string) *AdvancedRecognitionSetting {
+	s.AudioRecognitionStrategy = &v
+	return s
+}
+
 // Filters responses returned by the ListAggregatedUtterances operation.
 type AggregatedUtterancesFilter struct {
 	_ struct{} `type:"structure"`
@@ -6531,14 +7459,113 @@ func (s *AggregatedUtterancesSummary) SetUtteranceLastRecordedInAggregationDurat
 	return s
 }
 
+// The object containing information that associates the recommended intent/slot
+// type with a conversation.
+type AssociatedTranscript struct {
+	_ struct{} `type:"structure"`
+
+	// The content of the transcript that meets the search filter criteria. For
+	// the JSON format of the transcript, see Output transcript format (https://docs.aws.amazon.com/lexv2/latest/dg/designing-output-format.html).
+	Transcript *string `locationName:"transcript" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedTranscript) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedTranscript) GoString() string {
+	return s.String()
+}
+
+// SetTranscript sets the Transcript field's value.
+func (s *AssociatedTranscript) SetTranscript(v string) *AssociatedTranscript {
+	s.Transcript = &v
+	return s
+}
+
+// Filters to search for the associated transcript.
+type AssociatedTranscriptFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the field to use for filtering. The allowed names are IntentId
+	// and SlotTypeId.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true" enum:"AssociatedTranscriptFilterName"`
+
+	// The values to use to filter the transcript.
+	//
+	// Values is a required field
+	Values []*string `locationName:"values" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedTranscriptFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedTranscriptFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociatedTranscriptFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociatedTranscriptFilter"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *AssociatedTranscriptFilter) SetName(v string) *AssociatedTranscriptFilter {
+	s.Name = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *AssociatedTranscriptFilter) SetValues(v []*string) *AssociatedTranscriptFilter {
+	s.Values = v
+	return s
+}
+
 // The location of audio log files collected when conversation logging is enabled
 // for a bot.
 type AudioLogDestination struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon S3 bucket where the audio log files are stored. The IAM role specified
-	// in the roleArn parameter of the CreateBot operation must have permission
-	// to write to this bucket.
+	// in the roleArn parameter of the CreateBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateBot.html)
+	// operation must have permission to write to this bucket.
 	//
 	// S3Bucket is a required field
 	S3Bucket *S3BucketLogDestination `locationName:"s3Bucket" type:"structure" required:"true"`
@@ -6769,12 +7796,14 @@ func (s *BotAliasLocaleSettings) SetEnabled(v bool) *BotAliasLocaleSettings {
 	return s
 }
 
-// Summary information about bot aliases returned from the ListBotAliases operation.
+// Summary information about bot aliases returned from the ListBotAliases (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBotAliases.html)
+// operation.
 type BotAliasSummary struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier assigned to the bot alias. You can use this ID to get
-	// detailed information about the alias using the DescribeBotAlias operation.
+	// detailed information about the alias using the DescribeBotAlias (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeBotAlias.html)
+	// operation.
 	BotAliasId *string `locationName:"botAliasId" min:"10" type:"string"`
 
 	// The name of the bot alias.
@@ -7528,7 +8557,8 @@ func (s *BotLocaleSortBy) SetOrder(v string) *BotLocaleSortBy {
 	return s
 }
 
-// Summary information about bot locales returned by the ListBotLocales operation.
+// Summary information about bot locales returned by the ListBotLocales (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBotLocales.html)
+// operation.
 type BotLocaleSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -7606,6 +8636,166 @@ func (s *BotLocaleSummary) SetLocaleName(v string) *BotLocaleSummary {
 	return s
 }
 
+// A statistical summary of the bot recommendation results.
+type BotRecommendationResultStatistics struct {
+	_ struct{} `type:"structure"`
+
+	// Statistical information about about the intents associated with the bot recommendation
+	// results.
+	Intents *IntentStatistics `locationName:"intents" type:"structure"`
+
+	// Statistical information about the slot types associated with the bot recommendation
+	// results.
+	SlotTypes *SlotTypeStatistics `locationName:"slotTypes" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotRecommendationResultStatistics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotRecommendationResultStatistics) GoString() string {
+	return s.String()
+}
+
+// SetIntents sets the Intents field's value.
+func (s *BotRecommendationResultStatistics) SetIntents(v *IntentStatistics) *BotRecommendationResultStatistics {
+	s.Intents = v
+	return s
+}
+
+// SetSlotTypes sets the SlotTypes field's value.
+func (s *BotRecommendationResultStatistics) SetSlotTypes(v *SlotTypeStatistics) *BotRecommendationResultStatistics {
+	s.SlotTypes = v
+	return s
+}
+
+// The object representing the URL of the bot definition, the URL of the associated
+// transcript, and a statistical summary of the bot recommendation results.
+type BotRecommendationResults struct {
+	_ struct{} `type:"structure"`
+
+	// The presigned url link of the associated transcript.
+	AssociatedTranscriptsUrl *string `locationName:"associatedTranscriptsUrl" min:"1" type:"string"`
+
+	// The presigned URL link of the recommended bot definition.
+	BotLocaleExportUrl *string `locationName:"botLocaleExportUrl" min:"1" type:"string"`
+
+	// The statistical summary of the bot recommendation results.
+	Statistics *BotRecommendationResultStatistics `locationName:"statistics" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotRecommendationResults) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotRecommendationResults) GoString() string {
+	return s.String()
+}
+
+// SetAssociatedTranscriptsUrl sets the AssociatedTranscriptsUrl field's value.
+func (s *BotRecommendationResults) SetAssociatedTranscriptsUrl(v string) *BotRecommendationResults {
+	s.AssociatedTranscriptsUrl = &v
+	return s
+}
+
+// SetBotLocaleExportUrl sets the BotLocaleExportUrl field's value.
+func (s *BotRecommendationResults) SetBotLocaleExportUrl(v string) *BotRecommendationResults {
+	s.BotLocaleExportUrl = &v
+	return s
+}
+
+// SetStatistics sets the Statistics field's value.
+func (s *BotRecommendationResults) SetStatistics(v *BotRecommendationResultStatistics) *BotRecommendationResults {
+	s.Statistics = v
+	return s
+}
+
+// A summary of the bot recommendation.
+type BotRecommendationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot recommendation to be updated.
+	//
+	// BotRecommendationId is a required field
+	BotRecommendationId *string `locationName:"botRecommendationId" min:"10" type:"string" required:"true"`
+
+	// The status of the bot recommendation.
+	//
+	// If the status is Failed, then the reasons for the failure are listed in the
+	// failureReasons field.
+	//
+	// BotRecommendationStatus is a required field
+	BotRecommendationStatus *string `locationName:"botRecommendationStatus" type:"string" required:"true" enum:"BotRecommendationStatus"`
+
+	// A timestamp of the date and time that the bot recommendation was created.
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
+
+	// A timestamp of the date and time that the bot recommendation was last updated.
+	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotRecommendationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BotRecommendationSummary) GoString() string {
+	return s.String()
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *BotRecommendationSummary) SetBotRecommendationId(v string) *BotRecommendationSummary {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotRecommendationStatus sets the BotRecommendationStatus field's value.
+func (s *BotRecommendationSummary) SetBotRecommendationStatus(v string) *BotRecommendationSummary {
+	s.BotRecommendationStatus = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *BotRecommendationSummary) SetCreationDateTime(v time.Time) *BotRecommendationSummary {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetLastUpdatedDateTime sets the LastUpdatedDateTime field's value.
+func (s *BotRecommendationSummary) SetLastUpdatedDateTime(v time.Time) *BotRecommendationSummary {
+	s.LastUpdatedDateTime = &v
+	return s
+}
+
 // Specifies attributes for sorting a list of bots.
 type BotSortBy struct {
 	_ struct{} `type:"structure"`
@@ -7667,12 +8857,14 @@ func (s *BotSortBy) SetOrder(v string) *BotSortBy {
 	return s
 }
 
-// Summary information about a bot returned by the ListBots operation.
+// Summary information about a bot returned by the ListBots (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBots.html)
+// operation.
 type BotSummary struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier assigned to the bot. Use this ID to get detailed information
-	// about the bot with the DescribeBot operation.
+	// about the bot with the DescribeBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeBot.html)
+	// operation.
 	BotId *string `locationName:"botId" min:"10" type:"string"`
 
 	// The name of the bot.
@@ -7857,7 +9049,8 @@ func (s *BotVersionSortBy) SetOrder(v string) *BotVersionSortBy {
 	return s
 }
 
-// Summary information about a bot version returned by the ListBotVersions operation.
+// Summary information about a bot version returned by the ListBotVersions (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBotVersions.html)
+// operation.
 type BotVersionSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -7931,7 +9124,8 @@ type BuildBotLocaleInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The identifier of the bot to build. The identifier is returned in the response
-	// from the operation.
+	// from the CreateBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateBot.html)
+	// operation.
 	//
 	// BotId is a required field
 	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
@@ -8149,6 +9343,7 @@ func (s *BuiltInIntentSortBy) SetOrder(v string) *BuiltInIntentSortBy {
 }
 
 // Provides summary information about a built-in intent for the ListBuiltInIntents
+// (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBuiltInIntents.html)
 // operation.
 type BuiltInIntentSummary struct {
 	_ struct{} `type:"structure"`
@@ -8253,6 +9448,7 @@ func (s *BuiltInSlotTypeSortBy) SetOrder(v string) *BuiltInSlotTypeSortBy {
 }
 
 // Provides summary information about a built-in slot type for the ListBuiltInSlotTypes
+// (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListBuiltInSlotTypes.html)
 // operation.
 type BuiltInSlotTypeSummary struct {
 	_ struct{} `type:"structure"`
@@ -8646,7 +9842,8 @@ type CreateBotAliasInput struct {
 	// BotId is a required field
 	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
 
-	// The version of the bot that this alias points to. You can use the operation
+	// The version of the bot that this alias points to. You can use the UpdateBotAlias
+	// (https://docs.aws.amazon.com/lexv2/latest/dg/API_UpdateBotAlias.html) operation
 	// to change the bot version associated with the alias.
 	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
 
@@ -9681,7 +10878,8 @@ type CreateExportOutput struct {
 	// An identifier for a specific request to create an export.
 	ExportId *string `locationName:"exportId" min:"10" type:"string"`
 
-	// The status of the export. When the status is Completed, you can use the operation
+	// The status of the export. When the status is Completed, you can use the DescribeExport
+	// (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeExport.html) operation
 	// to get the pre-signed S3 URL link to your exported bot or bot locale.
 	ExportStatus *string `locationName:"exportStatus" type:"string" enum:"ExportStatus"`
 
@@ -10570,9 +11768,7 @@ type CreateSlotInput struct {
 
 	// The unique identifier for the slot type associated with this slot. The slot
 	// type determines the values that can be entered into the slot.
-	//
-	// SlotTypeId is a required field
-	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string" required:"true"`
+	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string"`
 
 	// Specifies prompts that Amazon Lex sends to the user to elicit a response
 	// that provides the value for the slot.
@@ -10631,9 +11827,6 @@ func (s *CreateSlotInput) Validate() error {
 	}
 	if s.SlotName != nil && len(*s.SlotName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotName", 1))
-	}
-	if s.SlotTypeId == nil {
-		invalidParams.Add(request.NewErrParamRequired("SlotTypeId"))
 	}
 	if s.SlotTypeId != nil && len(*s.SlotTypeId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotTypeId", 1))
@@ -10867,6 +12060,9 @@ type CreateSlotTypeInput struct {
 	// slot type in lists.
 	Description *string `locationName:"description" type:"string"`
 
+	// Sets the type of external information used to create the slot type.
+	ExternalSourceSetting *ExternalSourceSetting `locationName:"externalSourceSetting" type:"structure"`
+
 	// The identifier of the language and locale that the slot type will be used
 	// in. The string must match one of the supported locales. All of the bots,
 	// intents, and slots used by the slot type must have the same locale. For more
@@ -10905,9 +12101,7 @@ type CreateSlotTypeInput struct {
 	//
 	// If you don't specify the valueSelectionSetting parameter, the default is
 	// OriginalValue.
-	//
-	// ValueSelectionSetting is a required field
-	ValueSelectionSetting *SlotValueSelectionSetting `locationName:"valueSelectionSetting" type:"structure" required:"true"`
+	ValueSelectionSetting *SlotValueSelectionSetting `locationName:"valueSelectionSetting" type:"structure"`
 }
 
 // String returns the string representation.
@@ -10958,8 +12152,10 @@ func (s *CreateSlotTypeInput) Validate() error {
 	if s.SlotTypeValues != nil && len(s.SlotTypeValues) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotTypeValues", 1))
 	}
-	if s.ValueSelectionSetting == nil {
-		invalidParams.Add(request.NewErrParamRequired("ValueSelectionSetting"))
+	if s.ExternalSourceSetting != nil {
+		if err := s.ExternalSourceSetting.Validate(); err != nil {
+			invalidParams.AddNested("ExternalSourceSetting", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.SlotTypeValues != nil {
 		for i, v := range s.SlotTypeValues {
@@ -10998,6 +12194,12 @@ func (s *CreateSlotTypeInput) SetBotVersion(v string) *CreateSlotTypeInput {
 // SetDescription sets the Description field's value.
 func (s *CreateSlotTypeInput) SetDescription(v string) *CreateSlotTypeInput {
 	s.Description = &v
+	return s
+}
+
+// SetExternalSourceSetting sets the ExternalSourceSetting field's value.
+func (s *CreateSlotTypeInput) SetExternalSourceSetting(v *ExternalSourceSetting) *CreateSlotTypeInput {
+	s.ExternalSourceSetting = v
 	return s
 }
 
@@ -11045,6 +12247,9 @@ type CreateSlotTypeOutput struct {
 
 	// The description specified for the slot type.
 	Description *string `locationName:"description" type:"string"`
+
+	// The type of external information used to create the slot type.
+	ExternalSourceSetting *ExternalSourceSetting `locationName:"externalSourceSetting" type:"structure"`
 
 	// The specified language and local specified for the slot type.
 	LocaleId *string `locationName:"localeId" type:"string"`
@@ -11109,6 +12314,12 @@ func (s *CreateSlotTypeOutput) SetDescription(v string) *CreateSlotTypeOutput {
 	return s
 }
 
+// SetExternalSourceSetting sets the ExternalSourceSetting field's value.
+func (s *CreateSlotTypeOutput) SetExternalSourceSetting(v *ExternalSourceSetting) *CreateSlotTypeOutput {
+	s.ExternalSourceSetting = v
+	return s
+}
+
 // SetLocaleId sets the LocaleId field's value.
 func (s *CreateSlotTypeOutput) SetLocaleId(v string) *CreateSlotTypeOutput {
 	s.LocaleId = &v
@@ -11170,7 +12381,8 @@ func (s CreateUploadUrlInput) GoString() string {
 type CreateUploadUrlOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An identifier for a unique import job. Use it when you call the operation.
+	// An identifier for a unique import job. Use it when you call the StartImport
+	// (https://docs.aws.amazon.com/lexv2/latest/dg/API_StartImport.html) operation.
 	ImportId *string `locationName:"importId" min:"10" type:"string"`
 
 	// A pre-signed S3 write URL. Upload the zip archive file that contains the
@@ -11259,6 +12471,169 @@ func (s *CustomPayload) SetValue(v string) *CustomPayload {
 	return s
 }
 
+// Provides the parameters required for exporting a custom vocabulary.
+type CustomVocabularyExportSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot that contains the custom vocabulary to export.
+	//
+	// BotId is a required field
+	BotId *string `locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot that contains the custom vocabulary to export.
+	//
+	// BotVersion is a required field
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string" required:"true"`
+
+	// The locale of the bot that contains the custom vocabulary to export.
+	//
+	// LocaleId is a required field
+	LocaleId *string `locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyExportSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyExportSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomVocabularyExportSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomVocabularyExportSpecification"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 1))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *CustomVocabularyExportSpecification) SetBotId(v string) *CustomVocabularyExportSpecification {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *CustomVocabularyExportSpecification) SetBotVersion(v string) *CustomVocabularyExportSpecification {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *CustomVocabularyExportSpecification) SetLocaleId(v string) *CustomVocabularyExportSpecification {
+	s.LocaleId = &v
+	return s
+}
+
+// Provides the parameters required for importing a custom vocabulary.
+type CustomVocabularyImportSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot to import the custom vocabulary to.
+	//
+	// BotId is a required field
+	BotId *string `locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot to import the custom vocabulary to.
+	//
+	// BotVersion is a required field
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The identifier of the local to import the custom vocabulary to. The value
+	// must be en_GB.
+	//
+	// LocaleId is a required field
+	LocaleId *string `locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyImportSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomVocabularyImportSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomVocabularyImportSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomVocabularyImportSpecification"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *CustomVocabularyImportSpecification) SetBotId(v string) *CustomVocabularyImportSpecification {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *CustomVocabularyImportSpecification) SetBotVersion(v string) *CustomVocabularyImportSpecification {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *CustomVocabularyImportSpecification) SetLocaleId(v string) *CustomVocabularyImportSpecification {
+	s.LocaleId = &v
+	return s
+}
+
 // By default, data stored by Amazon Lex is encrypted. The DataPrivacy structure
 // provides settings that determine how Amazon Lex handles special cases of
 // securing the data for your bot.
@@ -11325,6 +12700,68 @@ func (s *DataPrivacy) Validate() error {
 // SetChildDirected sets the ChildDirected field's value.
 func (s *DataPrivacy) SetChildDirected(v bool) *DataPrivacy {
 	s.ChildDirected = &v
+	return s
+}
+
+// The object used for specifying the data range that the customer wants Amazon
+// Lex to read through in the input transcripts.
+type DateRangeFilter struct {
+	_ struct{} `type:"structure"`
+
+	// A timestamp indicating the end date for the date range filter.
+	//
+	// EndDateTime is a required field
+	EndDateTime *time.Time `locationName:"endDateTime" type:"timestamp" required:"true"`
+
+	// A timestamp indicating the start date for the date range filter.
+	//
+	// StartDateTime is a required field
+	StartDateTime *time.Time `locationName:"startDateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DateRangeFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DateRangeFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DateRangeFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DateRangeFilter"}
+	if s.EndDateTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndDateTime"))
+	}
+	if s.StartDateTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartDateTime"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndDateTime sets the EndDateTime field's value.
+func (s *DateRangeFilter) SetEndDateTime(v time.Time) *DateRangeFilter {
+	s.EndDateTime = &v
+	return s
+}
+
+// SetStartDateTime sets the StartDateTime field's value.
+func (s *DateRangeFilter) SetStartDateTime(v time.Time) *DateRangeFilter {
+	s.StartDateTime = &v
 	return s
 }
 
@@ -11827,6 +13264,149 @@ func (s *DeleteBotVersionOutput) SetBotVersion(v string) *DeleteBotVersionOutput
 	return s
 }
 
+type DeleteCustomVocabularyInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique identifier of the bot to remove the custom vocabulary from.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot to remove the custom vocabulary from.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The locale identifier for the locale that contains the custom vocabulary
+	// to remove.
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomVocabularyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomVocabularyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCustomVocabularyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCustomVocabularyInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *DeleteCustomVocabularyInput) SetBotId(v string) *DeleteCustomVocabularyInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *DeleteCustomVocabularyInput) SetBotVersion(v string) *DeleteCustomVocabularyInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *DeleteCustomVocabularyInput) SetLocaleId(v string) *DeleteCustomVocabularyInput {
+	s.LocaleId = &v
+	return s
+}
+
+type DeleteCustomVocabularyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot that the custom vocabulary was removed from.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The version of the bot that the custom vocabulary was removed from.
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// The status of removing the custom vocabulary.
+	CustomVocabularyStatus *string `locationName:"customVocabularyStatus" type:"string" enum:"CustomVocabularyStatus"`
+
+	// The locale identifier for the locale that the custom vocabulary was removed
+	// from.
+	LocaleId *string `locationName:"localeId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomVocabularyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCustomVocabularyOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *DeleteCustomVocabularyOutput) SetBotId(v string) *DeleteCustomVocabularyOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *DeleteCustomVocabularyOutput) SetBotVersion(v string) *DeleteCustomVocabularyOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCustomVocabularyStatus sets the CustomVocabularyStatus field's value.
+func (s *DeleteCustomVocabularyOutput) SetCustomVocabularyStatus(v string) *DeleteCustomVocabularyOutput {
+	s.CustomVocabularyStatus = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *DeleteCustomVocabularyOutput) SetLocaleId(v string) *DeleteCustomVocabularyOutput {
+	s.LocaleId = &v
+	return s
+}
+
 type DeleteExportInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -11883,8 +13463,9 @@ type DeleteExportOutput struct {
 	ExportId *string `locationName:"exportId" min:"10" type:"string"`
 
 	// The current status of the deletion. When the deletion is complete, the export
-	// will no longer be returned by the operation and calls to the with the export
-	// identifier will fail.
+	// will no longer be returned by the ListExports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListExports.html)
+	// operation and calls to the DescribeExport (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeExport.html)
+	// operation with the export identifier will fail.
 	ExportStatus *string `locationName:"exportStatus" type:"string" enum:"ExportStatus"`
 }
 
@@ -11974,8 +13555,9 @@ type DeleteImportOutput struct {
 	ImportId *string `locationName:"importId" min:"10" type:"string"`
 
 	// The current status of the deletion. When the deletion is complete, the import
-	// will no longer be returned by the operation and calls to the with the import
-	// identifier will fail.
+	// will no longer be returned by the ListImports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListImports.html)
+	// operation and calls to the DescribeImport (https://docs.aws.amazon.com/lexv2/latest/dg/API_DescribeImport.html)
+	// operation with the import identifier will fail.
 	ImportStatus *string `locationName:"importStatus" type:"string" enum:"ImportStatus"`
 }
 
@@ -12112,7 +13694,7 @@ func (s *DeleteIntentInput) SetLocaleId(v string) *DeleteIntentInput {
 }
 
 type DeleteIntentOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12490,7 +14072,7 @@ func (s *DeleteSlotInput) SetSlotId(v string) *DeleteSlotInput {
 }
 
 type DeleteSlotOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12626,7 +14208,7 @@ func (s *DeleteSlotTypeInput) SetSlotTypeId(v string) *DeleteSlotTypeInput {
 }
 
 type DeleteSlotTypeOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12661,7 +14243,9 @@ type DeleteUtterancesInput struct {
 	LocaleId *string `location:"querystring" locationName:"localeId" type:"string"`
 
 	// The unique identifier of the session with the user. The ID is returned in
-	// the response from the and operations.
+	// the response from the RecognizeText (https://docs.aws.amazon.com/lexv2/latest/dg/API_runtime_RecognizeText.html)
+	// and RecognizeUtterance (https://docs.aws.amazon.com/lexv2/latest/dg/API_runtime_RecognizeUtterance.html)
+	// operations.
 	SessionId *string `location:"querystring" locationName:"sessionId" min:"2" type:"string"`
 }
 
@@ -12721,7 +14305,7 @@ func (s *DeleteUtterancesInput) SetSessionId(v string) *DeleteUtterancesInput {
 }
 
 type DeleteUtterancesOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -13122,6 +14706,9 @@ type DescribeBotLocaleOutput struct {
 	// an utterance.
 	NluIntentConfidenceThreshold *float64 `locationName:"nluIntentConfidenceThreshold" type:"double"`
 
+	// Recommended actions to take to resolve an error in the failureReasons field.
+	RecommendedActions []*string `locationName:"recommendedActions" type:"list"`
+
 	// The number of slot types defined for the locale.
 	SlotTypesCount *int64 `locationName:"slotTypesCount" type:"integer"`
 
@@ -13222,6 +14809,12 @@ func (s *DescribeBotLocaleOutput) SetLocaleName(v string) *DescribeBotLocaleOutp
 // SetNluIntentConfidenceThreshold sets the NluIntentConfidenceThreshold field's value.
 func (s *DescribeBotLocaleOutput) SetNluIntentConfidenceThreshold(v float64) *DescribeBotLocaleOutput {
 	s.NluIntentConfidenceThreshold = &v
+	return s
+}
+
+// SetRecommendedActions sets the RecommendedActions field's value.
+func (s *DescribeBotLocaleOutput) SetRecommendedActions(v []*string) *DescribeBotLocaleOutput {
+	s.RecommendedActions = v
 	return s
 }
 
@@ -13341,6 +14934,234 @@ func (s *DescribeBotOutput) SetLastUpdatedDateTime(v time.Time) *DescribeBotOutp
 // SetRoleArn sets the RoleArn field's value.
 func (s *DescribeBotOutput) SetRoleArn(v string) *DescribeBotOutput {
 	s.RoleArn = &v
+	return s
+}
+
+type DescribeBotRecommendationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique identifier of the bot associated with the bot recommendation.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The identifier of the bot recommendation to describe.
+	//
+	// BotRecommendationId is a required field
+	BotRecommendationId *string `location:"uri" locationName:"botRecommendationId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot associated with the bot recommendation.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The identifier of the language and locale of the bot recommendation to describe.
+	// The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeBotRecommendationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeBotRecommendationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeBotRecommendationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeBotRecommendationInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotRecommendationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotRecommendationId"))
+	}
+	if s.BotRecommendationId != nil && len(*s.BotRecommendationId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotRecommendationId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *DescribeBotRecommendationInput) SetBotId(v string) *DescribeBotRecommendationInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *DescribeBotRecommendationInput) SetBotRecommendationId(v string) *DescribeBotRecommendationInput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *DescribeBotRecommendationInput) SetBotVersion(v string) *DescribeBotRecommendationInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *DescribeBotRecommendationInput) SetLocaleId(v string) *DescribeBotRecommendationInput {
+	s.LocaleId = &v
+	return s
+}
+
+type DescribeBotRecommendationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot associated with the bot recommendation.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The identifier of the bot recommendation being described.
+	BotRecommendationId *string `locationName:"botRecommendationId" min:"10" type:"string"`
+
+	// The object representing the URL of the bot definition, the URL of the associated
+	// transcript and a statistical summary of the bot recommendation results.
+	BotRecommendationResults *BotRecommendationResults `locationName:"botRecommendationResults" type:"structure"`
+
+	// The status of the bot recommendation. If the status is Failed, then the reasons
+	// for the failure are listed in the failureReasons field.
+	BotRecommendationStatus *string `locationName:"botRecommendationStatus" type:"string" enum:"BotRecommendationStatus"`
+
+	// The version of the bot associated with the bot recommendation.
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// The date and time that the bot recommendation was created.
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
+
+	// The object representing the passwords that were used to encrypt the data
+	// related to the bot recommendation results, as well as the KMS key ARN used
+	// to encrypt the associated metadata.
+	EncryptionSetting *EncryptionSetting `locationName:"encryptionSetting" type:"structure"`
+
+	// If botRecommendationStatus is Failed, Amazon Lex explains why.
+	FailureReasons []*string `locationName:"failureReasons" type:"list"`
+
+	// The date and time that the bot recommendation was last updated.
+	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
+
+	// The identifier of the language and locale of the bot recommendation to describe.
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// The object representing the Amazon S3 bucket containing the transcript, as
+	// well as the associated metadata.
+	TranscriptSourceSetting *TranscriptSourceSetting `locationName:"transcriptSourceSetting" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeBotRecommendationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeBotRecommendationOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *DescribeBotRecommendationOutput) SetBotId(v string) *DescribeBotRecommendationOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *DescribeBotRecommendationOutput) SetBotRecommendationId(v string) *DescribeBotRecommendationOutput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotRecommendationResults sets the BotRecommendationResults field's value.
+func (s *DescribeBotRecommendationOutput) SetBotRecommendationResults(v *BotRecommendationResults) *DescribeBotRecommendationOutput {
+	s.BotRecommendationResults = v
+	return s
+}
+
+// SetBotRecommendationStatus sets the BotRecommendationStatus field's value.
+func (s *DescribeBotRecommendationOutput) SetBotRecommendationStatus(v string) *DescribeBotRecommendationOutput {
+	s.BotRecommendationStatus = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *DescribeBotRecommendationOutput) SetBotVersion(v string) *DescribeBotRecommendationOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *DescribeBotRecommendationOutput) SetCreationDateTime(v time.Time) *DescribeBotRecommendationOutput {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetEncryptionSetting sets the EncryptionSetting field's value.
+func (s *DescribeBotRecommendationOutput) SetEncryptionSetting(v *EncryptionSetting) *DescribeBotRecommendationOutput {
+	s.EncryptionSetting = v
+	return s
+}
+
+// SetFailureReasons sets the FailureReasons field's value.
+func (s *DescribeBotRecommendationOutput) SetFailureReasons(v []*string) *DescribeBotRecommendationOutput {
+	s.FailureReasons = v
+	return s
+}
+
+// SetLastUpdatedDateTime sets the LastUpdatedDateTime field's value.
+func (s *DescribeBotRecommendationOutput) SetLastUpdatedDateTime(v time.Time) *DescribeBotRecommendationOutput {
+	s.LastUpdatedDateTime = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *DescribeBotRecommendationOutput) SetLocaleId(v string) *DescribeBotRecommendationOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetTranscriptSourceSetting sets the TranscriptSourceSetting field's value.
+func (s *DescribeBotRecommendationOutput) SetTranscriptSourceSetting(v *TranscriptSourceSetting) *DescribeBotRecommendationOutput {
+	s.TranscriptSourceSetting = v
 	return s
 }
 
@@ -13526,6 +15347,167 @@ func (s *DescribeBotVersionOutput) SetRoleArn(v string) *DescribeBotVersionOutpu
 	return s
 }
 
+type DescribeCustomVocabularyMetadataInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The unique identifier of the bot that contains the custom vocabulary.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The bot version of the bot to return metadata for.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"1" type:"string" required:"true"`
+
+	// The locale to return the custom vocabulary information for. The locale must
+	// be en_GB.
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCustomVocabularyMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCustomVocabularyMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeCustomVocabularyMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeCustomVocabularyMetadataInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 1))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *DescribeCustomVocabularyMetadataInput) SetBotId(v string) *DescribeCustomVocabularyMetadataInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *DescribeCustomVocabularyMetadataInput) SetBotVersion(v string) *DescribeCustomVocabularyMetadataInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *DescribeCustomVocabularyMetadataInput) SetLocaleId(v string) *DescribeCustomVocabularyMetadataInput {
+	s.LocaleId = &v
+	return s
+}
+
+type DescribeCustomVocabularyMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the bot that contains the custom vocabulary.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The version of the bot that contains the custom vocabulary to describe.
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
+
+	// The date and time that the custom vocabulary was created.
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
+
+	// The status of the custom vocabulary. If the status is Ready the custom vocabulary
+	// is ready to use.
+	CustomVocabularyStatus *string `locationName:"customVocabularyStatus" type:"string" enum:"CustomVocabularyStatus"`
+
+	// The date and time that the custom vocabulary was last updated.
+	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
+
+	// The locale that contains the custom vocabulary to describe.
+	LocaleId *string `locationName:"localeId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCustomVocabularyMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCustomVocabularyMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *DescribeCustomVocabularyMetadataOutput) SetBotId(v string) *DescribeCustomVocabularyMetadataOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *DescribeCustomVocabularyMetadataOutput) SetBotVersion(v string) *DescribeCustomVocabularyMetadataOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *DescribeCustomVocabularyMetadataOutput) SetCreationDateTime(v time.Time) *DescribeCustomVocabularyMetadataOutput {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetCustomVocabularyStatus sets the CustomVocabularyStatus field's value.
+func (s *DescribeCustomVocabularyMetadataOutput) SetCustomVocabularyStatus(v string) *DescribeCustomVocabularyMetadataOutput {
+	s.CustomVocabularyStatus = &v
+	return s
+}
+
+// SetLastUpdatedDateTime sets the LastUpdatedDateTime field's value.
+func (s *DescribeCustomVocabularyMetadataOutput) SetLastUpdatedDateTime(v time.Time) *DescribeCustomVocabularyMetadataOutput {
+	s.LastUpdatedDateTime = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *DescribeCustomVocabularyMetadataOutput) SetLocaleId(v string) *DescribeCustomVocabularyMetadataOutput {
+	s.LocaleId = &v
+	return s
+}
+
 type DescribeExportInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -13596,7 +15578,7 @@ type DescribeExportOutput struct {
 	// could not be completed.
 	FailureReasons []*string `locationName:"failureReasons" type:"list"`
 
-	// The file format used in the files that describe the bot or bot locale.
+	// The file format used in the files that describe the resource.
 	FileFormat *string `locationName:"fileFormat" type:"string" enum:"ImportExportFileFormat"`
 
 	// The last date and time that the export was updated.
@@ -13753,7 +15735,7 @@ type DescribeImportOutput struct {
 	// resources are not overwritten and the import fails.
 	MergeStrategy *string `locationName:"mergeStrategy" type:"string" enum:"MergeStrategy"`
 
-	// The specifications of the imported bot or bot locale.
+	// The specifications of the imported bot, bot locale, or custom vocabulary.
 	ResourceSpecification *ImportResourceSpecification `locationName:"resourceSpecification" type:"structure"`
 }
 
@@ -14602,6 +16584,9 @@ type DescribeSlotTypeOutput struct {
 	// The description specified for the slot type.
 	Description *string `locationName:"description" type:"string"`
 
+	// Provides information about the external source of the slot type's definition.
+	ExternalSourceSetting *ExternalSourceSetting `locationName:"externalSourceSetting" type:"structure"`
+
 	// A timestamp of the date and time that the slot type was last updated.
 	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
 
@@ -14665,6 +16650,12 @@ func (s *DescribeSlotTypeOutput) SetCreationDateTime(v time.Time) *DescribeSlotT
 // SetDescription sets the Description field's value.
 func (s *DescribeSlotTypeOutput) SetDescription(v string) *DescribeSlotTypeOutput {
 	s.Description = &v
+	return s
+}
+
+// SetExternalSourceSetting sets the ExternalSourceSetting field's value.
+func (s *DescribeSlotTypeOutput) SetExternalSourceSetting(v *ExternalSourceSetting) *DescribeSlotTypeOutput {
+	s.ExternalSourceSetting = v
 	return s
 }
 
@@ -14758,7 +16749,81 @@ func (s *DialogCodeHookSettings) SetEnabled(v bool) *DialogCodeHookSettings {
 	return s
 }
 
-// Filters the response form the operation
+// The object representing the passwords that were used to encrypt the data
+// related to the bot recommendation, as well as the KMS key ARN used to encrypt
+// the associated metadata.
+type EncryptionSetting struct {
+	_ struct{} `type:"structure"`
+
+	// The password used to encrypt the associated transcript file.
+	//
+	// AssociatedTranscriptsPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EncryptionSetting's
+	// String and GoString methods.
+	AssociatedTranscriptsPassword *string `locationName:"associatedTranscriptsPassword" type:"string" sensitive:"true"`
+
+	// The password used to encrypt the recommended bot recommendation file.
+	//
+	// BotLocaleExportPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by EncryptionSetting's
+	// String and GoString methods.
+	BotLocaleExportPassword *string `locationName:"botLocaleExportPassword" type:"string" sensitive:"true"`
+
+	// The KMS key ARN used to encrypt the metadata associated with the bot recommendation.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EncryptionSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EncryptionSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EncryptionSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EncryptionSetting"}
+	if s.KmsKeyArn != nil && len(*s.KmsKeyArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssociatedTranscriptsPassword sets the AssociatedTranscriptsPassword field's value.
+func (s *EncryptionSetting) SetAssociatedTranscriptsPassword(v string) *EncryptionSetting {
+	s.AssociatedTranscriptsPassword = &v
+	return s
+}
+
+// SetBotLocaleExportPassword sets the BotLocaleExportPassword field's value.
+func (s *EncryptionSetting) SetBotLocaleExportPassword(v string) *EncryptionSetting {
+	s.BotLocaleExportPassword = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *EncryptionSetting) SetKmsKeyArn(v string) *EncryptionSetting {
+	s.KmsKeyArn = &v
+	return s
+}
+
+// Filters the response form the ListExports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListExports.html)
+// operation
 type ExportFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -14775,7 +16840,8 @@ type ExportFilter struct {
 	// Operator is a required field
 	Operator *string `locationName:"operator" type:"string" required:"true" enum:"ExportFilterOperator"`
 
-	// The values to use to filter the response.
+	// The values to use to filter the response. The values must be Bot, BotLocale,
+	// or CustomVocabulary.
 	//
 	// Values is a required field
 	Values []*string `locationName:"values" min:"1" type:"list" required:"true"`
@@ -14850,6 +16916,9 @@ type ExportResourceSpecification struct {
 
 	// Parameters for exporting a bot locale.
 	BotLocaleExportSpecification *BotLocaleExportSpecification `locationName:"botLocaleExportSpecification" type:"structure"`
+
+	// The parameters required to export a custom vocabulary.
+	CustomVocabularyExportSpecification *CustomVocabularyExportSpecification `locationName:"customVocabularyExportSpecification" type:"structure"`
 }
 
 // String returns the string representation.
@@ -14883,6 +16952,11 @@ func (s *ExportResourceSpecification) Validate() error {
 			invalidParams.AddNested("BotLocaleExportSpecification", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.CustomVocabularyExportSpecification != nil {
+		if err := s.CustomVocabularyExportSpecification.Validate(); err != nil {
+			invalidParams.AddNested("CustomVocabularyExportSpecification", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -14899,6 +16973,12 @@ func (s *ExportResourceSpecification) SetBotExportSpecification(v *BotExportSpec
 // SetBotLocaleExportSpecification sets the BotLocaleExportSpecification field's value.
 func (s *ExportResourceSpecification) SetBotLocaleExportSpecification(v *BotLocaleExportSpecification) *ExportResourceSpecification {
 	s.BotLocaleExportSpecification = v
+	return s
+}
+
+// SetCustomVocabularyExportSpecification sets the CustomVocabularyExportSpecification field's value.
+func (s *ExportResourceSpecification) SetCustomVocabularyExportSpecification(v *CustomVocabularyExportSpecification) *ExportResourceSpecification {
+	s.CustomVocabularyExportSpecification = v
 	return s
 }
 
@@ -15038,6 +17118,53 @@ func (s *ExportSummary) SetLastUpdatedDateTime(v time.Time) *ExportSummary {
 // SetResourceSpecification sets the ResourceSpecification field's value.
 func (s *ExportSummary) SetResourceSpecification(v *ExportResourceSpecification) *ExportSummary {
 	s.ResourceSpecification = v
+	return s
+}
+
+// Provides information about the external source of the slot type's definition.
+type ExternalSourceSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Settings required for a slot type based on a grammar that you provide.
+	GrammarSlotTypeSetting *GrammarSlotTypeSetting `locationName:"grammarSlotTypeSetting" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExternalSourceSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ExternalSourceSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExternalSourceSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExternalSourceSetting"}
+	if s.GrammarSlotTypeSetting != nil {
+		if err := s.GrammarSlotTypeSetting.Validate(); err != nil {
+			invalidParams.AddNested("GrammarSlotTypeSetting", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGrammarSlotTypeSetting sets the GrammarSlotTypeSetting field's value.
+func (s *ExternalSourceSetting) SetGrammarSlotTypeSetting(v *GrammarSlotTypeSetting) *ExternalSourceSetting {
+	s.GrammarSlotTypeSetting = v
 	return s
 }
 
@@ -15397,6 +17524,133 @@ func (s *FulfillmentUpdatesSpecification) SetUpdateResponse(v *FulfillmentUpdate
 	return s
 }
 
+// Settings requried for a slot type based on a grammar that you provide.
+type GrammarSlotTypeSetting struct {
+	_ struct{} `type:"structure"`
+
+	// The source of the grammar used to create the slot type.
+	Source *GrammarSlotTypeSource `locationName:"source" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GrammarSlotTypeSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GrammarSlotTypeSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GrammarSlotTypeSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GrammarSlotTypeSetting"}
+	if s.Source != nil {
+		if err := s.Source.Validate(); err != nil {
+			invalidParams.AddNested("Source", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSource sets the Source field's value.
+func (s *GrammarSlotTypeSetting) SetSource(v *GrammarSlotTypeSource) *GrammarSlotTypeSetting {
+	s.Source = v
+	return s
+}
+
+// Describes the Amazon S3 bucket name and location for the grammar that is
+// the source for the slot type.
+type GrammarSlotTypeSource struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon KMS key required to decrypt the contents of the grammar, if any.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"20" type:"string"`
+
+	// The name of the S3 bucket that contains the grammar source.
+	//
+	// S3BucketName is a required field
+	S3BucketName *string `locationName:"s3BucketName" min:"3" type:"string" required:"true"`
+
+	// The path to the grammar in the S3 bucket.
+	//
+	// S3ObjectKey is a required field
+	S3ObjectKey *string `locationName:"s3ObjectKey" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GrammarSlotTypeSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GrammarSlotTypeSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GrammarSlotTypeSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GrammarSlotTypeSource"}
+	if s.KmsKeyArn != nil && len(*s.KmsKeyArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyArn", 20))
+	}
+	if s.S3BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3BucketName"))
+	}
+	if s.S3BucketName != nil && len(*s.S3BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3BucketName", 3))
+	}
+	if s.S3ObjectKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3ObjectKey"))
+	}
+	if s.S3ObjectKey != nil && len(*s.S3ObjectKey) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("S3ObjectKey", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *GrammarSlotTypeSource) SetKmsKeyArn(v string) *GrammarSlotTypeSource {
+	s.KmsKeyArn = &v
+	return s
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *GrammarSlotTypeSource) SetS3BucketName(v string) *GrammarSlotTypeSource {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3ObjectKey sets the S3ObjectKey field's value.
+func (s *GrammarSlotTypeSource) SetS3ObjectKey(v string) *GrammarSlotTypeSource {
+	s.S3ObjectKey = &v
+	return s
+}
+
 // A card that is shown to the user by a messaging platform. You define the
 // contents of the card, the card is displayed by the platform.
 //
@@ -15499,7 +17753,8 @@ func (s *ImageResponseCard) SetTitle(v string) *ImageResponseCard {
 	return s
 }
 
-// Filters the response from the operation.
+// Filters the response from the ListImports (https://docs.aws.amazon.com/lexv2/latest/dg/API_ListImports.html)
+// operation.
 type ImportFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -15516,7 +17771,8 @@ type ImportFilter struct {
 	// Operator is a required field
 	Operator *string `locationName:"operator" type:"string" required:"true" enum:"ImportFilterOperator"`
 
-	// The values to use to filter the response.
+	// The values to use to filter the response. The values must be Bot, BotLocale,
+	// or CustomVocabulary.
 	//
 	// Values is a required field
 	Values []*string `locationName:"values" min:"1" type:"list" required:"true"`
@@ -15591,6 +17847,9 @@ type ImportResourceSpecification struct {
 
 	// Parameters for importing a bot locale.
 	BotLocaleImportSpecification *BotLocaleImportSpecification `locationName:"botLocaleImportSpecification" type:"structure"`
+
+	// Provides the parameters required for importing a custom vocabulary.
+	CustomVocabularyImportSpecification *CustomVocabularyImportSpecification `locationName:"customVocabularyImportSpecification" type:"structure"`
 }
 
 // String returns the string representation.
@@ -15624,6 +17883,11 @@ func (s *ImportResourceSpecification) Validate() error {
 			invalidParams.AddNested("BotLocaleImportSpecification", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.CustomVocabularyImportSpecification != nil {
+		if err := s.CustomVocabularyImportSpecification.Validate(); err != nil {
+			invalidParams.AddNested("CustomVocabularyImportSpecification", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -15640,6 +17904,12 @@ func (s *ImportResourceSpecification) SetBotImportSpecification(v *BotImportSpec
 // SetBotLocaleImportSpecification sets the BotLocaleImportSpecification field's value.
 func (s *ImportResourceSpecification) SetBotLocaleImportSpecification(v *BotLocaleImportSpecification) *ImportResourceSpecification {
 	s.BotLocaleImportSpecification = v
+	return s
+}
+
+// SetCustomVocabularyImportSpecification sets the CustomVocabularyImportSpecification field's value.
+func (s *ImportResourceSpecification) SetCustomVocabularyImportSpecification(v *CustomVocabularyImportSpecification) *ImportResourceSpecification {
+	s.CustomVocabularyImportSpecification = v
 	return s
 }
 
@@ -15724,6 +17994,9 @@ type ImportSummary struct {
 	// The name that you gave the imported resource.
 	ImportedResourceName *string `locationName:"importedResourceName" min:"1" type:"string"`
 
+	// The type of resource that was imported.
+	ImportedResourceType *string `locationName:"importedResourceType" type:"string" enum:"ImportResourceType"`
+
 	// The date and time that the import was last updated.
 	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
 
@@ -15777,6 +18050,12 @@ func (s *ImportSummary) SetImportedResourceId(v string) *ImportSummary {
 // SetImportedResourceName sets the ImportedResourceName field's value.
 func (s *ImportSummary) SetImportedResourceName(v string) *ImportSummary {
 	s.ImportedResourceName = &v
+	return s
+}
+
+// SetImportedResourceType sets the ImportedResourceType field's value.
+func (s *ImportSummary) SetImportedResourceType(v string) *ImportSummary {
+	s.ImportedResourceType = &v
 	return s
 }
 
@@ -16141,6 +18420,39 @@ func (s *IntentSortBy) SetOrder(v string) *IntentSortBy {
 	return s
 }
 
+// The object that contains the statistical summary of recommended intents associated
+// with the bot recommendation.
+type IntentStatistics struct {
+	_ struct{} `type:"structure"`
+
+	// The number of recommended intents associated with the bot recommendation.
+	DiscoveredIntentCount *int64 `locationName:"discoveredIntentCount" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntentStatistics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntentStatistics) GoString() string {
+	return s.String()
+}
+
+// SetDiscoveredIntentCount sets the DiscoveredIntentCount field's value.
+func (s *IntentStatistics) SetDiscoveredIntentCount(v int64) *IntentStatistics {
+	s.DiscoveredIntentCount = &v
+	return s
+}
+
 // Summary information about an intent returned by the ListIntents operation.
 type IntentSummary struct {
 	_ struct{} `type:"structure"`
@@ -16438,6 +18750,56 @@ func (s *LambdaCodeHook) SetCodeHookInterfaceVersion(v string) *LambdaCodeHook {
 // SetLambdaARN sets the LambdaARN field's value.
 func (s *LambdaCodeHook) SetLambdaARN(v string) *LambdaCodeHook {
 	s.LambdaARN = &v
+	return s
+}
+
+// The object that contains transcript filter details that are associated with
+// a bot recommendation.
+type LexTranscriptFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The object that contains a date range filter that will be applied to the
+	// transcript. Specify this object if you want Amazon Lex to only read the files
+	// that are within the date range.
+	DateRangeFilter *DateRangeFilter `locationName:"dateRangeFilter" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LexTranscriptFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LexTranscriptFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LexTranscriptFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LexTranscriptFilter"}
+	if s.DateRangeFilter != nil {
+		if err := s.DateRangeFilter.Validate(); err != nil {
+			invalidParams.AddNested("DateRangeFilter", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDateRangeFilter sets the DateRangeFilter field's value.
+func (s *LexTranscriptFilter) SetDateRangeFilter(v *DateRangeFilter) *LexTranscriptFilter {
+	s.DateRangeFilter = v
 	return s
 }
 
@@ -17070,6 +19432,187 @@ func (s *ListBotLocalesOutput) SetNextToken(v string) *ListBotLocalesOutput {
 	return s
 }
 
+type ListBotRecommendationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot that contains the bot recommendation list.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot that contains the bot recommendation list.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The identifier of the language and locale of the bot recommendation list.
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+
+	// The maximum number of bot recommendations to return in each page of results.
+	// If there are fewer results than the max page size, only the actual number
+	// of results are returned.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// If the response from the ListBotRecommendation operation contains more results
+	// than specified in the maxResults parameter, a token is returned in the response.
+	// Use that token in the nextToken parameter to return the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBotRecommendationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBotRecommendationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListBotRecommendationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListBotRecommendationsInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *ListBotRecommendationsInput) SetBotId(v string) *ListBotRecommendationsInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *ListBotRecommendationsInput) SetBotVersion(v string) *ListBotRecommendationsInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListBotRecommendationsInput) SetLocaleId(v string) *ListBotRecommendationsInput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListBotRecommendationsInput) SetMaxResults(v int64) *ListBotRecommendationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBotRecommendationsInput) SetNextToken(v string) *ListBotRecommendationsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListBotRecommendationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot that contains the bot recommendation list.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// Summary information for the bot recommendations that meet the filter specified
+	// in this request. The length of the list is specified in the maxResults parameter
+	// of the request. If there are more bot recommendations available, the nextToken
+	// field contains a token to get the next page of results.
+	BotRecommendationSummaries []*BotRecommendationSummary `locationName:"botRecommendationSummaries" type:"list"`
+
+	// The version of the bot that contains the bot recommendation list.
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// The identifier of the language and locale of the bot recommendation list.
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// A token that indicates whether there are more results to return in a response
+	// to the ListBotRecommendations operation. If the nextToken field is present,
+	// you send the contents as the nextToken parameter of a ListBotRecommendations
+	// operation request to get the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBotRecommendationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBotRecommendationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *ListBotRecommendationsOutput) SetBotId(v string) *ListBotRecommendationsOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationSummaries sets the BotRecommendationSummaries field's value.
+func (s *ListBotRecommendationsOutput) SetBotRecommendationSummaries(v []*BotRecommendationSummary) *ListBotRecommendationsOutput {
+	s.BotRecommendationSummaries = v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *ListBotRecommendationsOutput) SetBotVersion(v string) *ListBotRecommendationsOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListBotRecommendationsOutput) SetLocaleId(v string) *ListBotRecommendationsOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBotRecommendationsOutput) SetNextToken(v string) *ListBotRecommendationsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListBotVersionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17228,8 +19771,11 @@ type ListBotsInput struct {
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// If the response from the ListBots operation contains more results than specified
-	// in the maxResults parameter, a token is returned in the response. Use that
-	// token in the nextToken parameter to return the next page of results.
+	// in the maxResults parameter, a token is returned in the response.
+	//
+	// Use the returned token in the nextToken parameter of a ListBots request to
+	// return the next page of results. For a complete set of results, call the
+	// ListBots operation until the nextToken returned in the response is null.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// Specifies sorting parameters for the list of bots. You can specify that the
@@ -17664,6 +20210,11 @@ type ListExportsInput struct {
 	// filter and one string to filter on.
 	Filters []*ExportFilter `locationName:"filters" min:"1" type:"list"`
 
+	// Specifies the resources that should be exported. If you don't specify a resource
+	// type in the filters parameter, both bot locales and custom vocabularies are
+	// exported.
+	LocaleId *string `locationName:"localeId" type:"string"`
+
 	// The maximum number of exports to return in each page of results. If there
 	// are fewer results than the max page size, only the actual number of results
 	// are returned.
@@ -17671,7 +20222,10 @@ type ListExportsInput struct {
 
 	// If the response from the ListExports operation contains more results that
 	// specified in the maxResults parameter, a token is returned in the response.
-	// Use that token in the nextToken parameter to return the next page of results.
+	//
+	// Use the returned token in the nextToken parameter of a ListExports request
+	// to return the next page of results. For a complete set of results, call the
+	// ListExports operation until the nextToken returned in the response is null.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// Determines the field that the list of exports is sorted by. You can sort
@@ -17752,6 +20306,12 @@ func (s *ListExportsInput) SetFilters(v []*ExportFilter) *ListExportsInput {
 	return s
 }
 
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListExportsInput) SetLocaleId(v string) *ListExportsInput {
+	s.LocaleId = &v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListExportsInput) SetMaxResults(v int64) *ListExportsInput {
 	s.MaxResults = &v
@@ -17784,6 +20344,9 @@ type ListExportsOutput struct {
 	// If there are more exports available, the nextToken field contains a token
 	// to get the next page of results.
 	ExportSummaries []*ExportSummary `locationName:"exportSummaries" type:"list"`
+
+	// The locale specified in the request.
+	LocaleId *string `locationName:"localeId" type:"string"`
 
 	// A token that indicates whether there are more results to return in a response
 	// to the ListExports operation. If the nextToken field is present, you send
@@ -17828,6 +20391,12 @@ func (s *ListExportsOutput) SetExportSummaries(v []*ExportSummary) *ListExportsO
 	return s
 }
 
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListExportsOutput) SetLocaleId(v string) *ListExportsOutput {
+	s.LocaleId = &v
+	return s
+}
+
 // SetNextToken sets the NextToken field's value.
 func (s *ListExportsOutput) SetNextToken(v string) *ListExportsOutput {
 	s.NextToken = &v
@@ -17848,6 +20417,11 @@ type ListImportsInput struct {
 	// filter and one string to filter on.
 	Filters []*ImportFilter `locationName:"filters" min:"1" type:"list"`
 
+	// Specifies the locale that should be present in the list. If you don't specify
+	// a resource type in the filters parameter, the list contains both bot locales
+	// and custom vocabularies.
+	LocaleId *string `locationName:"localeId" type:"string"`
+
 	// The maximum number of imports to return in each page of results. If there
 	// are fewer results than the max page size, only the actual number of results
 	// are returned.
@@ -17855,7 +20429,10 @@ type ListImportsInput struct {
 
 	// If the response from the ListImports operation contains more results than
 	// specified in the maxResults parameter, a token is returned in the response.
-	// Use that token in the nextToken parameter to return the next page of results.
+	//
+	// Use the returned token in the nextToken parameter of a ListImports request
+	// to return the next page of results. For a complete set of results, call the
+	// ListImports operation until the nextToken returned in the response is null.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// Determines the field that the list of imports is sorted by. You can sort
@@ -17936,6 +20513,12 @@ func (s *ListImportsInput) SetFilters(v []*ImportFilter) *ListImportsInput {
 	return s
 }
 
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListImportsInput) SetLocaleId(v string) *ListImportsInput {
+	s.LocaleId = &v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListImportsInput) SetMaxResults(v int64) *ListImportsInput {
 	s.MaxResults = &v
@@ -17968,6 +20551,9 @@ type ListImportsOutput struct {
 	// If there are more imports available, the nextToken field contains a token
 	// to get the next page of results.
 	ImportSummaries []*ImportSummary `locationName:"importSummaries" type:"list"`
+
+	// The locale specified in the request.
+	LocaleId *string `locationName:"localeId" type:"string"`
 
 	// A token that indicates whether there are more results to return in a response
 	// to the ListImports operation. If the nextToken field is present, you send
@@ -18012,6 +20598,12 @@ func (s *ListImportsOutput) SetImportSummaries(v []*ImportSummary) *ListImportsO
 	return s
 }
 
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListImportsOutput) SetLocaleId(v string) *ListImportsOutput {
+	s.LocaleId = &v
+	return s
+}
+
 // SetNextToken sets the NextToken field's value.
 func (s *ListImportsOutput) SetNextToken(v string) *ListImportsOutput {
 	s.NextToken = &v
@@ -18050,7 +20642,10 @@ type ListIntentsInput struct {
 
 	// If the response from the ListIntents operation contains more results than
 	// specified in the maxResults parameter, a token is returned in the response.
-	// Use that token in the nextToken parameter to return the next page of results.
+	//
+	// Use the returned token in the nextToken parameter of a ListIntents request
+	// to return the next page of results. For a complete set of results, call the
+	// ListIntents operation until the nextToken returned in the response is null.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// Determines the sort order for the response from the ListIntents operation.
@@ -18238,6 +20833,215 @@ func (s *ListIntentsOutput) SetLocaleId(v string) *ListIntentsOutput {
 // SetNextToken sets the NextToken field's value.
 func (s *ListIntentsOutput) SetNextToken(v string) *ListIntentsOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListRecommendedIntentsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot associated with the recommended intents.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The identifier of the bot recommendation that contains the recommended intents.
+	//
+	// BotRecommendationId is a required field
+	BotRecommendationId *string `location:"uri" locationName:"botRecommendationId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot that contains the recommended intents.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The identifier of the language and locale of the recommended intents.
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+
+	// The maximum number of bot recommendations to return in each page of results.
+	// If there are fewer results than the max page size, only the actual number
+	// of results are returned.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// If the response from the ListRecommendedIntents operation contains more results
+	// than specified in the maxResults parameter, a token is returned in the response.
+	// Use that token in the nextToken parameter to return the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRecommendedIntentsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRecommendedIntentsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListRecommendedIntentsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListRecommendedIntentsInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotRecommendationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotRecommendationId"))
+	}
+	if s.BotRecommendationId != nil && len(*s.BotRecommendationId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotRecommendationId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *ListRecommendedIntentsInput) SetBotId(v string) *ListRecommendedIntentsInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *ListRecommendedIntentsInput) SetBotRecommendationId(v string) *ListRecommendedIntentsInput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *ListRecommendedIntentsInput) SetBotVersion(v string) *ListRecommendedIntentsInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListRecommendedIntentsInput) SetLocaleId(v string) *ListRecommendedIntentsInput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListRecommendedIntentsInput) SetMaxResults(v int64) *ListRecommendedIntentsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRecommendedIntentsInput) SetNextToken(v string) *ListRecommendedIntentsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListRecommendedIntentsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot associated with the recommended intent.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The identifier of the bot recommendation that contains the recommended intent.
+	BotRecommendationId *string `locationName:"botRecommendationId" min:"10" type:"string"`
+
+	// The version of the bot that contains the intent.
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// The identifier of the language and locale of the intents to list. The string
+	// must match one of the supported locales. For more information, see Supported
+	// languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// A token that indicates whether there are more results to return in a response
+	// to the ListRecommendedIntents operation. If the nextToken field is present,
+	// you send the contents as the nextToken parameter of a ListRecommendedIntents
+	// operation request to get the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Summary information for the intents that meet the filter criteria specified
+	// in the request. The length of the list is specified in the maxResults parameter
+	// of the request. If there are more intents available, the nextToken field
+	// contains a token to get the next page of results.
+	SummaryList []*RecommendedIntentSummary `locationName:"summaryList" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRecommendedIntentsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRecommendedIntentsOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *ListRecommendedIntentsOutput) SetBotId(v string) *ListRecommendedIntentsOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *ListRecommendedIntentsOutput) SetBotRecommendationId(v string) *ListRecommendedIntentsOutput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *ListRecommendedIntentsOutput) SetBotVersion(v string) *ListRecommendedIntentsOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *ListRecommendedIntentsOutput) SetLocaleId(v string) *ListRecommendedIntentsOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRecommendedIntentsOutput) SetNextToken(v string) *ListRecommendedIntentsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSummaryList sets the SummaryList field's value.
+func (s *ListRecommendedIntentsOutput) SetSummaryList(v []*RecommendedIntentSummary) *ListRecommendedIntentsOutput {
+	s.SummaryList = v
 	return s
 }
 
@@ -19129,6 +21933,55 @@ func (s *OutputContext) SetTurnsToLive(v int64) *OutputContext {
 	return s
 }
 
+// The object that contains a path format that will be applied when Amazon Lex
+// reads the transcript file in the bucket you provide. Specify this object
+// if you only want Lex to read a subset of files in your Amazon S3 bucket.
+type PathFormat struct {
+	_ struct{} `type:"structure"`
+
+	// A list of Amazon S3 prefixes that points to sub-folders in the Amazon S3
+	// bucket. Specify this list if you only want Lex to read the files under this
+	// set of sub-folders.
+	ObjectPrefixes []*string `locationName:"objectPrefixes" min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PathFormat) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PathFormat) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PathFormat) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PathFormat"}
+	if s.ObjectPrefixes != nil && len(s.ObjectPrefixes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ObjectPrefixes", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetObjectPrefixes sets the ObjectPrefixes field's value.
+func (s *PathFormat) SetObjectPrefixes(v []*string) *PathFormat {
+	s.ObjectPrefixes = v
+	return s
+}
+
 // Defines an ASCII text message to send to the user.
 type PlainTextMessage struct {
 	_ struct{} `type:"structure"`
@@ -19403,6 +22256,9 @@ type PromptSpecification struct {
 	//
 	// MessageGroups is a required field
 	MessageGroups []*MessageGroup `locationName:"messageGroups" min:"1" type:"list" required:"true"`
+
+	// Indicates how a message is selected from a message group among retries.
+	MessageSelectionStrategy *string `locationName:"messageSelectionStrategy" type:"string" enum:"MessageSelectionStrategy"`
 }
 
 // String returns the string representation.
@@ -19467,6 +22323,63 @@ func (s *PromptSpecification) SetMaxRetries(v int64) *PromptSpecification {
 // SetMessageGroups sets the MessageGroups field's value.
 func (s *PromptSpecification) SetMessageGroups(v []*MessageGroup) *PromptSpecification {
 	s.MessageGroups = v
+	return s
+}
+
+// SetMessageSelectionStrategy sets the MessageSelectionStrategy field's value.
+func (s *PromptSpecification) SetMessageSelectionStrategy(v string) *PromptSpecification {
+	s.MessageSelectionStrategy = &v
+	return s
+}
+
+// An object that contains a summary of a recommended intent.
+type RecommendedIntentSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of a recommended intent associated with the bot recommendation.
+	IntentId *string `locationName:"intentId" min:"10" type:"string"`
+
+	// The name of a recommended intent associated with the bot recommendation.
+	IntentName *string `locationName:"intentName" min:"1" type:"string"`
+
+	// The count of sample utterances of a recommended intent that is associated
+	// with a bot recommendation.
+	SampleUtterancesCount *int64 `locationName:"sampleUtterancesCount" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendedIntentSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendedIntentSummary) GoString() string {
+	return s.String()
+}
+
+// SetIntentId sets the IntentId field's value.
+func (s *RecommendedIntentSummary) SetIntentId(v string) *RecommendedIntentSummary {
+	s.IntentId = &v
+	return s
+}
+
+// SetIntentName sets the IntentName field's value.
+func (s *RecommendedIntentSummary) SetIntentName(v string) *RecommendedIntentSummary {
+	s.IntentName = &v
+	return s
+}
+
+// SetSampleUtterancesCount sets the SampleUtterancesCount field's value.
+func (s *RecommendedIntentSummary) SetSampleUtterancesCount(v int64) *RecommendedIntentSummary {
+	s.SampleUtterancesCount = &v
 	return s
 }
 
@@ -19772,6 +22685,119 @@ func (s *S3BucketLogDestination) SetS3BucketArn(v string) *S3BucketLogDestinatio
 	return s
 }
 
+// The object representing the Amazon S3 bucket containing the transcript, as
+// well as the associated metadata.
+type S3BucketTranscriptSource struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the KMS key that customer use to encrypt their Amazon S3 bucket.
+	// Only use this field if your bucket is encrypted using a customer managed
+	// KMS key.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"20" type:"string"`
+
+	// The object that contains a path format that will be applied when Amazon Lex
+	// reads the transcript file in the bucket you provide. Specify this object
+	// if you only want Lex to read a subset of files in your Amazon S3 bucket.
+	PathFormat *PathFormat `locationName:"pathFormat" type:"structure"`
+
+	// The name of the bucket containing the transcript and the associated metadata.
+	//
+	// S3BucketName is a required field
+	S3BucketName *string `locationName:"s3BucketName" min:"3" type:"string" required:"true"`
+
+	// The object that contains the filter which will be applied when Amazon Lex
+	// reads through the Amazon S3 bucket. Specify this object if you want Amazon
+	// Lex to read only a subset of the Amazon S3 bucket based on the filter you
+	// provide.
+	TranscriptFilter *TranscriptFilter `locationName:"transcriptFilter" type:"structure"`
+
+	// The format of the transcript content. Currently, Genie only supports the
+	// Amazon Lex transcript format.
+	//
+	// TranscriptFormat is a required field
+	TranscriptFormat *string `locationName:"transcriptFormat" type:"string" required:"true" enum:"TranscriptFormat"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketTranscriptSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3BucketTranscriptSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3BucketTranscriptSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3BucketTranscriptSource"}
+	if s.KmsKeyArn != nil && len(*s.KmsKeyArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyArn", 20))
+	}
+	if s.S3BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3BucketName"))
+	}
+	if s.S3BucketName != nil && len(*s.S3BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3BucketName", 3))
+	}
+	if s.TranscriptFormat == nil {
+		invalidParams.Add(request.NewErrParamRequired("TranscriptFormat"))
+	}
+	if s.PathFormat != nil {
+		if err := s.PathFormat.Validate(); err != nil {
+			invalidParams.AddNested("PathFormat", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TranscriptFilter != nil {
+		if err := s.TranscriptFilter.Validate(); err != nil {
+			invalidParams.AddNested("TranscriptFilter", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *S3BucketTranscriptSource) SetKmsKeyArn(v string) *S3BucketTranscriptSource {
+	s.KmsKeyArn = &v
+	return s
+}
+
+// SetPathFormat sets the PathFormat field's value.
+func (s *S3BucketTranscriptSource) SetPathFormat(v *PathFormat) *S3BucketTranscriptSource {
+	s.PathFormat = v
+	return s
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *S3BucketTranscriptSource) SetS3BucketName(v string) *S3BucketTranscriptSource {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetTranscriptFilter sets the TranscriptFilter field's value.
+func (s *S3BucketTranscriptSource) SetTranscriptFilter(v *TranscriptFilter) *S3BucketTranscriptSource {
+	s.TranscriptFilter = v
+	return s
+}
+
+// SetTranscriptFormat sets the TranscriptFormat field's value.
+func (s *S3BucketTranscriptSource) SetTranscriptFormat(v string) *S3BucketTranscriptSource {
+	s.TranscriptFormat = &v
+	return s
+}
+
 // Defines a Speech Synthesis Markup Language (SSML) prompt.
 type SSMLMessage struct {
 	_ struct{} `type:"structure"`
@@ -19918,6 +22944,266 @@ func (s *SampleValue) Validate() error {
 // SetValue sets the Value field's value.
 func (s *SampleValue) SetValue(v string) *SampleValue {
 	s.Value = &v
+	return s
+}
+
+type SearchAssociatedTranscriptsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot associated with the transcripts that you
+	// are searching.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The unique identifier of the bot recommendation associated with the transcripts
+	// to search.
+	//
+	// BotRecommendationId is a required field
+	BotRecommendationId *string `location:"uri" locationName:"botRecommendationId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot containing the transcripts that you are searching.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"1" type:"string" required:"true"`
+
+	// A list of filter objects.
+	//
+	// Filters is a required field
+	Filters []*AssociatedTranscriptFilter `locationName:"filters" min:"1" type:"list" required:"true"`
+
+	// The identifier of the language and locale of the transcripts to search. The
+	// string must match one of the supported locales. For more information, see
+	// Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+
+	// The maximum number of bot recommendations to return in each page of results.
+	// If there are fewer results than the max page size, only the actual number
+	// of results are returned.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// If the response from the SearchAssociatedTranscriptsRequest operation contains
+	// more results than specified in the maxResults parameter, an index is returned
+	// in the response. Use that index in the nextIndex parameter to return the
+	// next page of results.
+	NextIndex *int64 `locationName:"nextIndex" type:"integer"`
+
+	// How SearchResults are ordered. Valid values are Ascending or Descending.
+	// The default is Descending.
+	SearchOrder *string `locationName:"searchOrder" type:"string" enum:"SearchOrder"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAssociatedTranscriptsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAssociatedTranscriptsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchAssociatedTranscriptsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchAssociatedTranscriptsInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotRecommendationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotRecommendationId"))
+	}
+	if s.BotRecommendationId != nil && len(*s.BotRecommendationId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotRecommendationId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 1))
+	}
+	if s.Filters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Filters"))
+	}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *SearchAssociatedTranscriptsInput) SetBotId(v string) *SearchAssociatedTranscriptsInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *SearchAssociatedTranscriptsInput) SetBotRecommendationId(v string) *SearchAssociatedTranscriptsInput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *SearchAssociatedTranscriptsInput) SetBotVersion(v string) *SearchAssociatedTranscriptsInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *SearchAssociatedTranscriptsInput) SetFilters(v []*AssociatedTranscriptFilter) *SearchAssociatedTranscriptsInput {
+	s.Filters = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *SearchAssociatedTranscriptsInput) SetLocaleId(v string) *SearchAssociatedTranscriptsInput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *SearchAssociatedTranscriptsInput) SetMaxResults(v int64) *SearchAssociatedTranscriptsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextIndex sets the NextIndex field's value.
+func (s *SearchAssociatedTranscriptsInput) SetNextIndex(v int64) *SearchAssociatedTranscriptsInput {
+	s.NextIndex = &v
+	return s
+}
+
+// SetSearchOrder sets the SearchOrder field's value.
+func (s *SearchAssociatedTranscriptsInput) SetSearchOrder(v string) *SearchAssociatedTranscriptsInput {
+	s.SearchOrder = &v
+	return s
+}
+
+type SearchAssociatedTranscriptsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The object that contains the associated transcript that meet the criteria
+	// you specified.
+	AssociatedTranscripts []*AssociatedTranscript `locationName:"associatedTranscripts" type:"list"`
+
+	// The unique identifier of the bot associated with the transcripts that you
+	// are searching.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The unique identifier of the bot recommendation associated with the transcripts
+	// to search.
+	BotRecommendationId *string `locationName:"botRecommendationId" min:"10" type:"string"`
+
+	// The version of the bot containing the transcripts that you are searching.
+	BotVersion *string `locationName:"botVersion" min:"1" type:"string"`
+
+	// The identifier of the language and locale of the transcripts to search. The
+	// string must match one of the supported locales. For more information, see
+	// Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// A index that indicates whether there are more results to return in a response
+	// to the SearchAssociatedTranscripts operation. If the nextIndex field is present,
+	// you send the contents as the nextIndex parameter of a SearchAssociatedTranscriptsRequest
+	// operation to get the next page of results.
+	NextIndex *int64 `locationName:"nextIndex" type:"integer"`
+
+	// The total number of transcripts returned by the search.
+	TotalResults *int64 `locationName:"totalResults" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAssociatedTranscriptsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchAssociatedTranscriptsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAssociatedTranscripts sets the AssociatedTranscripts field's value.
+func (s *SearchAssociatedTranscriptsOutput) SetAssociatedTranscripts(v []*AssociatedTranscript) *SearchAssociatedTranscriptsOutput {
+	s.AssociatedTranscripts = v
+	return s
+}
+
+// SetBotId sets the BotId field's value.
+func (s *SearchAssociatedTranscriptsOutput) SetBotId(v string) *SearchAssociatedTranscriptsOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *SearchAssociatedTranscriptsOutput) SetBotRecommendationId(v string) *SearchAssociatedTranscriptsOutput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *SearchAssociatedTranscriptsOutput) SetBotVersion(v string) *SearchAssociatedTranscriptsOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *SearchAssociatedTranscriptsOutput) SetLocaleId(v string) *SearchAssociatedTranscriptsOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetNextIndex sets the NextIndex field's value.
+func (s *SearchAssociatedTranscriptsOutput) SetNextIndex(v int64) *SearchAssociatedTranscriptsOutput {
+	s.NextIndex = &v
+	return s
+}
+
+// SetTotalResults sets the TotalResults field's value.
+func (s *SearchAssociatedTranscriptsOutput) SetTotalResults(v int64) *SearchAssociatedTranscriptsOutput {
+	s.TotalResults = &v
 	return s
 }
 
@@ -20580,6 +23866,39 @@ func (s *SlotTypeSortBy) SetOrder(v string) *SlotTypeSortBy {
 	return s
 }
 
+// The object that contains the statistical summary of the recommended slot
+// type associated with the bot recommendation.
+type SlotTypeStatistics struct {
+	_ struct{} `type:"structure"`
+
+	// The number of recommended slot types associated with the bot recommendation.
+	DiscoveredSlotTypeCount *int64 `locationName:"discoveredSlotTypeCount" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotTypeStatistics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SlotTypeStatistics) GoString() string {
+	return s.String()
+}
+
+// SetDiscoveredSlotTypeCount sets the DiscoveredSlotTypeCount field's value.
+func (s *SlotTypeStatistics) SetDiscoveredSlotTypeCount(v int64) *SlotTypeStatistics {
+	s.DiscoveredSlotTypeCount = &v
+	return s
+}
+
 // Provides summary information about a slot type.
 type SlotTypeSummary struct {
 	_ struct{} `type:"structure"`
@@ -20593,6 +23912,18 @@ type SlotTypeSummary struct {
 	// If the slot type is derived from a built-on slot type, the name of the parent
 	// slot type.
 	ParentSlotTypeSignature *string `locationName:"parentSlotTypeSignature" type:"string"`
+
+	// Indicates the type of the slot type.
+	//
+	//    * Custom - A slot type that you created using custom values. For more
+	//    information, see Creating custom slot types (https://docs.aws.amazon.com/lexv2/latest/dg/custom-slot-types.html).
+	//
+	//    * Extended - A slot type created by extending the AMAZON.AlphaNumeric
+	//    built-in slot type. For more information, see AMAZON.AlphaNumeric (https://docs.aws.amazon.com/lexv2/latest/dg/built-in-slot-alphanumerice.html).
+	//
+	//    * ExternalGrammar - A slot type using a custom GRXML grammar to define
+	//    values. For more information, see Using a custom grammar slot type (https://docs.aws.amazon.com/lexv2/latest/dg/building-grxml.html).
+	SlotTypeCategory *string `locationName:"slotTypeCategory" type:"string" enum:"SlotTypeCategory"`
 
 	// The unique identifier assigned to the slot type.
 	SlotTypeId *string `locationName:"slotTypeId" min:"10" type:"string"`
@@ -20634,6 +23965,12 @@ func (s *SlotTypeSummary) SetLastUpdatedDateTime(v time.Time) *SlotTypeSummary {
 // SetParentSlotTypeSignature sets the ParentSlotTypeSignature field's value.
 func (s *SlotTypeSummary) SetParentSlotTypeSignature(v string) *SlotTypeSummary {
 	s.ParentSlotTypeSignature = &v
+	return s
+}
+
+// SetSlotTypeCategory sets the SlotTypeCategory field's value.
+func (s *SlotTypeSummary) SetSlotTypeCategory(v string) *SlotTypeSummary {
+	s.SlotTypeCategory = &v
 	return s
 }
 
@@ -20904,6 +24241,9 @@ func (s *SlotValueRegexFilter) SetPattern(v string) *SlotValueRegexFilter {
 type SlotValueSelectionSetting struct {
 	_ struct{} `type:"structure"`
 
+	// Provides settings that enable advanced recognition settings for slot values.
+	AdvancedRecognitionSetting *AdvancedRecognitionSetting `locationName:"advancedRecognitionSetting" type:"structure"`
+
 	// A regular expression used to validate the value of a slot.
 	RegexFilter *SlotValueRegexFilter `locationName:"regexFilter" type:"structure"`
 
@@ -20959,6 +24299,12 @@ func (s *SlotValueSelectionSetting) Validate() error {
 	return nil
 }
 
+// SetAdvancedRecognitionSetting sets the AdvancedRecognitionSetting field's value.
+func (s *SlotValueSelectionSetting) SetAdvancedRecognitionSetting(v *AdvancedRecognitionSetting) *SlotValueSelectionSetting {
+	s.AdvancedRecognitionSetting = v
+	return s
+}
+
 // SetRegexFilter sets the RegexFilter field's value.
 func (s *SlotValueSelectionSetting) SetRegexFilter(v *SlotValueRegexFilter) *SlotValueSelectionSetting {
 	s.RegexFilter = v
@@ -20971,12 +24317,235 @@ func (s *SlotValueSelectionSetting) SetResolutionStrategy(v string) *SlotValueSe
 	return s
 }
 
+type StartBotRecommendationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot containing the bot recommendation.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot containing the bot recommendation.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The object representing the passwords that will be used to encrypt the data
+	// related to the bot recommendation results, as well as the KMS key ARN used
+	// to encrypt the associated metadata.
+	EncryptionSetting *EncryptionSetting `locationName:"encryptionSetting" type:"structure"`
+
+	// The identifier of the language and locale of the bot recommendation to start.
+	// The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+
+	// The object representing the Amazon S3 bucket containing the transcript, as
+	// well as the associated metadata.
+	//
+	// TranscriptSourceSetting is a required field
+	TranscriptSourceSetting *TranscriptSourceSetting `locationName:"transcriptSourceSetting" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartBotRecommendationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartBotRecommendationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartBotRecommendationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartBotRecommendationInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.TranscriptSourceSetting == nil {
+		invalidParams.Add(request.NewErrParamRequired("TranscriptSourceSetting"))
+	}
+	if s.EncryptionSetting != nil {
+		if err := s.EncryptionSetting.Validate(); err != nil {
+			invalidParams.AddNested("EncryptionSetting", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TranscriptSourceSetting != nil {
+		if err := s.TranscriptSourceSetting.Validate(); err != nil {
+			invalidParams.AddNested("TranscriptSourceSetting", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *StartBotRecommendationInput) SetBotId(v string) *StartBotRecommendationInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *StartBotRecommendationInput) SetBotVersion(v string) *StartBotRecommendationInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetEncryptionSetting sets the EncryptionSetting field's value.
+func (s *StartBotRecommendationInput) SetEncryptionSetting(v *EncryptionSetting) *StartBotRecommendationInput {
+	s.EncryptionSetting = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *StartBotRecommendationInput) SetLocaleId(v string) *StartBotRecommendationInput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetTranscriptSourceSetting sets the TranscriptSourceSetting field's value.
+func (s *StartBotRecommendationInput) SetTranscriptSourceSetting(v *TranscriptSourceSetting) *StartBotRecommendationInput {
+	s.TranscriptSourceSetting = v
+	return s
+}
+
+type StartBotRecommendationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot containing the bot recommendation.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The identifier of the bot recommendation that you have created.
+	BotRecommendationId *string `locationName:"botRecommendationId" min:"10" type:"string"`
+
+	// The status of the bot recommendation.
+	//
+	// If the status is Failed, then the reasons for the failure are listed in the
+	// failureReasons field.
+	BotRecommendationStatus *string `locationName:"botRecommendationStatus" type:"string" enum:"BotRecommendationStatus"`
+
+	// The version of the bot containing the bot recommendation.
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// A timestamp of the date and time that the bot recommendation was created.
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
+
+	// The object representing the passwords that were used to encrypt the data
+	// related to the bot recommendation results, as well as the KMS key ARN used
+	// to encrypt the associated metadata.
+	EncryptionSetting *EncryptionSetting `locationName:"encryptionSetting" type:"structure"`
+
+	// The identifier of the language and locale of the bot recommendation to start.
+	// The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// The object representing the Amazon S3 bucket containing the transcript, as
+	// well as the associated metadata.
+	TranscriptSourceSetting *TranscriptSourceSetting `locationName:"transcriptSourceSetting" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartBotRecommendationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartBotRecommendationOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *StartBotRecommendationOutput) SetBotId(v string) *StartBotRecommendationOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *StartBotRecommendationOutput) SetBotRecommendationId(v string) *StartBotRecommendationOutput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotRecommendationStatus sets the BotRecommendationStatus field's value.
+func (s *StartBotRecommendationOutput) SetBotRecommendationStatus(v string) *StartBotRecommendationOutput {
+	s.BotRecommendationStatus = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *StartBotRecommendationOutput) SetBotVersion(v string) *StartBotRecommendationOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *StartBotRecommendationOutput) SetCreationDateTime(v time.Time) *StartBotRecommendationOutput {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetEncryptionSetting sets the EncryptionSetting field's value.
+func (s *StartBotRecommendationOutput) SetEncryptionSetting(v *EncryptionSetting) *StartBotRecommendationOutput {
+	s.EncryptionSetting = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *StartBotRecommendationOutput) SetLocaleId(v string) *StartBotRecommendationOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetTranscriptSourceSetting sets the TranscriptSourceSetting field's value.
+func (s *StartBotRecommendationOutput) SetTranscriptSourceSetting(v *TranscriptSourceSetting) *StartBotRecommendationOutput {
+	s.TranscriptSourceSetting = v
+	return s
+}
+
 type StartImportInput struct {
 	_ struct{} `type:"structure"`
 
-	// The password used to encrypt the zip archive that contains the bot or bot
-	// locale definition. You should always encrypt the zip archive to protect it
-	// during transit between your site and Amazon Lex.
+	// The password used to encrypt the zip archive that contains the resource definition.
+	// You should always encrypt the zip archive to protect it during transit between
+	// your site and Amazon Lex.
 	//
 	// FilePassword is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by StartImportInput's
@@ -20984,7 +24553,8 @@ type StartImportInput struct {
 	FilePassword *string `locationName:"filePassword" min:"1" type:"string" sensitive:"true"`
 
 	// The unique identifier for the import. It is included in the response from
-	// the operation.
+	// the CreateUploadUrl (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateUploadUrl.html)
+	// operation.
 	//
 	// ImportId is a required field
 	ImportId *string `locationName:"importId" min:"10" type:"string" required:"true"`
@@ -20996,7 +24566,7 @@ type StartImportInput struct {
 	// MergeStrategy is a required field
 	MergeStrategy *string `locationName:"mergeStrategy" type:"string" required:"true" enum:"MergeStrategy"`
 
-	// Parameters for creating the bot or bot locale.
+	// Parameters for creating the bot, bot locale or custom vocabulary.
 	//
 	// ResourceSpecification is a required field
 	ResourceSpecification *ImportResourceSpecification `locationName:"resourceSpecification" type:"structure" required:"true"`
@@ -21083,8 +24653,8 @@ type StartImportOutput struct {
 	// A unique identifier for the import.
 	ImportId *string `locationName:"importId" min:"10" type:"string"`
 
-	// The current status of the import. When the status is Complete the bot or
-	// bot alias is ready to use.
+	// The current status of the import. When the status is Complete the bot, bot
+	// alias, or custom vocabulary is ready to use.
 	ImportStatus *string `locationName:"importStatus" type:"string" enum:"ImportStatus"`
 
 	// The strategy used when there was a name conflict between the imported resource
@@ -21092,7 +24662,7 @@ type StartImportOutput struct {
 	// resources are not overwritten and the import fails.
 	MergeStrategy *string `locationName:"mergeStrategy" type:"string" enum:"MergeStrategy"`
 
-	// The parameters used when importing the bot or bot locale.
+	// The parameters used when importing the resource.
 	ResourceSpecification *ImportResourceSpecification `locationName:"resourceSpecification" type:"structure"`
 }
 
@@ -21317,7 +24887,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -21525,6 +25095,102 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The object representing the filter that Amazon Lex will use to select the
+// appropriate transcript.
+type TranscriptFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The object representing the filter that Amazon Lex will use to select the
+	// appropriate transcript when the transcript format is the Amazon Lex format.
+	LexTranscriptFilter *LexTranscriptFilter `locationName:"lexTranscriptFilter" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TranscriptFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TranscriptFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TranscriptFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TranscriptFilter"}
+	if s.LexTranscriptFilter != nil {
+		if err := s.LexTranscriptFilter.Validate(); err != nil {
+			invalidParams.AddNested("LexTranscriptFilter", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLexTranscriptFilter sets the LexTranscriptFilter field's value.
+func (s *TranscriptFilter) SetLexTranscriptFilter(v *LexTranscriptFilter) *TranscriptFilter {
+	s.LexTranscriptFilter = v
+	return s
+}
+
+// Indicates the setting of the location where the transcript is stored.
+type TranscriptSourceSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates the setting of the Amazon S3 bucket where the transcript is stored.
+	S3BucketTranscriptSource *S3BucketTranscriptSource `locationName:"s3BucketTranscriptSource" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TranscriptSourceSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TranscriptSourceSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TranscriptSourceSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TranscriptSourceSetting"}
+	if s.S3BucketTranscriptSource != nil {
+		if err := s.S3BucketTranscriptSource.Validate(); err != nil {
+			invalidParams.AddNested("S3BucketTranscriptSource", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3BucketTranscriptSource sets the S3BucketTranscriptSource field's value.
+func (s *TranscriptSourceSetting) SetS3BucketTranscriptSource(v *S3BucketTranscriptSource) *TranscriptSourceSetting {
+	s.S3BucketTranscriptSource = v
+	return s
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -21590,7 +25256,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -21895,7 +25561,8 @@ type UpdateBotInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique identifier of the bot to update. This identifier is returned by
-	// the CreateBot operation.
+	// the CreateBot (https://docs.aws.amazon.com/lexv2/latest/dg/API_CreateBot.html)
+	// operation.
 	//
 	// BotId is a required field
 	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
@@ -22193,6 +25860,9 @@ type UpdateBotLocaleOutput struct {
 	// an utterance.
 	NluIntentConfidenceThreshold *float64 `locationName:"nluIntentConfidenceThreshold" type:"double"`
 
+	// Recommended actions to take to resolve an error in the failureReasons field.
+	RecommendedActions []*string `locationName:"recommendedActions" type:"list"`
+
 	// The updated Amazon Polly voice to use for voice interaction with the user.
 	VoiceSettings *VoiceSettings `locationName:"voiceSettings" type:"structure"`
 }
@@ -22272,6 +25942,12 @@ func (s *UpdateBotLocaleOutput) SetLocaleName(v string) *UpdateBotLocaleOutput {
 // SetNluIntentConfidenceThreshold sets the NluIntentConfidenceThreshold field's value.
 func (s *UpdateBotLocaleOutput) SetNluIntentConfidenceThreshold(v float64) *UpdateBotLocaleOutput {
 	s.NluIntentConfidenceThreshold = &v
+	return s
+}
+
+// SetRecommendedActions sets the RecommendedActions field's value.
+func (s *UpdateBotLocaleOutput) SetRecommendedActions(v []*string) *UpdateBotLocaleOutput {
+	s.RecommendedActions = v
 	return s
 }
 
@@ -22387,6 +26063,242 @@ func (s *UpdateBotOutput) SetRoleArn(v string) *UpdateBotOutput {
 	return s
 }
 
+type UpdateBotRecommendationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot containing the bot recommendation to be
+	// updated.
+	//
+	// BotId is a required field
+	BotId *string `location:"uri" locationName:"botId" min:"10" type:"string" required:"true"`
+
+	// The unique identifier of the bot recommendation to be updated.
+	//
+	// BotRecommendationId is a required field
+	BotRecommendationId *string `location:"uri" locationName:"botRecommendationId" min:"10" type:"string" required:"true"`
+
+	// The version of the bot containing the bot recommendation to be updated.
+	//
+	// BotVersion is a required field
+	BotVersion *string `location:"uri" locationName:"botVersion" min:"5" type:"string" required:"true"`
+
+	// The object representing the passwords that will be used to encrypt the data
+	// related to the bot recommendation results, as well as the KMS key ARN used
+	// to encrypt the associated metadata.
+	//
+	// EncryptionSetting is a required field
+	EncryptionSetting *EncryptionSetting `locationName:"encryptionSetting" type:"structure" required:"true"`
+
+	// The identifier of the language and locale of the bot recommendation to update.
+	// The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	//
+	// LocaleId is a required field
+	LocaleId *string `location:"uri" locationName:"localeId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBotRecommendationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBotRecommendationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateBotRecommendationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateBotRecommendationInput"}
+	if s.BotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotId"))
+	}
+	if s.BotId != nil && len(*s.BotId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotId", 10))
+	}
+	if s.BotRecommendationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotRecommendationId"))
+	}
+	if s.BotRecommendationId != nil && len(*s.BotRecommendationId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("BotRecommendationId", 10))
+	}
+	if s.BotVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("BotVersion"))
+	}
+	if s.BotVersion != nil && len(*s.BotVersion) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("BotVersion", 5))
+	}
+	if s.EncryptionSetting == nil {
+		invalidParams.Add(request.NewErrParamRequired("EncryptionSetting"))
+	}
+	if s.LocaleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocaleId"))
+	}
+	if s.LocaleId != nil && len(*s.LocaleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LocaleId", 1))
+	}
+	if s.EncryptionSetting != nil {
+		if err := s.EncryptionSetting.Validate(); err != nil {
+			invalidParams.AddNested("EncryptionSetting", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBotId sets the BotId field's value.
+func (s *UpdateBotRecommendationInput) SetBotId(v string) *UpdateBotRecommendationInput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *UpdateBotRecommendationInput) SetBotRecommendationId(v string) *UpdateBotRecommendationInput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *UpdateBotRecommendationInput) SetBotVersion(v string) *UpdateBotRecommendationInput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetEncryptionSetting sets the EncryptionSetting field's value.
+func (s *UpdateBotRecommendationInput) SetEncryptionSetting(v *EncryptionSetting) *UpdateBotRecommendationInput {
+	s.EncryptionSetting = v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *UpdateBotRecommendationInput) SetLocaleId(v string) *UpdateBotRecommendationInput {
+	s.LocaleId = &v
+	return s
+}
+
+type UpdateBotRecommendationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the bot containing the bot recommendation that has
+	// been updated.
+	BotId *string `locationName:"botId" min:"10" type:"string"`
+
+	// The unique identifier of the bot recommendation to be updated.
+	BotRecommendationId *string `locationName:"botRecommendationId" min:"10" type:"string"`
+
+	// The status of the bot recommendation.
+	//
+	// If the status is Failed, then the reasons for the failure are listed in the
+	// failureReasons field.
+	BotRecommendationStatus *string `locationName:"botRecommendationStatus" type:"string" enum:"BotRecommendationStatus"`
+
+	// The version of the bot containing the bot recommendation that has been updated.
+	BotVersion *string `locationName:"botVersion" min:"5" type:"string"`
+
+	// A timestamp of the date and time that the bot recommendation was created.
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp"`
+
+	// The object representing the passwords that were used to encrypt the data
+	// related to the bot recommendation results, as well as the KMS key ARN used
+	// to encrypt the associated metadata.
+	EncryptionSetting *EncryptionSetting `locationName:"encryptionSetting" type:"structure"`
+
+	// A timestamp of the date and time that the bot recommendation was last updated.
+	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
+
+	// The identifier of the language and locale of the bot recommendation to update.
+	// The string must match one of the supported locales. For more information,
+	// see Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html)
+	LocaleId *string `locationName:"localeId" type:"string"`
+
+	// The object representing the Amazon S3 bucket containing the transcript, as
+	// well as the associated metadata.
+	TranscriptSourceSetting *TranscriptSourceSetting `locationName:"transcriptSourceSetting" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBotRecommendationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBotRecommendationOutput) GoString() string {
+	return s.String()
+}
+
+// SetBotId sets the BotId field's value.
+func (s *UpdateBotRecommendationOutput) SetBotId(v string) *UpdateBotRecommendationOutput {
+	s.BotId = &v
+	return s
+}
+
+// SetBotRecommendationId sets the BotRecommendationId field's value.
+func (s *UpdateBotRecommendationOutput) SetBotRecommendationId(v string) *UpdateBotRecommendationOutput {
+	s.BotRecommendationId = &v
+	return s
+}
+
+// SetBotRecommendationStatus sets the BotRecommendationStatus field's value.
+func (s *UpdateBotRecommendationOutput) SetBotRecommendationStatus(v string) *UpdateBotRecommendationOutput {
+	s.BotRecommendationStatus = &v
+	return s
+}
+
+// SetBotVersion sets the BotVersion field's value.
+func (s *UpdateBotRecommendationOutput) SetBotVersion(v string) *UpdateBotRecommendationOutput {
+	s.BotVersion = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *UpdateBotRecommendationOutput) SetCreationDateTime(v time.Time) *UpdateBotRecommendationOutput {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetEncryptionSetting sets the EncryptionSetting field's value.
+func (s *UpdateBotRecommendationOutput) SetEncryptionSetting(v *EncryptionSetting) *UpdateBotRecommendationOutput {
+	s.EncryptionSetting = v
+	return s
+}
+
+// SetLastUpdatedDateTime sets the LastUpdatedDateTime field's value.
+func (s *UpdateBotRecommendationOutput) SetLastUpdatedDateTime(v time.Time) *UpdateBotRecommendationOutput {
+	s.LastUpdatedDateTime = &v
+	return s
+}
+
+// SetLocaleId sets the LocaleId field's value.
+func (s *UpdateBotRecommendationOutput) SetLocaleId(v string) *UpdateBotRecommendationOutput {
+	s.LocaleId = &v
+	return s
+}
+
+// SetTranscriptSourceSetting sets the TranscriptSourceSetting field's value.
+func (s *UpdateBotRecommendationOutput) SetTranscriptSourceSetting(v *TranscriptSourceSetting) *UpdateBotRecommendationOutput {
+	s.TranscriptSourceSetting = v
+	return s
+}
+
 type UpdateExportInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22465,7 +26377,8 @@ type UpdateExportOutput struct {
 	// is available for download.
 	ExportStatus *string `locationName:"exportStatus" type:"string" enum:"ExportStatus"`
 
-	// The file format used for the files that define the resource.
+	// The file format used for the files that define the resource. The TSV format
+	// is required to export a custom vocabulary only; otherwise use LexJson format.
 	FileFormat *string `locationName:"fileFormat" type:"string" enum:"ImportExportFileFormat"`
 
 	// The date and time that the export was last updated.
@@ -23189,9 +27102,7 @@ type UpdateSlotInput struct {
 	SlotName *string `locationName:"slotName" min:"1" type:"string" required:"true"`
 
 	// The unique identifier of the new slot type to associate with this slot.
-	//
-	// SlotTypeId is a required field
-	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string" required:"true"`
+	SlotTypeId *string `locationName:"slotTypeId" min:"1" type:"string"`
 
 	// A new set of prompts that Amazon Lex sends to the user to elicit a response
 	// the provides a value for the slot.
@@ -23256,9 +27167,6 @@ func (s *UpdateSlotInput) Validate() error {
 	}
 	if s.SlotName != nil && len(*s.SlotName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotName", 1))
-	}
-	if s.SlotTypeId == nil {
-		invalidParams.Add(request.NewErrParamRequired("SlotTypeId"))
 	}
 	if s.SlotTypeId != nil && len(*s.SlotTypeId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotTypeId", 1))
@@ -23507,6 +27415,9 @@ type UpdateSlotTypeInput struct {
 	// The new description of the slot type.
 	Description *string `locationName:"description" type:"string"`
 
+	// Provides information about the external source of the slot type's definition.
+	ExternalSourceSetting *ExternalSourceSetting `locationName:"externalSourceSetting" type:"structure"`
+
 	// The identifier of the language and locale that contains the slot type. The
 	// string must match one of the supported locales. For more information, see
 	// Supported languages (https://docs.aws.amazon.com/lexv2/latest/dg/how-languages.html).
@@ -23534,9 +27445,7 @@ type UpdateSlotTypeInput struct {
 
 	// The strategy that Amazon Lex should use when deciding on a value from the
 	// list of slot type values.
-	//
-	// ValueSelectionSetting is a required field
-	ValueSelectionSetting *SlotValueSelectionSetting `locationName:"valueSelectionSetting" type:"structure" required:"true"`
+	ValueSelectionSetting *SlotValueSelectionSetting `locationName:"valueSelectionSetting" type:"structure"`
 }
 
 // String returns the string representation.
@@ -23593,8 +27502,10 @@ func (s *UpdateSlotTypeInput) Validate() error {
 	if s.SlotTypeValues != nil && len(s.SlotTypeValues) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SlotTypeValues", 1))
 	}
-	if s.ValueSelectionSetting == nil {
-		invalidParams.Add(request.NewErrParamRequired("ValueSelectionSetting"))
+	if s.ExternalSourceSetting != nil {
+		if err := s.ExternalSourceSetting.Validate(); err != nil {
+			invalidParams.AddNested("ExternalSourceSetting", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.SlotTypeValues != nil {
 		for i, v := range s.SlotTypeValues {
@@ -23633,6 +27544,12 @@ func (s *UpdateSlotTypeInput) SetBotVersion(v string) *UpdateSlotTypeInput {
 // SetDescription sets the Description field's value.
 func (s *UpdateSlotTypeInput) SetDescription(v string) *UpdateSlotTypeInput {
 	s.Description = &v
+	return s
+}
+
+// SetExternalSourceSetting sets the ExternalSourceSetting field's value.
+func (s *UpdateSlotTypeInput) SetExternalSourceSetting(v *ExternalSourceSetting) *UpdateSlotTypeInput {
+	s.ExternalSourceSetting = v
 	return s
 }
 
@@ -23686,6 +27603,9 @@ type UpdateSlotTypeOutput struct {
 
 	// The updated description of the slot type.
 	Description *string `locationName:"description" type:"string"`
+
+	// Provides information about the external source of the slot type's definition.
+	ExternalSourceSetting *ExternalSourceSetting `locationName:"externalSourceSetting" type:"structure"`
 
 	// A timestamp of the date and time that the slot type was last updated.
 	LastUpdatedDateTime *time.Time `locationName:"lastUpdatedDateTime" type:"timestamp"`
@@ -23750,6 +27670,12 @@ func (s *UpdateSlotTypeOutput) SetCreationDateTime(v time.Time) *UpdateSlotTypeO
 // SetDescription sets the Description field's value.
 func (s *UpdateSlotTypeOutput) SetDescription(v string) *UpdateSlotTypeOutput {
 	s.Description = &v
+	return s
+}
+
+// SetExternalSourceSetting sets the ExternalSourceSetting field's value.
+func (s *UpdateSlotTypeOutput) SetExternalSourceSetting(v *ExternalSourceSetting) *UpdateSlotTypeOutput {
+	s.ExternalSourceSetting = v
 	return s
 }
 
@@ -23917,6 +27843,14 @@ func (s *ValidationException) RequestID() string {
 type VoiceSettings struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the type of Amazon Polly voice that Amazon Lex should use for voice
+	// interaction with the user. For more information, see the engine parameter
+	// of the SynthesizeSpeech operation (https://docs.aws.amazon.com/polly/latest/dg/API_SynthesizeSpeech.html#polly-SynthesizeSpeech-request-Engine)
+	// in the Amazon Polly developer guide.
+	//
+	// If you do not specify a value, the default is standard.
+	Engine *string `locationName:"engine" type:"string" enum:"VoiceEngine"`
+
 	// The identifier of the Amazon Polly voice to use.
 	//
 	// VoiceId is a required field
@@ -23952,6 +27886,12 @@ func (s *VoiceSettings) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetEngine sets the Engine field's value.
+func (s *VoiceSettings) SetEngine(v string) *VoiceSettings {
+	s.Engine = &v
+	return s
 }
 
 // SetVoiceId sets the VoiceId field's value.
@@ -24105,6 +28045,34 @@ func AggregatedUtterancesSortAttribute_Values() []string {
 }
 
 const (
+	// AssociatedTranscriptFilterNameIntentId is a AssociatedTranscriptFilterName enum value
+	AssociatedTranscriptFilterNameIntentId = "IntentId"
+
+	// AssociatedTranscriptFilterNameSlotTypeId is a AssociatedTranscriptFilterName enum value
+	AssociatedTranscriptFilterNameSlotTypeId = "SlotTypeId"
+)
+
+// AssociatedTranscriptFilterName_Values returns all elements of the AssociatedTranscriptFilterName enum
+func AssociatedTranscriptFilterName_Values() []string {
+	return []string{
+		AssociatedTranscriptFilterNameIntentId,
+		AssociatedTranscriptFilterNameSlotTypeId,
+	}
+}
+
+const (
+	// AudioRecognitionStrategyUseSlotValuesAsCustomVocabulary is a AudioRecognitionStrategy enum value
+	AudioRecognitionStrategyUseSlotValuesAsCustomVocabulary = "UseSlotValuesAsCustomVocabulary"
+)
+
+// AudioRecognitionStrategy_Values returns all elements of the AudioRecognitionStrategy enum
+func AudioRecognitionStrategy_Values() []string {
+	return []string{
+		AudioRecognitionStrategyUseSlotValuesAsCustomVocabulary,
+	}
+}
+
+const (
 	// BotAliasStatusCreating is a BotAliasStatus enum value
 	BotAliasStatusCreating = "Creating"
 
@@ -24220,6 +28188,9 @@ const (
 
 	// BotLocaleStatusImporting is a BotLocaleStatus enum value
 	BotLocaleStatusImporting = "Importing"
+
+	// BotLocaleStatusProcessing is a BotLocaleStatus enum value
+	BotLocaleStatusProcessing = "Processing"
 )
 
 // BotLocaleStatus_Values returns all elements of the BotLocaleStatus enum
@@ -24233,6 +28204,43 @@ func BotLocaleStatus_Values() []string {
 		BotLocaleStatusDeleting,
 		BotLocaleStatusNotBuilt,
 		BotLocaleStatusImporting,
+		BotLocaleStatusProcessing,
+	}
+}
+
+const (
+	// BotRecommendationStatusProcessing is a BotRecommendationStatus enum value
+	BotRecommendationStatusProcessing = "Processing"
+
+	// BotRecommendationStatusDeleting is a BotRecommendationStatus enum value
+	BotRecommendationStatusDeleting = "Deleting"
+
+	// BotRecommendationStatusDeleted is a BotRecommendationStatus enum value
+	BotRecommendationStatusDeleted = "Deleted"
+
+	// BotRecommendationStatusDownloading is a BotRecommendationStatus enum value
+	BotRecommendationStatusDownloading = "Downloading"
+
+	// BotRecommendationStatusUpdating is a BotRecommendationStatus enum value
+	BotRecommendationStatusUpdating = "Updating"
+
+	// BotRecommendationStatusAvailable is a BotRecommendationStatus enum value
+	BotRecommendationStatusAvailable = "Available"
+
+	// BotRecommendationStatusFailed is a BotRecommendationStatus enum value
+	BotRecommendationStatusFailed = "Failed"
+)
+
+// BotRecommendationStatus_Values returns all elements of the BotRecommendationStatus enum
+func BotRecommendationStatus_Values() []string {
+	return []string{
+		BotRecommendationStatusProcessing,
+		BotRecommendationStatusDeleting,
+		BotRecommendationStatusDeleted,
+		BotRecommendationStatusDownloading,
+		BotRecommendationStatusUpdating,
+		BotRecommendationStatusAvailable,
+		BotRecommendationStatusFailed,
 	}
 }
 
@@ -24321,6 +28329,34 @@ func BuiltInSlotTypeSortAttribute_Values() []string {
 }
 
 const (
+	// CustomVocabularyStatusReady is a CustomVocabularyStatus enum value
+	CustomVocabularyStatusReady = "Ready"
+
+	// CustomVocabularyStatusDeleting is a CustomVocabularyStatus enum value
+	CustomVocabularyStatusDeleting = "Deleting"
+
+	// CustomVocabularyStatusExporting is a CustomVocabularyStatus enum value
+	CustomVocabularyStatusExporting = "Exporting"
+
+	// CustomVocabularyStatusImporting is a CustomVocabularyStatus enum value
+	CustomVocabularyStatusImporting = "Importing"
+
+	// CustomVocabularyStatusCreating is a CustomVocabularyStatus enum value
+	CustomVocabularyStatusCreating = "Creating"
+)
+
+// CustomVocabularyStatus_Values returns all elements of the CustomVocabularyStatus enum
+func CustomVocabularyStatus_Values() []string {
+	return []string{
+		CustomVocabularyStatusReady,
+		CustomVocabularyStatusDeleting,
+		CustomVocabularyStatusExporting,
+		CustomVocabularyStatusImporting,
+		CustomVocabularyStatusCreating,
+	}
+}
+
+const (
 	// EffectAllow is a Effect enum value
 	EffectAllow = "Allow"
 
@@ -24403,12 +28439,16 @@ func ExportStatus_Values() []string {
 const (
 	// ImportExportFileFormatLexJson is a ImportExportFileFormat enum value
 	ImportExportFileFormatLexJson = "LexJson"
+
+	// ImportExportFileFormatTsv is a ImportExportFileFormat enum value
+	ImportExportFileFormatTsv = "TSV"
 )
 
 // ImportExportFileFormat_Values returns all elements of the ImportExportFileFormat enum
 func ImportExportFileFormat_Values() []string {
 	return []string{
 		ImportExportFileFormatLexJson,
+		ImportExportFileFormatTsv,
 	}
 }
 
@@ -24437,6 +28477,26 @@ func ImportFilterOperator_Values() []string {
 	return []string{
 		ImportFilterOperatorCo,
 		ImportFilterOperatorEq,
+	}
+}
+
+const (
+	// ImportResourceTypeBot is a ImportResourceType enum value
+	ImportResourceTypeBot = "Bot"
+
+	// ImportResourceTypeBotLocale is a ImportResourceType enum value
+	ImportResourceTypeBotLocale = "BotLocale"
+
+	// ImportResourceTypeCustomVocabulary is a ImportResourceType enum value
+	ImportResourceTypeCustomVocabulary = "CustomVocabulary"
+)
+
+// ImportResourceType_Values returns all elements of the ImportResourceType enum
+func ImportResourceType_Values() []string {
+	return []string{
+		ImportResourceTypeBot,
+		ImportResourceTypeBotLocale,
+		ImportResourceTypeCustomVocabulary,
 	}
 }
 
@@ -24526,6 +28586,9 @@ const (
 
 	// MergeStrategyFailOnConflict is a MergeStrategy enum value
 	MergeStrategyFailOnConflict = "FailOnConflict"
+
+	// MergeStrategyAppend is a MergeStrategy enum value
+	MergeStrategyAppend = "Append"
 )
 
 // MergeStrategy_Values returns all elements of the MergeStrategy enum
@@ -24533,6 +28596,23 @@ func MergeStrategy_Values() []string {
 	return []string{
 		MergeStrategyOverwrite,
 		MergeStrategyFailOnConflict,
+		MergeStrategyAppend,
+	}
+}
+
+const (
+	// MessageSelectionStrategyRandom is a MessageSelectionStrategy enum value
+	MessageSelectionStrategyRandom = "Random"
+
+	// MessageSelectionStrategyOrdered is a MessageSelectionStrategy enum value
+	MessageSelectionStrategyOrdered = "Ordered"
+)
+
+// MessageSelectionStrategy_Values returns all elements of the MessageSelectionStrategy enum
+func MessageSelectionStrategy_Values() []string {
+	return []string{
+		MessageSelectionStrategyRandom,
+		MessageSelectionStrategyOrdered,
 	}
 }
 
@@ -24549,6 +28629,22 @@ func ObfuscationSettingType_Values() []string {
 	return []string{
 		ObfuscationSettingTypeNone,
 		ObfuscationSettingTypeDefaultObfuscation,
+	}
+}
+
+const (
+	// SearchOrderAscending is a SearchOrder enum value
+	SearchOrderAscending = "Ascending"
+
+	// SearchOrderDescending is a SearchOrder enum value
+	SearchOrderDescending = "Descending"
+)
+
+// SearchOrder_Values returns all elements of the SearchOrder enum
+func SearchOrder_Values() []string {
+	return []string{
+		SearchOrderAscending,
+		SearchOrderDescending,
 	}
 }
 
@@ -24613,14 +28709,38 @@ func SlotSortAttribute_Values() []string {
 }
 
 const (
+	// SlotTypeCategoryCustom is a SlotTypeCategory enum value
+	SlotTypeCategoryCustom = "Custom"
+
+	// SlotTypeCategoryExtended is a SlotTypeCategory enum value
+	SlotTypeCategoryExtended = "Extended"
+
+	// SlotTypeCategoryExternalGrammar is a SlotTypeCategory enum value
+	SlotTypeCategoryExternalGrammar = "ExternalGrammar"
+)
+
+// SlotTypeCategory_Values returns all elements of the SlotTypeCategory enum
+func SlotTypeCategory_Values() []string {
+	return []string{
+		SlotTypeCategoryCustom,
+		SlotTypeCategoryExtended,
+		SlotTypeCategoryExternalGrammar,
+	}
+}
+
+const (
 	// SlotTypeFilterNameSlotTypeName is a SlotTypeFilterName enum value
 	SlotTypeFilterNameSlotTypeName = "SlotTypeName"
+
+	// SlotTypeFilterNameExternalSourceType is a SlotTypeFilterName enum value
+	SlotTypeFilterNameExternalSourceType = "ExternalSourceType"
 )
 
 // SlotTypeFilterName_Values returns all elements of the SlotTypeFilterName enum
 func SlotTypeFilterName_Values() []string {
 	return []string{
 		SlotTypeFilterNameSlotTypeName,
+		SlotTypeFilterNameExternalSourceType,
 	}
 }
 
@@ -24705,5 +28825,33 @@ func TimeDimension_Values() []string {
 		TimeDimensionHours,
 		TimeDimensionDays,
 		TimeDimensionWeeks,
+	}
+}
+
+const (
+	// TranscriptFormatLex is a TranscriptFormat enum value
+	TranscriptFormatLex = "Lex"
+)
+
+// TranscriptFormat_Values returns all elements of the TranscriptFormat enum
+func TranscriptFormat_Values() []string {
+	return []string{
+		TranscriptFormatLex,
+	}
+}
+
+const (
+	// VoiceEngineStandard is a VoiceEngine enum value
+	VoiceEngineStandard = "standard"
+
+	// VoiceEngineNeural is a VoiceEngine enum value
+	VoiceEngineNeural = "neural"
+)
+
+// VoiceEngine_Values returns all elements of the VoiceEngine enum
+func VoiceEngine_Values() []string {
+	return []string{
+		VoiceEngineStandard,
+		VoiceEngineNeural,
 	}
 }

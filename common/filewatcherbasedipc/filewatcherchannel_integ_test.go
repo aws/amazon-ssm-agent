@@ -14,19 +14,18 @@
 //go:build integration
 // +build integration
 
-//Package channel defines and implements the communication interface between agent and command runner process
+// Package channel defines and implements the communication interface between agent and command runner process
 package filewatcherbasedipc
 
 import (
-	"testing"
-	"time"
-
 	"errors"
 	"os"
 	"path"
 	"path/filepath"
+	"testing"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -70,7 +69,7 @@ func TestChannelDuplexTransmission(t *testing.T) {
 
 }
 
-//agent channel is reopened, and starts receiving only after re-open
+// agent channel is reopened, and starts receiving only after re-open
 func TestChannelReopen(t *testing.T) {
 	done := make(chan bool)
 	agentChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster, path.Join(defaultRootDir, channelName), false)
@@ -101,7 +100,7 @@ func TestChannelReopen(t *testing.T) {
 	newAgentChannel.Destroy()
 }
 
-//verify the given set of messages are received
+// verify the given set of messages are received
 func verifyReceive(t *testing.T, ch IPCChannel, messages []string, name string, done chan bool) {
 
 	//timer := time.After(5 * time.Second)
@@ -114,7 +113,7 @@ func verifyReceive(t *testing.T, ch IPCChannel, messages []string, name string, 
 	done <- true
 }
 
-//send a given set of messages
+// send a given set of messages
 func send(ch IPCChannel, messages []string, name string) {
 
 	for _, testMsg := range messages {

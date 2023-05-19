@@ -19,12 +19,17 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
 )
 
 const (
@@ -56,6 +61,24 @@ var ssmSvc ssm.Service
 var ssmSvcOnce sync.Once
 
 var newSsmSvc = ssm.NewService
+var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ecs.NewECSIdentity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+	if identityRef := onprem.NewOnPremIdentity(log, config); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
 
 // UpdateHealthCheck sends the health check information back to the service
 func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) (err error) {
@@ -64,7 +87,24 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
 	status := PrepareHealthStatus(update, errorCode, update.TargetVersion)
-	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName); err != nil {
+	appConfig := s.context.AppConfig()
+	var isEC2, isECS, isOnPrem bool
+	var ec2Identity, ecsIdentity identity.IAgentIdentityInner
+	onpremIdentity := newOnPremIdentity(log, &appConfig)
+	isOnPrem = onpremIdentity != nil && onpremIdentity.IsIdentityEnvironment()
+	if !isOnPrem {
+		ec2Identity = newEC2Identity(log)
+		ecsIdentity = newECSIdentity(log)
+		isEC2 = ec2Identity != nil && ec2Identity.IsIdentityEnvironment()
+		isECS = ecsIdentity != nil && ecsIdentity.IsIdentityEnvironment()
+	}
+	var availabilityZone = ""
+	var availabilityZoneId = ""
+	if isEC2 && !isECS && !isOnPrem {
+		availabilityZone, _ = ec2Identity.AvailabilityZone()
+		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
+	}
+	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName, availabilityZone, availabilityZoneId); err != nil {
 		return
 	}
 

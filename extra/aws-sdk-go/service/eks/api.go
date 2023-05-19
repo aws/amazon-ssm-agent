@@ -273,9 +273,11 @@ func (c *EKS) CreateAddonRequest(input *CreateAddonInput) (req *request.Request,
 //
 // Amazon EKS add-ons help to automate the provisioning and lifecycle management
 // of common operational software for Amazon EKS clusters. Amazon EKS add-ons
-// can only be used with Amazon EKS clusters running version 1.18 with platform
-// version eks.3 or later because add-ons rely on the Server-side Apply Kubernetes
-// feature, which is only available in Kubernetes 1.18 and later.
+// require clusters running version 1.18 or later because Amazon EKS add-ons
+// rely on the Server-side Apply Kubernetes feature, which is only available
+// in Kubernetes 1.18 and later. For more information, see Amazon EKS add-ons
+// (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html) in the
+// Amazon EKS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -380,8 +382,8 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 // The Amazon EKS control plane consists of control plane instances that run
 // the Kubernetes software, such as etcd and the API server. The control plane
 // runs in an account managed by Amazon Web Services, and the Kubernetes API
-// is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster
-// control plane is single-tenant and unique and runs on its own set of Amazon
+// is exposed by the Amazon EKS API server endpoint. Each Amazon EKS cluster
+// control plane is single tenant and unique. It runs on its own set of Amazon
 // EC2 instances.
 //
 // The cluster control plane is provisioned across multiple Availability Zones
@@ -391,12 +393,12 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 // to support kubectl exec, logs, and proxy data flows).
 //
 // Amazon EKS nodes run in your Amazon Web Services account and connect to your
-// cluster's control plane via the Kubernetes API server endpoint and a certificate
+// cluster's control plane over the Kubernetes API server endpoint and a certificate
 // file that is created for your cluster.
 //
-// Cluster creation typically takes several minutes. After you create an Amazon
-// EKS cluster, you must configure your Kubernetes tooling to communicate with
-// the API server and launch nodes into your cluster. For more information,
+// In most cases, it takes several minutes to create a cluster. After you create
+// an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate
+// with the API server and launch nodes into your cluster. For more information,
 // see Managing Cluster Authentication (https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html)
 // and Launching Amazon EKS nodes (https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html)
 // in the Amazon EKS User Guide.
@@ -1184,6 +1186,13 @@ func (c *EKS) DeregisterClusterRequest(input *DeregisterClusterInput) (req *requ
 //   * ServiceUnavailableException
 //   The service is unavailable. Back off and retry the operation.
 //
+//   * AccessDeniedException
+//   You don't have permissions to perform the requested operation. The user or
+//   role that is making the request must have at least one IAM permissions policy
+//   attached that grants the required permissions. For more information, see
+//   Access Management (https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
+//   in the IAM User Guide.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DeregisterCluster
 func (c *EKS) DeregisterCluster(input *DeregisterClusterInput) (*DeregisterClusterOutput, error) {
 	req, out := c.DeregisterClusterRequest(input)
@@ -1879,7 +1888,7 @@ func (c *EKS) DescribeUpdateRequest(input *DescribeUpdateInput) (req *request.Re
 // DescribeUpdate API operation for Amazon Elastic Kubernetes Service.
 //
 // Returns descriptive information about an update against your Amazon EKS cluster
-// or associated managed node group.
+// or associated managed node group or Amazon EKS add-on.
 //
 // When the status of the update is Succeeded, the update is complete. If an
 // update fails, the status is Failed, and an error detail explains the reason
@@ -3096,8 +3105,8 @@ func (c *EKS) RegisterClusterRequest(input *RegisterClusterInput) (req *request.
 //
 // After the Manifest is updated and applied, then the connected cluster is
 // visible to the Amazon EKS control plane. If the Manifest is not applied within
-// a set amount of time, then the connected cluster will no longer be visible
-// and must be deregistered. See DeregisterCluster.
+// three days, then the connected cluster will no longer be visible and must
+// be deregistered. See DeregisterCluster.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3124,6 +3133,20 @@ func (c *EKS) RegisterClusterRequest(input *RegisterClusterInput) (req *request.
 //
 //   * ServiceUnavailableException
 //   The service is unavailable. Back off and retry the operation.
+//
+//   * AccessDeniedException
+//   You don't have permissions to perform the requested operation. The user or
+//   role that is making the request must have at least one IAM permissions policy
+//   attached that grants the required permissions. For more information, see
+//   Access Management (https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
+//   in the IAM User Guide.
+//
+//   * ResourceInUseException
+//   The specified resource is in use.
+//
+//   * ResourcePropagationDelayException
+//   Required resources (such as service-linked roles) were created and are still
+//   propagating. Retry later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/RegisterCluster
 func (c *EKS) RegisterCluster(input *RegisterClusterInput) (*RegisterClusterOutput, error) {
@@ -3889,7 +3912,76 @@ func (c *EKS) UpdateNodegroupVersionWithContext(ctx aws.Context, input *UpdateNo
 	return out, req.Send()
 }
 
-// An Amazon EKS add-on.
+// You don't have permissions to perform the requested operation. The user or
+// role that is making the request must have at least one IAM permissions policy
+// attached that grants the required permissions. For more information, see
+// Access Management (https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
+// in the IAM User Guide.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+// in the Amazon EKS User Guide.
 type Addon struct {
 	_ struct{} `type:"structure"`
 
@@ -3922,9 +4014,9 @@ type Addon struct {
 	Status *string `locationName:"status" type:"string" enum:"AddonStatus"`
 
 	// The metadata that you apply to the add-on to assist with categorization and
-	// organization. Each tag consists of a key and an optional value, both of which
-	// you define. Add-on tags do not propagate to any other resources associated
-	// with the cluster.
+	// organization. Each tag consists of a key and an optional value. You define
+	// both. Add-on tags do not propagate to any other resources associated with
+	// the cluster.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
@@ -4310,8 +4402,8 @@ type AssociateIdentityProviderConfigInput struct {
 	Oidc *OidcIdentityProviderConfigRequest `locationName:"oidc" type:"structure" required:"true"`
 
 	// The metadata to apply to the configuration to assist with categorization
-	// and organization. Each tag consists of a key and an optional value, both
-	// of which you define.
+	// and organization. Each tag consists of a key and an optional value. You define
+	// both.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
@@ -4690,9 +4782,9 @@ type Cluster struct {
 	Status *string `locationName:"status" type:"string" enum:"ClusterStatus"`
 
 	// The metadata that you apply to the cluster to assist with categorization
-	// and organization. Each tag consists of a key and an optional value, both
-	// of which you define. Cluster tags do not propagate to any other resources
-	// associated with the cluster.
+	// and organization. Each tag consists of a key and an optional value. You define
+	// both. Cluster tags do not propagate to any other resources associated with
+	// the cluster.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 
 	// The Kubernetes server version for the cluster.
@@ -4948,8 +5040,8 @@ type ConnectorConfigResponse struct {
 	// The cluster's cloud service provider.
 	Provider *string `locationName:"provider" type:"string"`
 
-	// The Amazon Resource Name (ARN) of the role that is used by the EKS connector
-	// to communicate with AWS services from the connected Kubernetes cluster.
+	// The Amazon Resource Name (ARN) of the role to communicate with services from
+	// the connected Kubernetes cluster.
 	RoleArn *string `locationName:"roleArn" type:"string"`
 }
 
@@ -5041,7 +5133,7 @@ type CreateAddonInput struct {
 	ServiceAccountRoleArn *string `locationName:"serviceAccountRoleArn" min:"1" type:"string"`
 
 	// The metadata to apply to the cluster to assist with categorization and organization.
-	// Each tag consists of a key and an optional value, both of which you define.
+	// Each tag consists of a key and an optional value. You define both.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
@@ -5133,7 +5225,8 @@ func (s *CreateAddonInput) SetTags(v map[string]*string) *CreateAddonInput {
 type CreateAddonOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An Amazon EKS add-on.
+	// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+	// in the Amazon EKS User Guide.
 	Addon *Addon `locationName:"addon" type:"structure"`
 }
 
@@ -5190,13 +5283,13 @@ type CreateClusterInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The VPC configuration used by the cluster control plane. Amazon EKS VPC resources
-	// have specific requirements to work properly with Kubernetes. For more information,
-	// see Cluster VPC Considerations (https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
+	// The VPC configuration that's used by the cluster control plane. Amazon EKS
+	// VPC resources have specific requirements to work properly with Kubernetes.
+	// For more information, see Cluster VPC Considerations (https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
 	// and Cluster Security Group Considerations (https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html)
 	// in the Amazon EKS User Guide. You must specify at least two subnets. You
-	// can specify up to five security groups, but we recommend that you use a dedicated
-	// security group for your cluster control plane.
+	// can specify up to five security groups. However, we recommend that you use
+	// a dedicated security group for your cluster control plane.
 	//
 	// ResourcesVpcConfig is a required field
 	ResourcesVpcConfig *VpcConfigRequest `locationName:"resourcesVpcConfig" type:"structure" required:"true"`
@@ -5211,7 +5304,7 @@ type CreateClusterInput struct {
 	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
 
 	// The metadata to apply to the cluster to assist with categorization and organization.
-	// Each tag consists of a key and an optional value, both of which you define.
+	// Each tag consists of a key and an optional value. You define both.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 
 	// The desired Kubernetes version for your cluster. If you don't specify a value
@@ -5385,10 +5478,9 @@ type CreateFargateProfileInput struct {
 	Subnets []*string `locationName:"subnets" type:"list"`
 
 	// The metadata to apply to the Fargate profile to assist with categorization
-	// and organization. Each tag consists of a key and an optional value, both
-	// of which you define. Fargate profile tags do not propagate to any other resources
-	// associated with the Fargate profile, such as the pods that are scheduled
-	// with it.
+	// and organization. Each tag consists of a key and an optional value. You define
+	// both. Fargate profile tags do not propagate to any other resources associated
+	// with the Fargate profile, such as the pods that are scheduled with it.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
@@ -5569,7 +5661,7 @@ type CreateNodegroupInput struct {
 	// through an IAM instance profile and associated policies. Before you can launch
 	// nodes and register them into a cluster, you must create an IAM role for those
 	// nodes to use when they are launched. For more information, see Amazon EKS
-	// node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html)
+	// node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html)
 	// in the Amazon EKS User Guide . If you specify launchTemplate, then don't
 	// specify IamInstanceProfile (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html)
 	// in your launch template, or the node group deployment will fail. For more
@@ -5618,12 +5710,13 @@ type CreateNodegroupInput struct {
 	Subnets []*string `locationName:"subnets" type:"list" required:"true"`
 
 	// The metadata to apply to the node group to assist with categorization and
-	// organization. Each tag consists of a key and an optional value, both of which
-	// you define. Node group tags do not propagate to any other resources associated
+	// organization. Each tag consists of a key and an optional value. You define
+	// both. Node group tags do not propagate to any other resources associated
 	// with the node group, such as the Amazon EC2 instances or subnets.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 
-	// The Kubernetes taints to be applied to the nodes in the node group.
+	// The Kubernetes taints to be applied to the nodes in the node group. For more
+	// information, see Node taints on managed node groups (https://docs.aws.amazon.com/eks/latest/userguide/node-taints-managed-node-groups.html).
 	Taints []*Taint `locationName:"taints" type:"list"`
 
 	// The node group update configuration.
@@ -5925,7 +6018,8 @@ func (s *DeleteAddonInput) SetPreserve(v bool) *DeleteAddonInput {
 type DeleteAddonOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An Amazon EKS add-on.
+	// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+	// in the Amazon EKS User Guide.
 	Addon *Addon `locationName:"addon" type:"structure"`
 }
 
@@ -6378,7 +6472,8 @@ func (s *DescribeAddonInput) SetClusterName(v string) *DescribeAddonInput {
 type DescribeAddonOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An Amazon EKS add-on.
+	// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+	// in the Amazon EKS User Guide.
 	Addon *Addon `locationName:"addon" type:"structure"`
 }
 
@@ -6908,6 +7003,7 @@ type DescribeUpdateInput struct {
 
 	// The name of the add-on. The name must match one of the names returned by
 	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
+	// This parameter is required if the update is an add-on update.
 	AddonName *string `location:"querystring" locationName:"addonName" type:"string"`
 
 	// The name of the Amazon EKS cluster associated with the update.
@@ -6915,7 +7011,8 @@ type DescribeUpdateInput struct {
 	// Name is a required field
 	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
 
-	// The name of the Amazon EKS node group associated with the update.
+	// The name of the Amazon EKS node group associated with the update. This parameter
+	// is required if the update is a node group update.
 	NodegroupName *string `location:"querystring" locationName:"nodegroupName" type:"string"`
 
 	// The ID of the update to describe.
@@ -7270,10 +7367,9 @@ type FargateProfile struct {
 	Subnets []*string `locationName:"subnets" type:"list"`
 
 	// The metadata applied to the Fargate profile to assist with categorization
-	// and organization. Each tag consists of a key and an optional value, both
-	// of which you define. Fargate profile tags do not propagate to any other resources
-	// associated with the Fargate profile, such as the pods that are scheduled
-	// with it.
+	// and organization. Each tag consists of a key and an optional value. You define
+	// both. Fargate profile tags do not propagate to any other resources associated
+	// with the Fargate profile, such as the pods that are scheduled with it.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
@@ -7434,7 +7530,8 @@ type IdentityProviderConfig struct {
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
 
-	// The type of the identity provider configuration.
+	// The type of the identity provider configuration. The only type available
+	// is oidc.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true"`
@@ -7733,7 +7830,7 @@ type Issue struct {
 	//
 	//    * NodeCreationFailure: Your launched instances are unable to register
 	//    with your Amazon EKS cluster. Common causes of this failure are insufficient
-	//    node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html)
+	//    node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html)
 	//    permissions or lack of outbound internet access for the nodes.
 	Code *string `locationName:"code" type:"string" enum:"NodegroupIssueCode"`
 
@@ -7784,13 +7881,30 @@ func (s *Issue) SetResourceIds(v []*string) *Issue {
 type KubernetesNetworkConfigRequest struct {
 	_ struct{} `type:"structure"`
 
-	// The CIDR block to assign Kubernetes service IP addresses from. If you don't
-	// specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16
-	// or 172.20.0.0/16 CIDR blocks. We recommend that you specify a block that
-	// does not overlap with resources in other networks that are peered or connected
-	// to your VPC. The block must meet the following requirements:
+	// Specify which IP family is used to assign Kubernetes pod and service IP addresses.
+	// If you don't specify a value, ipv4 is used by default. You can only specify
+	// an IP family when you create a cluster and can't change this value once the
+	// cluster is created. If you specify ipv6, the VPC and subnets that you specify
+	// for cluster creation must have both IPv4 and IPv6 CIDR blocks assigned to
+	// them. You can't specify ipv6 for clusters in China Regions.
 	//
-	//    * Within one of the following private IP address blocks: 10.0.0.0/8, 172.16.0.0.0/12,
+	// You can only specify ipv6 for 1.21 and later clusters that use version 1.10.1
+	// or later of the Amazon VPC CNI add-on. If you specify ipv6, then ensure that
+	// your VPC meets the requirements listed in the considerations listed in Assigning
+	// IPv6 addresses to pods and services (https://docs.aws.amazon.com/eks/latest/userguide/cni-ipv6.html)
+	// in the Amazon EKS User Guide. Kubernetes assigns services IPv6 addresses
+	// from the unique local address range (fc00::/7). You can't specify a custom
+	// IPv6 CIDR block. Pod addresses are assigned from the subnet's IPv6 CIDR.
+	IpFamily *string `locationName:"ipFamily" type:"string" enum:"IpFamily"`
+
+	// Don't specify a value if you select ipv6 for ipFamily. The CIDR block to
+	// assign Kubernetes service IP addresses from. If you don't specify a block,
+	// Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16
+	// CIDR blocks. We recommend that you specify a block that does not overlap
+	// with resources in other networks that are peered or connected to your VPC.
+	// The block must meet the following requirements:
+	//
+	//    * Within one of the following private IP address blocks: 10.0.0.0/8, 172.16.0.0/12,
 	//    or 192.168.0.0/16.
 	//
 	//    * Doesn't overlap with any CIDR block assigned to the VPC that you selected
@@ -7821,22 +7935,44 @@ func (s KubernetesNetworkConfigRequest) GoString() string {
 	return s.String()
 }
 
+// SetIpFamily sets the IpFamily field's value.
+func (s *KubernetesNetworkConfigRequest) SetIpFamily(v string) *KubernetesNetworkConfigRequest {
+	s.IpFamily = &v
+	return s
+}
+
 // SetServiceIpv4Cidr sets the ServiceIpv4Cidr field's value.
 func (s *KubernetesNetworkConfigRequest) SetServiceIpv4Cidr(v string) *KubernetesNetworkConfigRequest {
 	s.ServiceIpv4Cidr = &v
 	return s
 }
 
-// The Kubernetes network configuration for the cluster.
+// The Kubernetes network configuration for the cluster. The response contains
+// a value for serviceIpv6Cidr or serviceIpv4Cidr, but not both.
 type KubernetesNetworkConfigResponse struct {
 	_ struct{} `type:"structure"`
 
-	// The CIDR block that Kubernetes service IP addresses are assigned from. If
-	// you didn't specify a CIDR block when you created the cluster, then Kubernetes
-	// assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks.
-	// If this was specified, then it was specified when the cluster was created
-	// and it cannot be changed.
+	// The IP family used to assign Kubernetes pod and service IP addresses. The
+	// IP family is always ipv4, unless you have a 1.21 or later cluster running
+	// version 1.10.1 or later of the Amazon VPC CNI add-on and specified ipv6 when
+	// you created the cluster.
+	IpFamily *string `locationName:"ipFamily" type:"string" enum:"IpFamily"`
+
+	// The CIDR block that Kubernetes pod and service IP addresses are assigned
+	// from. Kubernetes assigns addresses from an IPv4 CIDR block assigned to a
+	// subnet that the node is in. If you didn't specify a CIDR block when you created
+	// the cluster, then Kubernetes assigns addresses from either the 10.100.0.0/16
+	// or 172.20.0.0/16 CIDR blocks. If this was specified, then it was specified
+	// when the cluster was created and it can't be changed.
 	ServiceIpv4Cidr *string `locationName:"serviceIpv4Cidr" type:"string"`
+
+	// The CIDR block that Kubernetes pod and service IP addresses are assigned
+	// from if you created a 1.21 or later cluster with version 1.10.1 or later
+	// of the Amazon VPC CNI add-on and specified ipv6 for ipFamily when you created
+	// the cluster. Kubernetes assigns service addresses from the unique local address
+	// range (fc00::/7) because you can't specify a custom IPv6 CIDR block when
+	// you create the cluster.
+	ServiceIpv6Cidr *string `locationName:"serviceIpv6Cidr" type:"string"`
 }
 
 // String returns the string representation.
@@ -7857,9 +7993,21 @@ func (s KubernetesNetworkConfigResponse) GoString() string {
 	return s.String()
 }
 
+// SetIpFamily sets the IpFamily field's value.
+func (s *KubernetesNetworkConfigResponse) SetIpFamily(v string) *KubernetesNetworkConfigResponse {
+	s.IpFamily = &v
+	return s
+}
+
 // SetServiceIpv4Cidr sets the ServiceIpv4Cidr field's value.
 func (s *KubernetesNetworkConfigResponse) SetServiceIpv4Cidr(v string) *KubernetesNetworkConfigResponse {
 	s.ServiceIpv4Cidr = &v
+	return s
+}
+
+// SetServiceIpv6Cidr sets the ServiceIpv6Cidr field's value.
+func (s *KubernetesNetworkConfigResponse) SetServiceIpv6Cidr(v string) *KubernetesNetworkConfigResponse {
+	s.ServiceIpv6Cidr = &v
 	return s
 }
 
@@ -8057,8 +8205,9 @@ func (s *ListAddonsOutput) SetNextToken(v string) *ListAddonsOutput {
 type ListClustersInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Indicates whether connected clusters are included in the returned list. Default
-	// value is 'ALL'.
+	// Indicates whether external clusters are included in the returned list. Use
+	// 'all' to return connected clusters, or blank to return only Amazon EKS clusters.
+	// 'all' must be in lowercase otherwise an error occurs.
 	Include []*string `location:"querystring" locationName:"include" type:"list"`
 
 	// The maximum number of cluster results returned by ListClusters in paginated
@@ -8774,7 +8923,7 @@ type LogSetup struct {
 	Enabled *bool `locationName:"enabled" type:"boolean"`
 
 	// The available cluster control plane log types.
-	Types []*string `locationName:"types" type:"list"`
+	Types []*string `locationName:"types" type:"list" enum:"LogType"`
 }
 
 // String returns the string representation.
@@ -8924,15 +9073,16 @@ type Nodegroup struct {
 	Subnets []*string `locationName:"subnets" type:"list"`
 
 	// The metadata applied to the node group to assist with categorization and
-	// organization. Each tag consists of a key and an optional value, both of which
-	// you define. Node group tags do not propagate to any other resources associated
+	// organization. Each tag consists of a key and an optional value. You define
+	// both. Node group tags do not propagate to any other resources associated
 	// with the node group, such as the Amazon EC2 instances or subnets.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 
 	// The Kubernetes taints to be applied to the nodes in the node group when they
 	// are created. Effect is one of No_Schedule, Prefer_No_Schedule, or No_Execute.
 	// Kubernetes taints can be used together with tolerations to control how workloads
-	// are scheduled to your nodes.
+	// are scheduled to your nodes. For more information, see Node taints on managed
+	// node groups (https://docs.aws.amazon.com/eks/latest/userguide/node-taints-managed-node-groups.html).
 	Taints []*Taint `locationName:"taints" type:"list"`
 
 	// The node group update configuration.
@@ -9181,6 +9331,25 @@ type NodegroupScalingConfig struct {
 	_ struct{} `type:"structure"`
 
 	// The current number of nodes that the managed node group should maintain.
+	//
+	// If you use Cluster Autoscaler, you shouldn't change the desiredSize value
+	// directly, as this can cause the Cluster Autoscaler to suddenly scale up or
+	// scale down.
+	//
+	// Whenever this parameter changes, the number of worker nodes in the node group
+	// is updated to the specified size. If this parameter is given a value that
+	// is smaller than the current number of running worker nodes, the necessary
+	// number of worker nodes are terminated to match the given value. When using
+	// CloudFormation, no action occurs if you remove this parameter from your CFN
+	// template.
+	//
+	// This parameter can be different from minSize in some cases, such as when
+	// starting with extra hosts for testing. This parameter can also be different
+	// when you want to start with an estimated number of needed hosts, but let
+	// Cluster Autoscaler reduce the number if there are too many. When Cluster
+	// Autoscaler is used, the desiredSize parameter is altered by Cluster Autoscaler
+	// (but can be out-of-date for short periods of time). Cluster Autoscaler doesn't
+	// scale a managed node group lower than minSize or higher than maxSize.
 	DesiredSize *int64 `locationName:"desiredSize" type:"integer"`
 
 	// The maximum number of nodes that the managed node group can scale out to.
@@ -9440,8 +9609,8 @@ type OidcIdentityProviderConfig struct {
 	Status *string `locationName:"status" type:"string" enum:"ConfigStatus"`
 
 	// The metadata to apply to the provider configuration to assist with categorization
-	// and organization. Each tag consists of a key and an optional value, both
-	// of which you defined.
+	// and organization. Each tag consists of a key and an optional value. You define
+	// both.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 
 	// The JSON Web token (JWT) claim that is used as the username.
@@ -9734,10 +9903,16 @@ type RegisterClusterInput struct {
 	// ConnectorConfig is a required field
 	ConnectorConfig *ConnectorConfigRequest `locationName:"connectorConfig" type:"structure" required:"true"`
 
-	// Define a unique name for this cluster within your AWS account.
+	// Define a unique name for this cluster for your Region.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The metadata that you apply to the cluster to assist with categorization
+	// and organization. Each tag consists of a key and an optional value, both
+	// of which you define. Cluster tags do not propagate to any other resources
+	// associated with the cluster.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
 // String returns the string representation.
@@ -9770,6 +9945,9 @@ func (s *RegisterClusterInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
 	if s.ConnectorConfig != nil {
 		if err := s.ConnectorConfig.Validate(); err != nil {
 			invalidParams.AddNested("ConnectorConfig", err.(request.ErrInvalidParams))
@@ -9797,6 +9975,12 @@ func (s *RegisterClusterInput) SetConnectorConfig(v *ConnectorConfigRequest) *Re
 // SetName sets the Name field's value.
 func (s *RegisterClusterInput) SetName(v string) *RegisterClusterInput {
 	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *RegisterClusterInput) SetTags(v map[string]*string) *RegisterClusterInput {
+	s.Tags = v
 	return s
 }
 
@@ -10100,6 +10284,71 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Required resources (such as service-linked roles) were created and are still
+// propagating. Retry later.
+type ResourcePropagationDelayException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourcePropagationDelayException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourcePropagationDelayException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourcePropagationDelayException(v protocol.ResponseMetadata) error {
+	return &ResourcePropagationDelayException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourcePropagationDelayException) Code() string {
+	return "ResourcePropagationDelayException"
+}
+
+// Message returns the exception's message.
+func (s *ResourcePropagationDelayException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourcePropagationDelayException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourcePropagationDelayException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourcePropagationDelayException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourcePropagationDelayException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // These errors are usually caused by a server-side issue.
 type ServerException struct {
 	_            struct{}                  `type:"structure"`
@@ -10304,7 +10553,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10325,7 +10574,8 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
-// A property that allows a node to repel a set of pods.
+// A property that allows a node to repel a set of pods. For more information,
+// see Node taints on managed node groups (https://docs.aws.amazon.com/eks/latest/userguide/node-taints-managed-node-groups.html).
 type Taint struct {
 	_ struct{} `type:"structure"`
 
@@ -10534,7 +10784,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11068,7 +11318,8 @@ type UpdateNodegroupConfigInput struct {
 	ScalingConfig *NodegroupScalingConfig `locationName:"scalingConfig" type:"structure"`
 
 	// The Kubernetes taints to be applied to the nodes in the node group after
-	// the update.
+	// the update. For more information, see Node taints on managed node groups
+	// (https://docs.aws.amazon.com/eks/latest/userguide/node-taints-managed-node-groups.html).
 	Taints *UpdateTaintsPayload `locationName:"taints" type:"structure"`
 
 	// The node group update configuration.
@@ -11408,7 +11659,8 @@ func (s *UpdateParam) SetValue(v string) *UpdateParam {
 	return s
 }
 
-// An object representing the details of an update to a taints payload.
+// An object representing the details of an update to a taints payload. For
+// more information, see Node taints on managed node groups (https://docs.aws.amazon.com/eks/latest/userguide/node-taints-managed-node-groups.html).
 type UpdateTaintsPayload struct {
 	_ struct{} `type:"structure"`
 
@@ -11699,6 +11951,18 @@ const (
 
 	// AMITypesCustom is a AMITypes enum value
 	AMITypesCustom = "CUSTOM"
+
+	// AMITypesBottlerocketArm64 is a AMITypes enum value
+	AMITypesBottlerocketArm64 = "BOTTLEROCKET_ARM_64"
+
+	// AMITypesBottlerocketX8664 is a AMITypes enum value
+	AMITypesBottlerocketX8664 = "BOTTLEROCKET_x86_64"
+
+	// AMITypesBottlerocketArm64Nvidia is a AMITypes enum value
+	AMITypesBottlerocketArm64Nvidia = "BOTTLEROCKET_ARM_64_NVIDIA"
+
+	// AMITypesBottlerocketX8664Nvidia is a AMITypes enum value
+	AMITypesBottlerocketX8664Nvidia = "BOTTLEROCKET_x86_64_NVIDIA"
 )
 
 // AMITypes_Values returns all elements of the AMITypes enum
@@ -11708,6 +11972,10 @@ func AMITypes_Values() []string {
 		AMITypesAl2X8664Gpu,
 		AMITypesAl2Arm64,
 		AMITypesCustom,
+		AMITypesBottlerocketArm64,
+		AMITypesBottlerocketX8664,
+		AMITypesBottlerocketArm64Nvidia,
+		AMITypesBottlerocketX8664Nvidia,
 	}
 }
 
@@ -12004,6 +12272,22 @@ func FargateProfileStatus_Values() []string {
 }
 
 const (
+	// IpFamilyIpv4 is a IpFamily enum value
+	IpFamilyIpv4 = "ipv4"
+
+	// IpFamilyIpv6 is a IpFamily enum value
+	IpFamilyIpv6 = "ipv6"
+)
+
+// IpFamily_Values returns all elements of the IpFamily enum
+func IpFamily_Values() []string {
+	return []string{
+		IpFamilyIpv4,
+		IpFamilyIpv6,
+	}
+}
+
+const (
 	// LogTypeApi is a LogType enum value
 	LogTypeApi = "api"
 
@@ -12085,6 +12369,9 @@ const (
 
 	// NodegroupIssueCodeClusterUnreachable is a NodegroupIssueCode enum value
 	NodegroupIssueCodeClusterUnreachable = "ClusterUnreachable"
+
+	// NodegroupIssueCodeEc2subnetMissingIpv6assignment is a NodegroupIssueCode enum value
+	NodegroupIssueCodeEc2subnetMissingIpv6assignment = "Ec2SubnetMissingIpv6Assignment"
 )
 
 // NodegroupIssueCode_Values returns all elements of the NodegroupIssueCode enum
@@ -12108,6 +12395,7 @@ func NodegroupIssueCode_Values() []string {
 		NodegroupIssueCodeAccessDenied,
 		NodegroupIssueCodeInternalFailure,
 		NodegroupIssueCodeClusterUnreachable,
+		NodegroupIssueCodeEc2subnetMissingIpv6assignment,
 	}
 }
 

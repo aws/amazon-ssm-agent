@@ -15,12 +15,18 @@
 package updates3util
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	updatemanifestmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest/mocks"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
@@ -28,10 +34,10 @@ import (
 
 func TestResolveManifestUrl_RegionError(t *testing.T) {
 	identity := &identityMocks.IAgentIdentity{}
-	context := &context.Mock{}
+	context := &contextmocks.Mock{}
 
 	context.On("Identity").Return(identity)
-	context.On("Log").Return(log.NewMockLog())
+	context.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		context,
 	}
@@ -44,10 +50,10 @@ func TestResolveManifestUrl_RegionError(t *testing.T) {
 
 func TestResolveManifestUrl_EmptyURL_DynamicEndpointSuccess(t *testing.T) {
 	identity := &identityMocks.IAgentIdentity{}
-	context := &context.Mock{}
+	context := &contextmocks.Mock{}
 
 	context.On("Identity").Return(identity)
-	context.On("Log").Return(log.NewMockLog())
+	context.On("Log").Return(logmocks.NewMockLog())
 	identity.On("GetServiceEndpoint", "s3").Return("SomeRandom_{Region}_URL")
 	util := &updateS3UtilImpl{
 		context,
@@ -61,10 +67,10 @@ func TestResolveManifestUrl_EmptyURL_DynamicEndpointSuccess(t *testing.T) {
 
 func TestResolveManifestUrl_EmptyURL_EmptyDynamicEndpoint(t *testing.T) {
 	identity := &identityMocks.IAgentIdentity{}
-	context := &context.Mock{}
+	context := &contextmocks.Mock{}
 
 	context.On("Identity").Return(identity)
-	context.On("Log").Return(log.NewMockLog())
+	context.On("Log").Return(logmocks.NewMockLog())
 	identity.On("GetServiceEndpoint", "s3").Return("")
 	util := &updateS3UtilImpl{
 		context,
@@ -85,12 +91,12 @@ func TestResolveManifestUrl_EmptyURL_EmptyDynamicEndpoint(t *testing.T) {
 
 func TestDownloadManifest_FailedResolveManifestUrl(t *testing.T) {
 	identity := &identityMocks.IAgentIdentity{}
-	context := &context.Mock{}
+	context := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	context.On("Identity").Return(identity)
-	context.On("Log").Return(log.NewMockLog())
+	context.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		context,
 	}
@@ -107,12 +113,12 @@ func TestDownloadManifest_FailedResolveManifestUrl(t *testing.T) {
 func TestDownloadManifest_FailedCreateTempDir(t *testing.T) {
 	createTempDir = func(string, string) (string, error) { return "", fmt.Errorf("SomeTmpError") }
 	identity := &identityMocks.IAgentIdentity{}
-	context := &context.Mock{}
+	context := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	context.On("Identity").Return(identity)
-	context.On("Log").Return(log.NewMockLog())
+	context.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		context,
 	}
@@ -129,12 +135,12 @@ func TestDownloadManifest_FailedDownloadFile(t *testing.T) {
 	removeDir = func(string) error { return nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -183,12 +189,12 @@ func TestDownloadManifest_FailedLoadManifest(t *testing.T) {
 	fileDownload = func(context.T, artifact.DownloadInput) (artifact.DownloadOutput, error) { return artifactOutput, nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -212,12 +218,12 @@ func TestDownloadManifest_Success(t *testing.T) {
 	fileDownload = func(context.T, artifact.DownloadInput) (artifact.DownloadOutput, error) { return artifactOutput, nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -242,12 +248,12 @@ func TestDownloadUpdater_FailedGetLatestVersion(t *testing.T) {
 	fileDownload = func(context.T, artifact.DownloadInput) (artifact.DownloadOutput, error) { return artifactOutput, nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -275,12 +281,12 @@ func TestDownloadUpdater_FailedGetDownloadURL(t *testing.T) {
 	fileDownload = func(context.T, artifact.DownloadInput) (artifact.DownloadOutput, error) { return artifactOutput, nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -303,12 +309,12 @@ func TestDownloadUpdater_FailedDownloadUpdater(t *testing.T) {
 	removeDir = func(string) error { return nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -361,12 +367,12 @@ func TestDownloadUpdater_FailedDecompress(t *testing.T) {
 	fileDownload = func(context.T, artifact.DownloadInput) (artifact.DownloadOutput, error) { return artifactOutput, nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -397,12 +403,12 @@ func TestDownloadUpdater_Success(t *testing.T) {
 	fileDecompress = func(log log.T, src, dest string) error { return nil }
 
 	identity := &identityMocks.IAgentIdentity{}
-	mockContext := &context.Mock{}
+	mockContext := &contextmocks.Mock{}
 
 	manifest := &updatemanifestmocks.T{}
 
 	mockContext.On("Identity").Return(identity)
-	mockContext.On("Log").Return(log.NewMockLog())
+	mockContext.On("Log").Return(logmocks.NewMockLog())
 	util := &updateS3UtilImpl{
 		mockContext,
 	}
@@ -414,4 +420,127 @@ func TestDownloadUpdater_Success(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, expectedVersion, version)
+}
+
+func TestGetStableVersion_s3httpDownload_Success(t *testing.T) {
+	mockContext := contextmocks.NewMockDefault()
+	util := &updateS3UtilImpl{
+		mockContext,
+	}
+	// s3 success
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return []byte("3.1.1.1"), nil
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), nil
+	}
+	version, err := util.GetStableVersion("")
+	assert.Equal(t, "3.1.1.1", version)
+	assert.Nil(t, err)
+
+	// s3 fail & http success
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return []byte("3.1.1.1"), fmt.Errorf("s3 download failed")
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), nil
+	}
+	version, err = util.GetStableVersion("stableUrl")
+	assert.Equal(t, "3.2.1.1", version)
+	assert.Nil(t, err)
+
+	// s3 fail & http success
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return nil, nil
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), nil
+	}
+	version, err = util.GetStableVersion("stableUrl")
+	assert.Equal(t, "3.2.1.1", version)
+	assert.Nil(t, err)
+}
+
+func TestGetStableVersion_s3httpDownload_Failed(t *testing.T) {
+	mockContext := contextmocks.NewMockDefault()
+	util := &updateS3UtilImpl{
+		mockContext,
+	}
+	s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+		return []byte("3.1.1.1"), fmt.Errorf("s3 download failed")
+	}
+	https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+		return []byte("3.2.1.1"), fmt.Errorf("http download failed")
+	}
+	version, err := util.GetStableVersion("stableUrl")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "http download failed")
+	assert.Empty(t, version)
+}
+
+func TestGetStableVersion_InvalidVersion(t *testing.T) {
+	mockContext := contextmocks.NewMockDefault()
+	util := &updateS3UtilImpl{
+		mockContext,
+	}
+
+	versionsToTest := []string{
+		"3.1.1.1.1",
+		"3.1.1.a",
+		"3.1.a.1",
+		"3.a.1.1",
+		"a.1.1.1",
+		"3.1.1.1a",
+		"3.1.1",
+	}
+	for _, versionResponse := range versionsToTest {
+
+		s3FileRead = func(context context.T, stableVersionUrl string) (output []byte, err error) {
+			return []byte(versionResponse), nil
+		}
+		https3Download = func(stableVersionUrl string, client *http.Client) ([]byte, error) {
+			return []byte(versionResponse), nil
+		}
+		version, err := util.GetStableVersion("stableUrl")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "invalid version format returned from")
+		if !strings.HasSuffix(err.Error(), versionResponse) {
+			assert.Fail(t, fmt.Sprintf("expected error to end with version %s: %s", versionResponse, err.Error()))
+		}
+		assert.Empty(t, version)
+	}
+}
+
+func TestHttpDownload_Success(t *testing.T) {
+	httpClient := &http.Client{}
+	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte("3.1.1188.0"))),
+			Header:     http.Header{},
+		}
+	})
+	version, err := httpDownload("stableUrl", httpClient)
+	assert.NoError(t, err)
+	assert.Equal(t, "3.1.1188.0", string(version))
+}
+
+func TestHttpDownload_Failure(t *testing.T) {
+	httpClient := &http.Client{}
+	httpClient.Transport = roundTripFunc(func(req *http.Request) *http.Response {
+		return &http.Response{
+			StatusCode: http.StatusBadRequest,
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte("3.1.1188.0"))),
+			Header:     http.Header{},
+		}
+	})
+	version, err := httpDownload("stableUrl", httpClient)
+	assert.Error(t, err)
+	assert.Equal(t, "", string(version))
+}
+
+type roundTripFunc func(req *http.Request) *http.Response
+
+func (f roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req), nil
 }

@@ -5,6 +5,8 @@ import (
 	"runtime/debug"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
@@ -19,7 +21,7 @@ import (
 
 const (
 	defaultCommandTimeoutMax = 172800 * time.Second
-	defaultWorkerContextName = "[ssm-document-worker]"
+	defaultWorkerContextName = "[" + appconfig.SSMDocumentWorkerName + "]"
 )
 
 var pluginRunner = func(
@@ -40,7 +42,6 @@ func main() {
 			logger.Errorf("document worker panic: %v", err)
 			logger.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
-
 		logger.Flush()
 		logger.Close()
 	}()
@@ -54,6 +55,16 @@ func main() {
 
 	ctx := context.Default(logger, *cfg, agentIdentity).With(defaultWorkerContextName).With("[" + channelName + "]")
 	logger = ctx.Log()
+
+	cloudwatchPublisher := cloudwatchlogspublisher.NewCloudWatchPublisher(ctx)
+	cloudwatchPublisher.Init()
+
+	defer func() {
+		// Wait few seconds for cw logs to upload
+		logger.Flush()
+		time.Sleep(3 * time.Second)
+		cloudwatchPublisher.Stop()
+	}()
 
 	logger.Infof("document: %v worker started", channelName)
 	//create channel from the given handle identifier by master
@@ -77,8 +88,6 @@ func main() {
 		return
 	}
 	logger.Info("document worker closed")
-	//ensure logs are flushed
-	logger.Close()
 	//TODO figure out s3 aync problem
 	//TODO figure out why defer main doesnt work on windows
 	if err != nil {

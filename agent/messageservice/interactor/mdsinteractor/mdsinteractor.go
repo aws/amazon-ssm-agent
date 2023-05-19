@@ -22,6 +22,7 @@ import (
 	"runtime/debug"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -41,19 +42,20 @@ import (
 
 // MDSInteractor defines the properties and methods to communicate with MDS
 type MDSInteractor struct {
-	context              context.T
-	config               contracts.AgentConfiguration
-	service              mdsService.Service
-	orchestrationRootDir string
-	messagePollJob       *scheduler.Job
-	sendReplyJob         *scheduler.Job
-	messagePollWaitGroup *sync.WaitGroup
-	lastPollTime         time.Time
-	mutex                sync.RWMutex
-	processorStopPolicy  *sdkutil.StopPolicy
-	messageHandler       messageHandler.IMessageHandler
-	replyChan            chan contracts.DocumentResult
-	ackSkipCodes         map[messageHandler.ErrorCode]struct{}
+	context                 context.T
+	config                  contracts.AgentConfiguration
+	service                 mdsService.Service
+	orchestrationRootDir    string
+	messagePollJob          *scheduler.Job
+	sendReplyJob            *scheduler.Job
+	messagePollWaitGroup    *sync.WaitGroup
+	lastPollTime            time.Time
+	mutex                   sync.RWMutex
+	processorStopPolicy     *sdkutil.StopPolicy
+	messageHandler          messageHandler.IMessageHandler
+	replyChan               chan contracts.DocumentResult
+	ackSkipCodes            map[messageHandler.ErrorCode]struct{}
+	ableToOpenMGSConnection *uint32
 }
 
 const (
@@ -141,8 +143,9 @@ func (mds *MDSInteractor) GetSupportedWorkers() []utils.WorkerName {
 }
 
 // Initialize initializes MDSInteractor properties and starts failed reply job
-func (mds *MDSInteractor) Initialize() (err error) {
+func (mds *MDSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error) {
 	log := mds.context.Log()
+	mds.ableToOpenMGSConnection = ableToOpenMGSConnection
 
 	log.Info("Starting message polling")
 	mds.messagePollWaitGroup = &sync.WaitGroup{}
@@ -218,7 +221,15 @@ func (mds *MDSInteractor) listenReply() {
 	for result := range mds.replyChan {
 		log.Debugf("start processing reply: %v", result.MessageID)
 		pluginID := result.LastPlugin
-		payloadDoc := utils.PrepareReplyPayloadFromIntermediatePluginResults(mds.context.Log(), pluginID, mds.config.AgentInfo, result.PluginResults)
+		payloadDoc := messageContracts.SendReplyPayload{}
+
+		if mds.ableToOpenMGSConnection != nil {
+			ableToOpenMGSConnection := atomic.LoadUint32(mds.ableToOpenMGSConnection) != 0
+			payloadDoc = utils.PrepareReplyPayloadFromIntermediatePluginResults(mds.context.Log(), pluginID, mds.config.AgentInfo, result.PluginResults, &ableToOpenMGSConnection)
+		} else {
+			payloadDoc = utils.PrepareReplyPayloadFromIntermediatePluginResults(mds.context.Log(), pluginID, mds.config.AgentInfo, result.PluginResults, nil)
+		}
+
 		mds.processSendReply(result.MessageID, payloadDoc)
 		log.Debugf("ended processing reply: %v", result.MessageID)
 	}
@@ -468,7 +479,15 @@ func (mds *MDSInteractor) sendFailedReplies() {
 }
 
 func (mds *MDSInteractor) sendDocLevelResponse(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string) {
-	payloadDoc := utils.PrepareReplyPayloadToUpdateDocumentStatus(mds.config.AgentInfo, resultStatus, documentTraceOutput)
+	payloadDoc := messageContracts.SendReplyPayload{}
+
+	if mds.ableToOpenMGSConnection != nil {
+		ableToOpenMGSConnection := atomic.LoadUint32(mds.ableToOpenMGSConnection) != 0
+		payloadDoc = utils.PrepareReplyPayloadToUpdateDocumentStatus(mds.config.AgentInfo, resultStatus, documentTraceOutput, &ableToOpenMGSConnection)
+	} else {
+		payloadDoc = utils.PrepareReplyPayloadToUpdateDocumentStatus(mds.config.AgentInfo, resultStatus, documentTraceOutput, nil)
+	}
+
 	mds.processSendReply(messageID, payloadDoc)
 }
 

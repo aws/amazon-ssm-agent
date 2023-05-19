@@ -21,7 +21,7 @@ import (
 
 type Backend messaging.MessagingBackend
 
-//see differences between zombie and orphan: https://www.gmarik.info/blog/2012/orphan-vs-zombie-vs-daemon-processes/
+// see differences between zombie and orphan: https://www.gmarik.info/blog/2012/orphan-vs-zombie-vs-daemon-processes/
 const (
 	//TODO prolong this value once we go to production
 	defaultZombieProcessTimeout = 3 * time.Second
@@ -71,7 +71,7 @@ func NewOutOfProcExecuter(ctx context.T) *OutOfProcExecuter {
 	}
 }
 
-//Run() prepare the ipc channel, create a data processing backend and start messaging with docment worker
+// Run() prepare the ipc channel, create a data processing backend and start messaging with docment worker
 func (e *OutOfProcExecuter) Run(
 	cancelFlag task.CancelFlag,
 	docStore executer.DocumentStore) chan contracts.DocumentResult {
@@ -117,9 +117,9 @@ func (e *OutOfProcExecuter) Run(
 	}
 }
 
-//Executer spins up an ipc transmission worker, it creates a Data processing backend and hands off the backend to the ipc worker
-//ipc worker and data backend act as 2 threads exchange raw json messages, and messaging protocol happened in data backend, data backend is self-contained and exit when command finishes accordingly
-//Executer however does hold a timer to the worker to forcefully termniate both of them
+// Executer spins up an ipc transmission worker, it creates a Data processing backend and hands off the backend to the ipc worker
+// ipc worker and data backend act as 2 threads exchange raw json messages, and messaging protocol happened in data backend, data backend is self-contained and exit when command finishes accordingly
+// Executer however does hold a timer to the worker to forcefully termniate both of them
 func (e *OutOfProcExecuter) messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
 
 	//handoff reply functionalities to data backend.
@@ -158,8 +158,8 @@ func (e *OutOfProcExecuter) generateUnexpectedFailResult(errMsg string) contract
 	return docResult
 }
 
-//prepare the channel for messaging as well as launching the document worker process, if the channel already exists, re-open it.
-//launch timeout timer based off the discovered process status
+// prepare the channel for messaging as well as launching the document worker process, if the channel already exists, re-open it.
+// launch timeout timer based off the discovered process status
 func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbasedipc.IPCChannel, err error) {
 	log := e.ctx.Log()
 	var found bool

@@ -21,16 +21,20 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 )
 
 const (
+	documentWorkerContext = "[" + appconfig.SSMDocumentWorkerName + "]"
+	sessionWorkerContext  = "[" + appconfig.SSMSessionWorkerName + "]"
+
 	dataAlreadyAcceptedException   = "DataAlreadyAcceptedException"
 	invalidSequenceTokenException  = "InvalidSequenceTokenException"
 	resourceAlreadyExistsException = "ResourceAlreadyExistsException"
 	resourceNotFoundException      = "ResourceNotFoundException"
 	defaultPollingInterval         = time.Second
-	defaultPollingWaitTime         = 200 * time.Millisecond
+	defaultPollingWaitTime         = 100 * time.Millisecond
 	pollingBackoffMultiplier       = 2
 	maxPollingInterval             = 30 * time.Second
 )
@@ -158,6 +162,22 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 		return
 	}
 
+	// Use different log streams for Agent/Document/Session worker
+	// Add channelName (last context) to 1:1 bind worker execution and log stream
+	cwpContext := cloudwatchPublisher.context.CurrentContext()
+
+	for _, context := range cwpContext {
+		if context == documentWorkerContext {
+			logStream += documentWorkerContext
+			logStream += cwpContext[len(cwpContext)-1]
+			break
+		} else if context == sessionWorkerContext {
+			logStream += sessionWorkerContext
+			logStream += cwpContext[len(cwpContext)-1]
+			break
+		}
+	}
+
 	log.Debugf("Cloudwatchlogs Publishing Logs to LogGroup: %v", logGroup)
 	log.Debugf("Cloudwatchlogs Publishing Logs to LogStream: %v", logStream)
 
@@ -223,7 +243,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 					log.Debugf("Error Dequeueing Messages from Cloudwatchlogs Queue : %v", err)
 				}
 
-				if messages != nil {
+				if messages != nil && len(messages) > 0 {
 					// There are some messages. Call the PUT Api
 					if sequenceToken, err = cloudwatchPublisher.cloudWatchLogsService.PutLogEvents(messages, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream, sequenceToken); err != nil {
 						// Error pushing logs even after retries and fixing sequence token

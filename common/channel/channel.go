@@ -11,11 +11,13 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// package channel captures IPC implementation.
+// Package channel captures IPC implementation.
 package channel
 
 import (
 	"runtime"
+	"runtime/debug"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -36,6 +38,11 @@ type IChannel interface {
 	IsConnect() bool
 }
 
+var (
+	newNamedPipeChannelRef     = NewNamedPipeChannel
+	isDefaultChannelPresentRef = utils.IsDefaultChannelPresent
+)
+
 // GetChannelCreator returns function reference for channel creation based
 // on whether named pipe be created or not
 func GetChannelCreator(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity) (channelCreateFn func(log.T, identity.IAgentIdentity) IChannel) {
@@ -54,23 +61,37 @@ func canUseNamedPipe(log log.T, appConfig appconfig.SsmagentConfig, identity ide
 	}
 
 	if appConfig.Agent.ForceFileIPC {
+		log.Info("Not using named pipe as force file IPC is set")
 		return false
 	}
-	namedPipeChannel := NewNamedPipeChannel(log, identity)
-	defer func() {
-		if msg := recover(); msg != nil {
-			log.Error("named pipe check panicked")
+	namedPipeChan := newNamedPipeChannelRef(log, identity)
+	namedPipeCreationChan := make(chan bool, 1)
+	go func() {
+		defer func() {
+			if msg := recover(); msg != nil {
+				log.Error("named pipe creation panicked")
+				log.Errorf("stacktrace:\n%s", debug.Stack())
+			}
+		}()
+		defer func() {
+			if err := namedPipeChan.Close(); err != nil {
+				log.Errorf("error while closing named pipe channel %v", err)
+			}
+		}()
+		namedPipeChan.Initialize(utils.Surveyor)
+		if err := namedPipeChan.Listen(utils.TestAddress); err == nil && !isDefaultChannelPresentRef(identity) {
+			namedPipeCreationChan <- true
+			return
 		}
+		log.Info("falling back to file based IPC as named pipe creation failed")
+		namedPipeCreationChan <- false
 	}()
-	defer func() {
-		err := namedPipeChannel.Close()
-		if err != nil {
-			log.Errorf("error while closing named pipe channel %v", err)
-		}
-	}()
-	namedPipeChannel.Initialize(utils.Surveyor)
-	if err := namedPipeChannel.Listen(utils.TestAddress); err == nil && !utils.IsDefaultChannelPresent(identity) {
-		return true
+
+	select {
+	case creationSuccessFlag := <-namedPipeCreationChan:
+		return creationSuccessFlag
+	case <-time.After(10 * time.Second):
+		log.Info("falling back to file based IPC after timeout")
+		return false
 	}
-	return false
 }

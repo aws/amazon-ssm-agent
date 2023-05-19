@@ -21,8 +21,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
-	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider/rsaauth"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/rsaauth"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -34,29 +38,34 @@ const (
 	ProviderName = "OnPremRoleProvider"
 )
 
-func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info registration.IOnpremRegistrationInfo, sharingCreds bool) credentials.Provider {
+// NewCredentialsProvider initializes a new credential provider that retrieves OnPrem credentials from Systems Manager
+func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info registration.IOnpremRegistrationInfo, sharingCreds bool) credentialproviders.IRemoteProvider {
 	log = log.WithContext("[OnPremCredsProvider]")
-
+	provider := &onpremCredentialsProvider{
+		log:              log,
+		config:           config,
+		registrationInfo: info,
+		isSharingCreds:   sharingCreds,
+		endpointHelper:   endpoint.NewEndpointHelper(log, *config),
+	}
 	// If credentials are not being shared, the ssm-agent-worker should be in charge of rotating private key
 	// because as of now the amazon-ssm-agent does not use the aws sdk and therefore the retrieve function is never called.
 	// If credentials are being shared, the amazon-ssm-agent is the only executable that calls retrieve using the onpremcreds provider,
 	// all other workers will be using the sharedprovider.
 	// TODO: When amazon-ssm-agent starts using the aws-sdk, make the executableToRotateKey always be amazon-ssm-agent
-	executableToRotateKey := "ssm-agent-worker"
+	provider.executableToRotateKey = "ssm-agent-worker"
 	if sharingCreds {
-		executableToRotateKey = "amazon-ssm-agent"
+		provider.executableToRotateKey = "amazon-ssm-agent"
+		shareFile, err := sharedCredentials.GetSharedCredsFilePath("")
+		if err != nil {
+			log.Errorf("failed to get path to shared credentials file, not sharing credentials: %v", err)
+			provider.isSharingCreds = false
+		} else {
+			provider.shareFile = shareFile
+		}
 	}
 
-	provider := &onpremCredentialsProvider{
-		log:                   log,
-		config:                config,
-		registrationInfo:      info,
-		isSharingCreds:        sharingCreds,
-		executableToRotateKey: executableToRotateKey,
-		endpointHelper:        endpoint.NewEndpointHelper(log, *config),
-	}
-
-	provider.initializeClient(info.PrivateKey(log))
+	provider.initializeClient(info.PrivateKey(log, "", registration.RegVaultKey))
 	return provider
 }
 
@@ -77,7 +86,7 @@ func shouldRetryAwsRequest(err error) bool {
 	return true
 }
 
-// Retrieve retrieves credentials from the SSM Auth service.
+// Retrieve retrieves OnPrem credentials from the SSM Auth service.
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
@@ -97,12 +106,17 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 	}
 
 	// Get role token
-	_ = backoffRetry(func() error {
+	err = backoffRetry(func() error {
 		roleCreds, err = m.client.RequestManagedInstanceRoleToken(fingerprint)
+		if err == nil {
+			return nil
+		}
+
 		if shouldRetryAwsRequest(err) {
 			return err
 		}
-		return nil
+
+		return backoff.Permanent(err)
 	}, exponentialBackoff)
 
 	// Failed to get role token
@@ -110,7 +124,7 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 		return emptyCredential, err
 	}
 
-	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.executableToRotateKey, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair)
+	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.executableToRotateKey, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair, "", registration.RegVaultKey)
 	if err != nil {
 		m.log.Warnf("Failed to check if private key should be rotated: %v", err)
 	} else if shouldRotate {
@@ -146,8 +160,8 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponentialBackoff *backoff.ExponentialBackOff) error {
 	m.log.Infof("Attempting to rotate private key")
 
-	oldPrivateKey := m.registrationInfo.PrivateKey(m.log)
-	oldKeyType := m.registrationInfo.PrivateKeyType(m.log)
+	oldPrivateKey := m.registrationInfo.PrivateKey(m.log, "", registration.RegVaultKey)
+	oldKeyType := m.registrationInfo.PrivateKeyType(m.log, "", registration.RegVaultKey)
 	oldPublicKey, err := m.registrationInfo.GeneratePublicKey(oldPrivateKey)
 	if err != nil {
 		m.log.Warnf("Failed to generate old public key: %v", err)
@@ -162,7 +176,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 	}
 
 	// Update remote public key
-	_ = backoffRetry(func() error {
+	err = backoffRetry(func() error {
 		_, err = m.client.UpdateManagedInstancePublicKey(newPublicKey, newKeyType)
 		if shouldRetryAwsRequest(err) {
 			return err
@@ -199,7 +213,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 
 		if err != nil {
 			m.log.Warnf("Unable to verify neither new nor old key, rolling back private key change")
-			m.initializeClient(m.registrationInfo.PrivateKey(m.log))
+			m.initializeClient(m.registrationInfo.PrivateKey(m.log, "", registration.RegVaultKey))
 			return err
 		}
 
@@ -211,7 +225,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 
 	// New key was successfully updated in service, trying to save new key to disk
 	_ = backoffRetry(func() error {
-		err = m.registrationInfo.UpdatePrivateKey(m.log, newPrivateKey, newKeyType)
+		err = m.registrationInfo.UpdatePrivateKey(m.log, newPrivateKey, newKeyType, "", registration.RegVaultKey)
 		return err
 	}, exponentialBackoff)
 
@@ -234,7 +248,7 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 
 		m.log.Warn("Successfully rolled back remote key, and recovered registration")
 		m.initializeClient(oldPrivateKey)
-		return fmt.Errorf("Failed to save new private key to disk")
+		return fmt.Errorf("failed to save new private key to disk")
 	}
 
 	m.log.Info("Successfully rotated private key")
@@ -245,10 +259,25 @@ func (m *onpremCredentialsProvider) initializeClient(newPrivateKey string) {
 	m.client = createNewClient(m, newPrivateKey)
 }
 
-// Assigning function to variable to be able to mock out during tests
-var createNewClient = func(m *onpremCredentialsProvider, privateKey string) rsaauth.RsaSignedService {
-	instanceID := m.registrationInfo.InstanceID(m.log)
-	region := m.registrationInfo.Region(m.log)
+// ShareProfile is the aws profile to which OnPrem credentials should be saved
+func (m *onpremCredentialsProvider) ShareProfile() string {
+	return m.config.Profile.ShareProfile
+}
 
-	return rsaauth.NewRsaService(m.log, m.config, instanceID, region, privateKey)
+// ShareFile is the aws credentials file location to which OnPrem credentials should be saved
+func (m *onpremCredentialsProvider) ShareFile() string {
+	return m.shareFile
+}
+
+// SharesCredentials returns true if the role provider requires credentials to be saved to disk
+func (m *onpremCredentialsProvider) SharesCredentials() bool {
+	return m.isSharingCreds
+}
+
+// Assigning function to variable to be able to mock out during tests
+var createNewClient = func(m *onpremCredentialsProvider, privateKey string) authtokenrequest.IClient {
+	instanceID := m.registrationInfo.InstanceID(m.log, "", registration.RegVaultKey)
+	region := m.registrationInfo.Region(m.log, "", registration.RegVaultKey)
+
+	return rsaauth.NewRsaClient(m.log, m.config, instanceID, region, privateKey)
 }

@@ -23,6 +23,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -31,8 +33,8 @@ import (
 // TestEngineProcessor_Submit tests the basic flow of start command thread operation
 // this function submits to the job pool
 func TestEngineProcessor_Submit(t *testing.T) {
-	sendCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	executerMock := executermocks.NewMockExecuter()
 	creator := func(ctx context.T) executer.Executer {
 		return executerMock
@@ -58,8 +60,8 @@ func TestEngineProcessor_Submit(t *testing.T) {
 }
 
 func TestEngineProcessor_Cancel(t *testing.T) {
-	cancelCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	cancelCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	docMock := new(DocumentMgrMock)
 	processor := EngineProcessor{
 		context:           ctx,
@@ -83,9 +85,9 @@ func TestEngineProcessor_Cancel(t *testing.T) {
 }
 
 func TestEngineProcessor_Stop(t *testing.T) {
-	sendCommandPoolMock := new(task.MockedPool)
-	cancelCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	cancelCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	resChan := make(chan contracts.DocumentResult)
 	processor := EngineProcessor{
 		sendCommandPool:   sendCommandPoolMock,
@@ -99,16 +101,16 @@ func TestEngineProcessor_Stop(t *testing.T) {
 	sendCommandPoolMock.AssertExpectations(t)
 	cancelCommandPoolMock.AssertExpectations(t)
 	// multiple stop
-	sendCommandPoolMock = new(task.MockedPool)
-	cancelCommandPoolMock = new(task.MockedPool)
+	sendCommandPoolMock = new(taskmocks.MockedPool)
+	cancelCommandPoolMock = new(taskmocks.MockedPool)
 	processor.Stop()
 	sendCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
 	cancelCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
 }
 
-//TODO add shutdown and reboot test once we encapsulate docmanager
+// TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand(t *testing.T) {
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
 	docState.DocumentInformation.InstanceID = "instanceID"
@@ -153,8 +155,8 @@ func TestProcessCommand(t *testing.T) {
 }
 
 func TestCheckDocSubmissionAllowed(t *testing.T) {
-	sendCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	resChan := make(chan contracts.DocumentResult)
 	processor := EngineProcessor{
 		sendCommandPool:             sendCommandPoolMock,
@@ -178,7 +180,7 @@ func TestCheckDocSubmissionAllowed(t *testing.T) {
 	assert.Equal(t, ConversionFailed, errorCode, "conversion failed")
 
 	processor.loadProcessorPoolErrorCodes()
-	sendCommandPoolMock = new(task.MockedPool)
+	sendCommandPoolMock = new(taskmocks.MockedPool)
 	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
 	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.JobQueueFull)
 	processor.sendCommandPool = sendCommandPoolMock
@@ -187,8 +189,8 @@ func TestCheckDocSubmissionAllowed(t *testing.T) {
 }
 
 func TestDocSubmission_Panic(t *testing.T) {
-	sendCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	executerMock := executermocks.NewMockExecuter()
 	creator := func(ctx context.T) executer.Executer {
 		return executerMock
@@ -214,13 +216,13 @@ func TestDocSubmission_Panic(t *testing.T) {
 }
 
 func TestDocSubmission_CheckDocSubmissionAllowedError(t *testing.T) {
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	executerMock := executermocks.NewMockExecuter()
 	creator := func(ctx context.T) executer.Executer {
 		return executerMock
 	}
 
-	sendCommandPoolMock := new(task.MockedPool)
+	sendCommandPoolMock := new(taskmocks.MockedPool)
 	processor := EngineProcessor{
 		executerCreator:             creator,
 		sendCommandPool:             sendCommandPoolMock,
@@ -246,14 +248,14 @@ func TestDocSubmission_CheckDocSubmissionAllowedError(t *testing.T) {
 	errorCode := processor.Submit(docState)
 	assert.Equal(t, errorCode, DuplicateCommand)
 
-	sendCommandPoolMock = new(task.MockedPool)
+	sendCommandPoolMock = new(taskmocks.MockedPool)
 	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
 	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.InvalidJobId)
 	processor.sendCommandPool = sendCommandPoolMock
 	errorCode = processor.Submit(docState)
 	assert.Equal(t, errorCode, InvalidDocumentId)
 
-	sendCommandPoolMock = new(task.MockedPool)
+	sendCommandPoolMock = new(taskmocks.MockedPool)
 	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
 	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.JobQueueFull)
 	processor.sendCommandPool = sendCommandPoolMock
@@ -262,8 +264,8 @@ func TestDocSubmission_CheckDocSubmissionAllowedError(t *testing.T) {
 }
 
 func TestDocCancellation_Panic(t *testing.T) {
-	cancelCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	cancelCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	executerMock := executermocks.NewMockExecuter()
 	creator := func(ctx context.T) executer.Executer {
 		return executerMock
@@ -289,9 +291,9 @@ func TestDocCancellation_Panic(t *testing.T) {
 	assert.Equal(t, errorCode, SubmissionPanic)
 }
 
-//TODO add shutdown and reboot test once we encapsulate docmanager
+// TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand_Shutdown(t *testing.T) {
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
 	docState.DocumentInformation.InstanceID = "instanceID"
@@ -324,8 +326,8 @@ func TestProcessCommand_Shutdown(t *testing.T) {
 }
 
 func TestProcessCancelCommand_Success(t *testing.T) {
-	ctx := context.NewMockDefault()
-	sendCommandPoolMock := new(task.MockedPool)
+	ctx := contextmocks.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
 	docState := contracts.DocumentState{}
 	docState.CancelInformation.CancelMessageID = "messageID"
 	sendCommandPoolMock.On("Cancel", "messageID").Return(true)

@@ -34,6 +34,7 @@ import (
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/xtaci/smux"
 	"golang.org/x/sync/errgroup"
 )
@@ -55,6 +56,7 @@ type MuxServer struct {
 type MuxPortSession struct {
 	context            agentContext.T
 	portSession        IPortSession
+	clientVersion      string
 	cancelled          chan struct{}
 	destinationAddress string
 	sessionId          string
@@ -74,9 +76,10 @@ func (s *MuxServer) close() {
 }
 
 // NewMuxPortSession returns a new instance of the MuxPortSession.
-func NewMuxPortSession(context agentContext.T, cancelled chan struct{}, destinationAddress string, sessionId string) (IPortSession, error) {
+func NewMuxPortSession(context agentContext.T, clientVersion string, cancelled chan struct{}, destinationAddress string, sessionId string) (IPortSession, error) {
 	var plugin = MuxPortSession{
 		context:            context,
+		clientVersion:      clientVersion,
 		cancelled:          cancelled,
 		destinationAddress: destinationAddress,
 		sessionId:          sessionId}
@@ -182,7 +185,12 @@ func (p *MuxPortSession) initialize() (err error) {
 		log.Debugf("Accepted a connection %s\n", conn.LocalAddr())
 
 		var session *smux.Session
-		if session, err = smux.Server(conn, nil); err != nil {
+		smuxConfig := smux.DefaultConfig()
+		if versionutil.Compare(p.clientVersion, muxKeepAliveDisabledAfterThisClientVersion, true) > 0 {
+			// Disable smux KeepAlive or else it breaks Session Manager idle timeout.
+			smuxConfig.KeepAliveDisabled = true
+		}
+		if session, err = smux.Server(conn, smuxConfig); err != nil {
 			log.Errorf("Unable to setup smux server: %v", err)
 			return err
 		}

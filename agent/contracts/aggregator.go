@@ -21,7 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
-//TODO move part of the function to service?
+// TODO move part of the function to service?
 // prepareRuntimeStatus creates the structure for the runtimeStatus section of the payload of SendReply
 // for a particular plugin.
 func prepareRuntimeStatus(log log.T, pluginResult PluginResult) PluginRuntimeStatus {

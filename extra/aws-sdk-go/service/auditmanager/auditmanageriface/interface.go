@@ -108,6 +108,10 @@ type AuditManagerAPI interface {
 	DeleteAssessmentFrameworkWithContext(aws.Context, *auditmanager.DeleteAssessmentFrameworkInput, ...request.Option) (*auditmanager.DeleteAssessmentFrameworkOutput, error)
 	DeleteAssessmentFrameworkRequest(*auditmanager.DeleteAssessmentFrameworkInput) (*request.Request, *auditmanager.DeleteAssessmentFrameworkOutput)
 
+	DeleteAssessmentFrameworkShare(*auditmanager.DeleteAssessmentFrameworkShareInput) (*auditmanager.DeleteAssessmentFrameworkShareOutput, error)
+	DeleteAssessmentFrameworkShareWithContext(aws.Context, *auditmanager.DeleteAssessmentFrameworkShareInput, ...request.Option) (*auditmanager.DeleteAssessmentFrameworkShareOutput, error)
+	DeleteAssessmentFrameworkShareRequest(*auditmanager.DeleteAssessmentFrameworkShareInput) (*request.Request, *auditmanager.DeleteAssessmentFrameworkShareOutput)
+
 	DeleteAssessmentReport(*auditmanager.DeleteAssessmentReportInput) (*auditmanager.DeleteAssessmentReportOutput, error)
 	DeleteAssessmentReportWithContext(aws.Context, *auditmanager.DeleteAssessmentReportInput, ...request.Option) (*auditmanager.DeleteAssessmentReportOutput, error)
 	DeleteAssessmentReportRequest(*auditmanager.DeleteAssessmentReportInput) (*request.Request, *auditmanager.DeleteAssessmentReportOutput)
@@ -191,6 +195,14 @@ type AuditManagerAPI interface {
 	GetEvidenceFoldersByAssessmentControlPages(*auditmanager.GetEvidenceFoldersByAssessmentControlInput, func(*auditmanager.GetEvidenceFoldersByAssessmentControlOutput, bool) bool) error
 	GetEvidenceFoldersByAssessmentControlPagesWithContext(aws.Context, *auditmanager.GetEvidenceFoldersByAssessmentControlInput, func(*auditmanager.GetEvidenceFoldersByAssessmentControlOutput, bool) bool, ...request.Option) error
 
+	GetInsights(*auditmanager.GetInsightsInput) (*auditmanager.GetInsightsOutput, error)
+	GetInsightsWithContext(aws.Context, *auditmanager.GetInsightsInput, ...request.Option) (*auditmanager.GetInsightsOutput, error)
+	GetInsightsRequest(*auditmanager.GetInsightsInput) (*request.Request, *auditmanager.GetInsightsOutput)
+
+	GetInsightsByAssessment(*auditmanager.GetInsightsByAssessmentInput) (*auditmanager.GetInsightsByAssessmentOutput, error)
+	GetInsightsByAssessmentWithContext(aws.Context, *auditmanager.GetInsightsByAssessmentInput, ...request.Option) (*auditmanager.GetInsightsByAssessmentOutput, error)
+	GetInsightsByAssessmentRequest(*auditmanager.GetInsightsByAssessmentInput) (*request.Request, *auditmanager.GetInsightsByAssessmentOutput)
+
 	GetOrganizationAdminAccount(*auditmanager.GetOrganizationAdminAccountInput) (*auditmanager.GetOrganizationAdminAccountOutput, error)
 	GetOrganizationAdminAccountWithContext(aws.Context, *auditmanager.GetOrganizationAdminAccountInput, ...request.Option) (*auditmanager.GetOrganizationAdminAccountOutput, error)
 	GetOrganizationAdminAccountRequest(*auditmanager.GetOrganizationAdminAccountInput) (*request.Request, *auditmanager.GetOrganizationAdminAccountOutput)
@@ -202,6 +214,20 @@ type AuditManagerAPI interface {
 	GetSettings(*auditmanager.GetSettingsInput) (*auditmanager.GetSettingsOutput, error)
 	GetSettingsWithContext(aws.Context, *auditmanager.GetSettingsInput, ...request.Option) (*auditmanager.GetSettingsOutput, error)
 	GetSettingsRequest(*auditmanager.GetSettingsInput) (*request.Request, *auditmanager.GetSettingsOutput)
+
+	ListAssessmentControlInsightsByControlDomain(*auditmanager.ListAssessmentControlInsightsByControlDomainInput) (*auditmanager.ListAssessmentControlInsightsByControlDomainOutput, error)
+	ListAssessmentControlInsightsByControlDomainWithContext(aws.Context, *auditmanager.ListAssessmentControlInsightsByControlDomainInput, ...request.Option) (*auditmanager.ListAssessmentControlInsightsByControlDomainOutput, error)
+	ListAssessmentControlInsightsByControlDomainRequest(*auditmanager.ListAssessmentControlInsightsByControlDomainInput) (*request.Request, *auditmanager.ListAssessmentControlInsightsByControlDomainOutput)
+
+	ListAssessmentControlInsightsByControlDomainPages(*auditmanager.ListAssessmentControlInsightsByControlDomainInput, func(*auditmanager.ListAssessmentControlInsightsByControlDomainOutput, bool) bool) error
+	ListAssessmentControlInsightsByControlDomainPagesWithContext(aws.Context, *auditmanager.ListAssessmentControlInsightsByControlDomainInput, func(*auditmanager.ListAssessmentControlInsightsByControlDomainOutput, bool) bool, ...request.Option) error
+
+	ListAssessmentFrameworkShareRequests(*auditmanager.ListAssessmentFrameworkShareRequestsInput) (*auditmanager.ListAssessmentFrameworkShareRequestsOutput, error)
+	ListAssessmentFrameworkShareRequestsWithContext(aws.Context, *auditmanager.ListAssessmentFrameworkShareRequestsInput, ...request.Option) (*auditmanager.ListAssessmentFrameworkShareRequestsOutput, error)
+	ListAssessmentFrameworkShareRequestsRequest(*auditmanager.ListAssessmentFrameworkShareRequestsInput) (*request.Request, *auditmanager.ListAssessmentFrameworkShareRequestsOutput)
+
+	ListAssessmentFrameworkShareRequestsPages(*auditmanager.ListAssessmentFrameworkShareRequestsInput, func(*auditmanager.ListAssessmentFrameworkShareRequestsOutput, bool) bool) error
+	ListAssessmentFrameworkShareRequestsPagesWithContext(aws.Context, *auditmanager.ListAssessmentFrameworkShareRequestsInput, func(*auditmanager.ListAssessmentFrameworkShareRequestsOutput, bool) bool, ...request.Option) error
 
 	ListAssessmentFrameworks(*auditmanager.ListAssessmentFrameworksInput) (*auditmanager.ListAssessmentFrameworksOutput, error)
 	ListAssessmentFrameworksWithContext(aws.Context, *auditmanager.ListAssessmentFrameworksInput, ...request.Option) (*auditmanager.ListAssessmentFrameworksOutput, error)
@@ -223,6 +249,27 @@ type AuditManagerAPI interface {
 
 	ListAssessmentsPages(*auditmanager.ListAssessmentsInput, func(*auditmanager.ListAssessmentsOutput, bool) bool) error
 	ListAssessmentsPagesWithContext(aws.Context, *auditmanager.ListAssessmentsInput, func(*auditmanager.ListAssessmentsOutput, bool) bool, ...request.Option) error
+
+	ListControlDomainInsights(*auditmanager.ListControlDomainInsightsInput) (*auditmanager.ListControlDomainInsightsOutput, error)
+	ListControlDomainInsightsWithContext(aws.Context, *auditmanager.ListControlDomainInsightsInput, ...request.Option) (*auditmanager.ListControlDomainInsightsOutput, error)
+	ListControlDomainInsightsRequest(*auditmanager.ListControlDomainInsightsInput) (*request.Request, *auditmanager.ListControlDomainInsightsOutput)
+
+	ListControlDomainInsightsPages(*auditmanager.ListControlDomainInsightsInput, func(*auditmanager.ListControlDomainInsightsOutput, bool) bool) error
+	ListControlDomainInsightsPagesWithContext(aws.Context, *auditmanager.ListControlDomainInsightsInput, func(*auditmanager.ListControlDomainInsightsOutput, bool) bool, ...request.Option) error
+
+	ListControlDomainInsightsByAssessment(*auditmanager.ListControlDomainInsightsByAssessmentInput) (*auditmanager.ListControlDomainInsightsByAssessmentOutput, error)
+	ListControlDomainInsightsByAssessmentWithContext(aws.Context, *auditmanager.ListControlDomainInsightsByAssessmentInput, ...request.Option) (*auditmanager.ListControlDomainInsightsByAssessmentOutput, error)
+	ListControlDomainInsightsByAssessmentRequest(*auditmanager.ListControlDomainInsightsByAssessmentInput) (*request.Request, *auditmanager.ListControlDomainInsightsByAssessmentOutput)
+
+	ListControlDomainInsightsByAssessmentPages(*auditmanager.ListControlDomainInsightsByAssessmentInput, func(*auditmanager.ListControlDomainInsightsByAssessmentOutput, bool) bool) error
+	ListControlDomainInsightsByAssessmentPagesWithContext(aws.Context, *auditmanager.ListControlDomainInsightsByAssessmentInput, func(*auditmanager.ListControlDomainInsightsByAssessmentOutput, bool) bool, ...request.Option) error
+
+	ListControlInsightsByControlDomain(*auditmanager.ListControlInsightsByControlDomainInput) (*auditmanager.ListControlInsightsByControlDomainOutput, error)
+	ListControlInsightsByControlDomainWithContext(aws.Context, *auditmanager.ListControlInsightsByControlDomainInput, ...request.Option) (*auditmanager.ListControlInsightsByControlDomainOutput, error)
+	ListControlInsightsByControlDomainRequest(*auditmanager.ListControlInsightsByControlDomainInput) (*request.Request, *auditmanager.ListControlInsightsByControlDomainOutput)
+
+	ListControlInsightsByControlDomainPages(*auditmanager.ListControlInsightsByControlDomainInput, func(*auditmanager.ListControlInsightsByControlDomainOutput, bool) bool) error
+	ListControlInsightsByControlDomainPagesWithContext(aws.Context, *auditmanager.ListControlInsightsByControlDomainInput, func(*auditmanager.ListControlInsightsByControlDomainOutput, bool) bool, ...request.Option) error
 
 	ListControls(*auditmanager.ListControlsInput) (*auditmanager.ListControlsOutput, error)
 	ListControlsWithContext(aws.Context, *auditmanager.ListControlsInput, ...request.Option) (*auditmanager.ListControlsOutput, error)
@@ -257,6 +304,10 @@ type AuditManagerAPI interface {
 	RegisterOrganizationAdminAccountWithContext(aws.Context, *auditmanager.RegisterOrganizationAdminAccountInput, ...request.Option) (*auditmanager.RegisterOrganizationAdminAccountOutput, error)
 	RegisterOrganizationAdminAccountRequest(*auditmanager.RegisterOrganizationAdminAccountInput) (*request.Request, *auditmanager.RegisterOrganizationAdminAccountOutput)
 
+	StartAssessmentFrameworkShare(*auditmanager.StartAssessmentFrameworkShareInput) (*auditmanager.StartAssessmentFrameworkShareOutput, error)
+	StartAssessmentFrameworkShareWithContext(aws.Context, *auditmanager.StartAssessmentFrameworkShareInput, ...request.Option) (*auditmanager.StartAssessmentFrameworkShareOutput, error)
+	StartAssessmentFrameworkShareRequest(*auditmanager.StartAssessmentFrameworkShareInput) (*request.Request, *auditmanager.StartAssessmentFrameworkShareOutput)
+
 	TagResource(*auditmanager.TagResourceInput) (*auditmanager.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *auditmanager.TagResourceInput, ...request.Option) (*auditmanager.TagResourceOutput, error)
 	TagResourceRequest(*auditmanager.TagResourceInput) (*request.Request, *auditmanager.TagResourceOutput)
@@ -280,6 +331,10 @@ type AuditManagerAPI interface {
 	UpdateAssessmentFramework(*auditmanager.UpdateAssessmentFrameworkInput) (*auditmanager.UpdateAssessmentFrameworkOutput, error)
 	UpdateAssessmentFrameworkWithContext(aws.Context, *auditmanager.UpdateAssessmentFrameworkInput, ...request.Option) (*auditmanager.UpdateAssessmentFrameworkOutput, error)
 	UpdateAssessmentFrameworkRequest(*auditmanager.UpdateAssessmentFrameworkInput) (*request.Request, *auditmanager.UpdateAssessmentFrameworkOutput)
+
+	UpdateAssessmentFrameworkShare(*auditmanager.UpdateAssessmentFrameworkShareInput) (*auditmanager.UpdateAssessmentFrameworkShareOutput, error)
+	UpdateAssessmentFrameworkShareWithContext(aws.Context, *auditmanager.UpdateAssessmentFrameworkShareInput, ...request.Option) (*auditmanager.UpdateAssessmentFrameworkShareOutput, error)
+	UpdateAssessmentFrameworkShareRequest(*auditmanager.UpdateAssessmentFrameworkShareInput) (*request.Request, *auditmanager.UpdateAssessmentFrameworkShareOutput)
 
 	UpdateAssessmentStatus(*auditmanager.UpdateAssessmentStatusInput) (*auditmanager.UpdateAssessmentStatusOutput, error)
 	UpdateAssessmentStatusWithContext(aws.Context, *auditmanager.UpdateAssessmentStatusInput, ...request.Option) (*auditmanager.UpdateAssessmentStatusOutput, error)

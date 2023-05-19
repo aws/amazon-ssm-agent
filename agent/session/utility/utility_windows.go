@@ -23,10 +23,11 @@ import (
 	"syscall"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/mgr"
@@ -98,14 +99,14 @@ type LOCALGROUP_MEMBERS_INFO_3 struct {
 }
 
 var (
-	modNetapi32             = syscall.NewLazyDLL("netapi32.dll")
+	modNetapi32             = windows.NewLazySystemDLL("netapi32.dll")
 	netUserSetInfo          = modNetapi32.NewProc("NetUserSetInfo")
 	netUserGetInfo          = modNetapi32.NewProc("NetUserGetInfo")
 	netUserAdd              = modNetapi32.NewProc("NetUserAdd")
 	netApiBufferFree        = modNetapi32.NewProc("NetApiBufferFree")
 	netLocalGroupAddMembers = modNetapi32.NewProc("NetLocalGroupAddMembers")
-	advapi32                = syscall.NewLazyDLL("advapi32.dll")
-	userenv                 = syscall.NewLazyDLL("userenv.dll")
+	advapi32                = windows.NewLazySystemDLL("advapi32.dll")
+	userenv                 = windows.NewLazySystemDLL("userenv.dll")
 	logonProc               = advapi32.NewProc("LogonUserW")
 	loadUserProfileW        = userenv.NewProc("LoadUserProfileW")
 	unloadUserProfile       = userenv.NewProc("UnloadUserProfile")
@@ -402,7 +403,7 @@ func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err e
 	return
 }
 
-//Impersonate attempts to impersonate the user.
+// Impersonate attempts to impersonate the user.
 func (u *SessionUtil) Impersonate(log log.T, user string, pass string) error {
 	token, err := logonUser(user, pass)
 	if err != nil {
@@ -434,7 +435,7 @@ func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Token, 
 	return token, profileInfo.Profile, nil
 }
 
-//logonUser attempts to log a user on to the local computer to generate a token.
+// logonUser attempts to log a user on to the local computer to generate a token.
 func logonUser(user, pass string) (token syscall.Token, err error) {
 	// ".\0" meaning "this computer:
 	domain := [2]uint16{uint16('.'), 0}
@@ -503,7 +504,7 @@ func (u *SessionUtil) EnablePowerShellTranscription(transcriptFilePath string, k
 	return
 }
 
-//revertToSelf reverts the impersonation process.
+// revertToSelf reverts the impersonation process.
 func (u *SessionUtil) RevertToSelf() error {
 	if rc, _, ec := syscall.Syscall(revertSelfProc.Addr(), 0, 0, 0, 0); rc == 0 {
 		return error(ec)
@@ -511,7 +512,7 @@ func (u *SessionUtil) RevertToSelf() error {
 	return nil
 }
 
-//mustCloseHandle ensures to close the user token handle.
+// mustCloseHandle ensures to close the user token handle.
 func mustCloseHandle(log log.T, token syscall.Token) {
 	if err := token.Close(); err != nil {
 		log.Error(err)

@@ -16,10 +16,12 @@
 package cloudwatchlogsqueue
 
 import (
+	"strings"
 	"sync"
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"
@@ -40,7 +42,7 @@ func TestFacade(t *testing.T) {
 
 	messages, err := Dequeue(time.Millisecond)
 	assert.NoError(t, err, "Unexpected Error in Dequeueing From Queue")
-	assert.Nil(t, messages, "No Messages should be present")
+	assert.Len(t, messages, 0, "No Messages should be present")
 
 	message := &cloudwatchlogs.InputLogEvent{}
 
@@ -53,7 +55,7 @@ func TestFacade(t *testing.T) {
 
 	messages, err = Dequeue(time.Millisecond)
 	assert.NoError(t, err, "Unexpected Error in Dequeueing From Queue")
-	assert.Nil(t, messages, "No Messages should be present")
+	assert.Len(t, messages, 0, "No Messages should be present")
 
 	Enqueue(message)
 
@@ -61,11 +63,22 @@ func TestFacade(t *testing.T) {
 	assert.NoError(t, err, "Unexpected Error in Dequeueing From Queue")
 	assert.NotNil(t, messages, "Messages should be present")
 
+	s := strings.Repeat("A", batchByteSizeMax/2)
+	message = &cloudwatchlogs.InputLogEvent{
+		Message: &s,
+	}
+	Enqueue(message)
+	Enqueue(message)
+	messages, err = Dequeue(time.Millisecond)
+	assert.Equal(t, "cw batch byte size exceeded the limit", err.Error())
+	assert.Len(t, messages, 1, "No Messages should be present")
+
 	DestroyCloudWatchDataInstance()
 
 	messages, err = Dequeue(time.Millisecond)
 	assert.Error(t, err, "No Error in Dequeueing From Destroyed Queue")
-	assert.Nil(t, messages, "No Messages should be present")
+	assert.Len(t, messages, 0, "No Messages should be present")
+
 }
 
 func TestParallelAccessOfQueue(t *testing.T) {
@@ -158,4 +171,46 @@ func TestOverflow(t *testing.T) {
 	}
 
 	assert.Equal(t, queueLimit, logDataFacadeInstance.messageQueue.Len(), "No. of messages in Queue do not match queuelimit on enqueueing more than limit")
+}
+
+func TestFacadeCWGroupNameTest(t *testing.T) {
+
+	xmlArgs := make(map[string]string)
+	xmlArgs["log-stream"] = "LogStream"
+
+	initArgs := seelog.CustomReceiverInitArgs{
+		XmlCustomAttrs: xmlArgs,
+	}
+
+	var args = []string{appconfig.DefaultDocumentWorker}
+	initArgs.XmlCustomAttrs[agentWorkerLogGroupSeelogAttrib] = ""
+	err := verifyLogGroupName(initArgs, args)
+	assert.Error(t, err)
+
+	verifiedLogGroupName = ""
+	args = []string{appconfig.DefaultDocumentWorker}
+	initArgs.XmlCustomAttrs[agentWorkerLogGroupSeelogAttrib] = "test"
+	err = verifyLogGroupName(initArgs, args)
+	assert.Error(t, err)
+	assert.Equal(t, "", verifiedLogGroupName)
+
+	verifiedLogGroupName = ""
+	args = []string{appconfig.DefaultDocumentWorker}
+	initArgs.XmlCustomAttrs[docWorkerLogGroupSeelogAttrib] = "test1"
+	err = verifyLogGroupName(initArgs, args)
+	assert.NoError(t, err)
+	assert.Equal(t, "test1", verifiedLogGroupName)
+
+	verifiedLogGroupName = ""
+	args = []string{appconfig.DefaultSessionWorker}
+	initArgs.XmlCustomAttrs[docWorkerLogGroupSeelogAttrib] = "test2"
+	err = verifyLogGroupName(initArgs, args)
+	assert.Error(t, err)
+	assert.Equal(t, "", verifiedLogGroupName)
+
+	verifiedLogGroupName = ""
+	initArgs.XmlCustomAttrs[sessionWorkerLogGroupSeelogAttrib] = "test3"
+	err = verifyLogGroupName(initArgs, args)
+	assert.NoError(t, err)
+	assert.Equal(t, "test3", verifiedLogGroupName)
 }

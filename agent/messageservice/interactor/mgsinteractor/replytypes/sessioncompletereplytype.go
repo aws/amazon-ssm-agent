@@ -45,7 +45,7 @@ func NewSessionCompleteType(ctx context.T, res contracts.DocumentResult, replyId
 		context:               ctx,
 		agentResult:           res,
 		shouldPersist:         false,
-		noOfContinuousRetries: 4,
+		noOfContinuousRetries: 3,
 		backOffSecond:         1,
 		replyId:               replyId,
 		retryNumber:           retryNumber,

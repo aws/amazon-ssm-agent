@@ -2185,7 +2185,7 @@ type CreateApplicationVersionOutput struct {
 
 	ParameterDefinitions []*ParameterDefinition `locationName:"parameterDefinitions" type:"list"`
 
-	RequiredCapabilities []*string `locationName:"requiredCapabilities" type:"list"`
+	RequiredCapabilities []*string `locationName:"requiredCapabilities" type:"list" enum:"Capability"`
 
 	ResourcesSupported *bool `locationName:"resourcesSupported" type:"boolean"`
 
@@ -2774,7 +2774,7 @@ func (s *DeleteApplicationInput) SetApplicationId(v string) *DeleteApplicationIn
 }
 
 type DeleteApplicationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4389,7 +4389,7 @@ func (s *UnshareApplicationInput) SetOrganizationId(v string) *UnshareApplicatio
 }
 
 type UnshareApplicationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4686,7 +4686,7 @@ type Version struct {
 	// the call will fail.
 	//
 	// RequiredCapabilities is a required field
-	RequiredCapabilities []*string `locationName:"requiredCapabilities" type:"list" required:"true"`
+	RequiredCapabilities []*string `locationName:"requiredCapabilities" type:"list" required:"true" enum:"Capability"`
 
 	// Whether all of the AWS resources contained in this application are supported
 	// in the region in which it is being retrieved.

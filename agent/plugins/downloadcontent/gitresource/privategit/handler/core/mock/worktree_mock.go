@@ -25,7 +25,7 @@ type GitWorktreeMock struct {
 	mock.Mock
 }
 
-func (gitWorktree GitWorktreeMock) Checkout(opts *git.CheckoutOptions) error {
+func (gitWorktree *GitWorktreeMock) Checkout(opts *git.CheckoutOptions) error {
 	args := gitWorktree.Called(opts)
 	return args.Error(0)
 }

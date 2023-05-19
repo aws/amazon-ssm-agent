@@ -18,10 +18,9 @@
 package main
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-// resolveUpdateRoot returns the platform specific path to update artifacts
-func resolveUpdateRoot(sourceVersion string) (string, error) {
-	return appconfig.UpdaterArtifactsRoot, nil
+func updateSSMUserShellProperties(log logger.T) {
+	return
 }

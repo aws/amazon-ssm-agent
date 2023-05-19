@@ -173,7 +173,7 @@ func fetch(log log.T) (hwInfo, error) {
 	savedHwInfo := hwInfo{}
 
 	// try get previously saved fingerprint data from vault
-	d, err := vault.Retrieve(vaultKey)
+	d, err := vault.Retrieve("", vaultKey)
 	if err != nil {
 		_ = log.Warnf("Could not read InstanceFingerprint file: %v", err)
 		return hwInfo{}, nil
@@ -200,8 +200,8 @@ func save(info hwInfo) error {
 		return err
 	}
 
-	// save content in vault
-	if err = vault.Store(vaultKey, data); err != nil {
+	// save content in vault with no manifestFileNamePrefix for onprem
+	if err = vault.Store("", vaultKey, data); err != nil {
 		return err
 	}
 
@@ -375,8 +375,8 @@ func ClearStoredHardwareInfo(log log.T) {
 		return
 	}
 
-	// save content in vault
-	if err = vault.Store(vaultKey, data); err != nil {
+	// save content in vault with no manifestFileNamePrefix for onprem
+	if err = vault.Store("", vaultKey, data); err != nil {
 		log.Errorf("Failed to store empty hardware info: %v", err)
 	}
 }

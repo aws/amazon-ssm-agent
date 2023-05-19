@@ -21,17 +21,18 @@ package application
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
 const (
-	PowershellCmd                                   = "powershell"
-	SysnativePowershellCmd                          = `C:\Windows\sysnative\WindowsPowerShell\v1.0\powershell.exe `
 	ArgsForDetectingOSArch                          = `get-wmiobject -class win32_processor | select-object addresswidth`
 	KeywordFor64BitArchitectureReportedByPowershell = "64"
 	KeywordFor32BitArchitectureReportedByPowershell = "32"
@@ -106,6 +107,9 @@ Select-Object @{n="Name";e={$_."DisplayName"}},
 {"Name":"$(Clean-Quotes-Backslash $_.Name)","PackageId":"$($_.PackageId)","Version":"$(Clean-Quotes-Backslash $_.Version)","Publisher":"$(Clean-Quotes-Backslash $_.Publisher)","InstalledTime":"$($_.InstalledTime)"},
 "@)} `
 )
+
+var PowershellCmd = appconfig.PowerShellPluginCommandName
+var SysnativePowershellCmd = filepath.Join(os.Getenv("SystemRoot"), "sysnative", "WindowsPowerShell", "v1.0", "powershell.exe")
 
 var ArgsToReadRegistryFromWindowsCurrentVersionUninstall = fmt.Sprintf(ArgsToReadRegistryApplications, RegistryPathCurrentVersionUninstall)
 var ArgsToReadRegistryFromWow6432Node = fmt.Sprintf(ArgsToReadRegistryApplications, RegistryPathWow6432NodeCurrentVersionUninstall)

@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"

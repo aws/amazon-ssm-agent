@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package fileutil contains utilities for working with the file system.
+// Package fileutil contains utilities for working with the file system.
 package fileutil
 
 import (

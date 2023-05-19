@@ -151,7 +151,7 @@ func (ols *offlineService) AcknowledgeMessage(log log.T, messageID string) error
 	return nil
 }
 
-//offline service bookkeeps the command output to specified disk location
+// offline service bookkeeps the command output to specified disk location
 func (ols *offlineService) SendReply(log log.T, messageID string, payload string) error {
 	commandID, err := messageContracts.GetCommandID(messageID)
 	if err != nil {

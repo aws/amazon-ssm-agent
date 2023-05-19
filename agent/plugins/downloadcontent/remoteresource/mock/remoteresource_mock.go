@@ -25,12 +25,12 @@ type RemoteResourceMock struct {
 	mock.Mock
 }
 
-func (resourceMock RemoteResourceMock) DownloadRemoteResource(filesys filemanager.FileSystem, destinationDir string) (err error, result *remoteresource.DownloadResult) {
+func (resourceMock *RemoteResourceMock) DownloadRemoteResource(filesys filemanager.FileSystem, destinationDir string) (err error, result *remoteresource.DownloadResult) {
 	args := resourceMock.Called(filesys, destinationDir)
 	return args.Error(0), args.Get(1).(*remoteresource.DownloadResult)
 }
 
-func (resourceMock RemoteResourceMock) ValidateLocationInfo() (bool, error) {
+func (resourceMock *RemoteResourceMock) ValidateLocationInfo() (bool, error) {
 	args := resourceMock.Called()
 	return args.Bool(0), args.Error(1)
 }

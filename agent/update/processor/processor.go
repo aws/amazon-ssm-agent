@@ -50,6 +50,7 @@ var (
 	getInstalledVersionRef = getInstalledVersions
 	getDirectoryNames      = fileutil.GetDirectoryNames
 	deleteDirectory        = os.RemoveAll
+	getStableManifestURL   = updateutil.GetStableURLFromManifestURL
 )
 
 const (
@@ -60,15 +61,13 @@ const (
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
-func NewUpdater(context context.T, info updateinfo.T) *Updater {
+func NewUpdater(context context.T, info updateinfo.T, updateUtilRef *updateutil.Utility) *Updater {
 	updater := &Updater{
 		mgr: &updateManager{
 			Context: context,
 			Info:    info,
-			util: &updateutil.Utility{
-				Context: context,
-			},
-			S3util: updates3util.New(context),
+			util:    updateUtilRef,
+			S3util:  updates3util.New(context),
 			svc: &svcManager{
 				context: context,
 			},
@@ -280,6 +279,19 @@ func determineTarget(mgr *updateManager, logger log.T, updateDetail *UpdateDetai
 		if err != nil {
 			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetLatestActiveVersionManifest, fmt.Sprintf("Failed to get latest active version from manifest: %v", err), true)
 		}
+	} else if strings.ToLower(updateDetail.TargetVersion) == "stable" {
+		var stableVersionUrl string
+		updateDetail.TargetResolver = updateconstants.TargetVersionStable
+		logger.Info("TargetVersion is 'stable', attempting to get the stable version from s3")
+		stableVersionUrl, err = getStableManifestURL(updateDetail.ManifestURL)
+		if err != nil {
+			// Should never happen because manifest has already been downloaded using the manifest url at this point
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetStableVersionS3, fmt.Sprintf("Failed to generate stable version from manifest url: %v", err), true)
+		}
+		updateDetail.TargetVersion, err = mgr.S3util.GetStableVersion(stableVersionUrl)
+		if err != nil {
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetStableVersionS3, fmt.Sprintf("Failed to get stable version form s3: %v", err), true)
+		}
 	} else {
 		updateDetail.TargetResolver = updateconstants.TargetVersionCustomerDefined
 	}
@@ -459,6 +471,10 @@ func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 
 	mgr.runTests(mgr.Context, mgr.reportTestResultGenerator(updateDetail, log))
 
+	if err = mgr.util.UpdateInstallDelayer(mgr.Context, updateDetail.UpdateRoot); err != nil {
+		log.Errorf("error while executing install delayer %v", err)
+	}
+
 	if exitCode, err := mgr.install(mgr, log, updateDetail.TargetVersion, updateDetail); err != nil {
 		// Install target failed with err
 		// log the error and initiating rollback to the source version
@@ -471,7 +487,9 @@ func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 		if exitCode == updateconstants.ExitCodeUnsupportedPlatform {
 			return mgr.failed(updateDetail, log, updateconstants.ErrorUnsupportedServiceManager, message, true)
 		}
-
+		if exitCode == updateconstants.ExitCodeUpdateFailedDueToSnapd {
+			return mgr.failed(updateDetail, log, updateconstants.ErrorInstallFailureDueToSnapd, message, true)
+		}
 		updateDetail.AppendInfo(
 			log,
 			"Initiating rollback %v to %v",
@@ -650,14 +668,32 @@ func installAgent(mgr *updateManager, log log.T, version string, updateDetail *U
 		installRetryCount = 4 // this value is taken because previous updater version had total 4 retries (2 target install + 2 rollback install)
 	}
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
-		_, exitCode, err = mgr.util.ExeCommand(
-			log,
-			installerPath,
-			workDir,
-			updateDetail.UpdateRoot,
-			updateDetail.StdoutFileName,
-			updateDetail.StderrFileName,
-			false)
+		if retryCounter == installRetryCount && strings.Contains(mgr.Info.GetInstallScriptName(), "snap") {
+			log.Info("execute command and fetch error output for agent install using snap")
+			var errBytes *bytes.Buffer
+			_, exitCode, _, errBytes, err = mgr.util.ExecCommandWithOutput(
+				log,
+				installerPath,
+				workDir,
+				updateDetail.UpdateRoot,
+				updateDetail.StdoutFileName,
+				updateDetail.StderrFileName)
+			if err != nil && errBytes != nil && errBytes.Len() != 0 {
+				if strings.Contains(errBytes.String(), "snap \"amazon-ssm-agent\" has running apps") {
+					log.Errorf("command failure for agent installed using snap: %v", err)
+					return updateconstants.ExitCodeUpdateFailedDueToSnapd, err
+				}
+			}
+		} else {
+			_, exitCode, err = mgr.util.ExeCommand(
+				log,
+				installerPath,
+				workDir,
+				updateDetail.UpdateRoot,
+				updateDetail.StdoutFileName,
+				updateDetail.StderrFileName,
+				false)
+		}
 		if err == nil {
 			break
 		}

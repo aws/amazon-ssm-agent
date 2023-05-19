@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//package auth provides methods to implement managed instances auth support
+// package auth provides methods to implement managed instances auth support
 package auth
 
 import (
@@ -36,14 +36,14 @@ type RsaKey struct {
 	privateKey *rsa.PrivateKey
 }
 
-//CreateKeypair creates a new RSA keypair
+// CreateKeypair creates a new RSA keypair
 func CreateKeypair() (rsaKey RsaKey, err error) {
 	rsaKey.privateKey, err = rsa.GenerateKey(rand.Reader, keySize)
 
 	return
 }
 
-//EncodePublicKey encodes a public key to a base 64 DER encoded string
+// EncodePublicKey encodes a public key to a base 64 DER encoded string
 func (rsaKey *RsaKey) EncodePublicKey() (publicKey string, err error) {
 	var publicKeyBytes []byte
 	publicKeyBytes, err = x509.MarshalPKIXPublicKey(&rsaKey.privateKey.PublicKey)
@@ -55,7 +55,7 @@ func (rsaKey *RsaKey) EncodePublicKey() (publicKey string, err error) {
 	return
 }
 
-//EncodePrivateKey encodes a private key to a base 64 DER encoded string
+// EncodePrivateKey encodes a private key to a base 64 DER encoded string
 func (rsaKey *RsaKey) EncodePrivateKey() (privateKey string, err error) {
 	var privateKeyBytes []byte
 	privateKeyBytes = x509.MarshalPKCS1PrivateKey(rsaKey.privateKey)
@@ -65,7 +65,7 @@ func (rsaKey *RsaKey) EncodePrivateKey() (privateKey string, err error) {
 	return
 }
 
-//DecodePrivateKey decodes a private key from a base 64 DER encoded string
+// DecodePrivateKey decodes a private key from a base 64 DER encoded string
 func DecodePrivateKey(privateKey string) (rsaKey RsaKey, err error) {
 	var privateKeyBytes []byte
 	privateKeyBytes, err = base64.StdEncoding.DecodeString(privateKey)
@@ -80,7 +80,7 @@ func DecodePrivateKey(privateKey string) (rsaKey RsaKey, err error) {
 	return
 }
 
-//Sign creates the signature for a message
+// Sign creates the signature for a message
 func (rsaKey *RsaKey) Sign(message string) (signature string, err error) {
 	var signatureBytes []byte
 	hashAlgorithm := crypto.SHA256
@@ -105,7 +105,7 @@ func (rsaKey *RsaKey) Sign(message string) (signature string, err error) {
 	return
 }
 
-//VerifySignature verifies the signature of a message
+// VerifySignature verifies the signature of a message
 func (rsaKey *RsaKey) VerifySignature(message string, signature string) (err error) {
 	hashAlgorithm := crypto.SHA256
 	if rsaKey.privateKey == nil {

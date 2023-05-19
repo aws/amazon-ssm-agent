@@ -38,6 +38,9 @@ func (e *Identity) Region() (string, error) { return fetchRegion() }
 // AvailabilityZone returns the managed instance availabilityZone
 func (e *Identity) AvailabilityZone() (string, error) { return fetchAvailabilityZone() }
 
+// AvailabilityZoneId returns empty if the managed instance is not EC2
+func (e *Identity) AvailabilityZoneId() (string, error) { return "", nil }
+
 // InstanceType returns the managed instance instanceType
 func (e *Identity) InstanceType() (string, error) { return ecsInstanceType, nil }
 
@@ -49,6 +52,9 @@ func (e *Identity) Credentials() *credentials.Credentials {
 // IsIdentityEnvironment returns if instance has managed instance registration
 func (e *Identity) IsIdentityEnvironment() bool {
 	_, err := taskMetadataResponse()
+	if err != nil {
+		e.Log.Infof("Agent not taking ECS identity: %v", err)
+	}
 	return err == nil
 }
 

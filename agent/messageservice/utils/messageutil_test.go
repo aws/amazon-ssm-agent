@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	contracts2 "github.com/aws/amazon-ssm-agent/agent/messageservice/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/stretchr/testify/assert"
 )
@@ -121,7 +121,23 @@ func TestGenerateCloudWatchConfigWithoutEmptyValuesInParsedMessage(t *testing.T)
 	assert.NotNil(t, err)
 }
 
-//getSampleParsedMessage returns a mocked SendCommandPayload
+func TestCloudLogGroupNameCleanup(t *testing.T) {
+	inputOutputMap := make(map[string]string)
+	inputOutputMap["aws:vendor:account:document-name"] = "aws.vendor.account.document-name"
+	inputOutputMap["aws:vendor:account/document-name"] = "aws.vendor.account/document-name"
+	inputOutputMap["aws:vendor:account/document/name123"] = "aws.vendor.account/document/name123"
+	inputOutputMap["AWS-TestDoc"] = "AWS-TestDoc"
+	inputOutputMap["//__****;;\\\\"] = "//__........"
+	inputOutputMap["#\n\n  "] = "#...."
+	inputOutputMap[""] = ""
+
+	for input, output := range inputOutputMap {
+		groupName := cleanupLogGroupName(input)
+		assert.Equal(t, groupName, output)
+	}
+}
+
+// getSampleParsedMessage returns a mocked SendCommandPayload
 func getSampleParsedMessage(logGroupName string, outputEnabled string) messageContracts.SendCommandPayload {
 
 	return messageContracts.SendCommandPayload{

@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/processorwrappers"
 	processorWrapperMock "github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/processorwrappers/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -39,7 +40,7 @@ type MessageServiceTestSuite struct {
 	suite.Suite
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestMessageServiceTestSuite(t *testing.T) {
 	suite.Run(t, new(MessageServiceTestSuite))
 }
@@ -47,7 +48,7 @@ func TestMessageServiceTestSuite(t *testing.T) {
 // TestMessageService_Initialize tests initialize scenarios
 func (suite *MessageServiceTestSuite) TestMessageService_Initialize() {
 	// Nano platform check
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	isPlatformNanoServer = func(log log.T) (bool, error) {
 		return true, nil
 	}
@@ -63,7 +64,7 @@ func (suite *MessageServiceTestSuite) TestMessageService_Initialize() {
 			ContainerMode: true,
 		},
 	}
-	ctx = context.NewMockDefaultWithConfig(ssmAgentConfig)
+	ctx = contextmocks.NewMockDefaultWithConfig(ssmAgentConfig)
 	msgService = NewService(ctx).(*MessageService)
 	assert.Equal(suite.T(), 1, len(msgService.interactors), "length not expected for container")
 
@@ -76,7 +77,7 @@ func (suite *MessageServiceTestSuite) TestMessageService_Initialize() {
 			ContainerMode: false,
 		},
 	}
-	ctx = context.NewMockDefaultWithConfig(ssmAgentConfig)
+	ctx = contextmocks.NewMockDefaultWithConfig(ssmAgentConfig)
 	msgService = NewService(ctx).(*MessageService)
 	assert.Equal(suite.T(), 2, len(msgService.interactors), "length not expected for other platforms")
 
@@ -89,7 +90,7 @@ func (suite *MessageServiceTestSuite) TestMessageService_Initialize() {
 			ContainerMode: true,
 		},
 	}
-	ctx = context.NewMockDefaultWithConfig(ssmAgentConfig)
+	ctx = contextmocks.NewMockDefaultWithConfig(ssmAgentConfig)
 	msgService = NewService(ctx).(*MessageService)
 	assert.Equal(suite.T(), 0, len(msgService.interactors), "length not expected for container")
 }
@@ -104,7 +105,7 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleName() {
 			ContainerMode: false,
 		},
 	}
-	ctx := context.NewMockDefaultWithConfig(ssmAgentConfig)
+	ctx := contextmocks.NewMockDefaultWithConfig(ssmAgentConfig)
 	msgService := NewService(ctx)
 	assert.Equal(suite.T(), msgService.ModuleName(), ServiceName, "invalid module name")
 }
@@ -119,14 +120,14 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleExecute() {
 			ContainerMode: false,
 		},
 	}
-	ctx := context.NewMockDefaultWithConfig(ssmAgentConfig)
+	ctx := contextmocks.NewMockDefaultWithConfig(ssmAgentConfig)
 	msgService := NewService(ctx).(*MessageService)
 	assert.Equal(suite.T(), 2, len(msgService.interactors), "length not expected for other platforms")
 
 	// clearing interactor array
 	msgService.interactors = make([]interactor.IInteractor, 0)
 	interactorMockObj := &interactorMock.IInteractor{}
-	interactorMockObj.On("Initialize").Return(nil)
+	interactorMockObj.On("Initialize", mock.Anything).Return(nil)
 	interactorMockObj.On("PostProcessorInitialization", mock.Anything).Return(nil)
 	interactorMockObj.On("GetName").Return(mock.Anything)
 	interactorMockObj.On("GetSupportedWorkers").Return([]utils.WorkerName{utils.DocumentWorkerName, utils.SessionWorkerName})
@@ -179,7 +180,7 @@ func (suite *MessageServiceTestSuite) TestMessageService_ModuleStop() {
 			ContainerMode: false,
 		},
 	}
-	ctx := context.NewMockDefaultWithConfig(ssmAgentConfig)
+	ctx := contextmocks.NewMockDefaultWithConfig(ssmAgentConfig)
 	msgService := NewService(ctx).(*MessageService)
 	assert.Equal(suite.T(), 2, len(msgService.interactors), "length not expected for other platforms")
 

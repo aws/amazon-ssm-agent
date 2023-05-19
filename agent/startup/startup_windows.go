@@ -27,6 +27,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/startup/model"
@@ -494,7 +495,7 @@ func runPowershell(jsonObj interface{}, command string, properties []string, exp
 	args = append(args, "| ConvertTo-Json -Depth 3")
 
 	// execute powershell with arguments in cmd.
-	cmdOut, err = cmdExec.ExecuteCommand("powershell", args...)
+	cmdOut, err = cmdExec.ExecuteCommand(appconfig.PowerShellPluginCommandName, args...)
 	if err != nil {
 		err = errors.New(fmt.Sprintf("Error while running powershell %v: %v", args, err.Error()))
 		return

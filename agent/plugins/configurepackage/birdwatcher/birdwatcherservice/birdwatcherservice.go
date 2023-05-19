@@ -166,7 +166,7 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 	return nil
 }
 
-//utils
+// utils
 func downloadManifest(tracer trace.Tracer, ds *PackageService, packageName string, version string) (*birdwatcher.Manifest, bool, error) {
 	isSameAsCache := false
 	if ds == nil {

@@ -70,22 +70,25 @@ type InputService1ProtocolTest struct {
 //     svc := inputservice1protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService1ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService1ProtocolTest {
 	c := p.ClientConfig("inputservice1protocoltest", cfgs...)
-	return newInputService1ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService1ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService1ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService1ProtocolTest {
+func newInputService1ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService1ProtocolTest {
 	svc := &InputService1ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService1ProtocolTest",
-				ServiceID:     "InputService1ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService1ProtocolTest",
+				ServiceID:      "InputService1ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -184,7 +187,7 @@ type InputService1TestShapeInputService1TestCaseOperation1Input struct {
 }
 
 type InputService1TestShapeInputService1TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService2ProtocolTest provides the API operation methods for making requests to
@@ -211,22 +214,25 @@ type InputService2ProtocolTest struct {
 //     svc := inputservice2protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService2ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService2ProtocolTest {
 	c := p.ClientConfig("inputservice2protocoltest", cfgs...)
-	return newInputService2ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService2ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService2ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService2ProtocolTest {
+func newInputService2ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService2ProtocolTest {
 	svc := &InputService2ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService2ProtocolTest",
-				ServiceID:     "InputService2ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService2ProtocolTest",
+				ServiceID:      "InputService2ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -350,7 +356,7 @@ func (s *InputService2TestShapeInputService2TestCaseOperation1Input) SetPipeline
 }
 
 type InputService2TestShapeInputService2TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService3ProtocolTest provides the API operation methods for making requests to
@@ -377,22 +383,25 @@ type InputService3ProtocolTest struct {
 //     svc := inputservice3protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService3ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService3ProtocolTest {
 	c := p.ClientConfig("inputservice3protocoltest", cfgs...)
-	return newInputService3ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService3ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService3ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService3ProtocolTest {
+func newInputService3ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService3ProtocolTest {
 	svc := &InputService3ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService3ProtocolTest",
-				ServiceID:     "InputService3ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService3ProtocolTest",
+				ServiceID:      "InputService3ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -516,7 +525,7 @@ func (s *InputService3TestShapeInputService3TestCaseOperation1Input) SetFoo(v st
 }
 
 type InputService3TestShapeInputService3TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService4ProtocolTest provides the API operation methods for making requests to
@@ -543,22 +552,25 @@ type InputService4ProtocolTest struct {
 //     svc := inputservice4protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService4ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService4ProtocolTest {
 	c := p.ClientConfig("inputservice4protocoltest", cfgs...)
-	return newInputService4ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService4ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService4ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService4ProtocolTest {
+func newInputService4ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService4ProtocolTest {
 	svc := &InputService4ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService4ProtocolTest",
-				ServiceID:     "InputService4ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService4ProtocolTest",
+				ServiceID:      "InputService4ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -665,7 +677,7 @@ func (s *InputService4TestShapeInputService4TestCaseOperation1Input) SetItems(v 
 }
 
 type InputService4TestShapeInputService4TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService5ProtocolTest provides the API operation methods for making requests to
@@ -692,22 +704,25 @@ type InputService5ProtocolTest struct {
 //     svc := inputservice5protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService5ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService5ProtocolTest {
 	c := p.ClientConfig("inputservice5protocoltest", cfgs...)
-	return newInputService5ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService5ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService5ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService5ProtocolTest {
+func newInputService5ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService5ProtocolTest {
 	svc := &InputService5ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService5ProtocolTest",
-				ServiceID:     "InputService5ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService5ProtocolTest",
+				ServiceID:      "InputService5ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -839,7 +854,7 @@ func (s *InputService5TestShapeInputService5TestCaseOperation1Input) SetQueryDoc
 }
 
 type InputService5TestShapeInputService5TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService6ProtocolTest provides the API operation methods for making requests to
@@ -866,22 +881,25 @@ type InputService6ProtocolTest struct {
 //     svc := inputservice6protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService6ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService6ProtocolTest {
 	c := p.ClientConfig("inputservice6protocoltest", cfgs...)
-	return newInputService6ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService6ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService6ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService6ProtocolTest {
+func newInputService6ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService6ProtocolTest {
 	svc := &InputService6ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService6ProtocolTest",
-				ServiceID:     "InputService6ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService6ProtocolTest",
+				ServiceID:      "InputService6ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -1013,7 +1031,7 @@ func (s *InputService6TestShapeInputService6TestCaseOperation1Input) SetQueryDoc
 }
 
 type InputService6TestShapeInputService6TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService7ProtocolTest provides the API operation methods for making requests to
@@ -1040,22 +1058,25 @@ type InputService7ProtocolTest struct {
 //     svc := inputservice7protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService7ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService7ProtocolTest {
 	c := p.ClientConfig("inputservice7protocoltest", cfgs...)
-	return newInputService7ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService7ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService7ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService7ProtocolTest {
+func newInputService7ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService7ProtocolTest {
 	svc := &InputService7ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService7ProtocolTest",
-				ServiceID:     "InputService7ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService7ProtocolTest",
+				ServiceID:      "InputService7ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -1232,7 +1253,7 @@ func (s *InputService7TestShapeInputService7TestCaseOperation1Input) SetBoolQuer
 }
 
 type InputService7TestShapeInputService7TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService7TestShapeInputService7TestCaseOperation2Input struct {
@@ -1248,7 +1269,7 @@ func (s *InputService7TestShapeInputService7TestCaseOperation2Input) SetBoolQuer
 }
 
 type InputService7TestShapeInputService7TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService8ProtocolTest provides the API operation methods for making requests to
@@ -1275,22 +1296,25 @@ type InputService8ProtocolTest struct {
 //     svc := inputservice8protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService8ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService8ProtocolTest {
 	c := p.ClientConfig("inputservice8protocoltest", cfgs...)
-	return newInputService8ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService8ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService8ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService8ProtocolTest {
+func newInputService8ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService8ProtocolTest {
 	svc := &InputService8ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService8ProtocolTest",
-				ServiceID:     "InputService8ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService8ProtocolTest",
+				ServiceID:      "InputService8ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -1430,7 +1454,7 @@ func (s *InputService8TestShapeInputService8TestCaseOperation1Input) SetPipeline
 }
 
 type InputService8TestShapeInputService8TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService9ProtocolTest provides the API operation methods for making requests to
@@ -1457,22 +1481,25 @@ type InputService9ProtocolTest struct {
 //     svc := inputservice9protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService9ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService9ProtocolTest {
 	c := p.ClientConfig("inputservice9protocoltest", cfgs...)
-	return newInputService9ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService9ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService9ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService9ProtocolTest {
+func newInputService9ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService9ProtocolTest {
 	svc := &InputService9ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService9ProtocolTest",
-				ServiceID:     "InputService9ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService9ProtocolTest",
+				ServiceID:      "InputService9ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -1620,7 +1647,7 @@ func (s *InputService9TestShapeInputService9TestCaseOperation1Input) SetPipeline
 }
 
 type InputService9TestShapeInputService9TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService9TestShapeStructType struct {
@@ -1667,22 +1694,25 @@ type InputService10ProtocolTest struct {
 //     svc := inputservice10protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService10ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService10ProtocolTest {
 	c := p.ClientConfig("inputservice10protocoltest", cfgs...)
-	return newInputService10ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService10ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService10ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService10ProtocolTest {
+func newInputService10ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService10ProtocolTest {
 	svc := &InputService10ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService10ProtocolTest",
-				ServiceID:     "InputService10ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService10ProtocolTest",
+				ServiceID:      "InputService10ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -1838,7 +1868,7 @@ func (s *InputService10TestShapeInputService10TestCaseOperation1Input) SetPipeli
 }
 
 type InputService10TestShapeInputService10TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService10TestShapeStructType struct {
@@ -1885,22 +1915,25 @@ type InputService11ProtocolTest struct {
 //     svc := inputservice11protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService11ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService11ProtocolTest {
 	c := p.ClientConfig("inputservice11protocoltest", cfgs...)
-	return newInputService11ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService11ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService11ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService11ProtocolTest {
+func newInputService11ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService11ProtocolTest {
 	svc := &InputService11ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService11ProtocolTest",
-				ServiceID:     "InputService11ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService11ProtocolTest",
+				ServiceID:      "InputService11ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -2040,7 +2073,7 @@ func (s *InputService11TestShapeInputService11TestCaseOperation1Input) SetVaultN
 }
 
 type InputService11TestShapeInputService11TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService12ProtocolTest provides the API operation methods for making requests to
@@ -2067,22 +2100,25 @@ type InputService12ProtocolTest struct {
 //     svc := inputservice12protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService12ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService12ProtocolTest {
 	c := p.ClientConfig("inputservice12protocoltest", cfgs...)
-	return newInputService12ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService12ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService12ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService12ProtocolTest {
+func newInputService12ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService12ProtocolTest {
 	svc := &InputService12ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService12ProtocolTest",
-				ServiceID:     "InputService12ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService12ProtocolTest",
+				ServiceID:      "InputService12ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -2215,7 +2251,7 @@ func (s *InputService12TestShapeInputService12TestCaseOperation1Input) SetFoo(v 
 }
 
 type InputService12TestShapeInputService12TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService13ProtocolTest provides the API operation methods for making requests to
@@ -2242,22 +2278,25 @@ type InputService13ProtocolTest struct {
 //     svc := inputservice13protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService13ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService13ProtocolTest {
 	c := p.ClientConfig("inputservice13protocoltest", cfgs...)
-	return newInputService13ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService13ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService13ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService13ProtocolTest {
+func newInputService13ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService13ProtocolTest {
 	svc := &InputService13ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService13ProtocolTest",
-				ServiceID:     "InputService13ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService13ProtocolTest",
+				ServiceID:      "InputService13ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -2434,7 +2473,7 @@ func (s *InputService13TestShapeInputService13TestCaseOperation1Input) SetFoo(v 
 }
 
 type InputService13TestShapeInputService13TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService13TestShapeInputService13TestCaseOperation2Input struct {
@@ -2450,7 +2489,7 @@ func (s *InputService13TestShapeInputService13TestCaseOperation2Input) SetFoo(v 
 }
 
 type InputService13TestShapeInputService13TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService14ProtocolTest provides the API operation methods for making requests to
@@ -2477,22 +2516,25 @@ type InputService14ProtocolTest struct {
 //     svc := inputservice14protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService14ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService14ProtocolTest {
 	c := p.ClientConfig("inputservice14protocoltest", cfgs...)
-	return newInputService14ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService14ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService14ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService14ProtocolTest {
+func newInputService14ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService14ProtocolTest {
 	svc := &InputService14ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService14ProtocolTest",
-				ServiceID:     "InputService14ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService14ProtocolTest",
+				ServiceID:      "InputService14ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -2681,7 +2723,7 @@ func (s *InputService14TestShapeInputService14TestCaseOperation1Input) SetFoo(v 
 }
 
 type InputService14TestShapeInputService14TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService14TestShapeInputService14TestCaseOperation2Input struct {
@@ -2697,7 +2739,7 @@ func (s *InputService14TestShapeInputService14TestCaseOperation2Input) SetFoo(v 
 }
 
 type InputService14TestShapeInputService14TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService15ProtocolTest provides the API operation methods for making requests to
@@ -2724,22 +2766,25 @@ type InputService15ProtocolTest struct {
 //     svc := inputservice15protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService15ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService15ProtocolTest {
 	c := p.ClientConfig("inputservice15protocoltest", cfgs...)
-	return newInputService15ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService15ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService15ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService15ProtocolTest {
+func newInputService15ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService15ProtocolTest {
 	svc := &InputService15ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService15ProtocolTest",
-				ServiceID:     "InputService15ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService15ProtocolTest",
+				ServiceID:      "InputService15ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -2916,7 +2961,7 @@ func (s *InputService15TestShapeInputService15TestCaseOperation1Input) SetFoo(v 
 }
 
 type InputService15TestShapeInputService15TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService15TestShapeInputService15TestCaseOperation2Input struct {
@@ -2932,7 +2977,7 @@ func (s *InputService15TestShapeInputService15TestCaseOperation2Input) SetFoo(v 
 }
 
 type InputService15TestShapeInputService15TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService16ProtocolTest provides the API operation methods for making requests to
@@ -2959,22 +3004,25 @@ type InputService16ProtocolTest struct {
 //     svc := inputservice16protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService16ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService16ProtocolTest {
 	c := p.ClientConfig("inputservice16protocoltest", cfgs...)
-	return newInputService16ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService16ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService16ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService16ProtocolTest {
+func newInputService16ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService16ProtocolTest {
 	svc := &InputService16ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService16ProtocolTest",
-				ServiceID:     "InputService16ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService16ProtocolTest",
+				ServiceID:      "InputService16ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -3431,7 +3479,7 @@ func (s *InputService16TestShapeInputService16TestCaseOperation1Input) SetRecurs
 }
 
 type InputService16TestShapeInputService16TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService16TestShapeInputService16TestCaseOperation2Input struct {
@@ -3447,7 +3495,7 @@ func (s *InputService16TestShapeInputService16TestCaseOperation2Input) SetRecurs
 }
 
 type InputService16TestShapeInputService16TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService16TestShapeInputService16TestCaseOperation3Input struct {
@@ -3463,7 +3511,7 @@ func (s *InputService16TestShapeInputService16TestCaseOperation3Input) SetRecurs
 }
 
 type InputService16TestShapeInputService16TestCaseOperation3Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService16TestShapeInputService16TestCaseOperation4Input struct {
@@ -3479,7 +3527,7 @@ func (s *InputService16TestShapeInputService16TestCaseOperation4Input) SetRecurs
 }
 
 type InputService16TestShapeInputService16TestCaseOperation4Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService16TestShapeInputService16TestCaseOperation5Input struct {
@@ -3495,7 +3543,7 @@ func (s *InputService16TestShapeInputService16TestCaseOperation5Input) SetRecurs
 }
 
 type InputService16TestShapeInputService16TestCaseOperation5Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService16TestShapeInputService16TestCaseOperation6Input struct {
@@ -3511,7 +3559,7 @@ func (s *InputService16TestShapeInputService16TestCaseOperation6Input) SetRecurs
 }
 
 type InputService16TestShapeInputService16TestCaseOperation6Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService16TestShapeRecursiveStructType struct {
@@ -3574,22 +3622,25 @@ type InputService17ProtocolTest struct {
 //     svc := inputservice17protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService17ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService17ProtocolTest {
 	c := p.ClientConfig("inputservice17protocoltest", cfgs...)
-	return newInputService17ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService17ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService17ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService17ProtocolTest {
+func newInputService17ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService17ProtocolTest {
 	svc := &InputService17ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService17ProtocolTest",
-				ServiceID:     "InputService17ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService17ProtocolTest",
+				ServiceID:      "InputService17ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -3760,7 +3811,7 @@ func (s *InputService17TestShapeInputService17TestCaseOperation1Input) SetTimeFo
 }
 
 type InputService17TestShapeInputService17TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService18ProtocolTest provides the API operation methods for making requests to
@@ -3787,22 +3838,25 @@ type InputService18ProtocolTest struct {
 //     svc := inputservice18protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService18ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService18ProtocolTest {
 	c := p.ClientConfig("inputservice18protocoltest", cfgs...)
-	return newInputService18ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService18ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService18ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService18ProtocolTest {
+func newInputService18ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService18ProtocolTest {
 	svc := &InputService18ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService18ProtocolTest",
-				ServiceID:     "InputService18ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService18ProtocolTest",
+				ServiceID:      "InputService18ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -3909,7 +3963,7 @@ func (s *InputService18TestShapeInputService18TestCaseOperation1Input) SetTimeAr
 }
 
 type InputService18TestShapeInputService18TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService19ProtocolTest provides the API operation methods for making requests to
@@ -3936,22 +3990,25 @@ type InputService19ProtocolTest struct {
 //     svc := inputservice19protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService19ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService19ProtocolTest {
 	c := p.ClientConfig("inputservice19protocoltest", cfgs...)
-	return newInputService19ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService19ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService19ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService19ProtocolTest {
+func newInputService19ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService19ProtocolTest {
 	svc := &InputService19ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService19ProtocolTest",
-				ServiceID:     "InputService19ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService19ProtocolTest",
+				ServiceID:      "InputService19ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -4058,7 +4115,7 @@ func (s *InputService19TestShapeInputService19TestCaseOperation1Input) SetFoo(v 
 }
 
 type InputService19TestShapeInputService19TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService20ProtocolTest provides the API operation methods for making requests to
@@ -4085,22 +4142,25 @@ type InputService20ProtocolTest struct {
 //     svc := inputservice20protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService20ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService20ProtocolTest {
 	c := p.ClientConfig("inputservice20protocoltest", cfgs...)
-	return newInputService20ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService20ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService20ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService20ProtocolTest {
+func newInputService20ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService20ProtocolTest {
 	svc := &InputService20ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService20ProtocolTest",
-				ServiceID:     "InputService20ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService20ProtocolTest",
+				ServiceID:      "InputService20ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -4277,7 +4337,7 @@ func (s *InputService20TestShapeInputService20TestCaseOperation1Input) SetToken(
 }
 
 type InputService20TestShapeInputService20TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService20TestShapeInputService20TestCaseOperation2Input struct {
@@ -4293,7 +4353,7 @@ func (s *InputService20TestShapeInputService20TestCaseOperation2Input) SetToken(
 }
 
 type InputService20TestShapeInputService20TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService21ProtocolTest provides the API operation methods for making requests to
@@ -4320,22 +4380,25 @@ type InputService21ProtocolTest struct {
 //     svc := inputservice21protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService21ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService21ProtocolTest {
 	c := p.ClientConfig("inputservice21protocoltest", cfgs...)
-	return newInputService21ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService21ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService21ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService21ProtocolTest {
+func newInputService21ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService21ProtocolTest {
 	svc := &InputService21ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService21ProtocolTest",
-				ServiceID:     "InputService21ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService21ProtocolTest",
+				ServiceID:      "InputService21ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -4618,7 +4681,7 @@ func (s *InputService21TestShapeInputService21TestCaseOperation1Input) SetQueryF
 }
 
 type InputService21TestShapeInputService21TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService21TestShapeInputService21TestCaseOperation2Input struct {
@@ -4650,7 +4713,7 @@ func (s *InputService21TestShapeInputService21TestCaseOperation2Input) SetQueryF
 }
 
 type InputService21TestShapeInputService21TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService21TestShapeInputService21TestCaseOperation3Input struct {
@@ -4682,7 +4745,7 @@ func (s *InputService21TestShapeInputService21TestCaseOperation3Input) SetQueryF
 }
 
 type InputService21TestShapeInputService21TestCaseOperation3Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService22ProtocolTest provides the API operation methods for making requests to
@@ -4709,22 +4772,25 @@ type InputService22ProtocolTest struct {
 //     svc := inputservice22protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService22ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService22ProtocolTest {
 	c := p.ClientConfig("inputservice22protocoltest", cfgs...)
-	return newInputService22ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService22ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService22ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService22ProtocolTest {
+func newInputService22ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService22ProtocolTest {
 	svc := &InputService22ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService22ProtocolTest",
-				ServiceID:     "InputService22ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService22ProtocolTest",
+				ServiceID:      "InputService22ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -4895,11 +4961,11 @@ type InputService22TestShapeInputService22TestCaseOperation1Input struct {
 
 	HeaderEnum *string `location:"header" locationName:"x-amz-enum" type:"string" enum:"InputService22TestShapeEnumType"`
 
-	ListEnums []*string `type:"list"`
+	ListEnums []*string `type:"list" enum:"InputService22TestShapeEnumType"`
 
 	QueryFooEnum *string `location:"querystring" locationName:"Enum" type:"string" enum:"InputService22TestShapeEnumType"`
 
-	QueryListEnums []*string `location:"querystring" locationName:"List" type:"list"`
+	QueryListEnums []*string `location:"querystring" locationName:"List" type:"list" enum:"InputService22TestShapeEnumType"`
 }
 
 // SetFooEnum sets the FooEnum field's value.
@@ -4933,7 +4999,7 @@ func (s *InputService22TestShapeInputService22TestCaseOperation1Input) SetQueryL
 }
 
 type InputService22TestShapeInputService22TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService22TestShapeInputService22TestCaseOperation2Input struct {
@@ -4943,11 +5009,11 @@ type InputService22TestShapeInputService22TestCaseOperation2Input struct {
 
 	HeaderEnum *string `location:"header" locationName:"x-amz-enum" type:"string" enum:"InputService22TestShapeEnumType"`
 
-	ListEnums []*string `type:"list"`
+	ListEnums []*string `type:"list" enum:"InputService22TestShapeEnumType"`
 
 	QueryFooEnum *string `location:"querystring" locationName:"Enum" type:"string" enum:"InputService22TestShapeEnumType"`
 
-	QueryListEnums []*string `location:"querystring" locationName:"List" type:"list"`
+	QueryListEnums []*string `location:"querystring" locationName:"List" type:"list" enum:"InputService22TestShapeEnumType"`
 }
 
 // SetFooEnum sets the FooEnum field's value.
@@ -4981,7 +5047,7 @@ func (s *InputService22TestShapeInputService22TestCaseOperation2Input) SetQueryL
 }
 
 type InputService22TestShapeInputService22TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 const (
@@ -5032,22 +5098,25 @@ type InputService23ProtocolTest struct {
 //     svc := inputservice23protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService23ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService23ProtocolTest {
 	c := p.ClientConfig("inputservice23protocoltest", cfgs...)
-	return newInputService23ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService23ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService23ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService23ProtocolTest {
+func newInputService23ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService23ProtocolTest {
 	svc := &InputService23ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService23ProtocolTest",
-				ServiceID:     "InputService23ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService23ProtocolTest",
+				ServiceID:      "InputService23ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -5228,7 +5297,7 @@ func (s *InputService23TestShapeInputService23TestCaseOperation1Input) SetName(v
 }
 
 type InputService23TestShapeInputService23TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService23TestShapeInputService23TestCaseOperation2Input struct {
@@ -5267,7 +5336,7 @@ func (s *InputService23TestShapeInputService23TestCaseOperation2Input) hostLabel
 }
 
 type InputService23TestShapeInputService23TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // InputService24ProtocolTest provides the API operation methods for making requests to
@@ -5294,22 +5363,25 @@ type InputService24ProtocolTest struct {
 //     svc := inputservice24protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService24ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService24ProtocolTest {
 	c := p.ClientConfig("inputservice24protocoltest", cfgs...)
-	return newInputService24ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService24ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService24ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService24ProtocolTest {
+func newInputService24ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService24ProtocolTest {
 	svc := &InputService24ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService24ProtocolTest",
-				ServiceID:     "InputService24ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2014-01-01",
+				ServiceName:    "InputService24ProtocolTest",
+				ServiceID:      "InputService24ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2014-01-01",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -5696,7 +5768,7 @@ func (s *InputService24TestShapeInputService24TestCaseOperation1Input) SetOneOf(
 }
 
 type InputService24TestShapeInputService24TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService24TestShapeInputService24TestCaseOperation2Input struct {
@@ -5712,7 +5784,7 @@ func (s *InputService24TestShapeInputService24TestCaseOperation2Input) SetOneOf(
 }
 
 type InputService24TestShapeInputService24TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService24TestShapeInputService24TestCaseOperation3Input struct {
@@ -5728,7 +5800,7 @@ func (s *InputService24TestShapeInputService24TestCaseOperation3Input) SetOneOf(
 }
 
 type InputService24TestShapeInputService24TestCaseOperation3Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService24TestShapeInputService24TestCaseOperation4Input struct {
@@ -5744,7 +5816,7 @@ func (s *InputService24TestShapeInputService24TestCaseOperation4Input) SetOneOf(
 }
 
 type InputService24TestShapeInputService24TestCaseOperation4Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService24TestShapeInputService24TestCaseOperation5Input struct {
@@ -5760,7 +5832,7 @@ func (s *InputService24TestShapeInputService24TestCaseOperation5Input) SetOneOf(
 }
 
 type InputService24TestShapeInputService24TestCaseOperation5Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService24TestShapeMyUnion struct {
@@ -5843,22 +5915,25 @@ type InputService25ProtocolTest struct {
 //     svc := inputservice25protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func NewInputService25ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *InputService25ProtocolTest {
 	c := p.ClientConfig("inputservice25protocoltest", cfgs...)
-	return newInputService25ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
+	}
+	return newInputService25ProtocolTestClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newInputService25ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *InputService25ProtocolTest {
+func newInputService25ProtocolTestClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *InputService25ProtocolTest {
 	svc := &InputService25ProtocolTest{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
-				ServiceName:   "InputService25ProtocolTest",
-				ServiceID:     "InputService25ProtocolTest",
-				SigningName:   signingName,
-				SigningRegion: signingRegion,
-				PartitionID:   partitionID,
-				Endpoint:      endpoint,
-				APIVersion:    "2021-05-13",
+				ServiceName:    "InputService25ProtocolTest",
+				ServiceID:      "InputService25ProtocolTest",
+				SigningName:    signingName,
+				SigningRegion:  signingRegion,
+				PartitionID:    partitionID,
+				Endpoint:       endpoint,
+				APIVersion:     "2021-05-13",
+				ResolvedRegion: resolvedRegion,
 			},
 			handlers,
 		),
@@ -5952,7 +6027,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation1WithContext
 	return out, req.Send()
 }
 
-const opInputService25TestCaseOperation2 = "TestPayloadNoParams"
+const opInputService25TestCaseOperation2 = "TestBodyNoParams"
 
 // InputService25TestCaseOperation2Request generates a "aws/request.Request" representing the
 // client's request for the InputService25TestCaseOperation2 operation. The "output" return
@@ -5980,7 +6055,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation2Request(inp
 	op := &request.Operation{
 		Name:       opInputService25TestCaseOperation2,
 		HTTPMethod: "POST",
-		HTTPPath:   "/payload",
+		HTTPPath:   "/body",
 	}
 
 	if input == nil {
@@ -6022,7 +6097,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation2WithContext
 	return out, req.Send()
 }
 
-const opInputService25TestCaseOperation3 = "TestPayload"
+const opInputService25TestCaseOperation3 = "TestPayloadNoParams"
 
 // InputService25TestCaseOperation3Request generates a "aws/request.Request" representing the
 // client's request for the InputService25TestCaseOperation3 operation. The "output" return
@@ -6092,7 +6167,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation3WithContext
 	return out, req.Send()
 }
 
-const opInputService25TestCaseOperation4 = "TestPayloadNoBody"
+const opInputService25TestCaseOperation4 = "TestPayload"
 
 // InputService25TestCaseOperation4Request generates a "aws/request.Request" representing the
 // client's request for the InputService25TestCaseOperation4 operation. The "output" return
@@ -6162,7 +6237,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation4WithContext
 	return out, req.Send()
 }
 
-const opInputService25TestCaseOperation5 = "TestBlobPayload"
+const opInputService25TestCaseOperation5 = "TestPayloadNoBody"
 
 // InputService25TestCaseOperation5Request generates a "aws/request.Request" representing the
 // client's request for the InputService25TestCaseOperation5 operation. The "output" return
@@ -6190,7 +6265,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation5Request(inp
 	op := &request.Operation{
 		Name:       opInputService25TestCaseOperation5,
 		HTTPMethod: "POST",
-		HTTPPath:   "/blob-payload",
+		HTTPPath:   "/payload",
 	}
 
 	if input == nil {
@@ -6232,7 +6307,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation5WithContext
 	return out, req.Send()
 }
 
-const opInputService25TestCaseOperation6 = "TestBlobPayloadNoParams"
+const opInputService25TestCaseOperation6 = "TestBlobPayload"
 
 // InputService25TestCaseOperation6Request generates a "aws/request.Request" representing the
 // client's request for the InputService25TestCaseOperation6 operation. The "output" return
@@ -6302,7 +6377,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation6WithContext
 	return out, req.Send()
 }
 
-const opInputService25TestCaseOperation7 = "NoPayload"
+const opInputService25TestCaseOperation7 = "TestBlobPayloadNoParams"
 
 // InputService25TestCaseOperation7Request generates a "aws/request.Request" representing the
 // client's request for the InputService25TestCaseOperation7 operation. The "output" return
@@ -6329,8 +6404,8 @@ const opInputService25TestCaseOperation7 = "NoPayload"
 func (c *InputService25ProtocolTest) InputService25TestCaseOperation7Request(input *InputService25TestShapeInputService25TestCaseOperation7Input) (req *request.Request, output *InputService25TestShapeInputService25TestCaseOperation7Output) {
 	op := &request.Operation{
 		Name:       opInputService25TestCaseOperation7,
-		HTTPMethod: "GET",
-		HTTPPath:   "/no-payload",
+		HTTPMethod: "POST",
+		HTTPPath:   "/blob-payload",
 	}
 
 	if input == nil {
@@ -6372,7 +6447,7 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation7WithContext
 	return out, req.Send()
 }
 
-const opInputService25TestCaseOperation8 = "NoPayloadWithHeader"
+const opInputService25TestCaseOperation8 = "NoPayload"
 
 // InputService25TestCaseOperation8Request generates a "aws/request.Request" representing the
 // client's request for the InputService25TestCaseOperation8 operation. The "output" return
@@ -6442,6 +6517,76 @@ func (c *InputService25ProtocolTest) InputService25TestCaseOperation8WithContext
 	return out, req.Send()
 }
 
+const opInputService25TestCaseOperation9 = "NoPayloadWithHeader"
+
+// InputService25TestCaseOperation9Request generates a "aws/request.Request" representing the
+// client's request for the InputService25TestCaseOperation9 operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See InputService25TestCaseOperation9 for more information on using the InputService25TestCaseOperation9
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the InputService25TestCaseOperation9Request method.
+//    req, resp := client.InputService25TestCaseOperation9Request(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *InputService25ProtocolTest) InputService25TestCaseOperation9Request(input *InputService25TestShapeInputService25TestCaseOperation9Input) (req *request.Request, output *InputService25TestShapeInputService25TestCaseOperation9Output) {
+	op := &request.Operation{
+		Name:       opInputService25TestCaseOperation9,
+		HTTPMethod: "GET",
+		HTTPPath:   "/no-payload",
+	}
+
+	if input == nil {
+		input = &InputService25TestShapeInputService25TestCaseOperation9Input{}
+	}
+
+	output = &InputService25TestShapeInputService25TestCaseOperation9Output{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// InputService25TestCaseOperation9 API operation for .
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for 's
+// API operation InputService25TestCaseOperation9 for usage and error information.
+func (c *InputService25ProtocolTest) InputService25TestCaseOperation9(input *InputService25TestShapeInputService25TestCaseOperation9Input) (*InputService25TestShapeInputService25TestCaseOperation9Output, error) {
+	req, out := c.InputService25TestCaseOperation9Request(input)
+	return out, req.Send()
+}
+
+// InputService25TestCaseOperation9WithContext is the same as InputService25TestCaseOperation9 with the addition of
+// the ability to pass a context and additional request options.
+//
+// See InputService25TestCaseOperation9 for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *InputService25ProtocolTest) InputService25TestCaseOperation9WithContext(ctx aws.Context, input *InputService25TestShapeInputService25TestCaseOperation9Input, opts ...request.Option) (*InputService25TestShapeInputService25TestCaseOperation9Output, error) {
+	req, out := c.InputService25TestCaseOperation9Request(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 type InputService25TestShapeInputService25TestCaseOperation1Input struct {
 	_ struct{} `type:"structure"`
 
@@ -6476,13 +6621,13 @@ func (s *InputService25TestShapeInputService25TestCaseOperation1Input) SetTestId
 }
 
 type InputService25TestShapeInputService25TestCaseOperation1Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapeInputService25TestCaseOperation2Input struct {
-	_ struct{} `type:"structure" payload:"PayloadConfig"`
+	_ struct{} `type:"structure"`
 
-	PayloadConfig *InputService25TestShapePayloadConfig `locationName:"payloadConfig" type:"structure"`
+	TestConfig *InputService25TestShapeTestConfig `locationName:"testConfig" type:"structure"`
 
 	TestId *string `location:"header" locationName:"x-amz-test-id" min:"3" type:"string"`
 }
@@ -6500,9 +6645,9 @@ func (s *InputService25TestShapeInputService25TestCaseOperation2Input) Validate(
 	return nil
 }
 
-// SetPayloadConfig sets the PayloadConfig field's value.
-func (s *InputService25TestShapeInputService25TestCaseOperation2Input) SetPayloadConfig(v *InputService25TestShapePayloadConfig) *InputService25TestShapeInputService25TestCaseOperation2Input {
-	s.PayloadConfig = v
+// SetTestConfig sets the TestConfig field's value.
+func (s *InputService25TestShapeInputService25TestCaseOperation2Input) SetTestConfig(v *InputService25TestShapeTestConfig) *InputService25TestShapeInputService25TestCaseOperation2Input {
+	s.TestConfig = v
 	return s
 }
 
@@ -6513,7 +6658,7 @@ func (s *InputService25TestShapeInputService25TestCaseOperation2Input) SetTestId
 }
 
 type InputService25TestShapeInputService25TestCaseOperation2Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapeInputService25TestCaseOperation3Input struct {
@@ -6550,7 +6695,7 @@ func (s *InputService25TestShapeInputService25TestCaseOperation3Input) SetTestId
 }
 
 type InputService25TestShapeInputService25TestCaseOperation3Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapeInputService25TestCaseOperation4Input struct {
@@ -6587,31 +6732,44 @@ func (s *InputService25TestShapeInputService25TestCaseOperation4Input) SetTestId
 }
 
 type InputService25TestShapeInputService25TestCaseOperation4Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapeInputService25TestCaseOperation5Input struct {
-	_ struct{} `type:"structure" payload:"Data"`
+	_ struct{} `type:"structure" payload:"PayloadConfig"`
 
-	ContentType *string `location:"header" locationName:"Content-Type" type:"string"`
+	PayloadConfig *InputService25TestShapePayloadConfig `locationName:"payloadConfig" type:"structure"`
 
-	Data []byte `locationName:"data" type:"blob"`
+	TestId *string `location:"header" locationName:"x-amz-test-id" min:"3" type:"string"`
 }
 
-// SetContentType sets the ContentType field's value.
-func (s *InputService25TestShapeInputService25TestCaseOperation5Input) SetContentType(v string) *InputService25TestShapeInputService25TestCaseOperation5Input {
-	s.ContentType = &v
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputService25TestShapeInputService25TestCaseOperation5Input) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputService25TestShapeInputService25TestCaseOperation5Input"}
+	if s.TestId != nil && len(*s.TestId) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("TestId", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPayloadConfig sets the PayloadConfig field's value.
+func (s *InputService25TestShapeInputService25TestCaseOperation5Input) SetPayloadConfig(v *InputService25TestShapePayloadConfig) *InputService25TestShapeInputService25TestCaseOperation5Input {
+	s.PayloadConfig = v
 	return s
 }
 
-// SetData sets the Data field's value.
-func (s *InputService25TestShapeInputService25TestCaseOperation5Input) SetData(v []byte) *InputService25TestShapeInputService25TestCaseOperation5Input {
-	s.Data = v
+// SetTestId sets the TestId field's value.
+func (s *InputService25TestShapeInputService25TestCaseOperation5Input) SetTestId(v string) *InputService25TestShapeInputService25TestCaseOperation5Input {
+	s.TestId = &v
 	return s
 }
 
 type InputService25TestShapeInputService25TestCaseOperation5Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapeInputService25TestCaseOperation6Input struct {
@@ -6635,36 +6793,31 @@ func (s *InputService25TestShapeInputService25TestCaseOperation6Input) SetData(v
 }
 
 type InputService25TestShapeInputService25TestCaseOperation6Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapeInputService25TestCaseOperation7Input struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure" payload:"Data"`
 
-	TestId *string `location:"header" locationName:"x-amz-test-id" min:"3" type:"string"`
+	ContentType *string `location:"header" locationName:"Content-Type" type:"string"`
+
+	Data []byte `locationName:"data" type:"blob"`
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *InputService25TestShapeInputService25TestCaseOperation7Input) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "InputService25TestShapeInputService25TestCaseOperation7Input"}
-	if s.TestId != nil && len(*s.TestId) < 3 {
-		invalidParams.Add(request.NewErrParamMinLen("TestId", 3))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+// SetContentType sets the ContentType field's value.
+func (s *InputService25TestShapeInputService25TestCaseOperation7Input) SetContentType(v string) *InputService25TestShapeInputService25TestCaseOperation7Input {
+	s.ContentType = &v
+	return s
 }
 
-// SetTestId sets the TestId field's value.
-func (s *InputService25TestShapeInputService25TestCaseOperation7Input) SetTestId(v string) *InputService25TestShapeInputService25TestCaseOperation7Input {
-	s.TestId = &v
+// SetData sets the Data field's value.
+func (s *InputService25TestShapeInputService25TestCaseOperation7Input) SetData(v []byte) *InputService25TestShapeInputService25TestCaseOperation7Input {
+	s.Data = v
 	return s
 }
 
 type InputService25TestShapeInputService25TestCaseOperation7Output struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapeInputService25TestCaseOperation8Input struct {
@@ -6693,7 +6846,36 @@ func (s *InputService25TestShapeInputService25TestCaseOperation8Input) SetTestId
 }
 
 type InputService25TestShapeInputService25TestCaseOperation8Output struct {
+	_ struct{} `type:"structure"`
+}
+
+type InputService25TestShapeInputService25TestCaseOperation9Input struct {
 	_ struct{} `type:"structure" nopayload:"true"`
+
+	TestId *string `location:"header" locationName:"x-amz-test-id" min:"3" type:"string"`
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputService25TestShapeInputService25TestCaseOperation9Input) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputService25TestShapeInputService25TestCaseOperation9Input"}
+	if s.TestId != nil && len(*s.TestId) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("TestId", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTestId sets the TestId field's value.
+func (s *InputService25TestShapeInputService25TestCaseOperation9Input) SetTestId(v string) *InputService25TestShapeInputService25TestCaseOperation9Input {
+	s.TestId = &v
+	return s
+}
+
+type InputService25TestShapeInputService25TestCaseOperation9Output struct {
+	_ struct{} `type:"structure"`
 }
 
 type InputService25TestShapePayloadConfig struct {
@@ -7729,6 +7911,9 @@ func TestInputService21ProtocolTestJSONValueTraitCase1(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/?Bar=%7B%22Foo%22%3A%22Bar%22%7D", r.URL.String())
 
 	// assert headers
+	if e, a := "application/json", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect Content-Type %v header value, got %v", e, a)
+	}
 	if e, a := "eyJGb28iOiJCYXIifQ==", r.Header.Get("X-Amz-Foo"); e != a {
 		t.Errorf("expect X-Amz-Foo %v header value, got %v", e, a)
 	}
@@ -7775,6 +7960,11 @@ func TestInputService21ProtocolTestJSONValueTraitCase2(t *testing.T) {
 
 	// assert URL
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
+
+	// assert headers
+	if e, a := "application/json", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect Content-Type %v header value, got %v", e, a)
+	}
 }
 
 func TestInputService21ProtocolTestJSONValueTraitCase3(t *testing.T) {
@@ -7793,8 +7983,24 @@ func TestInputService21ProtocolTestJSONValueTraitCase3(t *testing.T) {
 		t.Errorf("expect no error, got %v", req.Error)
 	}
 
+	// assert body
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
+	body, _ := ioutil.ReadAll(r.Body)
+	awstesting.AssertJSON(t, `{}`, util.Trim(string(body)))
+
+	if e, a := int64(len(body)), r.ContentLength; e != a {
+		t.Errorf("expect serialized body length to match %v ContentLength, got %v", e, a)
+	}
+
 	// assert URL
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
+
+	// assert headers
+	if e, a := "application/json", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect Content-Type %v header value, got %v", e, a)
+	}
 }
 
 func TestInputService22ProtocolTestEnumCase1(t *testing.T) {
@@ -8188,7 +8394,7 @@ func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase2(t *testing.T)
 	}
 
 	// assert URL
-	awstesting.AssertURL(t, "https://rest-test.amazonaws.com/payload", r.URL.String())
+	awstesting.AssertURL(t, "https://rest-test.amazonaws.com/body", r.URL.String())
 
 	// assert headers
 	if e, a := "application/json", r.Header.Get("Content-Type"); e != a {
@@ -8198,13 +8404,49 @@ func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase2(t *testing.T)
 
 func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase3(t *testing.T) {
 	svc := NewInputService25ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://rest-test.amazonaws.com")})
-	input := &InputService25TestShapeInputService25TestCaseOperation3Input{
+	input := &InputService25TestShapeInputService25TestCaseOperation3Input{}
+	req, _ := svc.InputService25TestCaseOperation3Request(input)
+	r := req.HTTPRequest
+
+	// build request
+	req.Build()
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
+	req.Sign()
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
+
+	// assert body
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
+	body, _ := ioutil.ReadAll(r.Body)
+	awstesting.AssertJSON(t, `{}`, util.Trim(string(body)))
+
+	if e, a := int64(len(body)), r.ContentLength; e != a {
+		t.Errorf("expect serialized body length to match %v ContentLength, got %v", e, a)
+	}
+
+	// assert URL
+	awstesting.AssertURL(t, "https://rest-test.amazonaws.com/payload", r.URL.String())
+
+	// assert headers
+	if e, a := "application/json", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect Content-Type %v header value, got %v", e, a)
+	}
+}
+
+func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase4(t *testing.T) {
+	svc := NewInputService25ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://rest-test.amazonaws.com")})
+	input := &InputService25TestShapeInputService25TestCaseOperation4Input{
 		PayloadConfig: &InputService25TestShapePayloadConfig{
 			Data: aws.Int64(25),
 		},
 		TestId: aws.String("t-12345"),
 	}
-	req, _ := svc.InputService25TestCaseOperation3Request(input)
+	req, _ := svc.InputService25TestCaseOperation4Request(input)
 	r := req.HTTPRequest
 
 	// build request
@@ -8240,12 +8482,12 @@ func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase3(t *testing.T)
 	}
 }
 
-func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase4(t *testing.T) {
+func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase5(t *testing.T) {
 	svc := NewInputService25ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://rest-test.amazonaws.com")})
-	input := &InputService25TestShapeInputService25TestCaseOperation4Input{
+	input := &InputService25TestShapeInputService25TestCaseOperation5Input{
 		TestId: aws.String("t-12345"),
 	}
-	req, _ := svc.InputService25TestCaseOperation4Request(input)
+	req, _ := svc.InputService25TestCaseOperation5Request(input)
 	r := req.HTTPRequest
 
 	// build request
@@ -8281,13 +8523,13 @@ func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase4(t *testing.T)
 	}
 }
 
-func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase5(t *testing.T) {
+func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase6(t *testing.T) {
 	svc := NewInputService25ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://rest-test.amazonaws.com")})
-	input := &InputService25TestShapeInputService25TestCaseOperation5Input{
+	input := &InputService25TestShapeInputService25TestCaseOperation6Input{
 		ContentType: aws.String("image/jpg"),
 		Data:        []byte("1234"),
 	}
-	req, _ := svc.InputService25TestCaseOperation5Request(input)
+	req, _ := svc.InputService25TestCaseOperation6Request(input)
 	r := req.HTTPRequest
 
 	// build request
@@ -8322,10 +8564,10 @@ func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase5(t *testing.T)
 	}
 }
 
-func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase6(t *testing.T) {
+func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase7(t *testing.T) {
 	svc := NewInputService25ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://rest-test.amazonaws.com")})
-	input := &InputService25TestShapeInputService25TestCaseOperation6Input{}
-	req, _ := svc.InputService25TestCaseOperation6Request(input)
+	input := &InputService25TestShapeInputService25TestCaseOperation7Input{}
+	req, _ := svc.InputService25TestCaseOperation7Request(input)
 	r := req.HTTPRequest
 
 	// build request
@@ -8347,10 +8589,10 @@ func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase6(t *testing.T)
 	}
 }
 
-func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase7(t *testing.T) {
+func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase8(t *testing.T) {
 	svc := NewInputService25ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://rest-test.amazonaws.com")})
-	input := &InputService25TestShapeInputService25TestCaseOperation7Input{}
-	req, _ := svc.InputService25TestCaseOperation7Request(input)
+	input := &InputService25TestShapeInputService25TestCaseOperation8Input{}
+	req, _ := svc.InputService25TestCaseOperation8Request(input)
 	r := req.HTTPRequest
 
 	// build request
@@ -8378,12 +8620,12 @@ func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase7(t *testing.T)
 	}
 }
 
-func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase8(t *testing.T) {
+func TestInputService25ProtocolTestrestjsonContentTypeAndBodyCase9(t *testing.T) {
 	svc := NewInputService25ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://rest-test.amazonaws.com")})
-	input := &InputService25TestShapeInputService25TestCaseOperation8Input{
+	input := &InputService25TestShapeInputService25TestCaseOperation9Input{
 		TestId: aws.String("t-12345"),
 	}
-	req, _ := svc.InputService25TestCaseOperation8Request(input)
+	req, _ := svc.InputService25TestCaseOperation9Request(input)
 	r := req.HTTPRequest
 
 	// build request

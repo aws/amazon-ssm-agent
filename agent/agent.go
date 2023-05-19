@@ -31,12 +31,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	"github.com/aws/amazon-ssm-agent/agent/ipc/messagebus"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/startup"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 )
 
 const (
@@ -58,7 +59,7 @@ var (
 	process                                  *startup.Processor
 )
 
-func start(log logger.T, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent, err error) {
+func start(log log.T, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent, err error) {
 	config, err := appconfig.Config(false)
 	if err != nil {
 		log.Debugf("appconfig could not be loaded - %v", err)
@@ -142,7 +143,7 @@ func startAgent(ssmAgent agent.ISSMAgent, context context.T) (err error) {
 	return
 }
 
-func blockUntilSignaled(log logger.T) {
+func blockUntilSignaled(log log.T) {
 	// ssm-agent-worker will rely on the termination channel to be notified when to terminate
 	// the agent worker will listen to OS signals until termination channel is successfully connected
 
@@ -176,7 +177,7 @@ func blockUntilSignaled(log logger.T) {
 }
 
 // Run as a single process. Used by Unix systems and when running agent from console.
-func run(log logger.T, shouldCheckHibernation bool) {
+func run(log log.T, shouldCheckHibernation bool) {
 	log = log.WithContext("[ssm-agent-worker]")
 	defer func() {
 		// recover in case the agent panics

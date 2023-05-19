@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	mockIdentity "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
@@ -14,7 +15,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 	mockIdentity := mockIdentity.NewDefaultMockAgentIdentity()
 	type args struct {
 		log      log.T
@@ -187,7 +188,7 @@ func Test_runtimeConfigInit_initIdentityRuntimeConfig(t *testing.T) {
 		{
 			"Success_ConfigNotEqual",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				successIdentity,
 				icc_notEqualConfig,
@@ -198,7 +199,7 @@ func Test_runtimeConfigInit_initIdentityRuntimeConfig(t *testing.T) {
 		{
 			"Success_ConfigEqual",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				successIdentity,
 				icc_equalConfig,
@@ -208,7 +209,7 @@ func Test_runtimeConfigInit_initIdentityRuntimeConfig(t *testing.T) {
 		{
 			"Success_ConfigNotExistEqual",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				successIdentity,
 				icc_configNotExist,
@@ -218,7 +219,7 @@ func Test_runtimeConfigInit_initIdentityRuntimeConfig(t *testing.T) {
 		{
 			"Success_ConfigExistErr",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				successIdentity,
 				icc_configExistErr,
@@ -228,7 +229,7 @@ func Test_runtimeConfigInit_initIdentityRuntimeConfig(t *testing.T) {
 		{
 			"Success_GetConfigErr",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				successIdentity,
 				icc_errGetConfig,
@@ -238,7 +239,7 @@ func Test_runtimeConfigInit_initIdentityRuntimeConfig(t *testing.T) {
 		{
 			"Failed_SaveConfigErr",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				successIdentity,
 				icc_saveConfigErr,
@@ -295,7 +296,7 @@ func Test_runtimeConfigInit_saveIdentityConfigWithRetry(t *testing.T) {
 		{
 			"Failed",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				nil,
 				icc,
@@ -308,7 +309,7 @@ func Test_runtimeConfigInit_saveIdentityConfigWithRetry(t *testing.T) {
 		{
 			"Success",
 			fields{
-				log.NewMockLog(),
+				logmocks.NewMockLog(),
 				nil,
 				nil,
 				icc,

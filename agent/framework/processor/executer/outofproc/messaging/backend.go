@@ -25,7 +25,7 @@ type PluginRunner func(
 	cancelFlag task.CancelFlag,
 )
 
-//worker backend receives request messages from master, controls a pluginRunner based off the request and send reponses to Executer
+// worker backend receives request messages from master, controls a pluginRunner based off the request and send reponses to Executer
 type WorkerBackend struct {
 	ctx        context.T
 	input      chan string
@@ -35,7 +35,7 @@ type WorkerBackend struct {
 	stopChan   chan int
 }
 
-//Executer backend formulate the run request to the worker, and collect back the responses from worker
+// Executer backend formulate the run request to the worker, and collect back the responses from worker
 type ExecuterBackend struct {
 	//the shared state object that Executer hand off to data backend
 	docState   *contracts.DocumentState
@@ -95,8 +95,8 @@ func (p *ExecuterBackend) CloseStop() {
 	return
 }
 
-//TODO handle error and logging, when err, ask messaging to stop
-//TODO version handling?
+// TODO handle error and logging, when err, ask messaging to stop
+// TODO version handling?
 func (p *ExecuterBackend) Process(datagram string) error {
 	t, content := ParseDatagram(datagram)
 	switch t {

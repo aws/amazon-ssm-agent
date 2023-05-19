@@ -51,6 +51,9 @@ type API struct {
 	// Set to true to not generate struct field accessors
 	NoGenStructFieldAccessors bool
 
+	// Set to not remove unsupported (non-legacy) JSON from API, (for generated tests).
+	NoRemoveUnsupportedJSONValue bool
+
 	BaseImportPath string
 
 	initialized bool
@@ -71,6 +74,9 @@ type API struct {
 	HasAccountIdWithARN bool `json:"-"`
 
 	WithGeneratedTypedErrors bool
+
+	// Set to true to strictly enforce usage of the serviceId for the package naming
+	StrictServiceId bool
 }
 
 // A Metadata is the metadata about an API's definition.
@@ -124,20 +130,28 @@ func (a *API) StructName() string {
 		return a.name
 	}
 
-	name := a.Metadata.ServiceAbbreviation
-	if len(name) == 0 {
-		name = a.Metadata.ServiceFullName
+	var name string
+	if a.StrictServiceId {
+		name = a.Metadata.ServiceID
+		if len(name) == 0 {
+			panic("expect serviceId to be set, but was not")
+		}
+		if legacyName, ok := legacyStructNames[strings.ToLower(name)]; ok {
+			// The legacy names come from service abbreviations or service full names,
+			// so we will want to apply the old procedure to them.
+			name = makeLikeServiceId(legacyName)
+		}
+	} else {
+		name = a.Metadata.ServiceAbbreviation
+		if len(name) == 0 {
+			name = a.Metadata.ServiceFullName
+		}
+		// If we aren't using the strictly modeled service id, then
+		// strip out prefix names not reflected in service client symbol names.
+		name = makeLikeServiceId(name)
 	}
 
 	name = strings.TrimSpace(name)
-
-	// Strip out prefix names not reflected in service client symbol names.
-	for _, prefix := range stripServiceNamePrefixes {
-		if strings.HasPrefix(name, prefix) {
-			name = name[len(prefix):]
-			break
-		}
-	}
 
 	// Replace all Non-letter/number values with space
 	runes := []rune(name)
@@ -561,17 +575,21 @@ func New(p client.ConfigProvider, cfgs ...*aws.Config) *{{ .StructName }} {
 	{{- else -}}
 		c := p.ClientConfig({{ EndpointsIDValue . }}, cfgs...)
 	{{- end }}
-
+	if c.SigningNameDerived || len(c.SigningName) == 0 {
 	{{- if .Metadata.SigningName }}
-		if c.SigningNameDerived || len(c.SigningName) == 0{
-			c.SigningName = "{{ .Metadata.SigningName }}"
-		}
+		c.SigningName = "{{ .Metadata.SigningName }}"
+    {{- else }}
+		{{- if not .NoConstServiceNames -}}
+		c.SigningName = {{ EndpointsIDValue . }}
+		// No Fallback
+		{{- end }}
 	{{- end }}
-	return newClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName)
+	}
+	return newClient(*c.Config, c.Handlers, c.PartitionID, c.Endpoint, c.SigningRegion, c.SigningName, c.ResolvedRegion)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName string) *{{ .StructName }} {
+func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint, signingRegion, signingName, resolvedRegion string) *{{ .StructName }} {
     svc := &{{ .StructName }}{
     	Client: client.New(
     		cfg,
@@ -583,6 +601,7 @@ func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint,
 			PartitionID: partitionID,
 			Endpoint:     endpoint,
 			APIVersion:   "{{ .Metadata.APIVersion }}",
+            ResolvedRegion: resolvedRegion,
 			{{ if and (.Metadata.JSONVersion) (eq .Metadata.Protocol "json") -}}
 				JSONVersion:  "{{ .Metadata.JSONVersion }}",
 			{{- end }}
@@ -1038,10 +1057,32 @@ func (a *API) validateNoDocumentShapes() error {
 	return fmt.Errorf("model contains document shapes: %s", strings.Join(shapes, ", "))
 }
 
+func (a *API) backfillSigningName() {
+	backfill := map[string]string{
+		"kinesisvideo": "kinesisvideo",
+	}
+
+	if value, ok := backfill[a.PackageName()]; ok && len(a.Metadata.SigningName) == 0 {
+		a.Metadata.SigningName = value
+	} else if ok && len(a.Metadata.SigningName) > 0 {
+		debugLogger.Logf("%s no longer requires signingName backfill", a.PackageName())
+	}
+}
+
 func getDeprecatedMessage(msg string, name string) string {
 	if len(msg) == 0 {
 		return name + " has been deprecated"
 	}
 
 	return msg
+}
+
+func makeLikeServiceId(name string) string {
+	for _, prefix := range stripServiceNamePrefixes {
+		if strings.HasPrefix(name, prefix) {
+			name = name[len(prefix):]
+			break
+		}
+	}
+	return name
 }

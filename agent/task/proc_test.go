@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/times"
 	"github.com/stretchr/testify/assert"
 )
 

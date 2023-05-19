@@ -17,8 +17,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -100,7 +100,7 @@ func TestGenerateCloudWatchConfigWithoutEmptyValuesInParsedMessage(t *testing.T)
 	assert.NotNil(t, err)
 }
 
-//getSampleParsedMessage returns a mocked SendCommandPayload
+// getSampleParsedMessage returns a mocked SendCommandPayload
 func getSampleParsedMessage(logGroupName string, outputEnabled string) messageContracts.SendCommandPayload {
 
 	return messageContracts.SendCommandPayload{

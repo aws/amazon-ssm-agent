@@ -41,6 +41,8 @@ type T interface {
 		updaterPackageName string,
 		downloadPath string,
 	) (version string, err error)
+
+	GetStableVersion(stableVersionUrl string) (stableVersion string, err error)
 }
 
 type updateS3UtilImpl struct {

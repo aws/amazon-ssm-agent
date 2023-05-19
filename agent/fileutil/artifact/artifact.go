@@ -21,6 +21,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -33,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -54,7 +56,8 @@ type DownloadInput struct {
 }
 
 // httpDownload attempts to download a file via http/s call
-func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOutput, err error) {
+func httpDownload(ctx context.T, fileURL string, destFile string) (output DownloadOutput, err error) {
+	log := ctx.Log()
 	log.Debugf("attempting to download as http/https download from %v to %v", fileURL, destFile)
 
 	exponentialBackoff, err := backoffconfig.GetExponentialBackoff(200*time.Millisecond, 5)
@@ -76,12 +79,14 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 			existingETag, err = fileutil.ReadAllText(eTagFile)
 			httpRequest.Header.Add("If-None-Match", existingETag)
 		}
-
+		customTransport := network.GetDefaultTransport(log, ctx.AppConfig())
+		customTransport.TLSHandshakeTimeout = 20 * time.Second
 		check = http.Client{
 			CheckRedirect: func(r *http.Request, via []*http.Request) error {
 				r.URL.Opaque = r.URL.Path
 				return nil
 			},
+			Transport: customTransport,
 		}
 
 		var resp *http.Response
@@ -308,6 +313,40 @@ func s3Download(context context.T, amazonS3URL s3util.AmazonS3URL, destFile stri
 	return
 }
 
+// S3FileRead attempts to read a file content from S3 via s3 client.
+func S3FileRead(context context.T, s3FullPath string) (output []byte, err error) {
+	log := context.Log()
+
+	var fileURL *url.URL
+	fileURL, err = url.Parse(s3FullPath)
+	amazonS3URL := s3util.ParseAmazonS3URL(log, fileURL)
+	params := &s3.GetObjectInput{
+		Bucket: aws.String(amazonS3URL.Bucket),
+		Key:    aws.String(amazonS3URL.Key),
+	}
+
+	sess, err := s3util.GetS3CrossRegionCapableSession(context, amazonS3URL.Bucket)
+	if err != nil {
+		log.Errorf("failed to get S3 session: %v", err)
+		return nil, err
+	}
+
+	s3client := s3.New(sess)
+	resp, err := s3client.GetObject(params)
+	if err != nil {
+		return nil, err
+	}
+	if resp == nil {
+		return nil, fmt.Errorf("response is nil")
+	}
+	defer resp.Body.Close()
+	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
+}
+
 // FileCopy copies the content from reader to destinationPath file
 func FileCopy(log log.T, destinationPath string, src io.Reader) (written int64, err error) {
 
@@ -375,11 +414,11 @@ func Download(context context.T, input DownloadInput) (output DownloadOutput, er
 			tempOutput, err = s3Download(context, amazonS3URL, output.LocalFilePath)
 			if err != nil {
 				log.Info("An error occurred when attempting s3 download. Attempting http/https download as fallback.")
-				tempOutput, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
+				tempOutput, err = httpDownload(context, input.SourceURL, output.LocalFilePath)
 			}
 			output = tempOutput
 		} else {
-			output, err = httpDownload(log, input.SourceURL, output.LocalFilePath)
+			output, err = httpDownload(context, input.SourceURL, output.LocalFilePath)
 		}
 
 		if err != nil {

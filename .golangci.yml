@@ -6,6 +6,9 @@ linters-settings:
       - github.com/aws/amazon-ssm-agent
   dupl:
     threshold: 100
+  exhaustruct:
+    exclude:
+      -.*Mock.*
   funlen:
     lines: 100
     statements: 50
@@ -29,7 +32,7 @@ linters-settings:
     min-complexity: 15
   goimports:
     local-prefixes: github.com/aws/amazon-ssm-agent
-  golint:
+  revive:
     min-confidence: 0
   gomnd:
     settings:
@@ -49,66 +52,53 @@ linters-settings:
     allow-unused: false # report any unused nolint directives
     require-explanation: false # don't require an explanation for nolint directives
     require-specific: false # don't require nolint directives to be specific about which linter is being skipped
-
+  goheader:
+    template: |-
+      // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+      //
+      // Licensed under the Apache License, Version 2.0 (the "License"). You may not
+      // use this file except in compliance with the License. A copy of the
+      // License is located at
+      //
+      // http://aws.amazon.com/apache2.0/
+      //
+      // or in the "license" file accompanying this file. This file is distributed
+      // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+      // either express or implied. See the License for the specific language governing
+      // permissions and limitations under the License.
+  errcheck:
+    ignore: fmt:.*,github.com/aws/amazon-ssm-agent/agent/log:.*
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
-    - bodyclose
-    - deadcode
-    - depguard
     - dogsled
     - dupl
     - errcheck
     - exhaustive
+  #  - exhaustruct
     - funlen
     - gochecknoinits
     - goconst
+    - gocognit
     - gocritic
     - gocyclo
+    - godox
     - gofmt
     - goimports
-    - golint
-    - gomnd
-    - goprintffuncname
     - gosec
     - gosimple
     - govet
     - ineffassign
     - lll
+    - makezero
     - misspell
     - nakedret
-    - noctx
-    - nolintlint
-    - rowserrcheck
-    - staticcheck
-    - structcheck
-    - stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - whitespace
-
-  # don't enable:
-  # - asciicheck
-  # - scopelint
-  # - gochecknoglobals
-  # - gocognit
-  # - godot
-  # - godox
-  # - goerr113
-  # - interfacer
-  # - maligned
-  # - nestif
-  # - prealloc
-  # - testpackage
-  # - revive
-  # - wsl
-  # - exportloopref
-
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
@@ -120,7 +110,9 @@ issues:
         - gosec
         - golint
         - govet
-    - path: _mock\.go
+        - lll
+        - goconst
+    - path: mock\.go
       linters:
         - gocyclo
         - errcheck
@@ -128,6 +120,22 @@ issues:
         - gosec
         - golint
         - govet
+        - lll
+        - goconst
+        - gocritic
+        - gosimple
+    - path: mock\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - golint
+        - govet
+        - lll
+        - goconst
+        - gocritic
+        - gosimple
   # https://github.com/go-critic/go-critic/issues/926
     - linters:
         - gocritic

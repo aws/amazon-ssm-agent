@@ -68,9 +68,17 @@ type ManagedGrafanaAPI interface {
 	CreateWorkspaceWithContext(aws.Context, *managedgrafana.CreateWorkspaceInput, ...request.Option) (*managedgrafana.CreateWorkspaceOutput, error)
 	CreateWorkspaceRequest(*managedgrafana.CreateWorkspaceInput) (*request.Request, *managedgrafana.CreateWorkspaceOutput)
 
+	CreateWorkspaceApiKey(*managedgrafana.CreateWorkspaceApiKeyInput) (*managedgrafana.CreateWorkspaceApiKeyOutput, error)
+	CreateWorkspaceApiKeyWithContext(aws.Context, *managedgrafana.CreateWorkspaceApiKeyInput, ...request.Option) (*managedgrafana.CreateWorkspaceApiKeyOutput, error)
+	CreateWorkspaceApiKeyRequest(*managedgrafana.CreateWorkspaceApiKeyInput) (*request.Request, *managedgrafana.CreateWorkspaceApiKeyOutput)
+
 	DeleteWorkspace(*managedgrafana.DeleteWorkspaceInput) (*managedgrafana.DeleteWorkspaceOutput, error)
 	DeleteWorkspaceWithContext(aws.Context, *managedgrafana.DeleteWorkspaceInput, ...request.Option) (*managedgrafana.DeleteWorkspaceOutput, error)
 	DeleteWorkspaceRequest(*managedgrafana.DeleteWorkspaceInput) (*request.Request, *managedgrafana.DeleteWorkspaceOutput)
+
+	DeleteWorkspaceApiKey(*managedgrafana.DeleteWorkspaceApiKeyInput) (*managedgrafana.DeleteWorkspaceApiKeyOutput, error)
+	DeleteWorkspaceApiKeyWithContext(aws.Context, *managedgrafana.DeleteWorkspaceApiKeyInput, ...request.Option) (*managedgrafana.DeleteWorkspaceApiKeyOutput, error)
+	DeleteWorkspaceApiKeyRequest(*managedgrafana.DeleteWorkspaceApiKeyInput) (*request.Request, *managedgrafana.DeleteWorkspaceApiKeyOutput)
 
 	DescribeWorkspace(*managedgrafana.DescribeWorkspaceInput) (*managedgrafana.DescribeWorkspaceOutput, error)
 	DescribeWorkspaceWithContext(aws.Context, *managedgrafana.DescribeWorkspaceInput, ...request.Option) (*managedgrafana.DescribeWorkspaceOutput, error)
@@ -91,12 +99,24 @@ type ManagedGrafanaAPI interface {
 	ListPermissionsPages(*managedgrafana.ListPermissionsInput, func(*managedgrafana.ListPermissionsOutput, bool) bool) error
 	ListPermissionsPagesWithContext(aws.Context, *managedgrafana.ListPermissionsInput, func(*managedgrafana.ListPermissionsOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*managedgrafana.ListTagsForResourceInput) (*managedgrafana.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *managedgrafana.ListTagsForResourceInput, ...request.Option) (*managedgrafana.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*managedgrafana.ListTagsForResourceInput) (*request.Request, *managedgrafana.ListTagsForResourceOutput)
+
 	ListWorkspaces(*managedgrafana.ListWorkspacesInput) (*managedgrafana.ListWorkspacesOutput, error)
 	ListWorkspacesWithContext(aws.Context, *managedgrafana.ListWorkspacesInput, ...request.Option) (*managedgrafana.ListWorkspacesOutput, error)
 	ListWorkspacesRequest(*managedgrafana.ListWorkspacesInput) (*request.Request, *managedgrafana.ListWorkspacesOutput)
 
 	ListWorkspacesPages(*managedgrafana.ListWorkspacesInput, func(*managedgrafana.ListWorkspacesOutput, bool) bool) error
 	ListWorkspacesPagesWithContext(aws.Context, *managedgrafana.ListWorkspacesInput, func(*managedgrafana.ListWorkspacesOutput, bool) bool, ...request.Option) error
+
+	TagResource(*managedgrafana.TagResourceInput) (*managedgrafana.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *managedgrafana.TagResourceInput, ...request.Option) (*managedgrafana.TagResourceOutput, error)
+	TagResourceRequest(*managedgrafana.TagResourceInput) (*request.Request, *managedgrafana.TagResourceOutput)
+
+	UntagResource(*managedgrafana.UntagResourceInput) (*managedgrafana.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *managedgrafana.UntagResourceInput, ...request.Option) (*managedgrafana.UntagResourceOutput, error)
+	UntagResourceRequest(*managedgrafana.UntagResourceInput) (*request.Request, *managedgrafana.UntagResourceOutput)
 
 	UpdatePermissions(*managedgrafana.UpdatePermissionsInput) (*managedgrafana.UpdatePermissionsOutput, error)
 	UpdatePermissionsWithContext(aws.Context, *managedgrafana.UpdatePermissionsInput, ...request.Option) (*managedgrafana.UpdatePermissionsOutput, error)

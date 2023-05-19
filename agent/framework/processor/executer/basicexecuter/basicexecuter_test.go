@@ -20,7 +20,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	executermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
@@ -89,7 +90,7 @@ func testBasicExecuter(t *testing.T, testCase TestCase) {
 
 	// call method under test
 	//orchestrationRootDir is set to empty such that it can meet the test expectation.
-	e := NewBasicExecuter(context.NewMockDefault())
+	e := NewBasicExecuter(contextmocks.NewMockDefault())
 
 	nStatusReceived := 0
 

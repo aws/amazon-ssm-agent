@@ -18,11 +18,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mgsinteractor/utils"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -44,7 +44,7 @@ var (
 	status      = contracts.ResultStatusInProgress
 )
 
-//Execute the test suite
+// Execute the test suite
 func TestSessionCompleteReplyTestSuite(t *testing.T) {
 	suite.Run(t, new(SessionCompleteReplyTestSuite))
 }
@@ -65,7 +65,7 @@ func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_BasicInitia
 	sessionComplete := NewSessionCompleteType(ctx, docResult, uuidVal, 0)
 	assert.Equal(suite.T(), uuidVal.String(), sessionComplete.GetMessageUUID().String())
 	assert.Equal(suite.T(), 1, sessionComplete.GetBackOffSecond())
-	assert.Equal(suite.T(), 4, sessionComplete.GetNumberOfContinuousRetries())
+	assert.Equal(suite.T(), 3, sessionComplete.GetNumberOfContinuousRetries())
 	assert.Equal(suite.T(), false, sessionComplete.ShouldPersistData())
 	assert.Equal(suite.T(), 0, sessionComplete.GetRetryNumber())
 }
@@ -77,7 +77,7 @@ func (suite *SessionCompleteReplyTestSuite) TestSessionCompleteReply_InitializeW
 	sessionComplete := NewSessionCompleteType(ctx, docResult, uuidVal, 1)
 	assert.Equal(suite.T(), uuidVal.String(), sessionComplete.GetMessageUUID().String())
 	assert.Equal(suite.T(), 1, sessionComplete.GetBackOffSecond())
-	assert.Equal(suite.T(), 4, sessionComplete.GetNumberOfContinuousRetries())
+	assert.Equal(suite.T(), 3, sessionComplete.GetNumberOfContinuousRetries())
 	assert.Equal(suite.T(), false, sessionComplete.ShouldPersistData())
 	assert.Equal(suite.T(), 1, sessionComplete.GetRetryNumber())
 }

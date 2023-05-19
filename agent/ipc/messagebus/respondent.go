@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package messagebus logic to send message and get reply over IPC
+// Package messagebus logic to send message and get reply over IPC
 package messagebus
 
 import (

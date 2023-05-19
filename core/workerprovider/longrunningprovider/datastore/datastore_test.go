@@ -18,7 +18,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	mockfs "github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
@@ -57,7 +57,7 @@ func (suite *StoreTestSuite) SetupTest() {
 		log:        log.NewMockLog()}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestDataStoreTestSuite(t *testing.T) {
 	suite.Run(t, new(StoreTestSuite))
 }

@@ -32,7 +32,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
@@ -180,7 +181,7 @@ func getTestContext() context.T {
 	identityMock.On("Region").Return(testRegionName, nil)
 	identityMock.On("InstanceID").Return(testInstanceID, nil)
 
-	contextMock := &context.Mock{}
+	contextMock := &contextmocks.Mock{}
 	contextMock.On("Identity").Return(identityMock)
 	contextMock.On("Log").Return(logger)
 
@@ -271,7 +272,7 @@ func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) 
 	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
 }
 
-//using long-running testcases for this test
+// using long-running testcases for this test
 func testCommandInvokerShutdown(t *testing.T, invoke CommandInvoker, cancelFlag task.CancelFlag, testCase TestCase) {
 	go func() {
 		time.Sleep(100 * time.Millisecond)

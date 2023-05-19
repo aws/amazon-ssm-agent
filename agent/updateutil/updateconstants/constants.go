@@ -93,11 +93,14 @@ const (
 	// PlatformCentOS represents CentOS
 	PlatformCentOS = "centos"
 
-	// PlatformCentOS represents CentOS
+	// PlatformRockyLinux represents Rocky Linux
 	PlatformRockyLinux = "rocky"
 
 	// PlatformFlatcar represents Flatcar
 	PlatformFlatcar = "flatcar"
+  
+	// PlatformAlmaLinux represents AlmaLinux
+	PlatformAlmaLinux = "almalinux"
 
 	// PlatformSuse represents SLES(SUSe)
 	PlatformSuseOS = "sles"
@@ -154,12 +157,16 @@ const (
 type UpdateScriptExitCode int
 
 const (
-	// exit code represents exit code when there is no service manager
+	// ExitCodeUnsupportedPlatform represents exit code when there is no service manager
 	// TODO: Move error to a update precondition
 	ExitCodeUnsupportedPlatform UpdateScriptExitCode = 124
 
-	// exit code represents exit code from agent update install script
+	// ExitCodeUpdateUsingPkgMgr represents exit code from agent update install script
 	ExitCodeUpdateUsingPkgMgr UpdateScriptExitCode = 125
+
+	// ExitCodeUpdateFailedDueToSnapd represents exit code from agent update install script
+	// due to snapd child process validation bug
+	ExitCodeUpdateFailedDueToSnapd UpdateScriptExitCode = 126
 )
 
 // SUb status values
@@ -174,7 +181,7 @@ const (
 	Downgrade = "downgrade_"
 )
 
-//ErrorCode is types of Error Codes
+// ErrorCode is types of Error Codes
 type ErrorCode string
 
 const (
@@ -244,6 +251,9 @@ const (
 	// ErrorGetLatestActiveVersionManifest represents failure to get latest active version from manifest
 	ErrorGetLatestActiveVersionManifest ErrorCode = "ErrorGetLatestActiveVersionManifest"
 
+	// ErrorGetStableVersionS3 represents failure to get the stable version from s3
+	ErrorGetStableVersionS3 ErrorCode = "ErrorGetStableVersionS3"
+
 	// ErrorInvalidManifest represents Invalid manifest file
 	ErrorInvalidManifest ErrorCode = "ErrorInvalidManifest"
 
@@ -255,6 +265,9 @@ const (
 
 	// ErrorUnsupportedServiceManager represents unsupported service manager
 	ErrorUnsupportedServiceManager ErrorCode = "ErrorUnsupportedServiceManager"
+
+	// ErrorInstallFailureDueToSnapd represents snapd child process bug failure
+	ErrorInstallFailureDueToSnapd ErrorCode = "ErrorInstallFailedDueToSnapd"
 
 	// ErrorInstallFailed represents Install failed
 	ErrorInstallFailed ErrorCode = "ErrorInstallFailed"
@@ -297,6 +310,7 @@ const (
 	TargetVersionCustomerDefined = iota
 	TargetVersionLatest
 	TargetVersionSelfUpdate
+	TargetVersionStable
 )
 
 // NonAlarmingErrors contains error codes which are not important.
@@ -305,6 +319,7 @@ var NonAlarmingErrors = map[ErrorCode]struct{}{
 	ErrorAttemptToDowngrade:        {},
 	ErrorFailedPrecondition:        {},
 	ErrorFailedLinksCheck:          {},
+	ErrorInstallFailureDueToSnapd:  {},
 }
 
 type SelfUpdateState string

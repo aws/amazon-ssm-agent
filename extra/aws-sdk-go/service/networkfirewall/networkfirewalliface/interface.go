@@ -116,6 +116,10 @@ type NetworkFirewallAPI interface {
 	DescribeRuleGroupWithContext(aws.Context, *networkfirewall.DescribeRuleGroupInput, ...request.Option) (*networkfirewall.DescribeRuleGroupOutput, error)
 	DescribeRuleGroupRequest(*networkfirewall.DescribeRuleGroupInput) (*request.Request, *networkfirewall.DescribeRuleGroupOutput)
 
+	DescribeRuleGroupMetadata(*networkfirewall.DescribeRuleGroupMetadataInput) (*networkfirewall.DescribeRuleGroupMetadataOutput, error)
+	DescribeRuleGroupMetadataWithContext(aws.Context, *networkfirewall.DescribeRuleGroupMetadataInput, ...request.Option) (*networkfirewall.DescribeRuleGroupMetadataOutput, error)
+	DescribeRuleGroupMetadataRequest(*networkfirewall.DescribeRuleGroupMetadataInput) (*request.Request, *networkfirewall.DescribeRuleGroupMetadataOutput)
+
 	DisassociateSubnets(*networkfirewall.DisassociateSubnetsInput) (*networkfirewall.DisassociateSubnetsOutput, error)
 	DisassociateSubnetsWithContext(aws.Context, *networkfirewall.DisassociateSubnetsInput, ...request.Option) (*networkfirewall.DisassociateSubnetsOutput, error)
 	DisassociateSubnetsRequest(*networkfirewall.DisassociateSubnetsInput) (*request.Request, *networkfirewall.DisassociateSubnetsOutput)
@@ -167,6 +171,10 @@ type NetworkFirewallAPI interface {
 	UpdateFirewallDescription(*networkfirewall.UpdateFirewallDescriptionInput) (*networkfirewall.UpdateFirewallDescriptionOutput, error)
 	UpdateFirewallDescriptionWithContext(aws.Context, *networkfirewall.UpdateFirewallDescriptionInput, ...request.Option) (*networkfirewall.UpdateFirewallDescriptionOutput, error)
 	UpdateFirewallDescriptionRequest(*networkfirewall.UpdateFirewallDescriptionInput) (*request.Request, *networkfirewall.UpdateFirewallDescriptionOutput)
+
+	UpdateFirewallEncryptionConfiguration(*networkfirewall.UpdateFirewallEncryptionConfigurationInput) (*networkfirewall.UpdateFirewallEncryptionConfigurationOutput, error)
+	UpdateFirewallEncryptionConfigurationWithContext(aws.Context, *networkfirewall.UpdateFirewallEncryptionConfigurationInput, ...request.Option) (*networkfirewall.UpdateFirewallEncryptionConfigurationOutput, error)
+	UpdateFirewallEncryptionConfigurationRequest(*networkfirewall.UpdateFirewallEncryptionConfigurationInput) (*request.Request, *networkfirewall.UpdateFirewallEncryptionConfigurationOutput)
 
 	UpdateFirewallPolicy(*networkfirewall.UpdateFirewallPolicyInput) (*networkfirewall.UpdateFirewallPolicyOutput, error)
 	UpdateFirewallPolicyWithContext(aws.Context, *networkfirewall.UpdateFirewallPolicyInput, ...request.Option) (*networkfirewall.UpdateFirewallPolicyOutput, error)

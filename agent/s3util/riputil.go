@@ -17,6 +17,7 @@
 package s3util
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -25,26 +26,31 @@ import (
 
 const defaultGlobalEndpoint = "s3.amazonaws.com"
 
-/* This function returns the s3 endpoint specified by the user in appconfig.
+/*
+	This function returns the s3 endpoint specified by the user in appconfig.
+
 If the user didn't specify one, it will return the Amazon S3 endpoint in a certain region
 */
-func GetS3Endpoint(context context.T, region string) (s3Endpoint string) {
+func GetS3Endpoint(context context.T, region string) (s3Endpoint string, err error) {
+	log := context.Log()
+
 	appConfig := context.AppConfig()
 	if appConfig.S3.Endpoint != "" {
-		return appConfig.S3.Endpoint
+		return appConfig.S3.Endpoint, nil
 	}
 
 	// Get the service endpoint for the region passed in, if it is return it
 	endpointHelper := endpoint.NewEndpointHelper(context.Log(), appConfig)
 	if serviceEndpoint := endpointHelper.GetServiceEndpoint("s3", region); serviceEndpoint != "" {
-		return serviceEndpoint
+		return serviceEndpoint, nil
 	}
 
 	if defaultEndpoint := context.Identity().GetServiceEndpoint("s3"); defaultEndpoint != "" {
-		return defaultEndpoint
+		return defaultEndpoint, nil
 	}
 
-	return defaultGlobalEndpoint
+	log.Warnf("Failed to get S3 endpoint for region %v.", region)
+	return "", fmt.Errorf("could not fetch s3 endpoint")
 }
 
 // Returns an alternate S3 endpoint in the same partition as
@@ -52,18 +58,18 @@ func GetS3Endpoint(context context.T, region string) (s3Endpoint string) {
 func getFallbackS3Endpoint(context context.T, region string) (s3Endpoint string) {
 	if strings.HasPrefix(region, "us-gov-") {
 		if region == "us-gov-west-1" {
-			s3Endpoint = GetS3Endpoint(context, "us-gov-east-1")
+			s3Endpoint, _ = GetS3Endpoint(context, "us-gov-east-1")
 		} else {
-			s3Endpoint = GetS3Endpoint(context, "us-gov-west-1")
+			s3Endpoint, _ = GetS3Endpoint(context, "us-gov-west-1")
 		}
 	} else if strings.HasPrefix(region, "cn-") {
 		if region == "cn-north-1" {
-			s3Endpoint = GetS3Endpoint(context, "cn-northwest-1")
+			s3Endpoint, _ = GetS3Endpoint(context, "cn-northwest-1")
 		} else {
-			s3Endpoint = GetS3Endpoint(context, "cn-north-1")
+			s3Endpoint, _ = GetS3Endpoint(context, "cn-north-1")
 		}
 	} else {
 		s3Endpoint = defaultGlobalEndpoint
 	}
-	return
+	return s3Endpoint
 }

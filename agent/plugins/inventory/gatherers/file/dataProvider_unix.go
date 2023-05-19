@@ -32,7 +32,7 @@ func expand(str string, mapping func(string) string) (newStr string, err error) 
 	return
 }
 
-//getMetaData gets metadata for the specified file paths
+// getMetaData gets metadata for the specified file paths
 func getMetaData(context context.T, paths []string) (fileInfo []model.FileData, err error) {
 	for _, p := range paths {
 		fi, err := os.Stat(p)

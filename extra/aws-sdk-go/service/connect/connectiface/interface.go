@@ -68,6 +68,10 @@ type ConnectAPI interface {
 	AssociateBotWithContext(aws.Context, *connect.AssociateBotInput, ...request.Option) (*connect.AssociateBotOutput, error)
 	AssociateBotRequest(*connect.AssociateBotInput) (*request.Request, *connect.AssociateBotOutput)
 
+	AssociateDefaultVocabulary(*connect.AssociateDefaultVocabularyInput) (*connect.AssociateDefaultVocabularyOutput, error)
+	AssociateDefaultVocabularyWithContext(aws.Context, *connect.AssociateDefaultVocabularyInput, ...request.Option) (*connect.AssociateDefaultVocabularyOutput, error)
+	AssociateDefaultVocabularyRequest(*connect.AssociateDefaultVocabularyInput) (*request.Request, *connect.AssociateDefaultVocabularyOutput)
+
 	AssociateInstanceStorageConfig(*connect.AssociateInstanceStorageConfigInput) (*connect.AssociateInstanceStorageConfigOutput, error)
 	AssociateInstanceStorageConfigWithContext(aws.Context, *connect.AssociateInstanceStorageConfigInput, ...request.Option) (*connect.AssociateInstanceStorageConfigOutput, error)
 	AssociateInstanceStorageConfigRequest(*connect.AssociateInstanceStorageConfigInput) (*request.Request, *connect.AssociateInstanceStorageConfigOutput)
@@ -79,6 +83,10 @@ type ConnectAPI interface {
 	AssociateLexBot(*connect.AssociateLexBotInput) (*connect.AssociateLexBotOutput, error)
 	AssociateLexBotWithContext(aws.Context, *connect.AssociateLexBotInput, ...request.Option) (*connect.AssociateLexBotOutput, error)
 	AssociateLexBotRequest(*connect.AssociateLexBotInput) (*request.Request, *connect.AssociateLexBotOutput)
+
+	AssociatePhoneNumberContactFlow(*connect.AssociatePhoneNumberContactFlowInput) (*connect.AssociatePhoneNumberContactFlowOutput, error)
+	AssociatePhoneNumberContactFlowWithContext(aws.Context, *connect.AssociatePhoneNumberContactFlowInput, ...request.Option) (*connect.AssociatePhoneNumberContactFlowOutput, error)
+	AssociatePhoneNumberContactFlowRequest(*connect.AssociatePhoneNumberContactFlowInput) (*request.Request, *connect.AssociatePhoneNumberContactFlowOutput)
 
 	AssociateQueueQuickConnects(*connect.AssociateQueueQuickConnectsInput) (*connect.AssociateQueueQuickConnectsOutput, error)
 	AssociateQueueQuickConnectsWithContext(aws.Context, *connect.AssociateQueueQuickConnectsInput, ...request.Option) (*connect.AssociateQueueQuickConnectsOutput, error)
@@ -92,6 +100,10 @@ type ConnectAPI interface {
 	AssociateSecurityKeyWithContext(aws.Context, *connect.AssociateSecurityKeyInput, ...request.Option) (*connect.AssociateSecurityKeyOutput, error)
 	AssociateSecurityKeyRequest(*connect.AssociateSecurityKeyInput) (*request.Request, *connect.AssociateSecurityKeyOutput)
 
+	ClaimPhoneNumber(*connect.ClaimPhoneNumberInput) (*connect.ClaimPhoneNumberOutput, error)
+	ClaimPhoneNumberWithContext(aws.Context, *connect.ClaimPhoneNumberInput, ...request.Option) (*connect.ClaimPhoneNumberOutput, error)
+	ClaimPhoneNumberRequest(*connect.ClaimPhoneNumberInput) (*request.Request, *connect.ClaimPhoneNumberOutput)
+
 	CreateAgentStatus(*connect.CreateAgentStatusInput) (*connect.CreateAgentStatusOutput, error)
 	CreateAgentStatusWithContext(aws.Context, *connect.CreateAgentStatusInput, ...request.Option) (*connect.CreateAgentStatusOutput, error)
 	CreateAgentStatusRequest(*connect.CreateAgentStatusInput) (*request.Request, *connect.CreateAgentStatusOutput)
@@ -99,6 +111,10 @@ type ConnectAPI interface {
 	CreateContactFlow(*connect.CreateContactFlowInput) (*connect.CreateContactFlowOutput, error)
 	CreateContactFlowWithContext(aws.Context, *connect.CreateContactFlowInput, ...request.Option) (*connect.CreateContactFlowOutput, error)
 	CreateContactFlowRequest(*connect.CreateContactFlowInput) (*request.Request, *connect.CreateContactFlowOutput)
+
+	CreateContactFlowModule(*connect.CreateContactFlowModuleInput) (*connect.CreateContactFlowModuleOutput, error)
+	CreateContactFlowModuleWithContext(aws.Context, *connect.CreateContactFlowModuleInput, ...request.Option) (*connect.CreateContactFlowModuleOutput, error)
+	CreateContactFlowModuleRequest(*connect.CreateContactFlowModuleInput) (*request.Request, *connect.CreateContactFlowModuleOutput)
 
 	CreateHoursOfOperation(*connect.CreateHoursOfOperationInput) (*connect.CreateHoursOfOperationOutput, error)
 	CreateHoursOfOperationWithContext(aws.Context, *connect.CreateHoursOfOperationInput, ...request.Option) (*connect.CreateHoursOfOperationOutput, error)
@@ -124,6 +140,14 @@ type ConnectAPI interface {
 	CreateRoutingProfileWithContext(aws.Context, *connect.CreateRoutingProfileInput, ...request.Option) (*connect.CreateRoutingProfileOutput, error)
 	CreateRoutingProfileRequest(*connect.CreateRoutingProfileInput) (*request.Request, *connect.CreateRoutingProfileOutput)
 
+	CreateSecurityProfile(*connect.CreateSecurityProfileInput) (*connect.CreateSecurityProfileOutput, error)
+	CreateSecurityProfileWithContext(aws.Context, *connect.CreateSecurityProfileInput, ...request.Option) (*connect.CreateSecurityProfileOutput, error)
+	CreateSecurityProfileRequest(*connect.CreateSecurityProfileInput) (*request.Request, *connect.CreateSecurityProfileOutput)
+
+	CreateTaskTemplate(*connect.CreateTaskTemplateInput) (*connect.CreateTaskTemplateOutput, error)
+	CreateTaskTemplateWithContext(aws.Context, *connect.CreateTaskTemplateInput, ...request.Option) (*connect.CreateTaskTemplateOutput, error)
+	CreateTaskTemplateRequest(*connect.CreateTaskTemplateInput) (*request.Request, *connect.CreateTaskTemplateOutput)
+
 	CreateUseCase(*connect.CreateUseCaseInput) (*connect.CreateUseCaseOutput, error)
 	CreateUseCaseWithContext(aws.Context, *connect.CreateUseCaseInput, ...request.Option) (*connect.CreateUseCaseOutput, error)
 	CreateUseCaseRequest(*connect.CreateUseCaseInput) (*request.Request, *connect.CreateUseCaseOutput)
@@ -135,6 +159,18 @@ type ConnectAPI interface {
 	CreateUserHierarchyGroup(*connect.CreateUserHierarchyGroupInput) (*connect.CreateUserHierarchyGroupOutput, error)
 	CreateUserHierarchyGroupWithContext(aws.Context, *connect.CreateUserHierarchyGroupInput, ...request.Option) (*connect.CreateUserHierarchyGroupOutput, error)
 	CreateUserHierarchyGroupRequest(*connect.CreateUserHierarchyGroupInput) (*request.Request, *connect.CreateUserHierarchyGroupOutput)
+
+	CreateVocabulary(*connect.CreateVocabularyInput) (*connect.CreateVocabularyOutput, error)
+	CreateVocabularyWithContext(aws.Context, *connect.CreateVocabularyInput, ...request.Option) (*connect.CreateVocabularyOutput, error)
+	CreateVocabularyRequest(*connect.CreateVocabularyInput) (*request.Request, *connect.CreateVocabularyOutput)
+
+	DeleteContactFlow(*connect.DeleteContactFlowInput) (*connect.DeleteContactFlowOutput, error)
+	DeleteContactFlowWithContext(aws.Context, *connect.DeleteContactFlowInput, ...request.Option) (*connect.DeleteContactFlowOutput, error)
+	DeleteContactFlowRequest(*connect.DeleteContactFlowInput) (*request.Request, *connect.DeleteContactFlowOutput)
+
+	DeleteContactFlowModule(*connect.DeleteContactFlowModuleInput) (*connect.DeleteContactFlowModuleOutput, error)
+	DeleteContactFlowModuleWithContext(aws.Context, *connect.DeleteContactFlowModuleInput, ...request.Option) (*connect.DeleteContactFlowModuleOutput, error)
+	DeleteContactFlowModuleRequest(*connect.DeleteContactFlowModuleInput) (*request.Request, *connect.DeleteContactFlowModuleOutput)
 
 	DeleteHoursOfOperation(*connect.DeleteHoursOfOperationInput) (*connect.DeleteHoursOfOperationOutput, error)
 	DeleteHoursOfOperationWithContext(aws.Context, *connect.DeleteHoursOfOperationInput, ...request.Option) (*connect.DeleteHoursOfOperationOutput, error)
@@ -152,6 +188,14 @@ type ConnectAPI interface {
 	DeleteQuickConnectWithContext(aws.Context, *connect.DeleteQuickConnectInput, ...request.Option) (*connect.DeleteQuickConnectOutput, error)
 	DeleteQuickConnectRequest(*connect.DeleteQuickConnectInput) (*request.Request, *connect.DeleteQuickConnectOutput)
 
+	DeleteSecurityProfile(*connect.DeleteSecurityProfileInput) (*connect.DeleteSecurityProfileOutput, error)
+	DeleteSecurityProfileWithContext(aws.Context, *connect.DeleteSecurityProfileInput, ...request.Option) (*connect.DeleteSecurityProfileOutput, error)
+	DeleteSecurityProfileRequest(*connect.DeleteSecurityProfileInput) (*request.Request, *connect.DeleteSecurityProfileOutput)
+
+	DeleteTaskTemplate(*connect.DeleteTaskTemplateInput) (*connect.DeleteTaskTemplateOutput, error)
+	DeleteTaskTemplateWithContext(aws.Context, *connect.DeleteTaskTemplateInput, ...request.Option) (*connect.DeleteTaskTemplateOutput, error)
+	DeleteTaskTemplateRequest(*connect.DeleteTaskTemplateInput) (*request.Request, *connect.DeleteTaskTemplateOutput)
+
 	DeleteUseCase(*connect.DeleteUseCaseInput) (*connect.DeleteUseCaseOutput, error)
 	DeleteUseCaseWithContext(aws.Context, *connect.DeleteUseCaseInput, ...request.Option) (*connect.DeleteUseCaseOutput, error)
 	DeleteUseCaseRequest(*connect.DeleteUseCaseInput) (*request.Request, *connect.DeleteUseCaseOutput)
@@ -164,13 +208,25 @@ type ConnectAPI interface {
 	DeleteUserHierarchyGroupWithContext(aws.Context, *connect.DeleteUserHierarchyGroupInput, ...request.Option) (*connect.DeleteUserHierarchyGroupOutput, error)
 	DeleteUserHierarchyGroupRequest(*connect.DeleteUserHierarchyGroupInput) (*request.Request, *connect.DeleteUserHierarchyGroupOutput)
 
+	DeleteVocabulary(*connect.DeleteVocabularyInput) (*connect.DeleteVocabularyOutput, error)
+	DeleteVocabularyWithContext(aws.Context, *connect.DeleteVocabularyInput, ...request.Option) (*connect.DeleteVocabularyOutput, error)
+	DeleteVocabularyRequest(*connect.DeleteVocabularyInput) (*request.Request, *connect.DeleteVocabularyOutput)
+
 	DescribeAgentStatus(*connect.DescribeAgentStatusInput) (*connect.DescribeAgentStatusOutput, error)
 	DescribeAgentStatusWithContext(aws.Context, *connect.DescribeAgentStatusInput, ...request.Option) (*connect.DescribeAgentStatusOutput, error)
 	DescribeAgentStatusRequest(*connect.DescribeAgentStatusInput) (*request.Request, *connect.DescribeAgentStatusOutput)
 
+	DescribeContact(*connect.DescribeContactInput) (*connect.DescribeContactOutput, error)
+	DescribeContactWithContext(aws.Context, *connect.DescribeContactInput, ...request.Option) (*connect.DescribeContactOutput, error)
+	DescribeContactRequest(*connect.DescribeContactInput) (*request.Request, *connect.DescribeContactOutput)
+
 	DescribeContactFlow(*connect.DescribeContactFlowInput) (*connect.DescribeContactFlowOutput, error)
 	DescribeContactFlowWithContext(aws.Context, *connect.DescribeContactFlowInput, ...request.Option) (*connect.DescribeContactFlowOutput, error)
 	DescribeContactFlowRequest(*connect.DescribeContactFlowInput) (*request.Request, *connect.DescribeContactFlowOutput)
+
+	DescribeContactFlowModule(*connect.DescribeContactFlowModuleInput) (*connect.DescribeContactFlowModuleOutput, error)
+	DescribeContactFlowModuleWithContext(aws.Context, *connect.DescribeContactFlowModuleInput, ...request.Option) (*connect.DescribeContactFlowModuleOutput, error)
+	DescribeContactFlowModuleRequest(*connect.DescribeContactFlowModuleInput) (*request.Request, *connect.DescribeContactFlowModuleOutput)
 
 	DescribeHoursOfOperation(*connect.DescribeHoursOfOperationInput) (*connect.DescribeHoursOfOperationOutput, error)
 	DescribeHoursOfOperationWithContext(aws.Context, *connect.DescribeHoursOfOperationInput, ...request.Option) (*connect.DescribeHoursOfOperationOutput, error)
@@ -188,6 +244,10 @@ type ConnectAPI interface {
 	DescribeInstanceStorageConfigWithContext(aws.Context, *connect.DescribeInstanceStorageConfigInput, ...request.Option) (*connect.DescribeInstanceStorageConfigOutput, error)
 	DescribeInstanceStorageConfigRequest(*connect.DescribeInstanceStorageConfigInput) (*request.Request, *connect.DescribeInstanceStorageConfigOutput)
 
+	DescribePhoneNumber(*connect.DescribePhoneNumberInput) (*connect.DescribePhoneNumberOutput, error)
+	DescribePhoneNumberWithContext(aws.Context, *connect.DescribePhoneNumberInput, ...request.Option) (*connect.DescribePhoneNumberOutput, error)
+	DescribePhoneNumberRequest(*connect.DescribePhoneNumberInput) (*request.Request, *connect.DescribePhoneNumberOutput)
+
 	DescribeQueue(*connect.DescribeQueueInput) (*connect.DescribeQueueOutput, error)
 	DescribeQueueWithContext(aws.Context, *connect.DescribeQueueInput, ...request.Option) (*connect.DescribeQueueOutput, error)
 	DescribeQueueRequest(*connect.DescribeQueueInput) (*request.Request, *connect.DescribeQueueOutput)
@@ -200,6 +260,10 @@ type ConnectAPI interface {
 	DescribeRoutingProfileWithContext(aws.Context, *connect.DescribeRoutingProfileInput, ...request.Option) (*connect.DescribeRoutingProfileOutput, error)
 	DescribeRoutingProfileRequest(*connect.DescribeRoutingProfileInput) (*request.Request, *connect.DescribeRoutingProfileOutput)
 
+	DescribeSecurityProfile(*connect.DescribeSecurityProfileInput) (*connect.DescribeSecurityProfileOutput, error)
+	DescribeSecurityProfileWithContext(aws.Context, *connect.DescribeSecurityProfileInput, ...request.Option) (*connect.DescribeSecurityProfileOutput, error)
+	DescribeSecurityProfileRequest(*connect.DescribeSecurityProfileInput) (*request.Request, *connect.DescribeSecurityProfileOutput)
+
 	DescribeUser(*connect.DescribeUserInput) (*connect.DescribeUserOutput, error)
 	DescribeUserWithContext(aws.Context, *connect.DescribeUserInput, ...request.Option) (*connect.DescribeUserOutput, error)
 	DescribeUserRequest(*connect.DescribeUserInput) (*request.Request, *connect.DescribeUserOutput)
@@ -211,6 +275,10 @@ type ConnectAPI interface {
 	DescribeUserHierarchyStructure(*connect.DescribeUserHierarchyStructureInput) (*connect.DescribeUserHierarchyStructureOutput, error)
 	DescribeUserHierarchyStructureWithContext(aws.Context, *connect.DescribeUserHierarchyStructureInput, ...request.Option) (*connect.DescribeUserHierarchyStructureOutput, error)
 	DescribeUserHierarchyStructureRequest(*connect.DescribeUserHierarchyStructureInput) (*request.Request, *connect.DescribeUserHierarchyStructureOutput)
+
+	DescribeVocabulary(*connect.DescribeVocabularyInput) (*connect.DescribeVocabularyOutput, error)
+	DescribeVocabularyWithContext(aws.Context, *connect.DescribeVocabularyInput, ...request.Option) (*connect.DescribeVocabularyOutput, error)
+	DescribeVocabularyRequest(*connect.DescribeVocabularyInput) (*request.Request, *connect.DescribeVocabularyOutput)
 
 	DisassociateApprovedOrigin(*connect.DisassociateApprovedOriginInput) (*connect.DisassociateApprovedOriginOutput, error)
 	DisassociateApprovedOriginWithContext(aws.Context, *connect.DisassociateApprovedOriginInput, ...request.Option) (*connect.DisassociateApprovedOriginOutput, error)
@@ -231,6 +299,10 @@ type ConnectAPI interface {
 	DisassociateLexBot(*connect.DisassociateLexBotInput) (*connect.DisassociateLexBotOutput, error)
 	DisassociateLexBotWithContext(aws.Context, *connect.DisassociateLexBotInput, ...request.Option) (*connect.DisassociateLexBotOutput, error)
 	DisassociateLexBotRequest(*connect.DisassociateLexBotInput) (*request.Request, *connect.DisassociateLexBotOutput)
+
+	DisassociatePhoneNumberContactFlow(*connect.DisassociatePhoneNumberContactFlowInput) (*connect.DisassociatePhoneNumberContactFlowOutput, error)
+	DisassociatePhoneNumberContactFlowWithContext(aws.Context, *connect.DisassociatePhoneNumberContactFlowInput, ...request.Option) (*connect.DisassociatePhoneNumberContactFlowOutput, error)
+	DisassociatePhoneNumberContactFlowRequest(*connect.DisassociatePhoneNumberContactFlowInput) (*request.Request, *connect.DisassociatePhoneNumberContactFlowOutput)
 
 	DisassociateQueueQuickConnects(*connect.DisassociateQueueQuickConnectsInput) (*connect.DisassociateQueueQuickConnectsOutput, error)
 	DisassociateQueueQuickConnectsWithContext(aws.Context, *connect.DisassociateQueueQuickConnectsInput, ...request.Option) (*connect.DisassociateQueueQuickConnectsOutput, error)
@@ -255,6 +327,13 @@ type ConnectAPI interface {
 	GetCurrentMetricDataPages(*connect.GetCurrentMetricDataInput, func(*connect.GetCurrentMetricDataOutput, bool) bool) error
 	GetCurrentMetricDataPagesWithContext(aws.Context, *connect.GetCurrentMetricDataInput, func(*connect.GetCurrentMetricDataOutput, bool) bool, ...request.Option) error
 
+	GetCurrentUserData(*connect.GetCurrentUserDataInput) (*connect.GetCurrentUserDataOutput, error)
+	GetCurrentUserDataWithContext(aws.Context, *connect.GetCurrentUserDataInput, ...request.Option) (*connect.GetCurrentUserDataOutput, error)
+	GetCurrentUserDataRequest(*connect.GetCurrentUserDataInput) (*request.Request, *connect.GetCurrentUserDataOutput)
+
+	GetCurrentUserDataPages(*connect.GetCurrentUserDataInput, func(*connect.GetCurrentUserDataOutput, bool) bool) error
+	GetCurrentUserDataPagesWithContext(aws.Context, *connect.GetCurrentUserDataInput, func(*connect.GetCurrentUserDataOutput, bool) bool, ...request.Option) error
+
 	GetFederationToken(*connect.GetFederationTokenInput) (*connect.GetFederationTokenOutput, error)
 	GetFederationTokenWithContext(aws.Context, *connect.GetFederationTokenInput, ...request.Option) (*connect.GetFederationTokenOutput, error)
 	GetFederationTokenRequest(*connect.GetFederationTokenInput) (*request.Request, *connect.GetFederationTokenOutput)
@@ -265,6 +344,10 @@ type ConnectAPI interface {
 
 	GetMetricDataPages(*connect.GetMetricDataInput, func(*connect.GetMetricDataOutput, bool) bool) error
 	GetMetricDataPagesWithContext(aws.Context, *connect.GetMetricDataInput, func(*connect.GetMetricDataOutput, bool) bool, ...request.Option) error
+
+	GetTaskTemplate(*connect.GetTaskTemplateInput) (*connect.GetTaskTemplateOutput, error)
+	GetTaskTemplateWithContext(aws.Context, *connect.GetTaskTemplateInput, ...request.Option) (*connect.GetTaskTemplateOutput, error)
+	GetTaskTemplateRequest(*connect.GetTaskTemplateInput) (*request.Request, *connect.GetTaskTemplateOutput)
 
 	ListAgentStatuses(*connect.ListAgentStatusesInput) (*connect.ListAgentStatusesOutput, error)
 	ListAgentStatusesWithContext(aws.Context, *connect.ListAgentStatusesInput, ...request.Option) (*connect.ListAgentStatusesOutput, error)
@@ -287,12 +370,33 @@ type ConnectAPI interface {
 	ListBotsPages(*connect.ListBotsInput, func(*connect.ListBotsOutput, bool) bool) error
 	ListBotsPagesWithContext(aws.Context, *connect.ListBotsInput, func(*connect.ListBotsOutput, bool) bool, ...request.Option) error
 
+	ListContactFlowModules(*connect.ListContactFlowModulesInput) (*connect.ListContactFlowModulesOutput, error)
+	ListContactFlowModulesWithContext(aws.Context, *connect.ListContactFlowModulesInput, ...request.Option) (*connect.ListContactFlowModulesOutput, error)
+	ListContactFlowModulesRequest(*connect.ListContactFlowModulesInput) (*request.Request, *connect.ListContactFlowModulesOutput)
+
+	ListContactFlowModulesPages(*connect.ListContactFlowModulesInput, func(*connect.ListContactFlowModulesOutput, bool) bool) error
+	ListContactFlowModulesPagesWithContext(aws.Context, *connect.ListContactFlowModulesInput, func(*connect.ListContactFlowModulesOutput, bool) bool, ...request.Option) error
+
 	ListContactFlows(*connect.ListContactFlowsInput) (*connect.ListContactFlowsOutput, error)
 	ListContactFlowsWithContext(aws.Context, *connect.ListContactFlowsInput, ...request.Option) (*connect.ListContactFlowsOutput, error)
 	ListContactFlowsRequest(*connect.ListContactFlowsInput) (*request.Request, *connect.ListContactFlowsOutput)
 
 	ListContactFlowsPages(*connect.ListContactFlowsInput, func(*connect.ListContactFlowsOutput, bool) bool) error
 	ListContactFlowsPagesWithContext(aws.Context, *connect.ListContactFlowsInput, func(*connect.ListContactFlowsOutput, bool) bool, ...request.Option) error
+
+	ListContactReferences(*connect.ListContactReferencesInput) (*connect.ListContactReferencesOutput, error)
+	ListContactReferencesWithContext(aws.Context, *connect.ListContactReferencesInput, ...request.Option) (*connect.ListContactReferencesOutput, error)
+	ListContactReferencesRequest(*connect.ListContactReferencesInput) (*request.Request, *connect.ListContactReferencesOutput)
+
+	ListContactReferencesPages(*connect.ListContactReferencesInput, func(*connect.ListContactReferencesOutput, bool) bool) error
+	ListContactReferencesPagesWithContext(aws.Context, *connect.ListContactReferencesInput, func(*connect.ListContactReferencesOutput, bool) bool, ...request.Option) error
+
+	ListDefaultVocabularies(*connect.ListDefaultVocabulariesInput) (*connect.ListDefaultVocabulariesOutput, error)
+	ListDefaultVocabulariesWithContext(aws.Context, *connect.ListDefaultVocabulariesInput, ...request.Option) (*connect.ListDefaultVocabulariesOutput, error)
+	ListDefaultVocabulariesRequest(*connect.ListDefaultVocabulariesInput) (*request.Request, *connect.ListDefaultVocabulariesOutput)
+
+	ListDefaultVocabulariesPages(*connect.ListDefaultVocabulariesInput, func(*connect.ListDefaultVocabulariesOutput, bool) bool) error
+	ListDefaultVocabulariesPagesWithContext(aws.Context, *connect.ListDefaultVocabulariesInput, func(*connect.ListDefaultVocabulariesOutput, bool) bool, ...request.Option) error
 
 	ListHoursOfOperations(*connect.ListHoursOfOperationsInput) (*connect.ListHoursOfOperationsOutput, error)
 	ListHoursOfOperationsWithContext(aws.Context, *connect.ListHoursOfOperationsInput, ...request.Option) (*connect.ListHoursOfOperationsOutput, error)
@@ -350,6 +454,13 @@ type ConnectAPI interface {
 	ListPhoneNumbersPages(*connect.ListPhoneNumbersInput, func(*connect.ListPhoneNumbersOutput, bool) bool) error
 	ListPhoneNumbersPagesWithContext(aws.Context, *connect.ListPhoneNumbersInput, func(*connect.ListPhoneNumbersOutput, bool) bool, ...request.Option) error
 
+	ListPhoneNumbersV2(*connect.ListPhoneNumbersV2Input) (*connect.ListPhoneNumbersV2Output, error)
+	ListPhoneNumbersV2WithContext(aws.Context, *connect.ListPhoneNumbersV2Input, ...request.Option) (*connect.ListPhoneNumbersV2Output, error)
+	ListPhoneNumbersV2Request(*connect.ListPhoneNumbersV2Input) (*request.Request, *connect.ListPhoneNumbersV2Output)
+
+	ListPhoneNumbersV2Pages(*connect.ListPhoneNumbersV2Input, func(*connect.ListPhoneNumbersV2Output, bool) bool) error
+	ListPhoneNumbersV2PagesWithContext(aws.Context, *connect.ListPhoneNumbersV2Input, func(*connect.ListPhoneNumbersV2Output, bool) bool, ...request.Option) error
+
 	ListPrompts(*connect.ListPromptsInput) (*connect.ListPromptsOutput, error)
 	ListPromptsWithContext(aws.Context, *connect.ListPromptsInput, ...request.Option) (*connect.ListPromptsOutput, error)
 	ListPromptsRequest(*connect.ListPromptsInput) (*request.Request, *connect.ListPromptsOutput)
@@ -399,6 +510,13 @@ type ConnectAPI interface {
 	ListSecurityKeysPages(*connect.ListSecurityKeysInput, func(*connect.ListSecurityKeysOutput, bool) bool) error
 	ListSecurityKeysPagesWithContext(aws.Context, *connect.ListSecurityKeysInput, func(*connect.ListSecurityKeysOutput, bool) bool, ...request.Option) error
 
+	ListSecurityProfilePermissions(*connect.ListSecurityProfilePermissionsInput) (*connect.ListSecurityProfilePermissionsOutput, error)
+	ListSecurityProfilePermissionsWithContext(aws.Context, *connect.ListSecurityProfilePermissionsInput, ...request.Option) (*connect.ListSecurityProfilePermissionsOutput, error)
+	ListSecurityProfilePermissionsRequest(*connect.ListSecurityProfilePermissionsInput) (*request.Request, *connect.ListSecurityProfilePermissionsOutput)
+
+	ListSecurityProfilePermissionsPages(*connect.ListSecurityProfilePermissionsInput, func(*connect.ListSecurityProfilePermissionsOutput, bool) bool) error
+	ListSecurityProfilePermissionsPagesWithContext(aws.Context, *connect.ListSecurityProfilePermissionsInput, func(*connect.ListSecurityProfilePermissionsOutput, bool) bool, ...request.Option) error
+
 	ListSecurityProfiles(*connect.ListSecurityProfilesInput) (*connect.ListSecurityProfilesOutput, error)
 	ListSecurityProfilesWithContext(aws.Context, *connect.ListSecurityProfilesInput, ...request.Option) (*connect.ListSecurityProfilesOutput, error)
 	ListSecurityProfilesRequest(*connect.ListSecurityProfilesInput) (*request.Request, *connect.ListSecurityProfilesOutput)
@@ -409,6 +527,13 @@ type ConnectAPI interface {
 	ListTagsForResource(*connect.ListTagsForResourceInput) (*connect.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *connect.ListTagsForResourceInput, ...request.Option) (*connect.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*connect.ListTagsForResourceInput) (*request.Request, *connect.ListTagsForResourceOutput)
+
+	ListTaskTemplates(*connect.ListTaskTemplatesInput) (*connect.ListTaskTemplatesOutput, error)
+	ListTaskTemplatesWithContext(aws.Context, *connect.ListTaskTemplatesInput, ...request.Option) (*connect.ListTaskTemplatesOutput, error)
+	ListTaskTemplatesRequest(*connect.ListTaskTemplatesInput) (*request.Request, *connect.ListTaskTemplatesOutput)
+
+	ListTaskTemplatesPages(*connect.ListTaskTemplatesInput, func(*connect.ListTaskTemplatesOutput, bool) bool) error
+	ListTaskTemplatesPagesWithContext(aws.Context, *connect.ListTaskTemplatesInput, func(*connect.ListTaskTemplatesOutput, bool) bool, ...request.Option) error
 
 	ListUseCases(*connect.ListUseCasesInput) (*connect.ListUseCasesOutput, error)
 	ListUseCasesWithContext(aws.Context, *connect.ListUseCasesInput, ...request.Option) (*connect.ListUseCasesOutput, error)
@@ -431,9 +556,38 @@ type ConnectAPI interface {
 	ListUsersPages(*connect.ListUsersInput, func(*connect.ListUsersOutput, bool) bool) error
 	ListUsersPagesWithContext(aws.Context, *connect.ListUsersInput, func(*connect.ListUsersOutput, bool) bool, ...request.Option) error
 
+	PutUserStatus(*connect.PutUserStatusInput) (*connect.PutUserStatusOutput, error)
+	PutUserStatusWithContext(aws.Context, *connect.PutUserStatusInput, ...request.Option) (*connect.PutUserStatusOutput, error)
+	PutUserStatusRequest(*connect.PutUserStatusInput) (*request.Request, *connect.PutUserStatusOutput)
+
+	ReleasePhoneNumber(*connect.ReleasePhoneNumberInput) (*connect.ReleasePhoneNumberOutput, error)
+	ReleasePhoneNumberWithContext(aws.Context, *connect.ReleasePhoneNumberInput, ...request.Option) (*connect.ReleasePhoneNumberOutput, error)
+	ReleasePhoneNumberRequest(*connect.ReleasePhoneNumberInput) (*request.Request, *connect.ReleasePhoneNumberOutput)
+
 	ResumeContactRecording(*connect.ResumeContactRecordingInput) (*connect.ResumeContactRecordingOutput, error)
 	ResumeContactRecordingWithContext(aws.Context, *connect.ResumeContactRecordingInput, ...request.Option) (*connect.ResumeContactRecordingOutput, error)
 	ResumeContactRecordingRequest(*connect.ResumeContactRecordingInput) (*request.Request, *connect.ResumeContactRecordingOutput)
+
+	SearchAvailablePhoneNumbers(*connect.SearchAvailablePhoneNumbersInput) (*connect.SearchAvailablePhoneNumbersOutput, error)
+	SearchAvailablePhoneNumbersWithContext(aws.Context, *connect.SearchAvailablePhoneNumbersInput, ...request.Option) (*connect.SearchAvailablePhoneNumbersOutput, error)
+	SearchAvailablePhoneNumbersRequest(*connect.SearchAvailablePhoneNumbersInput) (*request.Request, *connect.SearchAvailablePhoneNumbersOutput)
+
+	SearchAvailablePhoneNumbersPages(*connect.SearchAvailablePhoneNumbersInput, func(*connect.SearchAvailablePhoneNumbersOutput, bool) bool) error
+	SearchAvailablePhoneNumbersPagesWithContext(aws.Context, *connect.SearchAvailablePhoneNumbersInput, func(*connect.SearchAvailablePhoneNumbersOutput, bool) bool, ...request.Option) error
+
+	SearchUsers(*connect.SearchUsersInput) (*connect.SearchUsersOutput, error)
+	SearchUsersWithContext(aws.Context, *connect.SearchUsersInput, ...request.Option) (*connect.SearchUsersOutput, error)
+	SearchUsersRequest(*connect.SearchUsersInput) (*request.Request, *connect.SearchUsersOutput)
+
+	SearchUsersPages(*connect.SearchUsersInput, func(*connect.SearchUsersOutput, bool) bool) error
+	SearchUsersPagesWithContext(aws.Context, *connect.SearchUsersInput, func(*connect.SearchUsersOutput, bool) bool, ...request.Option) error
+
+	SearchVocabularies(*connect.SearchVocabulariesInput) (*connect.SearchVocabulariesOutput, error)
+	SearchVocabulariesWithContext(aws.Context, *connect.SearchVocabulariesInput, ...request.Option) (*connect.SearchVocabulariesOutput, error)
+	SearchVocabulariesRequest(*connect.SearchVocabulariesInput) (*request.Request, *connect.SearchVocabulariesOutput)
+
+	SearchVocabulariesPages(*connect.SearchVocabulariesInput, func(*connect.SearchVocabulariesOutput, bool) bool) error
+	SearchVocabulariesPagesWithContext(aws.Context, *connect.SearchVocabulariesInput, func(*connect.SearchVocabulariesOutput, bool) bool, ...request.Option) error
 
 	StartChatContact(*connect.StartChatContactInput) (*connect.StartChatContactOutput, error)
 	StartChatContactWithContext(aws.Context, *connect.StartChatContactInput, ...request.Option) (*connect.StartChatContactOutput, error)
@@ -442,6 +596,10 @@ type ConnectAPI interface {
 	StartContactRecording(*connect.StartContactRecordingInput) (*connect.StartContactRecordingOutput, error)
 	StartContactRecordingWithContext(aws.Context, *connect.StartContactRecordingInput, ...request.Option) (*connect.StartContactRecordingOutput, error)
 	StartContactRecordingRequest(*connect.StartContactRecordingInput) (*request.Request, *connect.StartContactRecordingOutput)
+
+	StartContactStreaming(*connect.StartContactStreamingInput) (*connect.StartContactStreamingOutput, error)
+	StartContactStreamingWithContext(aws.Context, *connect.StartContactStreamingInput, ...request.Option) (*connect.StartContactStreamingOutput, error)
+	StartContactStreamingRequest(*connect.StartContactStreamingInput) (*request.Request, *connect.StartContactStreamingOutput)
 
 	StartOutboundVoiceContact(*connect.StartOutboundVoiceContactInput) (*connect.StartOutboundVoiceContactOutput, error)
 	StartOutboundVoiceContactWithContext(aws.Context, *connect.StartOutboundVoiceContactInput, ...request.Option) (*connect.StartOutboundVoiceContactOutput, error)
@@ -459,6 +617,10 @@ type ConnectAPI interface {
 	StopContactRecordingWithContext(aws.Context, *connect.StopContactRecordingInput, ...request.Option) (*connect.StopContactRecordingOutput, error)
 	StopContactRecordingRequest(*connect.StopContactRecordingInput) (*request.Request, *connect.StopContactRecordingOutput)
 
+	StopContactStreaming(*connect.StopContactStreamingInput) (*connect.StopContactStreamingOutput, error)
+	StopContactStreamingWithContext(aws.Context, *connect.StopContactStreamingInput, ...request.Option) (*connect.StopContactStreamingOutput, error)
+	StopContactStreamingRequest(*connect.StopContactStreamingInput) (*request.Request, *connect.StopContactStreamingOutput)
+
 	SuspendContactRecording(*connect.SuspendContactRecordingInput) (*connect.SuspendContactRecordingOutput, error)
 	SuspendContactRecordingWithContext(aws.Context, *connect.SuspendContactRecordingInput, ...request.Option) (*connect.SuspendContactRecordingOutput, error)
 	SuspendContactRecordingRequest(*connect.SuspendContactRecordingInput) (*request.Request, *connect.SuspendContactRecordingOutput)
@@ -466,6 +628,10 @@ type ConnectAPI interface {
 	TagResource(*connect.TagResourceInput) (*connect.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *connect.TagResourceInput, ...request.Option) (*connect.TagResourceOutput, error)
 	TagResourceRequest(*connect.TagResourceInput) (*request.Request, *connect.TagResourceOutput)
+
+	TransferContact(*connect.TransferContactInput) (*connect.TransferContactOutput, error)
+	TransferContactWithContext(aws.Context, *connect.TransferContactInput, ...request.Option) (*connect.TransferContactOutput, error)
+	TransferContactRequest(*connect.TransferContactInput) (*request.Request, *connect.TransferContactOutput)
 
 	UntagResource(*connect.UntagResourceInput) (*connect.UntagResourceOutput, error)
 	UntagResourceWithContext(aws.Context, *connect.UntagResourceInput, ...request.Option) (*connect.UntagResourceOutput, error)
@@ -475,6 +641,10 @@ type ConnectAPI interface {
 	UpdateAgentStatusWithContext(aws.Context, *connect.UpdateAgentStatusInput, ...request.Option) (*connect.UpdateAgentStatusOutput, error)
 	UpdateAgentStatusRequest(*connect.UpdateAgentStatusInput) (*request.Request, *connect.UpdateAgentStatusOutput)
 
+	UpdateContact(*connect.UpdateContactInput) (*connect.UpdateContactOutput, error)
+	UpdateContactWithContext(aws.Context, *connect.UpdateContactInput, ...request.Option) (*connect.UpdateContactOutput, error)
+	UpdateContactRequest(*connect.UpdateContactInput) (*request.Request, *connect.UpdateContactOutput)
+
 	UpdateContactAttributes(*connect.UpdateContactAttributesInput) (*connect.UpdateContactAttributesOutput, error)
 	UpdateContactAttributesWithContext(aws.Context, *connect.UpdateContactAttributesInput, ...request.Option) (*connect.UpdateContactAttributesOutput, error)
 	UpdateContactAttributesRequest(*connect.UpdateContactAttributesInput) (*request.Request, *connect.UpdateContactAttributesOutput)
@@ -483,9 +653,25 @@ type ConnectAPI interface {
 	UpdateContactFlowContentWithContext(aws.Context, *connect.UpdateContactFlowContentInput, ...request.Option) (*connect.UpdateContactFlowContentOutput, error)
 	UpdateContactFlowContentRequest(*connect.UpdateContactFlowContentInput) (*request.Request, *connect.UpdateContactFlowContentOutput)
 
+	UpdateContactFlowMetadata(*connect.UpdateContactFlowMetadataInput) (*connect.UpdateContactFlowMetadataOutput, error)
+	UpdateContactFlowMetadataWithContext(aws.Context, *connect.UpdateContactFlowMetadataInput, ...request.Option) (*connect.UpdateContactFlowMetadataOutput, error)
+	UpdateContactFlowMetadataRequest(*connect.UpdateContactFlowMetadataInput) (*request.Request, *connect.UpdateContactFlowMetadataOutput)
+
+	UpdateContactFlowModuleContent(*connect.UpdateContactFlowModuleContentInput) (*connect.UpdateContactFlowModuleContentOutput, error)
+	UpdateContactFlowModuleContentWithContext(aws.Context, *connect.UpdateContactFlowModuleContentInput, ...request.Option) (*connect.UpdateContactFlowModuleContentOutput, error)
+	UpdateContactFlowModuleContentRequest(*connect.UpdateContactFlowModuleContentInput) (*request.Request, *connect.UpdateContactFlowModuleContentOutput)
+
+	UpdateContactFlowModuleMetadata(*connect.UpdateContactFlowModuleMetadataInput) (*connect.UpdateContactFlowModuleMetadataOutput, error)
+	UpdateContactFlowModuleMetadataWithContext(aws.Context, *connect.UpdateContactFlowModuleMetadataInput, ...request.Option) (*connect.UpdateContactFlowModuleMetadataOutput, error)
+	UpdateContactFlowModuleMetadataRequest(*connect.UpdateContactFlowModuleMetadataInput) (*request.Request, *connect.UpdateContactFlowModuleMetadataOutput)
+
 	UpdateContactFlowName(*connect.UpdateContactFlowNameInput) (*connect.UpdateContactFlowNameOutput, error)
 	UpdateContactFlowNameWithContext(aws.Context, *connect.UpdateContactFlowNameInput, ...request.Option) (*connect.UpdateContactFlowNameOutput, error)
 	UpdateContactFlowNameRequest(*connect.UpdateContactFlowNameInput) (*request.Request, *connect.UpdateContactFlowNameOutput)
+
+	UpdateContactSchedule(*connect.UpdateContactScheduleInput) (*connect.UpdateContactScheduleOutput, error)
+	UpdateContactScheduleWithContext(aws.Context, *connect.UpdateContactScheduleInput, ...request.Option) (*connect.UpdateContactScheduleOutput, error)
+	UpdateContactScheduleRequest(*connect.UpdateContactScheduleInput) (*request.Request, *connect.UpdateContactScheduleOutput)
 
 	UpdateHoursOfOperation(*connect.UpdateHoursOfOperationInput) (*connect.UpdateHoursOfOperationOutput, error)
 	UpdateHoursOfOperationWithContext(aws.Context, *connect.UpdateHoursOfOperationInput, ...request.Option) (*connect.UpdateHoursOfOperationOutput, error)
@@ -498,6 +684,10 @@ type ConnectAPI interface {
 	UpdateInstanceStorageConfig(*connect.UpdateInstanceStorageConfigInput) (*connect.UpdateInstanceStorageConfigOutput, error)
 	UpdateInstanceStorageConfigWithContext(aws.Context, *connect.UpdateInstanceStorageConfigInput, ...request.Option) (*connect.UpdateInstanceStorageConfigOutput, error)
 	UpdateInstanceStorageConfigRequest(*connect.UpdateInstanceStorageConfigInput) (*request.Request, *connect.UpdateInstanceStorageConfigOutput)
+
+	UpdatePhoneNumber(*connect.UpdatePhoneNumberInput) (*connect.UpdatePhoneNumberOutput, error)
+	UpdatePhoneNumberWithContext(aws.Context, *connect.UpdatePhoneNumberInput, ...request.Option) (*connect.UpdatePhoneNumberOutput, error)
+	UpdatePhoneNumberRequest(*connect.UpdatePhoneNumberInput) (*request.Request, *connect.UpdatePhoneNumberOutput)
 
 	UpdateQueueHoursOfOperation(*connect.UpdateQueueHoursOfOperationInput) (*connect.UpdateQueueHoursOfOperationOutput, error)
 	UpdateQueueHoursOfOperationWithContext(aws.Context, *connect.UpdateQueueHoursOfOperationInput, ...request.Option) (*connect.UpdateQueueHoursOfOperationOutput, error)
@@ -542,6 +732,14 @@ type ConnectAPI interface {
 	UpdateRoutingProfileQueues(*connect.UpdateRoutingProfileQueuesInput) (*connect.UpdateRoutingProfileQueuesOutput, error)
 	UpdateRoutingProfileQueuesWithContext(aws.Context, *connect.UpdateRoutingProfileQueuesInput, ...request.Option) (*connect.UpdateRoutingProfileQueuesOutput, error)
 	UpdateRoutingProfileQueuesRequest(*connect.UpdateRoutingProfileQueuesInput) (*request.Request, *connect.UpdateRoutingProfileQueuesOutput)
+
+	UpdateSecurityProfile(*connect.UpdateSecurityProfileInput) (*connect.UpdateSecurityProfileOutput, error)
+	UpdateSecurityProfileWithContext(aws.Context, *connect.UpdateSecurityProfileInput, ...request.Option) (*connect.UpdateSecurityProfileOutput, error)
+	UpdateSecurityProfileRequest(*connect.UpdateSecurityProfileInput) (*request.Request, *connect.UpdateSecurityProfileOutput)
+
+	UpdateTaskTemplate(*connect.UpdateTaskTemplateInput) (*connect.UpdateTaskTemplateOutput, error)
+	UpdateTaskTemplateWithContext(aws.Context, *connect.UpdateTaskTemplateInput, ...request.Option) (*connect.UpdateTaskTemplateOutput, error)
+	UpdateTaskTemplateRequest(*connect.UpdateTaskTemplateInput) (*request.Request, *connect.UpdateTaskTemplateOutput)
 
 	UpdateUserHierarchy(*connect.UpdateUserHierarchyInput) (*connect.UpdateUserHierarchyOutput, error)
 	UpdateUserHierarchyWithContext(aws.Context, *connect.UpdateUserHierarchyInput, ...request.Option) (*connect.UpdateUserHierarchyOutput, error)

@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/paramvalidator/utils"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -60,7 +61,7 @@ func TestAllowedValueParameterTestSuite(t *testing.T) {
 }
 
 func (suite *allowedValueParameterTestSuite) SetupTest() {
-	suite.log = log.NewMockLog()
+	suite.log = logmocks.NewMockLog()
 	suite.testCaseList = make([]*testCases, 0)
 	validAllowedValues := &testCases{
 		allowedVal: []string{"testValue1", "testValue2", "testValue3"},
@@ -151,7 +152,7 @@ func (suite *allowedValueParameterTestSuite) SetupTest() {
 }
 
 func (suite *allowedValueParameterTestSuite) TestValidate_MultipleTestCases() {
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 	for _, testCase := range suite.testCaseList {
 		for _, input := range testCase.testInput {
 			paramValue := input
@@ -188,7 +189,7 @@ func (suite *allowedValueParameterTestSuite) TestCheckValuesInAllowed_Success_Va
 }
 
 func (suite *allowedValueParameterTestSuite) TestVerifyAllowedValuesAfterMarshall_Success_ValidInputs() {
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 	input := make(map[string]map[string]struct{})
 	input["test"] = make(map[string]struct{})
 	err := suite.allowedValValidator.verifyAllowedValuesAfterMarshall(log, input, []string{"{\"test\":{}}"})
@@ -196,7 +197,7 @@ func (suite *allowedValueParameterTestSuite) TestVerifyAllowedValuesAfterMarshal
 }
 
 func (suite *allowedValueParameterTestSuite) TestVerifyAllowedValuesAfterMarshall_Failure_InValidInputs() {
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 	input := make(map[string]map[string]struct{})
 	input["test1"] = make(map[string]struct{})
 	err := suite.allowedValValidator.verifyAllowedValuesAfterMarshall(log, input, []string{"{\"testInvalid\":{}}"})

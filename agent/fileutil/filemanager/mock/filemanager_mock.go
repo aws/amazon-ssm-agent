@@ -25,57 +25,57 @@ type FileSystemMock struct {
 	mock.Mock
 }
 
-func (fileMock FileSystemMock) MakeDirs(destinationDir string) (err error) {
+func (fileMock *FileSystemMock) MakeDirs(destinationDir string) (err error) {
 	args := fileMock.Called(destinationDir)
 	return args.Error(0)
 }
 
-func (fileMock FileSystemMock) WriteFile(filename string, content string) error {
+func (fileMock *FileSystemMock) WriteFile(filename string, content string) error {
 	args := fileMock.Called(filename, content)
 	return args.Error(0)
 }
 
-func (fileMock FileSystemMock) ReadFile(filename string) (string, error) {
+func (fileMock *FileSystemMock) ReadFile(filename string) (string, error) {
 	args := fileMock.Called(filename)
 	return args.Get(0).(string), args.Error(1)
 }
 
-func (fileMock FileSystemMock) MoveAndRenameFile(sourcePath, sourceName, destPath, destName string) (result bool, err error) {
+func (fileMock *FileSystemMock) MoveAndRenameFile(sourcePath, sourceName, destPath, destName string) (result bool, err error) {
 	args := fileMock.Called(sourcePath, sourceName, destPath, destName)
 	return args.Bool(0), args.Error(1)
 }
 
-func (fileMock FileSystemMock) DeleteDirectory(fileName string) (err error) {
+func (fileMock *FileSystemMock) DeleteDirectory(fileName string) (err error) {
 	args := fileMock.Called(fileName)
 	return args.Error(0)
 }
 
-func (fileMock FileSystemMock) DeleteFile(fileName string) (err error) {
+func (fileMock *FileSystemMock) DeleteFile(fileName string) (err error) {
 	args := fileMock.Called(fileName)
 	return args.Error(0)
 }
 
-func (fileMock FileSystemMock) Exists(root string) bool {
+func (fileMock *FileSystemMock) Exists(root string) bool {
 	args := fileMock.Called(root)
 	return args.Bool(0)
 }
 
-func (fileMock FileSystemMock) IsDirectory(root string) bool {
+func (fileMock *FileSystemMock) IsDirectory(root string) bool {
 	args := fileMock.Called(root)
 	return args.Bool(0)
 }
 
-func (fileMock FileSystemMock) AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error) {
+func (fileMock *FileSystemMock) AppendToFile(fileDirectory string, filename string, content string) (filePath string, err error) {
 	args := fileMock.Called(fileDirectory, filename, content)
 	return args.Get(0).(string), args.Error(1)
 }
 
-func (fileMock FileSystemMock) CreateFile(name string) (file *os.File, err error) {
+func (fileMock *FileSystemMock) CreateFile(name string) (file *os.File, err error) {
 	args := fileMock.Called(name)
 	return args.Get(0).(*os.File), args.Error(1)
 }
 
-func (fileMock FileSystemMock) CreateTempDir(dir, prefix string) (name string, err error) {
+func (fileMock *FileSystemMock) CreateTempDir(dir, prefix string) (name string, err error) {
 	args := fileMock.Called(dir, prefix)
 	return args.String(0), args.Error(1)
 }

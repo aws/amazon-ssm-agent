@@ -32,7 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -78,9 +78,9 @@ var killProcess = func(process *os.Process) error {
 
 // var createScript = pluginutil.CreateScriptFile
 
-//todo: honor cancel flag for Start
-//todo: honor cancel flag for Stop
-//todo: Start,Stop -> should return plugin.result or error as well -> so that caller can report the results/errors accordingly.
+// todo: honor cancel flag for Start
+// todo: honor cancel flag for Stop
+// todo: Start,Stop -> should return plugin.result or error as well -> so that caller can report the results/errors accordingly.
 // NewPlugin returns a new instance of Cloudwatch plugin
 func NewPlugin(context context.T, pluginConfig iohandler.PluginConfig) (*Plugin, error) {
 

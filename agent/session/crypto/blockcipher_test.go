@@ -19,6 +19,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/session/crypto/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -39,7 +40,7 @@ type BlockCipherTestSuite struct {
 }
 
 func (suite *BlockCipherTestSuite) SetupTest() {
-	suite.mockLog = log.NewMockLog()
+	suite.mockLog = logmocks.NewMockLog()
 	suite.mockKMSService = mocks.IKMSService{}
 
 	suite.kmsKeyId = "kmsKeyId"
@@ -52,7 +53,7 @@ func (suite *BlockCipherTestSuite) SetupTest() {
 	suite.instanceId = "some-instance-id"
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestBlockCipherTestSuite(t *testing.T) {
 	suite.Run(t, new(BlockCipherTestSuite))
 }

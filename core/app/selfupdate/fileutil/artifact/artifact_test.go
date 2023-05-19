@@ -18,8 +18,8 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -54,7 +54,7 @@ func (suite *ArtifactTestSuite) TestSha256HashValue() {
 	assert.NotEqual(suite.T(), len(content), 0)
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSelfUpdateTestSuite(t *testing.T) {
 	suite.Run(t, new(ArtifactTestSuite))
 }

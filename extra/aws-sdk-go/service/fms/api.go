@@ -120,6 +120,103 @@ func (c *FMS) AssociateAdminAccountWithContext(ctx aws.Context, input *Associate
 	return out, req.Send()
 }
 
+const opAssociateThirdPartyFirewall = "AssociateThirdPartyFirewall"
+
+// AssociateThirdPartyFirewallRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateThirdPartyFirewall operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateThirdPartyFirewall for more information on using the AssociateThirdPartyFirewall
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateThirdPartyFirewallRequest method.
+//    req, resp := client.AssociateThirdPartyFirewallRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/AssociateThirdPartyFirewall
+func (c *FMS) AssociateThirdPartyFirewallRequest(input *AssociateThirdPartyFirewallInput) (req *request.Request, output *AssociateThirdPartyFirewallOutput) {
+	op := &request.Operation{
+		Name:       opAssociateThirdPartyFirewall,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociateThirdPartyFirewallInput{}
+	}
+
+	output = &AssociateThirdPartyFirewallOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AssociateThirdPartyFirewall API operation for Firewall Management Service.
+//
+// Sets the Firewall Manager policy administrator as a tenant administrator
+// of a third-party firewall service. A tenant is an instance of the third-party
+// firewall service that's associated with your Amazon Web Services customer
+// account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Firewall Management Service's
+// API operation AssociateThirdPartyFirewall for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidOperationException
+//   The operation failed because there was nothing to do or the operation wasn't
+//   possible. For example, you might have submitted an AssociateAdminAccount
+//   request for an account ID that was already set as the Firewall Manager administrator.
+//   Or you might have tried to access a Region that's disabled by default, and
+//   that you need to enable for the Firewall Manager administrator account and
+//   for Organizations before you can access it.
+//
+//   * InvalidInputException
+//   The parameters of the request were invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalErrorException
+//   The operation failed because of a system problem, even though the request
+//   was valid. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/AssociateThirdPartyFirewall
+func (c *FMS) AssociateThirdPartyFirewall(input *AssociateThirdPartyFirewallInput) (*AssociateThirdPartyFirewallOutput, error) {
+	req, out := c.AssociateThirdPartyFirewallRequest(input)
+	return out, req.Send()
+}
+
+// AssociateThirdPartyFirewallWithContext is the same as AssociateThirdPartyFirewall with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateThirdPartyFirewall for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FMS) AssociateThirdPartyFirewallWithContext(ctx aws.Context, input *AssociateThirdPartyFirewallInput, opts ...request.Option) (*AssociateThirdPartyFirewallOutput, error) {
+	req, out := c.AssociateThirdPartyFirewallRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteAppsList = "DeleteAppsList"
 
 // DeleteAppsListRequest generates a "aws/request.Request" representing the
@@ -588,6 +685,103 @@ func (c *FMS) DisassociateAdminAccount(input *DisassociateAdminAccountInput) (*D
 // for more information on using Contexts.
 func (c *FMS) DisassociateAdminAccountWithContext(ctx aws.Context, input *DisassociateAdminAccountInput, opts ...request.Option) (*DisassociateAdminAccountOutput, error) {
 	req, out := c.DisassociateAdminAccountRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDisassociateThirdPartyFirewall = "DisassociateThirdPartyFirewall"
+
+// DisassociateThirdPartyFirewallRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateThirdPartyFirewall operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateThirdPartyFirewall for more information on using the DisassociateThirdPartyFirewall
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateThirdPartyFirewallRequest method.
+//    req, resp := client.DisassociateThirdPartyFirewallRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DisassociateThirdPartyFirewall
+func (c *FMS) DisassociateThirdPartyFirewallRequest(input *DisassociateThirdPartyFirewallInput) (req *request.Request, output *DisassociateThirdPartyFirewallOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateThirdPartyFirewall,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociateThirdPartyFirewallInput{}
+	}
+
+	output = &DisassociateThirdPartyFirewallOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisassociateThirdPartyFirewall API operation for Firewall Management Service.
+//
+// Disassociates a Firewall Manager policy administrator from a third-party
+// firewall tenant. When you call DisassociateThirdPartyFirewall, the third-party
+// firewall vendor deletes all of the firewalls that are associated with the
+// account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Firewall Management Service's
+// API operation DisassociateThirdPartyFirewall for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidOperationException
+//   The operation failed because there was nothing to do or the operation wasn't
+//   possible. For example, you might have submitted an AssociateAdminAccount
+//   request for an account ID that was already set as the Firewall Manager administrator.
+//   Or you might have tried to access a Region that's disabled by default, and
+//   that you need to enable for the Firewall Manager administrator account and
+//   for Organizations before you can access it.
+//
+//   * InvalidInputException
+//   The parameters of the request were invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalErrorException
+//   The operation failed because of a system problem, even though the request
+//   was valid. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DisassociateThirdPartyFirewall
+func (c *FMS) DisassociateThirdPartyFirewall(input *DisassociateThirdPartyFirewallInput) (*DisassociateThirdPartyFirewallOutput, error) {
+	req, out := c.DisassociateThirdPartyFirewallRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateThirdPartyFirewallWithContext is the same as DisassociateThirdPartyFirewall with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateThirdPartyFirewall for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FMS) DisassociateThirdPartyFirewallWithContext(ctx aws.Context, input *DisassociateThirdPartyFirewallInput, opts ...request.Option) (*DisassociateThirdPartyFirewallOutput, error) {
+	req, out := c.DisassociateThirdPartyFirewallRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1249,6 +1443,101 @@ func (c *FMS) GetProtocolsList(input *GetProtocolsListInput) (*GetProtocolsListO
 // for more information on using Contexts.
 func (c *FMS) GetProtocolsListWithContext(ctx aws.Context, input *GetProtocolsListInput, opts ...request.Option) (*GetProtocolsListOutput, error) {
 	req, out := c.GetProtocolsListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetThirdPartyFirewallAssociationStatus = "GetThirdPartyFirewallAssociationStatus"
+
+// GetThirdPartyFirewallAssociationStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetThirdPartyFirewallAssociationStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetThirdPartyFirewallAssociationStatus for more information on using the GetThirdPartyFirewallAssociationStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetThirdPartyFirewallAssociationStatusRequest method.
+//    req, resp := client.GetThirdPartyFirewallAssociationStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetThirdPartyFirewallAssociationStatus
+func (c *FMS) GetThirdPartyFirewallAssociationStatusRequest(input *GetThirdPartyFirewallAssociationStatusInput) (req *request.Request, output *GetThirdPartyFirewallAssociationStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetThirdPartyFirewallAssociationStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetThirdPartyFirewallAssociationStatusInput{}
+	}
+
+	output = &GetThirdPartyFirewallAssociationStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetThirdPartyFirewallAssociationStatus API operation for Firewall Management Service.
+//
+// The onboarding status of a Firewall Manager admin account to third-party
+// firewall vendor tenant.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Firewall Management Service's
+// API operation GetThirdPartyFirewallAssociationStatus for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidOperationException
+//   The operation failed because there was nothing to do or the operation wasn't
+//   possible. For example, you might have submitted an AssociateAdminAccount
+//   request for an account ID that was already set as the Firewall Manager administrator.
+//   Or you might have tried to access a Region that's disabled by default, and
+//   that you need to enable for the Firewall Manager administrator account and
+//   for Organizations before you can access it.
+//
+//   * InvalidInputException
+//   The parameters of the request were invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalErrorException
+//   The operation failed because of a system problem, even though the request
+//   was valid. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetThirdPartyFirewallAssociationStatus
+func (c *FMS) GetThirdPartyFirewallAssociationStatus(input *GetThirdPartyFirewallAssociationStatusInput) (*GetThirdPartyFirewallAssociationStatusOutput, error) {
+	req, out := c.GetThirdPartyFirewallAssociationStatusRequest(input)
+	return out, req.Send()
+}
+
+// GetThirdPartyFirewallAssociationStatusWithContext is the same as GetThirdPartyFirewallAssociationStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetThirdPartyFirewallAssociationStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FMS) GetThirdPartyFirewallAssociationStatusWithContext(ctx aws.Context, input *GetThirdPartyFirewallAssociationStatusInput, opts ...request.Option) (*GetThirdPartyFirewallAssociationStatusOutput, error) {
+	req, out := c.GetThirdPartyFirewallAssociationStatusRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2180,6 +2469,159 @@ func (c *FMS) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsFor
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opListThirdPartyFirewallFirewallPolicies = "ListThirdPartyFirewallFirewallPolicies"
+
+// ListThirdPartyFirewallFirewallPoliciesRequest generates a "aws/request.Request" representing the
+// client's request for the ListThirdPartyFirewallFirewallPolicies operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListThirdPartyFirewallFirewallPolicies for more information on using the ListThirdPartyFirewallFirewallPolicies
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListThirdPartyFirewallFirewallPoliciesRequest method.
+//    req, resp := client.ListThirdPartyFirewallFirewallPoliciesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListThirdPartyFirewallFirewallPolicies
+func (c *FMS) ListThirdPartyFirewallFirewallPoliciesRequest(input *ListThirdPartyFirewallFirewallPoliciesInput) (req *request.Request, output *ListThirdPartyFirewallFirewallPoliciesOutput) {
+	op := &request.Operation{
+		Name:       opListThirdPartyFirewallFirewallPolicies,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListThirdPartyFirewallFirewallPoliciesInput{}
+	}
+
+	output = &ListThirdPartyFirewallFirewallPoliciesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListThirdPartyFirewallFirewallPolicies API operation for Firewall Management Service.
+//
+// Retrieves a list of all of the third-party firewall policies that are associated
+// with the third-party firewall administrator's account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Firewall Management Service's
+// API operation ListThirdPartyFirewallFirewallPolicies for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidOperationException
+//   The operation failed because there was nothing to do or the operation wasn't
+//   possible. For example, you might have submitted an AssociateAdminAccount
+//   request for an account ID that was already set as the Firewall Manager administrator.
+//   Or you might have tried to access a Region that's disabled by default, and
+//   that you need to enable for the Firewall Manager administrator account and
+//   for Organizations before you can access it.
+//
+//   * InvalidInputException
+//   The parameters of the request were invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InternalErrorException
+//   The operation failed because of a system problem, even though the request
+//   was valid. Retry your request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListThirdPartyFirewallFirewallPolicies
+func (c *FMS) ListThirdPartyFirewallFirewallPolicies(input *ListThirdPartyFirewallFirewallPoliciesInput) (*ListThirdPartyFirewallFirewallPoliciesOutput, error) {
+	req, out := c.ListThirdPartyFirewallFirewallPoliciesRequest(input)
+	return out, req.Send()
+}
+
+// ListThirdPartyFirewallFirewallPoliciesWithContext is the same as ListThirdPartyFirewallFirewallPolicies with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListThirdPartyFirewallFirewallPolicies for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FMS) ListThirdPartyFirewallFirewallPoliciesWithContext(ctx aws.Context, input *ListThirdPartyFirewallFirewallPoliciesInput, opts ...request.Option) (*ListThirdPartyFirewallFirewallPoliciesOutput, error) {
+	req, out := c.ListThirdPartyFirewallFirewallPoliciesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListThirdPartyFirewallFirewallPoliciesPages iterates over the pages of a ListThirdPartyFirewallFirewallPolicies operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListThirdPartyFirewallFirewallPolicies method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListThirdPartyFirewallFirewallPolicies operation.
+//    pageNum := 0
+//    err := client.ListThirdPartyFirewallFirewallPoliciesPages(params,
+//        func(page *fms.ListThirdPartyFirewallFirewallPoliciesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *FMS) ListThirdPartyFirewallFirewallPoliciesPages(input *ListThirdPartyFirewallFirewallPoliciesInput, fn func(*ListThirdPartyFirewallFirewallPoliciesOutput, bool) bool) error {
+	return c.ListThirdPartyFirewallFirewallPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListThirdPartyFirewallFirewallPoliciesPagesWithContext same as ListThirdPartyFirewallFirewallPoliciesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *FMS) ListThirdPartyFirewallFirewallPoliciesPagesWithContext(ctx aws.Context, input *ListThirdPartyFirewallFirewallPoliciesInput, fn func(*ListThirdPartyFirewallFirewallPoliciesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListThirdPartyFirewallFirewallPoliciesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListThirdPartyFirewallFirewallPoliciesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListThirdPartyFirewallFirewallPoliciesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opPutAppsList = "PutAppsList"
@@ -3190,6 +3632,99 @@ func (s AssociateAdminAccountOutput) GoString() string {
 	return s.String()
 }
 
+type AssociateThirdPartyFirewallInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the third-party firewall vendor.
+	//
+	// ThirdPartyFirewall is a required field
+	ThirdPartyFirewall *string `type:"string" required:"true" enum:"ThirdPartyFirewall"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateThirdPartyFirewallInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateThirdPartyFirewallInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateThirdPartyFirewallInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateThirdPartyFirewallInput"}
+	if s.ThirdPartyFirewall == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThirdPartyFirewall"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetThirdPartyFirewall sets the ThirdPartyFirewall field's value.
+func (s *AssociateThirdPartyFirewallInput) SetThirdPartyFirewall(v string) *AssociateThirdPartyFirewallInput {
+	s.ThirdPartyFirewall = &v
+	return s
+}
+
+type AssociateThirdPartyFirewallOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current status for setting a Firewall Manager policy administrator's
+	// account as an administrator of the third-party firewall tenant.
+	//
+	//    * ONBOARDING - The Firewall Manager policy administrator is being designated
+	//    as a tenant administrator.
+	//
+	//    * ONBOARD_COMPLETE - The Firewall Manager policy administrator is designated
+	//    as a tenant administrator.
+	//
+	//    * OFFBOARDING - The Firewall Manager policy administrator is being removed
+	//    as a tenant administrator.
+	//
+	//    * OFFBOARD_COMPLETE - The Firewall Manager policy administrator has been
+	//    removed as a tenant administrator.
+	//
+	//    * NOT_EXIST - The Firewall Manager policy administrator doesn't exist
+	//    as a tenant administrator.
+	ThirdPartyFirewallStatus *string `type:"string" enum:"ThirdPartyFirewallAssociationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateThirdPartyFirewallOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateThirdPartyFirewallOutput) GoString() string {
+	return s.String()
+}
+
+// SetThirdPartyFirewallStatus sets the ThirdPartyFirewallStatus field's value.
+func (s *AssociateThirdPartyFirewallOutput) SetThirdPartyFirewallStatus(v string) *AssociateThirdPartyFirewallOutput {
+	s.ThirdPartyFirewallStatus = &v
+	return s
+}
+
 // Violation detail for an EC2 instance resource.
 type AwsEc2InstanceViolation struct {
 	_ struct{} `type:"structure"`
@@ -3338,6 +3873,9 @@ func (s *AwsVPCSecurityGroupViolation) SetViolationTargetDescription(v string) *
 type ComplianceViolator struct {
 	_ struct{} `type:"structure"`
 
+	// Metadata about the resource that doesn't comply with the policy scope.
+	Metadata map[string]*string `type:"map"`
+
 	// The resource ID.
 	ResourceId *string `min:"1" type:"string"`
 
@@ -3367,6 +3905,12 @@ func (s ComplianceViolator) String() string {
 // value will be replaced with "sensitive".
 func (s ComplianceViolator) GoString() string {
 	return s.String()
+}
+
+// SetMetadata sets the Metadata field's value.
+func (s *ComplianceViolator) SetMetadata(v map[string]*string) *ComplianceViolator {
+	s.Metadata = v
+	return s
 }
 
 // SetResourceId sets the ResourceId field's value.
@@ -3722,6 +4266,84 @@ func (s DisassociateAdminAccountOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DisassociateAdminAccountOutput) GoString() string {
 	return s.String()
+}
+
+type DisassociateThirdPartyFirewallInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the third-party firewall vendor.
+	//
+	// ThirdPartyFirewall is a required field
+	ThirdPartyFirewall *string `type:"string" required:"true" enum:"ThirdPartyFirewall"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateThirdPartyFirewallInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateThirdPartyFirewallInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateThirdPartyFirewallInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateThirdPartyFirewallInput"}
+	if s.ThirdPartyFirewall == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThirdPartyFirewall"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetThirdPartyFirewall sets the ThirdPartyFirewall field's value.
+func (s *DisassociateThirdPartyFirewallInput) SetThirdPartyFirewall(v string) *DisassociateThirdPartyFirewallInput {
+	s.ThirdPartyFirewall = &v
+	return s
+}
+
+type DisassociateThirdPartyFirewallOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current status for the disassociation of a Firewall Manager administrators
+	// account with a third-party firewall.
+	ThirdPartyFirewallStatus *string `type:"string" enum:"ThirdPartyFirewallAssociationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateThirdPartyFirewallOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateThirdPartyFirewallOutput) GoString() string {
+	return s.String()
+}
+
+// SetThirdPartyFirewallStatus sets the ThirdPartyFirewallStatus field's value.
+func (s *DisassociateThirdPartyFirewallOutput) SetThirdPartyFirewallStatus(v string) *DisassociateThirdPartyFirewallOutput {
+	s.ThirdPartyFirewallStatus = &v
+	return s
 }
 
 // A DNS Firewall rule group that Firewall Manager tried to associate with a
@@ -4491,6 +5113,181 @@ func (s *ExpectedRoute) SetRouteTableId(v string) *ExpectedRoute {
 	return s
 }
 
+// Contains information about the actions that you can take to remediate scope
+// violations caused by your policy's FirewallCreationConfig. FirewallCreationConfig
+// is an optional configuration that you can use to choose which Availability
+// Zones Firewall Manager creates Network Firewall endpoints in.
+type FMSPolicyUpdateFirewallCreationConfigAction struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the remedial action.
+	Description *string `type:"string"`
+
+	// A FirewallCreationConfig that you can copy into your current policy's SecurityServiceData
+	// (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_SecurityServicePolicyData.html)
+	// in order to remedy scope violations.
+	FirewallCreationConfig *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FMSPolicyUpdateFirewallCreationConfigAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FMSPolicyUpdateFirewallCreationConfigAction) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *FMSPolicyUpdateFirewallCreationConfigAction) SetDescription(v string) *FMSPolicyUpdateFirewallCreationConfigAction {
+	s.Description = &v
+	return s
+}
+
+// SetFirewallCreationConfig sets the FirewallCreationConfig field's value.
+func (s *FMSPolicyUpdateFirewallCreationConfigAction) SetFirewallCreationConfig(v string) *FMSPolicyUpdateFirewallCreationConfigAction {
+	s.FirewallCreationConfig = &v
+	return s
+}
+
+// Contains details about the firewall subnet that violates the policy scope.
+type FirewallSubnetIsOutOfScopeViolation struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the firewall subnet that violates the policy scope.
+	FirewallSubnetId *string `min:"1" type:"string"`
+
+	// The Availability Zone of the firewall subnet that violates the policy scope.
+	SubnetAvailabilityZone *string `type:"string"`
+
+	// The Availability Zone ID of the firewall subnet that violates the policy
+	// scope.
+	SubnetAvailabilityZoneId *string `type:"string"`
+
+	// The VPC endpoint ID of the firewall subnet that violates the policy scope.
+	VpcEndpointId *string `min:"1" type:"string"`
+
+	// The VPC ID of the firewall subnet that violates the policy scope.
+	VpcId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FirewallSubnetIsOutOfScopeViolation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FirewallSubnetIsOutOfScopeViolation) GoString() string {
+	return s.String()
+}
+
+// SetFirewallSubnetId sets the FirewallSubnetId field's value.
+func (s *FirewallSubnetIsOutOfScopeViolation) SetFirewallSubnetId(v string) *FirewallSubnetIsOutOfScopeViolation {
+	s.FirewallSubnetId = &v
+	return s
+}
+
+// SetSubnetAvailabilityZone sets the SubnetAvailabilityZone field's value.
+func (s *FirewallSubnetIsOutOfScopeViolation) SetSubnetAvailabilityZone(v string) *FirewallSubnetIsOutOfScopeViolation {
+	s.SubnetAvailabilityZone = &v
+	return s
+}
+
+// SetSubnetAvailabilityZoneId sets the SubnetAvailabilityZoneId field's value.
+func (s *FirewallSubnetIsOutOfScopeViolation) SetSubnetAvailabilityZoneId(v string) *FirewallSubnetIsOutOfScopeViolation {
+	s.SubnetAvailabilityZoneId = &v
+	return s
+}
+
+// SetVpcEndpointId sets the VpcEndpointId field's value.
+func (s *FirewallSubnetIsOutOfScopeViolation) SetVpcEndpointId(v string) *FirewallSubnetIsOutOfScopeViolation {
+	s.VpcEndpointId = &v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *FirewallSubnetIsOutOfScopeViolation) SetVpcId(v string) *FirewallSubnetIsOutOfScopeViolation {
+	s.VpcId = &v
+	return s
+}
+
+// The violation details for a firewall subnet's VPC endpoint that's deleted
+// or missing.
+type FirewallSubnetMissingVPCEndpointViolation struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the firewall that this VPC endpoint is associated with.
+	FirewallSubnetId *string `min:"1" type:"string"`
+
+	// The name of the Availability Zone of the deleted VPC subnet.
+	SubnetAvailabilityZone *string `type:"string"`
+
+	// The ID of the Availability Zone of the deleted VPC subnet.
+	SubnetAvailabilityZoneId *string `type:"string"`
+
+	// The resource ID of the VPC associated with the deleted VPC subnet.
+	VpcId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FirewallSubnetMissingVPCEndpointViolation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FirewallSubnetMissingVPCEndpointViolation) GoString() string {
+	return s.String()
+}
+
+// SetFirewallSubnetId sets the FirewallSubnetId field's value.
+func (s *FirewallSubnetMissingVPCEndpointViolation) SetFirewallSubnetId(v string) *FirewallSubnetMissingVPCEndpointViolation {
+	s.FirewallSubnetId = &v
+	return s
+}
+
+// SetSubnetAvailabilityZone sets the SubnetAvailabilityZone field's value.
+func (s *FirewallSubnetMissingVPCEndpointViolation) SetSubnetAvailabilityZone(v string) *FirewallSubnetMissingVPCEndpointViolation {
+	s.SubnetAvailabilityZone = &v
+	return s
+}
+
+// SetSubnetAvailabilityZoneId sets the SubnetAvailabilityZoneId field's value.
+func (s *FirewallSubnetMissingVPCEndpointViolation) SetSubnetAvailabilityZoneId(v string) *FirewallSubnetMissingVPCEndpointViolation {
+	s.SubnetAvailabilityZoneId = &v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *FirewallSubnetMissingVPCEndpointViolation) SetVpcId(v string) *FirewallSubnetMissingVPCEndpointViolation {
+	s.VpcId = &v
+	return s
+}
+
 type GetAdminAccountInput struct {
 	_ struct{} `type:"structure"`
 }
@@ -5198,6 +5995,119 @@ func (s *GetProtocolsListOutput) SetProtocolsList(v *ProtocolsListData) *GetProt
 // SetProtocolsListArn sets the ProtocolsListArn field's value.
 func (s *GetProtocolsListOutput) SetProtocolsListArn(v string) *GetProtocolsListOutput {
 	s.ProtocolsListArn = &v
+	return s
+}
+
+type GetThirdPartyFirewallAssociationStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the third-party firewall vendor.
+	//
+	// ThirdPartyFirewall is a required field
+	ThirdPartyFirewall *string `type:"string" required:"true" enum:"ThirdPartyFirewall"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetThirdPartyFirewallAssociationStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetThirdPartyFirewallAssociationStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetThirdPartyFirewallAssociationStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetThirdPartyFirewallAssociationStatusInput"}
+	if s.ThirdPartyFirewall == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThirdPartyFirewall"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetThirdPartyFirewall sets the ThirdPartyFirewall field's value.
+func (s *GetThirdPartyFirewallAssociationStatusInput) SetThirdPartyFirewall(v string) *GetThirdPartyFirewallAssociationStatusInput {
+	s.ThirdPartyFirewall = &v
+	return s
+}
+
+type GetThirdPartyFirewallAssociationStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status for subscribing to the third-party firewall vendor in the Amazon
+	// Web Services Marketplace.
+	//
+	//    * NO_SUBSCRIPTION - The Firewall Manager policy administrator isn't subscribed
+	//    to the third-party firewall service in the Amazon Web Services Marketplace.
+	//
+	//    * NOT_COMPLETE - The Firewall Manager policy administrator is in the process
+	//    of subscribing to the third-party firewall service in the Amazon Web Services
+	//    Marketplace, but doesn't yet have an active subscription.
+	//
+	//    * COMPLETE - The Firewall Manager policy administrator has an active subscription
+	//    to the third-party firewall service in the Amazon Web Services Marketplace.
+	MarketplaceOnboardingStatus *string `type:"string" enum:"MarketplaceSubscriptionOnboardingStatus"`
+
+	// The current status for setting a Firewall Manager policy administrators account
+	// as an administrator of the third-party firewall tenant.
+	//
+	//    * ONBOARDING - The Firewall Manager policy administrator is being designated
+	//    as a tenant administrator.
+	//
+	//    * ONBOARD_COMPLETE - The Firewall Manager policy administrator is designated
+	//    as a tenant administrator.
+	//
+	//    * OFFBOARDING - The Firewall Manager policy administrator is being removed
+	//    as a tenant administrator.
+	//
+	//    * OFFBOARD_COMPLETE - The Firewall Manager policy administrator has been
+	//    removed as a tenant administrator.
+	//
+	//    * NOT_EXIST - The Firewall Manager policy administrator doesn't exist
+	//    as a tenant administrator.
+	ThirdPartyFirewallStatus *string `type:"string" enum:"ThirdPartyFirewallAssociationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetThirdPartyFirewallAssociationStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetThirdPartyFirewallAssociationStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetMarketplaceOnboardingStatus sets the MarketplaceOnboardingStatus field's value.
+func (s *GetThirdPartyFirewallAssociationStatusOutput) SetMarketplaceOnboardingStatus(v string) *GetThirdPartyFirewallAssociationStatusOutput {
+	s.MarketplaceOnboardingStatus = &v
+	return s
+}
+
+// SetThirdPartyFirewallStatus sets the ThirdPartyFirewallStatus field's value.
+func (s *GetThirdPartyFirewallAssociationStatusOutput) SetThirdPartyFirewallStatus(v string) *GetThirdPartyFirewallAssociationStatusOutput {
+	s.ThirdPartyFirewallStatus = &v
 	return s
 }
 
@@ -6334,6 +7244,137 @@ func (s *ListTagsForResourceOutput) SetTagList(v []*Tag) *ListTagsForResourceOut
 	return s
 }
 
+type ListThirdPartyFirewallFirewallPoliciesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of third-party firewall policies that you want Firewall
+	// Manager to return. If the specified third-party firewall vendor is associated
+	// with more than MaxResults firewall policies, the response includes a NextToken
+	// element. NextToken contains an encrypted token that identifies the first
+	// third-party firewall policies that Firewall Manager will return if you submit
+	// another request.
+	//
+	// MaxResults is a required field
+	MaxResults *int64 `min:"1" type:"integer" required:"true"`
+
+	// If the previous response included a NextToken element, the specified third-party
+	// firewall vendor is associated with more third-party firewall policies. To
+	// get more third-party firewall policies, submit another ListThirdPartyFirewallFirewallPoliciesRequest
+	// request.
+	//
+	// For the value of NextToken, specify the value of NextToken from the previous
+	// response. If the previous response didn't include a NextToken element, there
+	// are no more third-party firewall policies to get.
+	NextToken *string `min:"1" type:"string"`
+
+	// The name of the third-party firewall vendor.
+	//
+	// ThirdPartyFirewall is a required field
+	ThirdPartyFirewall *string `type:"string" required:"true" enum:"ThirdPartyFirewall"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThirdPartyFirewallFirewallPoliciesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThirdPartyFirewallFirewallPoliciesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListThirdPartyFirewallFirewallPoliciesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListThirdPartyFirewallFirewallPoliciesInput"}
+	if s.MaxResults == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxResults"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.ThirdPartyFirewall == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThirdPartyFirewall"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListThirdPartyFirewallFirewallPoliciesInput) SetMaxResults(v int64) *ListThirdPartyFirewallFirewallPoliciesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListThirdPartyFirewallFirewallPoliciesInput) SetNextToken(v string) *ListThirdPartyFirewallFirewallPoliciesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetThirdPartyFirewall sets the ThirdPartyFirewall field's value.
+func (s *ListThirdPartyFirewallFirewallPoliciesInput) SetThirdPartyFirewall(v string) *ListThirdPartyFirewallFirewallPoliciesInput {
+	s.ThirdPartyFirewall = &v
+	return s
+}
+
+type ListThirdPartyFirewallFirewallPoliciesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The value that you will use for NextToken in the next ListThirdPartyFirewallFirewallPolicies
+	// request.
+	NextToken *string `min:"1" type:"string"`
+
+	// A list that contains one ThirdPartyFirewallFirewallPolicies element for each
+	// third-party firewall policies that the specified third-party firewall vendor
+	// is associated with. Each ThirdPartyFirewallFirewallPolicies element contains
+	// the firewall policy name and ID.
+	ThirdPartyFirewallFirewallPolicies []*ThirdPartyFirewallFirewallPolicy `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThirdPartyFirewallFirewallPoliciesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListThirdPartyFirewallFirewallPoliciesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListThirdPartyFirewallFirewallPoliciesOutput) SetNextToken(v string) *ListThirdPartyFirewallFirewallPoliciesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetThirdPartyFirewallFirewallPolicies sets the ThirdPartyFirewallFirewallPolicies field's value.
+func (s *ListThirdPartyFirewallFirewallPoliciesOutput) SetThirdPartyFirewallFirewallPolicies(v []*ThirdPartyFirewallFirewallPolicy) *ListThirdPartyFirewallFirewallPoliciesOutput {
+	s.ThirdPartyFirewallFirewallPolicies = v
+	return s
+}
+
 // Violation detail for an internet gateway route with an inactive state in
 // the customer subnet route table or Network Firewall subnet route table.
 type NetworkFirewallBlackHoleRouteDetectedViolation struct {
@@ -6964,9 +8005,66 @@ func (s *NetworkFirewallMissingSubnetViolation) SetViolationTarget(v string) *Ne
 	return s
 }
 
+// Configures the firewall policy deployment model of Network Firewall. For
+// information about Network Firewall deployment models, see Network Firewall
+// example architectures with routing (https://docs.aws.amazon.com/network-firewall/latest/developerguide/architectures.html)
+// in the Network Firewall Developer Guide.
+type NetworkFirewallPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// Defines the deployment model to use for the firewall policy. To use a distributed
+	// model, set PolicyOption (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_PolicyOption.html)
+	// to NULL.
+	FirewallDeploymentModel *string `type:"string" enum:"FirewallDeploymentModel"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkFirewallPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkFirewallPolicy) GoString() string {
+	return s.String()
+}
+
+// SetFirewallDeploymentModel sets the FirewallDeploymentModel field's value.
+func (s *NetworkFirewallPolicy) SetFirewallDeploymentModel(v string) *NetworkFirewallPolicy {
+	s.FirewallDeploymentModel = &v
+	return s
+}
+
 // The definition of the Network Firewall firewall policy.
 type NetworkFirewallPolicyDescription struct {
 	_ struct{} `type:"structure"`
+
+	// The default actions to take on a packet that doesn't match any stateful rules.
+	// The stateful default action is optional, and is only valid when using the
+	// strict rule order.
+	//
+	// Valid values of the stateful default action:
+	//
+	//    * aws:drop_strict
+	//
+	//    * aws:drop_established
+	//
+	//    * aws:alert_strict
+	//
+	//    * aws:alert_established
+	StatefulDefaultActions []*string `type:"list"`
+
+	// Additional options governing how Network Firewall handles stateful rules.
+	// The stateful rule groups that you use in your policy must have stateful rule
+	// options settings that are compatible with these settings.
+	StatefulEngineOptions *StatefulEngineOptions `type:"structure"`
 
 	// The stateful rule groups that are used in the Network Firewall firewall policy.
 	StatefulRuleGroups []*StatefulRuleGroup `type:"list"`
@@ -7004,6 +8102,18 @@ func (s NetworkFirewallPolicyDescription) String() string {
 // value will be replaced with "sensitive".
 func (s NetworkFirewallPolicyDescription) GoString() string {
 	return s.String()
+}
+
+// SetStatefulDefaultActions sets the StatefulDefaultActions field's value.
+func (s *NetworkFirewallPolicyDescription) SetStatefulDefaultActions(v []*string) *NetworkFirewallPolicyDescription {
+	s.StatefulDefaultActions = v
+	return s
+}
+
+// SetStatefulEngineOptions sets the StatefulEngineOptions field's value.
+func (s *NetworkFirewallPolicyDescription) SetStatefulEngineOptions(v *StatefulEngineOptions) *NetworkFirewallPolicyDescription {
+	s.StatefulEngineOptions = v
+	return s
 }
 
 // SetStatefulRuleGroups sets the StatefulRuleGroups field's value.
@@ -7264,11 +8374,17 @@ func (s *PartialMatch) SetTargetViolationReasons(v []*string) *PartialMatch {
 type Policy struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether Firewall Manager should delete Firewall Manager managed
-	// resources, such as web ACLs and security groups, when they are not in use
-	// by the Firewall Manager policy. By default, Firewall Manager doesn't delete
-	// unused Firewall Manager managed resources. This option is not available for
-	// Shield Advanced or WAF Classic policies.
+	// Indicates whether Firewall Manager should automatically remove protections
+	// from resources that leave the policy scope and clean up resources that Firewall
+	// Manager is managing for accounts when those accounts leave policy scope.
+	// For example, Firewall Manager will disassociate a Firewall Manager managed
+	// web ACL from a protected customer resource when the customer resource leaves
+	// policy scope.
+	//
+	// By default, Firewall Manager doesn't remove protections or delete Firewall
+	// Manager managed resources.
+	//
+	// This option is not available for Shield Advanced or WAF Classic policies.
 	DeleteUnusedFMManagedResources *bool `type:"boolean"`
 
 	// Specifies the Amazon Web Services account IDs and Organizations organizational
@@ -7354,13 +8470,13 @@ type Policy struct {
 	// To apply this policy to multiple resource types, specify a resource type
 	// of ResourceTypeList and then specify the resource types in a ResourceTypeList.
 	//
-	// For WAF and Shield Advanced, example resource types include AWS::ElasticLoadBalancingV2::LoadBalancer
-	// and AWS::CloudFront::Distribution. For a security group common policy, valid
-	// values are AWS::EC2::NetworkInterface and AWS::EC2::Instance. For a security
-	// group content audit policy, valid values are AWS::EC2::SecurityGroup, AWS::EC2::NetworkInterface,
-	// and AWS::EC2::Instance. For a security group usage audit policy, the value
-	// is AWS::EC2::SecurityGroup. For an Network Firewall policy or DNS Firewall
-	// policy, the value is AWS::EC2::VPC.
+	// For WAF and Shield Advanced, resource types include AWS::ElasticLoadBalancingV2::LoadBalancer,
+	// AWS::ElasticLoadBalancing::LoadBalancer, AWS::EC2::EIP, and AWS::CloudFront::Distribution.
+	// For a security group common policy, valid values are AWS::EC2::NetworkInterface
+	// and AWS::EC2::Instance. For a security group content audit policy, valid
+	// values are AWS::EC2::SecurityGroup, AWS::EC2::NetworkInterface, and AWS::EC2::Instance.
+	// For a security group usage audit policy, the value is AWS::EC2::SecurityGroup.
+	// For an Network Firewall policy or DNS Firewall policy, the value is AWS::EC2::VPC.
 	//
 	// ResourceType is a required field
 	ResourceType *string `min:"1" type:"string" required:"true"`
@@ -7699,15 +8815,63 @@ func (s *PolicyComplianceStatus) SetPolicyOwner(v string) *PolicyComplianceStatu
 	return s
 }
 
+// Contains the Network Firewall firewall policy options to configure the policy's
+// deployment model and third-party firewall policy settings.
+type PolicyOption struct {
+	_ struct{} `type:"structure"`
+
+	// Defines the deployment model to use for the firewall policy.
+	NetworkFirewallPolicy *NetworkFirewallPolicy `type:"structure"`
+
+	// Defines the policy options for a third-party firewall policy.
+	ThirdPartyFirewallPolicy *ThirdPartyFirewallPolicy `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyOption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PolicyOption) GoString() string {
+	return s.String()
+}
+
+// SetNetworkFirewallPolicy sets the NetworkFirewallPolicy field's value.
+func (s *PolicyOption) SetNetworkFirewallPolicy(v *NetworkFirewallPolicy) *PolicyOption {
+	s.NetworkFirewallPolicy = v
+	return s
+}
+
+// SetThirdPartyFirewallPolicy sets the ThirdPartyFirewallPolicy field's value.
+func (s *PolicyOption) SetThirdPartyFirewallPolicy(v *ThirdPartyFirewallPolicy) *PolicyOption {
+	s.ThirdPartyFirewallPolicy = v
+	return s
+}
+
 // Details of the Firewall Manager policy.
 type PolicySummary struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether Firewall Manager should delete Firewall Manager managed
-	// resources, such as web ACLs and security groups, when they are not in use
-	// by the Firewall Manager policy. By default, Firewall Manager doesn't delete
-	// unused Firewall Manager managed resources. This option is not available for
-	// Shield Advanced or WAF Classic policies.
+	// Indicates whether Firewall Manager should automatically remove protections
+	// from resources that leave the policy scope and clean up resources that Firewall
+	// Manager is managing for accounts when those accounts leave policy scope.
+	// For example, Firewall Manager will disassociate a Firewall Manager managed
+	// web ACL from a protected customer resource when the customer resource leaves
+	// policy scope.
+	//
+	// By default, Firewall Manager doesn't remove protections or delete Firewall
+	// Manager managed resources.
+	//
+	// This option is not available for Shield Advanced or WAF Classic policies.
 	DeleteUnusedFMManagedResources *bool `type:"boolean"`
 
 	// The Amazon Resource Name (ARN) of the specified policy.
@@ -8517,6 +9681,9 @@ type RemediationAction struct {
 	// Information about the ReplaceRouteTableAssociation action in the Amazon EC2
 	// API.
 	EC2ReplaceRouteTableAssociationAction *EC2ReplaceRouteTableAssociationAction `type:"structure"`
+
+	// The remedial action to take when updating a firewall configuration.
+	FMSPolicyUpdateFirewallCreationConfigAction *FMSPolicyUpdateFirewallCreationConfigAction `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8582,6 +9749,12 @@ func (s *RemediationAction) SetEC2ReplaceRouteAction(v *EC2ReplaceRouteAction) *
 // SetEC2ReplaceRouteTableAssociationAction sets the EC2ReplaceRouteTableAssociationAction field's value.
 func (s *RemediationAction) SetEC2ReplaceRouteTableAssociationAction(v *EC2ReplaceRouteTableAssociationAction) *RemediationAction {
 	s.EC2ReplaceRouteTableAssociationAction = v
+	return s
+}
+
+// SetFMSPolicyUpdateFirewallCreationConfigAction sets the FMSPolicyUpdateFirewallCreationConfigAction field's value.
+func (s *RemediationAction) SetFMSPolicyUpdateFirewallCreationConfigAction(v *FMSPolicyUpdateFirewallCreationConfigAction) *RemediationAction {
+	s.FMSPolicyUpdateFirewallCreationConfigAction = v
 	return s
 }
 
@@ -8784,6 +9957,13 @@ type ResourceViolation struct {
 	// as a rule group that's already associated.
 	DnsRuleGroupPriorityConflictViolation *DnsRuleGroupPriorityConflictViolation `type:"structure"`
 
+	// Contains details about the firewall subnet that violates the policy scope.
+	FirewallSubnetIsOutOfScopeViolation *FirewallSubnetIsOutOfScopeViolation `type:"structure"`
+
+	// The violation details for a third-party firewall's VPC endpoint subnet that
+	// was deleted.
+	FirewallSubnetMissingVPCEndpointViolation *FirewallSubnetMissingVPCEndpointViolation `type:"structure"`
+
 	// Violation detail for an internet gateway route with an inactive state in
 	// the customer subnet route table or Network Firewall subnet route table.
 	NetworkFirewallBlackHoleRouteDetectedViolation *NetworkFirewallBlackHoleRouteDetectedViolation `type:"structure"`
@@ -8825,6 +10005,20 @@ type ResourceViolation struct {
 	// A list of possible remediation action lists. Each individual possible remediation
 	// action is a list of individual remediation actions.
 	PossibleRemediationActions *PossibleRemediationActions `type:"structure"`
+
+	// Contains details about the route endpoint that violates the policy scope.
+	RouteHasOutOfScopeEndpointViolation *RouteHasOutOfScopeEndpointViolation `type:"structure"`
+
+	// The violation details for a third-party firewall that has the Firewall Manager
+	// managed route table that was associated with the third-party firewall has
+	// been deleted.
+	ThirdPartyFirewallMissingExpectedRouteTableViolation *ThirdPartyFirewallMissingExpectedRouteTableViolation `type:"structure"`
+
+	// The violation details for a third-party firewall that's been deleted.
+	ThirdPartyFirewallMissingFirewallViolation *ThirdPartyFirewallMissingFirewallViolation `type:"structure"`
+
+	// The violation details for a third-party firewall's subnet that's been deleted.
+	ThirdPartyFirewallMissingSubnetViolation *ThirdPartyFirewallMissingSubnetViolation `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8878,6 +10072,18 @@ func (s *ResourceViolation) SetDnsRuleGroupLimitExceededViolation(v *DnsRuleGrou
 // SetDnsRuleGroupPriorityConflictViolation sets the DnsRuleGroupPriorityConflictViolation field's value.
 func (s *ResourceViolation) SetDnsRuleGroupPriorityConflictViolation(v *DnsRuleGroupPriorityConflictViolation) *ResourceViolation {
 	s.DnsRuleGroupPriorityConflictViolation = v
+	return s
+}
+
+// SetFirewallSubnetIsOutOfScopeViolation sets the FirewallSubnetIsOutOfScopeViolation field's value.
+func (s *ResourceViolation) SetFirewallSubnetIsOutOfScopeViolation(v *FirewallSubnetIsOutOfScopeViolation) *ResourceViolation {
+	s.FirewallSubnetIsOutOfScopeViolation = v
+	return s
+}
+
+// SetFirewallSubnetMissingVPCEndpointViolation sets the FirewallSubnetMissingVPCEndpointViolation field's value.
+func (s *ResourceViolation) SetFirewallSubnetMissingVPCEndpointViolation(v *FirewallSubnetMissingVPCEndpointViolation) *ResourceViolation {
+	s.FirewallSubnetMissingVPCEndpointViolation = v
 	return s
 }
 
@@ -8947,6 +10153,30 @@ func (s *ResourceViolation) SetPossibleRemediationActions(v *PossibleRemediation
 	return s
 }
 
+// SetRouteHasOutOfScopeEndpointViolation sets the RouteHasOutOfScopeEndpointViolation field's value.
+func (s *ResourceViolation) SetRouteHasOutOfScopeEndpointViolation(v *RouteHasOutOfScopeEndpointViolation) *ResourceViolation {
+	s.RouteHasOutOfScopeEndpointViolation = v
+	return s
+}
+
+// SetThirdPartyFirewallMissingExpectedRouteTableViolation sets the ThirdPartyFirewallMissingExpectedRouteTableViolation field's value.
+func (s *ResourceViolation) SetThirdPartyFirewallMissingExpectedRouteTableViolation(v *ThirdPartyFirewallMissingExpectedRouteTableViolation) *ResourceViolation {
+	s.ThirdPartyFirewallMissingExpectedRouteTableViolation = v
+	return s
+}
+
+// SetThirdPartyFirewallMissingFirewallViolation sets the ThirdPartyFirewallMissingFirewallViolation field's value.
+func (s *ResourceViolation) SetThirdPartyFirewallMissingFirewallViolation(v *ThirdPartyFirewallMissingFirewallViolation) *ResourceViolation {
+	s.ThirdPartyFirewallMissingFirewallViolation = v
+	return s
+}
+
+// SetThirdPartyFirewallMissingSubnetViolation sets the ThirdPartyFirewallMissingSubnetViolation field's value.
+func (s *ResourceViolation) SetThirdPartyFirewallMissingSubnetViolation(v *ThirdPartyFirewallMissingSubnetViolation) *ResourceViolation {
+	s.ThirdPartyFirewallMissingSubnetViolation = v
+	return s
+}
+
 // Describes a route in a route table.
 type Route struct {
 	_ struct{} `type:"structure"`
@@ -9003,6 +10233,137 @@ func (s *Route) SetTarget(v string) *Route {
 // SetTargetType sets the TargetType field's value.
 func (s *Route) SetTargetType(v string) *Route {
 	s.TargetType = &v
+	return s
+}
+
+// Contains details about the route endpoint that violates the policy scope.
+type RouteHasOutOfScopeEndpointViolation struct {
+	_ struct{} `type:"structure"`
+
+	// The route table associated with the current firewall subnet.
+	CurrentFirewallSubnetRouteTable *string `min:"1" type:"string"`
+
+	// The current route table associated with the Internet Gateway.
+	CurrentInternetGatewayRouteTable *string `min:"1" type:"string"`
+
+	// The ID of the firewall subnet.
+	FirewallSubnetId *string `min:"1" type:"string"`
+
+	// The list of firewall subnet routes.
+	FirewallSubnetRoutes []*Route `type:"list"`
+
+	// The ID of the Internet Gateway.
+	InternetGatewayId *string `min:"1" type:"string"`
+
+	// The routes in the route table associated with the Internet Gateway.
+	InternetGatewayRoutes []*Route `type:"list"`
+
+	// The ID of the route table.
+	RouteTableId *string `min:"1" type:"string"`
+
+	// The subnet's Availability Zone.
+	SubnetAvailabilityZone *string `type:"string"`
+
+	// The ID of the subnet's Availability Zone.
+	SubnetAvailabilityZoneId *string `type:"string"`
+
+	// The ID of the subnet associated with the route that violates the policy scope.
+	SubnetId *string `min:"1" type:"string"`
+
+	// The list of routes that violate the route table.
+	ViolatingRoutes []*Route `type:"list"`
+
+	// The VPC ID of the route that violates the policy scope.
+	VpcId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RouteHasOutOfScopeEndpointViolation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RouteHasOutOfScopeEndpointViolation) GoString() string {
+	return s.String()
+}
+
+// SetCurrentFirewallSubnetRouteTable sets the CurrentFirewallSubnetRouteTable field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetCurrentFirewallSubnetRouteTable(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.CurrentFirewallSubnetRouteTable = &v
+	return s
+}
+
+// SetCurrentInternetGatewayRouteTable sets the CurrentInternetGatewayRouteTable field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetCurrentInternetGatewayRouteTable(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.CurrentInternetGatewayRouteTable = &v
+	return s
+}
+
+// SetFirewallSubnetId sets the FirewallSubnetId field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetFirewallSubnetId(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.FirewallSubnetId = &v
+	return s
+}
+
+// SetFirewallSubnetRoutes sets the FirewallSubnetRoutes field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetFirewallSubnetRoutes(v []*Route) *RouteHasOutOfScopeEndpointViolation {
+	s.FirewallSubnetRoutes = v
+	return s
+}
+
+// SetInternetGatewayId sets the InternetGatewayId field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetInternetGatewayId(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.InternetGatewayId = &v
+	return s
+}
+
+// SetInternetGatewayRoutes sets the InternetGatewayRoutes field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetInternetGatewayRoutes(v []*Route) *RouteHasOutOfScopeEndpointViolation {
+	s.InternetGatewayRoutes = v
+	return s
+}
+
+// SetRouteTableId sets the RouteTableId field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetRouteTableId(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.RouteTableId = &v
+	return s
+}
+
+// SetSubnetAvailabilityZone sets the SubnetAvailabilityZone field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetSubnetAvailabilityZone(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.SubnetAvailabilityZone = &v
+	return s
+}
+
+// SetSubnetAvailabilityZoneId sets the SubnetAvailabilityZoneId field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetSubnetAvailabilityZoneId(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.SubnetAvailabilityZoneId = &v
+	return s
+}
+
+// SetSubnetId sets the SubnetId field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetSubnetId(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.SubnetId = &v
+	return s
+}
+
+// SetViolatingRoutes sets the ViolatingRoutes field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetViolatingRoutes(v []*Route) *RouteHasOutOfScopeEndpointViolation {
+	s.ViolatingRoutes = v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *RouteHasOutOfScopeEndpointViolation) SetVpcId(v string) *RouteHasOutOfScopeEndpointViolation {
+	s.VpcId = &v
 	return s
 }
 
@@ -9150,14 +10511,64 @@ type SecurityServicePolicyData struct {
 	_ struct{} `type:"structure"`
 
 	// Details about the service that are specific to the service type, in JSON
-	// format. For service type SHIELD_ADVANCED, this is an empty string.
+	// format.
 	//
 	//    * Example: DNS_FIREWALL "{\"type\":\"DNS_FIREWALL\",\"preProcessRuleGroups\":[{\"ruleGroupId\":\"rslvr-frg-1\",\"priority\":10}],\"postProcessRuleGroups\":[{\"ruleGroupId\":\"rslvr-frg-2\",\"priority\":9911}]}"
 	//    Valid values for preProcessRuleGroups are between 1 and 99. Valid values
 	//    for postProcessRuleGroups are between 9901 and 10000.
 	//
-	//    * Example: NETWORK_FIREWALL "{\"type\":\"NETWORK_FIREWALL\",\"networkFirewallStatelessRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-west-1:1234567891011:stateless-rulegroup/rulegroup2\",\"priority\":10}],\"networkFirewallStatelessDefaultActions\":[\"aws:pass\",\"custom1\"],\"networkFirewallStatelessFragmentDefaultActions\":[\"custom2\",\"aws:pass\"],\"networkFirewallStatelessCustomActions\":[{\"actionName\":\"custom1\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"dimension1\"}]}}},{\"actionName\":\"custom2\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"dimension2\"}]}}}],\"networkFirewallStatefulRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-west-1:1234567891011:stateful-rulegroup/rulegroup1\"}],\"networkFirewallOrchestrationConfig\":{\"singleFirewallEndpointPerVPC\":true,\"allowedIPV4CidrList\":[\"10.24.34.0/28\"]}
-	//    }"
+	//    * Example: NETWORK_FIREWALL - Centralized deployment model "{\"type\":\"NETWORK_FIREWALL\",\"awsNetworkFirewallConfig\":{\"networkFirewallStatelessRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateless-rulegroup/test\",\"priority\":1}],\"networkFirewallStatelessDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessFragmentDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessCustomActions\":[{\"actionName\":\"customActionName\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"metricdimensionvalue\"}]}}}],\"networkFirewallStatefulRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateful-rulegroup/test\"}],\"networkFirewallLoggingConfiguration\":{\"logDestinationConfigs\":[{\"logDestinationType\":\"S3\",\"logType\":\"ALERT\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}},{\"logDestinationType\":\"S3\",\"logType\":\"FLOW\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}}],\"overrideExistingConfig\":true}},\"firewallDeploymentModel\":{\"centralizedFirewallDeploymentModel\":{\"centralizedFirewallOrchestrationConfig\":{\"inspectionVpcIds\":[{\"resourceId\":\"vpc-1234\",\"accountId\":\"123456789011\"}],\"firewallCreationConfig\":{\"endpointLocation\":{\"availabilityZoneConfigList\":[{\"availabilityZoneId\":null,\"availabilityZoneName\":\"us-east-1a\",\"allowedIPV4CidrList\":[\"10.0.0.0/28\"]}]}},\"allowedIPV4CidrList\":[]}}}}"
+	//    To use the centralized deployment model, you must set PolicyOption (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_PolicyOption.html)
+	//    to CENTRALIZED.
+	//
+	//    * Example: NETWORK_FIREWALL - Distributed deployment model with automatic
+	//    Availability Zone configuration "{\"type\":\"NETWORK_FIREWALL\",\"networkFirewallStatelessRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateless-rulegroup/test\",\"priority\":1}],\"networkFirewallStatelessDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessFragmentDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessCustomActions\":[{\"actionName\":\"customActionName\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"metricdimensionvalue\"}]}}}],\"networkFirewallStatefulRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateful-rulegroup/test\"}],\"networkFirewallOrchestrationConfig\":{\"singleFirewallEndpointPerVPC\":false,\"allowedIPV4CidrList\":[\"10.0.0.0/28\",\"192.168.0.0/28\"],\"routeManagementAction\":\"OFF\"},\"networkFirewallLoggingConfiguration\":{\"logDestinationConfigs\":[{\"logDestinationType\":\"S3\",\"logType\":\"ALERT\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}},{\"logDestinationType\":\"S3\",\"logType\":\"FLOW\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}}],\"overrideExistingConfig\":true}}"
+	//    With automatic Availbility Zone configuration, Firewall Manager chooses
+	//    which Availability Zones to create the endpoints in. To use the distributed
+	//    deployment model, you must set PolicyOption (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_PolicyOption.html)
+	//    to NULL.
+	//
+	//    * Example: NETWORK_FIREWALL - Distributed deployment model with automatic
+	//    Availability Zone configuration and route management "{\"type\":\"NETWORK_FIREWALL\",\"networkFirewallStatelessRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateless-rulegroup/test\",\"priority\":1}],\"networkFirewallStatelessDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessFragmentDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessCustomActions\":[{\"actionName\":\"customActionName\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"metricdimensionvalue\"}]}}}],\"networkFirewallStatefulRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateful-rulegroup/test\"}],\"networkFirewallOrchestrationConfig\":{\"singleFirewallEndpointPerVPC\":false,\"allowedIPV4CidrList\":[\"10.0.0.0/28\",\"192.168.0.0/28\"],\"routeManagementAction\":\"MONITOR\",\"routeManagementTargetTypes\":[\"InternetGateway\"]},\"networkFirewallLoggingConfiguration\":{\"logDestinationConfigs\":[{\"logDestinationType\":\"S3\",\"logType\":\"ALERT\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}},{\"logDestinationType\":\"S3\",\"logType\":
+	//    \"FLOW\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}}],\"overrideExistingConfig\":true}}"
+	//    To use the distributed deployment model, you must set PolicyOption (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_PolicyOption.html)
+	//    to NULL.
+	//
+	//    * Example: NETWORK_FIREWALL - Distributed deployment model with custom
+	//    Availability Zone configuration "{\"type\":\"NETWORK_FIREWALL\",\"networkFirewallStatelessRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateless-rulegroup/test\",\"priority\":1}],\"networkFirewallStatelessDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessFragmentDefaultActions\":[\"aws:forward_to_sfe\",\"fragmentcustomactionname\"],\"networkFirewallStatelessCustomActions\":[{\"actionName\":\"customActionName\",
+	//    \"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"metricdimensionvalue\"}]}}},{\"actionName\":\"fragmentcustomactionname\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"fragmentmetricdimensionvalue\"}]}}}],\"networkFirewallStatefulRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateful-rulegroup/test\"}],\"networkFirewallOrchestrationConfig\":{\"firewallCreationConfig\":{
+	//    \"endpointLocation\":{\"availabilityZoneConfigList\":[{\"availabilityZoneName\":\"us-east-1a\",\"allowedIPV4CidrList\":[\"10.0.0.0/28\"]},{\"availabilityZoneName\":\"us-east-1b\",\"allowedIPV4CidrList\":[
+	//    \"10.0.0.0/28\"]}]} },\"singleFirewallEndpointPerVPC\":false,\"allowedIPV4CidrList\":null,\"routeManagementAction\":\"OFF\",\"networkFirewallLoggingConfiguration\":{\"logDestinationConfigs\":[{\"logDestinationType\":\"S3\",\"logType\":\"ALERT\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}},{\"logDestinationType\":\"S3\",\"logType\":\"FLOW\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}}],\"overrideExistingConfig\":boolean}}"
+	//    With custom Availability Zone configuration, you define which specific
+	//    Availability Zones to create endpoints in by configuring firewallCreationConfig.
+	//    To configure the Availability Zones in firewallCreationConfig, specify
+	//    either the availabilityZoneName or availabilityZoneId parameter, not both
+	//    parameters. To use the distributed deployment model, you must set PolicyOption
+	//    (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_PolicyOption.html)
+	//    to NULL.
+	//
+	//    * Example: NETWORK_FIREWALL - Distributed deployment model with custom
+	//    Availability Zone configuration and route management "{\"type\":\"NETWORK_FIREWALL\",\"networkFirewallStatelessRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateless-rulegroup/test\",\"priority\":1}],\"networkFirewallStatelessDefaultActions\":[\"aws:forward_to_sfe\",\"customActionName\"],\"networkFirewallStatelessFragmentDefaultActions\":[\"aws:forward_to_sfe\",\"fragmentcustomactionname\"],\"networkFirewallStatelessCustomActions\":[{\"actionName\":\"customActionName\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"metricdimensionvalue\"}]}}},{\"actionName\":\"fragmentcustomactionname\",\"actionDefinition\":{\"publishMetricAction\":{\"dimensions\":[{\"value\":\"fragmentmetricdimensionvalue\"}]}}}],\"networkFirewallStatefulRuleGroupReferences\":[{\"resourceARN\":\"arn:aws:network-firewall:us-east-1:123456789011:stateful-rulegroup/test\"}],\"networkFirewallOrchestrationConfig\":{\"firewallCreationConfig\":{\"endpointLocation\":{\"availabilityZoneConfigList\":[{\"availabilityZoneName\":\"us-east-1a\",\"allowedIPV4CidrList\":[\"10.0.0.0/28\"]},{\"availabilityZoneName\":\"us-east-1b\",\"allowedIPV4CidrList\":[\"10.0.0.0/28\"]}]}},\"singleFirewallEndpointPerVPC\":false,\"allowedIPV4CidrList\":null,\"routeManagementAction\":\"MONITOR\",\"routeManagementTargetTypes\":[\"InternetGateway\"],\"routeManagementConfig\":{\"allowCrossAZTrafficIfNoEndpoint\":true}},\"networkFirewallLoggingConfiguration\":{\"logDestinationConfigs\":[{\"logDestinationType\":\"S3\",\"logType\":\"ALERT\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}},{\"logDestinationType\":\"S3\",\"logType\":\"FLOW\",\"logDestination\":{\"bucketName\":\"s3-bucket-name\"}}],\"overrideExistingConfig\":boolean}}"
+	//    To use the distributed deployment model, you must set PolicyOption (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_PolicyOption.html)
+	//    to NULL.
+	//
+	//    * Example: THIRD_PARTY_FIREWALL "{ "type":"THIRD_PARTY_FIREWALL", "thirdPartyFirewall":"PALO_ALTO_NETWORKS_CLOUD_NGFW",
+	//    "thirdPartyFirewallConfig":{ "thirdPartyFirewallPolicyList":["global-1"]
+	//    }, "firewallDeploymentModel":{ "distributedFirewallDeploymentModel":{
+	//    "distributedFirewallOrchestrationConfig":{ "firewallCreationConfig":{
+	//    "endpointLocation":{ "availabilityZoneConfigList":[ { "availabilityZoneName":"${AvailabilityZone}"
+	//    } ] } }, "allowedIPV4CidrList":[ ] } } } }"
+	//
+	//    * Specification for SHIELD_ADVANCED for Amazon CloudFront distributions
+	//    "{\"type\":\"SHIELD_ADVANCED\",\"automaticResponseConfiguration\": {\"automaticResponseStatus\":\"ENABLED|IGNORED|DISABLED\",
+	//    \"automaticResponseAction\":\"BLOCK|COUNT\"}, \"overrideCustomerWebaclClassic\":true|false}"
+	//    For example: "{\"type\":\"SHIELD_ADVANCED\",\"automaticResponseConfiguration\":
+	//    {\"automaticResponseStatus\":\"ENABLED\", \"automaticResponseAction\":\"COUNT\"}}"
+	//    The default value for automaticResponseStatus is IGNORED. The value for
+	//    automaticResponseAction is only required when automaticResponseStatus
+	//    is set to ENABLED. The default value for overrideCustomerWebaclClassic
+	//    is false. For other resource types that you can protect with a Shield
+	//    Advanced policy, this ManagedServiceData configuration is an empty string.
 	//
 	//    * Example: WAFV2 "{\"type\":\"WAFV2\",\"preProcessRuleGroups\":[{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"version\":null,\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesAmazonIpReputationList\"},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[{\"name\":\"NoUserAgent_HEADER\"}]}],\"postProcessRuleGroups\":[],\"defaultAction\":{\"type\":\"ALLOW\"},\"overrideCustomerWebACLAssociation\":false,\"loggingConfiguration\":{\"logDestinationConfigs\":[\"arn:aws:firehose:us-west-2:12345678912:deliverystream/aws-waf-logs-fms-admin-destination\"],\"redactedFields\":[{\"redactedFieldType\":\"SingleHeader\",\"redactedFieldValue\":\"Cookies\"},{\"redactedFieldType\":\"Method\"}]}}"
 	//    In the loggingConfiguration, you can specify one logDestinationConfigs,
@@ -9168,8 +10579,27 @@ type SecurityServicePolicyData struct {
 	//    \"overrideAction\" : {\"type\": \"COUNT\"}}], \"defaultAction\": {\"type\":
 	//    \"BLOCK\"}}"
 	//
+	//    * Example: WAFV2 - Firewall Manager support for WAF managed rule group
+	//    versioning "{\"type\":\"WAFV2\",\"preProcessRuleGroups\":[{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"versionEnabled\":true,\"version\":\"Version_2.0\",\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesCommonRuleSet\"},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[{\"name\":\"NoUserAgent_HEADER\"}]}],\"postProcessRuleGroups\":[],\"defaultAction\":{\"type\":\"ALLOW\"},\"overrideCustomerWebACLAssociation\":false,\"loggingConfiguration\":{\"logDestinationConfigs\":[\"arn:aws:firehose:us-west-2:12345678912:deliverystream/aws-waf-logs-fms-admin-destination\"],\"redactedFields\":[{\"redactedFieldType\":\"SingleHeader\",\"redactedFieldValue\":\"Cookies\"},{\"redactedFieldType\":\"Method\"}]}}"
+	//    To use a specific version of a WAF managed rule group in your Firewall
+	//    Manager policy, you must set versionEnabled to true, and set version to
+	//    the version you'd like to use. If you don't set versionEnabled to true,
+	//    or if you omit versionEnabled, then Firewall Manager uses the default
+	//    version of the WAF managed rule group.
+	//
 	//    * Example: SECURITY_GROUPS_COMMON "{\"type\":\"SECURITY_GROUPS_COMMON\",\"revertManualSecurityGroupChanges\":false,\"exclusiveResourceSecurityGroupManagement\":false,
 	//    \"applyToAllEC2InstanceENIs\":false,\"securityGroups\":[{\"id\":\" sg-000e55995d61a06bd\"}]}"
+	//
+	//    * Example: SECURITY_GROUPS_COMMON - Security group tag distribution ""{\"type\":\"SECURITY_GROUPS_COMMON\",\"securityGroups\":[{\"id\":\"sg-000e55995d61a06bd\"}],\"revertManualSecurityGroupChanges\":true,\"exclusiveResourceSecurityGroupManagement\":false,\"applyToAllEC2InstanceENIs\":false,\"includeSharedVPC\":false,\"enableTagDistribution\":true}""
+	//    Firewall Manager automatically distributes tags from the primary group
+	//    to the security groups created by this policy. To use security group tag
+	//    distribution, you must also set revertManualSecurityGroupChanges to true,
+	//    otherwise Firewall Manager won't be able to create the policy. When you
+	//    enable revertManualSecurityGroupChanges, Firewall Manager identifies and
+	//    reports when the security groups created by this policy become non-compliant.
+	//    Firewall Manager won't distrubute system tags added by Amazon Web Services
+	//    services into the replica security groups. System tags begin with the
+	//    aws: prefix.
 	//
 	//    * Example: Shared VPCs. Apply the preceding policy to resources in shared
 	//    VPCs as well as to those in VPCs that the account owns "{\"type\":\"SECURITY_GROUPS_COMMON\",\"revertManualSecurityGroupChanges\":false,\"exclusiveResourceSecurityGroupManagement\":false,
@@ -9185,6 +10615,10 @@ type SecurityServicePolicyData struct {
 	//
 	//    * Example: SECURITY_GROUPS_USAGE_AUDIT "{\"type\":\"SECURITY_GROUPS_USAGE_AUDIT\",\"deleteUnusedSecurityGroups\":true,\"coalesceRedundantSecurityGroups\":true}"
 	ManagedServiceData *string `min:"1" type:"string"`
+
+	// Contains the Network Firewall firewall policy options to configure a centralized
+	// deployment model.
+	PolicyOption *PolicyOption `type:"structure"`
 
 	// The service that the policy is using to protect the resources. This specifies
 	// the type of policy that is created, either an WAF policy, a Shield Advanced
@@ -9237,15 +10671,73 @@ func (s *SecurityServicePolicyData) SetManagedServiceData(v string) *SecuritySer
 	return s
 }
 
+// SetPolicyOption sets the PolicyOption field's value.
+func (s *SecurityServicePolicyData) SetPolicyOption(v *PolicyOption) *SecurityServicePolicyData {
+	s.PolicyOption = v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *SecurityServicePolicyData) SetType(v string) *SecurityServicePolicyData {
 	s.Type = &v
 	return s
 }
 
+// Configuration settings for the handling of the stateful rule groups in a
+// Network Firewall firewall policy.
+type StatefulEngineOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates how to manage the order of stateful rule evaluation for the policy.
+	// DEFAULT_ACTION_ORDER is the default behavior. Stateful rules are provided
+	// to the rule engine as Suricata compatible strings, and Suricata evaluates
+	// them based on certain settings. For more information, see Evaluation order
+	// for stateful rules (https://docs.aws.amazon.com/network-firewall/latest/developerguide/suricata-rule-evaluation-order.html)
+	// in the Network Firewall Developer Guide.
+	RuleOrder *string `type:"string" enum:"RuleOrder"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StatefulEngineOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StatefulEngineOptions) GoString() string {
+	return s.String()
+}
+
+// SetRuleOrder sets the RuleOrder field's value.
+func (s *StatefulEngineOptions) SetRuleOrder(v string) *StatefulEngineOptions {
+	s.RuleOrder = &v
+	return s
+}
+
 // Network Firewall stateful rule group, used in a NetworkFirewallPolicyDescription.
 type StatefulRuleGroup struct {
 	_ struct{} `type:"structure"`
+
+	// An integer setting that indicates the order in which to run the stateful
+	// rule groups in a single Network Firewall firewall policy. This setting only
+	// applies to firewall policies that specify the STRICT_ORDER rule order in
+	// the stateful engine options settings.
+	//
+	// Network Firewall evalutes each stateful rule group against a packet starting
+	// with the group that has the lowest priority setting. You must ensure that
+	// the priority settings are unique within each policy. For information about
+	//
+	// You can change the priority settings of your rule groups at any time. To
+	// make it easier to insert rule groups later, number them so there's a wide
+	// range in between, for example use 100, 200, and so on.
+	Priority *int64 `type:"integer"`
 
 	// The resource ID of the rule group.
 	ResourceId *string `min:"1" type:"string"`
@@ -9270,6 +10762,12 @@ func (s StatefulRuleGroup) String() string {
 // value will be replaced with "sensitive".
 func (s StatefulRuleGroup) GoString() string {
 	return s.String()
+}
+
+// SetPriority sets the Priority field's value.
+func (s *StatefulRuleGroup) SetPriority(v int64) *StatefulRuleGroup {
+	s.Priority = &v
+	return s
 }
 
 // SetResourceId sets the ResourceId field's value.
@@ -9501,6 +10999,270 @@ func (s TagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Configures the third-party firewall's firewall policy.
+type ThirdPartyFirewallFirewallPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the specified firewall policy.
+	FirewallPolicyId *string `min:"1" type:"string"`
+
+	// The name of the specified firewall policy.
+	FirewallPolicyName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallFirewallPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallFirewallPolicy) GoString() string {
+	return s.String()
+}
+
+// SetFirewallPolicyId sets the FirewallPolicyId field's value.
+func (s *ThirdPartyFirewallFirewallPolicy) SetFirewallPolicyId(v string) *ThirdPartyFirewallFirewallPolicy {
+	s.FirewallPolicyId = &v
+	return s
+}
+
+// SetFirewallPolicyName sets the FirewallPolicyName field's value.
+func (s *ThirdPartyFirewallFirewallPolicy) SetFirewallPolicyName(v string) *ThirdPartyFirewallFirewallPolicy {
+	s.FirewallPolicyName = &v
+	return s
+}
+
+// The violation details for a third-party firewall that's not associated with
+// an Firewall Manager managed route table.
+type ThirdPartyFirewallMissingExpectedRouteTableViolation struct {
+	_ struct{} `type:"structure"`
+
+	// The Availability Zone of the firewall subnet that's causing the violation.
+	AvailabilityZone *string `type:"string"`
+
+	// The resource ID of the current route table that's associated with the subnet,
+	// if one is available.
+	CurrentRouteTable *string `min:"1" type:"string"`
+
+	// The resource ID of the route table that should be associated with the subnet.
+	ExpectedRouteTable *string `min:"1" type:"string"`
+
+	// The resource ID of the VPC associated with a fireawll subnet that's causing
+	// the violation.
+	VPC *string `min:"1" type:"string"`
+
+	// The ID of the third-party firewall or VPC resource that's causing the violation.
+	ViolationTarget *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallMissingExpectedRouteTableViolation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallMissingExpectedRouteTableViolation) GoString() string {
+	return s.String()
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *ThirdPartyFirewallMissingExpectedRouteTableViolation) SetAvailabilityZone(v string) *ThirdPartyFirewallMissingExpectedRouteTableViolation {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetCurrentRouteTable sets the CurrentRouteTable field's value.
+func (s *ThirdPartyFirewallMissingExpectedRouteTableViolation) SetCurrentRouteTable(v string) *ThirdPartyFirewallMissingExpectedRouteTableViolation {
+	s.CurrentRouteTable = &v
+	return s
+}
+
+// SetExpectedRouteTable sets the ExpectedRouteTable field's value.
+func (s *ThirdPartyFirewallMissingExpectedRouteTableViolation) SetExpectedRouteTable(v string) *ThirdPartyFirewallMissingExpectedRouteTableViolation {
+	s.ExpectedRouteTable = &v
+	return s
+}
+
+// SetVPC sets the VPC field's value.
+func (s *ThirdPartyFirewallMissingExpectedRouteTableViolation) SetVPC(v string) *ThirdPartyFirewallMissingExpectedRouteTableViolation {
+	s.VPC = &v
+	return s
+}
+
+// SetViolationTarget sets the ViolationTarget field's value.
+func (s *ThirdPartyFirewallMissingExpectedRouteTableViolation) SetViolationTarget(v string) *ThirdPartyFirewallMissingExpectedRouteTableViolation {
+	s.ViolationTarget = &v
+	return s
+}
+
+// The violation details about a third-party firewall's subnet that doesn't
+// have a Firewall Manager managed firewall in its VPC.
+type ThirdPartyFirewallMissingFirewallViolation struct {
+	_ struct{} `type:"structure"`
+
+	// The Availability Zone of the third-party firewall that's causing the violation.
+	AvailabilityZone *string `type:"string"`
+
+	// The reason the resource is causing this violation, if a reason is available.
+	TargetViolationReason *string `type:"string"`
+
+	// The resource ID of the VPC associated with a third-party firewall.
+	VPC *string `min:"1" type:"string"`
+
+	// The ID of the third-party firewall that's causing the violation.
+	ViolationTarget *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallMissingFirewallViolation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallMissingFirewallViolation) GoString() string {
+	return s.String()
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *ThirdPartyFirewallMissingFirewallViolation) SetAvailabilityZone(v string) *ThirdPartyFirewallMissingFirewallViolation {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetTargetViolationReason sets the TargetViolationReason field's value.
+func (s *ThirdPartyFirewallMissingFirewallViolation) SetTargetViolationReason(v string) *ThirdPartyFirewallMissingFirewallViolation {
+	s.TargetViolationReason = &v
+	return s
+}
+
+// SetVPC sets the VPC field's value.
+func (s *ThirdPartyFirewallMissingFirewallViolation) SetVPC(v string) *ThirdPartyFirewallMissingFirewallViolation {
+	s.VPC = &v
+	return s
+}
+
+// SetViolationTarget sets the ViolationTarget field's value.
+func (s *ThirdPartyFirewallMissingFirewallViolation) SetViolationTarget(v string) *ThirdPartyFirewallMissingFirewallViolation {
+	s.ViolationTarget = &v
+	return s
+}
+
+// The violation details for a third-party firewall for an Availability Zone
+// that's missing the Firewall Manager managed subnet.
+type ThirdPartyFirewallMissingSubnetViolation struct {
+	_ struct{} `type:"structure"`
+
+	// The Availability Zone of a subnet that's causing the violation.
+	AvailabilityZone *string `type:"string"`
+
+	// The reason the resource is causing the violation, if a reason is available.
+	TargetViolationReason *string `type:"string"`
+
+	// The resource ID of the VPC associated with a subnet that's causing the violation.
+	VPC *string `min:"1" type:"string"`
+
+	// The ID of the third-party firewall or VPC resource that's causing the violation.
+	ViolationTarget *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallMissingSubnetViolation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallMissingSubnetViolation) GoString() string {
+	return s.String()
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *ThirdPartyFirewallMissingSubnetViolation) SetAvailabilityZone(v string) *ThirdPartyFirewallMissingSubnetViolation {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetTargetViolationReason sets the TargetViolationReason field's value.
+func (s *ThirdPartyFirewallMissingSubnetViolation) SetTargetViolationReason(v string) *ThirdPartyFirewallMissingSubnetViolation {
+	s.TargetViolationReason = &v
+	return s
+}
+
+// SetVPC sets the VPC field's value.
+func (s *ThirdPartyFirewallMissingSubnetViolation) SetVPC(v string) *ThirdPartyFirewallMissingSubnetViolation {
+	s.VPC = &v
+	return s
+}
+
+// SetViolationTarget sets the ViolationTarget field's value.
+func (s *ThirdPartyFirewallMissingSubnetViolation) SetViolationTarget(v string) *ThirdPartyFirewallMissingSubnetViolation {
+	s.ViolationTarget = &v
+	return s
+}
+
+// Configures the deployment model for the third-party firewall.
+type ThirdPartyFirewallPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// Defines the deployment model to use for the third-party firewall policy.
+	FirewallDeploymentModel *string `type:"string" enum:"FirewallDeploymentModel"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThirdPartyFirewallPolicy) GoString() string {
+	return s.String()
+}
+
+// SetFirewallDeploymentModel sets the FirewallDeploymentModel field's value.
+func (s *ThirdPartyFirewallPolicy) SetFirewallDeploymentModel(v string) *ThirdPartyFirewallPolicy {
+	s.FirewallDeploymentModel = &v
+	return s
 }
 
 type UntagResourceInput struct {
@@ -9778,6 +11540,42 @@ func DestinationType_Values() []string {
 }
 
 const (
+	// FirewallDeploymentModelCentralized is a FirewallDeploymentModel enum value
+	FirewallDeploymentModelCentralized = "CENTRALIZED"
+
+	// FirewallDeploymentModelDistributed is a FirewallDeploymentModel enum value
+	FirewallDeploymentModelDistributed = "DISTRIBUTED"
+)
+
+// FirewallDeploymentModel_Values returns all elements of the FirewallDeploymentModel enum
+func FirewallDeploymentModel_Values() []string {
+	return []string{
+		FirewallDeploymentModelCentralized,
+		FirewallDeploymentModelDistributed,
+	}
+}
+
+const (
+	// MarketplaceSubscriptionOnboardingStatusNoSubscription is a MarketplaceSubscriptionOnboardingStatus enum value
+	MarketplaceSubscriptionOnboardingStatusNoSubscription = "NO_SUBSCRIPTION"
+
+	// MarketplaceSubscriptionOnboardingStatusNotComplete is a MarketplaceSubscriptionOnboardingStatus enum value
+	MarketplaceSubscriptionOnboardingStatusNotComplete = "NOT_COMPLETE"
+
+	// MarketplaceSubscriptionOnboardingStatusComplete is a MarketplaceSubscriptionOnboardingStatus enum value
+	MarketplaceSubscriptionOnboardingStatusComplete = "COMPLETE"
+)
+
+// MarketplaceSubscriptionOnboardingStatus_Values returns all elements of the MarketplaceSubscriptionOnboardingStatus enum
+func MarketplaceSubscriptionOnboardingStatus_Values() []string {
+	return []string{
+		MarketplaceSubscriptionOnboardingStatusNoSubscription,
+		MarketplaceSubscriptionOnboardingStatusNotComplete,
+		MarketplaceSubscriptionOnboardingStatusComplete,
+	}
+}
+
+const (
 	// PolicyComplianceStatusTypeCompliant is a PolicyComplianceStatusType enum value
 	PolicyComplianceStatusTypeCompliant = "COMPLIANT"
 
@@ -9810,6 +11608,22 @@ func RemediationActionType_Values() []string {
 }
 
 const (
+	// RuleOrderStrictOrder is a RuleOrder enum value
+	RuleOrderStrictOrder = "STRICT_ORDER"
+
+	// RuleOrderDefaultActionOrder is a RuleOrder enum value
+	RuleOrderDefaultActionOrder = "DEFAULT_ACTION_ORDER"
+)
+
+// RuleOrder_Values returns all elements of the RuleOrder enum
+func RuleOrder_Values() []string {
+	return []string{
+		RuleOrderStrictOrder,
+		RuleOrderDefaultActionOrder,
+	}
+}
+
+const (
 	// SecurityServiceTypeWaf is a SecurityServiceType enum value
 	SecurityServiceTypeWaf = "WAF"
 
@@ -9833,6 +11647,9 @@ const (
 
 	// SecurityServiceTypeDnsFirewall is a SecurityServiceType enum value
 	SecurityServiceTypeDnsFirewall = "DNS_FIREWALL"
+
+	// SecurityServiceTypeThirdPartyFirewall is a SecurityServiceType enum value
+	SecurityServiceTypeThirdPartyFirewall = "THIRD_PARTY_FIREWALL"
 )
 
 // SecurityServiceType_Values returns all elements of the SecurityServiceType enum
@@ -9846,6 +11663,7 @@ func SecurityServiceType_Values() []string {
 		SecurityServiceTypeSecurityGroupsUsageAudit,
 		SecurityServiceTypeNetworkFirewall,
 		SecurityServiceTypeDnsFirewall,
+		SecurityServiceTypeThirdPartyFirewall,
 	}
 }
 
@@ -9898,6 +11716,46 @@ func TargetType_Values() []string {
 }
 
 const (
+	// ThirdPartyFirewallPaloAltoNetworksCloudNgfw is a ThirdPartyFirewall enum value
+	ThirdPartyFirewallPaloAltoNetworksCloudNgfw = "PALO_ALTO_NETWORKS_CLOUD_NGFW"
+)
+
+// ThirdPartyFirewall_Values returns all elements of the ThirdPartyFirewall enum
+func ThirdPartyFirewall_Values() []string {
+	return []string{
+		ThirdPartyFirewallPaloAltoNetworksCloudNgfw,
+	}
+}
+
+const (
+	// ThirdPartyFirewallAssociationStatusOnboarding is a ThirdPartyFirewallAssociationStatus enum value
+	ThirdPartyFirewallAssociationStatusOnboarding = "ONBOARDING"
+
+	// ThirdPartyFirewallAssociationStatusOnboardComplete is a ThirdPartyFirewallAssociationStatus enum value
+	ThirdPartyFirewallAssociationStatusOnboardComplete = "ONBOARD_COMPLETE"
+
+	// ThirdPartyFirewallAssociationStatusOffboarding is a ThirdPartyFirewallAssociationStatus enum value
+	ThirdPartyFirewallAssociationStatusOffboarding = "OFFBOARDING"
+
+	// ThirdPartyFirewallAssociationStatusOffboardComplete is a ThirdPartyFirewallAssociationStatus enum value
+	ThirdPartyFirewallAssociationStatusOffboardComplete = "OFFBOARD_COMPLETE"
+
+	// ThirdPartyFirewallAssociationStatusNotExist is a ThirdPartyFirewallAssociationStatus enum value
+	ThirdPartyFirewallAssociationStatusNotExist = "NOT_EXIST"
+)
+
+// ThirdPartyFirewallAssociationStatus_Values returns all elements of the ThirdPartyFirewallAssociationStatus enum
+func ThirdPartyFirewallAssociationStatus_Values() []string {
+	return []string{
+		ThirdPartyFirewallAssociationStatusOnboarding,
+		ThirdPartyFirewallAssociationStatusOnboardComplete,
+		ThirdPartyFirewallAssociationStatusOffboarding,
+		ThirdPartyFirewallAssociationStatusOffboardComplete,
+		ThirdPartyFirewallAssociationStatusNotExist,
+	}
+}
+
+const (
 	// ViolationReasonWebAclMissingRuleGroup is a ViolationReason enum value
 	ViolationReasonWebAclMissingRuleGroup = "WEB_ACL_MISSING_RULE_GROUP"
 
@@ -9940,6 +11798,9 @@ const (
 	// ViolationReasonNetworkFirewallPolicyModified is a ViolationReason enum value
 	ViolationReasonNetworkFirewallPolicyModified = "NETWORK_FIREWALL_POLICY_MODIFIED"
 
+	// ViolationReasonFirewallSubnetIsOutOfScope is a ViolationReason enum value
+	ViolationReasonFirewallSubnetIsOutOfScope = "FIREWALL_SUBNET_IS_OUT_OF_SCOPE"
+
 	// ViolationReasonInternetGatewayMissingExpectedRoute is a ViolationReason enum value
 	ViolationReasonInternetGatewayMissingExpectedRoute = "INTERNET_GATEWAY_MISSING_EXPECTED_ROUTE"
 
@@ -9972,6 +11833,12 @@ const (
 
 	// ViolationReasonResourceMissingDnsFirewall is a ViolationReason enum value
 	ViolationReasonResourceMissingDnsFirewall = "RESOURCE_MISSING_DNS_FIREWALL"
+
+	// ViolationReasonRouteHasOutOfScopeEndpoint is a ViolationReason enum value
+	ViolationReasonRouteHasOutOfScopeEndpoint = "ROUTE_HAS_OUT_OF_SCOPE_ENDPOINT"
+
+	// ViolationReasonFirewallSubnetMissingVpceEndpoint is a ViolationReason enum value
+	ViolationReasonFirewallSubnetMissingVpceEndpoint = "FIREWALL_SUBNET_MISSING_VPCE_ENDPOINT"
 )
 
 // ViolationReason_Values returns all elements of the ViolationReason enum
@@ -9991,6 +11858,7 @@ func ViolationReason_Values() []string {
 		ViolationReasonMissingFirewallSubnetInAz,
 		ViolationReasonMissingExpectedRouteTable,
 		ViolationReasonNetworkFirewallPolicyModified,
+		ViolationReasonFirewallSubnetIsOutOfScope,
 		ViolationReasonInternetGatewayMissingExpectedRoute,
 		ViolationReasonFirewallSubnetMissingExpectedRoute,
 		ViolationReasonUnexpectedFirewallRoutes,
@@ -10002,5 +11870,7 @@ func ViolationReason_Values() []string {
 		ViolationReasonBlackHoleRouteDetected,
 		ViolationReasonBlackHoleRouteDetectedInFirewallSubnet,
 		ViolationReasonResourceMissingDnsFirewall,
+		ViolationReasonRouteHasOutOfScopeEndpoint,
+		ViolationReasonFirewallSubnetMissingVpceEndpoint,
 	}
 }

@@ -64,6 +64,10 @@ type ProtonAPI interface {
 	AcceptEnvironmentAccountConnectionWithContext(aws.Context, *proton.AcceptEnvironmentAccountConnectionInput, ...request.Option) (*proton.AcceptEnvironmentAccountConnectionOutput, error)
 	AcceptEnvironmentAccountConnectionRequest(*proton.AcceptEnvironmentAccountConnectionInput) (*request.Request, *proton.AcceptEnvironmentAccountConnectionOutput)
 
+	CancelComponentDeployment(*proton.CancelComponentDeploymentInput) (*proton.CancelComponentDeploymentOutput, error)
+	CancelComponentDeploymentWithContext(aws.Context, *proton.CancelComponentDeploymentInput, ...request.Option) (*proton.CancelComponentDeploymentOutput, error)
+	CancelComponentDeploymentRequest(*proton.CancelComponentDeploymentInput) (*request.Request, *proton.CancelComponentDeploymentOutput)
+
 	CancelEnvironmentDeployment(*proton.CancelEnvironmentDeploymentInput) (*proton.CancelEnvironmentDeploymentOutput, error)
 	CancelEnvironmentDeploymentWithContext(aws.Context, *proton.CancelEnvironmentDeploymentInput, ...request.Option) (*proton.CancelEnvironmentDeploymentOutput, error)
 	CancelEnvironmentDeploymentRequest(*proton.CancelEnvironmentDeploymentInput) (*request.Request, *proton.CancelEnvironmentDeploymentOutput)
@@ -75,6 +79,10 @@ type ProtonAPI interface {
 	CancelServicePipelineDeployment(*proton.CancelServicePipelineDeploymentInput) (*proton.CancelServicePipelineDeploymentOutput, error)
 	CancelServicePipelineDeploymentWithContext(aws.Context, *proton.CancelServicePipelineDeploymentInput, ...request.Option) (*proton.CancelServicePipelineDeploymentOutput, error)
 	CancelServicePipelineDeploymentRequest(*proton.CancelServicePipelineDeploymentInput) (*request.Request, *proton.CancelServicePipelineDeploymentOutput)
+
+	CreateComponent(*proton.CreateComponentInput) (*proton.CreateComponentOutput, error)
+	CreateComponentWithContext(aws.Context, *proton.CreateComponentInput, ...request.Option) (*proton.CreateComponentOutput, error)
+	CreateComponentRequest(*proton.CreateComponentInput) (*request.Request, *proton.CreateComponentOutput)
 
 	CreateEnvironment(*proton.CreateEnvironmentInput) (*proton.CreateEnvironmentOutput, error)
 	CreateEnvironmentWithContext(aws.Context, *proton.CreateEnvironmentInput, ...request.Option) (*proton.CreateEnvironmentOutput, error)
@@ -92,6 +100,10 @@ type ProtonAPI interface {
 	CreateEnvironmentTemplateVersionWithContext(aws.Context, *proton.CreateEnvironmentTemplateVersionInput, ...request.Option) (*proton.CreateEnvironmentTemplateVersionOutput, error)
 	CreateEnvironmentTemplateVersionRequest(*proton.CreateEnvironmentTemplateVersionInput) (*request.Request, *proton.CreateEnvironmentTemplateVersionOutput)
 
+	CreateRepository(*proton.CreateRepositoryInput) (*proton.CreateRepositoryOutput, error)
+	CreateRepositoryWithContext(aws.Context, *proton.CreateRepositoryInput, ...request.Option) (*proton.CreateRepositoryOutput, error)
+	CreateRepositoryRequest(*proton.CreateRepositoryInput) (*request.Request, *proton.CreateRepositoryOutput)
+
 	CreateService(*proton.CreateServiceInput) (*proton.CreateServiceOutput, error)
 	CreateServiceWithContext(aws.Context, *proton.CreateServiceInput, ...request.Option) (*proton.CreateServiceOutput, error)
 	CreateServiceRequest(*proton.CreateServiceInput) (*request.Request, *proton.CreateServiceOutput)
@@ -103,6 +115,14 @@ type ProtonAPI interface {
 	CreateServiceTemplateVersion(*proton.CreateServiceTemplateVersionInput) (*proton.CreateServiceTemplateVersionOutput, error)
 	CreateServiceTemplateVersionWithContext(aws.Context, *proton.CreateServiceTemplateVersionInput, ...request.Option) (*proton.CreateServiceTemplateVersionOutput, error)
 	CreateServiceTemplateVersionRequest(*proton.CreateServiceTemplateVersionInput) (*request.Request, *proton.CreateServiceTemplateVersionOutput)
+
+	CreateTemplateSyncConfig(*proton.CreateTemplateSyncConfigInput) (*proton.CreateTemplateSyncConfigOutput, error)
+	CreateTemplateSyncConfigWithContext(aws.Context, *proton.CreateTemplateSyncConfigInput, ...request.Option) (*proton.CreateTemplateSyncConfigOutput, error)
+	CreateTemplateSyncConfigRequest(*proton.CreateTemplateSyncConfigInput) (*request.Request, *proton.CreateTemplateSyncConfigOutput)
+
+	DeleteComponent(*proton.DeleteComponentInput) (*proton.DeleteComponentOutput, error)
+	DeleteComponentWithContext(aws.Context, *proton.DeleteComponentInput, ...request.Option) (*proton.DeleteComponentOutput, error)
+	DeleteComponentRequest(*proton.DeleteComponentInput) (*request.Request, *proton.DeleteComponentOutput)
 
 	DeleteEnvironment(*proton.DeleteEnvironmentInput) (*proton.DeleteEnvironmentOutput, error)
 	DeleteEnvironmentWithContext(aws.Context, *proton.DeleteEnvironmentInput, ...request.Option) (*proton.DeleteEnvironmentOutput, error)
@@ -120,6 +140,10 @@ type ProtonAPI interface {
 	DeleteEnvironmentTemplateVersionWithContext(aws.Context, *proton.DeleteEnvironmentTemplateVersionInput, ...request.Option) (*proton.DeleteEnvironmentTemplateVersionOutput, error)
 	DeleteEnvironmentTemplateVersionRequest(*proton.DeleteEnvironmentTemplateVersionInput) (*request.Request, *proton.DeleteEnvironmentTemplateVersionOutput)
 
+	DeleteRepository(*proton.DeleteRepositoryInput) (*proton.DeleteRepositoryOutput, error)
+	DeleteRepositoryWithContext(aws.Context, *proton.DeleteRepositoryInput, ...request.Option) (*proton.DeleteRepositoryOutput, error)
+	DeleteRepositoryRequest(*proton.DeleteRepositoryInput) (*request.Request, *proton.DeleteRepositoryOutput)
+
 	DeleteService(*proton.DeleteServiceInput) (*proton.DeleteServiceOutput, error)
 	DeleteServiceWithContext(aws.Context, *proton.DeleteServiceInput, ...request.Option) (*proton.DeleteServiceOutput, error)
 	DeleteServiceRequest(*proton.DeleteServiceInput) (*request.Request, *proton.DeleteServiceOutput)
@@ -132,9 +156,17 @@ type ProtonAPI interface {
 	DeleteServiceTemplateVersionWithContext(aws.Context, *proton.DeleteServiceTemplateVersionInput, ...request.Option) (*proton.DeleteServiceTemplateVersionOutput, error)
 	DeleteServiceTemplateVersionRequest(*proton.DeleteServiceTemplateVersionInput) (*request.Request, *proton.DeleteServiceTemplateVersionOutput)
 
+	DeleteTemplateSyncConfig(*proton.DeleteTemplateSyncConfigInput) (*proton.DeleteTemplateSyncConfigOutput, error)
+	DeleteTemplateSyncConfigWithContext(aws.Context, *proton.DeleteTemplateSyncConfigInput, ...request.Option) (*proton.DeleteTemplateSyncConfigOutput, error)
+	DeleteTemplateSyncConfigRequest(*proton.DeleteTemplateSyncConfigInput) (*request.Request, *proton.DeleteTemplateSyncConfigOutput)
+
 	GetAccountSettings(*proton.GetAccountSettingsInput) (*proton.GetAccountSettingsOutput, error)
 	GetAccountSettingsWithContext(aws.Context, *proton.GetAccountSettingsInput, ...request.Option) (*proton.GetAccountSettingsOutput, error)
 	GetAccountSettingsRequest(*proton.GetAccountSettingsInput) (*request.Request, *proton.GetAccountSettingsOutput)
+
+	GetComponent(*proton.GetComponentInput) (*proton.GetComponentOutput, error)
+	GetComponentWithContext(aws.Context, *proton.GetComponentInput, ...request.Option) (*proton.GetComponentOutput, error)
+	GetComponentRequest(*proton.GetComponentInput) (*request.Request, *proton.GetComponentOutput)
 
 	GetEnvironment(*proton.GetEnvironmentInput) (*proton.GetEnvironmentOutput, error)
 	GetEnvironmentWithContext(aws.Context, *proton.GetEnvironmentInput, ...request.Option) (*proton.GetEnvironmentOutput, error)
@@ -152,6 +184,14 @@ type ProtonAPI interface {
 	GetEnvironmentTemplateVersionWithContext(aws.Context, *proton.GetEnvironmentTemplateVersionInput, ...request.Option) (*proton.GetEnvironmentTemplateVersionOutput, error)
 	GetEnvironmentTemplateVersionRequest(*proton.GetEnvironmentTemplateVersionInput) (*request.Request, *proton.GetEnvironmentTemplateVersionOutput)
 
+	GetRepository(*proton.GetRepositoryInput) (*proton.GetRepositoryOutput, error)
+	GetRepositoryWithContext(aws.Context, *proton.GetRepositoryInput, ...request.Option) (*proton.GetRepositoryOutput, error)
+	GetRepositoryRequest(*proton.GetRepositoryInput) (*request.Request, *proton.GetRepositoryOutput)
+
+	GetRepositorySyncStatus(*proton.GetRepositorySyncStatusInput) (*proton.GetRepositorySyncStatusOutput, error)
+	GetRepositorySyncStatusWithContext(aws.Context, *proton.GetRepositorySyncStatusInput, ...request.Option) (*proton.GetRepositorySyncStatusOutput, error)
+	GetRepositorySyncStatusRequest(*proton.GetRepositorySyncStatusInput) (*request.Request, *proton.GetRepositorySyncStatusOutput)
+
 	GetService(*proton.GetServiceInput) (*proton.GetServiceOutput, error)
 	GetServiceWithContext(aws.Context, *proton.GetServiceInput, ...request.Option) (*proton.GetServiceOutput, error)
 	GetServiceRequest(*proton.GetServiceInput) (*request.Request, *proton.GetServiceOutput)
@@ -168,12 +208,55 @@ type ProtonAPI interface {
 	GetServiceTemplateVersionWithContext(aws.Context, *proton.GetServiceTemplateVersionInput, ...request.Option) (*proton.GetServiceTemplateVersionOutput, error)
 	GetServiceTemplateVersionRequest(*proton.GetServiceTemplateVersionInput) (*request.Request, *proton.GetServiceTemplateVersionOutput)
 
+	GetTemplateSyncConfig(*proton.GetTemplateSyncConfigInput) (*proton.GetTemplateSyncConfigOutput, error)
+	GetTemplateSyncConfigWithContext(aws.Context, *proton.GetTemplateSyncConfigInput, ...request.Option) (*proton.GetTemplateSyncConfigOutput, error)
+	GetTemplateSyncConfigRequest(*proton.GetTemplateSyncConfigInput) (*request.Request, *proton.GetTemplateSyncConfigOutput)
+
+	GetTemplateSyncStatus(*proton.GetTemplateSyncStatusInput) (*proton.GetTemplateSyncStatusOutput, error)
+	GetTemplateSyncStatusWithContext(aws.Context, *proton.GetTemplateSyncStatusInput, ...request.Option) (*proton.GetTemplateSyncStatusOutput, error)
+	GetTemplateSyncStatusRequest(*proton.GetTemplateSyncStatusInput) (*request.Request, *proton.GetTemplateSyncStatusOutput)
+
+	ListComponentOutputs(*proton.ListComponentOutputsInput) (*proton.ListComponentOutputsOutput, error)
+	ListComponentOutputsWithContext(aws.Context, *proton.ListComponentOutputsInput, ...request.Option) (*proton.ListComponentOutputsOutput, error)
+	ListComponentOutputsRequest(*proton.ListComponentOutputsInput) (*request.Request, *proton.ListComponentOutputsOutput)
+
+	ListComponentOutputsPages(*proton.ListComponentOutputsInput, func(*proton.ListComponentOutputsOutput, bool) bool) error
+	ListComponentOutputsPagesWithContext(aws.Context, *proton.ListComponentOutputsInput, func(*proton.ListComponentOutputsOutput, bool) bool, ...request.Option) error
+
+	ListComponentProvisionedResources(*proton.ListComponentProvisionedResourcesInput) (*proton.ListComponentProvisionedResourcesOutput, error)
+	ListComponentProvisionedResourcesWithContext(aws.Context, *proton.ListComponentProvisionedResourcesInput, ...request.Option) (*proton.ListComponentProvisionedResourcesOutput, error)
+	ListComponentProvisionedResourcesRequest(*proton.ListComponentProvisionedResourcesInput) (*request.Request, *proton.ListComponentProvisionedResourcesOutput)
+
+	ListComponentProvisionedResourcesPages(*proton.ListComponentProvisionedResourcesInput, func(*proton.ListComponentProvisionedResourcesOutput, bool) bool) error
+	ListComponentProvisionedResourcesPagesWithContext(aws.Context, *proton.ListComponentProvisionedResourcesInput, func(*proton.ListComponentProvisionedResourcesOutput, bool) bool, ...request.Option) error
+
+	ListComponents(*proton.ListComponentsInput) (*proton.ListComponentsOutput, error)
+	ListComponentsWithContext(aws.Context, *proton.ListComponentsInput, ...request.Option) (*proton.ListComponentsOutput, error)
+	ListComponentsRequest(*proton.ListComponentsInput) (*request.Request, *proton.ListComponentsOutput)
+
+	ListComponentsPages(*proton.ListComponentsInput, func(*proton.ListComponentsOutput, bool) bool) error
+	ListComponentsPagesWithContext(aws.Context, *proton.ListComponentsInput, func(*proton.ListComponentsOutput, bool) bool, ...request.Option) error
+
 	ListEnvironmentAccountConnections(*proton.ListEnvironmentAccountConnectionsInput) (*proton.ListEnvironmentAccountConnectionsOutput, error)
 	ListEnvironmentAccountConnectionsWithContext(aws.Context, *proton.ListEnvironmentAccountConnectionsInput, ...request.Option) (*proton.ListEnvironmentAccountConnectionsOutput, error)
 	ListEnvironmentAccountConnectionsRequest(*proton.ListEnvironmentAccountConnectionsInput) (*request.Request, *proton.ListEnvironmentAccountConnectionsOutput)
 
 	ListEnvironmentAccountConnectionsPages(*proton.ListEnvironmentAccountConnectionsInput, func(*proton.ListEnvironmentAccountConnectionsOutput, bool) bool) error
 	ListEnvironmentAccountConnectionsPagesWithContext(aws.Context, *proton.ListEnvironmentAccountConnectionsInput, func(*proton.ListEnvironmentAccountConnectionsOutput, bool) bool, ...request.Option) error
+
+	ListEnvironmentOutputs(*proton.ListEnvironmentOutputsInput) (*proton.ListEnvironmentOutputsOutput, error)
+	ListEnvironmentOutputsWithContext(aws.Context, *proton.ListEnvironmentOutputsInput, ...request.Option) (*proton.ListEnvironmentOutputsOutput, error)
+	ListEnvironmentOutputsRequest(*proton.ListEnvironmentOutputsInput) (*request.Request, *proton.ListEnvironmentOutputsOutput)
+
+	ListEnvironmentOutputsPages(*proton.ListEnvironmentOutputsInput, func(*proton.ListEnvironmentOutputsOutput, bool) bool) error
+	ListEnvironmentOutputsPagesWithContext(aws.Context, *proton.ListEnvironmentOutputsInput, func(*proton.ListEnvironmentOutputsOutput, bool) bool, ...request.Option) error
+
+	ListEnvironmentProvisionedResources(*proton.ListEnvironmentProvisionedResourcesInput) (*proton.ListEnvironmentProvisionedResourcesOutput, error)
+	ListEnvironmentProvisionedResourcesWithContext(aws.Context, *proton.ListEnvironmentProvisionedResourcesInput, ...request.Option) (*proton.ListEnvironmentProvisionedResourcesOutput, error)
+	ListEnvironmentProvisionedResourcesRequest(*proton.ListEnvironmentProvisionedResourcesInput) (*request.Request, *proton.ListEnvironmentProvisionedResourcesOutput)
+
+	ListEnvironmentProvisionedResourcesPages(*proton.ListEnvironmentProvisionedResourcesInput, func(*proton.ListEnvironmentProvisionedResourcesOutput, bool) bool) error
+	ListEnvironmentProvisionedResourcesPagesWithContext(aws.Context, *proton.ListEnvironmentProvisionedResourcesInput, func(*proton.ListEnvironmentProvisionedResourcesOutput, bool) bool, ...request.Option) error
 
 	ListEnvironmentTemplateVersions(*proton.ListEnvironmentTemplateVersionsInput) (*proton.ListEnvironmentTemplateVersionsOutput, error)
 	ListEnvironmentTemplateVersionsWithContext(aws.Context, *proton.ListEnvironmentTemplateVersionsInput, ...request.Option) (*proton.ListEnvironmentTemplateVersionsOutput, error)
@@ -196,12 +279,54 @@ type ProtonAPI interface {
 	ListEnvironmentsPages(*proton.ListEnvironmentsInput, func(*proton.ListEnvironmentsOutput, bool) bool) error
 	ListEnvironmentsPagesWithContext(aws.Context, *proton.ListEnvironmentsInput, func(*proton.ListEnvironmentsOutput, bool) bool, ...request.Option) error
 
+	ListRepositories(*proton.ListRepositoriesInput) (*proton.ListRepositoriesOutput, error)
+	ListRepositoriesWithContext(aws.Context, *proton.ListRepositoriesInput, ...request.Option) (*proton.ListRepositoriesOutput, error)
+	ListRepositoriesRequest(*proton.ListRepositoriesInput) (*request.Request, *proton.ListRepositoriesOutput)
+
+	ListRepositoriesPages(*proton.ListRepositoriesInput, func(*proton.ListRepositoriesOutput, bool) bool) error
+	ListRepositoriesPagesWithContext(aws.Context, *proton.ListRepositoriesInput, func(*proton.ListRepositoriesOutput, bool) bool, ...request.Option) error
+
+	ListRepositorySyncDefinitions(*proton.ListRepositorySyncDefinitionsInput) (*proton.ListRepositorySyncDefinitionsOutput, error)
+	ListRepositorySyncDefinitionsWithContext(aws.Context, *proton.ListRepositorySyncDefinitionsInput, ...request.Option) (*proton.ListRepositorySyncDefinitionsOutput, error)
+	ListRepositorySyncDefinitionsRequest(*proton.ListRepositorySyncDefinitionsInput) (*request.Request, *proton.ListRepositorySyncDefinitionsOutput)
+
+	ListRepositorySyncDefinitionsPages(*proton.ListRepositorySyncDefinitionsInput, func(*proton.ListRepositorySyncDefinitionsOutput, bool) bool) error
+	ListRepositorySyncDefinitionsPagesWithContext(aws.Context, *proton.ListRepositorySyncDefinitionsInput, func(*proton.ListRepositorySyncDefinitionsOutput, bool) bool, ...request.Option) error
+
+	ListServiceInstanceOutputs(*proton.ListServiceInstanceOutputsInput) (*proton.ListServiceInstanceOutputsOutput, error)
+	ListServiceInstanceOutputsWithContext(aws.Context, *proton.ListServiceInstanceOutputsInput, ...request.Option) (*proton.ListServiceInstanceOutputsOutput, error)
+	ListServiceInstanceOutputsRequest(*proton.ListServiceInstanceOutputsInput) (*request.Request, *proton.ListServiceInstanceOutputsOutput)
+
+	ListServiceInstanceOutputsPages(*proton.ListServiceInstanceOutputsInput, func(*proton.ListServiceInstanceOutputsOutput, bool) bool) error
+	ListServiceInstanceOutputsPagesWithContext(aws.Context, *proton.ListServiceInstanceOutputsInput, func(*proton.ListServiceInstanceOutputsOutput, bool) bool, ...request.Option) error
+
+	ListServiceInstanceProvisionedResources(*proton.ListServiceInstanceProvisionedResourcesInput) (*proton.ListServiceInstanceProvisionedResourcesOutput, error)
+	ListServiceInstanceProvisionedResourcesWithContext(aws.Context, *proton.ListServiceInstanceProvisionedResourcesInput, ...request.Option) (*proton.ListServiceInstanceProvisionedResourcesOutput, error)
+	ListServiceInstanceProvisionedResourcesRequest(*proton.ListServiceInstanceProvisionedResourcesInput) (*request.Request, *proton.ListServiceInstanceProvisionedResourcesOutput)
+
+	ListServiceInstanceProvisionedResourcesPages(*proton.ListServiceInstanceProvisionedResourcesInput, func(*proton.ListServiceInstanceProvisionedResourcesOutput, bool) bool) error
+	ListServiceInstanceProvisionedResourcesPagesWithContext(aws.Context, *proton.ListServiceInstanceProvisionedResourcesInput, func(*proton.ListServiceInstanceProvisionedResourcesOutput, bool) bool, ...request.Option) error
+
 	ListServiceInstances(*proton.ListServiceInstancesInput) (*proton.ListServiceInstancesOutput, error)
 	ListServiceInstancesWithContext(aws.Context, *proton.ListServiceInstancesInput, ...request.Option) (*proton.ListServiceInstancesOutput, error)
 	ListServiceInstancesRequest(*proton.ListServiceInstancesInput) (*request.Request, *proton.ListServiceInstancesOutput)
 
 	ListServiceInstancesPages(*proton.ListServiceInstancesInput, func(*proton.ListServiceInstancesOutput, bool) bool) error
 	ListServiceInstancesPagesWithContext(aws.Context, *proton.ListServiceInstancesInput, func(*proton.ListServiceInstancesOutput, bool) bool, ...request.Option) error
+
+	ListServicePipelineOutputs(*proton.ListServicePipelineOutputsInput) (*proton.ListServicePipelineOutputsOutput, error)
+	ListServicePipelineOutputsWithContext(aws.Context, *proton.ListServicePipelineOutputsInput, ...request.Option) (*proton.ListServicePipelineOutputsOutput, error)
+	ListServicePipelineOutputsRequest(*proton.ListServicePipelineOutputsInput) (*request.Request, *proton.ListServicePipelineOutputsOutput)
+
+	ListServicePipelineOutputsPages(*proton.ListServicePipelineOutputsInput, func(*proton.ListServicePipelineOutputsOutput, bool) bool) error
+	ListServicePipelineOutputsPagesWithContext(aws.Context, *proton.ListServicePipelineOutputsInput, func(*proton.ListServicePipelineOutputsOutput, bool) bool, ...request.Option) error
+
+	ListServicePipelineProvisionedResources(*proton.ListServicePipelineProvisionedResourcesInput) (*proton.ListServicePipelineProvisionedResourcesOutput, error)
+	ListServicePipelineProvisionedResourcesWithContext(aws.Context, *proton.ListServicePipelineProvisionedResourcesInput, ...request.Option) (*proton.ListServicePipelineProvisionedResourcesOutput, error)
+	ListServicePipelineProvisionedResourcesRequest(*proton.ListServicePipelineProvisionedResourcesInput) (*request.Request, *proton.ListServicePipelineProvisionedResourcesOutput)
+
+	ListServicePipelineProvisionedResourcesPages(*proton.ListServicePipelineProvisionedResourcesInput, func(*proton.ListServicePipelineProvisionedResourcesOutput, bool) bool) error
+	ListServicePipelineProvisionedResourcesPagesWithContext(aws.Context, *proton.ListServicePipelineProvisionedResourcesInput, func(*proton.ListServicePipelineProvisionedResourcesOutput, bool) bool, ...request.Option) error
 
 	ListServiceTemplateVersions(*proton.ListServiceTemplateVersionsInput) (*proton.ListServiceTemplateVersionsOutput, error)
 	ListServiceTemplateVersionsWithContext(aws.Context, *proton.ListServiceTemplateVersionsInput, ...request.Option) (*proton.ListServiceTemplateVersionsOutput, error)
@@ -231,6 +356,10 @@ type ProtonAPI interface {
 	ListTagsForResourcePages(*proton.ListTagsForResourceInput, func(*proton.ListTagsForResourceOutput, bool) bool) error
 	ListTagsForResourcePagesWithContext(aws.Context, *proton.ListTagsForResourceInput, func(*proton.ListTagsForResourceOutput, bool) bool, ...request.Option) error
 
+	NotifyResourceDeploymentStatusChange(*proton.NotifyResourceDeploymentStatusChangeInput) (*proton.NotifyResourceDeploymentStatusChangeOutput, error)
+	NotifyResourceDeploymentStatusChangeWithContext(aws.Context, *proton.NotifyResourceDeploymentStatusChangeInput, ...request.Option) (*proton.NotifyResourceDeploymentStatusChangeOutput, error)
+	NotifyResourceDeploymentStatusChangeRequest(*proton.NotifyResourceDeploymentStatusChangeInput) (*request.Request, *proton.NotifyResourceDeploymentStatusChangeOutput)
+
 	RejectEnvironmentAccountConnection(*proton.RejectEnvironmentAccountConnectionInput) (*proton.RejectEnvironmentAccountConnectionOutput, error)
 	RejectEnvironmentAccountConnectionWithContext(aws.Context, *proton.RejectEnvironmentAccountConnectionInput, ...request.Option) (*proton.RejectEnvironmentAccountConnectionOutput, error)
 	RejectEnvironmentAccountConnectionRequest(*proton.RejectEnvironmentAccountConnectionInput) (*request.Request, *proton.RejectEnvironmentAccountConnectionOutput)
@@ -246,6 +375,10 @@ type ProtonAPI interface {
 	UpdateAccountSettings(*proton.UpdateAccountSettingsInput) (*proton.UpdateAccountSettingsOutput, error)
 	UpdateAccountSettingsWithContext(aws.Context, *proton.UpdateAccountSettingsInput, ...request.Option) (*proton.UpdateAccountSettingsOutput, error)
 	UpdateAccountSettingsRequest(*proton.UpdateAccountSettingsInput) (*request.Request, *proton.UpdateAccountSettingsOutput)
+
+	UpdateComponent(*proton.UpdateComponentInput) (*proton.UpdateComponentOutput, error)
+	UpdateComponentWithContext(aws.Context, *proton.UpdateComponentInput, ...request.Option) (*proton.UpdateComponentOutput, error)
+	UpdateComponentRequest(*proton.UpdateComponentInput) (*request.Request, *proton.UpdateComponentOutput)
 
 	UpdateEnvironment(*proton.UpdateEnvironmentInput) (*proton.UpdateEnvironmentOutput, error)
 	UpdateEnvironmentWithContext(aws.Context, *proton.UpdateEnvironmentInput, ...request.Option) (*proton.UpdateEnvironmentOutput, error)
@@ -282,6 +415,16 @@ type ProtonAPI interface {
 	UpdateServiceTemplateVersion(*proton.UpdateServiceTemplateVersionInput) (*proton.UpdateServiceTemplateVersionOutput, error)
 	UpdateServiceTemplateVersionWithContext(aws.Context, *proton.UpdateServiceTemplateVersionInput, ...request.Option) (*proton.UpdateServiceTemplateVersionOutput, error)
 	UpdateServiceTemplateVersionRequest(*proton.UpdateServiceTemplateVersionInput) (*request.Request, *proton.UpdateServiceTemplateVersionOutput)
+
+	UpdateTemplateSyncConfig(*proton.UpdateTemplateSyncConfigInput) (*proton.UpdateTemplateSyncConfigOutput, error)
+	UpdateTemplateSyncConfigWithContext(aws.Context, *proton.UpdateTemplateSyncConfigInput, ...request.Option) (*proton.UpdateTemplateSyncConfigOutput, error)
+	UpdateTemplateSyncConfigRequest(*proton.UpdateTemplateSyncConfigInput) (*request.Request, *proton.UpdateTemplateSyncConfigOutput)
+
+	WaitUntilComponentDeleted(*proton.GetComponentInput) error
+	WaitUntilComponentDeletedWithContext(aws.Context, *proton.GetComponentInput, ...request.WaiterOption) error
+
+	WaitUntilComponentDeployed(*proton.GetComponentInput) error
+	WaitUntilComponentDeployedWithContext(aws.Context, *proton.GetComponentInput, ...request.WaiterOption) error
 
 	WaitUntilEnvironmentDeployed(*proton.GetEnvironmentInput) error
 	WaitUntilEnvironmentDeployedWithContext(aws.Context, *proton.GetEnvironmentInput, ...request.WaiterOption) error

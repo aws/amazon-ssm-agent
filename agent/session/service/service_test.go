@@ -22,6 +22,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -73,7 +75,7 @@ func TestCreateControlChannel(t *testing.T) {
 		}
 		return xml.Marshal(output)
 	}
-	output, err := service.CreateControlChannel(log.NewMockLog(), createControlChannelInput, instanceId)
+	output, err := service.CreateControlChannel(logmocks.NewMockLog(), createControlChannelInput, instanceId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, token, *output.TokenValue)
@@ -96,7 +98,7 @@ func TestCreateDataChannel(t *testing.T) {
 		}
 		return xml.Marshal(output)
 	}
-	output, err := service.CreateDataChannel(log.NewMockLog(), createDataChannelInput, sessionId)
+	output, err := service.CreateDataChannel(logmocks.NewMockLog(), createDataChannelInput, sessionId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, token, *output.TokenValue)
@@ -108,14 +110,14 @@ func TestGetBaseUrl(t *testing.T) {
 	}
 
 	// data channel url test
-	dataChannelUrlResult, err := getMGSBaseUrl(context.NewMockDefault(), mgsConfig.DataChannel, sessionId, region)
+	dataChannelUrlResult, err := getMGSBaseUrl(contextmocks.NewMockDefault(), mgsConfig.DataChannel, sessionId, region)
 
 	expectedDataChannelUrl := "https://" + mgsHost + "/v1/data-channel/" + sessionId
 	assert.Nil(t, err)
 	assert.Equal(t, expectedDataChannelUrl, dataChannelUrlResult)
 
 	// control channel url test
-	controlChannelUrlResult, err := getMGSBaseUrl(context.NewMockDefault(), mgsConfig.ControlChannel, instanceId, region)
+	controlChannelUrlResult, err := getMGSBaseUrl(contextmocks.NewMockDefault(), mgsConfig.ControlChannel, instanceId, region)
 
 	expectedControlChannelUrl := "https://" + mgsHost + "/v1/control-channel/" + instanceId
 	assert.Nil(t, err)
@@ -126,6 +128,6 @@ func getService() Service {
 	return &MessageGatewayService{
 		region:  "us-east-1",
 		signer:  signer,
-		context: context.NewMockDefault(),
+		context: contextmocks.NewMockDefault(),
 	}
 }

@@ -18,11 +18,15 @@
 package constants
 
 import (
+	"fmt"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameters"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 )
 
 const (
-	HomeEnvVariable     = "HOME=/home/"
+	UserDirectory       = "/home/"
+	HomeEnvVariable     = "HOME=" + UserDirectory
 	RootHomeEnvVariable = "HOME=/root"
 )
 
@@ -32,4 +36,23 @@ func GetShellCommand(shellProps mgsContracts.ShellProperties) string {
 
 func GetRunAsElevated(shellProps mgsContracts.ShellProperties) bool {
 	return shellProps.Linux.RunAsElevated
+}
+
+// GetSeparateOutputStream return whether need separate output stderr and stderr for non-interactive session.
+func GetSeparateOutputStream(shellProps mgsContracts.ShellProperties) (bool, error) {
+	separateOutPutStream, err := parameters.ConvertToBool(shellProps.Linux.SeparateOutputStream)
+	if err != nil {
+		err = fmt.Errorf("unable to convert separateOutPutStream: %v", err)
+	}
+	return separateOutPutStream, err
+}
+
+// GetStdOutSeparatorPrefix return the prefix used for StdOut partition
+func GetStdOutSeparatorPrefix(shellProps mgsContracts.ShellProperties) string {
+	return shellProps.Linux.StdOutSeparatorPrefix
+}
+
+// GetStdErrSeparatorPrefix return the prefix used for StdErr partition
+func GetStdErrSeparatorPrefix(shellProps mgsContracts.ShellProperties) string {
+	return shellProps.Linux.StdErrSeparatorPrefix
 }

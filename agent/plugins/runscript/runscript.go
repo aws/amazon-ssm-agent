@@ -28,7 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
@@ -36,7 +36,7 @@ const (
 	downloadsDir = "downloads" //Directory under the orchestration directory where the downloaded resource resides
 )
 
-var getCredentialsRefresherIdentity = identity.GetCredentialsRefresherIdentity
+var getRemoteProvider = identity.GetRemoteProvider
 
 // Plugin is the type for the runscript plugin.
 type Plugin struct {
@@ -86,13 +86,13 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 }
 
 func (p *Plugin) setShareCredsEnvironment(pluginInput RunScriptPluginInput) {
-	shareCredsIdentity, ok := getCredentialsRefresherIdentity(p.Context.Identity())
+	credentialProvider, ok := getRemoteProvider(p.Context.Identity())
 	if !ok {
 		return
 	}
 
 	// Don't set environment variables if credentials are not being shared
-	if !shareCredsIdentity.ShouldShareCredentials() {
+	if !credentialProvider.SharesCredentials() {
 		return
 	}
 

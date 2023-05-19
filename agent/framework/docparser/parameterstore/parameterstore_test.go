@@ -20,7 +20,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	mockcontext "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -147,7 +148,7 @@ func testResolveMethod(t *testing.T, testCase StringTestCase) {
 		return &result, nil
 	}
 
-	result, err := Resolve(context.NewMockDefault(), testCase.Input)
+	result, err := Resolve(mockcontext.NewMockDefault(), testCase.Input)
 
 	assert.Equal(t, testCase.Output, result)
 	assert.Nil(t, err)
@@ -163,7 +164,7 @@ func testResolveMethodWithInvalidCase(t *testing.T, testCase StringTestCase) {
 		return &result, nil
 	}
 
-	_, err := Resolve(context.NewMockDefault(), testCase.Input)
+	_, err := Resolve(mockcontext.NewMockDefault(), testCase.Input)
 
 	assert.NotNil(t, err)
 }
@@ -204,7 +205,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		"testDocument":     "testdash-p1",
 	}
 
-	err := ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, "")
+	err := ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, "")
 	assert.Nil(t, err)
 
 	// Test case 2 with SSM parameters and secure string SSM parameter type
@@ -247,7 +248,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, "")
+	err = ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, "")
 	assert.Equal(t, "Parameters [test test2] of type SecureString are not supported", err.Error())
 
 	// Test case 3 with SSM parameters and SSM parameter value doesn't match allowed pattern
@@ -288,7 +289,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, "")
+	err = ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, "")
 	assert.Contains(t, err.Error(), "does not match the allowed pattern /^[a-zA-Z]+$/")
 
 	// Test case 4 with SSM parameter versions
@@ -351,7 +352,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, "")
+	err = ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, "")
 	assert.Nil(t, err)
 
 	// Test case 4 with invalid SSM parameter versions
@@ -410,7 +411,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, "")
+	err = ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, "")
 	assert.Equal(t, "Input contains invalid parameters [foo:7]", err.Error())
 }
 
@@ -426,7 +427,7 @@ func TestValidateParameter_SkipValidation_SSMParameterWithExtraString(t *testing
 	resolve = func(context context.T, input interface{}) (interface{}, error) {
 		return map[string]interface{}{"commands": "test sample"}, nil
 	}
-	err := ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
+	err := ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
 	assert.Nil(t, err)
 }
 
@@ -442,7 +443,7 @@ func TestValidateParameter_SkipValidation_SSMParameter(t *testing.T) {
 	resolve = func(context context.T, input interface{}) (interface{}, error) {
 		return map[string]interface{}{"commands": "sample"}, nil
 	}
-	err := ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
+	err := ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
 	assert.Nil(t, err)
 }
 
@@ -458,7 +459,7 @@ func TestValidateParameter_Success_ValidMinChar(t *testing.T) {
 	resolve = func(context context.T, input interface{}) (interface{}, error) {
 		return map[string]interface{}{"commands": "12"}, nil
 	}
-	err := ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
+	err := ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
 	assert.Nil(t, err)
 }
 
@@ -474,6 +475,6 @@ func TestValidateParameter_Failed_InValidMinChar(t *testing.T) {
 	resolve = func(context context.T, input interface{}) (interface{}, error) {
 		return map[string]interface{}{"commands": "12345"}, nil
 	}
-	err := ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
+	err := ValidateSSMParameters(mockcontext.NewMockDefault(), documentParameters, parameters, appconfig.PluginRunDocument)
 	assert.Contains(t, err.Error(), "is less than the min char limit")
 }

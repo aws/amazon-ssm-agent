@@ -24,6 +24,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -32,8 +33,9 @@ import (
 
 var validIPV4Address *regexp.Regexp
 
+var cmd = appconfig.PowerShellPluginCommandName
+
 const (
-	cmd                                       = "powershell"
 	cmdArgsToGetFullDetailsForGivenMacAddress = `Get-wmiobject -class Win32_NetworkAdapterConfiguration | where-object {$_.MACAddress -eq "%s"} | Select-object @{Name="IPAddresses";Expression={$_.IPAddress}}, @{Name="DefaultIPGateway";Expression={$_.DefaultIPGateway}}, @{Name="MacAddress";Expression={$_.MACAddress}}, @{Name="DHCPServer";Expression={$_.DHCPServer}}, @{Name="DNSServers";Expression={$_.DNSServerSearchOrder}} ,@{Name="IPSubnet";Expression={$_.IPSubnet}} | ConvertTo-Json`
 
 	//We list only ethernet & wireless type of network interfaces. For more details refer to https://msdn.microsoft.com/en-us/library/aa394217%28v=vs.85%29.aspx

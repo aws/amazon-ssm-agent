@@ -19,10 +19,8 @@
 package application
 
 import (
-	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -113,15 +111,6 @@ var sampleDataSetsParsed = [][]model.ApplicationData{
 	{},
 }
 
-func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
-	var result []byte
-	return result, fmt.Errorf("Random Error")
-}
-
-func MockTestExecutorWithConvertToApplicationDataReturningRandomString(command string, args ...string) ([]byte, error) {
-	return []byte(randomString), nil
-}
-
 func TestConvertToApplicationData(t *testing.T) {
 
 	var data []model.ApplicationData
@@ -141,78 +130,4 @@ func getDataWithArchitecture(data []model.ApplicationData, architecture string) 
 		dataWithArchitecture[i].Architecture = architecture
 	}
 	return
-}
-
-func TestExecutePowershellCommands(t *testing.T) {
-
-	var data []model.ApplicationData
-	c := context.NewMockDefault()
-	packageRepository = MockPackageRepositoryEmpty()
-	mockCmd := "RandomCommand"
-	mockArgs := "RandomCommandArgs"
-
-	//testing command executor without errors
-	for i, sampleData := range sampleDataSets {
-		cmdExecutor = createMockExecutor(sampleData)
-		data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
-
-		assertEqual(t, getDataWithArchitecture(sampleDataSetsParsed[i], mockArch), data)
-	}
-
-	//testing command executor with errors
-	cmdExecutor = MockTestExecutorWithError
-	data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
-
-	assert.Equal(t, 0, len(data), "On encountering error - application dataset must be empty")
-
-	//testing command executor with ConvertToApplicationData throwing errors
-	cmdExecutor = MockTestExecutorWithConvertToApplicationDataReturningRandomString
-	data = executePowershellCommands(c, mockCmd, mockArgs, mockArch)
-
-	assert.Equal(t, 0, len(data), "On encountering error during json conversion - application dataset must be empty")
-}
-
-func TestCollectApplicationData(t *testing.T) {
-
-	var data []model.ApplicationData
-	c := context.NewMockDefault()
-	packageRepository = MockPackageRepositoryEmpty()
-
-	// mock OS arch
-	detectOSArch = func(context context.T, command, args string) (osArch string) {
-		return KeywordFor64BitArchitectureReportedByPowershell
-	}
-
-	//testing command executor without errors
-	for i, sampleData := range sampleDataSets {
-		cmdExecutor = createMockExecutor(sampleData)
-		data = collectPlatformDependentApplicationData(c)
-
-		// MockExecutor will be called 2 times: once for i386, once for amd64, hence total entries must be twice the sample data
-		var doubleResult []model.ApplicationData
-		doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataSetsParsed[i], model.Arch32Bit)...)
-		doubleResult = append(doubleResult, getDataWithArchitecture(sampleDataSetsParsed[i], model.Arch64Bit)...)
-		assertEqual(t, doubleResult, data)
-	}
-
-	//testing command executor with errors
-	cmdExecutor = MockTestExecutorWithError
-	data = collectPlatformDependentApplicationData(c)
-
-	assert.Equal(t, 0, len(data), "If MockExecutor throws error, application dataset must be empty")
-}
-
-func TestCollectAndMergePackages(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	packageRepository = MockPackageRepository([]model.ApplicationData{
-		{Name: "AWS Tools for Windows", Version: "3.9.344.0", Architecture: model.Arch64Bit, CompType: model.AWSComponent},
-		{Name: "IntelSriovDriver", Version: "1.2.3", Architecture: model.Arch64Bit},
-	})
-
-	for i, sampleData := range sampleDataSets {
-		cmdExecutor = createMockExecutor(sampleData)
-		data := CollectApplicationData(mockContext)
-		// MockExecutor will be called 2 times and there are one or two extra application from the merge
-		assert.True(t, 2*len(sampleDataSetsParsed[i])+1 <= len(data))
-	}
 }

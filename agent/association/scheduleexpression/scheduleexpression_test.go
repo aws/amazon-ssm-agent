@@ -16,13 +16,13 @@ package scheduleexpression
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestParseReturnsSuccessfullyForValidRateExpression(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "rate(30 minutes)")
@@ -34,7 +34,7 @@ func TestParseReturnsSuccessfullyForValidRateExpression(t *testing.T) {
 
 func TestParseReturnsSuccessfullyForValidUpperCasedRateExpression(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "RATE(30 MINUTES)")
@@ -46,7 +46,7 @@ func TestParseReturnsSuccessfullyForValidUpperCasedRateExpression(t *testing.T) 
 
 func TestParseReturnsErrorForInvalidRateExpression(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "rate(foo)")
@@ -58,7 +58,7 @@ func TestParseReturnsErrorForInvalidRateExpression(t *testing.T) {
 
 func TestParseReturnsSuccessfullyForValidCronExpression(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "cron(0 0 0/1 * * ? *)")
@@ -70,7 +70,7 @@ func TestParseReturnsSuccessfullyForValidCronExpression(t *testing.T) {
 
 func TestParseReturnsSuccessfullyForValidUpperCasedCronExpression(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "CRON(0 0 0/1 * * ? *)")
@@ -82,7 +82,7 @@ func TestParseReturnsSuccessfullyForValidUpperCasedCronExpression(t *testing.T) 
 
 func TestParseReturnsErrorWhenScheduleExpressionIsJustTheConstantCron(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "cron")
@@ -95,7 +95,7 @@ func TestParseReturnsErrorWhenScheduleExpressionIsJustTheConstantCron(t *testing
 
 func TestParseReturnsErrorWhenCronExpressionHasExtraCharactersAppendedAtTheEnd(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "cron(0 0 0/1 * * ? *)abc")
@@ -108,7 +108,7 @@ func TestParseReturnsErrorWhenCronExpressionHasExtraCharactersAppendedAtTheEnd(t
 
 func TestParseReturnsErrorWhenCronExpressionHasBracketsInsteadOfParentheses(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "cron{0 0 0/1 * * ? *}")
@@ -121,7 +121,7 @@ func TestParseReturnsErrorWhenCronExpressionHasBracketsInsteadOfParentheses(t *t
 
 func TestParseReturnsErrorWhenScheduleExpressionIsOfUnknownType(t *testing.T) {
 	// Assemble
-	logger := log.DefaultLogger()
+	logger := logger.DefaultLogger()
 
 	// Act
 	parsedExpression, err := CreateScheduleExpression(logger, "at(12:00)")

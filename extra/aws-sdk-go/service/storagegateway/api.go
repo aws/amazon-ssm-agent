@@ -528,8 +528,6 @@ func (c *StorageGateway) AssignTapePoolRequest(input *AssignTapePoolInput) (req 
 // into the S3 storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds
 // to the pool.
 //
-// Valid Values: GLACIER | DEEP_ARCHIVE
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1925,8 +1923,8 @@ func (c *StorageGateway) DeleteBandwidthRateLimitRequest(input *DeleteBandwidthR
 // upload and download bandwidth rate limit, or you can delete both. If you
 // delete only one of the limits, the other limit remains unchanged. To specify
 // which gateway to work with, use the Amazon Resource Name (ARN) of the gateway
-// in your request. This operation is supported for the stored volume, cached
-// volume and tape gateway types.
+// in your request. This operation is supported only for the stored volume,
+// cached volume, and tape gateway types.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2286,8 +2284,8 @@ func (c *StorageGateway) DeleteSnapshotScheduleRequest(input *DeleteSnapshotSche
 // This API action enables you to delete a snapshot schedule for a volume. For
 // more information, see Backing up your volumes (https://docs.aws.amazon.com/storagegateway/latest/userguide/backing-up-volumes.html).
 // In the DeleteSnapshotSchedule request, you identify the volume by providing
-// its Amazon Resource Name (ARN). This operation is only supported in stored
-// and cached volume gateway types.
+// its Amazon Resource Name (ARN). This operation is only supported for cached
+// volume gateway types.
 //
 // To list or delete a snapshot, you must use the Amazon EC2 API. For more information,
 // go to DescribeSnapshots (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html)
@@ -2817,10 +2815,11 @@ func (c *StorageGateway) DescribeBandwidthRateLimitRequest(input *DescribeBandwi
 //
 // Returns the bandwidth rate limits of a gateway. By default, these limits
 // are not set, which means no bandwidth rate limiting is in effect. This operation
-// is supported for the stored volume, cached volume, and tape gateway types.
+// is supported only for the stored volume, cached volume, and tape gateway
+// types. To describe bandwidth rate limits for S3 file gateways, use DescribeBandwidthRateLimitSchedule.
 //
-// This operation only returns a value for a bandwidth rate limit only if the
-// limit is set. If no limits are set for the gateway, then this operation returns
+// This operation returns a value for a bandwidth rate limit only if the limit
+// is set. If no limits are set for the gateway, then this operation returns
 // only the gateway ARN in the response body. To specify which gateway to describe,
 // use the Amazon Resource Name (ARN) of the gateway in your request.
 //
@@ -2909,7 +2908,8 @@ func (c *StorageGateway) DescribeBandwidthRateLimitScheduleRequest(input *Descri
 // Returns information about the bandwidth rate limit schedule of a gateway.
 // By default, gateways do not have bandwidth rate limit schedules, which means
 // no bandwidth rate limiting is in effect. This operation is supported only
-// in the volume and tape gateway types.
+// for volume, tape and S3 file gateways. FSx file gateways do not support bandwidth
+// rate limits.
 //
 // This operation returns information about a gateway's bandwidth rate limit
 // schedule. A bandwidth rate limit schedule consists of one or more bandwidth
@@ -6469,7 +6469,7 @@ func (c *StorageGateway) NotifyWhenUploadedRequest(input *NotifyWhenUploadedInpu
 // NotifyWhenUploaded API operation for AWS Storage Gateway.
 //
 // Sends you notification through CloudWatch Events when all files written to
-// your file share have been uploaded to Amazon S3.
+// your file share have been uploaded to S3. Amazon S3.
 //
 // Storage Gateway can send a notification through Amazon CloudWatch Events
 // when all files written to your file share up to that point in time have been
@@ -6592,9 +6592,17 @@ func (c *StorageGateway) RefreshCacheRequest(input *RefreshCacheInput) (req *req
 // see Getting notified about file operations (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification)
 // in the Storage Gateway User Guide.
 //
-// If you invoke the RefreshCache API when two requests are already being processed,
-// any new request will cause an InvalidGatewayRequestException error because
-// too many requests were sent to the server.
+//    * Wait at least 60 seconds between consecutive RefreshCache API requests.
+//
+//    * RefreshCache does not evict cache entries if invoked consecutively within
+//    60 seconds of a previous RefreshCache request.
+//
+//    * If you invoke the RefreshCache API when two requests are already being
+//    processed, any new request will cause an InvalidGatewayRequestException
+//    error because too many requests were sent to the server.
+//
+// The S3 bucket name does not need to be included when entering the list of
+// folders in the FolderList parameter.
 //
 // For more information, see Getting notified about file operations (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification)
 // in the Storage Gateway User Guide.
@@ -7602,7 +7610,8 @@ func (c *StorageGateway) UpdateBandwidthRateLimitRequest(input *UpdateBandwidthR
 // Updates the bandwidth rate limits of a gateway. You can update both the upload
 // and download bandwidth rate limit or specify only one of the two. If you
 // don't set a bandwidth rate limit, the existing rate limit remains. This operation
-// is supported for the stored volume, cached volume, and tape gateway types.
+// is supported only for the stored volume, cached volume, and tape gateway
+// types. To update bandwidth rate limits for S3 file gateways, use UpdateBandwidthRateLimitSchedule.
 //
 // By default, a gateway's bandwidth rate limits are not set. If you don't set
 // any limit, the gateway does not have any limitations on its bandwidth usage
@@ -7696,8 +7705,8 @@ func (c *StorageGateway) UpdateBandwidthRateLimitScheduleRequest(input *UpdateBa
 // Updates the bandwidth rate limit schedule for a specified gateway. By default,
 // gateways do not have bandwidth rate limit schedules, which means no bandwidth
 // rate limiting is in effect. Use this to initiate or update a gateway's bandwidth
-// rate limit schedule. This operation is supported in the volume and tape gateway
-// types.
+// rate limit schedule. This operation is supported only for volume, tape and
+// S3 file gateways. FSx file gateways do not support bandwidth rate limits.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8889,7 +8898,7 @@ type ActivateGatewayInput struct {
 	// is critical to all later functions of the gateway and cannot be changed after
 	// activation. The default value is CACHED.
 	//
-	// Valid Values: STORED | CACHED | VTL | FILE_S3 | FILE_FSX_SMB|
+	// Valid Values: STORED | CACHED | VTL | VTL_SNOW | FILE_S3 | FILE_FSX_SMB
 	GatewayType *string `min:"2" type:"string"`
 
 	// The value that indicates the type of medium changer to use for tape gateway.
@@ -9502,8 +9511,6 @@ type AssignTapePoolInput struct {
 	// is archived directly into the storage class (S3 Glacier or S3 Glacier Deep
 	// Archive) that corresponds to the pool.
 	//
-	// Valid Values: GLACIER | DEEP_ARCHIVE
-	//
 	// PoolId is a required field
 	PoolId *string `min:"1" type:"string" required:"true"`
 
@@ -10038,8 +10045,6 @@ type AutomaticTapeCreationRule struct {
 	// tape is archived directly into the storage class (S3 Glacier or S3 Glacier
 	// Deep Archive) that corresponds to the pool.
 	//
-	// Valid Values: GLACIER | DEEP_ARCHIVE
-	//
 	// PoolId is a required field
 	PoolId *string `min:"1" type:"string" required:"true"`
 
@@ -10383,6 +10388,12 @@ type CachediSCSIVolume struct {
 	//
 	// This value is not available for volumes created prior to May 13, 2015, until
 	// you store data on the volume.
+	//
+	// If you use a delete tool that overwrites the data on your volume with random
+	// data, your usage will not be reduced. This is because the random data is
+	// not compressible. If you want to reduce the amount of billed storage on your
+	// volume, we recommend overwriting your files with zeros to compress the data
+	// to a negligible amount of actual storage.
 	VolumeUsedInBytes *int64 `type:"long"`
 
 	// An VolumeiSCSIAttributes object that represents a collection of iSCSI attributes
@@ -11034,7 +11045,7 @@ type CreateNFSFileShareInput struct {
 	ClientToken *string `min:"5" type:"string" required:"true"`
 
 	// The default storage class for objects put into an Amazon S3 bucket by the
-	// S3 File Gateway. The default value is S3_INTELLIGENT_TIERING. Optional.
+	// S3 File Gateway. The default value is S3_STANDARD. Optional.
 	//
 	// Valid Values: S3_STANDARD | S3_INTELLIGENT_TIERING | S3_STANDARD_IA | S3_ONEZONE_IA
 	DefaultStorageClass *string `min:"5" type:"string"`
@@ -11474,7 +11485,7 @@ type CreateSMBFileShareInput struct {
 	ClientToken *string `min:"5" type:"string" required:"true"`
 
 	// The default storage class for objects put into an Amazon S3 bucket by the
-	// S3 File Gateway. The default value is S3_INTELLIGENT_TIERING. Optional.
+	// S3 File Gateway. The default value is S3_STANDARD. Optional.
 	//
 	// Valid Values: S3_STANDARD | S3_INTELLIGENT_TIERING | S3_STANDARD_IA | S3_ONEZONE_IA
 	DefaultStorageClass *string `min:"5" type:"string"`
@@ -12618,8 +12629,6 @@ type CreateTapeWithBarcodeInput struct {
 	// the pool. When you use your backup application to eject the tape, the tape
 	// is archived directly into the storage class (S3 Glacier or S3 Deep Archive)
 	// that corresponds to the pool.
-	//
-	// Valid Values: GLACIER | DEEP_ARCHIVE
 	PoolId *string `min:"1" type:"string"`
 
 	// A list of up to 50 tags that can be assigned to a virtual tape that has a
@@ -12637,7 +12646,7 @@ type CreateTapeWithBarcodeInput struct {
 	// been deleted.
 	//
 	// TapeBarcode is a required field
-	TapeBarcode *string `min:"7" type:"string" required:"true"`
+	TapeBarcode *string `min:"5" type:"string" required:"true"`
 
 	// The size, in bytes, of the virtual tape that you want to create.
 	//
@@ -12687,8 +12696,8 @@ func (s *CreateTapeWithBarcodeInput) Validate() error {
 	if s.TapeBarcode == nil {
 		invalidParams.Add(request.NewErrParamRequired("TapeBarcode"))
 	}
-	if s.TapeBarcode != nil && len(*s.TapeBarcode) < 7 {
-		invalidParams.Add(request.NewErrParamMinLen("TapeBarcode", 7))
+	if s.TapeBarcode != nil && len(*s.TapeBarcode) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("TapeBarcode", 5))
 	}
 	if s.TapeSizeInBytes == nil {
 		invalidParams.Add(request.NewErrParamRequired("TapeSizeInBytes"))
@@ -12831,8 +12840,6 @@ type CreateTapesInput struct {
 	// the pool. When you use your backup application to eject the tape, the tape
 	// is archived directly into the storage class (S3 Glacier or S3 Glacier Deep
 	// Archive) that corresponds to the pool.
-	//
-	// Valid Values: GLACIER | DEEP_ARCHIVE
 	PoolId *string `min:"1" type:"string"`
 
 	// A list of up to 50 tags that can be assigned to a virtual tape. Each tag
@@ -14725,7 +14732,9 @@ type DescribeGatewayInformationOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that is
-	// used to monitor events in the gateway.
+	// used to monitor events in the gateway. This field only only exist and returns
+	// once it have been chosen and set by the SGW service, based on the OS version
+	// of the gateway VM
 	CloudWatchLogGroupARN *string `type:"string"`
 
 	// Date after which this gateway will not receive software updates for new features
@@ -14771,12 +14780,18 @@ type DescribeGatewayInformationOutput struct {
 	// The type of the gateway.
 	GatewayType *string `min:"2" type:"string"`
 
-	// The type of hypervisor environment used by the host.
+	// The type of hardware or software platform on which the gateway is running.
 	HostEnvironment *string `type:"string" enum:"HostEnvironment"`
+
+	// A unique identifier for the specific instance of the host platform running
+	// the gateway. This value is only available for certain host environments,
+	// and its format depends on the host environment type.
+	HostEnvironmentId *string `min:"1" type:"string"`
 
 	// The date on which the last software update was applied to the gateway. If
 	// the gateway has never been updated, this field does not return a value in
-	// the response.
+	// the response. This only only exist and returns once it have been chosen and
+	// set by the SGW service, based on the OS version of the gateway VM
 	LastSoftwareUpdate *string `min:"1" type:"string"`
 
 	// The date on which an update to the gateway is available. This date is in
@@ -14789,7 +14804,7 @@ type DescribeGatewayInformationOutput struct {
 
 	// A list of the metadata cache sizes that the gateway can support based on
 	// its current hardware specifications.
-	SupportedGatewayCapacities []*string `type:"list"`
+	SupportedGatewayCapacities []*string `type:"list" enum:"GatewayCapacity"`
 
 	// A list of up to 50 tags assigned to the gateway, sorted alphabetically by
 	// key name. Each tag is a key-value pair. For a gateway with more than 10 tags
@@ -14900,6 +14915,12 @@ func (s *DescribeGatewayInformationOutput) SetGatewayType(v string) *DescribeGat
 // SetHostEnvironment sets the HostEnvironment field's value.
 func (s *DescribeGatewayInformationOutput) SetHostEnvironment(v string) *DescribeGatewayInformationOutput {
 	s.HostEnvironment = &v
+	return s
+}
+
+// SetHostEnvironmentId sets the HostEnvironmentId field's value.
+func (s *DescribeGatewayInformationOutput) SetHostEnvironmentId(v string) *DescribeGatewayInformationOutput {
+	s.HostEnvironmentId = &v
 	return s
 }
 
@@ -17269,6 +17290,14 @@ type GatewayInfo struct {
 
 	// The type of the gateway.
 	GatewayType *string `min:"2" type:"string"`
+
+	// The type of hardware or software platform on which the gateway is running.
+	HostEnvironment *string `type:"string" enum:"HostEnvironment"`
+
+	// A unique identifier for the specific instance of the host platform running
+	// the gateway. This value is only available for certain host environments,
+	// and its format depends on the host environment type.
+	HostEnvironmentId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -17328,6 +17357,18 @@ func (s *GatewayInfo) SetGatewayOperationalState(v string) *GatewayInfo {
 // SetGatewayType sets the GatewayType field's value.
 func (s *GatewayInfo) SetGatewayType(v string) *GatewayInfo {
 	s.GatewayType = &v
+	return s
+}
+
+// SetHostEnvironment sets the HostEnvironment field's value.
+func (s *GatewayInfo) SetHostEnvironment(v string) *GatewayInfo {
+	s.HostEnvironment = &v
+	return s
+}
+
+// SetHostEnvironmentId sets the HostEnvironmentId field's value.
+func (s *GatewayInfo) SetHostEnvironmentId(v string) *GatewayInfo {
+	s.HostEnvironmentId = &v
 	return s
 }
 
@@ -18987,7 +19028,7 @@ type NFSFileShareInfo struct {
 	ClientList []*string `min:"1" type:"list"`
 
 	// The default storage class for objects put into an Amazon S3 bucket by the
-	// S3 File Gateway. The default value is S3_INTELLIGENT_TIERING. Optional.
+	// S3 File Gateway. The default value is S3_STANDARD. Optional.
 	//
 	// Valid Values: S3_STANDARD | S3_INTELLIGENT_TIERING | S3_STANDARD_IA | S3_ONEZONE_IA
 	DefaultStorageClass *string `min:"5" type:"string"`
@@ -20081,7 +20122,7 @@ type SMBFileShareInfo struct {
 	CaseSensitivity *string `type:"string" enum:"CaseSensitivity"`
 
 	// The default storage class for objects put into an Amazon S3 bucket by the
-	// S3 File Gateway. The default value is S3_INTELLIGENT_TIERING. Optional.
+	// S3 File Gateway. The default value is S3_STANDARD. Optional.
 	//
 	// Valid Values: S3_STANDARD | S3_INTELLIGENT_TIERING | S3_STANDARD_IA | S3_ONEZONE_IA
 	DefaultStorageClass *string `min:"5" type:"string"`
@@ -21274,8 +21315,6 @@ type Tape struct {
 	// pool. When you use your backup application to eject the tape, the tape is
 	// archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive)
 	// that corresponds to the pool.
-	//
-	// Valid Values: GLACIER | DEEP_ARCHIVE
 	PoolId *string `min:"1" type:"string"`
 
 	// For archiving virtual tapes, indicates how much data remains to be uploaded
@@ -21291,7 +21330,7 @@ type Tape struct {
 	TapeARN *string `min:"50" type:"string"`
 
 	// The barcode that identifies a specific virtual tape.
-	TapeBarcode *string `min:"7" type:"string"`
+	TapeBarcode *string `min:"5" type:"string"`
 
 	// The date the virtual tape was created.
 	TapeCreatedDate *time.Time `type:"timestamp"`
@@ -21434,8 +21473,6 @@ type TapeArchive struct {
 
 	// The ID of the pool that was used to archive the tape. The tapes in this pool
 	// are archived in the S3 storage class that is associated with the pool.
-	//
-	// Valid Values: GLACIER | DEEP_ARCHIVE
 	PoolId *string `min:"1" type:"string"`
 
 	// If the archived tape is subject to tape retention lock, the date that the
@@ -21452,7 +21489,7 @@ type TapeArchive struct {
 	TapeARN *string `min:"50" type:"string"`
 
 	// The barcode that identifies the archived virtual tape.
-	TapeBarcode *string `min:"7" type:"string"`
+	TapeBarcode *string `min:"5" type:"string"`
 
 	// The date the virtual tape was created.
 	TapeCreatedDate *time.Time `type:"timestamp"`
@@ -21585,8 +21622,6 @@ type TapeInfo struct {
 	// the pool. When you use your backup application to eject the tape, the tape
 	// is archived directly into the storage class (S3 Glacier or S3 Glacier Deep
 	// Archive) that corresponds to the pool.
-	//
-	// Valid Values: GLACIER | DEEP_ARCHIVE
 	PoolId *string `min:"1" type:"string"`
 
 	// The date that the tape became subject to tape retention lock.
@@ -21596,7 +21631,7 @@ type TapeInfo struct {
 	TapeARN *string `min:"50" type:"string"`
 
 	// The barcode that identifies a specific virtual tape.
-	TapeBarcode *string `min:"7" type:"string"`
+	TapeBarcode *string `min:"5" type:"string"`
 
 	// The size, in bytes, of a virtual tape.
 	TapeSizeInBytes *int64 `type:"long"`
@@ -22746,7 +22781,7 @@ type UpdateNFSFileShareInput struct {
 	ClientList []*string `min:"1" type:"list"`
 
 	// The default storage class for objects put into an Amazon S3 bucket by the
-	// S3 File Gateway. The default value is S3_INTELLIGENT_TIERING. Optional.
+	// S3 File Gateway. The default value is S3_STANDARD. Optional.
 	//
 	// Valid Values: S3_STANDARD | S3_INTELLIGENT_TIERING | S3_STANDARD_IA | S3_ONEZONE_IA
 	DefaultStorageClass *string `min:"5" type:"string"`
@@ -23043,7 +23078,7 @@ type UpdateSMBFileShareInput struct {
 	CaseSensitivity *string `type:"string" enum:"CaseSensitivity"`
 
 	// The default storage class for objects put into an Amazon S3 bucket by the
-	// S3 File Gateway. The default value is S3_INTELLIGENT_TIERING. Optional.
+	// S3 File Gateway. The default value is S3_STANDARD. Optional.
 	//
 	// Valid Values: S3_STANDARD | S3_INTELLIGENT_TIERING | S3_STANDARD_IA | S3_ONEZONE_IA
 	DefaultStorageClass *string `min:"5" type:"string"`
@@ -24595,6 +24630,9 @@ const (
 
 	// HostEnvironmentOther is a HostEnvironment enum value
 	HostEnvironmentOther = "OTHER"
+
+	// HostEnvironmentSnowball is a HostEnvironment enum value
+	HostEnvironmentSnowball = "SNOWBALL"
 )
 
 // HostEnvironment_Values returns all elements of the HostEnvironment enum
@@ -24605,6 +24643,7 @@ func HostEnvironment_Values() []string {
 		HostEnvironmentEc2,
 		HostEnvironmentKvm,
 		HostEnvironmentOther,
+		HostEnvironmentSnowball,
 	}
 }
 

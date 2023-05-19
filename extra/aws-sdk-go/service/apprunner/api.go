@@ -153,14 +153,16 @@ func (c *AppRunner) CreateAutoScalingConfigurationRequest(input *CreateAutoScali
 // CreateAutoScalingConfiguration API operation for AWS App Runner.
 //
 // Create an App Runner automatic scaling configuration resource. App Runner
-// requires this resource when you create App Runner services that require non-default
-// auto scaling settings. You can share an auto scaling configuration across
-// multiple services.
+// requires this resource when you create or update App Runner services and
+// you require non-default auto scaling settings. You can share an auto scaling
+// configuration across multiple services.
 //
-// Create multiple revisions of a configuration by using the same AutoScalingConfigurationName
-// and different AutoScalingConfigurationRevision values. When you create a
-// service, you can set it to use the latest active revision of an auto scaling
-// configuration or a specific revision.
+// Create multiple revisions of a configuration by calling this action multiple
+// times using the same AutoScalingConfigurationName. The call returns incremental
+// AutoScalingConfigurationRevision values. When you create a service and configure
+// an auto scaling configuration resource, the service uses the latest active
+// revision of the auto scaling configuration by default. You can optionally
+// configure the service to use a specific revision.
 //
 // Configure a higher MinSize to increase the spread of your App Runner service
 // over more Availability Zones in the Amazon Web Services Region. The tradeoff
@@ -310,6 +312,112 @@ func (c *AppRunner) CreateConnectionWithContext(ctx aws.Context, input *CreateCo
 	return out, req.Send()
 }
 
+const opCreateObservabilityConfiguration = "CreateObservabilityConfiguration"
+
+// CreateObservabilityConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateObservabilityConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateObservabilityConfiguration for more information on using the CreateObservabilityConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateObservabilityConfigurationRequest method.
+//    req, resp := client.CreateObservabilityConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/CreateObservabilityConfiguration
+func (c *AppRunner) CreateObservabilityConfigurationRequest(input *CreateObservabilityConfigurationInput) (req *request.Request, output *CreateObservabilityConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opCreateObservabilityConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateObservabilityConfigurationInput{}
+	}
+
+	output = &CreateObservabilityConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateObservabilityConfiguration API operation for AWS App Runner.
+//
+// Create an App Runner observability configuration resource. App Runner requires
+// this resource when you create or update App Runner services and you want
+// to enable non-default observability features. You can share an observability
+// configuration across multiple services.
+//
+// Create multiple revisions of a configuration by calling this action multiple
+// times using the same ObservabilityConfigurationName. The call returns incremental
+// ObservabilityConfigurationRevision values. When you create a service and
+// configure an observability configuration resource, the service uses the latest
+// active revision of the observability configuration by default. You can optionally
+// configure the service to use a specific revision.
+//
+// The observability configuration resource is designed to configure multiple
+// features (currently one feature, tracing). This action takes optional parameters
+// that describe the configuration of these features (currently one parameter,
+// TraceConfiguration). If you don't specify a feature parameter, App Runner
+// doesn't enable the feature.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation CreateObservabilityConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+//   * ServiceQuotaExceededException
+//   App Runner can't create this resource. You've reached your account quota
+//   for this resource type.
+//
+//   For App Runner per-resource quotas, see App Runner endpoints and quotas (https://docs.aws.amazon.com/general/latest/gr/apprunner.html)
+//   in the Amazon Web Services General Reference.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/CreateObservabilityConfiguration
+func (c *AppRunner) CreateObservabilityConfiguration(input *CreateObservabilityConfigurationInput) (*CreateObservabilityConfigurationOutput, error) {
+	req, out := c.CreateObservabilityConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// CreateObservabilityConfigurationWithContext is the same as CreateObservabilityConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateObservabilityConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) CreateObservabilityConfigurationWithContext(ctx aws.Context, input *CreateObservabilityConfigurationInput, opts ...request.Option) (*CreateObservabilityConfigurationOutput, error) {
+	req, out := c.CreateObservabilityConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateService = "CreateService"
 
 // CreateServiceRequest generates a "aws/request.Request" representing the
@@ -400,6 +508,98 @@ func (c *AppRunner) CreateService(input *CreateServiceInput) (*CreateServiceOutp
 // for more information on using Contexts.
 func (c *AppRunner) CreateServiceWithContext(ctx aws.Context, input *CreateServiceInput, opts ...request.Option) (*CreateServiceOutput, error) {
 	req, out := c.CreateServiceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateVpcConnector = "CreateVpcConnector"
+
+// CreateVpcConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the CreateVpcConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateVpcConnector for more information on using the CreateVpcConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateVpcConnectorRequest method.
+//    req, resp := client.CreateVpcConnectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/CreateVpcConnector
+func (c *AppRunner) CreateVpcConnectorRequest(input *CreateVpcConnectorInput) (req *request.Request, output *CreateVpcConnectorOutput) {
+	op := &request.Operation{
+		Name:       opCreateVpcConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateVpcConnectorInput{}
+	}
+
+	output = &CreateVpcConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateVpcConnector API operation for AWS App Runner.
+//
+// Create an App Runner VPC connector resource. App Runner requires this resource
+// when you want to associate your App Runner service to a custom Amazon Virtual
+// Private Cloud (Amazon VPC).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation CreateVpcConnector for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+//   * ServiceQuotaExceededException
+//   App Runner can't create this resource. You've reached your account quota
+//   for this resource type.
+//
+//   For App Runner per-resource quotas, see App Runner endpoints and quotas (https://docs.aws.amazon.com/general/latest/gr/apprunner.html)
+//   in the Amazon Web Services General Reference.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/CreateVpcConnector
+func (c *AppRunner) CreateVpcConnector(input *CreateVpcConnectorInput) (*CreateVpcConnectorOutput, error) {
+	req, out := c.CreateVpcConnectorRequest(input)
+	return out, req.Send()
+}
+
+// CreateVpcConnectorWithContext is the same as CreateVpcConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateVpcConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) CreateVpcConnectorWithContext(ctx aws.Context, input *CreateVpcConnectorInput, opts ...request.Option) (*CreateVpcConnectorOutput, error) {
+	req, out := c.CreateVpcConnectorRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -583,6 +783,95 @@ func (c *AppRunner) DeleteConnectionWithContext(ctx aws.Context, input *DeleteCo
 	return out, req.Send()
 }
 
+const opDeleteObservabilityConfiguration = "DeleteObservabilityConfiguration"
+
+// DeleteObservabilityConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteObservabilityConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteObservabilityConfiguration for more information on using the DeleteObservabilityConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteObservabilityConfigurationRequest method.
+//    req, resp := client.DeleteObservabilityConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DeleteObservabilityConfiguration
+func (c *AppRunner) DeleteObservabilityConfigurationRequest(input *DeleteObservabilityConfigurationInput) (req *request.Request, output *DeleteObservabilityConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteObservabilityConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteObservabilityConfigurationInput{}
+	}
+
+	output = &DeleteObservabilityConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteObservabilityConfiguration API operation for AWS App Runner.
+//
+// Delete an App Runner observability configuration resource. You can delete
+// a specific revision or the latest active revision. You can't delete a configuration
+// that's used by one or more App Runner services.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation DeleteObservabilityConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+//   * ResourceNotFoundException
+//   A resource doesn't exist for the specified Amazon Resource Name (ARN) in
+//   your Amazon Web Services account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DeleteObservabilityConfiguration
+func (c *AppRunner) DeleteObservabilityConfiguration(input *DeleteObservabilityConfigurationInput) (*DeleteObservabilityConfigurationOutput, error) {
+	req, out := c.DeleteObservabilityConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteObservabilityConfigurationWithContext is the same as DeleteObservabilityConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteObservabilityConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) DeleteObservabilityConfigurationWithContext(ctx aws.Context, input *DeleteObservabilityConfigurationInput, opts ...request.Option) (*DeleteObservabilityConfigurationOutput, error) {
+	req, out := c.DeleteObservabilityConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteService = "DeleteService"
 
 // DeleteServiceRequest generates a "aws/request.Request" representing the
@@ -672,6 +961,94 @@ func (c *AppRunner) DeleteService(input *DeleteServiceInput) (*DeleteServiceOutp
 // for more information on using Contexts.
 func (c *AppRunner) DeleteServiceWithContext(ctx aws.Context, input *DeleteServiceInput, opts ...request.Option) (*DeleteServiceOutput, error) {
 	req, out := c.DeleteServiceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteVpcConnector = "DeleteVpcConnector"
+
+// DeleteVpcConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteVpcConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteVpcConnector for more information on using the DeleteVpcConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteVpcConnectorRequest method.
+//    req, resp := client.DeleteVpcConnectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DeleteVpcConnector
+func (c *AppRunner) DeleteVpcConnectorRequest(input *DeleteVpcConnectorInput) (req *request.Request, output *DeleteVpcConnectorOutput) {
+	op := &request.Operation{
+		Name:       opDeleteVpcConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteVpcConnectorInput{}
+	}
+
+	output = &DeleteVpcConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteVpcConnector API operation for AWS App Runner.
+//
+// Delete an App Runner VPC connector resource. You can't delete a connector
+// that's used by one or more App Runner services.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation DeleteVpcConnector for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+//   * ResourceNotFoundException
+//   A resource doesn't exist for the specified Amazon Resource Name (ARN) in
+//   your Amazon Web Services account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DeleteVpcConnector
+func (c *AppRunner) DeleteVpcConnector(input *DeleteVpcConnectorInput) (*DeleteVpcConnectorOutput, error) {
+	req, out := c.DeleteVpcConnectorRequest(input)
+	return out, req.Send()
+}
+
+// DeleteVpcConnectorWithContext is the same as DeleteVpcConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteVpcConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) DeleteVpcConnectorWithContext(ctx aws.Context, input *DeleteVpcConnectorInput, opts ...request.Option) (*DeleteVpcConnectorOutput, error) {
+	req, out := c.DeleteVpcConnectorRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -911,6 +1288,93 @@ func (c *AppRunner) DescribeCustomDomainsPagesWithContext(ctx aws.Context, input
 	return p.Err()
 }
 
+const opDescribeObservabilityConfiguration = "DescribeObservabilityConfiguration"
+
+// DescribeObservabilityConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeObservabilityConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeObservabilityConfiguration for more information on using the DescribeObservabilityConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeObservabilityConfigurationRequest method.
+//    req, resp := client.DescribeObservabilityConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DescribeObservabilityConfiguration
+func (c *AppRunner) DescribeObservabilityConfigurationRequest(input *DescribeObservabilityConfigurationInput) (req *request.Request, output *DescribeObservabilityConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeObservabilityConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeObservabilityConfigurationInput{}
+	}
+
+	output = &DescribeObservabilityConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeObservabilityConfiguration API operation for AWS App Runner.
+//
+// Return a full description of an App Runner observability configuration resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation DescribeObservabilityConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+//   * ResourceNotFoundException
+//   A resource doesn't exist for the specified Amazon Resource Name (ARN) in
+//   your Amazon Web Services account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DescribeObservabilityConfiguration
+func (c *AppRunner) DescribeObservabilityConfiguration(input *DescribeObservabilityConfigurationInput) (*DescribeObservabilityConfigurationOutput, error) {
+	req, out := c.DescribeObservabilityConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeObservabilityConfigurationWithContext is the same as DescribeObservabilityConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeObservabilityConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) DescribeObservabilityConfigurationWithContext(ctx aws.Context, input *DescribeObservabilityConfigurationInput, opts ...request.Option) (*DescribeObservabilityConfigurationOutput, error) {
+	req, out := c.DescribeObservabilityConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeService = "DescribeService"
 
 // DescribeServiceRequest generates a "aws/request.Request" representing the
@@ -993,6 +1457,93 @@ func (c *AppRunner) DescribeService(input *DescribeServiceInput) (*DescribeServi
 // for more information on using Contexts.
 func (c *AppRunner) DescribeServiceWithContext(ctx aws.Context, input *DescribeServiceInput, opts ...request.Option) (*DescribeServiceOutput, error) {
 	req, out := c.DescribeServiceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeVpcConnector = "DescribeVpcConnector"
+
+// DescribeVpcConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeVpcConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeVpcConnector for more information on using the DescribeVpcConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeVpcConnectorRequest method.
+//    req, resp := client.DescribeVpcConnectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DescribeVpcConnector
+func (c *AppRunner) DescribeVpcConnectorRequest(input *DescribeVpcConnectorInput) (req *request.Request, output *DescribeVpcConnectorOutput) {
+	op := &request.Operation{
+		Name:       opDescribeVpcConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeVpcConnectorInput{}
+	}
+
+	output = &DescribeVpcConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeVpcConnector API operation for AWS App Runner.
+//
+// Return a description of an App Runner VPC connector resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation DescribeVpcConnector for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+//   * ResourceNotFoundException
+//   A resource doesn't exist for the specified Amazon Resource Name (ARN) in
+//   your Amazon Web Services account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/DescribeVpcConnector
+func (c *AppRunner) DescribeVpcConnector(input *DescribeVpcConnectorInput) (*DescribeVpcConnectorOutput, error) {
+	req, out := c.DescribeVpcConnectorRequest(input)
+	return out, req.Send()
+}
+
+// DescribeVpcConnectorWithContext is the same as DescribeVpcConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeVpcConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) DescribeVpcConnectorWithContext(ctx aws.Context, input *DescribeVpcConnectorInput, opts ...request.Option) (*DescribeVpcConnectorOutput, error) {
+	req, out := c.DescribeVpcConnectorRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1144,10 +1695,13 @@ func (c *AppRunner) ListAutoScalingConfigurationsRequest(input *ListAutoScalingC
 
 // ListAutoScalingConfigurations API operation for AWS App Runner.
 //
-// Returns a list of App Runner automatic scaling configurations in your Amazon
-// Web Services account. You can query the revisions for a specific configuration
-// name or the revisions for all configurations in your account. You can optionally
-// query only the latest revision of each requested name.
+// Returns a list of active App Runner automatic scaling configurations in your
+// Amazon Web Services account. You can query the revisions for a specific configuration
+// name or the revisions for all active configurations in your account. You
+// can optionally query only the latest revision of each requested name.
+//
+// To retrieve a full description of a particular configuration revision, call
+// and provide one of the ARNs returned by ListAutoScalingConfigurations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1373,6 +1927,153 @@ func (c *AppRunner) ListConnectionsPagesWithContext(ctx aws.Context, input *List
 
 	for p.Next() {
 		if !fn(p.Page().(*ListConnectionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListObservabilityConfigurations = "ListObservabilityConfigurations"
+
+// ListObservabilityConfigurationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListObservabilityConfigurations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListObservabilityConfigurations for more information on using the ListObservabilityConfigurations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListObservabilityConfigurationsRequest method.
+//    req, resp := client.ListObservabilityConfigurationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/ListObservabilityConfigurations
+func (c *AppRunner) ListObservabilityConfigurationsRequest(input *ListObservabilityConfigurationsInput) (req *request.Request, output *ListObservabilityConfigurationsOutput) {
+	op := &request.Operation{
+		Name:       opListObservabilityConfigurations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListObservabilityConfigurationsInput{}
+	}
+
+	output = &ListObservabilityConfigurationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListObservabilityConfigurations API operation for AWS App Runner.
+//
+// Returns a list of active App Runner observability configurations in your
+// Amazon Web Services account. You can query the revisions for a specific configuration
+// name or the revisions for all active configurations in your account. You
+// can optionally query only the latest revision of each requested name.
+//
+// To retrieve a full description of a particular configuration revision, call
+// and provide one of the ARNs returned by ListObservabilityConfigurations.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation ListObservabilityConfigurations for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/ListObservabilityConfigurations
+func (c *AppRunner) ListObservabilityConfigurations(input *ListObservabilityConfigurationsInput) (*ListObservabilityConfigurationsOutput, error) {
+	req, out := c.ListObservabilityConfigurationsRequest(input)
+	return out, req.Send()
+}
+
+// ListObservabilityConfigurationsWithContext is the same as ListObservabilityConfigurations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListObservabilityConfigurations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) ListObservabilityConfigurationsWithContext(ctx aws.Context, input *ListObservabilityConfigurationsInput, opts ...request.Option) (*ListObservabilityConfigurationsOutput, error) {
+	req, out := c.ListObservabilityConfigurationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListObservabilityConfigurationsPages iterates over the pages of a ListObservabilityConfigurations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListObservabilityConfigurations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListObservabilityConfigurations operation.
+//    pageNum := 0
+//    err := client.ListObservabilityConfigurationsPages(params,
+//        func(page *apprunner.ListObservabilityConfigurationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AppRunner) ListObservabilityConfigurationsPages(input *ListObservabilityConfigurationsInput, fn func(*ListObservabilityConfigurationsOutput, bool) bool) error {
+	return c.ListObservabilityConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListObservabilityConfigurationsPagesWithContext same as ListObservabilityConfigurationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) ListObservabilityConfigurationsPagesWithContext(ctx aws.Context, input *ListObservabilityConfigurationsInput, fn func(*ListObservabilityConfigurationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListObservabilityConfigurationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListObservabilityConfigurationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListObservabilityConfigurationsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -1759,6 +2460,147 @@ func (c *AppRunner) ListTagsForResourceWithContext(ctx aws.Context, input *ListT
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opListVpcConnectors = "ListVpcConnectors"
+
+// ListVpcConnectorsRequest generates a "aws/request.Request" representing the
+// client's request for the ListVpcConnectors operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListVpcConnectors for more information on using the ListVpcConnectors
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListVpcConnectorsRequest method.
+//    req, resp := client.ListVpcConnectorsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/ListVpcConnectors
+func (c *AppRunner) ListVpcConnectorsRequest(input *ListVpcConnectorsInput) (req *request.Request, output *ListVpcConnectorsOutput) {
+	op := &request.Operation{
+		Name:       opListVpcConnectors,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListVpcConnectorsInput{}
+	}
+
+	output = &ListVpcConnectorsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListVpcConnectors API operation for AWS App Runner.
+//
+// Returns a list of App Runner VPC connectors in your Amazon Web Services account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS App Runner's
+// API operation ListVpcConnectors for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   One or more input parameters aren't valid. Refer to the API action's document
+//   page, correct the input parameters, and try the action again.
+//
+//   * InternalServiceErrorException
+//   An unexpected service exception occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apprunner-2020-05-15/ListVpcConnectors
+func (c *AppRunner) ListVpcConnectors(input *ListVpcConnectorsInput) (*ListVpcConnectorsOutput, error) {
+	req, out := c.ListVpcConnectorsRequest(input)
+	return out, req.Send()
+}
+
+// ListVpcConnectorsWithContext is the same as ListVpcConnectors with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListVpcConnectors for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) ListVpcConnectorsWithContext(ctx aws.Context, input *ListVpcConnectorsInput, opts ...request.Option) (*ListVpcConnectorsOutput, error) {
+	req, out := c.ListVpcConnectorsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListVpcConnectorsPages iterates over the pages of a ListVpcConnectors operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListVpcConnectors method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListVpcConnectors operation.
+//    pageNum := 0
+//    err := client.ListVpcConnectorsPages(params,
+//        func(page *apprunner.ListVpcConnectorsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AppRunner) ListVpcConnectorsPages(input *ListVpcConnectorsInput, fn func(*ListVpcConnectorsOutput, bool) bool) error {
+	return c.ListVpcConnectorsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListVpcConnectorsPagesWithContext same as ListVpcConnectorsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppRunner) ListVpcConnectorsPagesWithContext(ctx aws.Context, input *ListVpcConnectorsInput, fn func(*ListVpcConnectorsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListVpcConnectorsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListVpcConnectorsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListVpcConnectorsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opPauseService = "PauseService"
@@ -2532,9 +3374,7 @@ func (s *AuthenticationConfiguration) SetConnectionArn(v string) *Authentication
 	return s
 }
 
-// Describes an App Runner automatic scaling configuration resource. Multiple
-// revisions of a configuration have the same AutoScalingConfigurationName and
-// different AutoScalingConfigurationRevision values.
+// Describes an App Runner automatic scaling configuration resource.
 //
 // A higher MinSize increases the spread of your App Runner service over more
 // Availability Zones in the Amazon Web Services Region. The tradeoff is a higher
@@ -2542,6 +3382,9 @@ func (s *AuthenticationConfiguration) SetConnectionArn(v string) *Authentication
 //
 // A lower MaxSize controls your cost. The tradeoff is lower responsiveness
 // during peak demand.
+//
+// Multiple revisions of a configuration might have the same AutoScalingConfigurationName
+// and different AutoScalingConfigurationRevision values.
 type AutoScalingConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -2565,7 +3408,8 @@ type AutoScalingConfiguration struct {
 	DeletedAt *time.Time `type:"timestamp"`
 
 	// It's set to true for the configuration with the highest Revision among all
-	// configurations that share the same Name. It's set to false otherwise.
+	// configurations that share the same AutoScalingConfigurationName. It's set
+	// to false otherwise.
 	Latest *bool `type:"boolean"`
 
 	// The maximum number of concurrent requests that an instance processes. If
@@ -2967,6 +3811,8 @@ type CodeRepository struct {
 	_ struct{} `type:"structure"`
 
 	// Configuration for building and running the service from a source code repository.
+	//
+	// CodeConfiguration is required only for CreateService request.
 	CodeConfiguration *CodeConfiguration `type:"structure"`
 
 	// The location of the repository that contains the source code.
@@ -3187,6 +4033,14 @@ type CreateAutoScalingConfigurationInput struct {
 	// time in an Amazon Web Services Region, App Runner creates revision number
 	// 1 of this name. When you use the same name in subsequent calls, App Runner
 	// creates incremental revisions of the configuration.
+	//
+	// The name DefaultConfiguration is reserved (it's the configuration that App
+	// Runner uses if you don't provide a custome one). You can't use it to create
+	// a new auto scaling configuration, and you can't create a revision of it.
+	//
+	// When you want to use your own auto scaling configuration for your App Runner
+	// service, create a configuration with a different name, and then provide it
+	// when you create or update your service.
 	//
 	// AutoScalingConfigurationName is a required field
 	AutoScalingConfigurationName *string `min:"4" type:"string" required:"true"`
@@ -3456,30 +4310,169 @@ func (s *CreateConnectionOutput) SetConnection(v *Connection) *CreateConnectionO
 	return s
 }
 
+type CreateObservabilityConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// A name for the observability configuration. When you use it for the first
+	// time in an Amazon Web Services Region, App Runner creates revision number
+	// 1 of this name. When you use the same name in subsequent calls, App Runner
+	// creates incremental revisions of the configuration.
+	//
+	// The name DefaultConfiguration is reserved. You can't use it to create a new
+	// observability configuration, and you can't create a revision of it.
+	//
+	// When you want to use your own observability configuration for your App Runner
+	// service, create a configuration with a different name, and then provide it
+	// when you create or update your service.
+	//
+	// ObservabilityConfigurationName is a required field
+	ObservabilityConfigurationName *string `min:"4" type:"string" required:"true"`
+
+	// A list of metadata items that you can associate with your observability configuration
+	// resource. A tag is a key-value pair.
+	Tags []*Tag `type:"list"`
+
+	// The configuration of the tracing feature within this observability configuration.
+	// If you don't specify it, App Runner doesn't enable tracing.
+	TraceConfiguration *TraceConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateObservabilityConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateObservabilityConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateObservabilityConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateObservabilityConfigurationInput"}
+	if s.ObservabilityConfigurationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ObservabilityConfigurationName"))
+	}
+	if s.ObservabilityConfigurationName != nil && len(*s.ObservabilityConfigurationName) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("ObservabilityConfigurationName", 4))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.TraceConfiguration != nil {
+		if err := s.TraceConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("TraceConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetObservabilityConfigurationName sets the ObservabilityConfigurationName field's value.
+func (s *CreateObservabilityConfigurationInput) SetObservabilityConfigurationName(v string) *CreateObservabilityConfigurationInput {
+	s.ObservabilityConfigurationName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateObservabilityConfigurationInput) SetTags(v []*Tag) *CreateObservabilityConfigurationInput {
+	s.Tags = v
+	return s
+}
+
+// SetTraceConfiguration sets the TraceConfiguration field's value.
+func (s *CreateObservabilityConfigurationInput) SetTraceConfiguration(v *TraceConfiguration) *CreateObservabilityConfigurationInput {
+	s.TraceConfiguration = v
+	return s
+}
+
+type CreateObservabilityConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the App Runner observability configuration that's created
+	// by this request.
+	//
+	// ObservabilityConfiguration is a required field
+	ObservabilityConfiguration *ObservabilityConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateObservabilityConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateObservabilityConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetObservabilityConfiguration sets the ObservabilityConfiguration field's value.
+func (s *CreateObservabilityConfigurationOutput) SetObservabilityConfiguration(v *ObservabilityConfiguration) *CreateObservabilityConfigurationOutput {
+	s.ObservabilityConfiguration = v
+	return s
+}
+
 type CreateServiceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of an App Runner automatic scaling configuration
 	// resource that you want to associate with your service. If not provided, App
 	// Runner associates the latest revision of a default auto scaling configuration.
+	//
+	// Specify an ARN with a name and a revision number to associate that revision.
+	// For example: arn:aws:apprunner:us-east-1:123456789012:autoscalingconfiguration/high-availability/3
+	//
+	// Specify just the name to associate the latest revision. For example: arn:aws:apprunner:us-east-1:123456789012:autoscalingconfiguration/high-availability
 	AutoScalingConfigurationArn *string `min:"1" type:"string"`
 
 	// An optional custom encryption key that App Runner uses to encrypt the copy
 	// of your source repository that it maintains and your service logs. By default,
-	// App Runner uses an Amazon Web Services managed CMK.
+	// App Runner uses an Amazon Web Services managed key.
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
 
 	// The settings for the health check that App Runner performs to monitor the
-	// health of your service.
+	// health of the App Runner service.
 	HealthCheckConfiguration *HealthCheckConfiguration `type:"structure"`
 
-	// The runtime configuration of instances (scaling units) of the App Runner
-	// service.
+	// The runtime configuration of instances (scaling units) of your service.
 	InstanceConfiguration *InstanceConfiguration `type:"structure"`
 
-	// A name for the new service. It must be unique across all the running App
-	// Runner services in your Amazon Web Services account in the Amazon Web Services
-	// Region.
+	// Configuration settings related to network traffic of the web application
+	// that the App Runner service runs.
+	NetworkConfiguration *NetworkConfiguration `type:"structure"`
+
+	// The observability configuration of your service.
+	ObservabilityConfiguration *ServiceObservabilityConfiguration `type:"structure"`
+
+	// A name for the App Runner service. It must be unique across all the running
+	// App Runner services in your Amazon Web Services account in the Amazon Web
+	// Services Region.
 	//
 	// ServiceName is a required field
 	ServiceName *string `min:"4" type:"string" required:"true"`
@@ -3490,8 +4483,8 @@ type CreateServiceInput struct {
 	// SourceConfiguration is a required field
 	SourceConfiguration *SourceConfiguration `type:"structure" required:"true"`
 
-	// An optional list of metadata items that you can associate with your service
-	// resource. A tag is a key-value pair.
+	// An optional list of metadata items that you can associate with the App Runner
+	// service resource. A tag is a key-value pair.
 	Tags []*Tag `type:"list"`
 }
 
@@ -3543,6 +4536,16 @@ func (s *CreateServiceInput) Validate() error {
 			invalidParams.AddNested("InstanceConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.NetworkConfiguration != nil {
+		if err := s.NetworkConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("NetworkConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ObservabilityConfiguration != nil {
+		if err := s.ObservabilityConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ObservabilityConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.SourceConfiguration != nil {
 		if err := s.SourceConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("SourceConfiguration", err.(request.ErrInvalidParams))
@@ -3586,6 +4589,18 @@ func (s *CreateServiceInput) SetHealthCheckConfiguration(v *HealthCheckConfigura
 // SetInstanceConfiguration sets the InstanceConfiguration field's value.
 func (s *CreateServiceInput) SetInstanceConfiguration(v *InstanceConfiguration) *CreateServiceInput {
 	s.InstanceConfiguration = v
+	return s
+}
+
+// SetNetworkConfiguration sets the NetworkConfiguration field's value.
+func (s *CreateServiceInput) SetNetworkConfiguration(v *NetworkConfiguration) *CreateServiceInput {
+	s.NetworkConfiguration = v
+	return s
+}
+
+// SetObservabilityConfiguration sets the ObservabilityConfiguration field's value.
+func (s *CreateServiceInput) SetObservabilityConfiguration(v *ServiceObservabilityConfiguration) *CreateServiceInput {
+	s.ObservabilityConfiguration = v
 	return s
 }
 
@@ -3650,6 +4665,138 @@ func (s *CreateServiceOutput) SetOperationId(v string) *CreateServiceOutput {
 // SetService sets the Service field's value.
 func (s *CreateServiceOutput) SetService(v *Service) *CreateServiceOutput {
 	s.Service = v
+	return s
+}
+
+type CreateVpcConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of IDs of security groups that App Runner should use for access to
+	// Amazon Web Services resources under the specified subnets. If not specified,
+	// App Runner uses the default security group of the Amazon VPC. The default
+	// security group allows all outbound traffic.
+	SecurityGroups []*string `type:"list"`
+
+	// A list of IDs of subnets that App Runner should use when it associates your
+	// service with a custom Amazon VPC. Specify IDs of subnets of a single Amazon
+	// VPC. App Runner determines the Amazon VPC from the subnets you specify.
+	//
+	// App Runner currently only provides support for IPv4.
+	//
+	// Subnets is a required field
+	Subnets []*string `type:"list" required:"true"`
+
+	// A list of metadata items that you can associate with your VPC connector resource.
+	// A tag is a key-value pair.
+	Tags []*Tag `type:"list"`
+
+	// A name for the VPC connector.
+	//
+	// VpcConnectorName is a required field
+	VpcConnectorName *string `min:"4" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVpcConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVpcConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateVpcConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateVpcConnectorInput"}
+	if s.Subnets == nil {
+		invalidParams.Add(request.NewErrParamRequired("Subnets"))
+	}
+	if s.VpcConnectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcConnectorName"))
+	}
+	if s.VpcConnectorName != nil && len(*s.VpcConnectorName) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("VpcConnectorName", 4))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSecurityGroups sets the SecurityGroups field's value.
+func (s *CreateVpcConnectorInput) SetSecurityGroups(v []*string) *CreateVpcConnectorInput {
+	s.SecurityGroups = v
+	return s
+}
+
+// SetSubnets sets the Subnets field's value.
+func (s *CreateVpcConnectorInput) SetSubnets(v []*string) *CreateVpcConnectorInput {
+	s.Subnets = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateVpcConnectorInput) SetTags(v []*Tag) *CreateVpcConnectorInput {
+	s.Tags = v
+	return s
+}
+
+// SetVpcConnectorName sets the VpcConnectorName field's value.
+func (s *CreateVpcConnectorInput) SetVpcConnectorName(v string) *CreateVpcConnectorInput {
+	s.VpcConnectorName = &v
+	return s
+}
+
+type CreateVpcConnectorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the App Runner VPC connector that's created by this request.
+	//
+	// VpcConnector is a required field
+	VpcConnector *VpcConnector `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVpcConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateVpcConnectorOutput) GoString() string {
+	return s.String()
+}
+
+// SetVpcConnector sets the VpcConnector field's value.
+func (s *CreateVpcConnectorOutput) SetVpcConnector(v *VpcConnector) *CreateVpcConnectorOutput {
+	s.VpcConnector = v
 	return s
 }
 
@@ -3890,6 +5037,94 @@ func (s *DeleteConnectionOutput) SetConnection(v *Connection) *DeleteConnectionO
 	return s
 }
 
+type DeleteObservabilityConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the App Runner observability configuration
+	// that you want to delete.
+	//
+	// The ARN can be a full observability configuration ARN, or a partial ARN ending
+	// with either .../name or .../name/revision . If a revision isn't specified,
+	// the latest active revision is deleted.
+	//
+	// ObservabilityConfigurationArn is a required field
+	ObservabilityConfigurationArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteObservabilityConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteObservabilityConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteObservabilityConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteObservabilityConfigurationInput"}
+	if s.ObservabilityConfigurationArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ObservabilityConfigurationArn"))
+	}
+	if s.ObservabilityConfigurationArn != nil && len(*s.ObservabilityConfigurationArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ObservabilityConfigurationArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetObservabilityConfigurationArn sets the ObservabilityConfigurationArn field's value.
+func (s *DeleteObservabilityConfigurationInput) SetObservabilityConfigurationArn(v string) *DeleteObservabilityConfigurationInput {
+	s.ObservabilityConfigurationArn = &v
+	return s
+}
+
+type DeleteObservabilityConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the App Runner observability configuration that this request
+	// just deleted.
+	//
+	// ObservabilityConfiguration is a required field
+	ObservabilityConfiguration *ObservabilityConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteObservabilityConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteObservabilityConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetObservabilityConfiguration sets the ObservabilityConfiguration field's value.
+func (s *DeleteObservabilityConfigurationOutput) SetObservabilityConfiguration(v *ObservabilityConfiguration) *DeleteObservabilityConfigurationOutput {
+	s.ObservabilityConfiguration = v
+	return s
+}
+
 type DeleteServiceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3983,6 +5218,91 @@ func (s *DeleteServiceOutput) SetOperationId(v string) *DeleteServiceOutput {
 // SetService sets the Service field's value.
 func (s *DeleteServiceOutput) SetService(v *Service) *DeleteServiceOutput {
 	s.Service = v
+	return s
+}
+
+type DeleteVpcConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the App Runner VPC connector that you want
+	// to delete.
+	//
+	// The ARN must be a full VPC connector ARN.
+	//
+	// VpcConnectorArn is a required field
+	VpcConnectorArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVpcConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVpcConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteVpcConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteVpcConnectorInput"}
+	if s.VpcConnectorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcConnectorArn"))
+	}
+	if s.VpcConnectorArn != nil && len(*s.VpcConnectorArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VpcConnectorArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetVpcConnectorArn sets the VpcConnectorArn field's value.
+func (s *DeleteVpcConnectorInput) SetVpcConnectorArn(v string) *DeleteVpcConnectorInput {
+	s.VpcConnectorArn = &v
+	return s
+}
+
+type DeleteVpcConnectorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the App Runner VPC connector that this request just deleted.
+	//
+	// VpcConnector is a required field
+	VpcConnector *VpcConnector `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVpcConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVpcConnectorOutput) GoString() string {
+	return s.String()
+}
+
+// SetVpcConnector sets the VpcConnector field's value.
+func (s *DeleteVpcConnectorOutput) SetVpcConnector(v *VpcConnector) *DeleteVpcConnectorOutput {
+	s.VpcConnector = v
 	return s
 }
 
@@ -4222,6 +5542,94 @@ func (s *DescribeCustomDomainsOutput) SetServiceArn(v string) *DescribeCustomDom
 	return s
 }
 
+type DescribeObservabilityConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the App Runner observability configuration
+	// that you want a description for.
+	//
+	// The ARN can be a full observability configuration ARN, or a partial ARN ending
+	// with either .../name or .../name/revision . If a revision isn't specified,
+	// the latest active revision is described.
+	//
+	// ObservabilityConfigurationArn is a required field
+	ObservabilityConfigurationArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeObservabilityConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeObservabilityConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeObservabilityConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeObservabilityConfigurationInput"}
+	if s.ObservabilityConfigurationArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ObservabilityConfigurationArn"))
+	}
+	if s.ObservabilityConfigurationArn != nil && len(*s.ObservabilityConfigurationArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ObservabilityConfigurationArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetObservabilityConfigurationArn sets the ObservabilityConfigurationArn field's value.
+func (s *DescribeObservabilityConfigurationInput) SetObservabilityConfigurationArn(v string) *DescribeObservabilityConfigurationInput {
+	s.ObservabilityConfigurationArn = &v
+	return s
+}
+
+type DescribeObservabilityConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A full description of the App Runner observability configuration that you
+	// specified in this request.
+	//
+	// ObservabilityConfiguration is a required field
+	ObservabilityConfiguration *ObservabilityConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeObservabilityConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeObservabilityConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetObservabilityConfiguration sets the ObservabilityConfiguration field's value.
+func (s *DescribeObservabilityConfigurationOutput) SetObservabilityConfiguration(v *ObservabilityConfiguration) *DescribeObservabilityConfigurationOutput {
+	s.ObservabilityConfiguration = v
+	return s
+}
+
 type DescribeServiceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4302,6 +5710,92 @@ func (s DescribeServiceOutput) GoString() string {
 // SetService sets the Service field's value.
 func (s *DescribeServiceOutput) SetService(v *Service) *DescribeServiceOutput {
 	s.Service = v
+	return s
+}
+
+type DescribeVpcConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the App Runner VPC connector that you want
+	// a description for.
+	//
+	// The ARN must be a full VPC connector ARN.
+	//
+	// VpcConnectorArn is a required field
+	VpcConnectorArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVpcConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVpcConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeVpcConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeVpcConnectorInput"}
+	if s.VpcConnectorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcConnectorArn"))
+	}
+	if s.VpcConnectorArn != nil && len(*s.VpcConnectorArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VpcConnectorArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetVpcConnectorArn sets the VpcConnectorArn field's value.
+func (s *DescribeVpcConnectorInput) SetVpcConnectorArn(v string) *DescribeVpcConnectorInput {
+	s.VpcConnectorArn = &v
+	return s
+}
+
+type DescribeVpcConnectorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the App Runner VPC connector that you specified in this
+	// request.
+	//
+	// VpcConnector is a required field
+	VpcConnector *VpcConnector `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVpcConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVpcConnectorOutput) GoString() string {
+	return s.String()
+}
+
+// SetVpcConnector sets the VpcConnector field's value.
+func (s *DescribeVpcConnectorOutput) SetVpcConnector(v *VpcConnector) *DescribeVpcConnectorOutput {
+	s.VpcConnector = v
 	return s
 }
 
@@ -4426,6 +5920,66 @@ func (s *DisassociateCustomDomainOutput) SetDNSTarget(v string) *DisassociateCus
 // SetServiceArn sets the ServiceArn field's value.
 func (s *DisassociateCustomDomainOutput) SetServiceArn(v string) *DisassociateCustomDomainOutput {
 	s.ServiceArn = &v
+	return s
+}
+
+// Describes configuration settings related to outbound network traffic of an
+// App Runner service.
+type EgressConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The type of egress configuration.
+	//
+	// Set to DEFAULT for access to resources hosted on public networks.
+	//
+	// Set to VPC to associate your service to a custom VPC specified by VpcConnectorArn.
+	EgressType *string `type:"string" enum:"EgressType"`
+
+	// The Amazon Resource Name (ARN) of the App Runner VPC connector that you want
+	// to associate with your App Runner service. Only valid when EgressType = VPC.
+	VpcConnectorArn *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EgressConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EgressConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EgressConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EgressConfiguration"}
+	if s.VpcConnectorArn != nil && len(*s.VpcConnectorArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VpcConnectorArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEgressType sets the EgressType field's value.
+func (s *EgressConfiguration) SetEgressType(v string) *EgressConfiguration {
+	s.EgressType = &v
+	return s
+}
+
+// SetVpcConnectorArn sets the VpcConnectorArn field's value.
+func (s *EgressConfiguration) SetVpcConnectorArn(v string) *EgressConfiguration {
+	s.VpcConnectorArn = &v
 	return s
 }
 
@@ -4618,7 +6172,11 @@ type ImageConfiguration struct {
 	// An optional command that App Runner runs to start the application in the
 	// source image. If specified, this command overrides the Docker image’s default
 	// start command.
-	StartCommand *string `type:"string"`
+	//
+	// StartCommand is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ImageConfiguration's
+	// String and GoString methods.
+	StartCommand *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -5010,15 +6568,15 @@ type ListAutoScalingConfigurationsInput struct {
 
 	// The name of the App Runner auto scaling configuration that you want to list.
 	// If specified, App Runner lists revisions that share this name. If not specified,
-	// App Runner returns revisions of all configurations.
+	// App Runner returns revisions of all active configurations.
 	AutoScalingConfigurationName *string `min:"4" type:"string"`
 
 	// Set to true to list only the latest revision for each requested configuration
 	// name.
 	//
-	// Keep as false to list all revisions for each requested configuration name.
+	// Set to false to list all revisions for each requested configuration name.
 	//
-	// Default: false
+	// Default: true
 	LatestOnly *bool `type:"boolean"`
 
 	// The maximum number of results to include in each response (result page).
@@ -5260,6 +6818,143 @@ func (s *ListConnectionsOutput) SetConnectionSummaryList(v []*ConnectionSummary)
 // SetNextToken sets the NextToken field's value.
 func (s *ListConnectionsOutput) SetNextToken(v string) *ListConnectionsOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListObservabilityConfigurationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Set to true to list only the latest revision for each requested configuration
+	// name.
+	//
+	// Set to false to list all revisions for each requested configuration name.
+	//
+	// Default: true
+	LatestOnly *bool `type:"boolean"`
+
+	// The maximum number of results to include in each response (result page).
+	// It's used for a paginated request.
+	//
+	// If you don't specify MaxResults, the request retrieves all available results
+	// in a single response.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token from a previous result page. It's used for a paginated request. The
+	// request retrieves the next result page. All other parameter values must be
+	// identical to the ones that are specified in the initial request.
+	//
+	// If you don't specify NextToken, the request retrieves the first result page.
+	NextToken *string `min:"1" type:"string"`
+
+	// The name of the App Runner observability configuration that you want to list.
+	// If specified, App Runner lists revisions that share this name. If not specified,
+	// App Runner returns revisions of all active configurations.
+	ObservabilityConfigurationName *string `min:"4" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListObservabilityConfigurationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListObservabilityConfigurationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListObservabilityConfigurationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListObservabilityConfigurationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.ObservabilityConfigurationName != nil && len(*s.ObservabilityConfigurationName) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("ObservabilityConfigurationName", 4))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLatestOnly sets the LatestOnly field's value.
+func (s *ListObservabilityConfigurationsInput) SetLatestOnly(v bool) *ListObservabilityConfigurationsInput {
+	s.LatestOnly = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListObservabilityConfigurationsInput) SetMaxResults(v int64) *ListObservabilityConfigurationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListObservabilityConfigurationsInput) SetNextToken(v string) *ListObservabilityConfigurationsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetObservabilityConfigurationName sets the ObservabilityConfigurationName field's value.
+func (s *ListObservabilityConfigurationsInput) SetObservabilityConfigurationName(v string) *ListObservabilityConfigurationsInput {
+	s.ObservabilityConfigurationName = &v
+	return s
+}
+
+type ListObservabilityConfigurationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token that you can pass in a subsequent request to get the next result
+	// page. It's returned in a paginated request.
+	NextToken *string `min:"1" type:"string"`
+
+	// A list of summary information records for observability configurations. In
+	// a paginated request, the request returns up to MaxResults records for each
+	// call.
+	//
+	// ObservabilityConfigurationSummaryList is a required field
+	ObservabilityConfigurationSummaryList []*ObservabilityConfigurationSummary `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListObservabilityConfigurationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListObservabilityConfigurationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListObservabilityConfigurationsOutput) SetNextToken(v string) *ListObservabilityConfigurationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetObservabilityConfigurationSummaryList sets the ObservabilityConfigurationSummaryList field's value.
+func (s *ListObservabilityConfigurationsOutput) SetObservabilityConfigurationSummaryList(v []*ObservabilityConfigurationSummary) *ListObservabilityConfigurationsOutput {
+	s.ObservabilityConfigurationSummaryList = v
 	return s
 }
 
@@ -5569,6 +7264,334 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+type ListVpcConnectorsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to include in each response (result page).
+	// It's used for a paginated request.
+	//
+	// If you don't specify MaxResults, the request retrieves all available results
+	// in a single response.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token from a previous result page. It's used for a paginated request. The
+	// request retrieves the next result page. All other parameter values must be
+	// identical to the ones that are specified in the initial request.
+	//
+	// If you don't specify NextToken, the request retrieves the first result page.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListVpcConnectorsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListVpcConnectorsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListVpcConnectorsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListVpcConnectorsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListVpcConnectorsInput) SetMaxResults(v int64) *ListVpcConnectorsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListVpcConnectorsInput) SetNextToken(v string) *ListVpcConnectorsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListVpcConnectorsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token that you can pass in a subsequent request to get the next result
+	// page. It's returned in a paginated request.
+	NextToken *string `min:"1" type:"string"`
+
+	// A list of information records for VPC connectors. In a paginated request,
+	// the request returns up to MaxResults records for each call.
+	//
+	// VpcConnectors is a required field
+	VpcConnectors []*VpcConnector `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListVpcConnectorsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListVpcConnectorsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListVpcConnectorsOutput) SetNextToken(v string) *ListVpcConnectorsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVpcConnectors sets the VpcConnectors field's value.
+func (s *ListVpcConnectorsOutput) SetVpcConnectors(v []*VpcConnector) *ListVpcConnectorsOutput {
+	s.VpcConnectors = v
+	return s
+}
+
+// Describes configuration settings related to network traffic of an App Runner
+// service. Consists of embedded objects for each configurable network feature.
+type NetworkConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Network configuration settings for outbound message traffic.
+	EgressConfiguration *EgressConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NetworkConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NetworkConfiguration"}
+	if s.EgressConfiguration != nil {
+		if err := s.EgressConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("EgressConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEgressConfiguration sets the EgressConfiguration field's value.
+func (s *NetworkConfiguration) SetEgressConfiguration(v *EgressConfiguration) *NetworkConfiguration {
+	s.EgressConfiguration = v
+	return s
+}
+
+// Describes an App Runner observability configuration resource. Multiple revisions
+// of a configuration have the same ObservabilityConfigurationName and different
+// ObservabilityConfigurationRevision values.
+//
+// The resource is designed to configure multiple features (currently one feature,
+// tracing). This type contains optional members that describe the configuration
+// of these features (currently one member, TraceConfiguration). If a feature
+// member isn't specified, the feature isn't enabled.
+type ObservabilityConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The time when the observability configuration was created. It's in Unix time
+	// stamp format.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The time when the observability configuration was deleted. It's in Unix time
+	// stamp format.
+	DeletedAt *time.Time `type:"timestamp"`
+
+	// It's set to true for the configuration with the highest Revision among all
+	// configurations that share the same ObservabilityConfigurationName. It's set
+	// to false otherwise.
+	Latest *bool `type:"boolean"`
+
+	// The Amazon Resource Name (ARN) of this observability configuration.
+	ObservabilityConfigurationArn *string `min:"1" type:"string"`
+
+	// The customer-provided observability configuration name. It can be used in
+	// multiple revisions of a configuration.
+	ObservabilityConfigurationName *string `min:"4" type:"string"`
+
+	// The revision of this observability configuration. It's unique among all the
+	// active configurations ("Status": "ACTIVE") that share the same ObservabilityConfigurationName.
+	ObservabilityConfigurationRevision *int64 `type:"integer"`
+
+	// The current state of the observability configuration. If the status of a
+	// configuration revision is INACTIVE, it was deleted and can't be used. Inactive
+	// configuration revisions are permanently removed some time after they are
+	// deleted.
+	Status *string `type:"string" enum:"ObservabilityConfigurationStatus"`
+
+	// The configuration of the tracing feature within this observability configuration.
+	// If not specified, tracing isn't enabled.
+	TraceConfiguration *TraceConfiguration `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ObservabilityConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ObservabilityConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ObservabilityConfiguration) SetCreatedAt(v time.Time) *ObservabilityConfiguration {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDeletedAt sets the DeletedAt field's value.
+func (s *ObservabilityConfiguration) SetDeletedAt(v time.Time) *ObservabilityConfiguration {
+	s.DeletedAt = &v
+	return s
+}
+
+// SetLatest sets the Latest field's value.
+func (s *ObservabilityConfiguration) SetLatest(v bool) *ObservabilityConfiguration {
+	s.Latest = &v
+	return s
+}
+
+// SetObservabilityConfigurationArn sets the ObservabilityConfigurationArn field's value.
+func (s *ObservabilityConfiguration) SetObservabilityConfigurationArn(v string) *ObservabilityConfiguration {
+	s.ObservabilityConfigurationArn = &v
+	return s
+}
+
+// SetObservabilityConfigurationName sets the ObservabilityConfigurationName field's value.
+func (s *ObservabilityConfiguration) SetObservabilityConfigurationName(v string) *ObservabilityConfiguration {
+	s.ObservabilityConfigurationName = &v
+	return s
+}
+
+// SetObservabilityConfigurationRevision sets the ObservabilityConfigurationRevision field's value.
+func (s *ObservabilityConfiguration) SetObservabilityConfigurationRevision(v int64) *ObservabilityConfiguration {
+	s.ObservabilityConfigurationRevision = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ObservabilityConfiguration) SetStatus(v string) *ObservabilityConfiguration {
+	s.Status = &v
+	return s
+}
+
+// SetTraceConfiguration sets the TraceConfiguration field's value.
+func (s *ObservabilityConfiguration) SetTraceConfiguration(v *TraceConfiguration) *ObservabilityConfiguration {
+	s.TraceConfiguration = v
+	return s
+}
+
+// Provides summary information about an App Runner observability configuration
+// resource.
+//
+// This type contains limited information about an observability configuration.
+// It includes only identification information, without configuration details.
+// It's returned by the ListObservabilityConfigurations action. Complete configuration
+// information is returned by the CreateObservabilityConfiguration, DescribeObservabilityConfiguration,
+// and DeleteObservabilityConfiguration actions using the ObservabilityConfiguration
+// type.
+type ObservabilityConfigurationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of this observability configuration.
+	ObservabilityConfigurationArn *string `min:"1" type:"string"`
+
+	// The customer-provided observability configuration name. It can be used in
+	// multiple revisions of a configuration.
+	ObservabilityConfigurationName *string `min:"4" type:"string"`
+
+	// The revision of this observability configuration. It's unique among all the
+	// active configurations ("Status": "ACTIVE") that share the same ObservabilityConfigurationName.
+	ObservabilityConfigurationRevision *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ObservabilityConfigurationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ObservabilityConfigurationSummary) GoString() string {
+	return s.String()
+}
+
+// SetObservabilityConfigurationArn sets the ObservabilityConfigurationArn field's value.
+func (s *ObservabilityConfigurationSummary) SetObservabilityConfigurationArn(v string) *ObservabilityConfigurationSummary {
+	s.ObservabilityConfigurationArn = &v
+	return s
+}
+
+// SetObservabilityConfigurationName sets the ObservabilityConfigurationName field's value.
+func (s *ObservabilityConfigurationSummary) SetObservabilityConfigurationName(v string) *ObservabilityConfigurationSummary {
+	s.ObservabilityConfigurationName = &v
+	return s
+}
+
+// SetObservabilityConfigurationRevision sets the ObservabilityConfigurationRevision field's value.
+func (s *ObservabilityConfigurationSummary) SetObservabilityConfigurationRevision(v int64) *ObservabilityConfigurationSummary {
+	s.ObservabilityConfigurationRevision = &v
 	return s
 }
 
@@ -5947,7 +7970,7 @@ type Service struct {
 	// The encryption key that App Runner uses to encrypt the service logs and the
 	// copy of the source repository that App Runner maintains for the service.
 	// It can be either a customer-provided encryption key or an Amazon Web Services
-	// managed CMK.
+	// managed key.
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
 
 	// The settings for the health check that App Runner performs to monitor the
@@ -5958,6 +7981,15 @@ type Service struct {
 	//
 	// InstanceConfiguration is a required field
 	InstanceConfiguration *InstanceConfiguration `type:"structure" required:"true"`
+
+	// Configuration settings related to network traffic of the web application
+	// that this service runs.
+	//
+	// NetworkConfiguration is a required field
+	NetworkConfiguration *NetworkConfiguration `type:"structure" required:"true"`
+
+	// The observability configuration of this service.
+	ObservabilityConfiguration *ServiceObservabilityConfiguration `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of this service.
 	//
@@ -6064,6 +8096,18 @@ func (s *Service) SetInstanceConfiguration(v *InstanceConfiguration) *Service {
 	return s
 }
 
+// SetNetworkConfiguration sets the NetworkConfiguration field's value.
+func (s *Service) SetNetworkConfiguration(v *NetworkConfiguration) *Service {
+	s.NetworkConfiguration = v
+	return s
+}
+
+// SetObservabilityConfiguration sets the ObservabilityConfiguration field's value.
+func (s *Service) SetObservabilityConfiguration(v *ServiceObservabilityConfiguration) *Service {
+	s.ObservabilityConfiguration = v
+	return s
+}
+
 // SetServiceArn sets the ServiceArn field's value.
 func (s *Service) SetServiceArn(v string) *Service {
 	s.ServiceArn = &v
@@ -6103,6 +8147,75 @@ func (s *Service) SetStatus(v string) *Service {
 // SetUpdatedAt sets the UpdatedAt field's value.
 func (s *Service) SetUpdatedAt(v time.Time) *Service {
 	s.UpdatedAt = &v
+	return s
+}
+
+// Describes the observability configuration of an App Runner service. These
+// are additional observability features, like tracing, that you choose to enable.
+// They're configured in a separate resource that you associate with your service.
+type ServiceObservabilityConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the observability configuration that is
+	// associated with the service. Specified only when ObservabilityEnabled is
+	// true.
+	//
+	// Specify an ARN with a name and a revision number to associate that revision.
+	// For example: arn:aws:apprunner:us-east-1:123456789012:observabilityconfiguration/xray-tracing/3
+	//
+	// Specify just the name to associate the latest revision. For example: arn:aws:apprunner:us-east-1:123456789012:observabilityconfiguration/xray-tracing
+	ObservabilityConfigurationArn *string `min:"1" type:"string"`
+
+	// When true, an observability configuration resource is associated with the
+	// service, and an ObservabilityConfigurationArn is specified.
+	//
+	// ObservabilityEnabled is a required field
+	ObservabilityEnabled *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceObservabilityConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceObservabilityConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ServiceObservabilityConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ServiceObservabilityConfiguration"}
+	if s.ObservabilityConfigurationArn != nil && len(*s.ObservabilityConfigurationArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ObservabilityConfigurationArn", 1))
+	}
+	if s.ObservabilityEnabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("ObservabilityEnabled"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetObservabilityConfigurationArn sets the ObservabilityConfigurationArn field's value.
+func (s *ServiceObservabilityConfiguration) SetObservabilityConfigurationArn(v string) *ServiceObservabilityConfiguration {
+	s.ObservabilityConfigurationArn = &v
+	return s
+}
+
+// SetObservabilityEnabled sets the ObservabilityEnabled field's value.
+func (s *ServiceObservabilityConfiguration) SetObservabilityEnabled(v bool) *ServiceObservabilityConfiguration {
+	s.ObservabilityEnabled = &v
 	return s
 }
 
@@ -6688,6 +8801,54 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
+// Describes the configuration of the tracing feature within an App Runner observability
+// configuration.
+type TraceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The implementation provider chosen for tracing App Runner services.
+	//
+	// Vendor is a required field
+	Vendor *string `type:"string" required:"true" enum:"TracingVendor"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TraceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TraceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TraceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TraceConfiguration"}
+	if s.Vendor == nil {
+		invalidParams.Add(request.NewErrParamRequired("Vendor"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetVendor sets the Vendor field's value.
+func (s *TraceConfiguration) SetVendor(v string) *TraceConfiguration {
+	s.Vendor = &v
+	return s
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6780,16 +8941,22 @@ type UpdateServiceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of an App Runner automatic scaling configuration
-	// resource that you want to associate with your service.
+	// resource that you want to associate with the App Runner service.
 	AutoScalingConfigurationArn *string `min:"1" type:"string"`
 
 	// The settings for the health check that App Runner performs to monitor the
-	// health of your service.
+	// health of the App Runner service.
 	HealthCheckConfiguration *HealthCheckConfiguration `type:"structure"`
 
-	// The runtime configuration to apply to instances (scaling units) of the App
-	// Runner service.
+	// The runtime configuration to apply to instances (scaling units) of your service.
 	InstanceConfiguration *InstanceConfiguration `type:"structure"`
+
+	// Configuration settings related to network traffic of the web application
+	// that the App Runner service runs.
+	NetworkConfiguration *NetworkConfiguration `type:"structure"`
+
+	// The observability configuration of your service.
+	ObservabilityConfiguration *ServiceObservabilityConfiguration `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the App Runner service that you want to
 	// update.
@@ -6848,6 +9015,16 @@ func (s *UpdateServiceInput) Validate() error {
 			invalidParams.AddNested("InstanceConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.NetworkConfiguration != nil {
+		if err := s.NetworkConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("NetworkConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ObservabilityConfiguration != nil {
+		if err := s.ObservabilityConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ObservabilityConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.SourceConfiguration != nil {
 		if err := s.SourceConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("SourceConfiguration", err.(request.ErrInvalidParams))
@@ -6875,6 +9052,18 @@ func (s *UpdateServiceInput) SetHealthCheckConfiguration(v *HealthCheckConfigura
 // SetInstanceConfiguration sets the InstanceConfiguration field's value.
 func (s *UpdateServiceInput) SetInstanceConfiguration(v *InstanceConfiguration) *UpdateServiceInput {
 	s.InstanceConfiguration = v
+	return s
+}
+
+// SetNetworkConfiguration sets the NetworkConfiguration field's value.
+func (s *UpdateServiceInput) SetNetworkConfiguration(v *NetworkConfiguration) *UpdateServiceInput {
+	s.NetworkConfiguration = v
+	return s
+}
+
+// SetObservabilityConfiguration sets the ObservabilityConfiguration field's value.
+func (s *UpdateServiceInput) SetObservabilityConfiguration(v *ServiceObservabilityConfiguration) *UpdateServiceInput {
+	s.ObservabilityConfiguration = v
 	return s
 }
 
@@ -6935,6 +9124,117 @@ func (s *UpdateServiceOutput) SetOperationId(v string) *UpdateServiceOutput {
 // SetService sets the Service field's value.
 func (s *UpdateServiceOutput) SetService(v *Service) *UpdateServiceOutput {
 	s.Service = v
+	return s
+}
+
+// Describes an App Runner VPC connector resource. A VPC connector describes
+// the Amazon Virtual Private Cloud (Amazon VPC) that an App Runner service
+// is associated with, and the subnets and security group that are used.
+//
+// Multiple revisions of a connector might have the same Name and different
+// Revision values.
+//
+// At this time, App Runner supports only one revision per name.
+type VpcConnector struct {
+	_ struct{} `type:"structure"`
+
+	// The time when the VPC connector was created. It's in Unix time stamp format.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The time when the VPC connector was deleted. It's in Unix time stamp format.
+	DeletedAt *time.Time `type:"timestamp"`
+
+	// A list of IDs of security groups that App Runner uses for access to Amazon
+	// Web Services resources under the specified subnets. If not specified, App
+	// Runner uses the default security group of the Amazon VPC. The default security
+	// group allows all outbound traffic.
+	SecurityGroups []*string `type:"list"`
+
+	// The current state of the VPC connector. If the status of a connector revision
+	// is INACTIVE, it was deleted and can't be used. Inactive connector revisions
+	// are permanently removed some time after they are deleted.
+	Status *string `type:"string" enum:"VpcConnectorStatus"`
+
+	// A list of IDs of subnets that App Runner uses for your service. All IDs are
+	// of subnets of a single Amazon VPC.
+	Subnets []*string `type:"list"`
+
+	// The Amazon Resource Name (ARN) of this VPC connector.
+	VpcConnectorArn *string `min:"1" type:"string"`
+
+	// The customer-provided VPC connector name.
+	VpcConnectorName *string `min:"4" type:"string"`
+
+	// The revision of this VPC connector. It's unique among all the active connectors
+	// ("Status": "ACTIVE") that share the same Name.
+	//
+	// At this time, App Runner supports only one revision per name.
+	VpcConnectorRevision *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VpcConnector) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VpcConnector) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *VpcConnector) SetCreatedAt(v time.Time) *VpcConnector {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDeletedAt sets the DeletedAt field's value.
+func (s *VpcConnector) SetDeletedAt(v time.Time) *VpcConnector {
+	s.DeletedAt = &v
+	return s
+}
+
+// SetSecurityGroups sets the SecurityGroups field's value.
+func (s *VpcConnector) SetSecurityGroups(v []*string) *VpcConnector {
+	s.SecurityGroups = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *VpcConnector) SetStatus(v string) *VpcConnector {
+	s.Status = &v
+	return s
+}
+
+// SetSubnets sets the Subnets field's value.
+func (s *VpcConnector) SetSubnets(v []*string) *VpcConnector {
+	s.Subnets = v
+	return s
+}
+
+// SetVpcConnectorArn sets the VpcConnectorArn field's value.
+func (s *VpcConnector) SetVpcConnectorArn(v string) *VpcConnector {
+	s.VpcConnectorArn = &v
+	return s
+}
+
+// SetVpcConnectorName sets the VpcConnectorName field's value.
+func (s *VpcConnector) SetVpcConnectorName(v string) *VpcConnector {
+	s.VpcConnectorName = &v
+	return s
+}
+
+// SetVpcConnectorRevision sets the VpcConnectorRevision field's value.
+func (s *VpcConnector) SetVpcConnectorRevision(v int64) *VpcConnector {
+	s.VpcConnectorRevision = &v
 	return s
 }
 
@@ -7051,6 +9351,22 @@ func CustomDomainAssociationStatus_Values() []string {
 }
 
 const (
+	// EgressTypeDefault is a EgressType enum value
+	EgressTypeDefault = "DEFAULT"
+
+	// EgressTypeVpc is a EgressType enum value
+	EgressTypeVpc = "VPC"
+)
+
+// EgressType_Values returns all elements of the EgressType enum
+func EgressType_Values() []string {
+	return []string{
+		EgressTypeDefault,
+		EgressTypeVpc,
+	}
+}
+
+const (
 	// HealthCheckProtocolTcp is a HealthCheckProtocol enum value
 	HealthCheckProtocolTcp = "TCP"
 
@@ -7079,6 +9395,22 @@ func ImageRepositoryType_Values() []string {
 	return []string{
 		ImageRepositoryTypeEcr,
 		ImageRepositoryTypeEcrPublic,
+	}
+}
+
+const (
+	// ObservabilityConfigurationStatusActive is a ObservabilityConfigurationStatus enum value
+	ObservabilityConfigurationStatusActive = "ACTIVE"
+
+	// ObservabilityConfigurationStatusInactive is a ObservabilityConfigurationStatus enum value
+	ObservabilityConfigurationStatusInactive = "INACTIVE"
+)
+
+// ObservabilityConfigurationStatus_Values returns all elements of the ObservabilityConfigurationStatus enum
+func ObservabilityConfigurationStatus_Values() []string {
+	return []string{
+		ObservabilityConfigurationStatusActive,
+		ObservabilityConfigurationStatusInactive,
 	}
 }
 
@@ -7164,6 +9496,15 @@ const (
 
 	// RuntimeNodejs12 is a Runtime enum value
 	RuntimeNodejs12 = "NODEJS_12"
+
+	// RuntimeNodejs14 is a Runtime enum value
+	RuntimeNodejs14 = "NODEJS_14"
+
+	// RuntimeCorretto8 is a Runtime enum value
+	RuntimeCorretto8 = "CORRETTO_8"
+
+	// RuntimeCorretto11 is a Runtime enum value
+	RuntimeCorretto11 = "CORRETTO_11"
 )
 
 // Runtime_Values returns all elements of the Runtime enum
@@ -7171,6 +9512,9 @@ func Runtime_Values() []string {
 	return []string{
 		RuntimePython3,
 		RuntimeNodejs12,
+		RuntimeNodejs14,
+		RuntimeCorretto8,
+		RuntimeCorretto11,
 	}
 }
 
@@ -7215,5 +9559,33 @@ const (
 func SourceCodeVersionType_Values() []string {
 	return []string{
 		SourceCodeVersionTypeBranch,
+	}
+}
+
+const (
+	// TracingVendorAwsxray is a TracingVendor enum value
+	TracingVendorAwsxray = "AWSXRAY"
+)
+
+// TracingVendor_Values returns all elements of the TracingVendor enum
+func TracingVendor_Values() []string {
+	return []string{
+		TracingVendorAwsxray,
+	}
+}
+
+const (
+	// VpcConnectorStatusActive is a VpcConnectorStatus enum value
+	VpcConnectorStatusActive = "ACTIVE"
+
+	// VpcConnectorStatusInactive is a VpcConnectorStatus enum value
+	VpcConnectorStatusInactive = "INACTIVE"
+)
+
+// VpcConnectorStatus_Values returns all elements of the VpcConnectorStatus enum
+func VpcConnectorStatus_Values() []string {
+	return []string{
+		VpcConnectorStatusActive,
+		VpcConnectorStatusInactive,
 	}
 }

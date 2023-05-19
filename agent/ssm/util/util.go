@@ -26,15 +26,16 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-func AwsConfig(log log.T, appConfig appconfig.SsmagentConfig, service, region string) *aws.Config {
-	endpointHelper := endpoint.NewEndpointHelper(log, appConfig)
+func AwsConfig(logger log.T, appConfig appconfig.SsmagentConfig, service, region string) *aws.Config {
+	endpointHelper := endpoint.NewEndpointHelper(logger, appConfig)
 
 	return &aws.Config{
 		Retryer:    newRetryer(),
 		SleepDelay: sleepDelay,
-		HTTPClient: &http.Client{Transport: network.GetDefaultTransport(log, appConfig)},
+		HTTPClient: &http.Client{Transport: network.GetDefaultTransport(logger, appConfig)},
 		Region:     aws.String(region),
 		Endpoint:   aws.String(endpointHelper.GetServiceEndpoint(service, region)),
+		Logger:     logger,
 	}
 
 }

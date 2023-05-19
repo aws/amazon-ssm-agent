@@ -119,7 +119,7 @@ func (p *BasicPortSession) WritePump(dataChannel datachannel.IDataChannel) (erro
 	log := p.context.Log()
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("WritePump thread crashed with message: \n", err)
+			log.Errorf("WritePump thread crashed with message: %v\n", err)
 		}
 	}()
 

@@ -114,6 +114,13 @@ type LookoutEquipmentAPI interface {
 	ListDatasetsPages(*lookoutequipment.ListDatasetsInput, func(*lookoutequipment.ListDatasetsOutput, bool) bool) error
 	ListDatasetsPagesWithContext(aws.Context, *lookoutequipment.ListDatasetsInput, func(*lookoutequipment.ListDatasetsOutput, bool) bool, ...request.Option) error
 
+	ListInferenceEvents(*lookoutequipment.ListInferenceEventsInput) (*lookoutequipment.ListInferenceEventsOutput, error)
+	ListInferenceEventsWithContext(aws.Context, *lookoutequipment.ListInferenceEventsInput, ...request.Option) (*lookoutequipment.ListInferenceEventsOutput, error)
+	ListInferenceEventsRequest(*lookoutequipment.ListInferenceEventsInput) (*request.Request, *lookoutequipment.ListInferenceEventsOutput)
+
+	ListInferenceEventsPages(*lookoutequipment.ListInferenceEventsInput, func(*lookoutequipment.ListInferenceEventsOutput, bool) bool) error
+	ListInferenceEventsPagesWithContext(aws.Context, *lookoutequipment.ListInferenceEventsInput, func(*lookoutequipment.ListInferenceEventsOutput, bool) bool, ...request.Option) error
+
 	ListInferenceExecutions(*lookoutequipment.ListInferenceExecutionsInput) (*lookoutequipment.ListInferenceExecutionsOutput, error)
 	ListInferenceExecutionsWithContext(aws.Context, *lookoutequipment.ListInferenceExecutionsInput, ...request.Option) (*lookoutequipment.ListInferenceExecutionsOutput, error)
 	ListInferenceExecutionsRequest(*lookoutequipment.ListInferenceExecutionsInput) (*request.Request, *lookoutequipment.ListInferenceExecutionsOutput)
@@ -134,6 +141,13 @@ type LookoutEquipmentAPI interface {
 
 	ListModelsPages(*lookoutequipment.ListModelsInput, func(*lookoutequipment.ListModelsOutput, bool) bool) error
 	ListModelsPagesWithContext(aws.Context, *lookoutequipment.ListModelsInput, func(*lookoutequipment.ListModelsOutput, bool) bool, ...request.Option) error
+
+	ListSensorStatistics(*lookoutequipment.ListSensorStatisticsInput) (*lookoutequipment.ListSensorStatisticsOutput, error)
+	ListSensorStatisticsWithContext(aws.Context, *lookoutequipment.ListSensorStatisticsInput, ...request.Option) (*lookoutequipment.ListSensorStatisticsOutput, error)
+	ListSensorStatisticsRequest(*lookoutequipment.ListSensorStatisticsInput) (*request.Request, *lookoutequipment.ListSensorStatisticsOutput)
+
+	ListSensorStatisticsPages(*lookoutequipment.ListSensorStatisticsInput, func(*lookoutequipment.ListSensorStatisticsOutput, bool) bool) error
+	ListSensorStatisticsPagesWithContext(aws.Context, *lookoutequipment.ListSensorStatisticsInput, func(*lookoutequipment.ListSensorStatisticsOutput, bool) bool, ...request.Option) error
 
 	ListTagsForResource(*lookoutequipment.ListTagsForResourceInput) (*lookoutequipment.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *lookoutequipment.ListTagsForResourceInput, ...request.Option) (*lookoutequipment.ListTagsForResourceOutput, error)

@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/agent/update/tester/common/mocks"
 	"github.com/stretchr/testify/assert"
@@ -51,7 +52,7 @@ func TestStartTests_Timeout(t *testing.T) {
 	}
 
 	defaultTestTimeOut = time.Millisecond
-	StartTests(context.NewMockDefault(), func(contracts.ResultStatus, string) {})
+	StartTests(contextmocks.NewMockDefault(), func(contracts.ResultStatus, string) {})
 	select {
 	case <-runTestDoneChan:
 	case <-time.After(time.Second):
@@ -81,7 +82,7 @@ func TestStartTests_PanicRecovered(t *testing.T) {
 		panic("Something Happened")
 	}
 
-	StartTests(context.NewMockDefault(), func(contracts.ResultStatus, string) {})
+	StartTests(contextmocks.NewMockDefault(), func(contracts.ResultStatus, string) {})
 }
 
 func TestStartTests_Success(t *testing.T) {
@@ -102,7 +103,7 @@ func TestStartTests_Success(t *testing.T) {
 	start := time.Now()
 	defaultTestTimeOut = time.Second
 
-	StartTests(context.NewMockDefault(), func(contracts.ResultStatus, string) {})
+	StartTests(contextmocks.NewMockDefault(), func(contracts.ResultStatus, string) {})
 	assert.Less(t, time.Since(start), time.Millisecond*500)
 
 	select {
@@ -122,7 +123,7 @@ func TestRunTests_NoTestToRun(t *testing.T) {
 	stopChan := make(chan bool, 1)
 	doneChan := make(chan bool, 1)
 
-	runTests(context.NewMockDefault(), []testCommon.ITestCase{}, func(contracts.ResultStatus, string) {}, doneChan, stopChan)
+	runTests(contextmocks.NewMockDefault(), []testCommon.ITestCase{}, func(contracts.ResultStatus, string) {}, doneChan, stopChan)
 
 	select {
 	case <-stopChan:
@@ -149,7 +150,7 @@ func TestRunTests_StopBeforeAnyTestRuns(t *testing.T) {
 
 	doneChan := make(chan bool, 1)
 
-	runTests(context.NewMockDefault(), testCases, func(contracts.ResultStatus, string) {}, doneChan, stopChan)
+	runTests(contextmocks.NewMockDefault(), testCases, func(contracts.ResultStatus, string) {}, doneChan, stopChan)
 
 	select {
 	case <-stopChan:
@@ -180,7 +181,7 @@ func TestRunTests_StopAfterFirstTest(t *testing.T) {
 		return false
 	}).Once()
 
-	runTests(context.NewMockDefault(), testCases, func(contracts.ResultStatus, string) {}, doneChan, stopChan)
+	runTests(contextmocks.NewMockDefault(), testCases, func(contracts.ResultStatus, string) {}, doneChan, stopChan)
 
 	select {
 	case <-stopChan:
@@ -242,7 +243,7 @@ func TestRunTests_RunAllTests(t *testing.T) {
 	testMock.On("ExecuteTestCase").Return(testCommon.TestOutput{Err: fmt.Errorf("SomeError"), Result: "SomeRandomResult"}).Once()
 	testMock.On("CleanupTestCase").Return().Once()
 
-	runTests(context.NewMockDefault(), testCases, reportResults, doneChan, stopChan)
+	runTests(contextmocks.NewMockDefault(), testCases, reportResults, doneChan, stopChan)
 
 	select {
 	case <-stopChan:
@@ -277,7 +278,7 @@ func TestRunTests_PanicRecovery(t *testing.T) {
 		panic("SomeRandomPanicInTest")
 	}).Once()
 
-	runTests(context.NewMockDefault(), testCases, reportResults, doneChan, stopChan)
+	runTests(contextmocks.NewMockDefault(), testCases, reportResults, doneChan, stopChan)
 
 	select {
 	case <-stopChan:

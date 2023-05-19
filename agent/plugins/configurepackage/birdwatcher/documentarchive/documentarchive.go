@@ -43,7 +43,7 @@ type PackageArchive struct {
 	timeUnit      int
 }
 
-//constructors
+// constructors
 // New is a constructor for PackageArchive struct
 func New(facadeClientSession facade.BirdwatcherFacade) archive.IPackageArchive {
 	return &PackageArchive{
@@ -74,7 +74,7 @@ func (da *PackageArchive) Name() string {
 	return da.archiveType
 }
 
-//setters
+// setters
 // SetPackageName sets the document arn. The manifest and version is not required
 // since we use the document name and document version
 func (da *PackageArchive) SetResource(packageName string, version string, manifest *birdwatcher.Manifest) {
@@ -89,7 +89,7 @@ func (da *PackageArchive) SetManifestCache(manifestCache packageservice.Manifest
 	da.manifestCache = manifestCache
 }
 
-//getters
+// getters
 // GetResourceVersion makes a call to birdwatcher API to figure the right version of the resource that needs to be installed
 func (da *PackageArchive) GetResourceVersion(packageName string, packageVersion string) (name string, version string) {
 	// Return the packageVersion as "" if empty and return version if specified.

@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
@@ -45,7 +46,7 @@ func TestSurveySuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *ISurveySuite) SetupTest() {
-	suite.log = log.NewMockLog()
+	suite.log = logmocks.NewMockLog()
 	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
 	suite.surveyInstance = GetSurveyInstance(suite.log, suite.identity)
 }
@@ -56,7 +57,7 @@ func (suite *ISurveySuite) TestBasic() {
 
 	assert.Equal(suite.T(), suite.surveyInstance.GetCommProtocolInfo(), utils.Surveyor)
 
-	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
+	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(logmocks.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
 	dummyMsg := message.Message{
 		SchemaVersion: 1,
 		Topic:         "TestBasic",
@@ -64,7 +65,7 @@ func (suite *ISurveySuite) TestBasic() {
 	}
 	dummyMsgOutput := dummyMsg
 	suite.surveyInstance.Send(&dummyMsg)
-	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
+	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(logmocks.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
 	output, err := suite.surveyInstance.Recv()
 	_ = json.Unmarshal(output, &dummyMsg)
 	assert.Equal(suite.T(), dummyMsg.Topic, dummyMsgOutput.Topic)

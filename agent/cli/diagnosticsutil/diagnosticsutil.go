@@ -24,9 +24,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	agentContext "github.com/aws/amazon-ssm-agent/agent/context"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/aws-sdk-go/aws/session"
 )
@@ -58,7 +59,7 @@ func RegisterDiagnosticQuery(diagnosticQuery DiagnosticQuery) {
 
 // GetAwsSession create a single session and shares the session cross diagnostics queries
 func GetAwsSession(agentIdentity identity.IAgentIdentity, service string) (*session.Session, error) {
-	awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.NewSilentMockLog(), appconfig.DefaultConfig(), agentIdentity), service)
+	awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.NewSilentLogger(), appconfig.DefaultConfig(), agentIdentity), service)
 	return session.NewSession(awsConfig)
 }
 
@@ -68,7 +69,7 @@ func IsOnPremRegistration() bool {
 	go func() {
 		agentIdentity, identityErr := cliutil.GetAgentIdentity()
 
-		isOnPremChan <- identityErr == nil && identity.IsOnPremInstance(agentIdentity)
+		isOnPremChan <- identityErr == nil && identity2.IsOnPremInstance(agentIdentity)
 	}()
 
 	select {
@@ -115,7 +116,7 @@ func IsAgentInstalledSnap() bool {
 }
 
 func getRunningAgentPid() (int, error) {
-	processQuerier := executor.NewProcessExecutor(logger.NewSilentMockLog())
+	processQuerier := executor.NewProcessExecutor(logger.NewSilentLogger())
 
 	procs, err := processQuerier.Processes()
 

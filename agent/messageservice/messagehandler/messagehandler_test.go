@@ -17,10 +17,10 @@ package messagehandler
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/processorwrappers"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

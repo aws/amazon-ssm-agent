@@ -22,6 +22,7 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager"
@@ -30,7 +31,7 @@ import (
 	"github.com/cihub/seelog"
 )
 
-var LogMutex = new(sync.Mutex)
+var LogMutex = new(sync.RWMutex)
 
 // cli parameters
 var artifactsDir string
@@ -117,7 +118,7 @@ func main() {
 		log.Info("Verified agent is installed")
 
 		registrationInfo := getRegistrationInfo()
-		instanceId := registrationInfo.InstanceID(log)
+		instanceId := registrationInfo.InstanceID(log, "", registration.RegVaultKey)
 
 		if instanceId != "" {
 			log.Infof("Agent already registered with instance id %s", instanceId)
@@ -149,8 +150,8 @@ func main() {
 		}
 
 		log.Infof("Successfully started agent, reloading registration info")
-		registrationInfo.ReloadInstanceInfo(log)
-		instanceId = registrationInfo.InstanceID(log)
+		registrationInfo.ReloadInstanceInfo(log, "", registration.RegVaultKey)
+		instanceId = registrationInfo.InstanceID(log, "", registration.RegVaultKey)
 		if instanceId == "" {
 			osExit(1, log, "Failed to get new instance id from registration info after registration")
 		} else {
@@ -294,8 +295,8 @@ func initializeLogger() log.T {
 </seelog>
 `
 	seelogger, _ := seelog.LoggerFromConfigAsBytes([]byte(seelogConfig))
-	loggerInstance := &log.DelegateLogger{}
+	loggerInstance := &logger.DelegateLogger{}
 	loggerInstance.BaseLoggerInstance = seelogger
-	formatFilter := &log.ContextFormatFilter{Context: []string{}}
-	return &log.Wrapper{Format: formatFilter, M: LogMutex, Delegate: loggerInstance}
+	formatFilter := &logger.ContextFormatFilter{Context: []string{}}
+	return &logger.Wrapper{Format: formatFilter, M: LogMutex, Delegate: loggerInstance}
 }

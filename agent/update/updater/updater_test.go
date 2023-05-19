@@ -24,12 +24,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
-var updateCommand = []string{"updater", "-update", "-source.version", "1.0.0.0", "-source.location", "http://source",
-	"-target.version", "5.0.0.0", "-target.location", "http://target"}
+var updateCommand = []string{"updater", "-" + updateconstants.UpdateCmd,
+	"-" + updateconstants.SourceVersionCmd, "1.0.0.0", "-" + updateconstants.SourceLocationCmd, "http://source",
+	"-" + updateconstants.TargetVersionCmd, "5.0.0.0", "-" + updateconstants.TargetLocationCmd, "http://target"}
 
 type stubUpdater struct {
 	returnUpdateError  bool
@@ -66,7 +68,7 @@ func (u *stubUpdater) Failed(
 func TestUpdater(t *testing.T) {
 	// setup
 	updater = &stubUpdater{}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 
@@ -79,26 +81,9 @@ func TestUpdater(t *testing.T) {
 func TestUpdaterFailedStartOrResume(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnUpdateError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
-
-	os.Args = updateCommand
-
-	// action
-	updateAgent()
-}
-
-func TestUpdaterFailedSetRegion(t *testing.T) {
-	// setup
-	log = logger.NewMockLog()
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
-		identity := &identityMocks.IAgentIdentity{}
-		identity.On("Region").Return("", fmt.Errorf("SomeError"))
-		return identity, nil
-	}
-
-	updater = &stubUpdater{returnUpdateError: true}
 
 	os.Args = updateCommand
 
@@ -109,12 +94,13 @@ func TestUpdaterFailedSetRegion(t *testing.T) {
 func TestUpdaterWithDowngrade(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnUpdateError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 
-	os.Args = []string{"updater", "-update", "-source.version", "5.0.0.0", "-source.location", "http://source",
-		"-target.version", "1.0.0.0", "-target.location", "http://target"}
+	os.Args = []string{"updater", "-" + updateconstants.UpdateCmd,
+		"-" + updateconstants.SourceVersionCmd, "5.0.0.0", "-" + updateconstants.SourceLocationCmd, "http://source",
+		"-" + updateconstants.TargetVersionCmd, "1.0.0.0", "-" + updateconstants.TargetLocationCmd, "http://target"}
 
 	// action
 	updateAgent()
@@ -127,12 +113,13 @@ func TestUpdaterWithDowngrade(t *testing.T) {
 func TestUpdaterFailedWithoutSourceTargetCmd(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnUpdateError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 
-	os.Args = []string{"updater", "-update", "-source.version", "", "-source.location", "http://source",
-		"-target.version", "", "-target.location", "http://target"}
+	os.Args = []string{"updater", "-" + updateconstants.UpdateCmd,
+		"-" + updateconstants.SourceVersionCmd, "", "-" + updateconstants.SourceLocationCmd, "http://source",
+		"-" + updateconstants.TargetVersionCmd, "", "-" + updateconstants.TargetLocationCmd, "http://target"}
 
 	// action
 	updateAgent()
@@ -146,7 +133,7 @@ func TestUpdaterFailedWithoutSourceTargetCmd(t *testing.T) {
 func TestCleanupFailed(t *testing.T) {
 	// setup
 	updater = &stubUpdater{returnCleanupError: true}
-	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity2.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
 		return identityMocks.NewDefaultMockAgentIdentity(), nil
 	}
 

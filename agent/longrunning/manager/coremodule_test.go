@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -49,7 +50,7 @@ var (
 		appconfig.EC2ConfigSettingPath,
 		NameOfCloudWatchJsonFile)
 
-	loggerMock = log.NewMockLog()
+	loggerMock = logmocks.NewMockLog()
 )
 
 /*

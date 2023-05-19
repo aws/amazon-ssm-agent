@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon GuardDuty.
 //    func myFunc(svc guarddutyiface.GuardDutyAPI) bool {
-//        // Make svc.AcceptInvitation request
+//        // Make svc.AcceptAdministratorInvitation request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockGuardDutyClient struct {
 //        guarddutyiface.GuardDutyAPI
 //    }
-//    func (m *mockGuardDutyClient) AcceptInvitation(input *guardduty.AcceptInvitationInput) (*guardduty.AcceptInvitationOutput, error) {
+//    func (m *mockGuardDutyClient) AcceptAdministratorInvitation(input *guardduty.AcceptAdministratorInvitationInput) (*guardduty.AcceptAdministratorInvitationOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type GuardDutyAPI interface {
+	AcceptAdministratorInvitation(*guardduty.AcceptAdministratorInvitationInput) (*guardduty.AcceptAdministratorInvitationOutput, error)
+	AcceptAdministratorInvitationWithContext(aws.Context, *guardduty.AcceptAdministratorInvitationInput, ...request.Option) (*guardduty.AcceptAdministratorInvitationOutput, error)
+	AcceptAdministratorInvitationRequest(*guardduty.AcceptAdministratorInvitationInput) (*request.Request, *guardduty.AcceptAdministratorInvitationOutput)
+
 	AcceptInvitation(*guardduty.AcceptInvitationInput) (*guardduty.AcceptInvitationOutput, error)
 	AcceptInvitationWithContext(aws.Context, *guardduty.AcceptInvitationInput, ...request.Option) (*guardduty.AcceptInvitationOutput, error)
 	AcceptInvitationRequest(*guardduty.AcceptInvitationInput) (*request.Request, *guardduty.AcceptInvitationOutput)
@@ -128,6 +132,13 @@ type GuardDutyAPI interface {
 	DeleteThreatIntelSetWithContext(aws.Context, *guardduty.DeleteThreatIntelSetInput, ...request.Option) (*guardduty.DeleteThreatIntelSetOutput, error)
 	DeleteThreatIntelSetRequest(*guardduty.DeleteThreatIntelSetInput) (*request.Request, *guardduty.DeleteThreatIntelSetOutput)
 
+	DescribeMalwareScans(*guardduty.DescribeMalwareScansInput) (*guardduty.DescribeMalwareScansOutput, error)
+	DescribeMalwareScansWithContext(aws.Context, *guardduty.DescribeMalwareScansInput, ...request.Option) (*guardduty.DescribeMalwareScansOutput, error)
+	DescribeMalwareScansRequest(*guardduty.DescribeMalwareScansInput) (*request.Request, *guardduty.DescribeMalwareScansOutput)
+
+	DescribeMalwareScansPages(*guardduty.DescribeMalwareScansInput, func(*guardduty.DescribeMalwareScansOutput, bool) bool) error
+	DescribeMalwareScansPagesWithContext(aws.Context, *guardduty.DescribeMalwareScansInput, func(*guardduty.DescribeMalwareScansOutput, bool) bool, ...request.Option) error
+
 	DescribeOrganizationConfiguration(*guardduty.DescribeOrganizationConfigurationInput) (*guardduty.DescribeOrganizationConfigurationOutput, error)
 	DescribeOrganizationConfigurationWithContext(aws.Context, *guardduty.DescribeOrganizationConfigurationInput, ...request.Option) (*guardduty.DescribeOrganizationConfigurationOutput, error)
 	DescribeOrganizationConfigurationRequest(*guardduty.DescribeOrganizationConfigurationInput) (*request.Request, *guardduty.DescribeOrganizationConfigurationOutput)
@@ -140,6 +151,10 @@ type GuardDutyAPI interface {
 	DisableOrganizationAdminAccountWithContext(aws.Context, *guardduty.DisableOrganizationAdminAccountInput, ...request.Option) (*guardduty.DisableOrganizationAdminAccountOutput, error)
 	DisableOrganizationAdminAccountRequest(*guardduty.DisableOrganizationAdminAccountInput) (*request.Request, *guardduty.DisableOrganizationAdminAccountOutput)
 
+	DisassociateFromAdministratorAccount(*guardduty.DisassociateFromAdministratorAccountInput) (*guardduty.DisassociateFromAdministratorAccountOutput, error)
+	DisassociateFromAdministratorAccountWithContext(aws.Context, *guardduty.DisassociateFromAdministratorAccountInput, ...request.Option) (*guardduty.DisassociateFromAdministratorAccountOutput, error)
+	DisassociateFromAdministratorAccountRequest(*guardduty.DisassociateFromAdministratorAccountInput) (*request.Request, *guardduty.DisassociateFromAdministratorAccountOutput)
+
 	DisassociateFromMasterAccount(*guardduty.DisassociateFromMasterAccountInput) (*guardduty.DisassociateFromMasterAccountOutput, error)
 	DisassociateFromMasterAccountWithContext(aws.Context, *guardduty.DisassociateFromMasterAccountInput, ...request.Option) (*guardduty.DisassociateFromMasterAccountOutput, error)
 	DisassociateFromMasterAccountRequest(*guardduty.DisassociateFromMasterAccountInput) (*request.Request, *guardduty.DisassociateFromMasterAccountOutput)
@@ -151,6 +166,10 @@ type GuardDutyAPI interface {
 	EnableOrganizationAdminAccount(*guardduty.EnableOrganizationAdminAccountInput) (*guardduty.EnableOrganizationAdminAccountOutput, error)
 	EnableOrganizationAdminAccountWithContext(aws.Context, *guardduty.EnableOrganizationAdminAccountInput, ...request.Option) (*guardduty.EnableOrganizationAdminAccountOutput, error)
 	EnableOrganizationAdminAccountRequest(*guardduty.EnableOrganizationAdminAccountInput) (*request.Request, *guardduty.EnableOrganizationAdminAccountOutput)
+
+	GetAdministratorAccount(*guardduty.GetAdministratorAccountInput) (*guardduty.GetAdministratorAccountOutput, error)
+	GetAdministratorAccountWithContext(aws.Context, *guardduty.GetAdministratorAccountInput, ...request.Option) (*guardduty.GetAdministratorAccountOutput, error)
+	GetAdministratorAccountRequest(*guardduty.GetAdministratorAccountInput) (*request.Request, *guardduty.GetAdministratorAccountOutput)
 
 	GetDetector(*guardduty.GetDetectorInput) (*guardduty.GetDetectorOutput, error)
 	GetDetectorWithContext(aws.Context, *guardduty.GetDetectorInput, ...request.Option) (*guardduty.GetDetectorOutput, error)
@@ -176,6 +195,10 @@ type GuardDutyAPI interface {
 	GetInvitationsCountWithContext(aws.Context, *guardduty.GetInvitationsCountInput, ...request.Option) (*guardduty.GetInvitationsCountOutput, error)
 	GetInvitationsCountRequest(*guardduty.GetInvitationsCountInput) (*request.Request, *guardduty.GetInvitationsCountOutput)
 
+	GetMalwareScanSettings(*guardduty.GetMalwareScanSettingsInput) (*guardduty.GetMalwareScanSettingsOutput, error)
+	GetMalwareScanSettingsWithContext(aws.Context, *guardduty.GetMalwareScanSettingsInput, ...request.Option) (*guardduty.GetMalwareScanSettingsOutput, error)
+	GetMalwareScanSettingsRequest(*guardduty.GetMalwareScanSettingsInput) (*request.Request, *guardduty.GetMalwareScanSettingsOutput)
+
 	GetMasterAccount(*guardduty.GetMasterAccountInput) (*guardduty.GetMasterAccountOutput, error)
 	GetMasterAccountWithContext(aws.Context, *guardduty.GetMasterAccountInput, ...request.Option) (*guardduty.GetMasterAccountOutput, error)
 	GetMasterAccountRequest(*guardduty.GetMasterAccountInput) (*request.Request, *guardduty.GetMasterAccountOutput)
@@ -187,6 +210,10 @@ type GuardDutyAPI interface {
 	GetMembers(*guardduty.GetMembersInput) (*guardduty.GetMembersOutput, error)
 	GetMembersWithContext(aws.Context, *guardduty.GetMembersInput, ...request.Option) (*guardduty.GetMembersOutput, error)
 	GetMembersRequest(*guardduty.GetMembersInput) (*request.Request, *guardduty.GetMembersOutput)
+
+	GetRemainingFreeTrialDays(*guardduty.GetRemainingFreeTrialDaysInput) (*guardduty.GetRemainingFreeTrialDaysOutput, error)
+	GetRemainingFreeTrialDaysWithContext(aws.Context, *guardduty.GetRemainingFreeTrialDaysInput, ...request.Option) (*guardduty.GetRemainingFreeTrialDaysOutput, error)
+	GetRemainingFreeTrialDaysRequest(*guardduty.GetRemainingFreeTrialDaysInput) (*request.Request, *guardduty.GetRemainingFreeTrialDaysOutput)
 
 	GetThreatIntelSet(*guardduty.GetThreatIntelSetInput) (*guardduty.GetThreatIntelSetOutput, error)
 	GetThreatIntelSetWithContext(aws.Context, *guardduty.GetThreatIntelSetInput, ...request.Option) (*guardduty.GetThreatIntelSetOutput, error)
@@ -305,6 +332,10 @@ type GuardDutyAPI interface {
 	UpdateIPSet(*guardduty.UpdateIPSetInput) (*guardduty.UpdateIPSetOutput, error)
 	UpdateIPSetWithContext(aws.Context, *guardduty.UpdateIPSetInput, ...request.Option) (*guardduty.UpdateIPSetOutput, error)
 	UpdateIPSetRequest(*guardduty.UpdateIPSetInput) (*request.Request, *guardduty.UpdateIPSetOutput)
+
+	UpdateMalwareScanSettings(*guardduty.UpdateMalwareScanSettingsInput) (*guardduty.UpdateMalwareScanSettingsOutput, error)
+	UpdateMalwareScanSettingsWithContext(aws.Context, *guardduty.UpdateMalwareScanSettingsInput, ...request.Option) (*guardduty.UpdateMalwareScanSettingsOutput, error)
+	UpdateMalwareScanSettingsRequest(*guardduty.UpdateMalwareScanSettingsInput) (*request.Request, *guardduty.UpdateMalwareScanSettingsOutput)
 
 	UpdateMemberDetectors(*guardduty.UpdateMemberDetectorsInput) (*guardduty.UpdateMemberDetectorsOutput, error)
 	UpdateMemberDetectorsWithContext(aws.Context, *guardduty.UpdateMemberDetectorsInput, ...request.Option) (*guardduty.UpdateMemberDetectorsOutput, error)

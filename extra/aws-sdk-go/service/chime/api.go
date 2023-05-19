@@ -2589,6 +2589,9 @@ func (c *Chime) CreateMeetingDialOutRequest(input *CreateMeetingDialOutInput) (r
 //   * UnauthorizedClientException
 //   The client is not currently authorized to make the request.
 //
+//   * AccessDeniedException
+//   You don't have permissions to perform the requested operation.
+//
 //   * ServiceUnavailableException
 //   The service is currently unavailable.
 //
@@ -16523,8 +16526,8 @@ func (c *Chime) PutVoiceConnectorStreamingConfigurationRequest(input *PutVoiceCo
 //
 // Adds a streaming configuration for the specified Amazon Chime Voice Connector.
 // The streaming configuration specifies whether media streaming is enabled
-// for sending to Indonesians. It also sets the retention period, in hours,
-// for the Amazon Kinesis data.
+// for sending to Kinesis. It also sets the retention period, in hours, for
+// the Amazon Kinesis data.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -19986,8 +19989,9 @@ func (c *Chime) UpdateSipMediaApplicationCallRequest(input *UpdateSipMediaApplic
 
 // UpdateSipMediaApplicationCall API operation for Amazon Chime.
 //
-// Allows you to trigger a Lambda function at any time while a call is active,
-// and replace the current actions with new actions returned by the invocation.
+// Invokes the AWS Lambda function associated with the SIP media application
+// and transaction ID in an update request. The Lambda function can then return
+// a new set of actions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -20542,6 +20546,107 @@ func (c *Chime) UpdateVoiceConnectorGroupWithContext(ctx aws.Context, input *Upd
 	return out, req.Send()
 }
 
+const opValidateE911Address = "ValidateE911Address"
+
+// ValidateE911AddressRequest generates a "aws/request.Request" representing the
+// client's request for the ValidateE911Address operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ValidateE911Address for more information on using the ValidateE911Address
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ValidateE911AddressRequest method.
+//    req, resp := client.ValidateE911AddressRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-2018-05-01/ValidateE911Address
+func (c *Chime) ValidateE911AddressRequest(input *ValidateE911AddressInput) (req *request.Request, output *ValidateE911AddressOutput) {
+	op := &request.Operation{
+		Name:       opValidateE911Address,
+		HTTPMethod: "POST",
+		HTTPPath:   "/emergency-calling/address",
+	}
+
+	if input == nil {
+		input = &ValidateE911AddressInput{}
+	}
+
+	output = &ValidateE911AddressOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ValidateE911Address API operation for Amazon Chime.
+//
+// Validates an address to be used for 911 calls made with Amazon Chime Voice
+// Connectors. You can use validated addresses in a Presence Information Data
+// Format Location Object file that you include in SIP requests. That helps
+// ensure that addresses are routed to the appropriate Public Safety Answering
+// Point.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Chime's
+// API operation ValidateE911Address for usage and error information.
+//
+// Returned Error Types:
+//   * UnauthorizedClientException
+//   The client is not currently authorized to make the request.
+//
+//   * NotFoundException
+//   One or more of the resources in the request does not exist in the system.
+//
+//   * ForbiddenException
+//   The client is permanently forbidden from making the request.
+//
+//   * BadRequestException
+//   The input parameters don't match the service's restrictions.
+//
+//   * ThrottledClientException
+//   The client exceeded its request rate limit.
+//
+//   * ServiceUnavailableException
+//   The service is currently unavailable.
+//
+//   * ServiceFailureException
+//   The service encountered an unexpected error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/chime-2018-05-01/ValidateE911Address
+func (c *Chime) ValidateE911Address(input *ValidateE911AddressInput) (*ValidateE911AddressOutput, error) {
+	req, out := c.ValidateE911AddressRequest(input)
+	return out, req.Send()
+}
+
+// ValidateE911AddressWithContext is the same as ValidateE911Address with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ValidateE911Address for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Chime) ValidateE911AddressWithContext(ctx aws.Context, input *ValidateE911AddressInput, opts ...request.Option) (*ValidateE911AddressOutput, error) {
+	req, out := c.ValidateE911AddressRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // You don't have permissions to perform the requested operation.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
@@ -20646,7 +20751,7 @@ type Account struct {
 	SigninDelegateGroups []*SigninDelegateGroup `type:"list"`
 
 	// Supported licenses for the Amazon Chime account.
-	SupportedLicenses []*string `type:"list"`
+	SupportedLicenses []*string `type:"list" enum:"License"`
 }
 
 // String returns the string representation.
@@ -20765,6 +20870,160 @@ func (s *AccountSettings) SetDisableRemoteControl(v bool) *AccountSettings {
 // SetEnableDialOut sets the EnableDialOut field's value.
 func (s *AccountSettings) SetEnableDialOut(v bool) *AccountSettings {
 	s.EnableDialOut = &v
+	return s
+}
+
+// A validated address.
+type Address struct {
+	_ struct{} `type:"structure"`
+
+	// The city of an address.
+	//
+	// City is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	City *string `locationName:"city" type:"string" sensitive:"true"`
+
+	// The country of an address.
+	//
+	// Country is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	Country *string `locationName:"country" type:"string" sensitive:"true"`
+
+	// An address suffix location, such as the S. Unit A in Central Park S. Unit
+	// A.
+	//
+	// PostDirectional is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	PostDirectional *string `locationName:"postDirectional" type:"string" sensitive:"true"`
+
+	// The postal code of an address.
+	//
+	// PostalCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	PostalCode *string `locationName:"postalCode" type:"string" sensitive:"true"`
+
+	// The Zip + 4 or postal code + 4 of an address.
+	//
+	// PostalCodePlus4 is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	PostalCodePlus4 *string `locationName:"postalCodePlus4" type:"string" sensitive:"true"`
+
+	// An address prefix location, such as the N in N. Third St..
+	//
+	// PreDirectional is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	PreDirectional *string `locationName:"preDirectional" type:"string" sensitive:"true"`
+
+	// The state of an address.
+	//
+	// State is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	State *string `locationName:"state" type:"string" sensitive:"true"`
+
+	// The address street, such as 8th Avenue.
+	//
+	// StreetName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	StreetName *string `locationName:"streetName" type:"string" sensitive:"true"`
+
+	// The numeric portion of an address.
+	//
+	// StreetNumber is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	StreetNumber *string `locationName:"streetNumber" type:"string" sensitive:"true"`
+
+	// The address suffix, such as the N in 8th Avenue N.
+	//
+	// StreetSuffix is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	StreetSuffix *string `locationName:"streetSuffix" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Address) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Address) GoString() string {
+	return s.String()
+}
+
+// SetCity sets the City field's value.
+func (s *Address) SetCity(v string) *Address {
+	s.City = &v
+	return s
+}
+
+// SetCountry sets the Country field's value.
+func (s *Address) SetCountry(v string) *Address {
+	s.Country = &v
+	return s
+}
+
+// SetPostDirectional sets the PostDirectional field's value.
+func (s *Address) SetPostDirectional(v string) *Address {
+	s.PostDirectional = &v
+	return s
+}
+
+// SetPostalCode sets the PostalCode field's value.
+func (s *Address) SetPostalCode(v string) *Address {
+	s.PostalCode = &v
+	return s
+}
+
+// SetPostalCodePlus4 sets the PostalCodePlus4 field's value.
+func (s *Address) SetPostalCodePlus4(v string) *Address {
+	s.PostalCodePlus4 = &v
+	return s
+}
+
+// SetPreDirectional sets the PreDirectional field's value.
+func (s *Address) SetPreDirectional(v string) *Address {
+	s.PreDirectional = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *Address) SetState(v string) *Address {
+	s.State = &v
+	return s
+}
+
+// SetStreetName sets the StreetName field's value.
+func (s *Address) SetStreetName(v string) *Address {
+	s.StreetName = &v
+	return s
+}
+
+// SetStreetNumber sets the StreetNumber field's value.
+func (s *Address) SetStreetNumber(v string) *Address {
+	s.StreetNumber = &v
+	return s
+}
+
+// SetStreetSuffix sets the StreetSuffix field's value.
+func (s *Address) SetStreetSuffix(v string) *Address {
+	s.StreetSuffix = &v
 	return s
 }
 
@@ -21496,7 +21755,7 @@ func (s *AssociatePhoneNumberWithUserInput) SetUserId(v string) *AssociatePhoneN
 }
 
 type AssociatePhoneNumberWithUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -21796,7 +22055,7 @@ func (s *AssociateSigninDelegateGroupsWithAccountInput) SetSigninDelegateGroups(
 }
 
 type AssociateSigninDelegateGroupsWithAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -23081,6 +23340,120 @@ func (s BusinessCallingSettings) GoString() string {
 // SetCdrBucket sets the CdrBucket field's value.
 func (s *BusinessCallingSettings) SetCdrBucket(v string) *BusinessCallingSettings {
 	s.CdrBucket = &v
+	return s
+}
+
+// A suggested address.
+type CandidateAddress struct {
+	_ struct{} `type:"structure"`
+
+	// The city of a candidate address.
+	//
+	// City is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CandidateAddress's
+	// String and GoString methods.
+	City *string `locationName:"city" type:"string" sensitive:"true"`
+
+	// The country of a candidate address.
+	//
+	// Country is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CandidateAddress's
+	// String and GoString methods.
+	Country *string `locationName:"country" type:"string" sensitive:"true"`
+
+	// The postal code of a candidate address.
+	//
+	// PostalCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CandidateAddress's
+	// String and GoString methods.
+	PostalCode *string `locationName:"postalCode" type:"string" sensitive:"true"`
+
+	// The Zip + 4 or postal code + 4 of a candidate address.
+	//
+	// PostalCodePlus4 is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CandidateAddress's
+	// String and GoString methods.
+	PostalCodePlus4 *string `locationName:"postalCodePlus4" type:"string" sensitive:"true"`
+
+	// The state of a candidate address.
+	//
+	// State is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CandidateAddress's
+	// String and GoString methods.
+	State *string `locationName:"state" type:"string" sensitive:"true"`
+
+	// The street information of a candidate address
+	//
+	// StreetInfo is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CandidateAddress's
+	// String and GoString methods.
+	StreetInfo *string `locationName:"streetInfo" type:"string" sensitive:"true"`
+
+	// The numeric portion of a candidate address.
+	//
+	// StreetNumber is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CandidateAddress's
+	// String and GoString methods.
+	StreetNumber *string `locationName:"streetNumber" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CandidateAddress) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CandidateAddress) GoString() string {
+	return s.String()
+}
+
+// SetCity sets the City field's value.
+func (s *CandidateAddress) SetCity(v string) *CandidateAddress {
+	s.City = &v
+	return s
+}
+
+// SetCountry sets the Country field's value.
+func (s *CandidateAddress) SetCountry(v string) *CandidateAddress {
+	s.Country = &v
+	return s
+}
+
+// SetPostalCode sets the PostalCode field's value.
+func (s *CandidateAddress) SetPostalCode(v string) *CandidateAddress {
+	s.PostalCode = &v
+	return s
+}
+
+// SetPostalCodePlus4 sets the PostalCodePlus4 field's value.
+func (s *CandidateAddress) SetPostalCodePlus4(v string) *CandidateAddress {
+	s.PostalCodePlus4 = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CandidateAddress) SetState(v string) *CandidateAddress {
+	s.State = &v
+	return s
+}
+
+// SetStreetInfo sets the StreetInfo field's value.
+func (s *CandidateAddress) SetStreetInfo(v string) *CandidateAddress {
+	s.StreetInfo = &v
+	return s
+}
+
+// SetStreetNumber sets the StreetNumber field's value.
+func (s *CandidateAddress) SetStreetNumber(v string) *CandidateAddress {
+	s.StreetNumber = &v
 	return s
 }
 
@@ -24375,7 +24748,7 @@ type CreateAppInstanceInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
-	// Tags assigned to the AppInstanceUser.
+	// Tags assigned to the AppInstance.
 	Tags []*Tag `min:"1" type:"list"`
 }
 
@@ -26351,7 +26724,7 @@ type CreateProxySessionInput struct {
 	// The proxy session capabilities.
 	//
 	// Capabilities is a required field
-	Capabilities []*string `type:"list" required:"true"`
+	Capabilities []*string `type:"list" required:"true" enum:"Capability"`
 
 	// The number of minutes allowed for the proxy session.
 	ExpiryMinutes *int64 `min:"1" type:"integer"`
@@ -27637,7 +28010,7 @@ func (s *DeleteAccountInput) SetAccountId(v string) *DeleteAccountInput {
 }
 
 type DeleteAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27725,7 +28098,7 @@ func (s *DeleteAppInstanceAdminInput) SetAppInstanceArn(v string) *DeleteAppInst
 }
 
 type DeleteAppInstanceAdminOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27796,7 +28169,7 @@ func (s *DeleteAppInstanceInput) SetAppInstanceArn(v string) *DeleteAppInstanceI
 }
 
 type DeleteAppInstanceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27867,7 +28240,7 @@ func (s *DeleteAppInstanceStreamingConfigurationsInput) SetAppInstanceArn(v stri
 }
 
 type DeleteAppInstanceStreamingConfigurationsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -27938,7 +28311,7 @@ func (s *DeleteAppInstanceUserInput) SetAppInstanceUserArn(v string) *DeleteAppI
 }
 
 type DeleteAppInstanceUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28026,7 +28399,7 @@ func (s *DeleteAttendeeInput) SetMeetingId(v string) *DeleteAttendeeInput {
 }
 
 type DeleteAttendeeOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28126,7 +28499,7 @@ func (s *DeleteChannelBanInput) SetMemberArn(v string) *DeleteChannelBanInput {
 }
 
 type DeleteChannelBanOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28287,7 +28660,7 @@ func (s *DeleteChannelMembershipInput) SetMemberArn(v string) *DeleteChannelMemb
 }
 
 type DeleteChannelMembershipOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28387,7 +28760,7 @@ func (s *DeleteChannelMessageInput) SetMessageId(v string) *DeleteChannelMessage
 }
 
 type DeleteChannelMessageOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28487,7 +28860,7 @@ func (s *DeleteChannelModeratorInput) SetChimeBearer(v string) *DeleteChannelMod
 }
 
 type DeleteChannelModeratorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28509,7 +28882,7 @@ func (s DeleteChannelModeratorOutput) GoString() string {
 }
 
 type DeleteChannelOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28597,7 +28970,7 @@ func (s *DeleteEventsConfigurationInput) SetBotId(v string) *DeleteEventsConfigu
 }
 
 type DeleteEventsConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28668,7 +29041,7 @@ func (s *DeleteMediaCapturePipelineInput) SetMediaPipelineId(v string) *DeleteMe
 }
 
 type DeleteMediaCapturePipelineOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28739,7 +29112,7 @@ func (s *DeleteMeetingInput) SetMeetingId(v string) *DeleteMeetingInput {
 }
 
 type DeleteMeetingOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28810,7 +29183,7 @@ func (s *DeletePhoneNumberInput) SetPhoneNumberId(v string) *DeletePhoneNumberIn
 }
 
 type DeletePhoneNumberOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -28898,7 +29271,7 @@ func (s *DeleteProxySessionInput) SetVoiceConnectorId(v string) *DeleteProxySess
 }
 
 type DeleteProxySessionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29069,7 +29442,7 @@ func (s *DeleteRoomMembershipInput) SetRoomId(v string) *DeleteRoomMembershipInp
 }
 
 type DeleteRoomMembershipOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29091,7 +29464,7 @@ func (s DeleteRoomMembershipOutput) GoString() string {
 }
 
 type DeleteRoomOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29162,7 +29535,7 @@ func (s *DeleteSipMediaApplicationInput) SetSipMediaApplicationId(v string) *Del
 }
 
 type DeleteSipMediaApplicationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29233,7 +29606,7 @@ func (s *DeleteSipRuleInput) SetSipRuleId(v string) *DeleteSipRuleInput {
 }
 
 type DeleteSipRuleOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29304,7 +29677,7 @@ func (s *DeleteVoiceConnectorEmergencyCallingConfigurationInput) SetVoiceConnect
 }
 
 type DeleteVoiceConnectorEmergencyCallingConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29375,7 +29748,7 @@ func (s *DeleteVoiceConnectorGroupInput) SetVoiceConnectorGroupId(v string) *Del
 }
 
 type DeleteVoiceConnectorGroupOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29495,7 +29868,7 @@ func (s *DeleteVoiceConnectorOriginationInput) SetVoiceConnectorId(v string) *De
 }
 
 type DeleteVoiceConnectorOriginationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29517,7 +29890,7 @@ func (s DeleteVoiceConnectorOriginationOutput) GoString() string {
 }
 
 type DeleteVoiceConnectorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29588,7 +29961,7 @@ func (s *DeleteVoiceConnectorProxyInput) SetVoiceConnectorId(v string) *DeleteVo
 }
 
 type DeleteVoiceConnectorProxyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29659,7 +30032,7 @@ func (s *DeleteVoiceConnectorStreamingConfigurationInput) SetVoiceConnectorId(v 
 }
 
 type DeleteVoiceConnectorStreamingConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29745,7 +30118,7 @@ func (s *DeleteVoiceConnectorTerminationCredentialsInput) SetVoiceConnectorId(v 
 }
 
 type DeleteVoiceConnectorTerminationCredentialsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -29816,7 +30189,7 @@ func (s *DeleteVoiceConnectorTerminationInput) SetVoiceConnectorId(v string) *De
 }
 
 type DeleteVoiceConnectorTerminationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -30800,7 +31173,7 @@ func (s *DisassociatePhoneNumberFromUserInput) SetUserId(v string) *Disassociate
 }
 
 type DisassociatePhoneNumberFromUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -31080,7 +31453,7 @@ func (s *DisassociateSigninDelegateGroupsFromAccountInput) SetGroupNames(v []*st
 }
 
 type DisassociateSigninDelegateGroupsFromAccountOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -31159,6 +31532,10 @@ func (s *EmergencyCallingConfiguration) SetDNIS(v []*DNISEmergencyCallingConfigu
 type EngineTranscribeMedicalSettings struct {
 	_ struct{} `type:"structure"`
 
+	// Set this field to PHI to identify personal health information in the transcription
+	// output.
+	ContentIdentificationType *string `type:"string" enum:"TranscribeMedicalContentIdentificationType"`
+
 	// The language code specified for the Amazon Transcribe Medical engine.
 	//
 	// LanguageCode is a required field
@@ -31219,6 +31596,12 @@ func (s *EngineTranscribeMedicalSettings) Validate() error {
 	return nil
 }
 
+// SetContentIdentificationType sets the ContentIdentificationType field's value.
+func (s *EngineTranscribeMedicalSettings) SetContentIdentificationType(v string) *EngineTranscribeMedicalSettings {
+	s.ContentIdentificationType = &v
+	return s
+}
+
 // SetLanguageCode sets the LanguageCode field's value.
 func (s *EngineTranscribeMedicalSettings) SetLanguageCode(v string) *EngineTranscribeMedicalSettings {
 	s.LanguageCode = &v
@@ -31253,10 +31636,42 @@ func (s *EngineTranscribeMedicalSettings) SetVocabularyName(v string) *EngineTra
 type EngineTranscribeSettings struct {
 	_ struct{} `type:"structure"`
 
+	// Set this field to PII to identify personally identifiable information in
+	// the transcription output.
+	ContentIdentificationType *string `type:"string" enum:"TranscribeContentIdentificationType"`
+
+	// Set this field to PII to redact personally identifiable information in the
+	// transcription output. Content redaction is performed only upon complete transcription
+	// of the audio segments.
+	ContentRedactionType *string `type:"string" enum:"TranscribeContentRedactionType"`
+
+	// Generates partial transcription results that are less likely to change as
+	// meeting attendees speak. It does so by only allowing the last few words from
+	// the partial results to change.
+	EnablePartialResultsStabilization *bool `type:"boolean"`
+
 	// The language code specified for the Amazon Transcribe engine.
 	//
 	// LanguageCode is a required field
 	LanguageCode *string `type:"string" required:"true" enum:"TranscribeLanguageCode"`
+
+	// The name of the language model used during transcription.
+	LanguageModelName *string `min:"1" type:"string"`
+
+	// The stabity level of a partial results transcription. Determines how stable
+	// you want the transcription results to be. A higher level means the transcription
+	// results are less likely to change.
+	PartialResultsStability *string `type:"string" enum:"TranscribePartialResultsStability"`
+
+	// Lists the PII entity types you want to identify or redact. To specify entity
+	// types, you must enable ContentIdentificationType or ContentRedactionType.
+	//
+	// PIIEntityTypes must be comma-separated. The available values are: BANK_ACCOUNT_NUMBER,
+	// BANK_ROUTING, CREDIT_DEBIT_NUMBER, CREDIT_DEBIT_CVV, CREDIT_DEBIT_EXPIRY,
+	// PIN, EMAIL, ADDRESS, NAME, PHONE, SSN, and ALL.
+	//
+	// PiiEntityTypes is an optional parameter with a default value of ALL.
+	PiiEntityTypes *string `min:"1" type:"string"`
 
 	// The AWS Region passed to Amazon Transcribe. If you don't specify a Region,
 	// Amazon Chime uses the meeting's Region.
@@ -31296,6 +31711,12 @@ func (s *EngineTranscribeSettings) Validate() error {
 	if s.LanguageCode == nil {
 		invalidParams.Add(request.NewErrParamRequired("LanguageCode"))
 	}
+	if s.LanguageModelName != nil && len(*s.LanguageModelName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LanguageModelName", 1))
+	}
+	if s.PiiEntityTypes != nil && len(*s.PiiEntityTypes) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PiiEntityTypes", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -31303,9 +31724,45 @@ func (s *EngineTranscribeSettings) Validate() error {
 	return nil
 }
 
+// SetContentIdentificationType sets the ContentIdentificationType field's value.
+func (s *EngineTranscribeSettings) SetContentIdentificationType(v string) *EngineTranscribeSettings {
+	s.ContentIdentificationType = &v
+	return s
+}
+
+// SetContentRedactionType sets the ContentRedactionType field's value.
+func (s *EngineTranscribeSettings) SetContentRedactionType(v string) *EngineTranscribeSettings {
+	s.ContentRedactionType = &v
+	return s
+}
+
+// SetEnablePartialResultsStabilization sets the EnablePartialResultsStabilization field's value.
+func (s *EngineTranscribeSettings) SetEnablePartialResultsStabilization(v bool) *EngineTranscribeSettings {
+	s.EnablePartialResultsStabilization = &v
+	return s
+}
+
 // SetLanguageCode sets the LanguageCode field's value.
 func (s *EngineTranscribeSettings) SetLanguageCode(v string) *EngineTranscribeSettings {
 	s.LanguageCode = &v
+	return s
+}
+
+// SetLanguageModelName sets the LanguageModelName field's value.
+func (s *EngineTranscribeSettings) SetLanguageModelName(v string) *EngineTranscribeSettings {
+	s.LanguageModelName = &v
+	return s
+}
+
+// SetPartialResultsStability sets the PartialResultsStability field's value.
+func (s *EngineTranscribeSettings) SetPartialResultsStability(v string) *EngineTranscribeSettings {
+	s.PartialResultsStability = &v
+	return s
+}
+
+// SetPiiEntityTypes sets the PiiEntityTypes field's value.
+func (s *EngineTranscribeSettings) SetPiiEntityTypes(v string) *EngineTranscribeSettings {
+	s.PiiEntityTypes = &v
 	return s
 }
 
@@ -37803,6 +38260,9 @@ func (s *ListVoiceConnectorsOutput) SetVoiceConnectors(v []*VoiceConnector) *Lis
 type LoggingConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// Boolean that enables the logging of Voice Connector metrics to Cloudwatch.
+	EnableMediaMetricLogs *bool `type:"boolean"`
+
 	// When true, enables SIP message logs for sending to Amazon CloudWatch Logs.
 	EnableSIPLogs *bool `type:"boolean"`
 }
@@ -37823,6 +38283,12 @@ func (s LoggingConfiguration) String() string {
 // value will be replaced with "sensitive".
 func (s LoggingConfiguration) GoString() string {
 	return s.String()
+}
+
+// SetEnableMediaMetricLogs sets the EnableMediaMetricLogs field's value.
+func (s *LoggingConfiguration) SetEnableMediaMetricLogs(v bool) *LoggingConfiguration {
+	s.EnableMediaMetricLogs = &v
+	return s
 }
 
 // SetEnableSIPLogs sets the EnableSIPLogs field's value.
@@ -37898,7 +38364,7 @@ func (s *LogoutUserInput) SetUserId(v string) *LogoutUserInput {
 }
 
 type LogoutUserOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -38045,7 +38511,7 @@ type MediaPlacement struct {
 	// The audio host URL.
 	AudioHostUrl *string `type:"string"`
 
-	// The event ingestion URL.
+	// The event ingestion URL to which you send client meeting events.
 	EventIngestionUrl *string `type:"string"`
 
 	// The screen data URL.
@@ -39070,7 +39536,7 @@ type PhoneNumberCountry struct {
 	CountryCode *string `type:"string"`
 
 	// The supported phone number types.
-	SupportedPhoneNumberTypes []*string `type:"list"`
+	SupportedPhoneNumberTypes []*string `type:"list" enum:"PhoneNumberType"`
 }
 
 // String returns the string representation.
@@ -39302,7 +39768,7 @@ type ProxySession struct {
 	_ struct{} `type:"structure"`
 
 	// The proxy session capabilities.
-	Capabilities []*string `type:"list"`
+	Capabilities []*string `type:"list" enum:"Capability"`
 
 	// The created time stamp, in ISO 8601 format.
 	CreatedTimestamp *time.Time `type:"timestamp" timestampFormat:"iso8601"`
@@ -40560,7 +41026,7 @@ func (s *PutVoiceConnectorTerminationCredentialsInput) SetVoiceConnectorId(v str
 }
 
 type PutVoiceConnectorTerminationCredentialsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -40882,7 +41348,7 @@ func (s *RedactConversationMessageInput) SetMessageId(v string) *RedactConversat
 }
 
 type RedactConversationMessageOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -40987,7 +41453,7 @@ func (s *RedactRoomMessageInput) SetRoomId(v string) *RedactRoomMessageInput {
 }
 
 type RedactRoomMessageOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -42629,7 +43095,7 @@ func (s *StartMeetingTranscriptionInput) SetTranscriptionConfiguration(v *Transc
 }
 
 type StartMeetingTranscriptionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -42700,7 +43166,7 @@ func (s *StopMeetingTranscriptionInput) SetMeetingId(v string) *StopMeetingTrans
 }
 
 type StopMeetingTranscriptionOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -43017,7 +43483,7 @@ func (s *TagAttendeeInput) SetTags(v []*Tag) *TagAttendeeInput {
 }
 
 type TagAttendeeOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -43115,7 +43581,7 @@ func (s *TagMeetingInput) SetTags(v []*Tag) *TagMeetingInput {
 }
 
 type TagMeetingOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -43217,7 +43683,7 @@ func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -43788,7 +44254,7 @@ func (s *UntagAttendeeInput) SetTagKeys(v []*string) *UntagAttendeeInput {
 }
 
 type UntagAttendeeOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -43876,7 +44342,7 @@ func (s *UntagMeetingInput) SetTagKeys(v []*string) *UntagMeetingInput {
 }
 
 type UntagMeetingOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -43968,7 +44434,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -44154,7 +44620,7 @@ func (s *UpdateAccountSettingsInput) SetAccountSettings(v *AccountSettings) *Upd
 }
 
 type UpdateAccountSettingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -44926,7 +45392,7 @@ func (s *UpdateGlobalSettingsInput) SetVoiceConnector(v *VoiceConnectorSettings)
 }
 
 type UpdateGlobalSettingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -45170,7 +45636,7 @@ func (s *UpdatePhoneNumberSettingsInput) SetCallingName(v string) *UpdatePhoneNu
 }
 
 type UpdatePhoneNumberSettingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -45197,7 +45663,7 @@ type UpdateProxySessionInput struct {
 	// The proxy session capabilities.
 	//
 	// Capabilities is a required field
-	Capabilities []*string `type:"list" required:"true"`
+	Capabilities []*string `type:"list" required:"true" enum:"Capability"`
 
 	// The number of minutes allowed for the proxy session.
 	ExpiryMinutes *int64 `min:"1" type:"integer"`
@@ -46176,7 +46642,7 @@ func (s *UpdateUserSettingsInput) SetUserSettings(v *UserSettings) *UpdateUserSe
 }
 
 type UpdateUserSettingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -46689,6 +47155,220 @@ func (s *UserSettings) SetTelephony(v *TelephonySettings) *UserSettings {
 	return s
 }
 
+type ValidateE911AddressInput struct {
+	_ struct{} `type:"structure"`
+
+	// The AWS account ID.
+	//
+	// AwsAccountId is a required field
+	AwsAccountId *string `type:"string" required:"true"`
+
+	// The address city, such as Portland.
+	//
+	// City is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ValidateE911AddressInput's
+	// String and GoString methods.
+	//
+	// City is a required field
+	City *string `type:"string" required:"true" sensitive:"true"`
+
+	// The address country, such as US.
+	//
+	// Country is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ValidateE911AddressInput's
+	// String and GoString methods.
+	//
+	// Country is a required field
+	Country *string `type:"string" required:"true" sensitive:"true"`
+
+	// The address postal code, such as 04352.
+	//
+	// PostalCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ValidateE911AddressInput's
+	// String and GoString methods.
+	//
+	// PostalCode is a required field
+	PostalCode *string `type:"string" required:"true" sensitive:"true"`
+
+	// The address state, such as ME.
+	//
+	// State is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ValidateE911AddressInput's
+	// String and GoString methods.
+	//
+	// State is a required field
+	State *string `type:"string" required:"true" sensitive:"true"`
+
+	// The address street information, such as 8th Avenue.
+	//
+	// StreetInfo is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ValidateE911AddressInput's
+	// String and GoString methods.
+	//
+	// StreetInfo is a required field
+	StreetInfo *string `type:"string" required:"true" sensitive:"true"`
+
+	// The address street number, such as 200 or 2121.
+	//
+	// StreetNumber is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ValidateE911AddressInput's
+	// String and GoString methods.
+	//
+	// StreetNumber is a required field
+	StreetNumber *string `type:"string" required:"true" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidateE911AddressInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidateE911AddressInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ValidateE911AddressInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ValidateE911AddressInput"}
+	if s.AwsAccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AwsAccountId"))
+	}
+	if s.City == nil {
+		invalidParams.Add(request.NewErrParamRequired("City"))
+	}
+	if s.Country == nil {
+		invalidParams.Add(request.NewErrParamRequired("Country"))
+	}
+	if s.PostalCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("PostalCode"))
+	}
+	if s.State == nil {
+		invalidParams.Add(request.NewErrParamRequired("State"))
+	}
+	if s.StreetInfo == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreetInfo"))
+	}
+	if s.StreetNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreetNumber"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAwsAccountId sets the AwsAccountId field's value.
+func (s *ValidateE911AddressInput) SetAwsAccountId(v string) *ValidateE911AddressInput {
+	s.AwsAccountId = &v
+	return s
+}
+
+// SetCity sets the City field's value.
+func (s *ValidateE911AddressInput) SetCity(v string) *ValidateE911AddressInput {
+	s.City = &v
+	return s
+}
+
+// SetCountry sets the Country field's value.
+func (s *ValidateE911AddressInput) SetCountry(v string) *ValidateE911AddressInput {
+	s.Country = &v
+	return s
+}
+
+// SetPostalCode sets the PostalCode field's value.
+func (s *ValidateE911AddressInput) SetPostalCode(v string) *ValidateE911AddressInput {
+	s.PostalCode = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ValidateE911AddressInput) SetState(v string) *ValidateE911AddressInput {
+	s.State = &v
+	return s
+}
+
+// SetStreetInfo sets the StreetInfo field's value.
+func (s *ValidateE911AddressInput) SetStreetInfo(v string) *ValidateE911AddressInput {
+	s.StreetInfo = &v
+	return s
+}
+
+// SetStreetNumber sets the StreetNumber field's value.
+func (s *ValidateE911AddressInput) SetStreetNumber(v string) *ValidateE911AddressInput {
+	s.StreetNumber = &v
+	return s
+}
+
+type ValidateE911AddressOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The validated address.
+	Address *Address `type:"structure"`
+
+	// The ID that represents the address.
+	AddressExternalId *string `type:"string"`
+
+	// The list of address suggestions.
+	CandidateAddressList []*CandidateAddress `type:"list"`
+
+	// Number indicating the result of address validation. 0 means the address was
+	// perfect as is and successfully validated. 1 means the address was corrected.
+	// 2 means the address sent was not close enough and was not validated.
+	ValidationResult *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidateE911AddressOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidateE911AddressOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddress sets the Address field's value.
+func (s *ValidateE911AddressOutput) SetAddress(v *Address) *ValidateE911AddressOutput {
+	s.Address = v
+	return s
+}
+
+// SetAddressExternalId sets the AddressExternalId field's value.
+func (s *ValidateE911AddressOutput) SetAddressExternalId(v string) *ValidateE911AddressOutput {
+	s.AddressExternalId = &v
+	return s
+}
+
+// SetCandidateAddressList sets the CandidateAddressList field's value.
+func (s *ValidateE911AddressOutput) SetCandidateAddressList(v []*CandidateAddress) *ValidateE911AddressOutput {
+	s.CandidateAddressList = v
+	return s
+}
+
+// SetValidationResult sets the ValidationResult field's value.
+func (s *ValidateE911AddressOutput) SetValidationResult(v int64) *ValidateE911AddressOutput {
+	s.ValidationResult = &v
+	return s
+}
+
 // The video artifact configuration object.
 type VideoArtifactsConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -46769,6 +47449,9 @@ type VoiceConnector struct {
 	// The updated Amazon Chime Voice Connector timestamp, in ISO 8601 format.
 	UpdatedTimestamp *time.Time `type:"timestamp" timestampFormat:"iso8601"`
 
+	// The ARN of the specified Amazon Chime Voice Connector.
+	VoiceConnectorArn *string `type:"string"`
+
 	// The Amazon Chime Voice Connector ID.
 	VoiceConnectorId *string `type:"string"`
 }
@@ -46827,6 +47510,12 @@ func (s *VoiceConnector) SetUpdatedTimestamp(v time.Time) *VoiceConnector {
 	return s
 }
 
+// SetVoiceConnectorArn sets the VoiceConnectorArn field's value.
+func (s *VoiceConnector) SetVoiceConnectorArn(v string) *VoiceConnector {
+	s.VoiceConnectorArn = &v
+	return s
+}
+
 // SetVoiceConnectorId sets the VoiceConnectorId field's value.
 func (s *VoiceConnector) SetVoiceConnectorId(v string) *VoiceConnector {
 	s.VoiceConnectorId = &v
@@ -46848,6 +47537,9 @@ type VoiceConnectorGroup struct {
 
 	// The updated Amazon Chime Voice Connector group time stamp, in ISO 8601 format.
 	UpdatedTimestamp *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+
+	// The ARN of the specified Amazon Chime Voice Connector group.
+	VoiceConnectorGroupArn *string `type:"string"`
 
 	// The Amazon Chime Voice Connector group ID.
 	VoiceConnectorGroupId *string `type:"string"`
@@ -46889,6 +47581,12 @@ func (s *VoiceConnectorGroup) SetName(v string) *VoiceConnectorGroup {
 // SetUpdatedTimestamp sets the UpdatedTimestamp field's value.
 func (s *VoiceConnectorGroup) SetUpdatedTimestamp(v time.Time) *VoiceConnectorGroup {
 	s.UpdatedTimestamp = &v
+	return s
+}
+
+// SetVoiceConnectorGroupArn sets the VoiceConnectorGroupArn field's value.
+func (s *VoiceConnectorGroup) SetVoiceConnectorGroupArn(v string) *VoiceConnectorGroup {
+	s.VoiceConnectorGroupArn = &v
 	return s
 }
 
@@ -47746,6 +48444,30 @@ func SortOrder_Values() []string {
 }
 
 const (
+	// TranscribeContentIdentificationTypePii is a TranscribeContentIdentificationType enum value
+	TranscribeContentIdentificationTypePii = "PII"
+)
+
+// TranscribeContentIdentificationType_Values returns all elements of the TranscribeContentIdentificationType enum
+func TranscribeContentIdentificationType_Values() []string {
+	return []string{
+		TranscribeContentIdentificationTypePii,
+	}
+}
+
+const (
+	// TranscribeContentRedactionTypePii is a TranscribeContentRedactionType enum value
+	TranscribeContentRedactionTypePii = "PII"
+)
+
+// TranscribeContentRedactionType_Values returns all elements of the TranscribeContentRedactionType enum
+func TranscribeContentRedactionType_Values() []string {
+	return []string{
+		TranscribeContentRedactionTypePii,
+	}
+}
+
+const (
 	// TranscribeLanguageCodeEnUs is a TranscribeLanguageCode enum value
 	TranscribeLanguageCodeEnUs = "en-US"
 
@@ -47798,6 +48520,18 @@ func TranscribeLanguageCode_Values() []string {
 		TranscribeLanguageCodeJaJp,
 		TranscribeLanguageCodeKoKr,
 		TranscribeLanguageCodeZhCn,
+	}
+}
+
+const (
+	// TranscribeMedicalContentIdentificationTypePhi is a TranscribeMedicalContentIdentificationType enum value
+	TranscribeMedicalContentIdentificationTypePhi = "PHI"
+)
+
+// TranscribeMedicalContentIdentificationType_Values returns all elements of the TranscribeMedicalContentIdentificationType enum
+func TranscribeMedicalContentIdentificationType_Values() []string {
+	return []string{
+		TranscribeMedicalContentIdentificationTypePhi,
 	}
 }
 
@@ -47894,6 +48628,26 @@ func TranscribeMedicalType_Values() []string {
 	return []string{
 		TranscribeMedicalTypeConversation,
 		TranscribeMedicalTypeDictation,
+	}
+}
+
+const (
+	// TranscribePartialResultsStabilityLow is a TranscribePartialResultsStability enum value
+	TranscribePartialResultsStabilityLow = "low"
+
+	// TranscribePartialResultsStabilityMedium is a TranscribePartialResultsStability enum value
+	TranscribePartialResultsStabilityMedium = "medium"
+
+	// TranscribePartialResultsStabilityHigh is a TranscribePartialResultsStability enum value
+	TranscribePartialResultsStabilityHigh = "high"
+)
+
+// TranscribePartialResultsStability_Values returns all elements of the TranscribePartialResultsStability enum
+func TranscribePartialResultsStability_Values() []string {
+	return []string{
+		TranscribePartialResultsStabilityLow,
+		TranscribePartialResultsStabilityMedium,
+		TranscribePartialResultsStabilityHigh,
 	}
 }
 

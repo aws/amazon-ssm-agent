@@ -25,7 +25,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//TODO add process start time
+// TODO add process start time
 func TestIsProcessExists(t *testing.T) {
 	cmd := exec.Command("cmd", "timeout", "5")
 	err := cmd.Start()

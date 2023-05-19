@@ -24,7 +24,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	loginterface "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -33,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/nightlyone/lockfile"
 )
 
@@ -45,7 +47,7 @@ const (
 
 var (
 	updater      processor.T
-	log          logger.T
+	log          loginterface.T
 	agentContext context.T
 )
 
@@ -68,7 +70,10 @@ var (
 	disableDowngrade *bool
 )
 
-var newAgentIdentity = identity.NewAgentIdentity
+var (
+	newAgentIdentity                 = identity2.NewAgentIdentity
+	isIdentityRuntimeConfigSupported = updateutil.IsIdentityRuntimeConfigSupported
+)
 
 func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
@@ -108,6 +113,8 @@ func updateAgent() int {
 	defer log.Close()
 	defer log.Flush()
 
+	flag.Parse()
+
 	// Initialize agent config for agent identity
 	appConfig, err := appconfig.Config(true)
 	if err != nil {
@@ -121,7 +128,8 @@ func updateAgent() int {
 	}
 
 	agentContext = context.Default(log, appConfig, agentIdentity)
-
+	updateUtilRef := updateutil.NewUpdaterUtilWithLoadedDocContent(agentContext, *messageID)
+	updateSSMUserShellProperties(log)
 	// Create update info
 	updateInfo, err := updateinfo.New(agentContext)
 	if err != nil {
@@ -132,7 +140,7 @@ func updateAgent() int {
 	// Sleep 3 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
 
-	updater = processor.NewUpdater(agentContext, updateInfo)
+	updater = processor.NewUpdater(agentContext, updateInfo, updateUtilRef)
 
 	// If the updater already owns the lockfile, no harm done
 	// If there is no lockfile, the updater will own it
@@ -150,8 +158,6 @@ func updateAgent() int {
 	}
 
 	defer lock.Unlock()
-
-	flag.Parse()
 
 	// Return if update is not present in the command
 	if !*update {
@@ -195,7 +201,7 @@ func updateAgent() int {
 		AllowDowngrade:     !*disableDowngrade,
 	}
 
-	updateDetail.UpdateRoot, err = resolveUpdateRoot(updateDetail.SourceVersion)
+	updateDetail.UpdateRoot, err = updateutil.ResolveUpdateRoot(updateDetail.SourceVersion)
 	if err != nil {
 		log.Errorf("Failed to resolve update root: %v", err)
 		return nonErrorExitCode
@@ -225,13 +231,13 @@ func updateAgent() int {
 }
 
 func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentIdentity, error) {
-	var selector identity.IAgentIdentitySelector
+	var selector identity2.IAgentIdentitySelector
 	var agentIdentity identity.IAgentIdentity
 	var err error
 	// To support downgrades and rollbacks, we want to make sure that the source version supports runtime config
-	if updateutil.IsIdentityRuntimeConfigSupported(*sourceVersion) {
-		selector = identity.NewRuntimeConfigIdentitySelector(log)
-		agentIdentity, err = identity.NewAgentIdentity(log, &appConfig, selector)
+	if isIdentityRuntimeConfigSupported(*sourceVersion) {
+		selector = identity2.NewRuntimeConfigIdentitySelector(log)
+		agentIdentity, err = newAgentIdentity(log, &appConfig, selector)
 
 		// If success, return the identity
 		if err == nil {
@@ -242,7 +248,7 @@ func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentId
 
 	// If not able to resolve agent identity with runtime config or source version
 	// does not support runtimeconfig, fallback to default identity selector
-	selector = identity.NewDefaultAgentIdentitySelector(log)
+	selector = identity2.NewDefaultAgentIdentitySelector(log)
 	agentIdentity, err = newAgentIdentity(log, &appConfig, selector)
 	if err != nil {
 		return nil, err

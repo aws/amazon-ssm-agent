@@ -38,12 +38,12 @@ func ByteArrayArg(args mock.Arguments, index int) []byte {
 	return s
 }
 
-func (m *fpFsVaultMock) Retrieve(key string) ([]byte, error) {
+func (m *fpFsVaultMock) Retrieve(manifestFileNamePrefix string, key string) ([]byte, error) {
 	args := m.Called(key)
 	return ByteArrayArg(args, 0), args.Error(1)
 }
 
-func (m *fpFsVaultMock) Store(key string, data []byte) error {
+func (m *fpFsVaultMock) Store(manifestFileNamePrefix string, key string, data []byte) error {
 	args := m.Called(key, data)
 	return args.Error(0)
 }

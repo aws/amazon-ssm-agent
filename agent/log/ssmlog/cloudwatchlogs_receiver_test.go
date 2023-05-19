@@ -15,6 +15,7 @@
 package ssmlog
 
 import (
+	"strings"
 	"testing"
 	"time"
 
@@ -37,11 +38,11 @@ func TestCloudWatchLogsReceiver(t *testing.T) {
 
 	messages, _ := cloudwatchlogsqueue.Dequeue(time.Millisecond)
 
-	assert.Nil(t, messages, "No Messages should be present")
+	assert.Len(t, messages, 0, "No Messages should be present")
 
 	assert.Equal(t, "LogGroup", cloudwatchlogsqueue.GetLogGroup(), "LogGroup Name Incorrect")
 
-	cwLogReceiver.ReceiveMessage("Message", seelog.DebugLvl, nil)
+	err := cwLogReceiver.ReceiveMessage("Message", seelog.DebugLvl, nil)
 
 	messages, _ = cloudwatchlogsqueue.Dequeue(time.Millisecond)
 
@@ -51,9 +52,20 @@ func TestCloudWatchLogsReceiver(t *testing.T) {
 
 	assert.Equal(t, "Message", *messages[0].Message, "Message Incorrect")
 
+	err = cwLogReceiver.ReceiveMessage(strings.Repeat("A", cloudWatchLogEventLength*3), seelog.DebugLvl, nil)
+	messages, _ = cloudwatchlogsqueue.Dequeue(time.Millisecond)
+	assert.NotNil(t, messages, "No Messages should be present")
+	assert.Nil(t, err)
+	assert.Len(t, messages, 3, "Messages should be of length 3")
+
+	err = cwLogReceiver.ReceiveMessage(strings.Repeat("A", cloudWatchLogEventLength*4), seelog.DebugLvl, nil)
+	messages, _ = cloudwatchlogsqueue.Dequeue(time.Millisecond)
+	assert.Equal(t, "exceeded max iterations for sending cloudwatch log event", err.Error())
+	assert.NotNil(t, messages, "No Messages should be present")
+	assert.Len(t, messages, 3, "Messages should be of length 3")
+
 	cwLogReceiver.Close()
 
 	messages, _ = cloudwatchlogsqueue.Dequeue(time.Millisecond)
-	assert.Nil(t, messages, "No Messages should be present")
-
+	assert.Len(t, messages, 0, "No Messages should be present")
 }

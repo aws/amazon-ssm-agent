@@ -116,7 +116,7 @@ func (trans headBucketTransport) RoundTrip(request *http.Request) (resp *http.Re
 	resp, err = trans.delegate.RoundTrip(request)
 	if err == nil && resp != nil && goHttpClientWillFollowRedirect(resp.StatusCode) {
 		if resp.Header != nil && resp.Header.Get("Location") == "" && resp.Header.Get(bucketRegionHeader) != "" {
-			logger.Debugf("redirect response missing Location header, overriding status code")
+			trans.logger.Debugf("redirect response missing Location header, overriding status code")
 			resp.StatusCode = 200
 		}
 	}

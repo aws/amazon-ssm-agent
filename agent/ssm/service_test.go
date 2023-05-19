@@ -15,8 +15,8 @@ package ssm
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
 	awsmock "github.com/aws/aws-sdk-go/awstesting/mock"
@@ -86,7 +86,7 @@ func (suite *SsmServiceTestSuite) TestUpdateEmptyInstanceInformation() {
 // This function update the agent name, agent statuc, and agent version.
 func (suite *SsmServiceTestSuite) TestUpdateInstanceInformation() {
 	// Give mock value to test UpdateInstanceInformation, assert the error is nil, assert the log.Debug function get called.
-	response, err := suite.sdkService.UpdateInstanceInformation(suite.logMock, "2.2.3.2", "active", "Amazon-ssm-agent")
+	response, err := suite.sdkService.UpdateInstanceInformation(suite.logMock, "2.2.3.2", "active", "Amazon-ssm-agent", "us-east-1b", "use1-az2")
 	assert.Nil(suite.T(), err, "Err should be nil")
 	assert.NotNil(suite.T(), response, "response shouldn't be nil")
 }

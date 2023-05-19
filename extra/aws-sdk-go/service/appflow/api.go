@@ -61,7 +61,8 @@ func (c *Appflow) CreateConnectorProfileRequest(input *CreateConnectorProfileInp
 // account. There is a soft quota of 100 connector profiles per Amazon Web Services
 // account. If you need more connector profiles than this quota allows, you
 // can submit a request to the Amazon AppFlow team through the Amazon AppFlow
-// support channel.
+// support channel. In each connector profile that you create, you can provide
+// the credentials and properties for only one connector.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -400,6 +401,95 @@ func (c *Appflow) DeleteFlowWithContext(ctx aws.Context, input *DeleteFlowInput,
 	return out, req.Send()
 }
 
+const opDescribeConnector = "DescribeConnector"
+
+// DescribeConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeConnector for more information on using the DescribeConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeConnectorRequest method.
+//    req, resp := client.DescribeConnectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/DescribeConnector
+func (c *Appflow) DescribeConnectorRequest(input *DescribeConnectorInput) (req *request.Request, output *DescribeConnectorOutput) {
+	op := &request.Operation{
+		Name:       opDescribeConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/describe-connector",
+	}
+
+	if input == nil {
+		input = &DescribeConnectorInput{}
+	}
+
+	output = &DescribeConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeConnector API operation for Amazon Appflow.
+//
+// Describes the given custom connector registered in your Amazon Web Services
+// account. This API can be used for custom connectors that are registered in
+// your account and also for Amazon authored connectors.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Appflow's
+// API operation DescribeConnector for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The request has invalid or missing parameters.
+//
+//   * InternalServerException
+//   An internal service error occurred during the processing of your request.
+//   Try again later.
+//
+//   * ResourceNotFoundException
+//   The resource specified in the request (such as the source or destination
+//   connector profile) is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/DescribeConnector
+func (c *Appflow) DescribeConnector(input *DescribeConnectorInput) (*DescribeConnectorOutput, error) {
+	req, out := c.DescribeConnectorRequest(input)
+	return out, req.Send()
+}
+
+// DescribeConnectorWithContext is the same as DescribeConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Appflow) DescribeConnectorWithContext(ctx aws.Context, input *DescribeConnectorInput, opts ...request.Option) (*DescribeConnectorOutput, error) {
+	req, out := c.DescribeConnectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeConnectorEntity = "DescribeConnectorEntity"
 
 // DescribeConnectorEntityRequest generates a "aws/request.Request" representing the
@@ -445,7 +535,7 @@ func (c *Appflow) DescribeConnectorEntityRequest(input *DescribeConnectorEntityI
 // DescribeConnectorEntity API operation for Amazon Appflow.
 //
 // Provides details regarding the entity used with the connector, with a description
-// of the data model for each entity.
+// of the data model for each field in that entity.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -675,7 +765,7 @@ func (c *Appflow) DescribeConnectorsRequest(input *DescribeConnectorsInput) (req
 		Paginator: &request.Paginator{
 			InputTokens:     []string{"nextToken"},
 			OutputTokens:    []string{"nextToken"},
-			LimitToken:      "",
+			LimitToken:      "maxResults",
 			TruncationToken: "",
 		},
 	}
@@ -1111,6 +1201,149 @@ func (c *Appflow) ListConnectorEntitiesWithContext(ctx aws.Context, input *ListC
 	return out, req.Send()
 }
 
+const opListConnectors = "ListConnectors"
+
+// ListConnectorsRequest generates a "aws/request.Request" representing the
+// client's request for the ListConnectors operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListConnectors for more information on using the ListConnectors
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListConnectorsRequest method.
+//    req, resp := client.ListConnectorsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/ListConnectors
+func (c *Appflow) ListConnectorsRequest(input *ListConnectorsInput) (req *request.Request, output *ListConnectorsOutput) {
+	op := &request.Operation{
+		Name:       opListConnectors,
+		HTTPMethod: "POST",
+		HTTPPath:   "/list-connectors",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListConnectorsInput{}
+	}
+
+	output = &ListConnectorsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListConnectors API operation for Amazon Appflow.
+//
+// Returns the list of all registered custom connectors in your Amazon Web Services
+// account. This API lists only custom connectors registered in this account,
+// not the Amazon Web Services authored connectors.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Appflow's
+// API operation ListConnectors for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The request has invalid or missing parameters.
+//
+//   * InternalServerException
+//   An internal service error occurred during the processing of your request.
+//   Try again later.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/ListConnectors
+func (c *Appflow) ListConnectors(input *ListConnectorsInput) (*ListConnectorsOutput, error) {
+	req, out := c.ListConnectorsRequest(input)
+	return out, req.Send()
+}
+
+// ListConnectorsWithContext is the same as ListConnectors with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListConnectors for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Appflow) ListConnectorsWithContext(ctx aws.Context, input *ListConnectorsInput, opts ...request.Option) (*ListConnectorsOutput, error) {
+	req, out := c.ListConnectorsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListConnectorsPages iterates over the pages of a ListConnectors operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListConnectors method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListConnectors operation.
+//    pageNum := 0
+//    err := client.ListConnectorsPages(params,
+//        func(page *appflow.ListConnectorsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Appflow) ListConnectorsPages(input *ListConnectorsInput, fn func(*ListConnectorsOutput, bool) bool) error {
+	return c.ListConnectorsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListConnectorsPagesWithContext same as ListConnectorsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Appflow) ListConnectorsPagesWithContext(ctx aws.Context, input *ListConnectorsInput, fn func(*ListConnectorsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListConnectorsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListConnectorsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListConnectorsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListFlows = "ListFlows"
 
 // ListFlowsRequest generates a "aws/request.Request" representing the
@@ -1334,6 +1567,116 @@ func (c *Appflow) ListTagsForResource(input *ListTagsForResourceInput) (*ListTag
 // for more information on using Contexts.
 func (c *Appflow) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRegisterConnector = "RegisterConnector"
+
+// RegisterConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RegisterConnector for more information on using the RegisterConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RegisterConnectorRequest method.
+//    req, resp := client.RegisterConnectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/RegisterConnector
+func (c *Appflow) RegisterConnectorRequest(input *RegisterConnectorInput) (req *request.Request, output *RegisterConnectorOutput) {
+	op := &request.Operation{
+		Name:       opRegisterConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/register-connector",
+	}
+
+	if input == nil {
+		input = &RegisterConnectorInput{}
+	}
+
+	output = &RegisterConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RegisterConnector API operation for Amazon Appflow.
+//
+// Registers a new connector with your Amazon Web Services account. Before you
+// can register the connector, you must deploy lambda in your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Appflow's
+// API operation RegisterConnector for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The request has invalid or missing parameters.
+//
+//   * ConflictException
+//   There was a conflict when processing the request (for example, a flow with
+//   the given name already exists within the account. Check for conflicting resource
+//   names and try again.
+//
+//   * AccessDeniedException
+//   AppFlow/Requester has invalid or missing permissions.
+//
+//   * ResourceNotFoundException
+//   The resource specified in the request (such as the source or destination
+//   connector profile) is not found.
+//
+//   * ServiceQuotaExceededException
+//   The request would cause a service quota (such as the number of flows) to
+//   be exceeded.
+//
+//   * ThrottlingException
+//   API calls have exceeded the maximum allowed API request rate per account
+//   and per Region.
+//
+//   * InternalServerException
+//   An internal service error occurred during the processing of your request.
+//   Try again later.
+//
+//   * ConnectorServerException
+//   An error occurred when retrieving data from the connector endpoint.
+//
+//   * ConnectorAuthenticationException
+//   An error occurred when authenticating with the connector endpoint.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/RegisterConnector
+func (c *Appflow) RegisterConnector(input *RegisterConnectorInput) (*RegisterConnectorOutput, error) {
+	req, out := c.RegisterConnectorRequest(input)
+	return out, req.Send()
+}
+
+// RegisterConnectorWithContext is the same as RegisterConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RegisterConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Appflow) RegisterConnectorWithContext(ctx aws.Context, input *RegisterConnectorInput, opts ...request.Option) (*RegisterConnectorOutput, error) {
+	req, out := c.RegisterConnectorRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1611,6 +1954,97 @@ func (c *Appflow) TagResource(input *TagResourceInput) (*TagResourceOutput, erro
 // for more information on using Contexts.
 func (c *Appflow) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUnregisterConnector = "UnregisterConnector"
+
+// UnregisterConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the UnregisterConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UnregisterConnector for more information on using the UnregisterConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UnregisterConnectorRequest method.
+//    req, resp := client.UnregisterConnectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/UnregisterConnector
+func (c *Appflow) UnregisterConnectorRequest(input *UnregisterConnectorInput) (req *request.Request, output *UnregisterConnectorOutput) {
+	op := &request.Operation{
+		Name:       opUnregisterConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/unregister-connector",
+	}
+
+	if input == nil {
+		input = &UnregisterConnectorInput{}
+	}
+
+	output = &UnregisterConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UnregisterConnector API operation for Amazon Appflow.
+//
+// Unregisters the custom connector registered in your account that matches
+// the connectorLabel provided in the request.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Appflow's
+// API operation UnregisterConnector for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The resource specified in the request (such as the source or destination
+//   connector profile) is not found.
+//
+//   * ConflictException
+//   There was a conflict when processing the request (for example, a flow with
+//   the given name already exists within the account. Check for conflicting resource
+//   names and try again.
+//
+//   * InternalServerException
+//   An internal service error occurred during the processing of your request.
+//   Try again later.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appflow-2020-08-23/UnregisterConnector
+func (c *Appflow) UnregisterConnector(input *UnregisterConnectorInput) (*UnregisterConnectorOutput, error) {
+	req, out := c.UnregisterConnectorRequest(input)
+	return out, req.Send()
+}
+
+// UnregisterConnectorWithContext is the same as UnregisterConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UnregisterConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Appflow) UnregisterConnectorWithContext(ctx aws.Context, input *UnregisterConnectorInput, opts ...request.Option) (*UnregisterConnectorOutput, error) {
+	req, out := c.UnregisterConnectorRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1901,6 +2335,70 @@ func (c *Appflow) UpdateFlowWithContext(ctx aws.Context, input *UpdateFlowInput,
 	return out, req.Send()
 }
 
+// AppFlow/Requester has invalid or missing permissions.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The aggregation settings that you can use to customize the output format
 // of your flow data.
 type AggregationConfig struct {
@@ -1942,8 +2440,12 @@ type AmplitudeConnectorProfileCredentials struct {
 	// A unique alphanumeric identifier used to authenticate a user, developer,
 	// or calling program to your API.
 	//
+	// ApiKey is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AmplitudeConnectorProfileCredentials's
+	// String and GoString methods.
+	//
 	// ApiKey is a required field
-	ApiKey *string `locationName:"apiKey" type:"string" required:"true"`
+	ApiKey *string `locationName:"apiKey" type:"string" required:"true" sensitive:"true"`
 
 	// The Secret Access Key portion of the credentials.
 	//
@@ -2003,7 +2505,7 @@ func (s *AmplitudeConnectorProfileCredentials) SetSecretKey(v string) *Amplitude
 
 // The connector-specific profile properties required when using Amplitude.
 type AmplitudeConnectorProfileProperties struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -2026,7 +2528,7 @@ func (s AmplitudeConnectorProfileProperties) GoString() string {
 
 // The connector metadata specific to Amplitude.
 type AmplitudeMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -2091,6 +2593,225 @@ func (s *AmplitudeSourceProperties) Validate() error {
 // SetObject sets the Object field's value.
 func (s *AmplitudeSourceProperties) SetObject(v string) *AmplitudeSourceProperties {
 	s.Object = &v
+	return s
+}
+
+// The API key credentials required for API key authentication.
+type ApiKeyCredentials struct {
+	_ struct{} `type:"structure"`
+
+	// The API key required for API key authentication.
+	//
+	// ApiKey is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ApiKeyCredentials's
+	// String and GoString methods.
+	//
+	// ApiKey is a required field
+	ApiKey *string `locationName:"apiKey" type:"string" required:"true" sensitive:"true"`
+
+	// The API secret key required for API key authentication.
+	//
+	// ApiSecretKey is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ApiKeyCredentials's
+	// String and GoString methods.
+	ApiSecretKey *string `locationName:"apiSecretKey" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApiKeyCredentials) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApiKeyCredentials) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ApiKeyCredentials) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ApiKeyCredentials"}
+	if s.ApiKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiKey"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiKey sets the ApiKey field's value.
+func (s *ApiKeyCredentials) SetApiKey(v string) *ApiKeyCredentials {
+	s.ApiKey = &v
+	return s
+}
+
+// SetApiSecretKey sets the ApiSecretKey field's value.
+func (s *ApiKeyCredentials) SetApiSecretKey(v string) *ApiKeyCredentials {
+	s.ApiSecretKey = &v
+	return s
+}
+
+// Information about required authentication parameters.
+type AuthParameter struct {
+	_ struct{} `type:"structure"`
+
+	// Contains default values for this authentication parameter that are supplied
+	// by the connector.
+	ConnectorSuppliedValues []*string `locationName:"connectorSuppliedValues" type:"list"`
+
+	// A description about the authentication parameter.
+	Description *string `locationName:"description" type:"string"`
+
+	// Indicates whether this authentication parameter is required.
+	IsRequired *bool `locationName:"isRequired" type:"boolean"`
+
+	// Indicates whether this authentication parameter is a sensitive field.
+	IsSensitiveField *bool `locationName:"isSensitiveField" type:"boolean"`
+
+	// The authentication key required to authenticate with the connector.
+	Key *string `locationName:"key" type:"string"`
+
+	// Label used for authentication parameter.
+	Label *string `locationName:"label" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthParameter) GoString() string {
+	return s.String()
+}
+
+// SetConnectorSuppliedValues sets the ConnectorSuppliedValues field's value.
+func (s *AuthParameter) SetConnectorSuppliedValues(v []*string) *AuthParameter {
+	s.ConnectorSuppliedValues = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *AuthParameter) SetDescription(v string) *AuthParameter {
+	s.Description = &v
+	return s
+}
+
+// SetIsRequired sets the IsRequired field's value.
+func (s *AuthParameter) SetIsRequired(v bool) *AuthParameter {
+	s.IsRequired = &v
+	return s
+}
+
+// SetIsSensitiveField sets the IsSensitiveField field's value.
+func (s *AuthParameter) SetIsSensitiveField(v bool) *AuthParameter {
+	s.IsSensitiveField = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *AuthParameter) SetKey(v string) *AuthParameter {
+	s.Key = &v
+	return s
+}
+
+// SetLabel sets the Label field's value.
+func (s *AuthParameter) SetLabel(v string) *AuthParameter {
+	s.Label = &v
+	return s
+}
+
+// Contains information about the authentication config that the connector supports.
+type AuthenticationConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Contains information required for custom authentication.
+	CustomAuthConfigs []*CustomAuthConfig `locationName:"customAuthConfigs" type:"list"`
+
+	// Indicates whether API key authentication is supported by the connector
+	IsApiKeyAuthSupported *bool `locationName:"isApiKeyAuthSupported" type:"boolean"`
+
+	// Indicates whether basic authentication is supported by the connector.
+	IsBasicAuthSupported *bool `locationName:"isBasicAuthSupported" type:"boolean"`
+
+	// Indicates whether custom authentication is supported by the connector
+	IsCustomAuthSupported *bool `locationName:"isCustomAuthSupported" type:"boolean"`
+
+	// Indicates whether OAuth 2.0 authentication is supported by the connector.
+	IsOAuth2Supported *bool `locationName:"isOAuth2Supported" type:"boolean"`
+
+	// Contains the default values required for OAuth 2.0 authentication.
+	OAuth2Defaults *OAuth2Defaults `locationName:"oAuth2Defaults" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthenticationConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuthenticationConfig) GoString() string {
+	return s.String()
+}
+
+// SetCustomAuthConfigs sets the CustomAuthConfigs field's value.
+func (s *AuthenticationConfig) SetCustomAuthConfigs(v []*CustomAuthConfig) *AuthenticationConfig {
+	s.CustomAuthConfigs = v
+	return s
+}
+
+// SetIsApiKeyAuthSupported sets the IsApiKeyAuthSupported field's value.
+func (s *AuthenticationConfig) SetIsApiKeyAuthSupported(v bool) *AuthenticationConfig {
+	s.IsApiKeyAuthSupported = &v
+	return s
+}
+
+// SetIsBasicAuthSupported sets the IsBasicAuthSupported field's value.
+func (s *AuthenticationConfig) SetIsBasicAuthSupported(v bool) *AuthenticationConfig {
+	s.IsBasicAuthSupported = &v
+	return s
+}
+
+// SetIsCustomAuthSupported sets the IsCustomAuthSupported field's value.
+func (s *AuthenticationConfig) SetIsCustomAuthSupported(v bool) *AuthenticationConfig {
+	s.IsCustomAuthSupported = &v
+	return s
+}
+
+// SetIsOAuth2Supported sets the IsOAuth2Supported field's value.
+func (s *AuthenticationConfig) SetIsOAuth2Supported(v bool) *AuthenticationConfig {
+	s.IsOAuth2Supported = &v
+	return s
+}
+
+// SetOAuth2Defaults sets the OAuth2Defaults field's value.
+func (s *AuthenticationConfig) SetOAuth2Defaults(v *OAuth2Defaults) *AuthenticationConfig {
+	s.OAuth2Defaults = v
 	return s
 }
 
@@ -2293,15 +3014,51 @@ func (s *ConnectorAuthenticationException) RequestID() string {
 type ConnectorConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// The authentication config required for the connector.
+	AuthenticationConfig *AuthenticationConfig `locationName:"authenticationConfig" type:"structure"`
+
 	// Specifies whether the connector can be used as a destination.
 	CanUseAsDestination *bool `locationName:"canUseAsDestination" type:"boolean"`
 
 	// Specifies whether the connector can be used as a source.
 	CanUseAsSource *bool `locationName:"canUseAsSource" type:"boolean"`
 
+	// The Amazon Resource Name (ARN) for the registered connector.
+	ConnectorArn *string `locationName:"connectorArn" type:"string"`
+
+	// A description about the connector.
+	ConnectorDescription *string `locationName:"connectorDescription" type:"string"`
+
+	// The label used for registering the connector.
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string"`
+
 	// Specifies connector-specific metadata such as oAuthScopes, supportedRegions,
 	// privateLinkServiceUrl, and so on.
 	ConnectorMetadata *ConnectorMetadata `locationName:"connectorMetadata" type:"structure"`
+
+	// The connection modes that the connector supports.
+	ConnectorModes []*string `locationName:"connectorModes" type:"list"`
+
+	// The connector name.
+	ConnectorName *string `locationName:"connectorName" type:"string"`
+
+	// The owner who developed the connector.
+	ConnectorOwner *string `locationName:"connectorOwner" type:"string"`
+
+	// The configuration required for registering the connector.
+	ConnectorProvisioningConfig *ConnectorProvisioningConfig `locationName:"connectorProvisioningConfig" type:"structure"`
+
+	// The provisioning type used to register the connector.
+	ConnectorProvisioningType *string `locationName:"connectorProvisioningType" type:"string" enum:"ConnectorProvisioningType"`
+
+	// The required connector runtime settings.
+	ConnectorRuntimeSettings []*ConnectorRuntimeSetting `locationName:"connectorRuntimeSettings" type:"list"`
+
+	// The connector type.
+	ConnectorType *string `locationName:"connectorType" type:"string" enum:"ConnectorType"`
+
+	// The connector version.
+	ConnectorVersion *string `locationName:"connectorVersion" type:"string"`
 
 	// Specifies if PrivateLink is enabled for that connector.
 	IsPrivateLinkEnabled *bool `locationName:"isPrivateLinkEnabled" type:"boolean"`
@@ -2309,14 +3066,32 @@ type ConnectorConfiguration struct {
 	// Specifies if a PrivateLink endpoint URL is required.
 	IsPrivateLinkEndpointUrlRequired *bool `locationName:"isPrivateLinkEndpointUrlRequired" type:"boolean"`
 
+	// Logo URL of the connector.
+	LogoURL *string `locationName:"logoURL" type:"string"`
+
+	// The date on which the connector was registered.
+	RegisteredAt *time.Time `locationName:"registeredAt" type:"timestamp"`
+
+	// Information about who registered the connector.
+	RegisteredBy *string `locationName:"registeredBy" type:"string"`
+
+	// A list of API versions that are supported by the connector.
+	SupportedApiVersions []*string `locationName:"supportedApiVersions" type:"list"`
+
 	// Lists the connectors that are available for use as destinations.
-	SupportedDestinationConnectors []*string `locationName:"supportedDestinationConnectors" type:"list"`
+	SupportedDestinationConnectors []*string `locationName:"supportedDestinationConnectors" type:"list" enum:"ConnectorType"`
+
+	// A list of operators supported by the connector.
+	SupportedOperators []*string `locationName:"supportedOperators" type:"list" enum:"Operators"`
 
 	// Specifies the supported flow frequency for that connector.
-	SupportedSchedulingFrequencies []*string `locationName:"supportedSchedulingFrequencies" type:"list"`
+	SupportedSchedulingFrequencies []*string `locationName:"supportedSchedulingFrequencies" type:"list" enum:"ScheduleFrequencyType"`
 
 	// Specifies the supported trigger types for the flow.
-	SupportedTriggerTypes []*string `locationName:"supportedTriggerTypes" type:"list"`
+	SupportedTriggerTypes []*string `locationName:"supportedTriggerTypes" type:"list" enum:"TriggerType"`
+
+	// A list of write operations supported by the connector.
+	SupportedWriteOperations []*string `locationName:"supportedWriteOperations" type:"list" enum:"WriteOperationType"`
 }
 
 // String returns the string representation.
@@ -2337,6 +3112,12 @@ func (s ConnectorConfiguration) GoString() string {
 	return s.String()
 }
 
+// SetAuthenticationConfig sets the AuthenticationConfig field's value.
+func (s *ConnectorConfiguration) SetAuthenticationConfig(v *AuthenticationConfig) *ConnectorConfiguration {
+	s.AuthenticationConfig = v
+	return s
+}
+
 // SetCanUseAsDestination sets the CanUseAsDestination field's value.
 func (s *ConnectorConfiguration) SetCanUseAsDestination(v bool) *ConnectorConfiguration {
 	s.CanUseAsDestination = &v
@@ -2349,9 +3130,75 @@ func (s *ConnectorConfiguration) SetCanUseAsSource(v bool) *ConnectorConfigurati
 	return s
 }
 
+// SetConnectorArn sets the ConnectorArn field's value.
+func (s *ConnectorConfiguration) SetConnectorArn(v string) *ConnectorConfiguration {
+	s.ConnectorArn = &v
+	return s
+}
+
+// SetConnectorDescription sets the ConnectorDescription field's value.
+func (s *ConnectorConfiguration) SetConnectorDescription(v string) *ConnectorConfiguration {
+	s.ConnectorDescription = &v
+	return s
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *ConnectorConfiguration) SetConnectorLabel(v string) *ConnectorConfiguration {
+	s.ConnectorLabel = &v
+	return s
+}
+
 // SetConnectorMetadata sets the ConnectorMetadata field's value.
 func (s *ConnectorConfiguration) SetConnectorMetadata(v *ConnectorMetadata) *ConnectorConfiguration {
 	s.ConnectorMetadata = v
+	return s
+}
+
+// SetConnectorModes sets the ConnectorModes field's value.
+func (s *ConnectorConfiguration) SetConnectorModes(v []*string) *ConnectorConfiguration {
+	s.ConnectorModes = v
+	return s
+}
+
+// SetConnectorName sets the ConnectorName field's value.
+func (s *ConnectorConfiguration) SetConnectorName(v string) *ConnectorConfiguration {
+	s.ConnectorName = &v
+	return s
+}
+
+// SetConnectorOwner sets the ConnectorOwner field's value.
+func (s *ConnectorConfiguration) SetConnectorOwner(v string) *ConnectorConfiguration {
+	s.ConnectorOwner = &v
+	return s
+}
+
+// SetConnectorProvisioningConfig sets the ConnectorProvisioningConfig field's value.
+func (s *ConnectorConfiguration) SetConnectorProvisioningConfig(v *ConnectorProvisioningConfig) *ConnectorConfiguration {
+	s.ConnectorProvisioningConfig = v
+	return s
+}
+
+// SetConnectorProvisioningType sets the ConnectorProvisioningType field's value.
+func (s *ConnectorConfiguration) SetConnectorProvisioningType(v string) *ConnectorConfiguration {
+	s.ConnectorProvisioningType = &v
+	return s
+}
+
+// SetConnectorRuntimeSettings sets the ConnectorRuntimeSettings field's value.
+func (s *ConnectorConfiguration) SetConnectorRuntimeSettings(v []*ConnectorRuntimeSetting) *ConnectorConfiguration {
+	s.ConnectorRuntimeSettings = v
+	return s
+}
+
+// SetConnectorType sets the ConnectorType field's value.
+func (s *ConnectorConfiguration) SetConnectorType(v string) *ConnectorConfiguration {
+	s.ConnectorType = &v
+	return s
+}
+
+// SetConnectorVersion sets the ConnectorVersion field's value.
+func (s *ConnectorConfiguration) SetConnectorVersion(v string) *ConnectorConfiguration {
+	s.ConnectorVersion = &v
 	return s
 }
 
@@ -2367,9 +3214,39 @@ func (s *ConnectorConfiguration) SetIsPrivateLinkEndpointUrlRequired(v bool) *Co
 	return s
 }
 
+// SetLogoURL sets the LogoURL field's value.
+func (s *ConnectorConfiguration) SetLogoURL(v string) *ConnectorConfiguration {
+	s.LogoURL = &v
+	return s
+}
+
+// SetRegisteredAt sets the RegisteredAt field's value.
+func (s *ConnectorConfiguration) SetRegisteredAt(v time.Time) *ConnectorConfiguration {
+	s.RegisteredAt = &v
+	return s
+}
+
+// SetRegisteredBy sets the RegisteredBy field's value.
+func (s *ConnectorConfiguration) SetRegisteredBy(v string) *ConnectorConfiguration {
+	s.RegisteredBy = &v
+	return s
+}
+
+// SetSupportedApiVersions sets the SupportedApiVersions field's value.
+func (s *ConnectorConfiguration) SetSupportedApiVersions(v []*string) *ConnectorConfiguration {
+	s.SupportedApiVersions = v
+	return s
+}
+
 // SetSupportedDestinationConnectors sets the SupportedDestinationConnectors field's value.
 func (s *ConnectorConfiguration) SetSupportedDestinationConnectors(v []*string) *ConnectorConfiguration {
 	s.SupportedDestinationConnectors = v
+	return s
+}
+
+// SetSupportedOperators sets the SupportedOperators field's value.
+func (s *ConnectorConfiguration) SetSupportedOperators(v []*string) *ConnectorConfiguration {
+	s.SupportedOperators = v
 	return s
 }
 
@@ -2382,6 +3259,134 @@ func (s *ConnectorConfiguration) SetSupportedSchedulingFrequencies(v []*string) 
 // SetSupportedTriggerTypes sets the SupportedTriggerTypes field's value.
 func (s *ConnectorConfiguration) SetSupportedTriggerTypes(v []*string) *ConnectorConfiguration {
 	s.SupportedTriggerTypes = v
+	return s
+}
+
+// SetSupportedWriteOperations sets the SupportedWriteOperations field's value.
+func (s *ConnectorConfiguration) SetSupportedWriteOperations(v []*string) *ConnectorConfiguration {
+	s.SupportedWriteOperations = v
+	return s
+}
+
+// Information about the registered connector.
+type ConnectorDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The application type of the connector.
+	ApplicationType *string `locationName:"applicationType" type:"string"`
+
+	// A description about the registered connector.
+	ConnectorDescription *string `locationName:"connectorDescription" type:"string"`
+
+	// A label used for the connector.
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string"`
+
+	// The connection mode that the connector supports.
+	ConnectorModes []*string `locationName:"connectorModes" type:"list"`
+
+	// The name of the connector.
+	ConnectorName *string `locationName:"connectorName" type:"string"`
+
+	// The owner of the connector.
+	ConnectorOwner *string `locationName:"connectorOwner" type:"string"`
+
+	// The provisioning type that the connector uses.
+	ConnectorProvisioningType *string `locationName:"connectorProvisioningType" type:"string" enum:"ConnectorProvisioningType"`
+
+	// The connector type.
+	ConnectorType *string `locationName:"connectorType" type:"string" enum:"ConnectorType"`
+
+	// The connector version.
+	ConnectorVersion *string `locationName:"connectorVersion" type:"string"`
+
+	// The time at which the connector was registered.
+	RegisteredAt *time.Time `locationName:"registeredAt" type:"timestamp"`
+
+	// The user who registered the connector.
+	RegisteredBy *string `locationName:"registeredBy" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorDetail) GoString() string {
+	return s.String()
+}
+
+// SetApplicationType sets the ApplicationType field's value.
+func (s *ConnectorDetail) SetApplicationType(v string) *ConnectorDetail {
+	s.ApplicationType = &v
+	return s
+}
+
+// SetConnectorDescription sets the ConnectorDescription field's value.
+func (s *ConnectorDetail) SetConnectorDescription(v string) *ConnectorDetail {
+	s.ConnectorDescription = &v
+	return s
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *ConnectorDetail) SetConnectorLabel(v string) *ConnectorDetail {
+	s.ConnectorLabel = &v
+	return s
+}
+
+// SetConnectorModes sets the ConnectorModes field's value.
+func (s *ConnectorDetail) SetConnectorModes(v []*string) *ConnectorDetail {
+	s.ConnectorModes = v
+	return s
+}
+
+// SetConnectorName sets the ConnectorName field's value.
+func (s *ConnectorDetail) SetConnectorName(v string) *ConnectorDetail {
+	s.ConnectorName = &v
+	return s
+}
+
+// SetConnectorOwner sets the ConnectorOwner field's value.
+func (s *ConnectorDetail) SetConnectorOwner(v string) *ConnectorDetail {
+	s.ConnectorOwner = &v
+	return s
+}
+
+// SetConnectorProvisioningType sets the ConnectorProvisioningType field's value.
+func (s *ConnectorDetail) SetConnectorProvisioningType(v string) *ConnectorDetail {
+	s.ConnectorProvisioningType = &v
+	return s
+}
+
+// SetConnectorType sets the ConnectorType field's value.
+func (s *ConnectorDetail) SetConnectorType(v string) *ConnectorDetail {
+	s.ConnectorType = &v
+	return s
+}
+
+// SetConnectorVersion sets the ConnectorVersion field's value.
+func (s *ConnectorDetail) SetConnectorVersion(v string) *ConnectorDetail {
+	s.ConnectorVersion = &v
+	return s
+}
+
+// SetRegisteredAt sets the RegisteredAt field's value.
+func (s *ConnectorDetail) SetRegisteredAt(v time.Time) *ConnectorDetail {
+	s.RegisteredAt = &v
+	return s
+}
+
+// SetRegisteredBy sets the RegisteredBy field's value.
+func (s *ConnectorDetail) SetRegisteredBy(v string) *ConnectorDetail {
+	s.RegisteredBy = &v
 	return s
 }
 
@@ -2448,6 +3453,12 @@ func (s *ConnectorEntity) SetName(v string) *ConnectorEntity {
 type ConnectorEntityField struct {
 	_ struct{} `type:"structure"`
 
+	// A map that has specific properties related to the ConnectorEntityField.
+	CustomProperties map[string]*string `locationName:"customProperties" type:"map"`
+
+	// Default value that can be assigned to this field.
+	DefaultValue *string `locationName:"defaultValue" type:"string"`
+
 	// A description of the connector entity field.
 	Description *string `locationName:"description" type:"string"`
 
@@ -2459,8 +3470,18 @@ type ConnectorEntityField struct {
 	// Identifier is a required field
 	Identifier *string `locationName:"identifier" type:"string" required:"true"`
 
+	// Booelan value that indicates whether this field is deprecated or not.
+	IsDeprecated *bool `locationName:"isDeprecated" type:"boolean"`
+
+	// Booelan value that indicates whether this field can be used as a primary
+	// key.
+	IsPrimaryKey *bool `locationName:"isPrimaryKey" type:"boolean"`
+
 	// The label applied to a connector entity field.
 	Label *string `locationName:"label" type:"string"`
+
+	// The parent identifier of the connector field.
+	ParentIdentifier *string `locationName:"parentIdentifier" type:"string"`
 
 	// The properties that can be applied to a field when the connector is being
 	// used as a source.
@@ -2489,6 +3510,18 @@ func (s ConnectorEntityField) GoString() string {
 	return s.String()
 }
 
+// SetCustomProperties sets the CustomProperties field's value.
+func (s *ConnectorEntityField) SetCustomProperties(v map[string]*string) *ConnectorEntityField {
+	s.CustomProperties = v
+	return s
+}
+
+// SetDefaultValue sets the DefaultValue field's value.
+func (s *ConnectorEntityField) SetDefaultValue(v string) *ConnectorEntityField {
+	s.DefaultValue = &v
+	return s
+}
+
 // SetDescription sets the Description field's value.
 func (s *ConnectorEntityField) SetDescription(v string) *ConnectorEntityField {
 	s.Description = &v
@@ -2507,9 +3540,27 @@ func (s *ConnectorEntityField) SetIdentifier(v string) *ConnectorEntityField {
 	return s
 }
 
+// SetIsDeprecated sets the IsDeprecated field's value.
+func (s *ConnectorEntityField) SetIsDeprecated(v bool) *ConnectorEntityField {
+	s.IsDeprecated = &v
+	return s
+}
+
+// SetIsPrimaryKey sets the IsPrimaryKey field's value.
+func (s *ConnectorEntityField) SetIsPrimaryKey(v bool) *ConnectorEntityField {
+	s.IsPrimaryKey = &v
+	return s
+}
+
 // SetLabel sets the Label field's value.
 func (s *ConnectorEntityField) SetLabel(v string) *ConnectorEntityField {
 	s.Label = &v
+	return s
+}
+
+// SetParentIdentifier sets the ParentIdentifier field's value.
+func (s *ConnectorEntityField) SetParentIdentifier(v string) *ConnectorEntityField {
+	s.ParentIdentifier = &v
 	return s
 }
 
@@ -2789,6 +3840,9 @@ type ConnectorOperator struct {
 	// The operation to be performed on the provided Amplitude source fields.
 	Amplitude *string `type:"string" enum:"AmplitudeConnectorOperator"`
 
+	// Operators supported by the custom connector.
+	CustomConnector *string `type:"string" enum:"Operator"`
+
 	// The operation to be performed on the provided Datadog source fields.
 	Datadog *string `type:"string" enum:"DatadogConnectorOperator"`
 
@@ -2853,6 +3907,12 @@ func (s ConnectorOperator) GoString() string {
 // SetAmplitude sets the Amplitude field's value.
 func (s *ConnectorOperator) SetAmplitude(v string) *ConnectorOperator {
 	s.Amplitude = &v
+	return s
+}
+
+// SetCustomConnector sets the CustomConnector field's value.
+func (s *ConnectorOperator) SetCustomConnector(v string) *ConnectorOperator {
+	s.CustomConnector = &v
 	return s
 }
 
@@ -2951,6 +4011,9 @@ type ConnectorProfile struct {
 	// Indicates the connection mode and if it is public or private.
 	ConnectionMode *string `locationName:"connectionMode" type:"string" enum:"ConnectionMode"`
 
+	// The label for the connector profile being created.
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string"`
+
 	// The Amazon Resource Name (ARN) of the connector profile.
 	ConnectorProfileArn *string `locationName:"connectorProfileArn" type:"string"`
 
@@ -2998,6 +4061,12 @@ func (s ConnectorProfile) GoString() string {
 // SetConnectionMode sets the ConnectionMode field's value.
 func (s *ConnectorProfile) SetConnectionMode(v string) *ConnectorProfile {
 	s.ConnectionMode = &v
+	return s
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *ConnectorProfile) SetConnectorLabel(v string) *ConnectorProfile {
+	s.ConnectorLabel = &v
 	return s
 }
 
@@ -3128,6 +4197,10 @@ type ConnectorProfileCredentials struct {
 	// The connector-specific credentials required when using Amplitude.
 	Amplitude *AmplitudeConnectorProfileCredentials `type:"structure"`
 
+	// The connector-specific profile credentials that are required when using the
+	// custom connector.
+	CustomConnector *CustomConnectorProfileCredentials `type:"structure"`
+
 	// The connector-specific credentials required when using Datadog.
 	Datadog *DatadogConnectorProfileCredentials `type:"structure"`
 
@@ -3201,6 +4274,11 @@ func (s *ConnectorProfileCredentials) Validate() error {
 	if s.Amplitude != nil {
 		if err := s.Amplitude.Validate(); err != nil {
 			invalidParams.AddNested("Amplitude", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CustomConnector != nil {
+		if err := s.CustomConnector.Validate(); err != nil {
+			invalidParams.AddNested("CustomConnector", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Datadog != nil {
@@ -3288,6 +4366,12 @@ func (s *ConnectorProfileCredentials) Validate() error {
 // SetAmplitude sets the Amplitude field's value.
 func (s *ConnectorProfileCredentials) SetAmplitude(v *AmplitudeConnectorProfileCredentials) *ConnectorProfileCredentials {
 	s.Amplitude = v
+	return s
+}
+
+// SetCustomConnector sets the CustomConnector field's value.
+func (s *ConnectorProfileCredentials) SetCustomConnector(v *CustomConnectorProfileCredentials) *ConnectorProfileCredentials {
+	s.CustomConnector = v
 	return s
 }
 
@@ -3394,6 +4478,9 @@ type ConnectorProfileProperties struct {
 	// The connector-specific properties required by Amplitude.
 	Amplitude *AmplitudeConnectorProfileProperties `type:"structure"`
 
+	// The properties required by the custom connector.
+	CustomConnector *CustomConnectorProfileProperties `type:"structure"`
+
 	// The connector-specific properties required by Datadog.
 	Datadog *DatadogConnectorProfileProperties `type:"structure"`
 
@@ -3464,6 +4551,11 @@ func (s ConnectorProfileProperties) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ConnectorProfileProperties) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ConnectorProfileProperties"}
+	if s.CustomConnector != nil {
+		if err := s.CustomConnector.Validate(); err != nil {
+			invalidParams.AddNested("CustomConnector", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Datadog != nil {
 		if err := s.Datadog.Validate(); err != nil {
 			invalidParams.AddNested("Datadog", err.(request.ErrInvalidParams))
@@ -3529,6 +4621,12 @@ func (s *ConnectorProfileProperties) Validate() error {
 // SetAmplitude sets the Amplitude field's value.
 func (s *ConnectorProfileProperties) SetAmplitude(v *AmplitudeConnectorProfileProperties) *ConnectorProfileProperties {
 	s.Amplitude = v
+	return s
+}
+
+// SetCustomConnector sets the CustomConnector field's value.
+func (s *ConnectorProfileProperties) SetCustomConnector(v *CustomConnectorProfileProperties) *ConnectorProfileProperties {
+	s.CustomConnector = v
 	return s
 }
 
@@ -3628,6 +4726,142 @@ func (s *ConnectorProfileProperties) SetZendesk(v *ZendeskConnectorProfileProper
 	return s
 }
 
+// Contains information about the configuration of the connector being registered.
+type ConnectorProvisioningConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Contains information about the configuration of the lambda which is being
+	// registered as the connector.
+	Lambda *LambdaConnectorProvisioningConfig `locationName:"lambda" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorProvisioningConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorProvisioningConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConnectorProvisioningConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConnectorProvisioningConfig"}
+	if s.Lambda != nil {
+		if err := s.Lambda.Validate(); err != nil {
+			invalidParams.AddNested("Lambda", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLambda sets the Lambda field's value.
+func (s *ConnectorProvisioningConfig) SetLambda(v *LambdaConnectorProvisioningConfig) *ConnectorProvisioningConfig {
+	s.Lambda = v
+	return s
+}
+
+// Contains information about the connector runtime settings that are required
+// for flow execution.
+type ConnectorRuntimeSetting struct {
+	_ struct{} `type:"structure"`
+
+	// Contains default values for the connector runtime setting that are supplied
+	// by the connector.
+	ConnectorSuppliedValueOptions []*string `locationName:"connectorSuppliedValueOptions" type:"list"`
+
+	// Data type of the connector runtime setting.
+	DataType *string `locationName:"dataType" type:"string"`
+
+	// A description about the connector runtime setting.
+	Description *string `locationName:"description" type:"string"`
+
+	// Indicates whether this connector runtime setting is required.
+	IsRequired *bool `locationName:"isRequired" type:"boolean"`
+
+	// Contains value information about the connector runtime setting.
+	Key *string `locationName:"key" type:"string"`
+
+	// A label used for connector runtime setting.
+	Label *string `locationName:"label" type:"string"`
+
+	// Indicates the scope of the connector runtime setting.
+	Scope *string `locationName:"scope" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorRuntimeSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorRuntimeSetting) GoString() string {
+	return s.String()
+}
+
+// SetConnectorSuppliedValueOptions sets the ConnectorSuppliedValueOptions field's value.
+func (s *ConnectorRuntimeSetting) SetConnectorSuppliedValueOptions(v []*string) *ConnectorRuntimeSetting {
+	s.ConnectorSuppliedValueOptions = v
+	return s
+}
+
+// SetDataType sets the DataType field's value.
+func (s *ConnectorRuntimeSetting) SetDataType(v string) *ConnectorRuntimeSetting {
+	s.DataType = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ConnectorRuntimeSetting) SetDescription(v string) *ConnectorRuntimeSetting {
+	s.Description = &v
+	return s
+}
+
+// SetIsRequired sets the IsRequired field's value.
+func (s *ConnectorRuntimeSetting) SetIsRequired(v bool) *ConnectorRuntimeSetting {
+	s.IsRequired = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *ConnectorRuntimeSetting) SetKey(v string) *ConnectorRuntimeSetting {
+	s.Key = &v
+	return s
+}
+
+// SetLabel sets the Label field's value.
+func (s *ConnectorRuntimeSetting) SetLabel(v string) *ConnectorRuntimeSetting {
+	s.Label = &v
+	return s
+}
+
+// SetScope sets the Scope field's value.
+func (s *ConnectorRuntimeSetting) SetScope(v string) *ConnectorRuntimeSetting {
+	s.Scope = &v
+	return s
+}
+
 // An error occurred when retrieving data from the connector endpoint.
 type ConnectorServerException struct {
 	_            struct{}                  `type:"structure"`
@@ -3701,6 +4935,11 @@ type CreateConnectorProfileInput struct {
 	//
 	// ConnectionMode is a required field
 	ConnectionMode *string `locationName:"connectionMode" type:"string" required:"true" enum:"ConnectionMode"`
+
+	// The label of the connector. The label is unique for each ConnectorRegistration
+	// in your Amazon Web Services account. Only needed if calling for CUSTOMCONNECTOR
+	// connector type/.
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string"`
 
 	// Defines the connector-specific configuration and credentials.
 	//
@@ -3776,6 +5015,12 @@ func (s *CreateConnectorProfileInput) Validate() error {
 // SetConnectionMode sets the ConnectionMode field's value.
 func (s *CreateConnectorProfileInput) SetConnectionMode(v string) *CreateConnectorProfileInput {
 	s.ConnectionMode = &v
+	return s
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *CreateConnectorProfileInput) SetConnectorLabel(v string) *CreateConnectorProfileInput {
+	s.ConnectorLabel = &v
 	return s
 }
 
@@ -4043,6 +5288,411 @@ func (s *CreateFlowOutput) SetFlowStatus(v string) *CreateFlowOutput {
 	return s
 }
 
+// Configuration information required for custom authentication.
+type CustomAuthConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Information about authentication parameters required for authentication.
+	AuthParameters []*AuthParameter `locationName:"authParameters" type:"list"`
+
+	// The authentication type that the custom connector uses.
+	CustomAuthenticationType *string `locationName:"customAuthenticationType" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomAuthConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomAuthConfig) GoString() string {
+	return s.String()
+}
+
+// SetAuthParameters sets the AuthParameters field's value.
+func (s *CustomAuthConfig) SetAuthParameters(v []*AuthParameter) *CustomAuthConfig {
+	s.AuthParameters = v
+	return s
+}
+
+// SetCustomAuthenticationType sets the CustomAuthenticationType field's value.
+func (s *CustomAuthConfig) SetCustomAuthenticationType(v string) *CustomAuthConfig {
+	s.CustomAuthenticationType = &v
+	return s
+}
+
+// The custom credentials required for custom authentication.
+type CustomAuthCredentials struct {
+	_ struct{} `type:"structure"`
+
+	// A map that holds custom authentication credentials.
+	CredentialsMap map[string]*string `locationName:"credentialsMap" type:"map"`
+
+	// The custom authentication type that the connector uses.
+	//
+	// CustomAuthenticationType is a required field
+	CustomAuthenticationType *string `locationName:"customAuthenticationType" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomAuthCredentials) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomAuthCredentials) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomAuthCredentials) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomAuthCredentials"}
+	if s.CustomAuthenticationType == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomAuthenticationType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCredentialsMap sets the CredentialsMap field's value.
+func (s *CustomAuthCredentials) SetCredentialsMap(v map[string]*string) *CustomAuthCredentials {
+	s.CredentialsMap = v
+	return s
+}
+
+// SetCustomAuthenticationType sets the CustomAuthenticationType field's value.
+func (s *CustomAuthCredentials) SetCustomAuthenticationType(v string) *CustomAuthCredentials {
+	s.CustomAuthenticationType = &v
+	return s
+}
+
+// The properties that are applied when the custom connector is being used as
+// a destination.
+type CustomConnectorDestinationProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The custom properties that are specific to the connector when it's used as
+	// a destination in the flow.
+	CustomProperties map[string]*string `locationName:"customProperties" type:"map"`
+
+	// The entity specified in the custom connector as a destination in the flow.
+	//
+	// EntityName is a required field
+	EntityName *string `locationName:"entityName" type:"string" required:"true"`
+
+	// The settings that determine how Amazon AppFlow handles an error when placing
+	// data in the custom connector as destination.
+	ErrorHandlingConfig *ErrorHandlingConfig `locationName:"errorHandlingConfig" type:"structure"`
+
+	// The name of the field that Amazon AppFlow uses as an ID when performing a
+	// write operation such as update, delete, or upsert.
+	IdFieldNames []*string `locationName:"idFieldNames" type:"list"`
+
+	// Specifies the type of write operation to be performed in the custom connector
+	// when it's used as destination.
+	WriteOperationType *string `locationName:"writeOperationType" type:"string" enum:"WriteOperationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorDestinationProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorDestinationProperties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomConnectorDestinationProperties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomConnectorDestinationProperties"}
+	if s.EntityName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityName"))
+	}
+	if s.ErrorHandlingConfig != nil {
+		if err := s.ErrorHandlingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ErrorHandlingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCustomProperties sets the CustomProperties field's value.
+func (s *CustomConnectorDestinationProperties) SetCustomProperties(v map[string]*string) *CustomConnectorDestinationProperties {
+	s.CustomProperties = v
+	return s
+}
+
+// SetEntityName sets the EntityName field's value.
+func (s *CustomConnectorDestinationProperties) SetEntityName(v string) *CustomConnectorDestinationProperties {
+	s.EntityName = &v
+	return s
+}
+
+// SetErrorHandlingConfig sets the ErrorHandlingConfig field's value.
+func (s *CustomConnectorDestinationProperties) SetErrorHandlingConfig(v *ErrorHandlingConfig) *CustomConnectorDestinationProperties {
+	s.ErrorHandlingConfig = v
+	return s
+}
+
+// SetIdFieldNames sets the IdFieldNames field's value.
+func (s *CustomConnectorDestinationProperties) SetIdFieldNames(v []*string) *CustomConnectorDestinationProperties {
+	s.IdFieldNames = v
+	return s
+}
+
+// SetWriteOperationType sets the WriteOperationType field's value.
+func (s *CustomConnectorDestinationProperties) SetWriteOperationType(v string) *CustomConnectorDestinationProperties {
+	s.WriteOperationType = &v
+	return s
+}
+
+// The connector-specific profile credentials that are required when using the
+// custom connector.
+type CustomConnectorProfileCredentials struct {
+	_ struct{} `type:"structure"`
+
+	// The API keys required for the authentication of the user.
+	ApiKey *ApiKeyCredentials `locationName:"apiKey" type:"structure"`
+
+	// The authentication type that the custom connector uses for authenticating
+	// while creating a connector profile.
+	//
+	// AuthenticationType is a required field
+	AuthenticationType *string `locationName:"authenticationType" type:"string" required:"true" enum:"AuthenticationType"`
+
+	// The basic credentials that are required for the authentication of the user.
+	Basic *BasicAuthCredentials `locationName:"basic" type:"structure"`
+
+	// If the connector uses the custom authentication mechanism, this holds the
+	// required credentials.
+	Custom *CustomAuthCredentials `locationName:"custom" type:"structure"`
+
+	// The OAuth 2.0 credentials required for the authentication of the user.
+	Oauth2 *OAuth2Credentials `locationName:"oauth2" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorProfileCredentials) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorProfileCredentials) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomConnectorProfileCredentials) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomConnectorProfileCredentials"}
+	if s.AuthenticationType == nil {
+		invalidParams.Add(request.NewErrParamRequired("AuthenticationType"))
+	}
+	if s.ApiKey != nil {
+		if err := s.ApiKey.Validate(); err != nil {
+			invalidParams.AddNested("ApiKey", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Basic != nil {
+		if err := s.Basic.Validate(); err != nil {
+			invalidParams.AddNested("Basic", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Custom != nil {
+		if err := s.Custom.Validate(); err != nil {
+			invalidParams.AddNested("Custom", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiKey sets the ApiKey field's value.
+func (s *CustomConnectorProfileCredentials) SetApiKey(v *ApiKeyCredentials) *CustomConnectorProfileCredentials {
+	s.ApiKey = v
+	return s
+}
+
+// SetAuthenticationType sets the AuthenticationType field's value.
+func (s *CustomConnectorProfileCredentials) SetAuthenticationType(v string) *CustomConnectorProfileCredentials {
+	s.AuthenticationType = &v
+	return s
+}
+
+// SetBasic sets the Basic field's value.
+func (s *CustomConnectorProfileCredentials) SetBasic(v *BasicAuthCredentials) *CustomConnectorProfileCredentials {
+	s.Basic = v
+	return s
+}
+
+// SetCustom sets the Custom field's value.
+func (s *CustomConnectorProfileCredentials) SetCustom(v *CustomAuthCredentials) *CustomConnectorProfileCredentials {
+	s.Custom = v
+	return s
+}
+
+// SetOauth2 sets the Oauth2 field's value.
+func (s *CustomConnectorProfileCredentials) SetOauth2(v *OAuth2Credentials) *CustomConnectorProfileCredentials {
+	s.Oauth2 = v
+	return s
+}
+
+// The profile properties required by the custom connector.
+type CustomConnectorProfileProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The OAuth 2.0 properties required for OAuth 2.0 authentication.
+	OAuth2Properties *OAuth2Properties `locationName:"oAuth2Properties" type:"structure"`
+
+	// A map of properties that are required to create a profile for the custom
+	// connector.
+	ProfileProperties map[string]*string `locationName:"profileProperties" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorProfileProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorProfileProperties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomConnectorProfileProperties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomConnectorProfileProperties"}
+	if s.OAuth2Properties != nil {
+		if err := s.OAuth2Properties.Validate(); err != nil {
+			invalidParams.AddNested("OAuth2Properties", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOAuth2Properties sets the OAuth2Properties field's value.
+func (s *CustomConnectorProfileProperties) SetOAuth2Properties(v *OAuth2Properties) *CustomConnectorProfileProperties {
+	s.OAuth2Properties = v
+	return s
+}
+
+// SetProfileProperties sets the ProfileProperties field's value.
+func (s *CustomConnectorProfileProperties) SetProfileProperties(v map[string]*string) *CustomConnectorProfileProperties {
+	s.ProfileProperties = v
+	return s
+}
+
+// The properties that are applied when the custom connector is being used as
+// a source.
+type CustomConnectorSourceProperties struct {
+	_ struct{} `type:"structure"`
+
+	// Custom properties that are required to use the custom connector as a source.
+	CustomProperties map[string]*string `locationName:"customProperties" type:"map"`
+
+	// The entity specified in the custom connector as a source in the flow.
+	//
+	// EntityName is a required field
+	EntityName *string `locationName:"entityName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorSourceProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomConnectorSourceProperties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomConnectorSourceProperties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomConnectorSourceProperties"}
+	if s.EntityName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCustomProperties sets the CustomProperties field's value.
+func (s *CustomConnectorSourceProperties) SetCustomProperties(v map[string]*string) *CustomConnectorSourceProperties {
+	s.CustomProperties = v
+	return s
+}
+
+// SetEntityName sets the EntityName field's value.
+func (s *CustomConnectorSourceProperties) SetEntityName(v string) *CustomConnectorSourceProperties {
+	s.EntityName = &v
+	return s
+}
+
 // The properties that are applied when Amazon Connect Customer Profiles is
 // used as a destination.
 type CustomerProfilesDestinationProperties struct {
@@ -4102,7 +5752,7 @@ func (s *CustomerProfilesDestinationProperties) SetObjectTypeName(v string) *Cus
 
 // The connector metadata specific to Amazon Connect Customer Profiles.
 type CustomerProfilesMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4130,8 +5780,12 @@ type DatadogConnectorProfileCredentials struct {
 	// A unique alphanumeric identifier used to authenticate a user, developer,
 	// or calling program to your API.
 	//
+	// ApiKey is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DatadogConnectorProfileCredentials's
+	// String and GoString methods.
+	//
 	// ApiKey is a required field
-	ApiKey *string `locationName:"apiKey" type:"string" required:"true"`
+	ApiKey *string `locationName:"apiKey" type:"string" required:"true" sensitive:"true"`
 
 	// Application keys, in conjunction with your API key, give you full access
 	// to Datadog’s programmatic API. Application keys are associated with the
@@ -4237,7 +5891,7 @@ func (s *DatadogConnectorProfileProperties) SetInstanceUrl(v string) *DatadogCon
 
 // The connector metadata specific to Datadog.
 type DatadogMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4363,7 +6017,7 @@ func (s *DeleteConnectorProfileInput) SetForceDelete(v bool) *DeleteConnectorPro
 }
 
 type DeleteConnectorProfileOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4442,7 +6096,7 @@ func (s *DeleteFlowInput) SetForceDelete(v bool) *DeleteFlowInput {
 }
 
 type DeleteFlowOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4465,6 +6119,9 @@ func (s DeleteFlowOutput) GoString() string {
 
 type DescribeConnectorEntityInput struct {
 	_ struct{} `type:"structure"`
+
+	// The version of the API that's used by the connector.
+	ApiVersion *string `locationName:"apiVersion" type:"string"`
 
 	// The entity name for that connector.
 	//
@@ -4509,6 +6166,12 @@ func (s *DescribeConnectorEntityInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetApiVersion sets the ApiVersion field's value.
+func (s *DescribeConnectorEntityInput) SetApiVersion(v string) *DescribeConnectorEntityInput {
+	s.ApiVersion = &v
+	return s
 }
 
 // SetConnectorEntityName sets the ConnectorEntityName field's value.
@@ -4563,8 +6226,102 @@ func (s *DescribeConnectorEntityOutput) SetConnectorEntityFields(v []*ConnectorE
 	return s
 }
 
+type DescribeConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The label of the connector. The label is unique for each ConnectorRegistration
+	// in your Amazon Web Services account. Only needed if calling for CUSTOMCONNECTOR
+	// connector type/.
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string"`
+
+	// The connector type, such as CUSTOMCONNECTOR, Saleforce, Marketo. Please choose
+	// CUSTOMCONNECTOR for Lambda based custom connectors.
+	//
+	// ConnectorType is a required field
+	ConnectorType *string `locationName:"connectorType" type:"string" required:"true" enum:"ConnectorType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeConnectorInput"}
+	if s.ConnectorType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *DescribeConnectorInput) SetConnectorLabel(v string) *DescribeConnectorInput {
+	s.ConnectorLabel = &v
+	return s
+}
+
+// SetConnectorType sets the ConnectorType field's value.
+func (s *DescribeConnectorInput) SetConnectorType(v string) *DescribeConnectorInput {
+	s.ConnectorType = &v
+	return s
+}
+
+type DescribeConnectorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration info of all the connectors that the user requested.
+	ConnectorConfiguration *ConnectorConfiguration `locationName:"connectorConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeConnectorOutput) GoString() string {
+	return s.String()
+}
+
+// SetConnectorConfiguration sets the ConnectorConfiguration field's value.
+func (s *DescribeConnectorOutput) SetConnectorConfiguration(v *ConnectorConfiguration) *DescribeConnectorOutput {
+	s.ConnectorConfiguration = v
+	return s
+}
+
 type DescribeConnectorProfilesInput struct {
 	_ struct{} `type:"structure"`
+
+	// The name of the connector. The name is unique for each ConnectorRegistration
+	// in your Amazon Web Services account. Only needed if calling for CUSTOMCONNECTOR
+	// connector type/.
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string"`
 
 	// The name of the connector profile. The name is unique for each ConnectorProfile
 	// in the Amazon Web Services account.
@@ -4610,6 +6367,12 @@ func (s *DescribeConnectorProfilesInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *DescribeConnectorProfilesInput) SetConnectorLabel(v string) *DescribeConnectorProfilesInput {
+	s.ConnectorLabel = &v
+	return s
 }
 
 // SetConnectorProfileNames sets the ConnectorProfileNames field's value.
@@ -4681,7 +6444,11 @@ type DescribeConnectorsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The type of connector, such as Salesforce, Amplitude, and so on.
-	ConnectorTypes []*string `locationName:"connectorTypes" type:"list"`
+	ConnectorTypes []*string `locationName:"connectorTypes" type:"list" enum:"ConnectorType"`
+
+	// The maximum number of items that should be returned in the result set. The
+	// default is 20.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The pagination token for the next page of data.
 	NextToken *string `locationName:"nextToken" type:"string"`
@@ -4705,9 +6472,28 @@ func (s DescribeConnectorsInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeConnectorsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeConnectorsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetConnectorTypes sets the ConnectorTypes field's value.
 func (s *DescribeConnectorsInput) SetConnectorTypes(v []*string) *DescribeConnectorsInput {
 	s.ConnectorTypes = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeConnectorsInput) SetMaxResults(v int64) *DescribeConnectorsInput {
+	s.MaxResults = &v
 	return s
 }
 
@@ -4722,6 +6508,9 @@ type DescribeConnectorsOutput struct {
 
 	// The configuration that is applied to the connectors used in the flow.
 	ConnectorConfigurations map[string]*ConnectorConfiguration `locationName:"connectorConfigurations" type:"map"`
+
+	// Information about the connectors supported in Amazon AppFlow.
+	Connectors []*ConnectorDetail `locationName:"connectors" type:"list"`
 
 	// The pagination token for the next page of data.
 	NextToken *string `locationName:"nextToken" type:"string"`
@@ -4748,6 +6537,12 @@ func (s DescribeConnectorsOutput) GoString() string {
 // SetConnectorConfigurations sets the ConnectorConfigurations field's value.
 func (s *DescribeConnectorsOutput) SetConnectorConfigurations(v map[string]*ConnectorConfiguration) *DescribeConnectorsOutput {
 	s.ConnectorConfigurations = v
+	return s
+}
+
+// SetConnectors sets the Connectors field's value.
+func (s *DescribeConnectorsOutput) SetConnectors(v []*ConnectorDetail) *DescribeConnectorsOutput {
+	s.Connectors = v
 	return s
 }
 
@@ -5091,6 +6886,9 @@ func (s *DescribeFlowOutput) SetTriggerConfig(v *TriggerConfig) *DescribeFlowOut
 type DestinationConnectorProperties struct {
 	_ struct{} `type:"structure"`
 
+	// The properties that are required to query the custom Connector.
+	CustomConnector *CustomConnectorDestinationProperties `type:"structure"`
+
 	// The properties required to query Amazon Connect Customer Profiles.
 	CustomerProfiles *CustomerProfilesDestinationProperties `type:"structure"`
 
@@ -5103,11 +6901,17 @@ type DestinationConnectorProperties struct {
 	// The properties required to query Amazon Lookout for Metrics.
 	LookoutMetrics *LookoutMetricsDestinationProperties `type:"structure"`
 
+	// The properties required to query Marketo.
+	Marketo *MarketoDestinationProperties `type:"structure"`
+
 	// The properties required to query Amazon Redshift.
 	Redshift *RedshiftDestinationProperties `type:"structure"`
 
 	// The properties required to query Amazon S3.
 	S3 *S3DestinationProperties `type:"structure"`
+
+	// The properties required to query SAPOData.
+	SAPOData *SAPODataDestinationProperties `type:"structure"`
 
 	// The properties required to query Salesforce.
 	Salesforce *SalesforceDestinationProperties `type:"structure"`
@@ -5143,6 +6947,11 @@ func (s DestinationConnectorProperties) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DestinationConnectorProperties) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DestinationConnectorProperties"}
+	if s.CustomConnector != nil {
+		if err := s.CustomConnector.Validate(); err != nil {
+			invalidParams.AddNested("CustomConnector", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.CustomerProfiles != nil {
 		if err := s.CustomerProfiles.Validate(); err != nil {
 			invalidParams.AddNested("CustomerProfiles", err.(request.ErrInvalidParams))
@@ -5158,6 +6967,11 @@ func (s *DestinationConnectorProperties) Validate() error {
 			invalidParams.AddNested("Honeycode", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Marketo != nil {
+		if err := s.Marketo.Validate(); err != nil {
+			invalidParams.AddNested("Marketo", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Redshift != nil {
 		if err := s.Redshift.Validate(); err != nil {
 			invalidParams.AddNested("Redshift", err.(request.ErrInvalidParams))
@@ -5166,6 +6980,11 @@ func (s *DestinationConnectorProperties) Validate() error {
 	if s.S3 != nil {
 		if err := s.S3.Validate(); err != nil {
 			invalidParams.AddNested("S3", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SAPOData != nil {
+		if err := s.SAPOData.Validate(); err != nil {
+			invalidParams.AddNested("SAPOData", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Salesforce != nil {
@@ -5195,6 +7014,12 @@ func (s *DestinationConnectorProperties) Validate() error {
 	return nil
 }
 
+// SetCustomConnector sets the CustomConnector field's value.
+func (s *DestinationConnectorProperties) SetCustomConnector(v *CustomConnectorDestinationProperties) *DestinationConnectorProperties {
+	s.CustomConnector = v
+	return s
+}
+
 // SetCustomerProfiles sets the CustomerProfiles field's value.
 func (s *DestinationConnectorProperties) SetCustomerProfiles(v *CustomerProfilesDestinationProperties) *DestinationConnectorProperties {
 	s.CustomerProfiles = v
@@ -5219,6 +7044,12 @@ func (s *DestinationConnectorProperties) SetLookoutMetrics(v *LookoutMetricsDest
 	return s
 }
 
+// SetMarketo sets the Marketo field's value.
+func (s *DestinationConnectorProperties) SetMarketo(v *MarketoDestinationProperties) *DestinationConnectorProperties {
+	s.Marketo = v
+	return s
+}
+
 // SetRedshift sets the Redshift field's value.
 func (s *DestinationConnectorProperties) SetRedshift(v *RedshiftDestinationProperties) *DestinationConnectorProperties {
 	s.Redshift = v
@@ -5228,6 +7059,12 @@ func (s *DestinationConnectorProperties) SetRedshift(v *RedshiftDestinationPrope
 // SetS3 sets the S3 field's value.
 func (s *DestinationConnectorProperties) SetS3(v *S3DestinationProperties) *DestinationConnectorProperties {
 	s.S3 = v
+	return s
+}
+
+// SetSAPOData sets the SAPOData field's value.
+func (s *DestinationConnectorProperties) SetSAPOData(v *SAPODataDestinationProperties) *DestinationConnectorProperties {
+	s.SAPOData = v
 	return s
 }
 
@@ -5263,6 +7100,9 @@ type DestinationFieldProperties struct {
 	// Specifies if the destination field can be created by the current user.
 	IsCreatable *bool `locationName:"isCreatable" type:"boolean"`
 
+	// Specifies whether the field can use the default value during a Create operation.
+	IsDefaultedOnCreate *bool `locationName:"isDefaultedOnCreate" type:"boolean"`
+
 	// Specifies if the destination field can have a null value.
 	IsNullable *bool `locationName:"isNullable" type:"boolean"`
 
@@ -5277,7 +7117,7 @@ type DestinationFieldProperties struct {
 	// A list of supported write operations. For each write operation listed, this
 	// field can be used in idFieldNames when that write operation is present as
 	// a destination option.
-	SupportedWriteOperations []*string `locationName:"supportedWriteOperations" type:"list"`
+	SupportedWriteOperations []*string `locationName:"supportedWriteOperations" type:"list" enum:"WriteOperationType"`
 }
 
 // String returns the string representation.
@@ -5301,6 +7141,12 @@ func (s DestinationFieldProperties) GoString() string {
 // SetIsCreatable sets the IsCreatable field's value.
 func (s *DestinationFieldProperties) SetIsCreatable(v bool) *DestinationFieldProperties {
 	s.IsCreatable = &v
+	return s
+}
+
+// SetIsDefaultedOnCreate sets the IsDefaultedOnCreate field's value.
+func (s *DestinationFieldProperties) SetIsDefaultedOnCreate(v bool) *DestinationFieldProperties {
+	s.IsDefaultedOnCreate = &v
 	return s
 }
 
@@ -5332,6 +7178,9 @@ func (s *DestinationFieldProperties) SetSupportedWriteOperations(v []*string) *D
 // in the flow.
 type DestinationFlowConfig struct {
 	_ struct{} `type:"structure"`
+
+	// The API version that the destination connector uses.
+	ApiVersion *string `locationName:"apiVersion" type:"string"`
 
 	// The name of the connector profile. This name must be unique for each connector
 	// profile in the Amazon Web Services account.
@@ -5385,6 +7234,12 @@ func (s *DestinationFlowConfig) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetApiVersion sets the ApiVersion field's value.
+func (s *DestinationFlowConfig) SetApiVersion(v string) *DestinationFlowConfig {
+	s.ApiVersion = &v
+	return s
 }
 
 // SetConnectorProfileName sets the ConnectorProfileName field's value.
@@ -5501,7 +7356,7 @@ func (s *DynatraceConnectorProfileProperties) SetInstanceUrl(v string) *Dynatrac
 
 // The connector metadata specific to Dynatrace.
 type DynatraceMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5747,7 +7602,7 @@ func (s *EventBridgeDestinationProperties) SetObject(v string) *EventBridgeDesti
 
 // The connector metadata specific to Amazon EventBridge.
 type EventBridgeMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5972,19 +7827,31 @@ func (s *ExecutionResult) SetRecordsProcessed(v int64) *ExecutionResult {
 type FieldTypeDetails struct {
 	_ struct{} `type:"structure"`
 
+	// This is the allowable length range for this field's value.
+	FieldLengthRange *Range `locationName:"fieldLengthRange" type:"structure"`
+
 	// The type of field, such as string, integer, date, and so on.
 	//
 	// FieldType is a required field
 	FieldType *string `locationName:"fieldType" type:"string" required:"true"`
 
+	// The range of values this field can hold.
+	FieldValueRange *Range `locationName:"fieldValueRange" type:"structure"`
+
 	// The list of operators supported by a field.
 	//
 	// FilterOperators is a required field
-	FilterOperators []*string `locationName:"filterOperators" type:"list" required:"true"`
+	FilterOperators []*string `locationName:"filterOperators" type:"list" required:"true" enum:"Operator"`
+
+	// The date format that the field supports.
+	SupportedDateFormat *string `locationName:"supportedDateFormat" type:"string"`
 
 	// The list of values that a field can contain. For example, a Boolean fieldType
 	// can have two values: "true" and "false".
 	SupportedValues []*string `locationName:"supportedValues" type:"list"`
+
+	// The regular expression pattern for the field name.
+	ValueRegexPattern *string `locationName:"valueRegexPattern" type:"string"`
 }
 
 // String returns the string representation.
@@ -6005,9 +7872,21 @@ func (s FieldTypeDetails) GoString() string {
 	return s.String()
 }
 
+// SetFieldLengthRange sets the FieldLengthRange field's value.
+func (s *FieldTypeDetails) SetFieldLengthRange(v *Range) *FieldTypeDetails {
+	s.FieldLengthRange = v
+	return s
+}
+
 // SetFieldType sets the FieldType field's value.
 func (s *FieldTypeDetails) SetFieldType(v string) *FieldTypeDetails {
 	s.FieldType = &v
+	return s
+}
+
+// SetFieldValueRange sets the FieldValueRange field's value.
+func (s *FieldTypeDetails) SetFieldValueRange(v *Range) *FieldTypeDetails {
+	s.FieldValueRange = v
 	return s
 }
 
@@ -6017,9 +7896,21 @@ func (s *FieldTypeDetails) SetFilterOperators(v []*string) *FieldTypeDetails {
 	return s
 }
 
+// SetSupportedDateFormat sets the SupportedDateFormat field's value.
+func (s *FieldTypeDetails) SetSupportedDateFormat(v string) *FieldTypeDetails {
+	s.SupportedDateFormat = &v
+	return s
+}
+
 // SetSupportedValues sets the SupportedValues field's value.
 func (s *FieldTypeDetails) SetSupportedValues(v []*string) *FieldTypeDetails {
 	s.SupportedValues = v
+	return s
+}
+
+// SetValueRegexPattern sets the ValueRegexPattern field's value.
+func (s *FieldTypeDetails) SetValueRegexPattern(v string) *FieldTypeDetails {
+	s.ValueRegexPattern = &v
 	return s
 }
 
@@ -6036,6 +7927,9 @@ type FlowDefinition struct {
 
 	// A user-entered description of the flow.
 	Description *string `locationName:"description" type:"string"`
+
+	// The label of the destination connector in the flow.
+	DestinationConnectorLabel *string `locationName:"destinationConnectorLabel" type:"string"`
 
 	// Specifies the destination connector type, such as Salesforce, Amazon S3,
 	// Amplitude, and so on.
@@ -6059,6 +7953,9 @@ type FlowDefinition struct {
 
 	// Specifies the account user name that most recently updated the flow.
 	LastUpdatedBy *string `locationName:"lastUpdatedBy" type:"string"`
+
+	// The label of the source connector in the flow.
+	SourceConnectorLabel *string `locationName:"sourceConnectorLabel" type:"string"`
 
 	// Specifies the source connector type, such as Salesforce, Amazon S3, Amplitude,
 	// and so on.
@@ -6107,6 +8004,12 @@ func (s *FlowDefinition) SetDescription(v string) *FlowDefinition {
 	return s
 }
 
+// SetDestinationConnectorLabel sets the DestinationConnectorLabel field's value.
+func (s *FlowDefinition) SetDestinationConnectorLabel(v string) *FlowDefinition {
+	s.DestinationConnectorLabel = &v
+	return s
+}
+
 // SetDestinationConnectorType sets the DestinationConnectorType field's value.
 func (s *FlowDefinition) SetDestinationConnectorType(v string) *FlowDefinition {
 	s.DestinationConnectorType = &v
@@ -6146,6 +8049,12 @@ func (s *FlowDefinition) SetLastUpdatedAt(v time.Time) *FlowDefinition {
 // SetLastUpdatedBy sets the LastUpdatedBy field's value.
 func (s *FlowDefinition) SetLastUpdatedBy(v string) *FlowDefinition {
 	s.LastUpdatedBy = &v
+	return s
+}
+
+// SetSourceConnectorLabel sets the SourceConnectorLabel field's value.
+func (s *FlowDefinition) SetSourceConnectorLabel(v string) *FlowDefinition {
+	s.SourceConnectorLabel = &v
 	return s
 }
 
@@ -6268,7 +8177,7 @@ func (s *GoogleAnalyticsConnectorProfileCredentials) SetRefreshToken(v string) *
 
 // The connector-specific profile properties required by Google Analytics.
 type GoogleAnalyticsConnectorProfileProperties struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6426,7 +8335,7 @@ func (s *HoneycodeConnectorProfileCredentials) SetRefreshToken(v string) *Honeyc
 
 // The connector-specific properties required when using Amazon Honeycode.
 type HoneycodeConnectorProfileProperties struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6720,7 +8629,7 @@ func (s *InforNexusConnectorProfileProperties) SetInstanceUrl(v string) *InforNe
 
 // The connector metadata specific to Infor Nexus.
 type InforNexusMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6853,8 +8762,59 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Contains information about the configuration of the lambda which is being
+// registered as the connector.
+type LambdaConnectorProvisioningConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Lambda ARN of the connector being registered.
+	//
+	// LambdaArn is a required field
+	LambdaArn *string `locationName:"lambdaArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaConnectorProvisioningConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LambdaConnectorProvisioningConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LambdaConnectorProvisioningConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LambdaConnectorProvisioningConfig"}
+	if s.LambdaArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLambdaArn sets the LambdaArn field's value.
+func (s *LambdaConnectorProvisioningConfig) SetLambdaArn(v string) *LambdaConnectorProvisioningConfig {
+	s.LambdaArn = &v
+	return s
+}
+
 type ListConnectorEntitiesInput struct {
 	_ struct{} `type:"structure"`
+
+	// The version of the API that's used by the connector.
+	ApiVersion *string `locationName:"apiVersion" type:"string"`
 
 	// The name of the connector profile. The name is unique for each ConnectorProfile
 	// in the Amazon Web Services account, and is used to query the downstream connector.
@@ -6888,6 +8848,12 @@ func (s ListConnectorEntitiesInput) String() string {
 // value will be replaced with "sensitive".
 func (s ListConnectorEntitiesInput) GoString() string {
 	return s.String()
+}
+
+// SetApiVersion sets the ApiVersion field's value.
+func (s *ListConnectorEntitiesInput) SetApiVersion(v string) *ListConnectorEntitiesInput {
+	s.ApiVersion = &v
+	return s
 }
 
 // SetConnectorProfileName sets the ConnectorProfileName field's value.
@@ -6940,6 +8906,101 @@ func (s ListConnectorEntitiesOutput) GoString() string {
 // SetConnectorEntityMap sets the ConnectorEntityMap field's value.
 func (s *ListConnectorEntitiesOutput) SetConnectorEntityMap(v map[string][]*ConnectorEntity) *ListConnectorEntitiesOutput {
 	s.ConnectorEntityMap = v
+	return s
+}
+
+type ListConnectorsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the maximum number of items that should be returned in the result
+	// set. The default for maxResults is 20 (for all paginated API operations).
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The pagination token for the next page of data.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListConnectorsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListConnectorsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListConnectorsInput) SetMaxResults(v int64) *ListConnectorsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorsInput) SetNextToken(v string) *ListConnectorsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConnectorsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains information about the connectors supported by Amazon AppFlow.
+	Connectors []*ConnectorDetail `locationName:"connectors" type:"list"`
+
+	// The pagination token for the next page of data. If nextToken=null, this means
+	// that all records have been fetched.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsOutput) GoString() string {
+	return s.String()
+}
+
+// SetConnectors sets the Connectors field's value.
+func (s *ListConnectorsOutput) SetConnectors(v []*ConnectorDetail) *ListConnectorsOutput {
+	s.Connectors = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorsOutput) SetNextToken(v string) *ListConnectorsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -7120,7 +9181,7 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 // The properties that are applied when Amazon Lookout for Metrics is used as
 // a destination.
 type LookoutMetricsDestinationProperties struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7277,9 +9338,75 @@ func (s *MarketoConnectorProfileProperties) SetInstanceUrl(v string) *MarketoCon
 	return s
 }
 
+// The properties that Amazon AppFlow applies when you use Marketo as a flow
+// destination.
+type MarketoDestinationProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The settings that determine how Amazon AppFlow handles an error when placing
+	// data in the destination. For example, this setting would determine if the
+	// flow should fail after one insertion error, or continue and attempt to insert
+	// every record regardless of the initial failure. ErrorHandlingConfig is a
+	// part of the destination connector details.
+	ErrorHandlingConfig *ErrorHandlingConfig `locationName:"errorHandlingConfig" type:"structure"`
+
+	// The object specified in the Marketo flow destination.
+	//
+	// Object is a required field
+	Object *string `locationName:"object" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MarketoDestinationProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MarketoDestinationProperties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MarketoDestinationProperties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MarketoDestinationProperties"}
+	if s.Object == nil {
+		invalidParams.Add(request.NewErrParamRequired("Object"))
+	}
+	if s.ErrorHandlingConfig != nil {
+		if err := s.ErrorHandlingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ErrorHandlingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetErrorHandlingConfig sets the ErrorHandlingConfig field's value.
+func (s *MarketoDestinationProperties) SetErrorHandlingConfig(v *ErrorHandlingConfig) *MarketoDestinationProperties {
+	s.ErrorHandlingConfig = v
+	return s
+}
+
+// SetObject sets the Object field's value.
+func (s *MarketoDestinationProperties) SetObject(v string) *MarketoDestinationProperties {
+	s.Object = &v
+	return s
+}
+
 // The connector metadata specific to Marketo.
 type MarketoMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7344,6 +9471,311 @@ func (s *MarketoSourceProperties) Validate() error {
 // SetObject sets the Object field's value.
 func (s *MarketoSourceProperties) SetObject(v string) *MarketoSourceProperties {
 	s.Object = &v
+	return s
+}
+
+// The OAuth 2.0 credentials required for OAuth 2.0 authentication.
+type OAuth2Credentials struct {
+	_ struct{} `type:"structure"`
+
+	// The access token used to access the connector on your behalf.
+	//
+	// AccessToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by OAuth2Credentials's
+	// String and GoString methods.
+	AccessToken *string `locationName:"accessToken" type:"string" sensitive:"true"`
+
+	// The identifier for the desired client.
+	ClientId *string `locationName:"clientId" type:"string"`
+
+	// The client secret used by the OAuth client to authenticate to the authorization
+	// server.
+	//
+	// ClientSecret is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by OAuth2Credentials's
+	// String and GoString methods.
+	ClientSecret *string `locationName:"clientSecret" type:"string" sensitive:"true"`
+
+	// Used by select connectors for which the OAuth workflow is supported, such
+	// as Salesforce, Google Analytics, Marketo, Zendesk, and Slack.
+	OAuthRequest *ConnectorOAuthRequest `locationName:"oAuthRequest" type:"structure"`
+
+	// The refresh token used to refresh an expired access token.
+	RefreshToken *string `locationName:"refreshToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2Credentials) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2Credentials) GoString() string {
+	return s.String()
+}
+
+// SetAccessToken sets the AccessToken field's value.
+func (s *OAuth2Credentials) SetAccessToken(v string) *OAuth2Credentials {
+	s.AccessToken = &v
+	return s
+}
+
+// SetClientId sets the ClientId field's value.
+func (s *OAuth2Credentials) SetClientId(v string) *OAuth2Credentials {
+	s.ClientId = &v
+	return s
+}
+
+// SetClientSecret sets the ClientSecret field's value.
+func (s *OAuth2Credentials) SetClientSecret(v string) *OAuth2Credentials {
+	s.ClientSecret = &v
+	return s
+}
+
+// SetOAuthRequest sets the OAuthRequest field's value.
+func (s *OAuth2Credentials) SetOAuthRequest(v *ConnectorOAuthRequest) *OAuth2Credentials {
+	s.OAuthRequest = v
+	return s
+}
+
+// SetRefreshToken sets the RefreshToken field's value.
+func (s *OAuth2Credentials) SetRefreshToken(v string) *OAuth2Credentials {
+	s.RefreshToken = &v
+	return s
+}
+
+// Custom parameter required for OAuth 2.0 authentication.
+type OAuth2CustomParameter struct {
+	_ struct{} `type:"structure"`
+
+	// Contains default values for this authentication parameter that are supplied
+	// by the connector.
+	ConnectorSuppliedValues []*string `locationName:"connectorSuppliedValues" type:"list"`
+
+	// A description about the custom parameter used for OAuth 2.0 authentication.
+	Description *string `locationName:"description" type:"string"`
+
+	// Indicates whether the custom parameter for OAuth 2.0 authentication is required.
+	IsRequired *bool `locationName:"isRequired" type:"boolean"`
+
+	// Indicates whether this authentication custom parameter is a sensitive field.
+	IsSensitiveField *bool `locationName:"isSensitiveField" type:"boolean"`
+
+	// The key of the custom parameter required for OAuth 2.0 authentication.
+	Key *string `locationName:"key" type:"string"`
+
+	// The label of the custom parameter used for OAuth 2.0 authentication.
+	Label *string `locationName:"label" type:"string"`
+
+	// Indicates whether custom parameter is used with TokenUrl or AuthUrl.
+	Type *string `locationName:"type" type:"string" enum:"OAuth2CustomPropType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2CustomParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2CustomParameter) GoString() string {
+	return s.String()
+}
+
+// SetConnectorSuppliedValues sets the ConnectorSuppliedValues field's value.
+func (s *OAuth2CustomParameter) SetConnectorSuppliedValues(v []*string) *OAuth2CustomParameter {
+	s.ConnectorSuppliedValues = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *OAuth2CustomParameter) SetDescription(v string) *OAuth2CustomParameter {
+	s.Description = &v
+	return s
+}
+
+// SetIsRequired sets the IsRequired field's value.
+func (s *OAuth2CustomParameter) SetIsRequired(v bool) *OAuth2CustomParameter {
+	s.IsRequired = &v
+	return s
+}
+
+// SetIsSensitiveField sets the IsSensitiveField field's value.
+func (s *OAuth2CustomParameter) SetIsSensitiveField(v bool) *OAuth2CustomParameter {
+	s.IsSensitiveField = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *OAuth2CustomParameter) SetKey(v string) *OAuth2CustomParameter {
+	s.Key = &v
+	return s
+}
+
+// SetLabel sets the Label field's value.
+func (s *OAuth2CustomParameter) SetLabel(v string) *OAuth2CustomParameter {
+	s.Label = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *OAuth2CustomParameter) SetType(v string) *OAuth2CustomParameter {
+	s.Type = &v
+	return s
+}
+
+// Contains the default values required for OAuth 2.0 authentication.
+type OAuth2Defaults struct {
+	_ struct{} `type:"structure"`
+
+	// Auth code URLs that can be used for OAuth 2.0 authentication.
+	AuthCodeUrls []*string `locationName:"authCodeUrls" type:"list"`
+
+	// List of custom parameters required for OAuth 2.0 authentication.
+	Oauth2CustomProperties []*OAuth2CustomParameter `locationName:"oauth2CustomProperties" type:"list"`
+
+	// OAuth 2.0 grant types supported by the connector.
+	Oauth2GrantTypesSupported []*string `locationName:"oauth2GrantTypesSupported" type:"list" enum:"OAuth2GrantType"`
+
+	// OAuth 2.0 scopes that the connector supports.
+	OauthScopes []*string `locationName:"oauthScopes" type:"list"`
+
+	// Token URLs that can be used for OAuth 2.0 authentication.
+	TokenUrls []*string `locationName:"tokenUrls" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2Defaults) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2Defaults) GoString() string {
+	return s.String()
+}
+
+// SetAuthCodeUrls sets the AuthCodeUrls field's value.
+func (s *OAuth2Defaults) SetAuthCodeUrls(v []*string) *OAuth2Defaults {
+	s.AuthCodeUrls = v
+	return s
+}
+
+// SetOauth2CustomProperties sets the Oauth2CustomProperties field's value.
+func (s *OAuth2Defaults) SetOauth2CustomProperties(v []*OAuth2CustomParameter) *OAuth2Defaults {
+	s.Oauth2CustomProperties = v
+	return s
+}
+
+// SetOauth2GrantTypesSupported sets the Oauth2GrantTypesSupported field's value.
+func (s *OAuth2Defaults) SetOauth2GrantTypesSupported(v []*string) *OAuth2Defaults {
+	s.Oauth2GrantTypesSupported = v
+	return s
+}
+
+// SetOauthScopes sets the OauthScopes field's value.
+func (s *OAuth2Defaults) SetOauthScopes(v []*string) *OAuth2Defaults {
+	s.OauthScopes = v
+	return s
+}
+
+// SetTokenUrls sets the TokenUrls field's value.
+func (s *OAuth2Defaults) SetTokenUrls(v []*string) *OAuth2Defaults {
+	s.TokenUrls = v
+	return s
+}
+
+// The OAuth 2.0 properties required for OAuth 2.0 authentication.
+type OAuth2Properties struct {
+	_ struct{} `type:"structure"`
+
+	// The OAuth 2.0 grant type used by connector for OAuth 2.0 authentication.
+	//
+	// OAuth2GrantType is a required field
+	OAuth2GrantType *string `locationName:"oAuth2GrantType" type:"string" required:"true" enum:"OAuth2GrantType"`
+
+	// The token URL required for OAuth 2.0 authentication.
+	//
+	// TokenUrl is a required field
+	TokenUrl *string `locationName:"tokenUrl" type:"string" required:"true"`
+
+	// Associates your token URL with a map of properties that you define. Use this
+	// parameter to provide any additional details that the connector requires to
+	// authenticate your request.
+	TokenUrlCustomProperties map[string]*string `locationName:"tokenUrlCustomProperties" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2Properties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OAuth2Properties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OAuth2Properties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OAuth2Properties"}
+	if s.OAuth2GrantType == nil {
+		invalidParams.Add(request.NewErrParamRequired("OAuth2GrantType"))
+	}
+	if s.TokenUrl == nil {
+		invalidParams.Add(request.NewErrParamRequired("TokenUrl"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOAuth2GrantType sets the OAuth2GrantType field's value.
+func (s *OAuth2Properties) SetOAuth2GrantType(v string) *OAuth2Properties {
+	s.OAuth2GrantType = &v
+	return s
+}
+
+// SetTokenUrl sets the TokenUrl field's value.
+func (s *OAuth2Properties) SetTokenUrl(v string) *OAuth2Properties {
+	s.TokenUrl = &v
+	return s
+}
+
+// SetTokenUrlCustomProperties sets the TokenUrlCustomProperties field's value.
+func (s *OAuth2Properties) SetTokenUrlCustomProperties(v map[string]*string) *OAuth2Properties {
+	s.TokenUrlCustomProperties = v
 	return s
 }
 
@@ -7616,6 +10048,47 @@ func (s *PrivateConnectionProvisioningState) SetStatus(v string) *PrivateConnect
 	return s
 }
 
+// The range of values that the property supports.
+type Range struct {
+	_ struct{} `type:"structure"`
+
+	// Maximum value supported by the field.
+	Maximum *float64 `locationName:"maximum" type:"double"`
+
+	// Minimum value supported by the field.
+	Minimum *float64 `locationName:"minimum" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Range) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Range) GoString() string {
+	return s.String()
+}
+
+// SetMaximum sets the Maximum field's value.
+func (s *Range) SetMaximum(v float64) *Range {
+	s.Maximum = &v
+	return s
+}
+
+// SetMinimum sets the Minimum field's value.
+func (s *Range) SetMinimum(v float64) *Range {
+	s.Minimum = &v
+	return s
+}
+
 // The connector-specific profile credentials required when using Amazon Redshift.
 type RedshiftConnectorProfileCredentials struct {
 	_ struct{} `type:"structure"`
@@ -7864,7 +10337,7 @@ func (s *RedshiftDestinationProperties) SetObject(v string) *RedshiftDestination
 
 // The connector metadata specific to Amazon Redshift.
 type RedshiftMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7883,6 +10356,113 @@ func (s RedshiftMetadata) String() string {
 // value will be replaced with "sensitive".
 func (s RedshiftMetadata) GoString() string {
 	return s.String()
+}
+
+type RegisterConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the connector. The name is unique for each ConnectorRegistration
+	// in your Amazon Web Services account.
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string"`
+
+	// The provisioning type of the connector. Currently the only supported value
+	// is LAMBDA.
+	ConnectorProvisioningConfig *ConnectorProvisioningConfig `locationName:"connectorProvisioningConfig" type:"structure"`
+
+	// The provisioning type of the connector. Currently the only supported value
+	// is LAMBDA.
+	ConnectorProvisioningType *string `locationName:"connectorProvisioningType" type:"string" enum:"ConnectorProvisioningType"`
+
+	// A description about the connector that's being registered.
+	Description *string `locationName:"description" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterConnectorInput"}
+	if s.ConnectorProvisioningConfig != nil {
+		if err := s.ConnectorProvisioningConfig.Validate(); err != nil {
+			invalidParams.AddNested("ConnectorProvisioningConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *RegisterConnectorInput) SetConnectorLabel(v string) *RegisterConnectorInput {
+	s.ConnectorLabel = &v
+	return s
+}
+
+// SetConnectorProvisioningConfig sets the ConnectorProvisioningConfig field's value.
+func (s *RegisterConnectorInput) SetConnectorProvisioningConfig(v *ConnectorProvisioningConfig) *RegisterConnectorInput {
+	s.ConnectorProvisioningConfig = v
+	return s
+}
+
+// SetConnectorProvisioningType sets the ConnectorProvisioningType field's value.
+func (s *RegisterConnectorInput) SetConnectorProvisioningType(v string) *RegisterConnectorInput {
+	s.ConnectorProvisioningType = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *RegisterConnectorInput) SetDescription(v string) *RegisterConnectorInput {
+	s.Description = &v
+	return s
+}
+
+type RegisterConnectorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the connector being registered.
+	ConnectorArn *string `locationName:"connectorArn" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RegisterConnectorOutput) GoString() string {
+	return s.String()
+}
+
+// SetConnectorArn sets the ConnectorArn field's value.
+func (s *RegisterConnectorOutput) SetConnectorArn(v string) *RegisterConnectorOutput {
+	s.ConnectorArn = &v
+	return s
 }
 
 // The resource specified in the request (such as the source or destination
@@ -8021,9 +10601,42 @@ func (s *S3DestinationProperties) SetS3OutputFormatConfig(v *S3OutputFormatConfi
 	return s
 }
 
+// When you use Amazon S3 as the source, the configuration format that you provide
+// the flow input data.
+type S3InputFormatConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The file type that Amazon AppFlow gets from your Amazon S3 bucket.
+	S3InputFileType *string `locationName:"s3InputFileType" type:"string" enum:"S3InputFileType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3InputFormatConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3InputFormatConfig) GoString() string {
+	return s.String()
+}
+
+// SetS3InputFileType sets the S3InputFileType field's value.
+func (s *S3InputFormatConfig) SetS3InputFileType(v string) *S3InputFormatConfig {
+	s.S3InputFileType = &v
+	return s
+}
+
 // The connector metadata specific to Amazon S3.
 type S3Metadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8060,6 +10673,19 @@ type S3OutputFormatConfig struct {
 	// Amazon S3 bucket. You can name folders according to the flow frequency and
 	// date.
 	PrefixConfig *PrefixConfig `locationName:"prefixConfig" type:"structure"`
+
+	// If your file output format is Parquet, use this parameter to set whether
+	// Amazon AppFlow preserves the data types in your source data when it writes
+	// the output to Amazon S3.
+	//
+	//    * true: Amazon AppFlow preserves the data types when it writes to Amazon
+	//    S3. For example, an integer or 1 in your source data is still an integer
+	//    in your output.
+	//
+	//    * false: Amazon AppFlow converts all of the source data into strings when
+	//    it writes to Amazon S3. For example, an integer of 1 in your source data
+	//    becomes the string "1" in the output.
+	PreserveSourceDataTyping *bool `locationName:"preserveSourceDataTyping" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -8098,6 +10724,12 @@ func (s *S3OutputFormatConfig) SetPrefixConfig(v *PrefixConfig) *S3OutputFormatC
 	return s
 }
 
+// SetPreserveSourceDataTyping sets the PreserveSourceDataTyping field's value.
+func (s *S3OutputFormatConfig) SetPreserveSourceDataTyping(v bool) *S3OutputFormatConfig {
+	s.PreserveSourceDataTyping = &v
+	return s
+}
+
 // The properties that are applied when Amazon S3 is being used as the flow
 // source.
 type S3SourceProperties struct {
@@ -8110,6 +10742,10 @@ type S3SourceProperties struct {
 
 	// The object key for the Amazon S3 bucket in which the source files are stored.
 	BucketPrefix *string `locationName:"bucketPrefix" type:"string"`
+
+	// When you use Amazon S3 as the source, the configuration format that you provide
+	// the flow input data.
+	S3InputFormatConfig *S3InputFormatConfig `locationName:"s3InputFormatConfig" type:"structure"`
 }
 
 // String returns the string representation.
@@ -8155,6 +10791,12 @@ func (s *S3SourceProperties) SetBucketName(v string) *S3SourceProperties {
 // SetBucketPrefix sets the BucketPrefix field's value.
 func (s *S3SourceProperties) SetBucketPrefix(v string) *S3SourceProperties {
 	s.BucketPrefix = &v
+	return s
+}
+
+// SetS3InputFormatConfig sets the S3InputFormatConfig field's value.
+func (s *S3SourceProperties) SetS3InputFormatConfig(v *S3InputFormatConfig) *S3SourceProperties {
+	s.S3InputFormatConfig = v
 	return s
 }
 
@@ -8346,9 +10988,112 @@ func (s *SAPODataConnectorProfileProperties) SetPrivateLinkServiceName(v string)
 	return s
 }
 
+// The properties that are applied when using SAPOData as a flow destination
+type SAPODataDestinationProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The settings that determine how Amazon AppFlow handles an error when placing
+	// data in the destination. For example, this setting would determine if the
+	// flow should fail after one insertion error, or continue and attempt to insert
+	// every record regardless of the initial failure. ErrorHandlingConfig is a
+	// part of the destination connector details.
+	ErrorHandlingConfig *ErrorHandlingConfig `locationName:"errorHandlingConfig" type:"structure"`
+
+	// A list of field names that can be used as an ID field when performing a write
+	// operation.
+	IdFieldNames []*string `locationName:"idFieldNames" type:"list"`
+
+	// The object path specified in the SAPOData flow destination.
+	//
+	// ObjectPath is a required field
+	ObjectPath *string `locationName:"objectPath" type:"string" required:"true"`
+
+	// Determines how Amazon AppFlow handles the success response that it gets from
+	// the connector after placing data.
+	//
+	// For example, this setting would determine where to write the response from
+	// a destination connector upon a successful insert operation.
+	SuccessResponseHandlingConfig *SuccessResponseHandlingConfig `locationName:"successResponseHandlingConfig" type:"structure"`
+
+	// The possible write operations in the destination connector. When this value
+	// is not provided, this defaults to the INSERT operation.
+	WriteOperationType *string `locationName:"writeOperationType" type:"string" enum:"WriteOperationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SAPODataDestinationProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SAPODataDestinationProperties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SAPODataDestinationProperties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SAPODataDestinationProperties"}
+	if s.ObjectPath == nil {
+		invalidParams.Add(request.NewErrParamRequired("ObjectPath"))
+	}
+	if s.ErrorHandlingConfig != nil {
+		if err := s.ErrorHandlingConfig.Validate(); err != nil {
+			invalidParams.AddNested("ErrorHandlingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SuccessResponseHandlingConfig != nil {
+		if err := s.SuccessResponseHandlingConfig.Validate(); err != nil {
+			invalidParams.AddNested("SuccessResponseHandlingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetErrorHandlingConfig sets the ErrorHandlingConfig field's value.
+func (s *SAPODataDestinationProperties) SetErrorHandlingConfig(v *ErrorHandlingConfig) *SAPODataDestinationProperties {
+	s.ErrorHandlingConfig = v
+	return s
+}
+
+// SetIdFieldNames sets the IdFieldNames field's value.
+func (s *SAPODataDestinationProperties) SetIdFieldNames(v []*string) *SAPODataDestinationProperties {
+	s.IdFieldNames = v
+	return s
+}
+
+// SetObjectPath sets the ObjectPath field's value.
+func (s *SAPODataDestinationProperties) SetObjectPath(v string) *SAPODataDestinationProperties {
+	s.ObjectPath = &v
+	return s
+}
+
+// SetSuccessResponseHandlingConfig sets the SuccessResponseHandlingConfig field's value.
+func (s *SAPODataDestinationProperties) SetSuccessResponseHandlingConfig(v *SuccessResponseHandlingConfig) *SAPODataDestinationProperties {
+	s.SuccessResponseHandlingConfig = v
+	return s
+}
+
+// SetWriteOperationType sets the WriteOperationType field's value.
+func (s *SAPODataDestinationProperties) SetWriteOperationType(v string) *SAPODataDestinationProperties {
+	s.WriteOperationType = &v
+	return s
+}
+
 // The connector metadata specific to SAPOData.
 type SAPODataMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8722,7 +11467,12 @@ type ScheduledTriggerProperties struct {
 	// the first flow run.
 	FirstExecutionFrom *time.Time `locationName:"firstExecutionFrom" type:"timestamp"`
 
-	// Specifies the scheduled end time for a schedule-triggered flow.
+	// Defines how many times a scheduled flow fails consecutively before Amazon
+	// AppFlow deactivates it.
+	FlowErrorDeactivationThreshold *int64 `locationName:"flowErrorDeactivationThreshold" min:"1" type:"integer"`
+
+	// The time at which the scheduled flow ends. The time is formatted as a timestamp
+	// that follows the ISO 8601 standard, such as 2022-04-27T13:00:00-07:00.
 	ScheduleEndTime *time.Time `locationName:"scheduleEndTime" type:"timestamp"`
 
 	// The scheduling expression that determines the rate at which the schedule
@@ -8735,11 +11485,18 @@ type ScheduledTriggerProperties struct {
 	// flow.
 	ScheduleOffset *int64 `locationName:"scheduleOffset" type:"long"`
 
-	// Specifies the scheduled start time for a schedule-triggered flow.
+	// The time at which the scheduled flow starts. The time is formatted as a timestamp
+	// that follows the ISO 8601 standard, such as 2022-04-26T13:00:00-07:00.
 	ScheduleStartTime *time.Time `locationName:"scheduleStartTime" type:"timestamp"`
 
-	// Specifies the time zone used when referring to the date and time of a scheduled-triggered
-	// flow, such as America/New_York.
+	// Specifies the time zone used when referring to the dates and times of a scheduled
+	// flow, such as America/New_York. This time zone is only a descriptive label.
+	// It doesn't affect how Amazon AppFlow interprets the timestamps that you specify
+	// to schedule the flow.
+	//
+	// If you want to schedule a flow by using times in a particular time zone,
+	// indicate the time zone as a UTC offset in your timestamps. For example, the
+	// UTC offsets for the America/New_York timezone are -04:00 EDT and -05:00 EST.
 	Timezone *string `locationName:"timezone" type:"string"`
 }
 
@@ -8764,6 +11521,9 @@ func (s ScheduledTriggerProperties) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ScheduledTriggerProperties) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ScheduledTriggerProperties"}
+	if s.FlowErrorDeactivationThreshold != nil && *s.FlowErrorDeactivationThreshold < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("FlowErrorDeactivationThreshold", 1))
+	}
 	if s.ScheduleExpression == nil {
 		invalidParams.Add(request.NewErrParamRequired("ScheduleExpression"))
 	}
@@ -8783,6 +11543,12 @@ func (s *ScheduledTriggerProperties) SetDataPullMode(v string) *ScheduledTrigger
 // SetFirstExecutionFrom sets the FirstExecutionFrom field's value.
 func (s *ScheduledTriggerProperties) SetFirstExecutionFrom(v time.Time) *ScheduledTriggerProperties {
 	s.FirstExecutionFrom = &v
+	return s
+}
+
+// SetFlowErrorDeactivationThreshold sets the FlowErrorDeactivationThreshold field's value.
+func (s *ScheduledTriggerProperties) SetFlowErrorDeactivationThreshold(v int64) *ScheduledTriggerProperties {
+	s.FlowErrorDeactivationThreshold = &v
 	return s
 }
 
@@ -8930,7 +11696,7 @@ func (s *ServiceNowConnectorProfileProperties) SetInstanceUrl(v string) *Service
 
 // The connector metadata specific to ServiceNow.
 type ServiceNowMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9070,8 +11836,12 @@ type SingularConnectorProfileCredentials struct {
 	// A unique alphanumeric identifier used to authenticate a user, developer,
 	// or calling program to your API.
 	//
+	// ApiKey is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SingularConnectorProfileCredentials's
+	// String and GoString methods.
+	//
 	// ApiKey is a required field
-	ApiKey *string `locationName:"apiKey" type:"string" required:"true"`
+	ApiKey *string `locationName:"apiKey" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -9113,7 +11883,7 @@ func (s *SingularConnectorProfileCredentials) SetApiKey(v string) *SingularConne
 
 // The connector-specific profile properties required when using Singular.
 type SingularConnectorProfileProperties struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9136,7 +11906,7 @@ func (s SingularConnectorProfileProperties) GoString() string {
 
 // The connector metadata specific to Singular.
 type SingularMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9731,6 +12501,10 @@ type SourceConnectorProperties struct {
 	// Specifies the information that is required for querying Amplitude.
 	Amplitude *AmplitudeSourceProperties `type:"structure"`
 
+	// The properties that are applied when the custom connector is being used as
+	// a source.
+	CustomConnector *CustomConnectorSourceProperties `type:"structure"`
+
 	// Specifies the information that is required for querying Datadog.
 	Datadog *DatadogSourceProperties `type:"structure"`
 
@@ -9798,6 +12572,11 @@ func (s *SourceConnectorProperties) Validate() error {
 	if s.Amplitude != nil {
 		if err := s.Amplitude.Validate(); err != nil {
 			invalidParams.AddNested("Amplitude", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.CustomConnector != nil {
+		if err := s.CustomConnector.Validate(); err != nil {
+			invalidParams.AddNested("CustomConnector", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Datadog != nil {
@@ -9875,6 +12654,12 @@ func (s *SourceConnectorProperties) Validate() error {
 // SetAmplitude sets the Amplitude field's value.
 func (s *SourceConnectorProperties) SetAmplitude(v *AmplitudeSourceProperties) *SourceConnectorProperties {
 	s.Amplitude = v
+	return s
+}
+
+// SetCustomConnector sets the CustomConnector field's value.
+func (s *SourceConnectorProperties) SetCustomConnector(v *CustomConnectorSourceProperties) *SourceConnectorProperties {
+	s.CustomConnector = v
 	return s
 }
 
@@ -9972,6 +12757,9 @@ type SourceFieldProperties struct {
 
 	// Indicates whether the field can be returned in a search result.
 	IsRetrievable *bool `locationName:"isRetrievable" type:"boolean"`
+
+	// Indicates if this timestamp field can be used for incremental queries.
+	IsTimestampFieldForIncrementalQueries *bool `locationName:"isTimestampFieldForIncrementalQueries" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -10004,10 +12792,19 @@ func (s *SourceFieldProperties) SetIsRetrievable(v bool) *SourceFieldProperties 
 	return s
 }
 
+// SetIsTimestampFieldForIncrementalQueries sets the IsTimestampFieldForIncrementalQueries field's value.
+func (s *SourceFieldProperties) SetIsTimestampFieldForIncrementalQueries(v bool) *SourceFieldProperties {
+	s.IsTimestampFieldForIncrementalQueries = &v
+	return s
+}
+
 // Contains information about the configuration of the source connector used
 // in the flow.
 type SourceFlowConfig struct {
 	_ struct{} `type:"structure"`
+
+	// The API version of the connector when it's used as a source in the flow.
+	ApiVersion *string `locationName:"apiVersion" type:"string"`
 
 	// The name of the connector profile. This name must be unique for each connector
 	// profile in the Amazon Web Services account.
@@ -10066,6 +12863,12 @@ func (s *SourceFlowConfig) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetApiVersion sets the ApiVersion field's value.
+func (s *SourceFlowConfig) SetApiVersion(v string) *SourceFlowConfig {
+	s.ApiVersion = &v
+	return s
 }
 
 // SetConnectorProfileName sets the ConnectorProfileName field's value.
@@ -10276,6 +13079,64 @@ func (s *StopFlowOutput) SetFlowStatus(v string) *StopFlowOutput {
 	return s
 }
 
+// Determines how Amazon AppFlow handles the success response that it gets from
+// the connector after placing data.
+//
+// For example, this setting would determine where to write the response from
+// the destination connector upon a successful insert operation.
+type SuccessResponseHandlingConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the Amazon S3 bucket.
+	BucketName *string `locationName:"bucketName" min:"3" type:"string"`
+
+	// The Amazon S3 bucket prefix.
+	BucketPrefix *string `locationName:"bucketPrefix" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuccessResponseHandlingConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuccessResponseHandlingConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SuccessResponseHandlingConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SuccessResponseHandlingConfig"}
+	if s.BucketName != nil && len(*s.BucketName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *SuccessResponseHandlingConfig) SetBucketName(v string) *SuccessResponseHandlingConfig {
+	s.BucketName = &v
+	return s
+}
+
+// SetBucketPrefix sets the BucketPrefix field's value.
+func (s *SuccessResponseHandlingConfig) SetBucketPrefix(v string) *SuccessResponseHandlingConfig {
+	s.BucketPrefix = &v
+	return s
+}
+
 // Contains details regarding all the supported FieldTypes and their corresponding
 // filterOperators and supportedValues.
 type SupportedFieldTypeDetails struct {
@@ -10376,7 +13237,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10488,6 +13349,71 @@ func (s *Task) SetTaskType(v string) *Task {
 	return s
 }
 
+// API calls have exceeded the maximum allowed API request rate per account
+// and per Region.
+type ThrottlingException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThrottlingException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThrottlingException) GoString() string {
+	return s.String()
+}
+
+func newErrorThrottlingException(v protocol.ResponseMetadata) error {
+	return &ThrottlingException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ThrottlingException) Code() string {
+	return "ThrottlingException"
+}
+
+// Message returns the exception's message.
+func (s *ThrottlingException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ThrottlingException) OrigErr() error {
+	return nil
+}
+
+func (s *ThrottlingException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ThrottlingException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ThrottlingException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The connector-specific profile credentials required when using Trend Micro.
 type TrendmicroConnectorProfileCredentials struct {
 	_ struct{} `type:"structure"`
@@ -10541,7 +13467,7 @@ func (s *TrendmicroConnectorProfileCredentials) SetApiSecretKey(v string) *Trend
 
 // The connector-specific profile properties required when using Trend Micro.
 type TrendmicroConnectorProfileProperties struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10564,7 +13490,7 @@ func (s TrendmicroConnectorProfileProperties) GoString() string {
 
 // The connector metadata specific to Trend Micro.
 type TrendmicroMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -10745,6 +13671,86 @@ func (s *TriggerProperties) SetScheduled(v *ScheduledTriggerProperties) *Trigger
 	return s
 }
 
+type UnregisterConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The label of the connector. The label is unique for each ConnectorRegistration
+	// in your Amazon Web Services account.
+	//
+	// ConnectorLabel is a required field
+	ConnectorLabel *string `locationName:"connectorLabel" type:"string" required:"true"`
+
+	// Indicates whether Amazon AppFlow should unregister the connector, even if
+	// it is currently in use in one or more connector profiles. The default value
+	// is false.
+	ForceDelete *bool `locationName:"forceDelete" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnregisterConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnregisterConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UnregisterConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UnregisterConnectorInput"}
+	if s.ConnectorLabel == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorLabel"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorLabel sets the ConnectorLabel field's value.
+func (s *UnregisterConnectorInput) SetConnectorLabel(v string) *UnregisterConnectorInput {
+	s.ConnectorLabel = &v
+	return s
+}
+
+// SetForceDelete sets the ForceDelete field's value.
+func (s *UnregisterConnectorInput) SetForceDelete(v bool) *UnregisterConnectorInput {
+	s.ForceDelete = &v
+	return s
+}
+
+type UnregisterConnectorOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnregisterConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnregisterConnectorOutput) GoString() string {
+	return s.String()
+}
+
 // The requested operation is not supported for the current flow.
 type UnsupportedOperationException struct {
 	_            struct{}                  `type:"structure"`
@@ -10873,7 +13879,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11264,7 +14270,7 @@ func (s *UpsolverDestinationProperties) SetS3OutputFormatConfig(v *UpsolverS3Out
 
 // The connector metadata specific to Upsolver.
 type UpsolverMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11533,7 +14539,7 @@ func (s *VeevaConnectorProfileProperties) SetInstanceUrl(v string) *VeevaConnect
 
 // The connector metadata specific to Veeva.
 type VeevaMetadata struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -11967,6 +14973,30 @@ func AmplitudeConnectorOperator_Values() []string {
 }
 
 const (
+	// AuthenticationTypeOauth2 is a AuthenticationType enum value
+	AuthenticationTypeOauth2 = "OAUTH2"
+
+	// AuthenticationTypeApikey is a AuthenticationType enum value
+	AuthenticationTypeApikey = "APIKEY"
+
+	// AuthenticationTypeBasic is a AuthenticationType enum value
+	AuthenticationTypeBasic = "BASIC"
+
+	// AuthenticationTypeCustom is a AuthenticationType enum value
+	AuthenticationTypeCustom = "CUSTOM"
+)
+
+// AuthenticationType_Values returns all elements of the AuthenticationType enum
+func AuthenticationType_Values() []string {
+	return []string{
+		AuthenticationTypeOauth2,
+		AuthenticationTypeApikey,
+		AuthenticationTypeBasic,
+		AuthenticationTypeCustom,
+	}
+}
+
+const (
 	// ConnectionModePublic is a ConnectionMode enum value
 	ConnectionModePublic = "Public"
 
@@ -11979,6 +15009,19 @@ func ConnectionMode_Values() []string {
 	return []string{
 		ConnectionModePublic,
 		ConnectionModePrivate,
+	}
+}
+
+// The type of provisioning that the connector supports, such as Lambda.
+const (
+	// ConnectorProvisioningTypeLambda is a ConnectorProvisioningType enum value
+	ConnectorProvisioningTypeLambda = "LAMBDA"
+)
+
+// ConnectorProvisioningType_Values returns all elements of the ConnectorProvisioningType enum
+func ConnectorProvisioningType_Values() []string {
+	return []string{
+		ConnectorProvisioningTypeLambda,
 	}
 }
 
@@ -12048,6 +15091,9 @@ const (
 
 	// ConnectorTypeSapodata is a ConnectorType enum value
 	ConnectorTypeSapodata = "SAPOData"
+
+	// ConnectorTypeCustomConnector is a ConnectorType enum value
+	ConnectorTypeCustomConnector = "CustomConnector"
 )
 
 // ConnectorType_Values returns all elements of the ConnectorType enum
@@ -12075,6 +15121,7 @@ func ConnectorType_Values() []string {
 		ConnectorTypeHoneycode,
 		ConnectorTypeCustomerProfiles,
 		ConnectorTypeSapodata,
+		ConnectorTypeCustomConnector,
 	}
 }
 
@@ -12459,6 +15506,38 @@ func MarketoConnectorOperator_Values() []string {
 }
 
 const (
+	// OAuth2CustomPropTypeTokenUrl is a OAuth2CustomPropType enum value
+	OAuth2CustomPropTypeTokenUrl = "TOKEN_URL"
+
+	// OAuth2CustomPropTypeAuthUrl is a OAuth2CustomPropType enum value
+	OAuth2CustomPropTypeAuthUrl = "AUTH_URL"
+)
+
+// OAuth2CustomPropType_Values returns all elements of the OAuth2CustomPropType enum
+func OAuth2CustomPropType_Values() []string {
+	return []string{
+		OAuth2CustomPropTypeTokenUrl,
+		OAuth2CustomPropTypeAuthUrl,
+	}
+}
+
+const (
+	// OAuth2GrantTypeClientCredentials is a OAuth2GrantType enum value
+	OAuth2GrantTypeClientCredentials = "CLIENT_CREDENTIALS"
+
+	// OAuth2GrantTypeAuthorizationCode is a OAuth2GrantType enum value
+	OAuth2GrantTypeAuthorizationCode = "AUTHORIZATION_CODE"
+)
+
+// OAuth2GrantType_Values returns all elements of the OAuth2GrantType enum
+func OAuth2GrantType_Values() []string {
+	return []string{
+		OAuth2GrantTypeClientCredentials,
+		OAuth2GrantTypeAuthorizationCode,
+	}
+}
+
+const (
 	// OperatorProjection is a Operator enum value
 	OperatorProjection = "PROJECTION"
 
@@ -12615,6 +15694,98 @@ func OperatorPropertiesKeys_Values() []string {
 		OperatorPropertiesKeysConcatFormat,
 		OperatorPropertiesKeysSubfieldCategoryMap,
 		OperatorPropertiesKeysExcludeSourceFieldsList,
+	}
+}
+
+const (
+	// OperatorsProjection is a Operators enum value
+	OperatorsProjection = "PROJECTION"
+
+	// OperatorsLessThan is a Operators enum value
+	OperatorsLessThan = "LESS_THAN"
+
+	// OperatorsGreaterThan is a Operators enum value
+	OperatorsGreaterThan = "GREATER_THAN"
+
+	// OperatorsContains is a Operators enum value
+	OperatorsContains = "CONTAINS"
+
+	// OperatorsBetween is a Operators enum value
+	OperatorsBetween = "BETWEEN"
+
+	// OperatorsLessThanOrEqualTo is a Operators enum value
+	OperatorsLessThanOrEqualTo = "LESS_THAN_OR_EQUAL_TO"
+
+	// OperatorsGreaterThanOrEqualTo is a Operators enum value
+	OperatorsGreaterThanOrEqualTo = "GREATER_THAN_OR_EQUAL_TO"
+
+	// OperatorsEqualTo is a Operators enum value
+	OperatorsEqualTo = "EQUAL_TO"
+
+	// OperatorsNotEqualTo is a Operators enum value
+	OperatorsNotEqualTo = "NOT_EQUAL_TO"
+
+	// OperatorsAddition is a Operators enum value
+	OperatorsAddition = "ADDITION"
+
+	// OperatorsMultiplication is a Operators enum value
+	OperatorsMultiplication = "MULTIPLICATION"
+
+	// OperatorsDivision is a Operators enum value
+	OperatorsDivision = "DIVISION"
+
+	// OperatorsSubtraction is a Operators enum value
+	OperatorsSubtraction = "SUBTRACTION"
+
+	// OperatorsMaskAll is a Operators enum value
+	OperatorsMaskAll = "MASK_ALL"
+
+	// OperatorsMaskFirstN is a Operators enum value
+	OperatorsMaskFirstN = "MASK_FIRST_N"
+
+	// OperatorsMaskLastN is a Operators enum value
+	OperatorsMaskLastN = "MASK_LAST_N"
+
+	// OperatorsValidateNonNull is a Operators enum value
+	OperatorsValidateNonNull = "VALIDATE_NON_NULL"
+
+	// OperatorsValidateNonZero is a Operators enum value
+	OperatorsValidateNonZero = "VALIDATE_NON_ZERO"
+
+	// OperatorsValidateNonNegative is a Operators enum value
+	OperatorsValidateNonNegative = "VALIDATE_NON_NEGATIVE"
+
+	// OperatorsValidateNumeric is a Operators enum value
+	OperatorsValidateNumeric = "VALIDATE_NUMERIC"
+
+	// OperatorsNoOp is a Operators enum value
+	OperatorsNoOp = "NO_OP"
+)
+
+// Operators_Values returns all elements of the Operators enum
+func Operators_Values() []string {
+	return []string{
+		OperatorsProjection,
+		OperatorsLessThan,
+		OperatorsGreaterThan,
+		OperatorsContains,
+		OperatorsBetween,
+		OperatorsLessThanOrEqualTo,
+		OperatorsGreaterThanOrEqualTo,
+		OperatorsEqualTo,
+		OperatorsNotEqualTo,
+		OperatorsAddition,
+		OperatorsMultiplication,
+		OperatorsDivision,
+		OperatorsSubtraction,
+		OperatorsMaskAll,
+		OperatorsMaskFirstN,
+		OperatorsMaskLastN,
+		OperatorsValidateNonNull,
+		OperatorsValidateNonZero,
+		OperatorsValidateNonNegative,
+		OperatorsValidateNumeric,
+		OperatorsNoOp,
 	}
 }
 
@@ -12799,6 +15970,22 @@ func S3ConnectorOperator_Values() []string {
 		S3ConnectorOperatorValidateNonNegative,
 		S3ConnectorOperatorValidateNumeric,
 		S3ConnectorOperatorNoOp,
+	}
+}
+
+const (
+	// S3InputFileTypeCsv is a S3InputFileType enum value
+	S3InputFileTypeCsv = "CSV"
+
+	// S3InputFileTypeJson is a S3InputFileType enum value
+	S3InputFileTypeJson = "JSON"
+)
+
+// S3InputFileType_Values returns all elements of the S3InputFileType enum
+func S3InputFileType_Values() []string {
+	return []string{
+		S3InputFileTypeCsv,
+		S3InputFileTypeJson,
 	}
 }
 
@@ -13277,6 +16464,9 @@ const (
 	// TaskTypeMerge is a TaskType enum value
 	TaskTypeMerge = "Merge"
 
+	// TaskTypePassthrough is a TaskType enum value
+	TaskTypePassthrough = "Passthrough"
+
 	// TaskTypeTruncate is a TaskType enum value
 	TaskTypeTruncate = "Truncate"
 
@@ -13293,6 +16483,7 @@ func TaskType_Values() []string {
 		TaskTypeMapAll,
 		TaskTypeMask,
 		TaskTypeMerge,
+		TaskTypePassthrough,
 		TaskTypeTruncate,
 		TaskTypeValidate,
 	}
@@ -13485,6 +16676,9 @@ const (
 
 	// WriteOperationTypeUpdate is a WriteOperationType enum value
 	WriteOperationTypeUpdate = "UPDATE"
+
+	// WriteOperationTypeDelete is a WriteOperationType enum value
+	WriteOperationTypeDelete = "DELETE"
 )
 
 // WriteOperationType_Values returns all elements of the WriteOperationType enum
@@ -13493,6 +16687,7 @@ func WriteOperationType_Values() []string {
 		WriteOperationTypeInsert,
 		WriteOperationTypeUpsert,
 		WriteOperationTypeUpdate,
+		WriteOperationTypeDelete,
 	}
 }
 

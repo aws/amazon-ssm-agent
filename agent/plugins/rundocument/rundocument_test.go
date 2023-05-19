@@ -17,22 +17,23 @@ package rundocument
 
 import (
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"testing"
+	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/rundocument/mocks/rundocument"
+	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm/mocks/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"time"
-
-	"io/ioutil"
-
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -52,7 +53,7 @@ var contextMock = context.NewMockDefault()
 var plugin = contracts.PluginState{}
 
 func TestReadFileContents(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
+	fileMock := &filemock.FileSystemMock{}
 	destinationDir := "destination"
 
 	fileMock.On("ReadFile", destinationDir).Return("content", nil)
@@ -65,7 +66,7 @@ func TestReadFileContents(t *testing.T) {
 }
 
 func TestReadFileContents_Fail(t *testing.T) {
-	fileMock := filemock.FileSystemMock{}
+	fileMock := &filemock.FileSystemMock{}
 	destinationDir := "destination"
 
 	fileMock.On("ReadFile", destinationDir).Return("content", fmt.Errorf("Error"))
@@ -151,7 +152,7 @@ func TestExecDocumentImpl_ExecuteDocumentWithMultiplePlugin(t *testing.T) {
 
 func TestExecutePlugin_PrepareDocumentForExecution(t *testing.T) {
 
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 
 	plugin := contracts.PluginState{}
@@ -181,7 +182,7 @@ func TestExecutePlugin_PrepareDocumentForExecution(t *testing.T) {
 
 func TestExecutePlugin_PrepareDocumentForExecutionFail(t *testing.T) {
 
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	localFileMock := filemock.FileSystemMock{}
 
 	conf := createStubConfiguration("orch", "bucket", "prefix", "1234-1234-1234", "directory")
@@ -203,7 +204,7 @@ func TestExecutePlugin_PrepareDocumentForExecutionFail(t *testing.T) {
 }
 
 func TestExecuteImpl_PrepareDocumentForExecutionParametersYAML(t *testing.T) {
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 
 	plugin := contracts.PluginState{}
@@ -235,7 +236,7 @@ param2: world`
 }
 
 func TestExecuteImpl_PrepareDocumentForExecutionParametersJSON(t *testing.T) {
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 
 	plugin := contracts.PluginState{}
@@ -269,7 +270,7 @@ func TestExecuteImpl_PrepareDocumentForExecutionParametersJSON(t *testing.T) {
 func TestPlugin_RunDocumentMaxDepthExceeded(t *testing.T) {
 
 	// Test to check if the max depth code works in the fail case
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	mockplugin := MockDefaultPlugin{}
@@ -278,7 +279,7 @@ func TestPlugin_RunDocumentMaxDepthExceeded(t *testing.T) {
 
 	var input RunDocumentPluginInput
 	input.DocumentType = "LocalPath"
-	input.DocumentPath = "/var/tmp/docLocation/docname.json"
+	input.DocumentPath = filepath.Join("var", "tmp", "docLocation", "docname.json")
 	conf.Properties = &input
 	var executionDepth interface{}
 	executionDepth = createStubExecutionDepth(4)
@@ -301,7 +302,7 @@ func TestPlugin_RunDocumentMaxDepthExceeded(t *testing.T) {
 
 func TestPlugin_RunDocument(t *testing.T) {
 
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	mockplugin := MockDefaultPlugin{}
@@ -310,7 +311,7 @@ func TestPlugin_RunDocument(t *testing.T) {
 
 	var input RunDocumentPluginInput
 	input.DocumentType = LocalPathType
-	input.DocumentPath = "/var/tmp/docLocation/docname.json"
+	input.DocumentPath = filepath.Join("var", "tmp", "docLocation", "docname.json")
 	conf.Properties = &input
 
 	resChan := make(chan contracts.DocumentResult)
@@ -339,7 +340,7 @@ func TestPlugin_RunDocument(t *testing.T) {
 	plugin := contracts.PluginState{}
 	plugins := []contracts.PluginState{plugin}
 
-	fileMock.On("ReadFile", "/var/tmp/docLocation/docname.json").Return(content, nil)
+	fileMock.On("ReadFile", filepath.Join("orch", "downloads", "var", "tmp", "docLocation", "docname.json")).Return(content, nil)
 	execMock.On("ParseDocument", contextMock, []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
 	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
@@ -361,7 +362,7 @@ func TestPlugin_RunDocument(t *testing.T) {
 
 func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	ssmMock := ssmsvc.NewMockDefault()
@@ -398,9 +399,9 @@ func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 	}()
 
 	ssmMock.On("GetDocument", contextMock.Log(), "RunShellScript", "10").Return(&docResponse, nil)
-	fileMock.On("MakeDirs", "orch/downloads").Return(nil)
-	fileMock.On("WriteFile", "orch/downloads/RunShellScript.json", content).Return(nil)
-	fileMock.On("ReadFile", "orch/downloads/RunShellScript.json").Return(content, nil)
+	fileMock.On("MakeDirs", filepath.Join("orch", "downloads")).Return(nil)
+	fileMock.On("WriteFile", filepath.Join("orch", "downloads", "RunShellScript.json"), content).Return(nil)
+	fileMock.On("ReadFile", filepath.Join("orch", "downloads", "RunShellScript.json")).Return(content, nil)
 	execMock.On("ParseDocument", contextMock, []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
 	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
@@ -428,7 +429,7 @@ func TestPlugin_RunDocumentFromSSMDocument(t *testing.T) {
 
 func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
@@ -459,7 +460,7 @@ func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 	}()
 	parameters := make(map[string]interface{})
 
-	fileMock.On("ReadFile", "/var/tmp/document/docName.json").Return(content, nil)
+	fileMock.On("ReadFile", filepath.Join(rootAbsPath, "tmp", "document", "docName.json")).Return(content, nil)
 	execMock.On("ParseDocument", contextMock, []byte(content), conf.OrchestrationDirectory, conf.OutputS3BucketName, conf.OutputS3KeyPrefix, conf.MessageId, conf.PluginID, conf.DefaultWorkingDirectory, parameters).Return(plugins, nil)
 	execMock.On("ExecuteDocument", contextMock, plugins, conf.BookKeepingFileName, mock.Anything).Return(resChan, nil)
 	mockIOHandler.On("GetStatus").Return(contracts.ResultStatusSuccess)
@@ -467,7 +468,7 @@ func TestPlugin_RunDocumentFromAbsLocalPath(t *testing.T) {
 
 	var input RunDocumentPluginInput
 	input.DocumentType = "LocalPath"
-	input.DocumentPath = "/var/tmp/document/docName.json"
+	input.DocumentPath = filepath.Join(rootAbsPath, "tmp", "document", "docName.json")
 	conf.Properties = &input
 
 	p := Plugin{
@@ -583,7 +584,7 @@ func TestDownloadDocumentFromSSM_ARNName(t *testing.T) {
 	input.DocumentType = SSMDocumentType
 	input.DocumentPath = "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument:10"
 
-	execMock := NewExecMock()
+	execMock := rundocument.NewExecMock()
 	fileMock := filemock.FileSystemMock{}
 	ssmMock := ssmsvc.NewMockDefault()
 
@@ -593,8 +594,8 @@ func TestDownloadDocumentFromSSM_ARNName(t *testing.T) {
 	}
 
 	ssmMock.On("GetDocument", contextMock.Log(), "arn:aws:ssm:us-east-1:1234567890:document/mySharedDocument", "10").Return(&docResponse, nil)
-	fileMock.On("MakeDirs", "orch/downloads").Return(nil)
-	fileMock.On("WriteFile", "orch/downloads/mySharedDocument.json", content).Return(nil)
+	fileMock.On("MakeDirs", filepath.Join("orch", "downloads")).Return(nil)
+	fileMock.On("WriteFile", filepath.Join("orch", "downloads", "mySharedDocument.json"), content).Return(nil)
 	p := Plugin{
 		context: contextMock,
 		filesys: &fileMock,
@@ -608,7 +609,7 @@ func TestDownloadDocumentFromSSM_ARNName(t *testing.T) {
 	ssmMock.AssertExpectations(t)
 	execMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
-	assert.Equal(t, pathToFile, "orch/downloads/mySharedDocument.json")
+	assert.Equal(t, pathToFile, filepath.Join("orch", "downloads", "mySharedDocument.json"))
 
 }
 
@@ -636,7 +637,7 @@ type MockDefaultPlugin struct {
 }
 
 func createMockCancelFlag() task.CancelFlag {
-	mockCancelFlag := new(task.MockCancelFlag)
+	mockCancelFlag := new(taskmocks.MockCancelFlag)
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
 	mockCancelFlag.On("ShutDown").Return(false)

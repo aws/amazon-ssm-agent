@@ -68,6 +68,10 @@ type TextractAPI interface {
 	AnalyzeExpenseWithContext(aws.Context, *textract.AnalyzeExpenseInput, ...request.Option) (*textract.AnalyzeExpenseOutput, error)
 	AnalyzeExpenseRequest(*textract.AnalyzeExpenseInput) (*request.Request, *textract.AnalyzeExpenseOutput)
 
+	AnalyzeID(*textract.AnalyzeIDInput) (*textract.AnalyzeIDOutput, error)
+	AnalyzeIDWithContext(aws.Context, *textract.AnalyzeIDInput, ...request.Option) (*textract.AnalyzeIDOutput, error)
+	AnalyzeIDRequest(*textract.AnalyzeIDInput) (*request.Request, *textract.AnalyzeIDOutput)
+
 	DetectDocumentText(*textract.DetectDocumentTextInput) (*textract.DetectDocumentTextOutput, error)
 	DetectDocumentTextWithContext(aws.Context, *textract.DetectDocumentTextInput, ...request.Option) (*textract.DetectDocumentTextOutput, error)
 	DetectDocumentTextRequest(*textract.DetectDocumentTextInput) (*request.Request, *textract.DetectDocumentTextOutput)
@@ -80,6 +84,10 @@ type TextractAPI interface {
 	GetDocumentTextDetectionWithContext(aws.Context, *textract.GetDocumentTextDetectionInput, ...request.Option) (*textract.GetDocumentTextDetectionOutput, error)
 	GetDocumentTextDetectionRequest(*textract.GetDocumentTextDetectionInput) (*request.Request, *textract.GetDocumentTextDetectionOutput)
 
+	GetExpenseAnalysis(*textract.GetExpenseAnalysisInput) (*textract.GetExpenseAnalysisOutput, error)
+	GetExpenseAnalysisWithContext(aws.Context, *textract.GetExpenseAnalysisInput, ...request.Option) (*textract.GetExpenseAnalysisOutput, error)
+	GetExpenseAnalysisRequest(*textract.GetExpenseAnalysisInput) (*request.Request, *textract.GetExpenseAnalysisOutput)
+
 	StartDocumentAnalysis(*textract.StartDocumentAnalysisInput) (*textract.StartDocumentAnalysisOutput, error)
 	StartDocumentAnalysisWithContext(aws.Context, *textract.StartDocumentAnalysisInput, ...request.Option) (*textract.StartDocumentAnalysisOutput, error)
 	StartDocumentAnalysisRequest(*textract.StartDocumentAnalysisInput) (*request.Request, *textract.StartDocumentAnalysisOutput)
@@ -87,6 +95,10 @@ type TextractAPI interface {
 	StartDocumentTextDetection(*textract.StartDocumentTextDetectionInput) (*textract.StartDocumentTextDetectionOutput, error)
 	StartDocumentTextDetectionWithContext(aws.Context, *textract.StartDocumentTextDetectionInput, ...request.Option) (*textract.StartDocumentTextDetectionOutput, error)
 	StartDocumentTextDetectionRequest(*textract.StartDocumentTextDetectionInput) (*request.Request, *textract.StartDocumentTextDetectionOutput)
+
+	StartExpenseAnalysis(*textract.StartExpenseAnalysisInput) (*textract.StartExpenseAnalysisOutput, error)
+	StartExpenseAnalysisWithContext(aws.Context, *textract.StartExpenseAnalysisInput, ...request.Option) (*textract.StartExpenseAnalysisOutput, error)
+	StartExpenseAnalysisRequest(*textract.StartExpenseAnalysisInput) (*request.Request, *textract.StartExpenseAnalysisOutput)
 }
 
 var _ TextractAPI = (*textract.Textract)(nil)

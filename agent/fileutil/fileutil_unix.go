@@ -29,6 +29,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
+const (
+	fileNotFoundErrorMessage = "open : no such file or directory"
+)
+
 // Uncompress untar the installation package
 func Uncompress(log log.T, src, dest string) error {
 	file, err := os.Open(src)

@@ -22,7 +22,15 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
+)
+
+const (
+	legacyUpdaterArtifactsRoot   = "/var/log/amazon/ssm/update/"
+	firstAgentWithNewUpdaterPath = "1.1.86.0"
 )
 
 func prepareProcess(command *exec.Cmd) {
@@ -41,6 +49,30 @@ func isAgentServiceRunning(log log.T) (bool, error) {
 	return strings.Contains(agentStatus, "amazon-ssm-agent start/running"), nil
 }
 
+// UpdateInstallDelayer delays the agent install when domain join reboot doc found
+func (util *Utility) UpdateInstallDelayer(ctx context.T, updateRoot string) error {
+	return nil
+}
+
+// LoadUpdateDocumentState loads the update document state from Pending queue
+func (util *Utility) LoadUpdateDocumentState(ctx context.T, commandId string) error {
+	return nil
+}
+
 func setPlatformSpecificCommand(parts []string) []string {
 	return parts
+}
+
+// ResolveUpdateRoot returns the platform specific path to update artifacts
+func ResolveUpdateRoot(sourceVersion string) (string, error) {
+	compareResult, err := versionutil.VersionCompare(sourceVersion, firstAgentWithNewUpdaterPath)
+	if err != nil {
+		return "", err
+	}
+	// New versions that with new binary locations
+	if compareResult >= 0 {
+		return appconfig.UpdaterArtifactsRoot, nil
+	}
+
+	return legacyUpdaterArtifactsRoot, nil
 }

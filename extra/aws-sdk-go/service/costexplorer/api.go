@@ -553,13 +553,13 @@ func (c *CostExplorer) DescribeCostCategoryDefinitionRequest(input *DescribeCost
 
 // DescribeCostCategoryDefinition API operation for AWS Cost Explorer Service.
 //
-// Returns the name, ARN, rules, definition, and effective dates of a Cost Category
-// that's defined in the account.
+// Returns the name, Amazon Resource Name (ARN), rules, definition, and effective
+// dates of a Cost Category that's defined in the account.
 //
-// You have the option to use EffectiveOn to return a Cost Category that is
-// active on a specific date. If there is no EffectiveOn specified, you’ll
-// see a Cost Category that is effective on the current date. If Cost Category
-// is still effective, EffectiveEnd is omitted in the response.
+// You have the option to use EffectiveOn to return a Cost Category that's active
+// on a specific date. If there's no EffectiveOn specified, you see a Cost Category
+// that's effective on the current date. If Cost Category is still effective,
+// EffectiveEnd is omitted in the response.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1008,8 +1008,8 @@ func (c *CostExplorer) GetCostAndUsageWithResourcesRequest(input *GetCostAndUsag
 // Compute Cloud – Compute service only.
 //
 // This is an opt-in only feature. You can enable this feature from the Cost
-// Explorer Settings page. For information on how to access the Settings page,
-// see Controlling Access for Cost Explorer (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html)
+// Explorer Settings page. For information about how to access the Settings
+// page, see Controlling Access for Cost Explorer (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html)
 // in the Billing and Cost Management User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1373,7 +1373,7 @@ func (c *CostExplorer) GetReservationCoverageRequest(input *GetReservationCovera
 
 // GetReservationCoverage API operation for AWS Cost Explorer Service.
 //
-// Retrieves the reservation coverage for your account. This enables you to
+// Retrieves the reservation coverage for your account, which you can use to
 // see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon
 // Relational Database Service, or Amazon Redshift usage is covered by a reservation.
 // An organization's management account can see the coverage of the associated
@@ -1490,26 +1490,26 @@ func (c *CostExplorer) GetReservationPurchaseRecommendationRequest(input *GetRes
 
 // GetReservationPurchaseRecommendation API operation for AWS Cost Explorer Service.
 //
-// Gets recommendations for which reservations to purchase. These recommendations
-// could help you reduce your costs. Reservations provide a discounted hourly
-// rate (up to 75%) compared to On-Demand pricing.
+// Gets recommendations for reservation purchases. These recommendations might
+// help you to reduce your costs. Reservations provide a discounted hourly rate
+// (up to 75%) compared to On-Demand pricing.
 //
 // Amazon Web Services generates your recommendations by identifying your On-Demand
 // usage during a specific time period and collecting your usage into categories
 // that are eligible for a reservation. After Amazon Web Services has these
 // categories, it simulates every combination of reservations in each category
-// of usage to identify the best number of each type of RI to purchase to maximize
-// your estimated savings.
+// of usage to identify the best number of each type of Reserved Instance (RI)
+// to purchase to maximize your estimated savings.
 //
 // For example, Amazon Web Services automatically aggregates your Amazon EC2
 // Linux, shared tenancy, and c4 family usage in the US West (Oregon) Region
 // and recommends that you buy size-flexible regional reservations to apply
 // to the c4 family usage. Amazon Web Services recommends the smallest size
 // instance in an instance family. This makes it easier to purchase a size-flexible
-// RI. Amazon Web Services also shows the equal number of normalized units so
-// that you can purchase any instance size that you want. For this example,
-// your RI recommendation would be for c4.large because that is the smallest
-// size instance in the c4 instance family.
+// Reserved Instance (RI). Amazon Web Services also shows the equal number of
+// normalized units. This way, you can purchase any instance size that you want.
+// For this example, your RI recommendation is for c4.large because that is
+// the smallest size instance in the c4 instance family.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1686,8 +1686,9 @@ func (c *CostExplorer) GetRightsizingRecommendationRequest(input *GetRightsizing
 // Amazon EC2 instances.
 //
 // Recommendations are generated to either downsize or terminate instances,
-// along with providing savings detail and metrics. For details on calculation
-// and function, see Optimizing Your Cost with Rightsizing Recommendations (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
+// along with providing savings detail and metrics. For more information about
+// calculation and function, see Optimizing Your Cost with Rightsizing Recommendations
+// (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html)
 // in the Billing and Cost Management User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2016,7 +2017,7 @@ func (c *CostExplorer) GetSavingsPlansUtilizationRequest(input *GetSavingsPlansU
 // have access to member accounts. You can use GetDimensionValues in SAVINGS_PLANS
 // to determine the possible dimension values.
 //
-// You cannot group by any dimension values for GetSavingsPlansUtilization.
+// You can't group by any dimension values for GetSavingsPlansUtilization.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2385,6 +2386,147 @@ func (c *CostExplorer) GetUsageForecastWithContext(ctx aws.Context, input *GetUs
 	return out, req.Send()
 }
 
+const opListCostAllocationTags = "ListCostAllocationTags"
+
+// ListCostAllocationTagsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCostAllocationTags operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCostAllocationTags for more information on using the ListCostAllocationTags
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListCostAllocationTagsRequest method.
+//    req, resp := client.ListCostAllocationTagsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/ListCostAllocationTags
+func (c *CostExplorer) ListCostAllocationTagsRequest(input *ListCostAllocationTagsInput) (req *request.Request, output *ListCostAllocationTagsOutput) {
+	op := &request.Operation{
+		Name:       opListCostAllocationTags,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCostAllocationTagsInput{}
+	}
+
+	output = &ListCostAllocationTagsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCostAllocationTags API operation for AWS Cost Explorer Service.
+//
+// Get a list of cost allocation tags. All inputs in the API are optional and
+// serve as filters. By default, all cost allocation tags are returned.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Cost Explorer Service's
+// API operation ListCostAllocationTags for usage and error information.
+//
+// Returned Error Types:
+//   * LimitExceededException
+//   You made too many calls in a short period of time. Try again later.
+//
+//   * InvalidNextTokenException
+//   The pagination token is invalid. Try again without a pagination token.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/ListCostAllocationTags
+func (c *CostExplorer) ListCostAllocationTags(input *ListCostAllocationTagsInput) (*ListCostAllocationTagsOutput, error) {
+	req, out := c.ListCostAllocationTagsRequest(input)
+	return out, req.Send()
+}
+
+// ListCostAllocationTagsWithContext is the same as ListCostAllocationTags with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCostAllocationTags for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) ListCostAllocationTagsWithContext(ctx aws.Context, input *ListCostAllocationTagsInput, opts ...request.Option) (*ListCostAllocationTagsOutput, error) {
+	req, out := c.ListCostAllocationTagsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCostAllocationTagsPages iterates over the pages of a ListCostAllocationTags operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCostAllocationTags method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCostAllocationTags operation.
+//    pageNum := 0
+//    err := client.ListCostAllocationTagsPages(params,
+//        func(page *costexplorer.ListCostAllocationTagsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *CostExplorer) ListCostAllocationTagsPages(input *ListCostAllocationTagsInput, fn func(*ListCostAllocationTagsOutput, bool) bool) error {
+	return c.ListCostAllocationTagsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCostAllocationTagsPagesWithContext same as ListCostAllocationTagsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) ListCostAllocationTagsPagesWithContext(ctx aws.Context, input *ListCostAllocationTagsInput, fn func(*ListCostAllocationTagsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCostAllocationTagsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCostAllocationTagsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCostAllocationTagsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListCostCategoryDefinitions = "ListCostCategoryDefinitions"
 
 // ListCostCategoryDefinitionsRequest generates a "aws/request.Request" representing the
@@ -2435,13 +2577,13 @@ func (c *CostExplorer) ListCostCategoryDefinitionsRequest(input *ListCostCategor
 
 // ListCostCategoryDefinitions API operation for AWS Cost Explorer Service.
 //
-// Returns the name, ARN, NumberOfRules and effective dates of all Cost Categories
-// defined in the account. You have the option to use EffectiveOn to return
-// a list of Cost Categories that were active on a specific date. If there is
-// no EffectiveOn specified, you’ll see Cost Categories that are effective
-// on the current date. If Cost Category is still effective, EffectiveEnd is
-// omitted in the response. ListCostCategoryDefinitions supports pagination.
-// The request can have a MaxResults range up to 100.
+// Returns the name, Amazon Resource Name (ARN), NumberOfRules and effective
+// dates of all Cost Categories defined in the account. You have the option
+// to use EffectiveOn to return a list of Cost Categories that were active on
+// a specific date. If there is no EffectiveOn specified, you’ll see Cost
+// Categories that are effective on the current date. If Cost Category is still
+// effective, EffectiveEnd is omitted in the response. ListCostCategoryDefinitions
+// supports pagination. The request can have a MaxResults range up to 100.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2528,6 +2670,89 @@ func (c *CostExplorer) ListCostCategoryDefinitionsPagesWithContext(ctx aws.Conte
 	return p.Err()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/ListTagsForResource
+func (c *CostExplorer) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for AWS Cost Explorer Service.
+//
+// Returns a list of resource tags associated with the resource specified by
+// the Amazon Resource Name (ARN).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Cost Explorer Service's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified ARN in the request doesn't exist.
+//
+//   * LimitExceededException
+//   You made too many calls in a short period of time. Try again later.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/ListTagsForResource
+func (c *CostExplorer) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opProvideAnomalyFeedback = "ProvideAnomalyFeedback"
 
 // ProvideAnomalyFeedbackRequest generates a "aws/request.Request" representing the
@@ -2607,6 +2832,186 @@ func (c *CostExplorer) ProvideAnomalyFeedbackWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/TagResource
+func (c *CostExplorer) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AWS Cost Explorer Service.
+//
+// An API operation for adding one or more tags (key-value pairs) to a resource.
+//
+// You can use the TagResource operation with a resource that already has tags.
+// If you specify a new tag key for the resource, this tag is appended to the
+// list of tags associated with the resource. If you specify a tag key that
+// is already associated with the resource, the new tag value you specify replaces
+// the previous value for that tag.
+//
+// Although the maximum number of array members is 200, user-tag maximum is
+// 50. The remaining are reserved for Amazon Web Services use.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Cost Explorer Service's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified ARN in the request doesn't exist.
+//
+//   * TooManyTagsException
+//   Can occur if you specify a number of tags for a resource greater than the
+//   maximum 50 user tags per resource.
+//
+//   * LimitExceededException
+//   You made too many calls in a short period of time. Try again later.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/TagResource
+func (c *CostExplorer) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/UntagResource
+func (c *CostExplorer) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AWS Cost Explorer Service.
+//
+// Removes one or more tags from a resource. Specify only tag keys in your request.
+// Don't specify the value.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Cost Explorer Service's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified ARN in the request doesn't exist.
+//
+//   * LimitExceededException
+//   You made too many calls in a short period of time. Try again later.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/UntagResource
+func (c *CostExplorer) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateAnomalyMonitor = "UpdateAnomalyMonitor"
 
 // UpdateAnomalyMonitorRequest generates a "aws/request.Request" representing the
@@ -2652,7 +3057,7 @@ func (c *CostExplorer) UpdateAnomalyMonitorRequest(input *UpdateAnomalyMonitorIn
 // UpdateAnomalyMonitor API operation for AWS Cost Explorer Service.
 //
 // Updates an existing cost anomaly monitor. The changes made are applied going
-// forward, and doesn'tt change anomalies detected in the past.
+// forward, and doesn't change anomalies detected in the past.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2775,6 +3180,88 @@ func (c *CostExplorer) UpdateAnomalySubscriptionWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opUpdateCostAllocationTagsStatus = "UpdateCostAllocationTagsStatus"
+
+// UpdateCostAllocationTagsStatusRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCostAllocationTagsStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateCostAllocationTagsStatus for more information on using the UpdateCostAllocationTagsStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateCostAllocationTagsStatusRequest method.
+//    req, resp := client.UpdateCostAllocationTagsStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/UpdateCostAllocationTagsStatus
+func (c *CostExplorer) UpdateCostAllocationTagsStatusRequest(input *UpdateCostAllocationTagsStatusInput) (req *request.Request, output *UpdateCostAllocationTagsStatusOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCostAllocationTagsStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateCostAllocationTagsStatusInput{}
+	}
+
+	output = &UpdateCostAllocationTagsStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateCostAllocationTagsStatus API operation for AWS Cost Explorer Service.
+//
+// Updates status for cost allocation tags in bulk, with maximum batch size
+// of 20. If the tag status that's updated is the same as the existing tag status,
+// the request doesn't fail. Instead, it doesn't have any effect on the tag
+// status (for example, activating the active tag).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Cost Explorer Service's
+// API operation UpdateCostAllocationTagsStatus for usage and error information.
+//
+// Returned Error Types:
+//   * LimitExceededException
+//   You made too many calls in a short period of time. Try again later.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/UpdateCostAllocationTagsStatus
+func (c *CostExplorer) UpdateCostAllocationTagsStatus(input *UpdateCostAllocationTagsStatusInput) (*UpdateCostAllocationTagsStatusOutput, error) {
+	req, out := c.UpdateCostAllocationTagsStatusRequest(input)
+	return out, req.Send()
+}
+
+// UpdateCostAllocationTagsStatusWithContext is the same as UpdateCostAllocationTagsStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateCostAllocationTagsStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) UpdateCostAllocationTagsStatusWithContext(ctx aws.Context, input *UpdateCostAllocationTagsStatusInput, opts ...request.Option) (*UpdateCostAllocationTagsStatusOutput, error) {
+	req, out := c.UpdateCostAllocationTagsStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateCostCategoryDefinition = "UpdateCostCategoryDefinition"
 
 // UpdateCostCategoryDefinitionRequest generates a "aws/request.Request" representing the
@@ -2884,8 +3371,8 @@ type Anomaly struct {
 	// The first day the anomaly is detected.
 	AnomalyStartDate *string `type:"string"`
 
-	// The dimension for the anomaly (for example, an Amazon Web Services service
-	// in a service monitor).
+	// The dimension for the anomaly (for example, an Amazon Web Service in a service
+	// monitor).
 	DimensionValue *string `type:"string"`
 
 	// The feedback value.
@@ -3439,6 +3926,129 @@ func (s *BillExpirationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The cost allocation tag structure. This includes detailed metadata for the
+// CostAllocationTag object.
+type CostAllocationTag struct {
+	_ struct{} `type:"structure"`
+
+	// The status of a cost allocation tag.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"CostAllocationTagStatus"`
+
+	// The key for the cost allocation tag.
+	//
+	// TagKey is a required field
+	TagKey *string `type:"string" required:"true"`
+
+	// The type of cost allocation tag. You can use AWSGenerated or UserDefined
+	// type tags. AWSGenerated type tags are tags that Amazon Web Services defines
+	// and applies to support Amazon Web Services resources for cost allocation
+	// purposes. UserDefined type tags are tags that you define, create, and apply
+	// to resources.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"CostAllocationTagType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CostAllocationTag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CostAllocationTag) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *CostAllocationTag) SetStatus(v string) *CostAllocationTag {
+	s.Status = &v
+	return s
+}
+
+// SetTagKey sets the TagKey field's value.
+func (s *CostAllocationTag) SetTagKey(v string) *CostAllocationTag {
+	s.TagKey = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CostAllocationTag) SetType(v string) *CostAllocationTag {
+	s.Type = &v
+	return s
+}
+
+// The cost allocation tag status. The status of a key can either be active
+// or inactive.
+type CostAllocationTagStatusEntry struct {
+	_ struct{} `type:"structure"`
+
+	// The status of a cost allocation tag.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"CostAllocationTagStatus"`
+
+	// The key for the cost allocation tag.
+	//
+	// TagKey is a required field
+	TagKey *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CostAllocationTagStatusEntry) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CostAllocationTagStatusEntry) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CostAllocationTagStatusEntry) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CostAllocationTagStatusEntry"}
+	if s.Status == nil {
+		invalidParams.Add(request.NewErrParamRequired("Status"))
+	}
+	if s.TagKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKey"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStatus sets the Status field's value.
+func (s *CostAllocationTagStatusEntry) SetStatus(v string) *CostAllocationTagStatusEntry {
+	s.Status = &v
+	return s
+}
+
+// SetTagKey sets the TagKey field's value.
+func (s *CostAllocationTagStatusEntry) SetTagKey(v string) *CostAllocationTagStatusEntry {
+	s.TagKey = &v
+	return s
+}
+
 // The structure of Cost Categories. This includes detailed metadata and the
 // set of rules for the CostCategory object.
 type CostCategory struct {
@@ -3558,13 +4168,13 @@ func (s *CostCategory) SetSplitChargeRules(v []*CostCategorySplitChargeRule) *Co
 	return s
 }
 
-// When creating or updating a cost category, you can define the CostCategoryRule
-// rule type as INHERITED_VALUE. This rule type adds the flexibility of defining
+// When you create or update a cost category, you can define the CostCategoryRule
+// rule type as INHERITED_VALUE. This rule type adds the flexibility to define
 // a rule that dynamically inherits the cost category value from the dimension
-// value defined by CostCategoryInheritedValueDimension. For example, if you
-// want to dynamically group costs that are based on the value of a specific
-// tag key, first choose an inherited value rule type, then choose the tag dimension
-// and specify the tag key to use.
+// value that's defined by CostCategoryInheritedValueDimension. For example,
+// suppose that you want to dynamically group costs that are based on the value
+// of a specific tag key. First, choose an inherited value rule type, and then
+// choose the tag dimension and specify the tag key to use.
 type CostCategoryInheritedValueDimension struct {
 	_ struct{} `type:"structure"`
 
@@ -3574,8 +4184,8 @@ type CostCategoryInheritedValueDimension struct {
 	// The name of the dimension that's used to group costs.
 	//
 	// If you specify LINKED_ACCOUNT_NAME, the cost category value is based on account
-	// name. If you specify TAG, the cost category value will be based on the value
-	// of the specified tag key.
+	// name. If you specify TAG, the cost category value is based on the value of
+	// the specified tag key.
 	DimensionName *string `type:"string" enum:"CostCategoryInheritedValueDimensionName"`
 }
 
@@ -3777,12 +4387,12 @@ type CostCategoryRule struct {
 	Rule *Expression `type:"structure"`
 
 	// You can define the CostCategoryRule rule type as either REGULAR or INHERITED_VALUE.
-	// The INHERITED_VALUE rule type adds the flexibility of defining a rule that
-	// dynamically inherits the cost category value from the dimension value defined
-	// by CostCategoryInheritedValueDimension. For example, if you want to dynamically
-	// group costs based on the value of a specific tag key, first choose an inherited
-	// value rule type, then choose the tag dimension and specify the tag key to
-	// use.
+	// The INHERITED_VALUE rule type adds the flexibility to define a rule that
+	// dynamically inherits the cost category value. This value is from the dimension
+	// value that's defined by CostCategoryInheritedValueDimension. For example,
+	// suppose that you want to costs to be dynamically grouped based on the value
+	// of a specific tag key. First, choose an inherited value rule type, and then
+	// choose the tag dimension and specify the tag key to use.
 	Type *string `type:"string" enum:"CostCategoryRuleType"`
 
 	// The default value for the cost category.
@@ -4045,7 +4655,7 @@ type CostCategoryValues struct {
 	// The match options that you can use to filter your results. MatchOptions is
 	// only applicable for actions related to cost category. The default values
 	// for MatchOptions is EQUALS and CASE_SENSITIVE.
-	MatchOptions []*string `type:"list"`
+	MatchOptions []*string `type:"list" enum:"MatchOption"`
 
 	// The specific value of the Cost Category.
 	Values []*string `type:"list"`
@@ -4370,6 +4980,31 @@ type CreateAnomalyMonitorInput struct {
 	//
 	// AnomalyMonitor is a required field
 	AnomalyMonitor *AnomalyMonitor `type:"structure" required:"true"`
+
+	// An optional list of tags to associate with the specified AnomalyMonitor (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_AnomalyMonitor.html).
+	// You can use resource tags to control access to your monitor using IAM policies.
+	//
+	// Each tag consists of a key and a value, and each key must be unique for the
+	// resource. The following restrictions apply to resource tags:
+	//
+	//    * Although the maximum number of array members is 200, you can assign
+	//    a maximum of 50 user-tags to one resource. The remaining are reserved
+	//    for Amazon Web Services use
+	//
+	//    * The maximum length of a key is 128 characters
+	//
+	//    * The maximum length of a value is 256 characters
+	//
+	//    * Keys and values can only contain alphanumeric characters, spaces, and
+	//    any of the following: _.:/=+@-
+	//
+	//    * Keys and values are case sensitive
+	//
+	//    * Keys and values are trimmed for any leading or trailing whitespaces
+	//
+	//    * Don’t use aws: as a prefix for your keys. This prefix is reserved
+	//    for Amazon Web Services use
+	ResourceTags []*ResourceTag `type:"list"`
 }
 
 // String returns the string representation.
@@ -4401,6 +5036,16 @@ func (s *CreateAnomalyMonitorInput) Validate() error {
 			invalidParams.AddNested("AnomalyMonitor", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ResourceTags != nil {
+		for i, v := range s.ResourceTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ResourceTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4411,6 +5056,12 @@ func (s *CreateAnomalyMonitorInput) Validate() error {
 // SetAnomalyMonitor sets the AnomalyMonitor field's value.
 func (s *CreateAnomalyMonitorInput) SetAnomalyMonitor(v *AnomalyMonitor) *CreateAnomalyMonitorInput {
 	s.AnomalyMonitor = v
+	return s
+}
+
+// SetResourceTags sets the ResourceTags field's value.
+func (s *CreateAnomalyMonitorInput) SetResourceTags(v []*ResourceTag) *CreateAnomalyMonitorInput {
+	s.ResourceTags = v
 	return s
 }
 
@@ -4454,6 +5105,33 @@ type CreateAnomalySubscriptionInput struct {
 	//
 	// AnomalySubscription is a required field
 	AnomalySubscription *AnomalySubscription `type:"structure" required:"true"`
+
+	// An optional list of tags to associate with the specified AnomalySubscription
+	// (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_AnomalySubscription.html).
+	// You can use resource tags to control access to your subscription using IAM
+	// policies.
+	//
+	// Each tag consists of a key and a value, and each key must be unique for the
+	// resource. The following restrictions apply to resource tags:
+	//
+	//    * Although the maximum number of array members is 200, you can assign
+	//    a maximum of 50 user-tags to one resource. The remaining are reserved
+	//    for Amazon Web Services use
+	//
+	//    * The maximum length of a key is 128 characters
+	//
+	//    * The maximum length of a value is 256 characters
+	//
+	//    * Keys and values can only contain alphanumeric characters, spaces, and
+	//    any of the following: _.:/=+@-
+	//
+	//    * Keys and values are case sensitive
+	//
+	//    * Keys and values are trimmed for any leading or trailing whitespaces
+	//
+	//    * Don’t use aws: as a prefix for your keys. This prefix is reserved
+	//    for Amazon Web Services use
+	ResourceTags []*ResourceTag `type:"list"`
 }
 
 // String returns the string representation.
@@ -4485,6 +5163,16 @@ func (s *CreateAnomalySubscriptionInput) Validate() error {
 			invalidParams.AddNested("AnomalySubscription", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ResourceTags != nil {
+		for i, v := range s.ResourceTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ResourceTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4495,6 +5183,12 @@ func (s *CreateAnomalySubscriptionInput) Validate() error {
 // SetAnomalySubscription sets the AnomalySubscription field's value.
 func (s *CreateAnomalySubscriptionInput) SetAnomalySubscription(v *AnomalySubscription) *CreateAnomalySubscriptionInput {
 	s.AnomalySubscription = v
+	return s
+}
+
+// SetResourceTags sets the ResourceTags field's value.
+func (s *CreateAnomalySubscriptionInput) SetResourceTags(v []*ResourceTag) *CreateAnomalySubscriptionInput {
+	s.ResourceTags = v
 	return s
 }
 
@@ -4541,6 +5235,32 @@ type CreateCostCategoryDefinitionInput struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	// An optional list of tags to associate with the specified CostCategory (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_CostCategory.html).
+	// You can use resource tags to control access to your cost category using IAM
+	// policies.
+	//
+	// Each tag consists of a key and a value, and each key must be unique for the
+	// resource. The following restrictions apply to resource tags:
+	//
+	//    * Although the maximum number of array members is 200, you can assign
+	//    a maximum of 50 user-tags to one resource. The remaining are reserved
+	//    for Amazon Web Services use
+	//
+	//    * The maximum length of a key is 128 characters
+	//
+	//    * The maximum length of a value is 256 characters
+	//
+	//    * Keys and values can only contain alphanumeric characters, spaces, and
+	//    any of the following: _.:/=+@-
+	//
+	//    * Keys and values are case sensitive
+	//
+	//    * Keys and values are trimmed for any leading or trailing whitespaces
+	//
+	//    * Don’t use aws: as a prefix for your keys. This prefix is reserved
+	//    for Amazon Web Services use
+	ResourceTags []*ResourceTag `type:"list"`
 
 	// The rule schema version in this particular Cost Category.
 	//
@@ -4600,6 +5320,16 @@ func (s *CreateCostCategoryDefinitionInput) Validate() error {
 	if s.SplitChargeRules != nil && len(s.SplitChargeRules) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SplitChargeRules", 1))
 	}
+	if s.ResourceTags != nil {
+		for i, v := range s.ResourceTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ResourceTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.Rules != nil {
 		for i, v := range s.Rules {
 			if v == nil {
@@ -4636,6 +5366,12 @@ func (s *CreateCostCategoryDefinitionInput) SetDefaultValue(v string) *CreateCos
 // SetName sets the Name field's value.
 func (s *CreateCostCategoryDefinitionInput) SetName(v string) *CreateCostCategoryDefinitionInput {
 	s.Name = &v
+	return s
+}
+
+// SetResourceTags sets the ResourceTags field's value.
+func (s *CreateCostCategoryDefinitionInput) SetResourceTags(v []*ResourceTag) *CreateCostCategoryDefinitionInput {
+	s.ResourceTags = v
 	return s
 }
 
@@ -5145,7 +5881,7 @@ type DeleteCostCategoryDefinitionOutput struct {
 	CostCategoryArn *string `min:"20" type:"string"`
 
 	// The effective end date of the Cost Category as a result of deleting it. No
-	// costs after this date will be categorized by the deleted Cost Category.
+	// costs after this date is categorized by the deleted Cost Category.
 	EffectiveEnd *string `min:"20" type:"string"`
 }
 
@@ -5284,7 +6020,7 @@ type DimensionValues struct {
 	// The match options that you can use to filter your results. MatchOptions is
 	// only applicable for actions related to Cost Category. The default values
 	// for MatchOptions are EQUALS and CASE_SENSITIVE.
-	MatchOptions []*string `type:"list"`
+	MatchOptions []*string `type:"list" enum:"MatchOption"`
 
 	// The metadata values that you can use to filter and group your results. You
 	// can use GetDimensionValues to find specific values.
@@ -5692,7 +6428,7 @@ func (s *EC2ResourceDetails) SetVcpu(v string) *EC2ResourceDetails {
 	return s
 }
 
-// Utilization metrics of the instance.
+// Utilization metrics for the instance.
 type EC2ResourceUtilization struct {
 	_ struct{} `type:"structure"`
 
@@ -5806,8 +6542,8 @@ func (s *EC2Specification) SetOfferingClass(v string) *EC2Specification {
 	return s
 }
 
-// Details about the Amazon ES instances that Amazon Web Services recommends
-// that you purchase.
+// Details about the Amazon OpenSearch Service instances that Amazon Web Services
+// recommends that you purchase.
 type ESInstanceDetails struct {
 	_ struct{} `type:"structure"`
 
@@ -6511,6 +7247,11 @@ type GetCostAndUsageInput struct {
 	// with that account's usage of that service. You can nest Expression objects
 	// to define any combination of dimension filters. For more information, see
 	// Expression (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html).
+	//
+	// Valid values for MatchOptions for Dimensions are EQUALS and CASE_SENSITIVE.
+	//
+	// Valid values for MatchOptions for CostCategories and Tags are EQUALS, ABSENT,
+	// and CASE_SENSITIVE. Default values are EQUALS and CASE_SENSITIVE.
 	Filter *Expression `type:"structure"`
 
 	// Sets the Amazon Web Services cost granularity to MONTHLY or DAILY, or HOURLY.
@@ -6524,8 +7265,8 @@ type GetCostAndUsageInput struct {
 	// either dimensions, tag keys, cost categories, or any two group by types.
 	//
 	// Valid values for the DIMENSION type are AZ, INSTANCE_TYPE, LEGAL_ENTITY_NAME,
-	// LINKED_ACCOUNT, OPERATION, PLATFORM, PURCHASE_TYPE, SERVICE, TENANCY, RECORD_TYPE,
-	// and USAGE_TYPE.
+	// INVOICING_ENTITY, LINKED_ACCOUNT, OPERATION, PLATFORM, PURCHASE_TYPE, SERVICE,
+	// TENANCY, RECORD_TYPE, and USAGE_TYPE.
 	//
 	// When you group by the TAG type and include a valid tag key, you get all tag
 	// values, including empty strings.
@@ -6723,6 +7464,11 @@ type GetCostAndUsageWithResourcesInput struct {
 	// by or filter by a ResourceId. It requires the Expression (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html)
 	// "SERVICE = Amazon Elastic Compute Cloud - Compute" in the filter.
 	//
+	// Valid values for MatchOptions for Dimensions are EQUALS and CASE_SENSITIVE.
+	//
+	// Valid values for MatchOptions for CostCategories and Tags are EQUALS, ABSENT,
+	// and CASE_SENSITIVE. Default values are EQUALS and CASE_SENSITIVE.
+	//
 	// Filter is a required field
 	Filter *Expression `type:"structure" required:"true"`
 
@@ -6748,7 +7494,7 @@ type GetCostAndUsageWithResourcesInput struct {
 	// numbers without taking the units into account. For example, if you aggregate
 	// usageQuantity across all of Amazon EC2, the results aren't meaningful because
 	// Amazon EC2 compute hours and data transfer are measured in different units
-	// (for example, hours vs. GB). To get more meaningful UsageQuantity metrics,
+	// (for example, hour or GB). To get more meaningful UsageQuantity metrics,
 	// filter by UsageType or UsageTypeGroups.
 	//
 	// Metrics is required for GetCostAndUsageWithResources requests.
@@ -6869,7 +7615,7 @@ type GetCostAndUsageWithResourcesOutput struct {
 	// maximum page size.
 	NextPageToken *string `type:"string"`
 
-	// The time period that is covered by the results in the response.
+	// The time period that's covered by the results in the response.
 	ResultsByTime []*ResultByTime `type:"list"`
 }
 
@@ -6956,32 +7702,32 @@ type GetCostCategoriesInput struct {
 	// AND and OR aren't supported. Dimensions are limited to LINKED_ACCOUNT.
 	Filter *Expression `type:"structure"`
 
-	// This field is only used when SortBy is provided in the request.
+	// This field is only used when the SortBy value is provided in the request.
 	//
-	// The maximum number of objects that to be returned for this request. If MaxResults
-	// is not specified with SortBy, the request will return 1000 results as the
-	// default value for this parameter.
+	// The maximum number of objects that are returned for this request. If MaxResults
+	// isn't specified with the SortBy value, the request returns 1000 results as
+	// the default value for this parameter.
 	//
-	// For GetCostCategories, MaxResults has an upper limit of 1000.
+	// For GetCostCategories, MaxResults has an upper quota of 1000.
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// If the number of objects that are still available for retrieval exceeds the
-	// limit, Amazon Web Services returns a NextPageToken value in the response.
+	// quota, Amazon Web Services returns a NextPageToken value in the response.
 	// To retrieve the next batch of objects, provide the NextPageToken from the
-	// prior call in your next request.
+	// previous call in your next request.
 	NextPageToken *string `type:"string"`
 
 	// The value that you want to search the filter values for.
 	//
-	// If you do not specify a CostCategoryName, SearchString will be used to filter
-	// Cost Category names that match the SearchString pattern. If you do specifiy
-	// a CostCategoryName, SearchString will be used to filter Cost Category values
-	// that match the SearchString pattern.
+	// If you don't specify a CostCategoryName, SearchString is used to filter Cost
+	// Category names that match the SearchString pattern. If you specify a CostCategoryName,
+	// SearchString is used to filter Cost Category values that match the SearchString
+	// pattern.
 	SearchString *string `type:"string"`
 
-	// The value by which you want to sort the data.
+	// The value that you sort the data by.
 	//
-	// The key represents cost and usage metrics. The following values are supported:
+	// The key represents the cost and usage metrics. The following values are supported:
 	//
 	//    * BlendedCost
 	//
@@ -6997,9 +7743,10 @@ type GetCostCategoriesInput struct {
 	//
 	//    * NormalizedUsageAmount
 	//
-	// Supported values for SortOrder are ASCENDING or DESCENDING.
+	// The supported key values for the SortOrder value are ASCENDING and DESCENDING.
 	//
-	// When using SortBy, NextPageToken and SearchString are not supported.
+	// When you use the SortBy value, the NextPageToken and SearchString key values
+	// aren't supported.
 	SortBy []*SortDefinition `type:"list"`
 
 	// The time period of the request.
@@ -7115,17 +7862,17 @@ type GetCostCategoriesOutput struct {
 
 	// The Cost Category values.
 	//
-	// CostCategoryValues are not returned if CostCategoryName is not specified
-	// in the request.
+	// If the CostCategoryName key isn't specified in the request, the CostCategoryValues
+	// fields aren't returned.
 	CostCategoryValues []*string `type:"list"`
 
 	// If the number of objects that are still available for retrieval exceeds the
-	// limit, Amazon Web Services returns a NextPageToken value in the response.
+	// quota, Amazon Web Services returns a NextPageToken value in the response.
 	// To retrieve the next batch of objects, provide the marker from the prior
 	// call in your next request.
 	NextPageToken *string `type:"string"`
 
-	// The number of objects returned.
+	// The number of objects that are returned.
 	//
 	// ReturnSize is a required field
 	ReturnSize *int64 `type:"integer" required:"true"`
@@ -7413,10 +8160,31 @@ type GetDimensionValuesInput struct {
 	//
 	//    * AZ - The Availability Zone. An example is us-east-1a.
 	//
+	//    * BILLING_ENTITY - The Amazon Web Services seller that your account is
+	//    with. Possible values are the following: - Amazon Web Services(Amazon
+	//    Web Services): The entity that sells Amazon Web Services. - AISPL (Amazon
+	//    Internet Services Pvt. Ltd.): The local Indian entity that's an acting
+	//    reseller for Amazon Web Services in India. - Amazon Web Services Marketplace:
+	//    The entity that supports the sale of solutions that are built on Amazon
+	//    Web Services by third-party software providers.
+	//
+	//    * CACHE_ENGINE - The Amazon ElastiCache operating system. Examples are
+	//    Windows or Linux.
+	//
+	//    * DEPLOYMENT_OPTION - The scope of Amazon Relational Database Service
+	//    deployments. Valid values are SingleAZ and MultiAZ.
+	//
 	//    * DATABASE_ENGINE - The Amazon Relational Database Service database. Examples
 	//    are Aurora or MySQL.
 	//
 	//    * INSTANCE_TYPE - The type of Amazon EC2 instance. An example is m4.xlarge.
+	//
+	//    * INSTANCE_TYPE_FAMILY - A family of instance types optimized to fit different
+	//    use cases. Examples are Compute Optimized (for example, C4, C5, C6g, and
+	//    C7g), Memory Optimization (for example, R4, R5n, R5b, and R6g).
+	//
+	//    * INVOICING_ENTITY - The name of the entity that issues the Amazon Web
+	//    Services invoice.
 	//
 	//    * LEGAL_ENTITY_NAME - The name of the organization that sells you Amazon
 	//    Web Services services, such as Amazon Web Services.
@@ -7432,11 +8200,20 @@ type GetDimensionValuesInput struct {
 	//    * PLATFORM - The Amazon EC2 operating system. Examples are Windows or
 	//    Linux.
 	//
-	//    * PURCHASE_TYPE - The reservation type of the purchase to which this usage
-	//    is related. Examples include On-Demand Instances and Standard Reserved
+	//    * PURCHASE_TYPE - The reservation type of the purchase that this usage
+	//    is related to. Examples include On-Demand Instances and Standard Reserved
 	//    Instances.
 	//
+	//    * RESERVATION_ID - The unique identifier for an Amazon Web Services Reservation
+	//    Instance.
+	//
+	//    * SAVINGS_PLAN_ARN - The unique identifier for your Savings Plans.
+	//
+	//    * SAVINGS_PLANS_TYPE - Type of Savings Plans (EC2 Instance or Compute).
+	//
 	//    * SERVICE - The Amazon Web Services service such as Amazon DynamoDB.
+	//
+	//    * TENANCY - The tenancy of a resource. Examples are shared or dedicated.
 	//
 	//    * USAGE_TYPE - The type of usage. An example is DataTransfer-In-Bytes.
 	//    The response for the GetDimensionValues operation includes a unit attribute.
@@ -7448,8 +8225,8 @@ type GetDimensionValuesInput struct {
 	//
 	//    * REGION - The Amazon Web Services Region.
 	//
-	//    * RECORD_TYPE - The different types of charges such as RI fees, usage
-	//    costs, tax refunds, and credits.
+	//    * RECORD_TYPE - The different types of charges such as Reserved Instance
+	//    (RI) fees, usage costs, tax refunds, and credits.
 	//
 	//    * RESOURCE_ID - The unique identifier of the resource. ResourceId is an
 	//    opt-in feature only available for last 14 days for EC2-Compute Service.
@@ -7489,8 +8266,8 @@ type GetDimensionValuesInput struct {
 	//
 	//    * SAVINGS_PLANS_TYPE - Type of Savings Plans (EC2 Instance or Compute)
 	//
-	//    * PAYMENT_OPTION - Payment option for the given Savings Plans (for example,
-	//    All Upfront)
+	//    * PAYMENT_OPTION - The payment option for the given Savings Plans (for
+	//    example, All Upfront)
 	//
 	//    * REGION - The Amazon Web Services Region.
 	//
@@ -7500,7 +8277,7 @@ type GetDimensionValuesInput struct {
 	//    the full name of the member account. The value field contains the Amazon
 	//    Web Services ID of the member account.
 	//
-	//    * SAVINGS_PLAN_ARN - The unique identifier for your Savings Plan
+	//    * SAVINGS_PLAN_ARN - The unique identifier for your Savings Plans.
 	Context *string `type:"string" enum:"Context"`
 
 	// The name of the dimension. Each Dimension is available for a different Context.
@@ -7545,9 +8322,9 @@ type GetDimensionValuesInput struct {
 	Filter *Expression `type:"structure"`
 
 	// This field is only used when SortBy is provided in the request. The maximum
-	// number of objects that to be returned for this request. If MaxResults is
-	// not specified with SortBy, the request will return 1000 results as the default
-	// value for this parameter.
+	// number of objects that are returned for this request. If MaxResults isn't
+	// specified with SortBy, the request returns 1000 results as the default value
+	// for this parameter.
 	//
 	// For GetDimensionValues, MaxResults has an upper limit of 1000.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -7560,7 +8337,7 @@ type GetDimensionValuesInput struct {
 	// The value that you want to search the filter values for.
 	SearchString *string `type:"string"`
 
-	// The value by which you want to sort the data.
+	// The value that you want to sort the data by.
 	//
 	// The key represents cost and usage metrics. The following values are supported:
 	//
@@ -7578,10 +8355,10 @@ type GetDimensionValuesInput struct {
 	//
 	//    * NormalizedUsageAmount
 	//
-	// Supported values for SortOrder are ASCENDING or DESCENDING.
+	// The supported values for the SortOrder key are ASCENDING or DESCENDING.
 	//
 	// When you specify a SortBy paramater, the context must be COST_AND_USAGE.
-	// Further, when using SortBy, NextPageToken and SearchString are not supported.
+	// Further, when using SortBy, NextPageToken and SearchString aren't supported.
 	SortBy []*SortDefinition `type:"list"`
 
 	// The start date and end date for retrieving the dimension values. The start
@@ -7919,6 +8696,8 @@ type GetReservationCoverageInput struct {
 	//
 	//    * INSTANCE_TYPE
 	//
+	//    * INVOICING_ENTITY
+	//
 	//    * LINKED_ACCOUNT
 	//
 	//    * OPERATING_SYSTEM
@@ -8136,7 +8915,7 @@ func (s *GetReservationCoverageOutput) SetTotal(v *Coverage) *GetReservationCove
 type GetReservationPurchaseRecommendationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The account ID that is associated with the recommendation.
+	// The account ID that's associated with the recommendation.
 	AccountId *string `type:"string"`
 
 	// The account scope that you want your recommendations for. Amazon Web Services
@@ -8408,7 +9187,7 @@ type GetReservationUtilizationInput struct {
 	// maximum page size.
 	NextPageToken *string `type:"string"`
 
-	// The value by which you want to sort the data.
+	// The value that you want to sort the data by.
 	//
 	// The following values are supported for Key:
 	//
@@ -8446,13 +9225,14 @@ type GetReservationUtilizationInput struct {
 	//
 	//    * UnrealizedSavings
 	//
-	// Supported values for SortOrder are ASCENDING or DESCENDING.
+	// The supported values for SortOrder are ASCENDING and DESCENDING.
 	SortBy *SortDefinition `type:"structure"`
 
-	// Sets the start and end dates for retrieving RI utilization. The start date
-	// is inclusive, but the end date is exclusive. For example, if start is 2017-01-01
-	// and end is 2017-05-01, then the cost and usage data is retrieved from 2017-01-01
-	// up to and including 2017-04-30 but not including 2017-05-01.
+	// Sets the start and end dates for retrieving Reserved Instance (RI) utilization.
+	// The start date is inclusive, but the end date is exclusive. For example,
+	// if start is 2017-01-01 and end is 2017-05-01, then the cost and usage data
+	// is retrieved from 2017-01-01 up to and including 2017-04-30 but not including
+	// 2017-05-01.
 	//
 	// TimePeriod is a required field
 	TimePeriod *DateInterval `type:"structure" required:"true"`
@@ -8557,10 +9337,10 @@ type GetReservationUtilizationOutput struct {
 	// maximum page size.
 	NextPageToken *string `type:"string"`
 
-	// The total amount of time that you used your RIs.
+	// The total amount of time that you used your Reserved Instances (RIs).
 	Total *ReservationAggregates `type:"structure"`
 
-	// The amount of time that you used your RIs.
+	// The amount of time that you used your Reserved Instances (RIs).
 	//
 	// UtilizationsByTime is a required field
 	UtilizationsByTime []*UtilizationByTime `type:"list" required:"true"`
@@ -8605,11 +9385,11 @@ func (s *GetReservationUtilizationOutput) SetUtilizationsByTime(v []*Utilization
 type GetRightsizingRecommendationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Enables you to customize recommendations across two attributes. You can choose
-	// to view recommendations for instances within the same instance families or
-	// across different instance families. You can also choose to view your estimated
-	// savings associated with recommendations with consideration of existing Savings
-	// Plans or RI benefits, or neither.
+	// You can use Configuration to customize recommendations across two attributes.
+	// You can choose to view recommendations for instances within the same instance
+	// families or across different instance families. You can also choose to view
+	// your estimated savings that are associated with recommendations with consideration
+	// of existing Savings Plans or RI benefits, or neither.
 	Configuration *RightsizingRecommendationConfiguration `type:"structure"`
 
 	// Use Expression to filter by cost or by usage. There are two patterns:
@@ -8736,11 +9516,11 @@ func (s *GetRightsizingRecommendationInput) SetService(v string) *GetRightsizing
 type GetRightsizingRecommendationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Enables you to customize recommendations across two attributes. You can choose
-	// to view recommendations for instances within the same instance families or
-	// across different instance families. You can also choose to view your estimated
-	// savings associated with recommendations with consideration of existing Savings
-	// Plans or RI benefits, or neither.
+	// You can use Configuration to customize recommendations across two attributes.
+	// You can choose to view recommendations for instances within the same instance
+	// families or across different instance families. You can also choose to view
+	// your estimated savings that are associated with recommendations with consideration
+	// of existing Savings Plans or RI benefits, or neither.
 	Configuration *RightsizingRecommendationConfiguration `type:"structure"`
 
 	// Information regarding this specific recommendation set.
@@ -8847,7 +9627,7 @@ type GetSavingsPlansCoverageInput struct {
 	// maximum page size.
 	NextToken *string `type:"string"`
 
-	// The value by which you want to sort the data.
+	// The value that you want to sort the data by.
 	//
 	// The following values are supported for Key:
 	//
@@ -8865,7 +9645,7 @@ type GetSavingsPlansCoverageInput struct {
 	//
 	//    * Service
 	//
-	// Supported values for SortOrder are ASCENDING or DESCENDING.
+	// The supported values for SortOrder are ASCENDING and DESCENDING.
 	SortBy *SortDefinition `type:"structure"`
 
 	// The time period that you want the usage and costs for. The Start date must
@@ -9028,17 +9808,17 @@ type GetSavingsPlansPurchaseRecommendationInput struct {
 
 	// You can filter your recommendations by Account ID with the LINKED_ACCOUNT
 	// dimension. To filter your recommendations by Account ID, specify Key as LINKED_ACCOUNT
-	// and Value as the comma-separated Acount ID(s) for which you want to see Savings
-	// Plans purchase recommendations.
+	// and Value as the comma-separated Acount ID(s) that you want to see Savings
+	// Plans purchase recommendations for.
 	//
-	// For GetSavingsPlansPurchaseRecommendation, the Filter does not include CostCategories
+	// For GetSavingsPlansPurchaseRecommendation, the Filter doesn't include CostCategories
 	// or Tags. It only includes Dimensions. With Dimensions, Key must be LINKED_ACCOUNT
 	// and Value can be a single Account ID or multiple comma-separated Account
-	// IDs for which you want to see Savings Plans Purchase Recommendations. AND
+	// IDs that you want to see Savings Plans Purchase Recommendations for. AND
 	// and OR operators are not supported.
 	Filter *Expression `type:"structure"`
 
-	// The lookback period used to generate the recommendation.
+	// The lookback period that's used to generate the recommendation.
 	//
 	// LookbackPeriodInDays is a required field
 	LookbackPeriodInDays *string `type:"string" required:"true" enum:"LookbackPeriodInDays"`
@@ -9052,17 +9832,17 @@ type GetSavingsPlansPurchaseRecommendationInput struct {
 	// object.
 	PageSize *int64 `type:"integer"`
 
-	// The payment option used to generate these recommendations.
+	// The payment option that's used to generate these recommendations.
 	//
 	// PaymentOption is a required field
 	PaymentOption *string `type:"string" required:"true" enum:"PaymentOption"`
 
-	// The Savings Plans recommendation type requested.
+	// The Savings Plans recommendation type that's requested.
 	//
 	// SavingsPlansType is a required field
 	SavingsPlansType *string `type:"string" required:"true" enum:"SupportedSavingsPlansType"`
 
-	// The savings plan recommendation term used to generate these recommendations.
+	// The savings plan recommendation term that's used to generate these recommendations.
 	//
 	// TermInYears is a required field
 	TermInYears *string `type:"string" required:"true" enum:"TermInYears"`
@@ -9164,7 +9944,7 @@ func (s *GetSavingsPlansPurchaseRecommendationInput) SetTermInYears(v string) *G
 type GetSavingsPlansPurchaseRecommendationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Information regarding this specific recommendation set.
+	// Information that regards this specific recommendation set.
 	Metadata *SavingsPlansPurchaseRecommendationMetadata `type:"structure"`
 
 	// The token for the next set of retrievable results. Amazon Web Services provides
@@ -9217,7 +9997,7 @@ type GetSavingsPlansUtilizationDetailsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The data type.
-	DataType []*string `type:"list"`
+	DataType []*string `type:"list" enum:"SavingsPlansDataType"`
 
 	// Filters Savings Plans utilization coverage data for active Savings Plans
 	// dimensions. You can filter data with the following dimensions:
@@ -9245,7 +10025,7 @@ type GetSavingsPlansUtilizationDetailsInput struct {
 	// maximum page size.
 	NextToken *string `type:"string"`
 
-	// The value by which you want to sort the data.
+	// The value that you want to sort the data by.
 	//
 	// The following values are supported for Key:
 	//
@@ -9263,7 +10043,7 @@ type GetSavingsPlansUtilizationDetailsInput struct {
 	//
 	//    * AmortizedUpfrontCommitment
 	//
-	// Supported values for SortOrder are ASCENDING or DESCENDING.
+	// The supported values for SortOrder are ASCENDING and DESCENDING.
 	SortBy *SortDefinition `type:"structure"`
 
 	// The time period that you want the usage and costs for. The Start date must
@@ -9453,7 +10233,7 @@ type GetSavingsPlansUtilizationInput struct {
 	// granularities.
 	Granularity *string `type:"string" enum:"Granularity"`
 
-	// The value by which you want to sort the data.
+	// The value that you want to sort the data by.
 	//
 	// The following values are supported for Key:
 	//
@@ -9467,7 +10247,7 @@ type GetSavingsPlansUtilizationInput struct {
 	//
 	//    * NetSavings
 	//
-	// Supported values for SortOrder are ASCENDING or DESCENDING.
+	// The supported values for SortOrder are ASCENDING and DESCENDING.
 	SortBy *SortDefinition `type:"structure"`
 
 	// The time period that you want the usage and costs for. The Start date must
@@ -9551,8 +10331,8 @@ func (s *GetSavingsPlansUtilizationInput) SetTimePeriod(v *DateInterval) *GetSav
 type GetSavingsPlansUtilizationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The amount of cost/commitment you used your Savings Plans. This allows you
-	// to specify date ranges.
+	// The amount of cost/commitment that you used your Savings Plans. You can use
+	// it to specify date ranges.
 	SavingsPlansUtilizationsByTime []*SavingsPlansUtilizationByTime `type:"list"`
 
 	// The total amount of cost/commitment that you used your Savings Plans, regardless
@@ -9631,11 +10411,11 @@ type GetTagsInput struct {
 	Filter *Expression `type:"structure"`
 
 	// This field is only used when SortBy is provided in the request. The maximum
-	// number of objects that to be returned for this request. If MaxResults is
-	// not specified with SortBy, the request will return 1000 results as the default
-	// value for this parameter.
+	// number of objects that are returned for this request. If MaxResults isn't
+	// specified with SortBy, the request returns 1000 results as the default value
+	// for this parameter.
 	//
-	// For GetTags, MaxResults has an upper limit of 1000.
+	// For GetTags, MaxResults has an upper quota of 1000.
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token to retrieve the next set of results. Amazon Web Services provides
@@ -9646,7 +10426,7 @@ type GetTagsInput struct {
 	// The value that you want to search for.
 	SearchString *string `type:"string"`
 
-	// The value by which you want to sort the data.
+	// The value that you want to sort the data by.
 	//
 	// The key represents cost and usage metrics. The following values are supported:
 	//
@@ -9664,9 +10444,9 @@ type GetTagsInput struct {
 	//
 	//    * NormalizedUsageAmount
 	//
-	// Supported values for SortOrder are ASCENDING or DESCENDING.
+	// The supported values for SortOrder are ASCENDING and DESCENDING.
 	//
-	// When using SortBy, NextPageToken and SearchString are not supported.
+	// When you use SortBy, NextPageToken and SearchString aren't supported.
 	SortBy []*SortDefinition `type:"list"`
 
 	// The key of the tag that you want to return values for.
@@ -9915,19 +10695,19 @@ type GetUsageForecastInput struct {
 	// Metric is a required field
 	Metric *string `type:"string" required:"true" enum:"Metric"`
 
-	// Cost Explorer always returns the mean forecast as a single point. You can
-	// request a prediction interval around the mean by specifying a confidence
-	// level. The higher the confidence level, the more confident Cost Explorer
-	// is about the actual value falling in the prediction interval. Higher confidence
-	// levels result in wider prediction intervals.
+	// Amazon Web Services Cost Explorer always returns the mean forecast as a single
+	// point. You can request a prediction interval around the mean by specifying
+	// a confidence level. The higher the confidence level, the more confident Cost
+	// Explorer is about the actual value falling in the prediction interval. Higher
+	// confidence levels result in wider prediction intervals.
 	PredictionIntervalLevel *int64 `min:"51" type:"integer"`
 
 	// The start and end dates of the period that you want to retrieve usage forecast
-	// for. The start date is inclusive, but the end date is exclusive. For example,
-	// if start is 2017-01-01 and end is 2017-05-01, then the cost and usage data
-	// is retrieved from 2017-01-01 up to and including 2017-04-30 but not including
-	// 2017-05-01. The start date must be equal to or later than the current date
-	// to avoid a validation error.
+	// for. The start date is included in the period, but the end date isn't included
+	// in the period. For example, if start is 2017-01-01 and end is 2017-05-01,
+	// then the cost and usage data is retrieved from 2017-01-01 up to and including
+	// 2017-04-30 but not including 2017-05-01. The start date must be equal to
+	// or later than the current date to avoid a validation error.
 	//
 	// TimePeriod is a required field
 	TimePeriod *DateInterval `type:"structure" required:"true"`
@@ -10188,7 +10968,8 @@ type InstanceDetails struct {
 	// The Amazon EC2 instances that Amazon Web Services recommends that you purchase.
 	EC2InstanceDetails *EC2InstanceDetails `type:"structure"`
 
-	// The Amazon ES instances that Amazon Web Services recommends that you purchase.
+	// The Amazon OpenSearch Service instances that Amazon Web Services recommends
+	// that you purchase.
 	ESInstanceDetails *ESInstanceDetails `type:"structure"`
 
 	// The ElastiCache instances that Amazon Web Services recommends that you purchase.
@@ -10378,6 +11159,139 @@ func (s *LimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type ListCostAllocationTagsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of objects that are returned for this request. By default,
+	// the request returns 100 results.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token to retrieve the next set of results. Amazon Web Services provides
+	// the token when the response from a previous call has more results than the
+	// maximum page size.
+	NextToken *string `type:"string"`
+
+	// The status of cost allocation tag keys that are returned for this request.
+	Status *string `type:"string" enum:"CostAllocationTagStatus"`
+
+	// The list of cost allocation tag keys that are returned for this request.
+	TagKeys []*string `min:"1" type:"list"`
+
+	// The type of CostAllocationTag object that are returned for this request.
+	// The AWSGenerated type tags are tags that Amazon Web Services defines and
+	// applies to support Amazon Web Services resources for cost allocation purposes.
+	// The UserDefined type tags are tags that you define, create, and apply to
+	// resources.
+	Type *string `type:"string" enum:"CostAllocationTagType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCostAllocationTagsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCostAllocationTagsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCostAllocationTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCostAllocationTagsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.TagKeys != nil && len(s.TagKeys) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeys", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCostAllocationTagsInput) SetMaxResults(v int64) *ListCostAllocationTagsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCostAllocationTagsInput) SetNextToken(v string) *ListCostAllocationTagsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListCostAllocationTagsInput) SetStatus(v string) *ListCostAllocationTagsInput {
+	s.Status = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *ListCostAllocationTagsInput) SetTagKeys(v []*string) *ListCostAllocationTagsInput {
+	s.TagKeys = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ListCostAllocationTagsInput) SetType(v string) *ListCostAllocationTagsInput {
+	s.Type = &v
+	return s
+}
+
+type ListCostAllocationTagsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of cost allocation tags that includes the detailed metadata for each
+	// one.
+	CostAllocationTags []*CostAllocationTag `type:"list"`
+
+	// The token to retrieve the next set of results. Amazon Web Services provides
+	// the token when the response from a previous call has more results than the
+	// maximum page size.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCostAllocationTagsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCostAllocationTagsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCostAllocationTags sets the CostAllocationTags field's value.
+func (s *ListCostAllocationTagsOutput) SetCostAllocationTags(v []*CostAllocationTag) *ListCostAllocationTagsOutput {
+	s.CostAllocationTags = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCostAllocationTagsOutput) SetNextToken(v string) *ListCostAllocationTagsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListCostCategoryDefinitionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10448,7 +11362,7 @@ func (s *ListCostCategoryDefinitionsInput) SetNextToken(v string) *ListCostCateg
 type ListCostCategoryDefinitionsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A reference to a Cost Category containing enough information to identify
+	// A reference to a Cost Category that contains enough information to identify
 	// the Cost Category.
 	CostCategoryReferences []*CostCategoryReference `type:"list"`
 
@@ -10485,6 +11399,87 @@ func (s *ListCostCategoryDefinitionsOutput) SetCostCategoryReferences(v []*CostC
 // SetNextToken sets the NextToken field's value.
 func (s *ListCostCategoryDefinitionsOutput) SetNextToken(v string) *ListCostCategoryDefinitionsOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the resource. For a list of supported resources,
+	// see ResourceTag (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_ResourceTag.html).
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of tag key value pairs that are associated with the resource.
+	ResourceTags []*ResourceTag `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetResourceTags sets the ResourceTags field's value.
+func (s *ListTagsForResourceOutput) SetResourceTags(v []*ResourceTag) *ListTagsForResourceOutput {
+	s.ResourceTags = v
 	return s
 }
 
@@ -10529,7 +11524,7 @@ func (s *MetricValue) SetUnit(v string) *MetricValue {
 	return s
 }
 
-// Details on the modification recommendation.
+// Details for the modification recommendation.
 type ModifyRecommendationDetail struct {
 	_ struct{} `type:"structure"`
 
@@ -10567,16 +11562,17 @@ func (s *ModifyRecommendationDetail) SetTargetInstances(v []*TargetInstance) *Mo
 type NetworkResourceUtilization struct {
 	_ struct{} `type:"structure"`
 
-	// The network inbound throughput utilization measured in Bytes per second.
+	// The network inbound throughput utilization measured in Bytes per second (Bps).
 	NetworkInBytesPerSecond *string `type:"string"`
 
-	// The network outbound throughput utilization measured in Bytes per second.
+	// The network outbound throughput utilization measured in Bytes per second
+	// (Bps).
 	NetworkOutBytesPerSecond *string `type:"string"`
 
-	// The network ingress packets that are measured in packets per second.
+	// The network inbound packets that are measured in packets per second.
 	NetworkPacketsInPerSecond *string `type:"string"`
 
-	// The network outgress packets that are measured in packets per second.
+	// The network outbound packets that are measured in packets per second.
 	NetworkPacketsOutPerSecond *string `type:"string"`
 }
 
@@ -11277,7 +12273,7 @@ func (s *ReservationPurchaseRecommendation) SetTermInYears(v string) *Reservatio
 type ReservationPurchaseRecommendationDetail struct {
 	_ struct{} `type:"structure"`
 
-	// The account that this RI recommendation is for.
+	// The account that this Reserved Instance (RI) recommendation is for.
 	AccountId *string `type:"string"`
 
 	// The average number of normalized units that you used in an hour during the
@@ -11307,15 +12303,15 @@ type ReservationPurchaseRecommendationDetail struct {
 	EstimatedMonthlyOnDemandCost *string `type:"string"`
 
 	// How much Amazon Web Services estimates that this specific recommendation
-	// could save you in a month.
+	// might save you in a month.
 	EstimatedMonthlySavingsAmount *string `type:"string"`
 
 	// How much Amazon Web Services estimates that this specific recommendation
-	// could save you in a month, as a percentage of your overall costs.
+	// might save you in a month, as a percentage of your overall costs.
 	EstimatedMonthlySavingsPercentage *string `type:"string"`
 
-	// How much Amazon Web Services estimates that you would have spent for all
-	// usage during the specified historical period if you had a reservation.
+	// How much Amazon Web Services estimates that you might spend for all usage
+	// during the specified historical period if you had a reservation.
 	EstimatedReservationCostForLookbackPeriod *string `type:"string"`
 
 	// Details about the instances that Amazon Web Services recommends that you
@@ -11643,11 +12639,11 @@ func (s *ReservationUtilizationGroup) SetValue(v string) *ReservationUtilization
 	return s
 }
 
-// Details on the resource.
+// Details for the resource.
 type ResourceDetails struct {
 	_ struct{} `type:"structure"`
 
-	// Details on the Amazon EC2 resource.
+	// Details for the Amazon EC2 resource.
 	EC2ResourceDetails *EC2ResourceDetails `type:"structure"`
 }
 
@@ -11681,6 +12677,8 @@ type ResourceNotFoundException struct {
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
 	Message_ *string `locationName:"Message" type:"string"`
+
+	ResourceName *string `min:"20" type:"string"`
 }
 
 // String returns the string representation.
@@ -11726,7 +12724,7 @@ func (s *ResourceNotFoundException) OrigErr() error {
 }
 
 func (s *ResourceNotFoundException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
 }
 
 // Status code returns the HTTP status code for the request's response error.
@@ -11737,6 +12735,75 @@ func (s *ResourceNotFoundException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The tag structure that contains a tag key and value.
+//
+// Tagging is supported only for the following Cost Explorer resource types:
+// AnomalyMonitor (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_AnomalyMonitor.html),
+// AnomalySubscription (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_AnomalySubscription.html),
+// CostCategory (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_CostCategory.html).
+type ResourceTag struct {
+	_ struct{} `type:"structure"`
+
+	// The key that's associated with the tag.
+	//
+	// Key is a required field
+	Key *string `min:"1" type:"string" required:"true"`
+
+	// The value that's associated with the tag.
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceTag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceTag) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResourceTag) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResourceTag"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *ResourceTag) SetKey(v string) *ResourceTag {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *ResourceTag) SetValue(v string) *ResourceTag {
+	s.Value = &v
+	return s
 }
 
 // Resource utilization of current resource.
@@ -11840,10 +12907,10 @@ type RightsizingRecommendation struct {
 	// Context regarding the current instance.
 	CurrentInstance *CurrentInstance `type:"structure"`
 
-	// The list of possible reasons why the recommendation is generated such as
-	// under or over utilization of specific metrics (for example, CPU, Memory,
+	// The list of possible reasons why the recommendation is generated, such as
+	// under- or over-utilization of specific metrics (for example, CPU, Memory,
 	// Network).
-	FindingReasonCodes []*string `type:"list"`
+	FindingReasonCodes []*string `type:"list" enum:"FindingReasonCode"`
 
 	// The details for the modification recommendations.
 	ModifyRecommendationDetail *ModifyRecommendationDetail `type:"structure"`
@@ -11913,8 +12980,8 @@ func (s *RightsizingRecommendation) SetTerminateRecommendationDetail(v *Terminat
 // across two attributes. You can choose to view recommendations for instances
 // within the same instance families or across different instance families.
 // You can also choose to view your estimated savings that are associated with
-// recommendations with consideration of existing Savings Plans or RI benefits,
-// or neither.
+// recommendations with consideration of existing Savings Plans or Reserved
+// Instance (RI) benefits, or neither.
 type RightsizingRecommendationConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -12097,8 +13164,8 @@ func (s *RightsizingRecommendationSummary) SetTotalRecommendationCount(v string)
 	return s
 }
 
-// The combination of Amazon Web Services service, linked account, Region, and
-// usage type where a cost anomaly is observed.
+// The combination of Amazon Web Service, linked account, Region, and usage
+// type where a cost anomaly is observed.
 type RootCause struct {
 	_ struct{} `type:"structure"`
 
@@ -12108,7 +13175,7 @@ type RootCause struct {
 	// The Amazon Web Services Region that's associated with the cost anomaly.
 	Region *string `type:"string"`
 
-	// The Amazon Web Services service name that's associated with the cost anomaly.
+	// The Amazon Web Service name that's associated with the cost anomaly.
 	Service *string `type:"string"`
 
 	// The UsageType value that's associated with the cost anomaly.
@@ -12211,7 +13278,7 @@ func (s *SavingsPlansAmortizedCommitment) SetTotalAmortizedCommitment(v string) 
 	return s
 }
 
-// The amount of Savings Plans eligible usage that is covered by Savings Plans.
+// The amount of Savings Plans eligible usage that's covered by Savings Plans.
 // All calculations consider the On-Demand equivalent of your Savings Plans
 // usage.
 type SavingsPlansCoverage struct {
@@ -12275,7 +13342,7 @@ type SavingsPlansCoverageData struct {
 	// The cost of your Amazon Web Services usage at the public On-Demand rate.
 	OnDemandCost *string `type:"string"`
 
-	// The amount of your Amazon Web Services usage that is covered by a Savings
+	// The amount of your Amazon Web Services usage that's covered by a Savings
 	// Plans.
 	SpendCoveredBySavingsPlans *string `type:"string"`
 
@@ -12388,14 +13455,14 @@ type SavingsPlansPurchaseRecommendation struct {
 	// are calculated for individual member accounts only.
 	AccountScope *string `type:"string" enum:"AccountScope"`
 
-	// The lookback period in days, used to generate the recommendation.
+	// The lookback period in days that's used to generate the recommendation.
 	LookbackPeriodInDays *string `type:"string" enum:"LookbackPeriodInDays"`
 
-	// The payment option used to generate the recommendation.
+	// The payment option that's used to generate the recommendation.
 	PaymentOption *string `type:"string" enum:"PaymentOption"`
 
-	// Details for the Savings Plans we recommend that you purchase to cover existing
-	// Savings Plans eligible workloads.
+	// Details for the Savings Plans that we recommend that you purchase to cover
+	// existing Savings Plans eligible workloads.
 	SavingsPlansPurchaseRecommendationDetails []*SavingsPlansPurchaseRecommendationDetail `type:"list"`
 
 	// Summary metrics for your Savings Plans Recommendations.
@@ -12502,9 +13569,8 @@ type SavingsPlansPurchaseRecommendationDetail struct {
 	// Savings Plans, over the length of the lookback period.
 	EstimatedOnDemandCost *string `type:"string"`
 
-	// The estimated On-Demand costs you would expect with no additional commitment,
-	// based on your usage of the selected time period and the Savings Plans you
-	// own.
+	// The estimated On-Demand costs you expect with no additional commitment, based
+	// on your usage of the selected time period and the Savings Plans you own.
 	EstimatedOnDemandCostWithCurrentCommitment *string `type:"string"`
 
 	// The estimated return on investment that's based on the recommended Savings
@@ -12656,7 +13722,7 @@ type SavingsPlansPurchaseRecommendationMetadata struct {
 	// Additional metadata that might be applicable to the recommendation.
 	AdditionalMetadata *string `type:"string"`
 
-	// The timestamp showing when the recommendations were generated.
+	// The timestamp that shows when the recommendations were generated.
 	GenerationTimestamp *string `type:"string"`
 
 	// The unique identifier for the recommendation set.
@@ -12718,9 +13784,9 @@ type SavingsPlansPurchaseRecommendationSummary struct {
 	// Plans purchase.
 	EstimatedMonthlySavingsAmount *string `type:"string"`
 
-	// The estimated On-Demand costs you would expect with no additional commitment.
-	// It's based on your usage of the selected time period and the Savings Plans
-	// you own.
+	// The estimated On-Demand costs you expect with no additional commitment. It's
+	// based on your usage of the selected time period and the Savings Plans you
+	// own.
 	EstimatedOnDemandCostWithCurrentCommitment *string `type:"string"`
 
 	// The estimated return on investment that's based on the recommended Savings
@@ -12948,9 +14014,9 @@ type SavingsPlansUtilizationAggregates struct {
 	// of the upfront and recurring Savings Plans fees.
 	AmortizedCommitment *SavingsPlansAmortizedCommitment `type:"structure"`
 
-	// The amount saved by using existing Savings Plans. Savings returns both net
-	// savings from Savings Plans, as well as the onDemandCostEquivalent of the
-	// Savings Plans when considering the utilization rate.
+	// The amount that's saved by using existing Savings Plans. Savings returns
+	// both net savings from Savings Plans and also the onDemandCostEquivalent of
+	// the Savings Plans when considering the utilization rate.
 	Savings *SavingsPlansSavings `type:"structure"`
 
 	// A ratio of your effectiveness of using existing Savings Plans to apply to
@@ -12996,7 +14062,7 @@ func (s *SavingsPlansUtilizationAggregates) SetUtilization(v *SavingsPlansUtiliz
 	return s
 }
 
-// The amount of Savings Plans utilization, in hours.
+// The amount of Savings Plans utilization (in hours).
 type SavingsPlansUtilizationByTime struct {
 	_ struct{} `type:"structure"`
 
@@ -13004,9 +14070,9 @@ type SavingsPlansUtilizationByTime struct {
 	// of the upfront and recurring Savings Plans fees.
 	AmortizedCommitment *SavingsPlansAmortizedCommitment `type:"structure"`
 
-	// The amount saved by using existing Savings Plans. Savings returns both net
-	// savings from Savings Plans as well as the onDemandCostEquivalent of the Savings
-	// Plans when considering the utilization rate.
+	// The amount that's saved by using existing Savings Plans. Savings returns
+	// both net savings from Savings Plans and also the onDemandCostEquivalent of
+	// the Savings Plans when considering the utilization rate.
 	Savings *SavingsPlansSavings `type:"structure"`
 
 	// The time period of the request.
@@ -13063,7 +14129,7 @@ func (s *SavingsPlansUtilizationByTime) SetUtilization(v *SavingsPlansUtilizatio
 	return s
 }
 
-// A single daily or monthly Savings Plans utilization rate, and details for
+// A single daily or monthly Savings Plans utilization rate and details for
 // your account. A management account in an organization have access to member
 // accounts. You can use GetDimensionValues to determine the possible dimension
 // values.
@@ -13078,7 +14144,7 @@ type SavingsPlansUtilizationDetail struct {
 	Attributes map[string]*string `type:"map"`
 
 	// The amount saved by using existing Savings Plans. Savings returns both net
-	// savings from savings plans as well as the onDemandCostEquivalent of the Savings
+	// savings from savings plans and also the onDemandCostEquivalent of the Savings
 	// Plans when considering the utilization rate.
 	Savings *SavingsPlansSavings `type:"structure"`
 
@@ -13236,7 +14302,7 @@ func (s *ServiceSpecification) SetEC2Specification(v *EC2Specification) *Service
 	return s
 }
 
-// The details of how to sort the data.
+// The details for how to sort the data.
 type SortDefinition struct {
 	_ struct{} `type:"structure"`
 
@@ -13356,6 +14422,123 @@ func (s *Subscriber) SetType(v string) *Subscriber {
 	return s
 }
 
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the resource. For a list of supported resources,
+	// see ResourceTag (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_ResourceTag.html).
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `min:"20" type:"string" required:"true"`
+
+	// A list of tag key-value pairs to be added to the resource.
+	//
+	// Each tag consists of a key and a value, and each key must be unique for the
+	// resource. The following restrictions apply to resource tags:
+	//
+	//    * Although the maximum number of array members is 200, you can assign
+	//    a maximum of 50 user-tags to one resource. The remaining are reserved
+	//    for Amazon Web Services use
+	//
+	//    * The maximum length of a key is 128 characters
+	//
+	//    * The maximum length of a value is 256 characters
+	//
+	//    * Keys and values can only contain alphanumeric characters, spaces, and
+	//    any of the following: _.:/=+@-
+	//
+	//    * Keys and values are case sensitive
+	//
+	//    * Keys and values are trimmed for any leading or trailing whitespaces
+	//
+	//    * Don’t use aws: as a prefix for your keys. This prefix is reserved
+	//    for Amazon Web Services use
+	//
+	// ResourceTags is a required field
+	ResourceTags []*ResourceTag `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 20))
+	}
+	if s.ResourceTags == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceTags"))
+	}
+	if s.ResourceTags != nil {
+		for i, v := range s.ResourceTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ResourceTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetResourceTags sets the ResourceTags field's value.
+func (s *TagResourceInput) SetResourceTags(v []*ResourceTag) *TagResourceInput {
+	s.ResourceTags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
 // The values that are available for a tag.
 //
 // If Values and Key aren't specified, the ABSENT MatchOption is applied to
@@ -13373,7 +14556,7 @@ type TagValues struct {
 	// The match options that you can use to filter your results. MatchOptions is
 	// only applicable for actions related to Cost Category. The default values
 	// for MatchOptions are EQUALS and CASE_SENSITIVE.
-	MatchOptions []*string `type:"list"`
+	MatchOptions []*string `type:"list" enum:"MatchOption"`
 
 	// The specific value of the tag.
 	Values []*string `type:"list"`
@@ -13436,10 +14619,10 @@ type TargetInstance struct {
 	// The expected utilization metrics for target instance type.
 	ExpectedResourceUtilization *ResourceUtilization `type:"structure"`
 
-	// Explains the actions you might need to take in order to successfully migrate
+	// Explains the actions that you might need to take to successfully migrate
 	// your workloads from the current instance type to the recommended instance
 	// type.
-	PlatformDifferences []*string `type:"list"`
+	PlatformDifferences []*string `type:"list" enum:"PlatformDifference"`
 
 	// Details on the target instance type.
 	ResourceDetails *ResourceDetails `type:"structure"`
@@ -13545,6 +14728,73 @@ func (s *TerminateRecommendationDetail) SetCurrencyCode(v string) *TerminateReco
 func (s *TerminateRecommendationDetail) SetEstimatedMonthlySavings(v string) *TerminateRecommendationDetail {
 	s.EstimatedMonthlySavings = &v
 	return s
+}
+
+// Can occur if you specify a number of tags for a resource greater than the
+// maximum 50 user tags per resource.
+type TooManyTagsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+
+	ResourceName *string `min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TooManyTagsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TooManyTagsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyTagsException(v protocol.ResponseMetadata) error {
+	return &TooManyTagsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyTagsException) Code() string {
+	return "TooManyTagsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyTagsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyTagsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyTagsException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyTagsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyTagsException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Filters cost anomalies based on the total impact.
@@ -13810,6 +15060,95 @@ func (s *UnresolvableUsageUnitException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the resource. For a list of supported resources,
+	// see ResourceTag (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_ResourceTag.html).
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `min:"20" type:"string" required:"true"`
+
+	// A list of tag keys associated with tags that need to be removed from the
+	// resource. If you specify a tag key that doesn't exist, it's ignored. Although
+	// the maximum number of array members is 200, user-tag maximum is 50. The remaining
+	// are reserved for Amazon Web Services use.
+	//
+	// ResourceTagKeys is a required field
+	ResourceTagKeys []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 20))
+	}
+	if s.ResourceTagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceTagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetResourceTagKeys sets the ResourceTagKeys field's value.
+func (s *UntagResourceInput) SetResourceTagKeys(v []*string) *UntagResourceInput {
+	s.ResourceTagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateAnomalyMonitorInput struct {
 	_ struct{} `type:"structure"`
 
@@ -14029,6 +15368,150 @@ func (s UpdateAnomalySubscriptionOutput) GoString() string {
 // SetSubscriptionArn sets the SubscriptionArn field's value.
 func (s *UpdateAnomalySubscriptionOutput) SetSubscriptionArn(v string) *UpdateAnomalySubscriptionOutput {
 	s.SubscriptionArn = &v
+	return s
+}
+
+// Gives a detailed description of the result of an action. It's on each cost
+// allocation tag entry in the request.
+type UpdateCostAllocationTagsStatusError struct {
+	_ struct{} `type:"structure"`
+
+	// An error code representing why the action failed on this entry.
+	Code *string `type:"string"`
+
+	// A message explaining why the action failed on this entry.
+	Message *string `type:"string"`
+
+	// The key for the cost allocation tag.
+	TagKey *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCostAllocationTagsStatusError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCostAllocationTagsStatusError) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *UpdateCostAllocationTagsStatusError) SetCode(v string) *UpdateCostAllocationTagsStatusError {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *UpdateCostAllocationTagsStatusError) SetMessage(v string) *UpdateCostAllocationTagsStatusError {
+	s.Message = &v
+	return s
+}
+
+// SetTagKey sets the TagKey field's value.
+func (s *UpdateCostAllocationTagsStatusError) SetTagKey(v string) *UpdateCostAllocationTagsStatusError {
+	s.TagKey = &v
+	return s
+}
+
+type UpdateCostAllocationTagsStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of CostAllocationTagStatusEntry objects that are used to update
+	// cost allocation tags status for this request.
+	//
+	// CostAllocationTagsStatus is a required field
+	CostAllocationTagsStatus []*CostAllocationTagStatusEntry `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCostAllocationTagsStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCostAllocationTagsStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateCostAllocationTagsStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateCostAllocationTagsStatusInput"}
+	if s.CostAllocationTagsStatus == nil {
+		invalidParams.Add(request.NewErrParamRequired("CostAllocationTagsStatus"))
+	}
+	if s.CostAllocationTagsStatus != nil && len(s.CostAllocationTagsStatus) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CostAllocationTagsStatus", 1))
+	}
+	if s.CostAllocationTagsStatus != nil {
+		for i, v := range s.CostAllocationTagsStatus {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CostAllocationTagsStatus", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCostAllocationTagsStatus sets the CostAllocationTagsStatus field's value.
+func (s *UpdateCostAllocationTagsStatusInput) SetCostAllocationTagsStatus(v []*CostAllocationTagStatusEntry) *UpdateCostAllocationTagsStatusInput {
+	s.CostAllocationTagsStatus = v
+	return s
+}
+
+type UpdateCostAllocationTagsStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of UpdateCostAllocationTagsStatusError objects with error details
+	// about each cost allocation tag that can't be updated. If there's no failure,
+	// an empty array returns.
+	Errors []*UpdateCostAllocationTagsStatusError `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCostAllocationTagsStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCostAllocationTagsStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetErrors sets the Errors field's value.
+func (s *UpdateCostAllocationTagsStatusOutput) SetErrors(v []*UpdateCostAllocationTagsStatusError) *UpdateCostAllocationTagsStatusOutput {
+	s.Errors = v
 	return s
 }
 
@@ -14325,6 +15808,38 @@ func Context_Values() []string {
 }
 
 const (
+	// CostAllocationTagStatusActive is a CostAllocationTagStatus enum value
+	CostAllocationTagStatusActive = "Active"
+
+	// CostAllocationTagStatusInactive is a CostAllocationTagStatus enum value
+	CostAllocationTagStatusInactive = "Inactive"
+)
+
+// CostAllocationTagStatus_Values returns all elements of the CostAllocationTagStatus enum
+func CostAllocationTagStatus_Values() []string {
+	return []string{
+		CostAllocationTagStatusActive,
+		CostAllocationTagStatusInactive,
+	}
+}
+
+const (
+	// CostAllocationTagTypeAwsgenerated is a CostAllocationTagType enum value
+	CostAllocationTagTypeAwsgenerated = "AWSGenerated"
+
+	// CostAllocationTagTypeUserDefined is a CostAllocationTagType enum value
+	CostAllocationTagTypeUserDefined = "UserDefined"
+)
+
+// CostAllocationTagType_Values returns all elements of the CostAllocationTagType enum
+func CostAllocationTagType_Values() []string {
+	return []string{
+		CostAllocationTagTypeAwsgenerated,
+		CostAllocationTagTypeUserDefined,
+	}
+}
+
+const (
 	// CostCategoryInheritedValueDimensionNameLinkedAccountName is a CostCategoryInheritedValueDimensionName enum value
 	CostCategoryInheritedValueDimensionNameLinkedAccountName = "LINKED_ACCOUNT_NAME"
 
@@ -14522,6 +16037,9 @@ const (
 
 	// DimensionAgreementEndDateTimeBefore is a Dimension enum value
 	DimensionAgreementEndDateTimeBefore = "AGREEMENT_END_DATE_TIME_BEFORE"
+
+	// DimensionInvoicingEntity is a Dimension enum value
+	DimensionInvoicingEntity = "INVOICING_ENTITY"
 )
 
 // Dimension_Values returns all elements of the Dimension enum
@@ -14558,6 +16076,7 @@ func Dimension_Values() []string {
 		DimensionPaymentOption,
 		DimensionAgreementEndDateTimeAfter,
 		DimensionAgreementEndDateTimeBefore,
+		DimensionInvoicingEntity,
 	}
 }
 

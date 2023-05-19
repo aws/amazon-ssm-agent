@@ -17,16 +17,18 @@ package ssminstaller
 
 import (
 	"io/ioutil"
-	"path"
+	"path/filepath"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
+	envdetectmocks "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/mocks/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -34,7 +36,7 @@ import (
 
 const testPackagePath = "testdata"
 
-var contextMock context.T = context.NewMockDefault()
+var contextMock context.T = contextmocks.NewMockDefault()
 
 func TestPackageName(t *testing.T) {
 	testName := "TestName"
@@ -74,7 +76,7 @@ func testReadAction(t *testing.T, actionPathNoExt string, contentSh []byte, cont
 	mockFileSys := MockedFileSys{}
 	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, expectReads)
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -97,7 +99,7 @@ func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byt
 	mockFileSys := MockedFileSys{}
 	mockReadAction(t, &mockFileSys, actionPathNoExt, contentSh, contentPs1, expectReads)
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -117,17 +119,17 @@ func testReadActionInvalid(t *testing.T, actionPathNoExt string, contentSh []byt
 }
 
 func TestReadAction(t *testing.T) {
-	actionPathNoExt := path.Join(testPackagePath, "Foo")
+	actionPathNoExt := filepath.Join(testPackagePath, "Foo")
 	testReadAction(t, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 	testReadAction(t, actionPathNoExt, []byte{}, append(fileutil.CreateUTF8ByteOrderMark(), []byte("Write-Host ps1 with BOM")...), false)
 }
 
 func TestReadActionMissing(t *testing.T) {
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "Foo")
+	actionPathNoExt := filepath.Join(testPackagePath, "Foo")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -148,11 +150,11 @@ func TestReadActionMissing(t *testing.T) {
 
 func testReadActionTooManyActionImplementations(t *testing.T, existSh bool, existPs1 bool) {
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "Foo")
+	actionPathNoExt := filepath.Join(testPackagePath, "Foo")
 	mockFileSys.On("Exists", actionPathNoExt+".sh").Return(existSh).Once()
 	mockFileSys.On("Exists", actionPathNoExt+".ps1").Return(existPs1).Once()
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -182,7 +184,7 @@ var envVars = map[string]string{
 
 func TestReadShActionWithEnvVars(t *testing.T) {
 	mockFileSys := MockedFileSys{}
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
@@ -204,7 +206,7 @@ func TestReadShActionWithEnvVars(t *testing.T) {
 
 func TestReadPs1ActionWithEnvVars(t *testing.T) {
 	mockFileSys := MockedFileSys{}
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 
 	// Instantiate installer with mock
 	inst := Installer{filesysdep: &mockFileSys, packagePath: testPackagePath, envdetectCollector: mockEnvdetectCollector}
@@ -226,7 +228,7 @@ func TestReadPs1ActionWithEnvVars(t *testing.T) {
 
 func TestGetEnvVarsContainsAdditionalArguments(t *testing.T) {
 	mockFileSys := MockedFileSys{}
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 	var argumentString = "{\"customArg1\":\"customVal1\", \"customArg2\":\"customVal2\"}"
 
@@ -246,7 +248,7 @@ func TestGetEnvVarsContainsAdditionalArguments(t *testing.T) {
 
 func TestGetEnvVarsWithEmptyAdditionalArguments(t *testing.T) {
 	mockFileSys := MockedFileSys{}
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 	var argumentString = ""
 
@@ -265,13 +267,13 @@ func TestGetEnvVarsWithEmptyAdditionalArguments(t *testing.T) {
 func TestInstall_ExecuteError(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "install")
+	actionPathNoExt := filepath.Join(testPackagePath, "install")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {StandardError: "execute error"}}).Once()
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -290,11 +292,11 @@ func TestInstall_ExecuteError(t *testing.T) {
 func TestValidate_NoAction(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "validate")
+	actionPathNoExt := filepath.Join(testPackagePath, "validate")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 	mockExec := MockedExec{}
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -314,13 +316,13 @@ func TestValidate_NoAction(t *testing.T) {
 func TestUninstall_Success(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "uninstall")
+	actionPathNoExt := filepath.Join(testPackagePath, "uninstall")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {Status: contracts.ResultStatusSuccess}}).Once()
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -344,13 +346,13 @@ func TestUninstall_Success(t *testing.T) {
 func TestUpdate_Success(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "update")
+	actionPathNoExt := filepath.Join(testPackagePath, "update")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {Status: contracts.ResultStatusSuccess}}).Once()
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -374,13 +376,13 @@ func TestUpdate_Success(t *testing.T) {
 func TestUpdate_ExecuteError(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "update")
+	actionPathNoExt := filepath.Join(testPackagePath, "update")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte("echo sh"), []byte{}, false)
 
 	mockExec := MockedExec{}
 	mockExec.On("ExecuteDocument", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(map[string]*contracts.PluginResult{"Foo": {StandardError: "execute error"}}).Once()
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())
@@ -399,12 +401,12 @@ func TestUpdate_ExecuteError(t *testing.T) {
 func TestUpdate_NoUpdateScript(t *testing.T) {
 	// Setup mocks with expectations
 	mockFileSys := MockedFileSys{}
-	actionPathNoExt := path.Join(testPackagePath, "update")
+	actionPathNoExt := filepath.Join(testPackagePath, "update")
 	mockReadAction(t, &mockFileSys, actionPathNoExt, []byte{}, []byte{}, false)
 
 	mockExec := MockedExec{}
 
-	mockEnvdetectCollector := &envdetect.CollectorMock{}
+	mockEnvdetectCollector := &envdetectmocks.CollectorMock{}
 	mockEnvdetectCollector.On("CollectData", mock.Anything).Return(&environmentStub, nil).Once()
 
 	tracer := trace.NewTracer(log.NewMockLog())

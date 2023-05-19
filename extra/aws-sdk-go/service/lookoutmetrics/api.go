@@ -513,6 +513,105 @@ func (c *LookoutMetrics) CreateMetricSetWithContext(ctx aws.Context, input *Crea
 	return out, req.Send()
 }
 
+const opDeactivateAnomalyDetector = "DeactivateAnomalyDetector"
+
+// DeactivateAnomalyDetectorRequest generates a "aws/request.Request" representing the
+// client's request for the DeactivateAnomalyDetector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeactivateAnomalyDetector for more information on using the DeactivateAnomalyDetector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeactivateAnomalyDetectorRequest method.
+//    req, resp := client.DeactivateAnomalyDetectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/DeactivateAnomalyDetector
+func (c *LookoutMetrics) DeactivateAnomalyDetectorRequest(input *DeactivateAnomalyDetectorInput) (req *request.Request, output *DeactivateAnomalyDetectorOutput) {
+	op := &request.Operation{
+		Name:       opDeactivateAnomalyDetector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DeactivateAnomalyDetector",
+	}
+
+	if input == nil {
+		input = &DeactivateAnomalyDetectorInput{}
+	}
+
+	output = &DeactivateAnomalyDetectorOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeactivateAnomalyDetector API operation for Amazon Lookout for Metrics.
+//
+// Deactivates an anomaly detector.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lookout for Metrics's
+// API operation DeactivateAnomalyDetector for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by the AWS service.
+//   Check your input values and try again.
+//
+//   * ConflictException
+//   There was a conflict processing the request. Try your request again.
+//
+//   * ResourceNotFoundException
+//   The specified resource cannot be found. Check the ARN of the resource and
+//   try again.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * TooManyRequestsException
+//   The request was denied due to too many requests being submitted at the same
+//   time.
+//
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/DeactivateAnomalyDetector
+func (c *LookoutMetrics) DeactivateAnomalyDetector(input *DeactivateAnomalyDetectorInput) (*DeactivateAnomalyDetectorOutput, error) {
+	req, out := c.DeactivateAnomalyDetectorRequest(input)
+	return out, req.Send()
+}
+
+// DeactivateAnomalyDetectorWithContext is the same as DeactivateAnomalyDetector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeactivateAnomalyDetector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LookoutMetrics) DeactivateAnomalyDetectorWithContext(ctx aws.Context, input *DeactivateAnomalyDetectorInput, opts ...request.Option) (*DeactivateAnomalyDetectorOutput, error) {
+	req, out := c.DeactivateAnomalyDetectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteAlert = "DeleteAlert"
 
 // DeleteAlertRequest generates a "aws/request.Request" representing the
@@ -1154,6 +1253,101 @@ func (c *LookoutMetrics) DescribeMetricSet(input *DescribeMetricSetInput) (*Desc
 // for more information on using Contexts.
 func (c *LookoutMetrics) DescribeMetricSetWithContext(ctx aws.Context, input *DescribeMetricSetInput, opts ...request.Option) (*DescribeMetricSetOutput, error) {
 	req, out := c.DescribeMetricSetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDetectMetricSetConfig = "DetectMetricSetConfig"
+
+// DetectMetricSetConfigRequest generates a "aws/request.Request" representing the
+// client's request for the DetectMetricSetConfig operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DetectMetricSetConfig for more information on using the DetectMetricSetConfig
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DetectMetricSetConfigRequest method.
+//    req, resp := client.DetectMetricSetConfigRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/DetectMetricSetConfig
+func (c *LookoutMetrics) DetectMetricSetConfigRequest(input *DetectMetricSetConfigInput) (req *request.Request, output *DetectMetricSetConfigOutput) {
+	op := &request.Operation{
+		Name:       opDetectMetricSetConfig,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DetectMetricSetConfig",
+	}
+
+	if input == nil {
+		input = &DetectMetricSetConfigInput{}
+	}
+
+	output = &DetectMetricSetConfigOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DetectMetricSetConfig API operation for Amazon Lookout for Metrics.
+//
+// Detects an Amazon S3 dataset's file format, interval, and offset.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lookout for Metrics's
+// API operation DetectMetricSetConfig for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource cannot be found. Check the ARN of the resource and
+//   try again.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by the AWS service.
+//   Check your input values and try again.
+//
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * TooManyRequestsException
+//   The request was denied due to too many requests being submitted at the same
+//   time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/DetectMetricSetConfig
+func (c *LookoutMetrics) DetectMetricSetConfig(input *DetectMetricSetConfigInput) (*DetectMetricSetConfigOutput, error) {
+	req, out := c.DetectMetricSetConfigRequest(input)
+	return out, req.Send()
+}
+
+// DetectMetricSetConfigWithContext is the same as DetectMetricSetConfig with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DetectMetricSetConfig for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LookoutMetrics) DetectMetricSetConfigWithContext(ctx aws.Context, input *DetectMetricSetConfigInput, opts ...request.Option) (*DetectMetricSetConfigOutput, error) {
+	req, out := c.DetectMetricSetConfigRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1809,6 +2003,160 @@ func (c *LookoutMetrics) ListAnomalyDetectorsPagesWithContext(ctx aws.Context, i
 
 	for p.Next() {
 		if !fn(p.Page().(*ListAnomalyDetectorsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListAnomalyGroupRelatedMetrics = "ListAnomalyGroupRelatedMetrics"
+
+// ListAnomalyGroupRelatedMetricsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAnomalyGroupRelatedMetrics operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAnomalyGroupRelatedMetrics for more information on using the ListAnomalyGroupRelatedMetrics
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAnomalyGroupRelatedMetricsRequest method.
+//    req, resp := client.ListAnomalyGroupRelatedMetricsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/ListAnomalyGroupRelatedMetrics
+func (c *LookoutMetrics) ListAnomalyGroupRelatedMetricsRequest(input *ListAnomalyGroupRelatedMetricsInput) (req *request.Request, output *ListAnomalyGroupRelatedMetricsOutput) {
+	op := &request.Operation{
+		Name:       opListAnomalyGroupRelatedMetrics,
+		HTTPMethod: "POST",
+		HTTPPath:   "/ListAnomalyGroupRelatedMetrics",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAnomalyGroupRelatedMetricsInput{}
+	}
+
+	output = &ListAnomalyGroupRelatedMetricsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAnomalyGroupRelatedMetrics API operation for Amazon Lookout for Metrics.
+//
+// Returns a list of measures that are potential causes or effects of an anomaly
+// group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lookout for Metrics's
+// API operation ListAnomalyGroupRelatedMetrics for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource cannot be found. Check the ARN of the resource and
+//   try again.
+//
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by the AWS service.
+//   Check your input values and try again.
+//
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * TooManyRequestsException
+//   The request was denied due to too many requests being submitted at the same
+//   time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/ListAnomalyGroupRelatedMetrics
+func (c *LookoutMetrics) ListAnomalyGroupRelatedMetrics(input *ListAnomalyGroupRelatedMetricsInput) (*ListAnomalyGroupRelatedMetricsOutput, error) {
+	req, out := c.ListAnomalyGroupRelatedMetricsRequest(input)
+	return out, req.Send()
+}
+
+// ListAnomalyGroupRelatedMetricsWithContext is the same as ListAnomalyGroupRelatedMetrics with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAnomalyGroupRelatedMetrics for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LookoutMetrics) ListAnomalyGroupRelatedMetricsWithContext(ctx aws.Context, input *ListAnomalyGroupRelatedMetricsInput, opts ...request.Option) (*ListAnomalyGroupRelatedMetricsOutput, error) {
+	req, out := c.ListAnomalyGroupRelatedMetricsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAnomalyGroupRelatedMetricsPages iterates over the pages of a ListAnomalyGroupRelatedMetrics operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAnomalyGroupRelatedMetrics method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAnomalyGroupRelatedMetrics operation.
+//    pageNum := 0
+//    err := client.ListAnomalyGroupRelatedMetricsPages(params,
+//        func(page *lookoutmetrics.ListAnomalyGroupRelatedMetricsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *LookoutMetrics) ListAnomalyGroupRelatedMetricsPages(input *ListAnomalyGroupRelatedMetricsInput, fn func(*ListAnomalyGroupRelatedMetricsOutput, bool) bool) error {
+	return c.ListAnomalyGroupRelatedMetricsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAnomalyGroupRelatedMetricsPagesWithContext same as ListAnomalyGroupRelatedMetricsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LookoutMetrics) ListAnomalyGroupRelatedMetricsPagesWithContext(ctx aws.Context, input *ListAnomalyGroupRelatedMetricsInput, fn func(*ListAnomalyGroupRelatedMetricsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAnomalyGroupRelatedMetricsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAnomalyGroupRelatedMetricsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAnomalyGroupRelatedMetricsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -2644,6 +2992,101 @@ func (c *LookoutMetrics) UntagResourceWithContext(ctx aws.Context, input *UntagR
 	return out, req.Send()
 }
 
+const opUpdateAlert = "UpdateAlert"
+
+// UpdateAlertRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAlert operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateAlert for more information on using the UpdateAlert
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateAlertRequest method.
+//    req, resp := client.UpdateAlertRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/UpdateAlert
+func (c *LookoutMetrics) UpdateAlertRequest(input *UpdateAlertInput) (req *request.Request, output *UpdateAlertOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAlert,
+		HTTPMethod: "POST",
+		HTTPPath:   "/UpdateAlert",
+	}
+
+	if input == nil {
+		input = &UpdateAlertInput{}
+	}
+
+	output = &UpdateAlertOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateAlert API operation for Amazon Lookout for Metrics.
+//
+// Make changes to an existing alert.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lookout for Metrics's
+// API operation UpdateAlert for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by the AWS service.
+//   Check your input values and try again.
+//
+//   * ResourceNotFoundException
+//   The specified resource cannot be found. Check the ARN of the resource and
+//   try again.
+//
+//   * InternalServerException
+//   The request processing has failed because of an unknown error, exception,
+//   or failure.
+//
+//   * AccessDeniedException
+//   You do not have sufficient permissions to perform this action.
+//
+//   * TooManyRequestsException
+//   The request was denied due to too many requests being submitted at the same
+//   time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/UpdateAlert
+func (c *LookoutMetrics) UpdateAlert(input *UpdateAlertInput) (*UpdateAlertOutput, error) {
+	req, out := c.UpdateAlertRequest(input)
+	return out, req.Send()
+}
+
+// UpdateAlertWithContext is the same as UpdateAlert with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateAlert for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *LookoutMetrics) UpdateAlertWithContext(ctx aws.Context, input *UpdateAlertInput, opts ...request.Option) (*UpdateAlertOutput, error) {
+	req, out := c.UpdateAlertRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateAnomalyDetector = "UpdateAnomalyDetector"
 
 // UpdateAnomalyDetectorRequest generates a "aws/request.Request" representing the
@@ -2812,6 +3255,10 @@ func (c *LookoutMetrics) UpdateMetricSetRequest(input *UpdateMetricSetInput) (re
 //   * TooManyRequestsException
 //   The request was denied due to too many requests being submitted at the same
 //   time.
+//
+//   * ServiceQuotaExceededException
+//   The request exceeded the service's quotas. Check the service quotas and try
+//   again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/lookoutmetrics-2017-07-25/UpdateMetricSet
 func (c *LookoutMetrics) UpdateMetricSet(input *UpdateMetricSetInput) (*UpdateMetricSetOutput, error) {
@@ -3007,7 +3454,7 @@ func (s *ActivateAnomalyDetectorInput) SetAnomalyDetectorArn(v string) *Activate
 }
 
 type ActivateAnomalyDetectorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3040,6 +3487,9 @@ type Alert struct {
 
 	// A description of the alert.
 	AlertDescription *string `type:"string"`
+
+	// The configuration of the alert filters, containing MetricList and DimensionFilter.
+	AlertFilters *AlertFilters `type:"structure"`
 
 	// The name of the alert.
 	AlertName *string `min:"1" type:"string"`
@@ -3099,6 +3549,12 @@ func (s *Alert) SetAlertDescription(v string) *Alert {
 	return s
 }
 
+// SetAlertFilters sets the AlertFilters field's value.
+func (s *Alert) SetAlertFilters(v *AlertFilters) *Alert {
+	s.AlertFilters = v
+	return s
+}
+
 // SetAlertName sets the AlertName field's value.
 func (s *Alert) SetAlertName(v string) *Alert {
 	s.AlertName = &v
@@ -3138,6 +3594,73 @@ func (s *Alert) SetCreationTime(v time.Time) *Alert {
 // SetLastModificationTime sets the LastModificationTime field's value.
 func (s *Alert) SetLastModificationTime(v time.Time) *Alert {
 	s.LastModificationTime = &v
+	return s
+}
+
+// The configuration of the alert filters.
+type AlertFilters struct {
+	_ struct{} `type:"structure"`
+
+	// The list of DimensionFilter objects that are used for dimension-based filtering.
+	DimensionFilterList []*DimensionFilter `min:"1" type:"list"`
+
+	// The list of measures that you want to get alerts for.
+	MetricList []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AlertFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AlertFilters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AlertFilters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AlertFilters"}
+	if s.DimensionFilterList != nil && len(s.DimensionFilterList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DimensionFilterList", 1))
+	}
+	if s.MetricList != nil && len(s.MetricList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MetricList", 1))
+	}
+	if s.DimensionFilterList != nil {
+		for i, v := range s.DimensionFilterList {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DimensionFilterList", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDimensionFilterList sets the DimensionFilterList field's value.
+func (s *AlertFilters) SetDimensionFilterList(v []*DimensionFilter) *AlertFilters {
+	s.DimensionFilterList = v
+	return s
+}
+
+// SetMetricList sets the MetricList field's value.
+func (s *AlertFilters) SetMetricList(v []*string) *AlertFilters {
+	s.MetricList = v
 	return s
 }
 
@@ -3726,15 +4249,11 @@ type AppFlowConfig struct {
 	_ struct{} `type:"structure"`
 
 	// name of the flow.
-	//
-	// FlowName is a required field
-	FlowName *string `type:"string" required:"true"`
+	FlowName *string `type:"string"`
 
 	// An IAM role that gives Amazon Lookout for Metrics permission to access the
 	// flow.
-	//
-	// RoleArn is a required field
-	RoleArn *string `type:"string" required:"true"`
+	RoleArn *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -3755,22 +4274,6 @@ func (s AppFlowConfig) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *AppFlowConfig) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "AppFlowConfig"}
-	if s.FlowName == nil {
-		invalidParams.Add(request.NewErrParamRequired("FlowName"))
-	}
-	if s.RoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // SetFlowName sets the FlowName field's value.
 func (s *AppFlowConfig) SetFlowName(v string) *AppFlowConfig {
 	s.FlowName = &v
@@ -3780,6 +4283,301 @@ func (s *AppFlowConfig) SetFlowName(v string) *AppFlowConfig {
 // SetRoleArn sets the RoleArn field's value.
 func (s *AppFlowConfig) SetRoleArn(v string) *AppFlowConfig {
 	s.RoleArn = &v
+	return s
+}
+
+// Details about an Amazon Athena datasource.
+type AthenaSourceConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Settings for backtest mode.
+	BackTestConfiguration *BackTestConfiguration `type:"structure"`
+
+	// The database's data catalog.
+	DataCatalog *string `min:"1" type:"string"`
+
+	// The database's name.
+	DatabaseName *string `min:"1" type:"string"`
+
+	// An IAM role that gives Amazon Lookout for Metrics permission to access the
+	// data.
+	RoleArn *string `type:"string"`
+
+	// The database's results path.
+	S3ResultsPath *string `type:"string"`
+
+	// The database's table name.
+	TableName *string `min:"1" type:"string"`
+
+	// The database's work group name.
+	WorkGroupName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AthenaSourceConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AthenaSourceConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AthenaSourceConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AthenaSourceConfig"}
+	if s.DataCatalog != nil && len(*s.DataCatalog) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataCatalog", 1))
+	}
+	if s.DatabaseName != nil && len(*s.DatabaseName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DatabaseName", 1))
+	}
+	if s.TableName != nil && len(*s.TableName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TableName", 1))
+	}
+	if s.WorkGroupName != nil && len(*s.WorkGroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkGroupName", 1))
+	}
+	if s.BackTestConfiguration != nil {
+		if err := s.BackTestConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("BackTestConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBackTestConfiguration sets the BackTestConfiguration field's value.
+func (s *AthenaSourceConfig) SetBackTestConfiguration(v *BackTestConfiguration) *AthenaSourceConfig {
+	s.BackTestConfiguration = v
+	return s
+}
+
+// SetDataCatalog sets the DataCatalog field's value.
+func (s *AthenaSourceConfig) SetDataCatalog(v string) *AthenaSourceConfig {
+	s.DataCatalog = &v
+	return s
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *AthenaSourceConfig) SetDatabaseName(v string) *AthenaSourceConfig {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *AthenaSourceConfig) SetRoleArn(v string) *AthenaSourceConfig {
+	s.RoleArn = &v
+	return s
+}
+
+// SetS3ResultsPath sets the S3ResultsPath field's value.
+func (s *AthenaSourceConfig) SetS3ResultsPath(v string) *AthenaSourceConfig {
+	s.S3ResultsPath = &v
+	return s
+}
+
+// SetTableName sets the TableName field's value.
+func (s *AthenaSourceConfig) SetTableName(v string) *AthenaSourceConfig {
+	s.TableName = &v
+	return s
+}
+
+// SetWorkGroupName sets the WorkGroupName field's value.
+func (s *AthenaSourceConfig) SetWorkGroupName(v string) *AthenaSourceConfig {
+	s.WorkGroupName = &v
+	return s
+}
+
+// An attribute value.
+type AttributeValue struct {
+	_ struct{} `type:"structure"`
+
+	// A binary value.
+	B *string `type:"string"`
+
+	// A list of binary values.
+	BS []*string `type:"list"`
+
+	// A number.
+	N *string `type:"string"`
+
+	// A list of numbers.
+	NS []*string `type:"list"`
+
+	// A string.
+	S *string `type:"string"`
+
+	// A list of strings.
+	SS []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttributeValue) GoString() string {
+	return s.String()
+}
+
+// SetB sets the B field's value.
+func (s *AttributeValue) SetB(v string) *AttributeValue {
+	s.B = &v
+	return s
+}
+
+// SetBS sets the BS field's value.
+func (s *AttributeValue) SetBS(v []*string) *AttributeValue {
+	s.BS = v
+	return s
+}
+
+// SetN sets the N field's value.
+func (s *AttributeValue) SetN(v string) *AttributeValue {
+	s.N = &v
+	return s
+}
+
+// SetNS sets the NS field's value.
+func (s *AttributeValue) SetNS(v []*string) *AttributeValue {
+	s.NS = v
+	return s
+}
+
+// SetS sets the S field's value.
+func (s *AttributeValue) SetS(v string) *AttributeValue {
+	s.S = &v
+	return s
+}
+
+// SetSS sets the SS field's value.
+func (s *AttributeValue) SetSS(v []*string) *AttributeValue {
+	s.SS = v
+	return s
+}
+
+// An auto detection metric source.
+type AutoDetectionMetricSource struct {
+	_ struct{} `type:"structure"`
+
+	// The source's source config.
+	S3SourceConfig *AutoDetectionS3SourceConfig `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoDetectionMetricSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoDetectionMetricSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AutoDetectionMetricSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AutoDetectionMetricSource"}
+	if s.S3SourceConfig != nil {
+		if err := s.S3SourceConfig.Validate(); err != nil {
+			invalidParams.AddNested("S3SourceConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3SourceConfig sets the S3SourceConfig field's value.
+func (s *AutoDetectionMetricSource) SetS3SourceConfig(v *AutoDetectionS3SourceConfig) *AutoDetectionMetricSource {
+	s.S3SourceConfig = v
+	return s
+}
+
+// An auto detection source config.
+type AutoDetectionS3SourceConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The config's historical data path list.
+	HistoricalDataPathList []*string `min:"1" type:"list"`
+
+	// The config's templated path list.
+	TemplatedPathList []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoDetectionS3SourceConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AutoDetectionS3SourceConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AutoDetectionS3SourceConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AutoDetectionS3SourceConfig"}
+	if s.HistoricalDataPathList != nil && len(s.HistoricalDataPathList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HistoricalDataPathList", 1))
+	}
+	if s.TemplatedPathList != nil && len(s.TemplatedPathList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplatedPathList", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetHistoricalDataPathList sets the HistoricalDataPathList field's value.
+func (s *AutoDetectionS3SourceConfig) SetHistoricalDataPathList(v []*string) *AutoDetectionS3SourceConfig {
+	s.HistoricalDataPathList = v
+	return s
+}
+
+// SetTemplatedPathList sets the TemplatedPathList field's value.
+func (s *AutoDetectionS3SourceConfig) SetTemplatedPathList(v []*string) *AutoDetectionS3SourceConfig {
+	s.TemplatedPathList = v
 	return s
 }
 
@@ -3830,7 +4628,7 @@ func (s *BackTestAnomalyDetectorInput) SetAnomalyDetectorArn(v string) *BackTest
 }
 
 type BackTestAnomalyDetectorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3851,15 +4649,63 @@ func (s BackTestAnomalyDetectorOutput) GoString() string {
 	return s.String()
 }
 
+// Settings for backtest mode.
+type BackTestConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Run a backtest instead of monitoring new data.
+	//
+	// RunBackTestMode is a required field
+	RunBackTestMode *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BackTestConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BackTestConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BackTestConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BackTestConfiguration"}
+	if s.RunBackTestMode == nil {
+		invalidParams.Add(request.NewErrParamRequired("RunBackTestMode"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRunBackTestMode sets the RunBackTestMode field's value.
+func (s *BackTestConfiguration) SetRunBackTestMode(v bool) *BackTestConfiguration {
+	s.RunBackTestMode = &v
+	return s
+}
+
 // Details about an Amazon CloudWatch datasource.
 type CloudWatchConfig struct {
 	_ struct{} `type:"structure"`
 
+	// Settings for backtest mode.
+	BackTestConfiguration *BackTestConfiguration `type:"structure"`
+
 	// An IAM role that gives Amazon Lookout for Metrics permission to access data
 	// in Amazon CloudWatch.
-	//
-	// RoleArn is a required field
-	RoleArn *string `type:"string" required:"true"`
+	RoleArn *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -3883,14 +4729,22 @@ func (s CloudWatchConfig) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CloudWatchConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CloudWatchConfig"}
-	if s.RoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	if s.BackTestConfiguration != nil {
+		if err := s.BackTestConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("BackTestConfiguration", err.(request.ErrInvalidParams))
+		}
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetBackTestConfiguration sets the BackTestConfiguration field's value.
+func (s *CloudWatchConfig) SetBackTestConfiguration(v *BackTestConfiguration) *CloudWatchConfig {
+	s.BackTestConfiguration = v
+	return s
 }
 
 // SetRoleArn sets the RoleArn field's value.
@@ -4012,15 +4866,16 @@ type CreateAlertInput struct {
 	// A description of the alert.
 	AlertDescription *string `type:"string"`
 
+	// The configuration of the alert filters, containing MetricList and DimensionFilterList.
+	AlertFilters *AlertFilters `type:"structure"`
+
 	// The name of the alert.
 	//
 	// AlertName is a required field
 	AlertName *string `min:"1" type:"string" required:"true"`
 
 	// An integer from 0 to 100 specifying the alert sensitivity threshold.
-	//
-	// AlertSensitivityThreshold is a required field
-	AlertSensitivityThreshold *int64 `type:"integer" required:"true"`
+	AlertSensitivityThreshold *int64 `type:"integer"`
 
 	// The ARN of the detector to which the alert is attached.
 	//
@@ -4062,9 +4917,6 @@ func (s *CreateAlertInput) Validate() error {
 	if s.AlertName != nil && len(*s.AlertName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AlertName", 1))
 	}
-	if s.AlertSensitivityThreshold == nil {
-		invalidParams.Add(request.NewErrParamRequired("AlertSensitivityThreshold"))
-	}
 	if s.AnomalyDetectorArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("AnomalyDetectorArn"))
 	}
@@ -4074,6 +4926,11 @@ func (s *CreateAlertInput) Validate() error {
 	if s.Action != nil {
 		if err := s.Action.Validate(); err != nil {
 			invalidParams.AddNested("Action", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.AlertFilters != nil {
+		if err := s.AlertFilters.Validate(); err != nil {
+			invalidParams.AddNested("AlertFilters", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -4092,6 +4949,12 @@ func (s *CreateAlertInput) SetAction(v *Action) *CreateAlertInput {
 // SetAlertDescription sets the AlertDescription field's value.
 func (s *CreateAlertInput) SetAlertDescription(v string) *CreateAlertInput {
 	s.AlertDescription = &v
+	return s
+}
+
+// SetAlertFilters sets the AlertFilters field's value.
+func (s *CreateAlertInput) SetAlertFilters(v *AlertFilters) *CreateAlertInput {
+	s.AlertFilters = v
 	return s
 }
 
@@ -4578,6 +5441,74 @@ func (s *CsvFormatDescriptor) SetQuoteSymbol(v string) *CsvFormatDescriptor {
 	return s
 }
 
+type DeactivateAnomalyDetectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the anomaly detector.
+	//
+	// AnomalyDetectorArn is a required field
+	AnomalyDetectorArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeactivateAnomalyDetectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeactivateAnomalyDetectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeactivateAnomalyDetectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeactivateAnomalyDetectorInput"}
+	if s.AnomalyDetectorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnomalyDetectorArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnomalyDetectorArn sets the AnomalyDetectorArn field's value.
+func (s *DeactivateAnomalyDetectorInput) SetAnomalyDetectorArn(v string) *DeactivateAnomalyDetectorInput {
+	s.AnomalyDetectorArn = &v
+	return s
+}
+
+type DeactivateAnomalyDetectorOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeactivateAnomalyDetectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeactivateAnomalyDetectorOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteAlertInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4625,7 +5556,7 @@ func (s *DeleteAlertInput) SetAlertArn(v string) *DeleteAlertInput {
 }
 
 type DeleteAlertOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4693,7 +5624,7 @@ func (s *DeleteAnomalyDetectorInput) SetAnomalyDetectorArn(v string) *DeleteAnom
 }
 
 type DeleteAnomalyDetectorOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4975,8 +5906,11 @@ type DescribeAnomalyDetectorOutput struct {
 	// The time at which the detector was created.
 	CreationTime *time.Time `type:"timestamp"`
 
-	// The reason that the detector failed, if any.
+	// The reason that the detector failed.
 	FailureReason *string `type:"string"`
+
+	// The process that caused the detector to fail.
+	FailureType *string `type:"string" enum:"AnomalyDetectorFailureType"`
 
 	// The ARN of the KMS key to use to encrypt your data.
 	KmsKeyArn *string `min:"20" type:"string"`
@@ -5039,6 +5973,12 @@ func (s *DescribeAnomalyDetectorOutput) SetCreationTime(v time.Time) *DescribeAn
 // SetFailureReason sets the FailureReason field's value.
 func (s *DescribeAnomalyDetectorOutput) SetFailureReason(v string) *DescribeAnomalyDetectorOutput {
 	s.FailureReason = &v
+	return s
+}
+
+// SetFailureType sets the FailureType field's value.
+func (s *DescribeAnomalyDetectorOutput) SetFailureType(v string) *DescribeAnomalyDetectorOutput {
+	s.FailureType = &v
 	return s
 }
 
@@ -5246,6 +6186,425 @@ func (s *DescribeMetricSetOutput) SetTimezone(v string) *DescribeMetricSetOutput
 	return s
 }
 
+type DetectMetricSetConfigInput struct {
+	_ struct{} `type:"structure"`
+
+	// An anomaly detector ARN.
+	//
+	// AnomalyDetectorArn is a required field
+	AnomalyDetectorArn *string `type:"string" required:"true"`
+
+	// A data source.
+	//
+	// AutoDetectionMetricSource is a required field
+	AutoDetectionMetricSource *AutoDetectionMetricSource `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectMetricSetConfigInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectMetricSetConfigInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DetectMetricSetConfigInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DetectMetricSetConfigInput"}
+	if s.AnomalyDetectorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnomalyDetectorArn"))
+	}
+	if s.AutoDetectionMetricSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutoDetectionMetricSource"))
+	}
+	if s.AutoDetectionMetricSource != nil {
+		if err := s.AutoDetectionMetricSource.Validate(); err != nil {
+			invalidParams.AddNested("AutoDetectionMetricSource", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnomalyDetectorArn sets the AnomalyDetectorArn field's value.
+func (s *DetectMetricSetConfigInput) SetAnomalyDetectorArn(v string) *DetectMetricSetConfigInput {
+	s.AnomalyDetectorArn = &v
+	return s
+}
+
+// SetAutoDetectionMetricSource sets the AutoDetectionMetricSource field's value.
+func (s *DetectMetricSetConfigInput) SetAutoDetectionMetricSource(v *AutoDetectionMetricSource) *DetectMetricSetConfigInput {
+	s.AutoDetectionMetricSource = v
+	return s
+}
+
+type DetectMetricSetConfigOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The inferred dataset configuration for the datasource.
+	DetectedMetricSetConfig *DetectedMetricSetConfig `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectMetricSetConfigOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectMetricSetConfigOutput) GoString() string {
+	return s.String()
+}
+
+// SetDetectedMetricSetConfig sets the DetectedMetricSetConfig field's value.
+func (s *DetectMetricSetConfigOutput) SetDetectedMetricSetConfig(v *DetectedMetricSetConfig) *DetectMetricSetConfigOutput {
+	s.DetectedMetricSetConfig = v
+	return s
+}
+
+// Properties of an inferred CSV format.
+type DetectedCsvFormatDescriptor struct {
+	_ struct{} `type:"structure"`
+
+	// The format's charset.
+	Charset *DetectedField `type:"structure"`
+
+	// Whether the format includes a header.
+	ContainsHeader *DetectedField `type:"structure"`
+
+	// The format's delimiter.
+	Delimiter *DetectedField `type:"structure"`
+
+	// The format's file compression.
+	FileCompression *DetectedField `type:"structure"`
+
+	// The format's header list.
+	HeaderList *DetectedField `type:"structure"`
+
+	// The format's quote symbol.
+	QuoteSymbol *DetectedField `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedCsvFormatDescriptor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedCsvFormatDescriptor) GoString() string {
+	return s.String()
+}
+
+// SetCharset sets the Charset field's value.
+func (s *DetectedCsvFormatDescriptor) SetCharset(v *DetectedField) *DetectedCsvFormatDescriptor {
+	s.Charset = v
+	return s
+}
+
+// SetContainsHeader sets the ContainsHeader field's value.
+func (s *DetectedCsvFormatDescriptor) SetContainsHeader(v *DetectedField) *DetectedCsvFormatDescriptor {
+	s.ContainsHeader = v
+	return s
+}
+
+// SetDelimiter sets the Delimiter field's value.
+func (s *DetectedCsvFormatDescriptor) SetDelimiter(v *DetectedField) *DetectedCsvFormatDescriptor {
+	s.Delimiter = v
+	return s
+}
+
+// SetFileCompression sets the FileCompression field's value.
+func (s *DetectedCsvFormatDescriptor) SetFileCompression(v *DetectedField) *DetectedCsvFormatDescriptor {
+	s.FileCompression = v
+	return s
+}
+
+// SetHeaderList sets the HeaderList field's value.
+func (s *DetectedCsvFormatDescriptor) SetHeaderList(v *DetectedField) *DetectedCsvFormatDescriptor {
+	s.HeaderList = v
+	return s
+}
+
+// SetQuoteSymbol sets the QuoteSymbol field's value.
+func (s *DetectedCsvFormatDescriptor) SetQuoteSymbol(v *DetectedField) *DetectedCsvFormatDescriptor {
+	s.QuoteSymbol = v
+	return s
+}
+
+// An inferred field.
+type DetectedField struct {
+	_ struct{} `type:"structure"`
+
+	// The field's confidence.
+	Confidence *string `type:"string" enum:"Confidence"`
+
+	// The field's message.
+	Message *string `type:"string"`
+
+	// The field's value.
+	Value *AttributeValue `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedField) GoString() string {
+	return s.String()
+}
+
+// SetConfidence sets the Confidence field's value.
+func (s *DetectedField) SetConfidence(v string) *DetectedField {
+	s.Confidence = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *DetectedField) SetMessage(v string) *DetectedField {
+	s.Message = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *DetectedField) SetValue(v *AttributeValue) *DetectedField {
+	s.Value = v
+	return s
+}
+
+// Properties of an inferred data format.
+type DetectedFileFormatDescriptor struct {
+	_ struct{} `type:"structure"`
+
+	// Details about a CSV format.
+	CsvFormatDescriptor *DetectedCsvFormatDescriptor `type:"structure"`
+
+	// Details about a JSON format.
+	JsonFormatDescriptor *DetectedJsonFormatDescriptor `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedFileFormatDescriptor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedFileFormatDescriptor) GoString() string {
+	return s.String()
+}
+
+// SetCsvFormatDescriptor sets the CsvFormatDescriptor field's value.
+func (s *DetectedFileFormatDescriptor) SetCsvFormatDescriptor(v *DetectedCsvFormatDescriptor) *DetectedFileFormatDescriptor {
+	s.CsvFormatDescriptor = v
+	return s
+}
+
+// SetJsonFormatDescriptor sets the JsonFormatDescriptor field's value.
+func (s *DetectedFileFormatDescriptor) SetJsonFormatDescriptor(v *DetectedJsonFormatDescriptor) *DetectedFileFormatDescriptor {
+	s.JsonFormatDescriptor = v
+	return s
+}
+
+// A detected JSON format descriptor.
+type DetectedJsonFormatDescriptor struct {
+	_ struct{} `type:"structure"`
+
+	// The format's character set.
+	Charset *DetectedField `type:"structure"`
+
+	// The format's file compression.
+	FileCompression *DetectedField `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedJsonFormatDescriptor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedJsonFormatDescriptor) GoString() string {
+	return s.String()
+}
+
+// SetCharset sets the Charset field's value.
+func (s *DetectedJsonFormatDescriptor) SetCharset(v *DetectedField) *DetectedJsonFormatDescriptor {
+	s.Charset = v
+	return s
+}
+
+// SetFileCompression sets the FileCompression field's value.
+func (s *DetectedJsonFormatDescriptor) SetFileCompression(v *DetectedField) *DetectedJsonFormatDescriptor {
+	s.FileCompression = v
+	return s
+}
+
+// An inferred dataset configuration.
+type DetectedMetricSetConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The dataset's interval.
+	MetricSetFrequency *DetectedField `type:"structure"`
+
+	// The dataset's data source.
+	MetricSource *DetectedMetricSource `type:"structure"`
+
+	// The dataset's offset.
+	Offset *DetectedField `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedMetricSetConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedMetricSetConfig) GoString() string {
+	return s.String()
+}
+
+// SetMetricSetFrequency sets the MetricSetFrequency field's value.
+func (s *DetectedMetricSetConfig) SetMetricSetFrequency(v *DetectedField) *DetectedMetricSetConfig {
+	s.MetricSetFrequency = v
+	return s
+}
+
+// SetMetricSource sets the MetricSource field's value.
+func (s *DetectedMetricSetConfig) SetMetricSource(v *DetectedMetricSource) *DetectedMetricSetConfig {
+	s.MetricSource = v
+	return s
+}
+
+// SetOffset sets the Offset field's value.
+func (s *DetectedMetricSetConfig) SetOffset(v *DetectedField) *DetectedMetricSetConfig {
+	s.Offset = v
+	return s
+}
+
+// An inferred data source.
+type DetectedMetricSource struct {
+	_ struct{} `type:"structure"`
+
+	// The data source's source configuration.
+	S3SourceConfig *DetectedS3SourceConfig `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedMetricSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedMetricSource) GoString() string {
+	return s.String()
+}
+
+// SetS3SourceConfig sets the S3SourceConfig field's value.
+func (s *DetectedMetricSource) SetS3SourceConfig(v *DetectedS3SourceConfig) *DetectedMetricSource {
+	s.S3SourceConfig = v
+	return s
+}
+
+// An inferred source configuration.
+type DetectedS3SourceConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The source's file format descriptor.
+	FileFormatDescriptor *DetectedFileFormatDescriptor `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedS3SourceConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DetectedS3SourceConfig) GoString() string {
+	return s.String()
+}
+
+// SetFileFormatDescriptor sets the FileFormatDescriptor field's value.
+func (s *DetectedS3SourceConfig) SetFileFormatDescriptor(v *DetectedFileFormatDescriptor) *DetectedS3SourceConfig {
+	s.FileFormatDescriptor = v
+	return s
+}
+
 // Details about a dimension that contributed to an anomaly.
 type DimensionContribution struct {
 	_ struct{} `type:"structure"`
@@ -5284,6 +6643,64 @@ func (s *DimensionContribution) SetDimensionName(v string) *DimensionContributio
 // SetDimensionValueContributionList sets the DimensionValueContributionList field's value.
 func (s *DimensionContribution) SetDimensionValueContributionList(v []*DimensionValueContribution) *DimensionContribution {
 	s.DimensionValueContributionList = v
+	return s
+}
+
+// The dimension filter, containing DimensionName and DimensionValueList.
+type DimensionFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the dimension to filter on.
+	DimensionName *string `min:"1" type:"string"`
+
+	// The list of values for the dimension specified in DimensionName that you
+	// want to filter on.
+	DimensionValueList []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DimensionFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DimensionFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DimensionFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DimensionFilter"}
+	if s.DimensionName != nil && len(*s.DimensionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DimensionName", 1))
+	}
+	if s.DimensionValueList != nil && len(s.DimensionValueList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DimensionValueList", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDimensionName sets the DimensionName field's value.
+func (s *DimensionFilter) SetDimensionName(v string) *DimensionFilter {
+	s.DimensionName = &v
+	return s
+}
+
+// SetDimensionValueList sets the DimensionValueList field's value.
+func (s *DimensionFilter) SetDimensionValueList(v []*string) *DimensionFilter {
+	s.DimensionValueList = v
 	return s
 }
 
@@ -5771,6 +7188,68 @@ func (s *GetSampleDataOutput) SetSampleRows(v [][]*string) *GetSampleDataOutput 
 	return s
 }
 
+// Aggregated details about the measures contributing to the anomaly group,
+// and the measures potentially impacted by the anomaly group.
+type InterMetricImpactDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the anomaly group.
+	AnomalyGroupId *string `type:"string"`
+
+	// For potential causes (CAUSE_OF_INPUT_ANOMALY_GROUP), the percentage contribution
+	// the measure has in causing the anomalies.
+	ContributionPercentage *float64 `type:"double"`
+
+	// The name of the measure.
+	MetricName *string `type:"string"`
+
+	// Whether a measure is a potential cause of the anomaly group (CAUSE_OF_INPUT_ANOMALY_GROUP),
+	// or whether the measure is impacted by the anomaly group (EFFECT_OF_INPUT_ANOMALY_GROUP).
+	RelationshipType *string `type:"string" enum:"RelationshipType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InterMetricImpactDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InterMetricImpactDetails) GoString() string {
+	return s.String()
+}
+
+// SetAnomalyGroupId sets the AnomalyGroupId field's value.
+func (s *InterMetricImpactDetails) SetAnomalyGroupId(v string) *InterMetricImpactDetails {
+	s.AnomalyGroupId = &v
+	return s
+}
+
+// SetContributionPercentage sets the ContributionPercentage field's value.
+func (s *InterMetricImpactDetails) SetContributionPercentage(v float64) *InterMetricImpactDetails {
+	s.ContributionPercentage = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *InterMetricImpactDetails) SetMetricName(v string) *InterMetricImpactDetails {
+	s.MetricName = &v
+	return s
+}
+
+// SetRelationshipType sets the RelationshipType field's value.
+func (s *InterMetricImpactDetails) SetRelationshipType(v string) *InterMetricImpactDetails {
+	s.RelationshipType = &v
+	return s
+}
+
 // The request processing has failed because of an unknown error, exception,
 // or failure.
 type InternalServerException struct {
@@ -6182,6 +7661,142 @@ func (s *ListAnomalyDetectorsOutput) SetAnomalyDetectorSummaryList(v []*AnomalyD
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListAnomalyDetectorsOutput) SetNextToken(v string) *ListAnomalyDetectorsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAnomalyGroupRelatedMetricsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the anomaly detector.
+	//
+	// AnomalyDetectorArn is a required field
+	AnomalyDetectorArn *string `type:"string" required:"true"`
+
+	// The ID of the anomaly group.
+	//
+	// AnomalyGroupId is a required field
+	AnomalyGroupId *string `type:"string" required:"true"`
+
+	// The maximum number of results to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Specify the pagination token that's returned by a previous request to retrieve
+	// the next page of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// Filter for potential causes (CAUSE_OF_INPUT_ANOMALY_GROUP) or downstream
+	// effects (EFFECT_OF_INPUT_ANOMALY_GROUP) of the anomaly group.
+	RelationshipTypeFilter *string `type:"string" enum:"RelationshipType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnomalyGroupRelatedMetricsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnomalyGroupRelatedMetricsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAnomalyGroupRelatedMetricsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAnomalyGroupRelatedMetricsInput"}
+	if s.AnomalyDetectorArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnomalyDetectorArn"))
+	}
+	if s.AnomalyGroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnomalyGroupId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnomalyDetectorArn sets the AnomalyDetectorArn field's value.
+func (s *ListAnomalyGroupRelatedMetricsInput) SetAnomalyDetectorArn(v string) *ListAnomalyGroupRelatedMetricsInput {
+	s.AnomalyDetectorArn = &v
+	return s
+}
+
+// SetAnomalyGroupId sets the AnomalyGroupId field's value.
+func (s *ListAnomalyGroupRelatedMetricsInput) SetAnomalyGroupId(v string) *ListAnomalyGroupRelatedMetricsInput {
+	s.AnomalyGroupId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAnomalyGroupRelatedMetricsInput) SetMaxResults(v int64) *ListAnomalyGroupRelatedMetricsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnomalyGroupRelatedMetricsInput) SetNextToken(v string) *ListAnomalyGroupRelatedMetricsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRelationshipTypeFilter sets the RelationshipTypeFilter field's value.
+func (s *ListAnomalyGroupRelatedMetricsInput) SetRelationshipTypeFilter(v string) *ListAnomalyGroupRelatedMetricsInput {
+	s.RelationshipTypeFilter = &v
+	return s
+}
+
+type ListAnomalyGroupRelatedMetricsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Aggregated details about the measures contributing to the anomaly group,
+	// and the measures potentially impacted by the anomaly group.
+	InterMetricImpactList []*InterMetricImpactDetails `type:"list"`
+
+	// The pagination token that's included if more results are available.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnomalyGroupRelatedMetricsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnomalyGroupRelatedMetricsOutput) GoString() string {
+	return s.String()
+}
+
+// SetInterMetricImpactList sets the InterMetricImpactList field's value.
+func (s *ListAnomalyGroupRelatedMetricsOutput) SetInterMetricImpactList(v []*InterMetricImpactDetails) *ListAnomalyGroupRelatedMetricsOutput {
+	s.InterMetricImpactList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnomalyGroupRelatedMetricsOutput) SetNextToken(v string) *ListAnomalyGroupRelatedMetricsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -6888,21 +8503,23 @@ func (s *MetricSetSummary) SetTags(v map[string]*string) *MetricSetSummary {
 	return s
 }
 
-// Contains information about source data used to generate a metric.
+// Contains information about source data used to generate metrics.
 type MetricSource struct {
 	_ struct{} `type:"structure"`
 
-	// An object containing information about the AppFlow configuration.
+	// Details about an AppFlow datasource.
 	AppFlowConfig *AppFlowConfig `type:"structure"`
 
-	// An object containing information about the Amazon CloudWatch monitoring configuration.
+	// Details about an Amazon Athena datasource.
+	AthenaSourceConfig *AthenaSourceConfig `type:"structure"`
+
+	// Details about an Amazon CloudWatch monitoring datasource.
 	CloudWatchConfig *CloudWatchConfig `type:"structure"`
 
-	// An object containing information about the Amazon Relational Database Service
-	// (RDS) configuration.
+	// Details about an Amazon Relational Database Service (RDS) datasource.
 	RDSSourceConfig *RDSSourceConfig `type:"structure"`
 
-	// An object containing information about the Amazon Redshift database configuration.
+	// Details about an Amazon Redshift database datasource.
 	RedshiftSourceConfig *RedshiftSourceConfig `type:"structure"`
 
 	// Contains information about the configuration of the S3 bucket that contains
@@ -6931,9 +8548,9 @@ func (s MetricSource) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *MetricSource) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "MetricSource"}
-	if s.AppFlowConfig != nil {
-		if err := s.AppFlowConfig.Validate(); err != nil {
-			invalidParams.AddNested("AppFlowConfig", err.(request.ErrInvalidParams))
+	if s.AthenaSourceConfig != nil {
+		if err := s.AthenaSourceConfig.Validate(); err != nil {
+			invalidParams.AddNested("AthenaSourceConfig", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.CloudWatchConfig != nil {
@@ -6966,6 +8583,12 @@ func (s *MetricSource) Validate() error {
 // SetAppFlowConfig sets the AppFlowConfig field's value.
 func (s *MetricSource) SetAppFlowConfig(v *AppFlowConfig) *MetricSource {
 	s.AppFlowConfig = v
+	return s
+}
+
+// SetAthenaSourceConfig sets the AthenaSourceConfig field's value.
+func (s *MetricSource) SetAthenaSourceConfig(v *AthenaSourceConfig) *MetricSource {
+	s.AthenaSourceConfig = v
 	return s
 }
 
@@ -7059,7 +8682,7 @@ func (s *PutFeedbackInput) SetAnomalyGroupTimeSeriesFeedback(v *AnomalyGroupTime
 }
 
 type PutFeedbackOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7085,45 +8708,29 @@ type RDSSourceConfig struct {
 	_ struct{} `type:"structure"`
 
 	// A string identifying the database instance.
-	//
-	// DBInstanceIdentifier is a required field
-	DBInstanceIdentifier *string `min:"1" type:"string" required:"true"`
+	DBInstanceIdentifier *string `min:"1" type:"string"`
 
 	// The host name of the database.
-	//
-	// DatabaseHost is a required field
-	DatabaseHost *string `min:"1" type:"string" required:"true"`
+	DatabaseHost *string `min:"1" type:"string"`
 
 	// The name of the RDS database.
-	//
-	// DatabaseName is a required field
-	DatabaseName *string `min:"1" type:"string" required:"true"`
+	DatabaseName *string `min:"1" type:"string"`
 
 	// The port number where the database can be accessed.
-	//
-	// DatabasePort is a required field
-	DatabasePort *int64 `min:"1" type:"integer" required:"true"`
+	DatabasePort *int64 `min:"1" type:"integer"`
 
 	// The Amazon Resource Name (ARN) of the role.
-	//
-	// RoleArn is a required field
-	RoleArn *string `type:"string" required:"true"`
+	RoleArn *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the AWS Secrets Manager role.
-	//
-	// SecretManagerArn is a required field
-	SecretManagerArn *string `type:"string" required:"true"`
+	SecretManagerArn *string `type:"string"`
 
 	// The name of the table in the database.
-	//
-	// TableName is a required field
-	TableName *string `min:"1" type:"string" required:"true"`
+	TableName *string `min:"1" type:"string"`
 
 	// An object containing information about the Amazon Virtual Private Cloud (VPC)
 	// configuration.
-	//
-	// VpcConfiguration is a required field
-	VpcConfiguration *VpcConfiguration `type:"structure" required:"true"`
+	VpcConfiguration *VpcConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7147,44 +8754,20 @@ func (s RDSSourceConfig) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RDSSourceConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RDSSourceConfig"}
-	if s.DBInstanceIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("DBInstanceIdentifier"))
-	}
 	if s.DBInstanceIdentifier != nil && len(*s.DBInstanceIdentifier) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DBInstanceIdentifier", 1))
-	}
-	if s.DatabaseHost == nil {
-		invalidParams.Add(request.NewErrParamRequired("DatabaseHost"))
 	}
 	if s.DatabaseHost != nil && len(*s.DatabaseHost) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DatabaseHost", 1))
 	}
-	if s.DatabaseName == nil {
-		invalidParams.Add(request.NewErrParamRequired("DatabaseName"))
-	}
 	if s.DatabaseName != nil && len(*s.DatabaseName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DatabaseName", 1))
-	}
-	if s.DatabasePort == nil {
-		invalidParams.Add(request.NewErrParamRequired("DatabasePort"))
 	}
 	if s.DatabasePort != nil && *s.DatabasePort < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("DatabasePort", 1))
 	}
-	if s.RoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
-	}
-	if s.SecretManagerArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("SecretManagerArn"))
-	}
-	if s.TableName == nil {
-		invalidParams.Add(request.NewErrParamRequired("TableName"))
-	}
 	if s.TableName != nil && len(*s.TableName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TableName", 1))
-	}
-	if s.VpcConfiguration == nil {
-		invalidParams.Add(request.NewErrParamRequired("VpcConfiguration"))
 	}
 	if s.VpcConfiguration != nil {
 		if err := s.VpcConfiguration.Validate(); err != nil {
@@ -7251,44 +8834,28 @@ type RedshiftSourceConfig struct {
 	_ struct{} `type:"structure"`
 
 	// A string identifying the Redshift cluster.
-	//
-	// ClusterIdentifier is a required field
-	ClusterIdentifier *string `min:"1" type:"string" required:"true"`
+	ClusterIdentifier *string `min:"1" type:"string"`
 
 	// The name of the database host.
-	//
-	// DatabaseHost is a required field
-	DatabaseHost *string `min:"1" type:"string" required:"true"`
+	DatabaseHost *string `min:"1" type:"string"`
 
 	// The Redshift database name.
-	//
-	// DatabaseName is a required field
-	DatabaseName *string `min:"1" type:"string" required:"true"`
+	DatabaseName *string `min:"1" type:"string"`
 
 	// The port number where the database can be accessed.
-	//
-	// DatabasePort is a required field
-	DatabasePort *int64 `min:"1" type:"integer" required:"true"`
+	DatabasePort *int64 `min:"1" type:"integer"`
 
 	// The Amazon Resource Name (ARN) of the role providing access to the database.
-	//
-	// RoleArn is a required field
-	RoleArn *string `type:"string" required:"true"`
+	RoleArn *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the AWS Secrets Manager role.
-	//
-	// SecretManagerArn is a required field
-	SecretManagerArn *string `type:"string" required:"true"`
+	SecretManagerArn *string `type:"string"`
 
 	// The table name of the Redshift database.
-	//
-	// TableName is a required field
-	TableName *string `min:"1" type:"string" required:"true"`
+	TableName *string `min:"1" type:"string"`
 
 	// Contains information about the Amazon Virtual Private Cloud (VPC) configuration.
-	//
-	// VpcConfiguration is a required field
-	VpcConfiguration *VpcConfiguration `type:"structure" required:"true"`
+	VpcConfiguration *VpcConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7312,44 +8879,20 @@ func (s RedshiftSourceConfig) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RedshiftSourceConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RedshiftSourceConfig"}
-	if s.ClusterIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
 	if s.ClusterIdentifier != nil && len(*s.ClusterIdentifier) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ClusterIdentifier", 1))
-	}
-	if s.DatabaseHost == nil {
-		invalidParams.Add(request.NewErrParamRequired("DatabaseHost"))
 	}
 	if s.DatabaseHost != nil && len(*s.DatabaseHost) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DatabaseHost", 1))
 	}
-	if s.DatabaseName == nil {
-		invalidParams.Add(request.NewErrParamRequired("DatabaseName"))
-	}
 	if s.DatabaseName != nil && len(*s.DatabaseName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DatabaseName", 1))
-	}
-	if s.DatabasePort == nil {
-		invalidParams.Add(request.NewErrParamRequired("DatabasePort"))
 	}
 	if s.DatabasePort != nil && *s.DatabasePort < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("DatabasePort", 1))
 	}
-	if s.RoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
-	}
-	if s.SecretManagerArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("SecretManagerArn"))
-	}
-	if s.TableName == nil {
-		invalidParams.Add(request.NewErrParamRequired("TableName"))
-	}
 	if s.TableName != nil && len(*s.TableName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TableName", 1))
-	}
-	if s.VpcConfiguration == nil {
-		invalidParams.Add(request.NewErrParamRequired("VpcConfiguration"))
 	}
 	if s.VpcConfiguration != nil {
 		if err := s.VpcConfiguration.Validate(); err != nil {
@@ -7495,9 +9038,7 @@ type S3SourceConfig struct {
 
 	// The ARN of an IAM role that has read and write access permissions to the
 	// source S3 bucket.
-	//
-	// RoleArn is a required field
-	RoleArn *string `type:"string" required:"true"`
+	RoleArn *string `type:"string"`
 
 	// A list of templated paths to the source files.
 	TemplatedPathList []*string `min:"1" type:"list"`
@@ -7526,9 +9067,6 @@ func (s *S3SourceConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "S3SourceConfig"}
 	if s.HistoricalDataPathList != nil && len(s.HistoricalDataPathList) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("HistoricalDataPathList", 1))
-	}
-	if s.RoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
 	}
 	if s.TemplatedPathList != nil && len(s.TemplatedPathList) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TemplatedPathList", 1))
@@ -7574,6 +9112,19 @@ type SNSConfiguration struct {
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
 
+	// The format of the SNS topic.
+	//
+	//    * JSON – Send JSON alerts with an anomaly ID and a link to the anomaly
+	//    detail page. This is the default.
+	//
+	//    * LONG_TEXT – Send human-readable alerts with information about the
+	//    impacted timeseries and a link to the anomaly detail page. We recommend
+	//    this for email.
+	//
+	//    * SHORT_TEXT – Send human-readable alerts with a link to the anomaly
+	//    detail page. We recommend this for SMS.
+	SnsFormat *string `type:"string" enum:"SnsFormat"`
+
 	// The ARN of the target SNS topic.
 	//
 	// SnsTopicArn is a required field
@@ -7617,6 +9168,12 @@ func (s *SNSConfiguration) Validate() error {
 // SetRoleArn sets the RoleArn field's value.
 func (s *SNSConfiguration) SetRoleArn(v string) *SNSConfiguration {
 	s.RoleArn = &v
+	return s
+}
+
+// SetSnsFormat sets the SnsFormat field's value.
+func (s *SNSConfiguration) SetSnsFormat(v string) *SNSConfiguration {
+	s.SnsFormat = &v
 	return s
 }
 
@@ -7856,7 +9413,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8162,7 +9719,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8181,6 +9738,129 @@ func (s UntagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
+}
+
+type UpdateAlertInput struct {
+	_ struct{} `type:"structure"`
+
+	// Action that will be triggered when there is an alert.
+	Action *Action `type:"structure"`
+
+	// The ARN of the alert to update.
+	//
+	// AlertArn is a required field
+	AlertArn *string `type:"string" required:"true"`
+
+	// A description of the alert.
+	AlertDescription *string `type:"string"`
+
+	// The configuration of the alert filters, containing MetricList and DimensionFilterList.
+	AlertFilters *AlertFilters `type:"structure"`
+
+	// An integer from 0 to 100 specifying the alert sensitivity threshold.
+	AlertSensitivityThreshold *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAlertInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAlertInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateAlertInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateAlertInput"}
+	if s.AlertArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AlertArn"))
+	}
+	if s.Action != nil {
+		if err := s.Action.Validate(); err != nil {
+			invalidParams.AddNested("Action", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.AlertFilters != nil {
+		if err := s.AlertFilters.Validate(); err != nil {
+			invalidParams.AddNested("AlertFilters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAction sets the Action field's value.
+func (s *UpdateAlertInput) SetAction(v *Action) *UpdateAlertInput {
+	s.Action = v
+	return s
+}
+
+// SetAlertArn sets the AlertArn field's value.
+func (s *UpdateAlertInput) SetAlertArn(v string) *UpdateAlertInput {
+	s.AlertArn = &v
+	return s
+}
+
+// SetAlertDescription sets the AlertDescription field's value.
+func (s *UpdateAlertInput) SetAlertDescription(v string) *UpdateAlertInput {
+	s.AlertDescription = &v
+	return s
+}
+
+// SetAlertFilters sets the AlertFilters field's value.
+func (s *UpdateAlertInput) SetAlertFilters(v *AlertFilters) *UpdateAlertInput {
+	s.AlertFilters = v
+	return s
+}
+
+// SetAlertSensitivityThreshold sets the AlertSensitivityThreshold field's value.
+func (s *UpdateAlertInput) SetAlertSensitivityThreshold(v int64) *UpdateAlertInput {
+	s.AlertSensitivityThreshold = &v
+	return s
+}
+
+type UpdateAlertOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the updated alert.
+	AlertArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAlertOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAlertOutput) GoString() string {
+	return s.String()
+}
+
+// SetAlertArn sets the AlertArn field's value.
+func (s *UpdateAlertOutput) SetAlertArn(v string) *UpdateAlertOutput {
+	s.AlertArn = &v
+	return s
 }
 
 type UpdateAnomalyDetectorInput struct {
@@ -8314,7 +9994,7 @@ type UpdateMetricSetInput struct {
 	// The dataset's interval.
 	MetricSetFrequency *string `type:"string" enum:"Frequency"`
 
-	// Contains information about source data used to generate a metric.
+	// Contains information about source data used to generate metrics.
 	MetricSource *MetricSource `type:"structure"`
 
 	// After an interval ends, the amount of seconds that the detector waits before
@@ -8719,6 +10399,30 @@ func AnomalyDetectionTaskStatus_Values() []string {
 }
 
 const (
+	// AnomalyDetectorFailureTypeActivationFailure is a AnomalyDetectorFailureType enum value
+	AnomalyDetectorFailureTypeActivationFailure = "ACTIVATION_FAILURE"
+
+	// AnomalyDetectorFailureTypeBackTestActivationFailure is a AnomalyDetectorFailureType enum value
+	AnomalyDetectorFailureTypeBackTestActivationFailure = "BACK_TEST_ACTIVATION_FAILURE"
+
+	// AnomalyDetectorFailureTypeDeletionFailure is a AnomalyDetectorFailureType enum value
+	AnomalyDetectorFailureTypeDeletionFailure = "DELETION_FAILURE"
+
+	// AnomalyDetectorFailureTypeDeactivationFailure is a AnomalyDetectorFailureType enum value
+	AnomalyDetectorFailureTypeDeactivationFailure = "DEACTIVATION_FAILURE"
+)
+
+// AnomalyDetectorFailureType_Values returns all elements of the AnomalyDetectorFailureType enum
+func AnomalyDetectorFailureType_Values() []string {
+	return []string{
+		AnomalyDetectorFailureTypeActivationFailure,
+		AnomalyDetectorFailureTypeBackTestActivationFailure,
+		AnomalyDetectorFailureTypeDeletionFailure,
+		AnomalyDetectorFailureTypeDeactivationFailure,
+	}
+}
+
+const (
 	// AnomalyDetectorStatusActive is a AnomalyDetectorStatus enum value
 	AnomalyDetectorStatusActive = "ACTIVE"
 
@@ -8745,6 +10449,12 @@ const (
 
 	// AnomalyDetectorStatusBackTestComplete is a AnomalyDetectorStatus enum value
 	AnomalyDetectorStatusBackTestComplete = "BACK_TEST_COMPLETE"
+
+	// AnomalyDetectorStatusDeactivated is a AnomalyDetectorStatus enum value
+	AnomalyDetectorStatusDeactivated = "DEACTIVATED"
+
+	// AnomalyDetectorStatusDeactivating is a AnomalyDetectorStatus enum value
+	AnomalyDetectorStatusDeactivating = "DEACTIVATING"
 )
 
 // AnomalyDetectorStatus_Values returns all elements of the AnomalyDetectorStatus enum
@@ -8759,6 +10469,8 @@ func AnomalyDetectorStatus_Values() []string {
 		AnomalyDetectorStatusBackTestActivating,
 		AnomalyDetectorStatusBackTestActive,
 		AnomalyDetectorStatusBackTestComplete,
+		AnomalyDetectorStatusDeactivated,
+		AnomalyDetectorStatusDeactivating,
 	}
 }
 
@@ -8775,6 +10487,26 @@ func CSVFileCompression_Values() []string {
 	return []string{
 		CSVFileCompressionNone,
 		CSVFileCompressionGzip,
+	}
+}
+
+const (
+	// ConfidenceHigh is a Confidence enum value
+	ConfidenceHigh = "HIGH"
+
+	// ConfidenceLow is a Confidence enum value
+	ConfidenceLow = "LOW"
+
+	// ConfidenceNone is a Confidence enum value
+	ConfidenceNone = "NONE"
+)
+
+// Confidence_Values returns all elements of the Confidence enum
+func Confidence_Values() []string {
+	return []string{
+		ConfidenceHigh,
+		ConfidenceLow,
+		ConfidenceNone,
 	}
 }
 
@@ -8815,6 +10547,42 @@ func JsonFileCompression_Values() []string {
 	return []string{
 		JsonFileCompressionNone,
 		JsonFileCompressionGzip,
+	}
+}
+
+const (
+	// RelationshipTypeCauseOfInputAnomalyGroup is a RelationshipType enum value
+	RelationshipTypeCauseOfInputAnomalyGroup = "CAUSE_OF_INPUT_ANOMALY_GROUP"
+
+	// RelationshipTypeEffectOfInputAnomalyGroup is a RelationshipType enum value
+	RelationshipTypeEffectOfInputAnomalyGroup = "EFFECT_OF_INPUT_ANOMALY_GROUP"
+)
+
+// RelationshipType_Values returns all elements of the RelationshipType enum
+func RelationshipType_Values() []string {
+	return []string{
+		RelationshipTypeCauseOfInputAnomalyGroup,
+		RelationshipTypeEffectOfInputAnomalyGroup,
+	}
+}
+
+const (
+	// SnsFormatLongText is a SnsFormat enum value
+	SnsFormatLongText = "LONG_TEXT"
+
+	// SnsFormatShortText is a SnsFormat enum value
+	SnsFormatShortText = "SHORT_TEXT"
+
+	// SnsFormatJson is a SnsFormat enum value
+	SnsFormatJson = "JSON"
+)
+
+// SnsFormat_Values returns all elements of the SnsFormat enum
+func SnsFormat_Values() []string {
+	return []string{
+		SnsFormatLongText,
+		SnsFormatShortText,
+		SnsFormatJson,
 	}
 }
 

@@ -74,7 +74,7 @@ func (c *ConnectWisdomService) CreateAssistantRequest(input *CreateAssistantInpu
 //   being created or mutated.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * ServiceQuotaExceededException
 //   You've exceeded your service quota. To perform the requested action, remove
@@ -169,7 +169,7 @@ func (c *ConnectWisdomService) CreateAssistantAssociationRequest(input *CreateAs
 //   being created or mutated.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * ServiceQuotaExceededException
 //   You've exceeded your service quota. To perform the requested action, remove
@@ -267,7 +267,7 @@ func (c *ConnectWisdomService) CreateContentRequest(input *CreateContentInput) (
 //   being created or mutated.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * ServiceQuotaExceededException
 //   You've exceeded your service quota. To perform the requested action, remove
@@ -375,7 +375,7 @@ func (c *ConnectWisdomService) CreateKnowledgeBaseRequest(input *CreateKnowledge
 //   being created or mutated.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * ServiceQuotaExceededException
 //   You've exceeded your service quota. To perform the requested action, remove
@@ -470,7 +470,7 @@ func (c *ConnectWisdomService) CreateSessionRequest(input *CreateSessionInput) (
 //   being created or mutated.
 //
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * ResourceNotFoundException
 //   The specified resource does not exist.
@@ -553,7 +553,7 @@ func (c *ConnectWisdomService) DeleteAssistantRequest(input *DeleteAssistantInpu
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -639,7 +639,7 @@ func (c *ConnectWisdomService) DeleteAssistantAssociationRequest(input *DeleteAs
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -725,7 +725,7 @@ func (c *ConnectWisdomService) DeleteContentRequest(input *DeleteContentInput) (
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -824,6 +824,9 @@ func (c *ConnectWisdomService) DeleteKnowledgeBaseRequest(input *DeleteKnowledge
 //   that accepts name, a conflicting resource (usually with the same name) is
 //   being created or mutated.
 //
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by a service.
+//
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
@@ -907,7 +910,7 @@ func (c *ConnectWisdomService) GetAssistantRequest(input *GetAssistantInput) (re
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -992,7 +995,7 @@ func (c *ConnectWisdomService) GetAssistantAssociationRequest(input *GetAssistan
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1077,7 +1080,7 @@ func (c *ConnectWisdomService) GetContentRequest(input *GetContentInput) (req *r
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1162,7 +1165,7 @@ func (c *ConnectWisdomService) GetContentSummaryRequest(input *GetContentSummary
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1247,7 +1250,7 @@ func (c *ConnectWisdomService) GetKnowledgeBaseRequest(input *GetKnowledgeBaseIn
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1338,7 +1341,7 @@ func (c *ConnectWisdomService) GetRecommendationsRequest(input *GetRecommendatio
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1423,7 +1426,7 @@ func (c *ConnectWisdomService) GetSessionRequest(input *GetSessionInput) (req *r
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1514,7 +1517,7 @@ func (c *ConnectWisdomService) ListAssistantAssociationsRequest(input *ListAssis
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1657,7 +1660,7 @@ func (c *ConnectWisdomService) ListAssistantsRequest(input *ListAssistantsInput)
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1797,7 +1800,7 @@ func (c *ConnectWisdomService) ListContentsRequest(input *ListContentsInput) (re
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -1940,7 +1943,7 @@ func (c *ConnectWisdomService) ListKnowledgeBasesRequest(input *ListKnowledgeBas
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -2157,7 +2160,7 @@ func (c *ConnectWisdomService) NotifyRecommendationsReceivedRequest(input *Notif
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -2182,6 +2185,94 @@ func (c *ConnectWisdomService) NotifyRecommendationsReceived(input *NotifyRecomm
 // for more information on using Contexts.
 func (c *ConnectWisdomService) NotifyRecommendationsReceivedWithContext(ctx aws.Context, input *NotifyRecommendationsReceivedInput, opts ...request.Option) (*NotifyRecommendationsReceivedOutput, error) {
 	req, out := c.NotifyRecommendationsReceivedRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutFeedback = "PutFeedback"
+
+// PutFeedbackRequest generates a "aws/request.Request" representing the
+// client's request for the PutFeedback operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutFeedback for more information on using the PutFeedback
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutFeedbackRequest method.
+//    req, resp := client.PutFeedbackRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wisdom-2020-10-19/PutFeedback
+func (c *ConnectWisdomService) PutFeedbackRequest(input *PutFeedbackInput) (req *request.Request, output *PutFeedbackOutput) {
+	op := &request.Operation{
+		Name:       opPutFeedback,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/assistants/{assistantId}/feedback",
+	}
+
+	if input == nil {
+		input = &PutFeedbackInput{}
+	}
+
+	output = &PutFeedbackOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutFeedback API operation for Amazon Connect Wisdom Service.
+//
+// Submits feedback to Wisdom. The feedback is used to improve future recommendations
+// from GetRecommendations (https://docs.aws.amazon.com/wisdom/latest/APIReference/API_GetRecommendations.html)
+// or results from QueryAssistant (https://docs.aws.amazon.com/wisdom/latest/APIReference/API_QueryAssistant.html).
+// Feedback can be resubmitted up to 6 hours after submission.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Wisdom Service's
+// API operation PutFeedback for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The input fails to satisfy the constraints specified by a service.
+//
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wisdom-2020-10-19/PutFeedback
+func (c *ConnectWisdomService) PutFeedback(input *PutFeedbackInput) (*PutFeedbackOutput, error) {
+	req, out := c.PutFeedbackRequest(input)
+	return out, req.Send()
+}
+
+// PutFeedbackWithContext is the same as PutFeedback with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutFeedback for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConnectWisdomService) PutFeedbackWithContext(ctx aws.Context, input *PutFeedbackInput, opts ...request.Option) (*PutFeedbackOutput, error) {
+	req, out := c.PutFeedbackRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2249,7 +2340,7 @@ func (c *ConnectWisdomService) QueryAssistantRequest(input *QueryAssistantInput)
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -2387,7 +2478,7 @@ func (c *ConnectWisdomService) RemoveKnowledgeBaseTemplateUriRequest(input *Remo
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -2479,7 +2570,7 @@ func (c *ConnectWisdomService) SearchContentRequest(input *SearchContentInput) (
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -2622,7 +2713,7 @@ func (c *ConnectWisdomService) SearchSessionsRequest(input *SearchSessionsInput)
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -2764,7 +2855,7 @@ func (c *ConnectWisdomService) StartContentUploadRequest(input *StartContentUplo
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -3013,7 +3104,7 @@ func (c *ConnectWisdomService) UpdateContentRequest(input *UpdateContentInput) (
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -3106,7 +3197,7 @@ func (c *ConnectWisdomService) UpdateKnowledgeBaseTemplateUriRequest(input *Upda
 //
 // Returned Error Types:
 //   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   The input fails to satisfy the constraints specified by a service.
 //
 //   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
@@ -3221,8 +3312,8 @@ type AppIntegrationsConfiguration struct {
 	//    you must include at least number, short_description, sys_mod_count, workflow_state,
 	//    and active.
 	//
-	// Make sure to include additional field(s); these are indexed and used to source
-	// recommendations.
+	// Make sure to include additional fields. These fields are indexed and used
+	// to source recommendations.
 	//
 	// ObjectFields is a required field
 	ObjectFields []*string `locationName:"objectFields" min:"1" type:"list" required:"true"`
@@ -3284,7 +3375,7 @@ func (s *AppIntegrationsConfiguration) SetObjectFields(v []*string) *AppIntegrat
 type AssistantAssociationData struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Wisdom assistant
+	// The Amazon Resource Name (ARN) of the Wisdom assistant.
 	//
 	// AssistantArn is a required field
 	AssistantArn *string `locationName:"assistantArn" type:"string" required:"true"`
@@ -3382,7 +3473,7 @@ func (s *AssistantAssociationData) SetTags(v map[string]*string) *AssistantAssoc
 type AssistantAssociationInputData struct {
 	_ struct{} `type:"structure"`
 
-	// The the identifier of the knowledge base.
+	// The identifier of the knowledge base.
 	KnowledgeBaseId *string `locationName:"knowledgeBaseId" type:"string"`
 }
 
@@ -3446,7 +3537,7 @@ func (s *AssistantAssociationOutputData) SetKnowledgeBaseAssociation(v *Knowledg
 type AssistantAssociationSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Wisdom assistant
+	// The Amazon Resource Name (ARN) of the Wisdom assistant.
 	//
 	// AssistantArn is a required field
 	AssistantArn *string `locationName:"assistantArn" type:"string" required:"true"`
@@ -3544,7 +3635,7 @@ func (s *AssistantAssociationSummary) SetTags(v map[string]*string) *AssistantAs
 type AssistantData struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Wisdom assistant
+	// The Amazon Resource Name (ARN) of the Wisdom assistant.
 	//
 	// AssistantArn is a required field
 	AssistantArn *string `locationName:"assistantArn" type:"string" required:"true"`
@@ -3649,7 +3740,7 @@ func (s *AssistantData) SetType(v string) *AssistantData {
 type AssistantSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Wisdom assistant
+	// The Amazon Resource Name (ARN) of the Wisdom assistant.
 	//
 	// AssistantArn is a required field
 	AssistantArn *string `locationName:"assistantArn" type:"string" required:"true"`
@@ -3841,7 +3932,7 @@ type ContentData struct {
 	// KnowledgeBaseArn is a required field
 	KnowledgeBaseArn *string `locationName:"knowledgeBaseArn" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base.
+	// The identifier of the knowledge base.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -4010,7 +4101,7 @@ type ContentReference struct {
 	// The Amazon Resource Name (ARN) of the knowledge base.
 	KnowledgeBaseArn *string `locationName:"knowledgeBaseArn" type:"string"`
 
-	// The the identifier of the knowledge base.
+	// The identifier of the knowledge base.
 	KnowledgeBaseId *string `locationName:"knowledgeBaseId" type:"string"`
 }
 
@@ -4080,7 +4171,7 @@ type ContentSummary struct {
 	// KnowledgeBaseArn is a required field
 	KnowledgeBaseArn *string `locationName:"knowledgeBaseArn" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base.
+	// The identifier of the knowledge base.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -4481,8 +4572,8 @@ type CreateContentInput struct {
 	// of the request.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -5026,7 +5117,7 @@ func (s *DeleteAssistantAssociationInput) SetAssistantId(v string) *DeleteAssist
 }
 
 type DeleteAssistantAssociationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5098,7 +5189,7 @@ func (s *DeleteAssistantInput) SetAssistantId(v string) *DeleteAssistantInput {
 }
 
 type DeleteAssistantOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5128,8 +5219,8 @@ type DeleteContentInput struct {
 	// ContentId is a required field
 	ContentId *string `location:"uri" locationName:"contentId" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -5188,7 +5279,7 @@ func (s *DeleteContentInput) SetKnowledgeBaseId(v string) *DeleteContentInput {
 }
 
 type DeleteContentOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5260,7 +5351,7 @@ func (s *DeleteKnowledgeBaseInput) SetKnowledgeBaseId(v string) *DeleteKnowledge
 }
 
 type DeleteKnowledgeBaseOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5375,6 +5466,53 @@ func (s *DocumentText) SetHighlights(v []*Highlight) *DocumentText {
 // SetText sets the Text field's value.
 func (s *DocumentText) SetText(v string) *DocumentText {
 	s.Text = &v
+	return s
+}
+
+// The feedback to submit to Wisdom.
+type FeedbackData struct {
+	_ struct{} `type:"structure"`
+
+	// The relevance of the target this feedback is for.
+	//
+	// Relevance is a required field
+	Relevance *string `locationName:"relevance" type:"string" required:"true" enum:"Relevance"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeedbackData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FeedbackData) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FeedbackData) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FeedbackData"}
+	if s.Relevance == nil {
+		invalidParams.Add(request.NewErrParamRequired("Relevance"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRelevance sets the Relevance field's value.
+func (s *FeedbackData) SetRelevance(v string) *FeedbackData {
+	s.Relevance = &v
 	return s
 }
 
@@ -5645,8 +5783,8 @@ type GetContentInput struct {
 	// ContentId is a required field
 	ContentId *string `location:"uri" locationName:"contentId" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -5744,8 +5882,8 @@ type GetContentSummaryInput struct {
 	// ContentId is a required field
 	ContentId *string `location:"uri" locationName:"contentId" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -5837,8 +5975,8 @@ func (s *GetContentSummaryOutput) SetContentSummary(v *ContentSummary) *GetConte
 type GetKnowledgeBaseInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -6014,6 +6152,9 @@ type GetRecommendationsOutput struct {
 	//
 	// Recommendations is a required field
 	Recommendations []*RecommendationData `locationName:"recommendations" type:"list" required:"true"`
+
+	// The triggers corresponding to recommendations.
+	Triggers []*RecommendationTrigger `locationName:"triggers" type:"list"`
 }
 
 // String returns the string representation.
@@ -6037,6 +6178,12 @@ func (s GetRecommendationsOutput) GoString() string {
 // SetRecommendations sets the Recommendations field's value.
 func (s *GetRecommendationsOutput) SetRecommendations(v []*RecommendationData) *GetRecommendationsOutput {
 	s.Recommendations = v
+	return s
+}
+
+// SetTriggers sets the Triggers field's value.
+func (s *GetRecommendationsOutput) SetTriggers(v []*RecommendationTrigger) *GetRecommendationsOutput {
+	s.Triggers = v
 	return s
 }
 
@@ -6188,7 +6335,7 @@ type KnowledgeBaseAssociationData struct {
 	// The Amazon Resource Name (ARN) of the knowledge base.
 	KnowledgeBaseArn *string `locationName:"knowledgeBaseArn" type:"string"`
 
-	// The the identifier of the knowledge base.
+	// The identifier of the knowledge base.
 	KnowledgeBaseId *string `locationName:"knowledgeBaseId" type:"string"`
 }
 
@@ -6234,7 +6381,7 @@ type KnowledgeBaseData struct {
 	// KnowledgeBaseArn is a required field
 	KnowledgeBaseArn *string `locationName:"knowledgeBaseArn" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base.
+	// The identifier of the knowledge base.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -6368,7 +6515,7 @@ type KnowledgeBaseSummary struct {
 	// KnowledgeBaseArn is a required field
 	KnowledgeBaseArn *string `locationName:"knowledgeBaseArn" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base.
+	// The identifier of the knowledge base.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -6389,7 +6536,7 @@ type KnowledgeBaseSummary struct {
 	// The KMS key used for encryption.
 	ServerSideEncryptionConfiguration *ServerSideEncryptionConfiguration `locationName:"serverSideEncryptionConfiguration" type:"structure"`
 
-	// [KEVIN]
+	// Configuration information about the external data source.
 	SourceConfiguration *SourceConfiguration `locationName:"sourceConfiguration" type:"structure"`
 
 	// The status of the knowledge base summary.
@@ -6698,8 +6845,8 @@ func (s *ListAssistantsOutput) SetNextToken(v string) *ListAssistantsOutput {
 type ListContentsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -7219,6 +7366,180 @@ func (s *PreconditionFailedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type PutFeedbackInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the Wisdom assistant. Can be either the ID or the ARN.
+	// URLs cannot contain the ARN.
+	//
+	// AssistantId is a required field
+	AssistantId *string `location:"uri" locationName:"assistantId" type:"string" required:"true"`
+
+	// The feedback.
+	//
+	// Feedback is a required field
+	Feedback *FeedbackData `locationName:"feedback" type:"structure" required:"true"`
+
+	// The identifier of a recommendation. or The identifier of the result data.
+	//
+	// TargetId is a required field
+	TargetId *string `locationName:"targetId" type:"string" required:"true"`
+
+	// The type of the targetId for which The feedback. is targeted.
+	//
+	// TargetType is a required field
+	TargetType *string `locationName:"targetType" type:"string" required:"true" enum:"TargetType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutFeedbackInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutFeedbackInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutFeedbackInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutFeedbackInput"}
+	if s.AssistantId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssistantId"))
+	}
+	if s.AssistantId != nil && len(*s.AssistantId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssistantId", 1))
+	}
+	if s.Feedback == nil {
+		invalidParams.Add(request.NewErrParamRequired("Feedback"))
+	}
+	if s.TargetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetId"))
+	}
+	if s.TargetType == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetType"))
+	}
+	if s.Feedback != nil {
+		if err := s.Feedback.Validate(); err != nil {
+			invalidParams.AddNested("Feedback", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssistantId sets the AssistantId field's value.
+func (s *PutFeedbackInput) SetAssistantId(v string) *PutFeedbackInput {
+	s.AssistantId = &v
+	return s
+}
+
+// SetFeedback sets the Feedback field's value.
+func (s *PutFeedbackInput) SetFeedback(v *FeedbackData) *PutFeedbackInput {
+	s.Feedback = v
+	return s
+}
+
+// SetTargetId sets the TargetId field's value.
+func (s *PutFeedbackInput) SetTargetId(v string) *PutFeedbackInput {
+	s.TargetId = &v
+	return s
+}
+
+// SetTargetType sets the TargetType field's value.
+func (s *PutFeedbackInput) SetTargetType(v string) *PutFeedbackInput {
+	s.TargetType = &v
+	return s
+}
+
+type PutFeedbackOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the Wisdom assistant.
+	//
+	// AssistantArn is a required field
+	AssistantArn *string `locationName:"assistantArn" type:"string" required:"true"`
+
+	// The identifier of the Wisdom assistant.
+	//
+	// AssistantId is a required field
+	AssistantId *string `locationName:"assistantId" type:"string" required:"true"`
+
+	// The feedback.
+	//
+	// Feedback is a required field
+	Feedback *FeedbackData `locationName:"feedback" type:"structure" required:"true"`
+
+	// The identifier of a recommendation. or The identifier of the result data.
+	//
+	// TargetId is a required field
+	TargetId *string `locationName:"targetId" type:"string" required:"true"`
+
+	// The type of the targetId for which The feedback. is targeted.
+	//
+	// TargetType is a required field
+	TargetType *string `locationName:"targetType" type:"string" required:"true" enum:"TargetType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutFeedbackOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutFeedbackOutput) GoString() string {
+	return s.String()
+}
+
+// SetAssistantArn sets the AssistantArn field's value.
+func (s *PutFeedbackOutput) SetAssistantArn(v string) *PutFeedbackOutput {
+	s.AssistantArn = &v
+	return s
+}
+
+// SetAssistantId sets the AssistantId field's value.
+func (s *PutFeedbackOutput) SetAssistantId(v string) *PutFeedbackOutput {
+	s.AssistantId = &v
+	return s
+}
+
+// SetFeedback sets the Feedback field's value.
+func (s *PutFeedbackOutput) SetFeedback(v *FeedbackData) *PutFeedbackOutput {
+	s.Feedback = v
+	return s
+}
+
+// SetTargetId sets the TargetId field's value.
+func (s *PutFeedbackOutput) SetTargetId(v string) *PutFeedbackOutput {
+	s.TargetId = &v
+	return s
+}
+
+// SetTargetType sets the TargetType field's value.
+func (s *PutFeedbackOutput) SetTargetType(v string) *PutFeedbackOutput {
+	s.TargetType = &v
+	return s
+}
+
 type QueryAssistantInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7354,6 +7675,42 @@ func (s *QueryAssistantOutput) SetResults(v []*ResultData) *QueryAssistantOutput
 	return s
 }
 
+// Data associated with the QUERY RecommendationTriggerType.
+type QueryRecommendationTriggerData struct {
+	_ struct{} `type:"structure"`
+
+	// The text associated with the recommendation trigger.
+	//
+	// Text is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by QueryRecommendationTriggerData's
+	// String and GoString methods.
+	Text *string `locationName:"text" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueryRecommendationTriggerData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueryRecommendationTriggerData) GoString() string {
+	return s.String()
+}
+
+// SetText sets the Text field's value.
+func (s *QueryRecommendationTriggerData) SetText(v string) *QueryRecommendationTriggerData {
+	s.Text = &v
+	return s
+}
+
 // Information about the recommendation.
 type RecommendationData struct {
 	_ struct{} `type:"structure"`
@@ -7373,6 +7730,9 @@ type RecommendationData struct {
 
 	// The relevance score of the recommendation.
 	RelevanceScore *float64 `locationName:"relevanceScore" type:"double"`
+
+	// The type of recommendation.
+	Type *string `locationName:"type" type:"string" enum:"RecommendationType"`
 }
 
 // String returns the string representation.
@@ -7417,11 +7777,135 @@ func (s *RecommendationData) SetRelevanceScore(v float64) *RecommendationData {
 	return s
 }
 
+// SetType sets the Type field's value.
+func (s *RecommendationData) SetType(v string) *RecommendationData {
+	s.Type = &v
+	return s
+}
+
+// A recommendation trigger provides context on the event that produced the
+// referenced recommendations. Recommendations are only referenced in recommendationIds
+// by a single RecommendationTrigger.
+type RecommendationTrigger struct {
+	_ struct{} `type:"structure"`
+
+	// A union type containing information related to the trigger.
+	//
+	// Data is a required field
+	Data *RecommendationTriggerData `locationName:"data" type:"structure" required:"true"`
+
+	// The identifier of the recommendation trigger.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// The identifiers of the recommendations.
+	//
+	// RecommendationIds is a required field
+	RecommendationIds []*string `locationName:"recommendationIds" type:"list" required:"true"`
+
+	// The source of the recommendation trigger.
+	//
+	//    * ISSUE_DETECTION: The corresponding recommendations were triggered by
+	//    a Contact Lens issue.
+	//
+	//    * RULE_EVALUATION: The corresponding recommendations were triggered by
+	//    a Contact Lens rule.
+	//
+	// Source is a required field
+	Source *string `locationName:"source" type:"string" required:"true" enum:"RecommendationSourceType"`
+
+	// The type of recommendation trigger.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"RecommendationTriggerType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendationTrigger) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendationTrigger) GoString() string {
+	return s.String()
+}
+
+// SetData sets the Data field's value.
+func (s *RecommendationTrigger) SetData(v *RecommendationTriggerData) *RecommendationTrigger {
+	s.Data = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *RecommendationTrigger) SetId(v string) *RecommendationTrigger {
+	s.Id = &v
+	return s
+}
+
+// SetRecommendationIds sets the RecommendationIds field's value.
+func (s *RecommendationTrigger) SetRecommendationIds(v []*string) *RecommendationTrigger {
+	s.RecommendationIds = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *RecommendationTrigger) SetSource(v string) *RecommendationTrigger {
+	s.Source = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *RecommendationTrigger) SetType(v string) *RecommendationTrigger {
+	s.Type = &v
+	return s
+}
+
+// A union type containing information related to the trigger.
+type RecommendationTriggerData struct {
+	_ struct{} `type:"structure"`
+
+	// Data associated with the QUERY RecommendationTriggerType.
+	Query *QueryRecommendationTriggerData `locationName:"query" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendationTriggerData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RecommendationTriggerData) GoString() string {
+	return s.String()
+}
+
+// SetQuery sets the Query field's value.
+func (s *RecommendationTriggerData) SetQuery(v *QueryRecommendationTriggerData) *RecommendationTriggerData {
+	s.Query = v
+	return s
+}
+
 type RemoveKnowledgeBaseTemplateUriInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -7468,7 +7952,7 @@ func (s *RemoveKnowledgeBaseTemplateUriInput) SetKnowledgeBaseId(v string) *Remo
 }
 
 type RemoveKnowledgeBaseTemplateUriOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7670,8 +8154,8 @@ func (s *ResultData) SetResultId(v string) *ResultData {
 type SearchContentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -8001,8 +8485,7 @@ type ServerSideEncryptionConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// The KMS key. For information about valid ID values, see Key identifiers (KeyId)
-	// (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id)
-	// in the AWS Key Management Service Developer Guide.
+	// (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id).
 	KmsKeyId *string `locationName:"kmsKeyId" min:"1" type:"string"`
 }
 
@@ -8187,7 +8670,7 @@ func (s *SessionData) SetTags(v map[string]*string) *SessionData {
 type SessionSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the Wisdom assistant
+	// The Amazon Resource Name (ARN) of the Wisdom assistant.
 	//
 	// AssistantArn is a required field
 	AssistantArn *string `locationName:"assistantArn" type:"string" required:"true"`
@@ -8306,8 +8789,8 @@ type StartContentUploadInput struct {
 	// ContentType is a required field
 	ContentType *string `locationName:"contentType" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -8496,7 +8979,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8652,7 +9135,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8682,7 +9165,7 @@ type UpdateContentInput struct {
 	// ContentId is a required field
 	ContentId *string `location:"uri" locationName:"contentId" type:"string" required:"true"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN
+	// The identifier of the knowledge base. Can be either the ID or the ARN
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -8850,8 +9333,8 @@ func (s *UpdateContentOutput) SetContent(v *ContentData) *UpdateContentOutput {
 type UpdateKnowledgeBaseTemplateUriInput struct {
 	_ struct{} `type:"structure"`
 
-	// The the identifier of the knowledge base. Can be either the ID or the ARN.
-	// URLs cannot contain the ARN.
+	// The identifier of the knowledge base. Can be either the ID or the ARN. URLs
+	// cannot contain the ARN.
 	//
 	// KnowledgeBaseId is a required field
 	KnowledgeBaseId *string `location:"uri" locationName:"knowledgeBaseId" type:"string" required:"true"`
@@ -8945,7 +9428,7 @@ func (s *UpdateKnowledgeBaseTemplateUriOutput) SetKnowledgeBase(v *KnowledgeBase
 	return s
 }
 
-// The input fails to satisfy the constraints specified by an AWS service.
+// The input fails to satisfy the constraints specified by a service.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -9174,6 +9657,66 @@ func KnowledgeBaseType_Values() []string {
 }
 
 const (
+	// RecommendationSourceTypeIssueDetection is a RecommendationSourceType enum value
+	RecommendationSourceTypeIssueDetection = "ISSUE_DETECTION"
+
+	// RecommendationSourceTypeRuleEvaluation is a RecommendationSourceType enum value
+	RecommendationSourceTypeRuleEvaluation = "RULE_EVALUATION"
+
+	// RecommendationSourceTypeOther is a RecommendationSourceType enum value
+	RecommendationSourceTypeOther = "OTHER"
+)
+
+// RecommendationSourceType_Values returns all elements of the RecommendationSourceType enum
+func RecommendationSourceType_Values() []string {
+	return []string{
+		RecommendationSourceTypeIssueDetection,
+		RecommendationSourceTypeRuleEvaluation,
+		RecommendationSourceTypeOther,
+	}
+}
+
+const (
+	// RecommendationTriggerTypeQuery is a RecommendationTriggerType enum value
+	RecommendationTriggerTypeQuery = "QUERY"
+)
+
+// RecommendationTriggerType_Values returns all elements of the RecommendationTriggerType enum
+func RecommendationTriggerType_Values() []string {
+	return []string{
+		RecommendationTriggerTypeQuery,
+	}
+}
+
+const (
+	// RecommendationTypeKnowledgeContent is a RecommendationType enum value
+	RecommendationTypeKnowledgeContent = "KNOWLEDGE_CONTENT"
+)
+
+// RecommendationType_Values returns all elements of the RecommendationType enum
+func RecommendationType_Values() []string {
+	return []string{
+		RecommendationTypeKnowledgeContent,
+	}
+}
+
+const (
+	// RelevanceHelpful is a Relevance enum value
+	RelevanceHelpful = "HELPFUL"
+
+	// RelevanceNotHelpful is a Relevance enum value
+	RelevanceNotHelpful = "NOT_HELPFUL"
+)
+
+// Relevance_Values returns all elements of the Relevance enum
+func Relevance_Values() []string {
+	return []string{
+		RelevanceHelpful,
+		RelevanceNotHelpful,
+	}
+}
+
+const (
 	// RelevanceLevelHigh is a RelevanceLevel enum value
 	RelevanceLevelHigh = "HIGH"
 
@@ -9190,5 +9733,21 @@ func RelevanceLevel_Values() []string {
 		RelevanceLevelHigh,
 		RelevanceLevelMedium,
 		RelevanceLevelLow,
+	}
+}
+
+const (
+	// TargetTypeRecommendation is a TargetType enum value
+	TargetTypeRecommendation = "RECOMMENDATION"
+
+	// TargetTypeResult is a TargetType enum value
+	TargetTypeResult = "RESULT"
+)
+
+// TargetType_Values returns all elements of the TargetType enum
+func TargetType_Values() []string {
+	return []string{
+		TargetTypeRecommendation,
+		TargetTypeResult,
 	}
 }

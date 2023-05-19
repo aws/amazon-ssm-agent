@@ -39,7 +39,7 @@ func (r *SSMRebooter) GetChannel() chan RebootType {
 	return ch
 }
 
-//RebootMachine reboots the machine
+// RebootMachine reboots the machine
 func (r *SSMRebooter) RebootMachine(log log.T) {
 	if err := reboot(log); err != nil {
 		log.Error("error in rebooting the machine", err)

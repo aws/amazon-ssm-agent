@@ -27,7 +27,9 @@ import (
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -116,6 +118,23 @@ func generateDomainJoinPluginInputOptionalParamSetHostNameWithAppendDigits(id st
 	}
 }
 
+func generateDomainJoinPluginInputOptionalParamKeepHostName(id string, name string, ipAddress []string, keepHostName bool) DomainJoinPluginInput {
+	return DomainJoinPluginInput{
+		DirectoryId:    id,
+		DirectoryName:  name,
+		DnsIpAddresses: ipAddress,
+		KeepHostName:   keepHostName,
+	}
+}
+
+func generateDomainJoinPluginInputOptionalParamKeepHostNameNoIPs(id string, name string, keepHostName bool) DomainJoinPluginInput {
+	return DomainJoinPluginInput{
+		DirectoryId:   id,
+		DirectoryName: name,
+		KeepHostName:  keepHostName,
+	}
+}
+
 // TestRunCommands tests the runCommands and runCommandsRawInput methods, which run one set of commands.
 func TestRunCommands(t *testing.T) {
 	for _, testCase := range TestCases {
@@ -151,7 +170,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 	p := &Plugin{
-		context: context.NewMockDefault(),
+		context: contextmocks.NewMockDefault(),
 	}
 
 	if rawInput {
@@ -176,8 +195,8 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 
 // TestMakeArguments tests the makeArguments methods, which build up the command for aws_domainjoin.sh
 func TestMakeArguments(t *testing.T) {
-	contextMock := &context.Mock{}
-	context := context.NewMockDefault()
+	contextMock := &contextmocks.Mock{}
+	context := contextmocks.NewMockDefault()
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
 	commandRes, _ := makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected := "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240"
@@ -224,8 +243,29 @@ func TestMakeArguments(t *testing.T) {
 	identityMock := &identityMocks.IAgentIdentity{}
 	identityMock.On("Region").Return("", nil) // Remove region setting
 	contextMock.On("Identity").Return(identityMock)
-	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("Log").Return(logmocks.NewMockLog())
 	commandRes, _ = makeArguments(contextMock, "./aws_domainjoin.sh", domainJoinInput)
 	expected = ""
 	assert.Equal(t, expected, commandRes)
+
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testKeepHostName)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
+	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --keep-hostname   --dns-addresses 172.31.4.141,172.31.21.240"
+	assert.Equal(t, expected, commandRes)
+
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostNameNoIPs(testDirectoryId, testDirectoryName, testKeepHostName)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
+	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --keep-hostname  "
+	assert.Equal(t, expected, commandRes)
+
+	var shellInjectionCheck = isShellInjection("$(rm *)")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for $(rm *)")
+	shellInjectionCheck = isShellInjection("`rm *`")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for `rm *`")
+	shellInjectionCheck = isShellInjection("echo abc && rm *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc && rm *")
+	shellInjectionCheck = isShellInjection("echo abc || rm *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc || rm *")
+	shellInjectionCheck = isShellInjection("echo abc ; rm *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc ; rm *")
 }

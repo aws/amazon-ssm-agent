@@ -3344,7 +3344,9 @@ type App struct {
 	// Describes the automated branch creation glob patterns for the Amplify app.
 	AutoBranchCreationPatterns []*string `locationName:"autoBranchCreationPatterns" type:"list"`
 
-	// The basic authorization credentials for branches for the Amplify app.
+	// The basic authorization credentials for branches for the Amplify app. You
+	// must base64-encode the authorization credentials and provide them in the
+	// format user:password.
 	//
 	// BasicAuthCredentials is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by App's
@@ -3353,7 +3355,11 @@ type App struct {
 
 	// Describes the content of the build specification (build spec) for the Amplify
 	// app.
-	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
+	//
+	// BuildSpec is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by App's
+	// String and GoString methods.
+	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string" sensitive:"true"`
 
 	// Creates a date and time for the Amplify app.
 	//
@@ -3361,7 +3367,7 @@ type App struct {
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
 
 	// Describes the custom HTTP headers for the Amplify app.
-	CustomHeaders *string `locationName:"customHeaders" min:"1" type:"string"`
+	CustomHeaders *string `locationName:"customHeaders" type:"string"`
 
 	// Describes the custom redirect and rewrite rules for the Amplify app.
 	CustomRules []*CustomRule `locationName:"customRules" type:"list"`
@@ -3400,7 +3406,7 @@ type App struct {
 
 	// The AWS Identity and Access Management (IAM) service role for the Amazon
 	// Resource Name (ARN) of the Amplify app.
-	IamServiceRoleArn *string `locationName:"iamServiceRoleArn" min:"1" type:"string"`
+	IamServiceRoleArn *string `locationName:"iamServiceRoleArn" type:"string"`
 
 	// The name for the Amplify app.
 	//
@@ -3415,13 +3421,22 @@ type App struct {
 	// Describes the information about a production branch of the Amplify app.
 	ProductionBranch *ProductionBranch `locationName:"productionBranch" type:"structure"`
 
-	// The repository for the Amplify app.
+	// The Git repository for the Amplify app.
 	//
 	// Repository is a required field
 	Repository *string `locationName:"repository" type:"string" required:"true"`
 
+	//
+	// This is for internal use.
+	//
+	// The Amplify service uses this parameter to specify the authentication protocol
+	// to use to access the Git repository for an Amplify app. Amplify specifies
+	// TOKEN for a GitHub repository, SIGV4 for an Amazon Web Services CodeCommit
+	// repository, and SSH for GitLab and Bitbucket repositories.
+	RepositoryCloneMethod *string `locationName:"repositoryCloneMethod" type:"string" enum:"RepositoryCloneMethod"`
+
 	// The tag for the Amplify app.
-	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// Updates the date and time for the Amplify app.
 	//
@@ -3573,6 +3588,12 @@ func (s *App) SetRepository(v string) *App {
 	return s
 }
 
+// SetRepositoryCloneMethod sets the RepositoryCloneMethod field's value.
+func (s *App) SetRepositoryCloneMethod(v string) *App {
+	s.RepositoryCloneMethod = &v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *App) SetTags(v map[string]*string) *App {
 	s.Tags = v
@@ -3634,7 +3655,9 @@ func (s *Artifact) SetArtifactId(v string) *Artifact {
 type AutoBranchCreationConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The basic authorization credentials for the autocreated branch.
+	// The basic authorization credentials for the autocreated branch. You must
+	// base64-encode the authorization credentials and provide them in the format
+	// user:password.
 	//
 	// BasicAuthCredentials is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by AutoBranchCreationConfig's
@@ -3642,7 +3665,11 @@ type AutoBranchCreationConfig struct {
 	BasicAuthCredentials *string `locationName:"basicAuthCredentials" type:"string" sensitive:"true"`
 
 	// The build specification (build spec) for the autocreated branch.
-	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
+	//
+	// BuildSpec is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AutoBranchCreationConfig's
+	// String and GoString methods.
+	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string" sensitive:"true"`
 
 	// Enables auto building for the autocreated branch.
 	EnableAutoBuild *bool `locationName:"enableAutoBuild" type:"boolean"`
@@ -3772,7 +3799,7 @@ type BackendEnvironment struct {
 	// an Amplify app.
 	//
 	// BackendEnvironmentArn is a required field
-	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" min:"1" type:"string" required:"true"`
+	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" type:"string" required:"true"`
 
 	// The creation date and time for a backend environment that is part of an Amplify
 	// app.
@@ -3930,9 +3957,11 @@ type Branch struct {
 
 	// The Amazon Resource Name (ARN) for a backend environment that is part of
 	// an Amplify app.
-	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" min:"1" type:"string"`
+	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" type:"string"`
 
-	// The basic authorization credentials for a branch of an Amplify app.
+	// The basic authorization credentials for a branch of an Amplify app. You must
+	// base64-encode the authorization credentials and provide them in the format
+	// user:password.
 	//
 	// BasicAuthCredentials is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by Branch's
@@ -3951,7 +3980,11 @@ type Branch struct {
 
 	// The build specification (build spec) content for the branch of an Amplify
 	// app.
-	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
+	//
+	// BuildSpec is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Branch's
+	// String and GoString methods.
+	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string" sensitive:"true"`
 
 	// The creation date and time for a branch that is part of an Amplify app.
 	//
@@ -4025,7 +4058,7 @@ type Branch struct {
 	Stage *string `locationName:"stage" type:"string" required:"true" enum:"Stage"`
 
 	// The tag for the branch of an Amplify app.
-	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// The thumbnail URL for the branch of an Amplify app.
 	ThumbnailUrl *string `locationName:"thumbnailUrl" min:"1" type:"string"`
@@ -4230,9 +4263,20 @@ func (s *Branch) SetUpdateTime(v time.Time) *Branch {
 type CreateAppInput struct {
 	_ struct{} `type:"structure"`
 
-	// The personal access token for a third-party source control system for an
-	// Amplify app. The personal access token is used to create a webhook and a
-	// read-only deploy key. The token is not stored.
+	// The personal access token for a GitHub repository for an Amplify app. The
+	// personal access token is used to authorize access to a GitHub repository
+	// using the Amplify GitHub App. The token is not stored.
+	//
+	// Use accessToken for GitHub repositories only. To authorize access to a repository
+	// provider such as Bitbucket or CodeCommit, use oauthToken.
+	//
+	// You must specify either accessToken or oauthToken when you create a new app.
+	//
+	// Existing Amplify apps deployed from a GitHub repository using OAuth continue
+	// to work with CI/CD. However, we strongly recommend that you migrate these
+	// apps to use the GitHub App. For more information, see Migrating an existing
+	// OAuth app to the Amplify GitHub App (https://docs.aws.amazon.com/amplify/latest/UserGuide/setting-up-GitHub-access.html#migrating-to-github-app-auth)
+	// in the Amplify User Guide .
 	//
 	// AccessToken is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateAppInput's
@@ -4245,7 +4289,8 @@ type CreateAppInput struct {
 	// The automated branch creation glob patterns for an Amplify app.
 	AutoBranchCreationPatterns []*string `locationName:"autoBranchCreationPatterns" type:"list"`
 
-	// The credentials for basic authorization for an Amplify app.
+	// The credentials for basic authorization for an Amplify app. You must base64-encode
+	// the authorization credentials and provide them in the format user:password.
 	//
 	// BasicAuthCredentials is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateAppInput's
@@ -4253,10 +4298,14 @@ type CreateAppInput struct {
 	BasicAuthCredentials *string `locationName:"basicAuthCredentials" type:"string" sensitive:"true"`
 
 	// The build specification (build spec) for an Amplify app.
-	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
+	//
+	// BuildSpec is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateAppInput's
+	// String and GoString methods.
+	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string" sensitive:"true"`
 
 	// The custom HTTP headers for an Amplify app.
-	CustomHeaders *string `locationName:"customHeaders" min:"1" type:"string"`
+	CustomHeaders *string `locationName:"customHeaders" type:"string"`
 
 	// The custom rewrite and redirect rules for an Amplify app.
 	CustomRules []*CustomRule `locationName:"customRules" type:"list"`
@@ -4283,7 +4332,7 @@ type CreateAppInput struct {
 
 	// The AWS Identity and Access Management (IAM) service role for an Amplify
 	// app.
-	IamServiceRoleArn *string `locationName:"iamServiceRoleArn" min:"1" type:"string"`
+	IamServiceRoleArn *string `locationName:"iamServiceRoleArn" type:"string"`
 
 	// The name for an Amplify app.
 	//
@@ -4291,8 +4340,20 @@ type CreateAppInput struct {
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
 	// The OAuth token for a third-party source control system for an Amplify app.
-	// The OAuth token is used to create a webhook and a read-only deploy key. The
-	// OAuth token is not stored.
+	// The OAuth token is used to create a webhook and a read-only deploy key using
+	// SSH cloning. The OAuth token is not stored.
+	//
+	// Use oauthToken for repository providers other than GitHub, such as Bitbucket
+	// or CodeCommit. To authorize access to GitHub as your repository provider,
+	// use accessToken.
+	//
+	// You must specify either oauthToken or accessToken when you create a new app.
+	//
+	// Existing Amplify apps deployed from a GitHub repository using OAuth continue
+	// to work with CI/CD. However, we strongly recommend that you migrate these
+	// apps to use the GitHub App. For more information, see Migrating an existing
+	// OAuth app to the Amplify GitHub App (https://docs.aws.amazon.com/amplify/latest/UserGuide/setting-up-GitHub-access.html#migrating-to-github-app-auth)
+	// in the Amplify User Guide .
 	//
 	// OauthToken is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateAppInput's
@@ -4306,7 +4367,7 @@ type CreateAppInput struct {
 	Repository *string `locationName:"repository" type:"string"`
 
 	// The tag for an Amplify app.
-	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation.
@@ -4336,20 +4397,11 @@ func (s *CreateAppInput) Validate() error {
 	if s.BuildSpec != nil && len(*s.BuildSpec) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("BuildSpec", 1))
 	}
-	if s.CustomHeaders != nil && len(*s.CustomHeaders) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("CustomHeaders", 1))
-	}
-	if s.IamServiceRoleArn != nil && len(*s.IamServiceRoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("IamServiceRoleArn", 1))
-	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.Tags != nil && len(s.Tags) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
 	}
 	if s.AutoBranchCreationConfig != nil {
 		if err := s.AutoBranchCreationConfig.Validate(); err != nil {
@@ -4657,9 +4709,10 @@ type CreateBranchInput struct {
 
 	// The Amazon Resource Name (ARN) for a backend environment that is part of
 	// an Amplify app.
-	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" min:"1" type:"string"`
+	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" type:"string"`
 
-	// The basic authorization credentials for the branch.
+	// The basic authorization credentials for the branch. You must base64-encode
+	// the authorization credentials and provide them in the format user:password.
 	//
 	// BasicAuthCredentials is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateBranchInput's
@@ -4672,7 +4725,11 @@ type CreateBranchInput struct {
 	BranchName *string `locationName:"branchName" min:"1" type:"string" required:"true"`
 
 	// The build specification (build spec) for the branch.
-	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
+	//
+	// BuildSpec is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateBranchInput's
+	// String and GoString methods.
+	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string" sensitive:"true"`
 
 	// The description for the branch.
 	Description *string `locationName:"description" type:"string"`
@@ -4712,7 +4769,7 @@ type CreateBranchInput struct {
 	Stage *string `locationName:"stage" type:"string" enum:"Stage"`
 
 	// The tag for the branch.
-	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// The content Time To Live (TTL) for the website in seconds.
 	Ttl *string `locationName:"ttl" type:"string"`
@@ -4745,9 +4802,6 @@ func (s *CreateBranchInput) Validate() error {
 	if s.AppId != nil && len(*s.AppId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AppId", 1))
 	}
-	if s.BackendEnvironmentArn != nil && len(*s.BackendEnvironmentArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("BackendEnvironmentArn", 1))
-	}
 	if s.BranchName == nil {
 		invalidParams.Add(request.NewErrParamRequired("BranchName"))
 	}
@@ -4756,9 +4810,6 @@ func (s *CreateBranchInput) Validate() error {
 	}
 	if s.BuildSpec != nil && len(*s.BuildSpec) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("BuildSpec", 1))
-	}
-	if s.Tags != nil && len(s.Tags) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5311,7 +5362,7 @@ type CustomRule struct {
 	_ struct{} `type:"structure"`
 
 	// The condition for a URL rewrite or redirect rule, such as a country code.
-	Condition *string `locationName:"condition" min:"1" type:"string"`
+	Condition *string `locationName:"condition" type:"string"`
 
 	// The source pattern for a URL rewrite or redirect rule.
 	//
@@ -5369,9 +5420,6 @@ func (s CustomRule) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CustomRule) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CustomRule"}
-	if s.Condition != nil && len(*s.Condition) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Condition", 1))
-	}
 	if s.Source == nil {
 		invalidParams.Add(request.NewErrParamRequired("Source"))
 	}
@@ -8060,7 +8108,7 @@ type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A list of tags for the specified The Amazon Resource Name (ARN).
-	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation.
@@ -9055,7 +9103,7 @@ type TagResourceInput struct {
 	// The tags used to tag the resource.
 	//
 	// Tags is a required field
-	Tags map[string]*string `locationName:"tags" min:"1" type:"map" required:"true"`
+	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
 }
 
 // String returns the string representation.
@@ -9088,9 +9136,6 @@ func (s *TagResourceInput) Validate() error {
 	if s.Tags == nil {
 		invalidParams.Add(request.NewErrParamRequired("Tags"))
 	}
-	if s.Tags != nil && len(s.Tags) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -9112,7 +9157,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 
 // The response for the tag resource request.
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9266,7 +9311,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 
 // The response for the untag resource request.
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9291,9 +9336,20 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateAppInput struct {
 	_ struct{} `type:"structure"`
 
-	// The personal access token for a third-party source control system for an
-	// Amplify app. The token is used to create webhook and a read-only deploy key.
-	// The token is not stored.
+	// The personal access token for a GitHub repository for an Amplify app. The
+	// personal access token is used to authorize access to a GitHub repository
+	// using the Amplify GitHub App. The token is not stored.
+	//
+	// Use accessToken for GitHub repositories only. To authorize access to a repository
+	// provider such as Bitbucket or CodeCommit, use oauthToken.
+	//
+	// You must specify either accessToken or oauthToken when you update an app.
+	//
+	// Existing Amplify apps deployed from a GitHub repository using OAuth continue
+	// to work with CI/CD. However, we strongly recommend that you migrate these
+	// apps to use the GitHub App. For more information, see Migrating an existing
+	// OAuth app to the Amplify GitHub App (https://docs.aws.amazon.com/amplify/latest/UserGuide/setting-up-GitHub-access.html#migrating-to-github-app-auth)
+	// in the Amplify User Guide .
 	//
 	// AccessToken is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by UpdateAppInput's
@@ -9311,7 +9367,8 @@ type UpdateAppInput struct {
 	// Describes the automated branch creation glob patterns for an Amplify app.
 	AutoBranchCreationPatterns []*string `locationName:"autoBranchCreationPatterns" type:"list"`
 
-	// The basic authorization credentials for an Amplify app.
+	// The basic authorization credentials for an Amplify app. You must base64-encode
+	// the authorization credentials and provide them in the format user:password.
 	//
 	// BasicAuthCredentials is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by UpdateAppInput's
@@ -9319,10 +9376,14 @@ type UpdateAppInput struct {
 	BasicAuthCredentials *string `locationName:"basicAuthCredentials" type:"string" sensitive:"true"`
 
 	// The build specification (build spec) for an Amplify app.
-	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
+	//
+	// BuildSpec is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateAppInput's
+	// String and GoString methods.
+	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string" sensitive:"true"`
 
 	// The custom HTTP headers for an Amplify app.
-	CustomHeaders *string `locationName:"customHeaders" min:"1" type:"string"`
+	CustomHeaders *string `locationName:"customHeaders" type:"string"`
 
 	// The custom redirect and rewrite rules for an Amplify app.
 	CustomRules []*CustomRule `locationName:"customRules" type:"list"`
@@ -9348,14 +9409,27 @@ type UpdateAppInput struct {
 
 	// The AWS Identity and Access Management (IAM) service role for an Amplify
 	// app.
-	IamServiceRoleArn *string `locationName:"iamServiceRoleArn" min:"1" type:"string"`
+	IamServiceRoleArn *string `locationName:"iamServiceRoleArn" type:"string"`
 
 	// The name for an Amplify app.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
 	// The OAuth token for a third-party source control system for an Amplify app.
-	// The token is used to create a webhook and a read-only deploy key. The OAuth
-	// token is not stored.
+	// The OAuth token is used to create a webhook and a read-only deploy key using
+	// SSH cloning. The OAuth token is not stored.
+	//
+	// Use oauthToken for repository providers other than GitHub, such as Bitbucket
+	// or CodeCommit.
+	//
+	// To authorize access to GitHub as your repository provider, use accessToken.
+	//
+	// You must specify either oauthToken or accessToken when you update an app.
+	//
+	// Existing Amplify apps deployed from a GitHub repository using OAuth continue
+	// to work with CI/CD. However, we strongly recommend that you migrate these
+	// apps to use the GitHub App. For more information, see Migrating an existing
+	// OAuth app to the Amplify GitHub App (https://docs.aws.amazon.com/amplify/latest/UserGuide/setting-up-GitHub-access.html#migrating-to-github-app-auth)
+	// in the Amplify User Guide .
 	//
 	// OauthToken is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by UpdateAppInput's
@@ -9401,12 +9475,6 @@ func (s *UpdateAppInput) Validate() error {
 	}
 	if s.BuildSpec != nil && len(*s.BuildSpec) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("BuildSpec", 1))
-	}
-	if s.CustomHeaders != nil && len(*s.CustomHeaders) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("CustomHeaders", 1))
-	}
-	if s.IamServiceRoleArn != nil && len(*s.IamServiceRoleArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("IamServiceRoleArn", 1))
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
@@ -9592,9 +9660,10 @@ type UpdateBranchInput struct {
 
 	// The Amazon Resource Name (ARN) for a backend environment that is part of
 	// an Amplify app.
-	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" min:"1" type:"string"`
+	BackendEnvironmentArn *string `locationName:"backendEnvironmentArn" type:"string"`
 
-	// The basic authorization credentials for the branch.
+	// The basic authorization credentials for the branch. You must base64-encode
+	// the authorization credentials and provide them in the format user:password.
 	//
 	// BasicAuthCredentials is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by UpdateBranchInput's
@@ -9607,7 +9676,11 @@ type UpdateBranchInput struct {
 	BranchName *string `location:"uri" locationName:"branchName" min:"1" type:"string" required:"true"`
 
 	// The build specification (build spec) for the branch.
-	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
+	//
+	// BuildSpec is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateBranchInput's
+	// String and GoString methods.
+	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string" sensitive:"true"`
 
 	// The description for the branch.
 	Description *string `locationName:"description" type:"string"`
@@ -9676,9 +9749,6 @@ func (s *UpdateBranchInput) Validate() error {
 	}
 	if s.AppId != nil && len(*s.AppId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AppId", 1))
-	}
-	if s.BackendEnvironmentArn != nil && len(*s.BackendEnvironmentArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("BackendEnvironmentArn", 1))
 	}
 	if s.BranchName == nil {
 		invalidParams.Add(request.NewErrParamRequired("BranchName"))
@@ -9857,9 +9927,7 @@ type UpdateDomainAssociationInput struct {
 	EnableAutoSubDomain *bool `locationName:"enableAutoSubDomain" type:"boolean"`
 
 	// Describes the settings for the subdomain.
-	//
-	// SubDomainSettings is a required field
-	SubDomainSettings []*SubDomainSetting `locationName:"subDomainSettings" type:"list" required:"true"`
+	SubDomainSettings []*SubDomainSetting `locationName:"subDomainSettings" type:"list"`
 }
 
 // String returns the string representation.
@@ -9894,9 +9962,6 @@ func (s *UpdateDomainAssociationInput) Validate() error {
 	}
 	if s.DomainName != nil && len(*s.DomainName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
-	}
-	if s.SubDomainSettings == nil {
-		invalidParams.Add(request.NewErrParamRequired("SubDomainSettings"))
 	}
 	if s.SubDomainSettings != nil {
 		for i, v := range s.SubDomainSettings {
@@ -10294,12 +10359,36 @@ func JobType_Values() []string {
 const (
 	// PlatformWeb is a Platform enum value
 	PlatformWeb = "WEB"
+
+	// PlatformWebDynamic is a Platform enum value
+	PlatformWebDynamic = "WEB_DYNAMIC"
 )
 
 // Platform_Values returns all elements of the Platform enum
 func Platform_Values() []string {
 	return []string{
 		PlatformWeb,
+		PlatformWebDynamic,
+	}
+}
+
+const (
+	// RepositoryCloneMethodSsh is a RepositoryCloneMethod enum value
+	RepositoryCloneMethodSsh = "SSH"
+
+	// RepositoryCloneMethodToken is a RepositoryCloneMethod enum value
+	RepositoryCloneMethodToken = "TOKEN"
+
+	// RepositoryCloneMethodSigv4 is a RepositoryCloneMethod enum value
+	RepositoryCloneMethodSigv4 = "SIGV4"
+)
+
+// RepositoryCloneMethod_Values returns all elements of the RepositoryCloneMethod enum
+func RepositoryCloneMethod_Values() []string {
+	return []string{
+		RepositoryCloneMethodSsh,
+		RepositoryCloneMethodToken,
+		RepositoryCloneMethodSigv4,
 	}
 }
 

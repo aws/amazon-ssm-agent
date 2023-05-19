@@ -215,15 +215,15 @@ func (c *IVS) CreateChannelRequest(input *CreateChannelInput) (req *request.Requ
 // API operation CreateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
-//
-//   * ServiceQuotaExceededException
+//   * ValidationException
 //
 //   * PendingVerification
+//
+//   * ServiceQuotaExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateChannel
 func (c *IVS) CreateChannel(input *CreateChannelInput) (*CreateChannelOutput, error) {
@@ -294,11 +294,11 @@ func (c *IVS) CreateRecordingConfigurationRequest(input *CreateRecordingConfigur
 // Creates a new recording configuration, used to enable recording to Amazon
 // S3.
 //
-// Known issue: In the us-east-1 region, if you use the AWS CLI to create a
-// recording configuration, it returns success even if the S3 bucket is in a
-// different region. In this case, the state of the recording configuration
-// is CREATE_FAILED (instead of ACTIVE). (In other regions, the CLI correctly
-// returns failure if the bucket is in a different region.)
+// Known issue: In the us-east-1 region, if you use the Amazon Web Services
+// CLI to create a recording configuration, it returns success even if the S3
+// bucket is in a different region. In this case, the state of the recording
+// configuration is CREATE_FAILED (instead of ACTIVE). (In other regions, the
+// CLI correctly returns failure if the bucket is in a different region.)
 //
 // Workaround: Ensure that your S3 bucket is in the same region as the recording
 // configuration. If you create a recording configuration in a different region
@@ -313,17 +313,17 @@ func (c *IVS) CreateRecordingConfigurationRequest(input *CreateRecordingConfigur
 // API operation CreateRecordingConfiguration for usage and error information.
 //
 // Returned Error Types:
+//   * InternalServerException
+//
 //   * AccessDeniedException
 //
-//   * ConflictException
-//
-//   * InternalServerException
+//   * ValidationException
 //
 //   * PendingVerification
 //
-//   * ServiceQuotaExceededException
+//   * ConflictException
 //
-//   * ValidationException
+//   * ServiceQuotaExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateRecordingConfiguration
 func (c *IVS) CreateRecordingConfiguration(input *CreateRecordingConfigurationInput) (*CreateRecordingConfigurationOutput, error) {
@@ -407,15 +407,15 @@ func (c *IVS) CreateStreamKeyRequest(input *CreateStreamKeyInput) (req *request.
 // API operation CreateStreamKey for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
-//
-//   * ServiceQuotaExceededException
+//   * ValidationException
 //
 //   * PendingVerification
+//
+//   * ServiceQuotaExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateStreamKey
 func (c *IVS) CreateStreamKey(input *CreateStreamKeyInput) (*CreateStreamKeyOutput, error) {
@@ -500,15 +500,15 @@ func (c *IVS) DeleteChannelRequest(input *DeleteChannelInput) (req *request.Requ
 // API operation DeleteChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
-//
-//   * ConflictException
+//   * ValidationException
 //
 //   * PendingVerification
+//
+//   * ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteChannel
 func (c *IVS) DeleteChannel(input *DeleteChannelInput) (*DeleteChannelOutput, error) {
@@ -590,11 +590,11 @@ func (c *IVS) DeletePlaybackKeyPairRequest(input *DeletePlaybackKeyPairInput) (r
 // API operation DeletePlaybackKeyPair for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
+//   * ValidationException
 //
 //   * PendingVerification
 //
@@ -680,15 +680,15 @@ func (c *IVS) DeleteRecordingConfigurationRequest(input *DeleteRecordingConfigur
 // API operation DeleteRecordingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//
-//   * ConflictException
+//   * ResourceNotFoundException
 //
 //   * InternalServerException
 //
-//   * ResourceNotFoundException
+//   * AccessDeniedException
 //
 //   * ValidationException
+//
+//   * ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteRecordingConfiguration
 func (c *IVS) DeleteRecordingConfiguration(input *DeleteRecordingConfigurationInput) (*DeleteRecordingConfigurationOutput, error) {
@@ -768,11 +768,11 @@ func (c *IVS) DeleteStreamKeyRequest(input *DeleteStreamKeyInput) (req *request.
 // API operation DeleteStreamKey for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
+//   * ValidationException
 //
 //   * PendingVerification
 //
@@ -852,11 +852,11 @@ func (c *IVS) GetChannelRequest(input *GetChannelInput) (req *request.Request, o
 // API operation GetChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
+//   * ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetChannel
 func (c *IVS) GetChannel(input *GetChannelInput) (*GetChannelOutput, error) {
@@ -938,11 +938,11 @@ func (c *IVS) GetPlaybackKeyPairRequest(input *GetPlaybackKeyPairInput) (req *re
 // API operation GetPlaybackKeyPair for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
+//   * ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetPlaybackKeyPair
 func (c *IVS) GetPlaybackKeyPair(input *GetPlaybackKeyPairInput) (*GetPlaybackKeyPairOutput, error) {
@@ -1020,11 +1020,11 @@ func (c *IVS) GetRecordingConfigurationRequest(input *GetRecordingConfigurationI
 // API operation GetRecordingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
+//   * ResourceNotFoundException
 //
 //   * InternalServerException
 //
-//   * ResourceNotFoundException
+//   * AccessDeniedException
 //
 //   * ValidationException
 //
@@ -1106,9 +1106,9 @@ func (c *IVS) GetStreamRequest(input *GetStreamInput) (req *request.Request, out
 // Returned Error Types:
 //   * ResourceNotFoundException
 //
-//   * ValidationException
-//
 //   * AccessDeniedException
+//
+//   * ValidationException
 //
 //   * ChannelNotBroadcasting
 //
@@ -1188,11 +1188,11 @@ func (c *IVS) GetStreamKeyRequest(input *GetStreamKeyInput) (req *request.Reques
 // API operation GetStreamKey for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
+//   * ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStreamKey
 func (c *IVS) GetStreamKey(input *GetStreamKeyInput) (*GetStreamKeyOutput, error) {
@@ -1211,6 +1211,88 @@ func (c *IVS) GetStreamKey(input *GetStreamKeyInput) (*GetStreamKeyOutput, error
 // for more information on using Contexts.
 func (c *IVS) GetStreamKeyWithContext(ctx aws.Context, input *GetStreamKeyInput, opts ...request.Option) (*GetStreamKeyOutput, error) {
 	req, out := c.GetStreamKeyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetStreamSession = "GetStreamSession"
+
+// GetStreamSessionRequest generates a "aws/request.Request" representing the
+// client's request for the GetStreamSession operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetStreamSession for more information on using the GetStreamSession
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetStreamSessionRequest method.
+//    req, resp := client.GetStreamSessionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStreamSession
+func (c *IVS) GetStreamSessionRequest(input *GetStreamSessionInput) (req *request.Request, output *GetStreamSessionOutput) {
+	op := &request.Operation{
+		Name:       opGetStreamSession,
+		HTTPMethod: "POST",
+		HTTPPath:   "/GetStreamSession",
+	}
+
+	if input == nil {
+		input = &GetStreamSessionInput{}
+	}
+
+	output = &GetStreamSessionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetStreamSession API operation for Amazon Interactive Video Service.
+//
+// Gets metadata on a specified stream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation GetStreamSession for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * ValidationException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStreamSession
+func (c *IVS) GetStreamSession(input *GetStreamSessionInput) (*GetStreamSessionOutput, error) {
+	req, out := c.GetStreamSessionRequest(input)
+	return out, req.Send()
+}
+
+// GetStreamSessionWithContext is the same as GetStreamSession with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetStreamSession for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) GetStreamSessionWithContext(ctx aws.Context, input *GetStreamSessionInput, opts ...request.Option) (*GetStreamSessionOutput, error) {
+	req, out := c.GetStreamSessionRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1274,15 +1356,15 @@ func (c *IVS) ImportPlaybackKeyPairRequest(input *ImportPlaybackKeyPairInput) (r
 // API operation ImportPlaybackKeyPair for usage and error information.
 //
 // Returned Error Types:
+//   * AccessDeniedException
+//
 //   * ValidationException
+//
+//   * PendingVerification
 //
 //   * ConflictException
 //
-//   * AccessDeniedException
-//
 //   * ServiceQuotaExceededException
-//
-//   * PendingVerification
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ImportPlaybackKeyPair
 func (c *IVS) ImportPlaybackKeyPair(input *ImportPlaybackKeyPairInput) (*ImportPlaybackKeyPairOutput, error) {
@@ -1356,11 +1438,11 @@ func (c *IVS) ListChannelsRequest(input *ListChannelsInput) (req *request.Reques
 
 // ListChannels API operation for Amazon Interactive Video Service.
 //
-// Gets summary information about all channels in your account, in the AWS region
-// where the API request is processed. This list can be filtered to match a
-// specified name or recording-configuration ARN. Filters are mutually exclusive
-// and cannot be used together. If you try to use both filters, you will get
-// an error (409 ConflictException).
+// Gets summary information about all channels in your account, in the Amazon
+// Web Services region where the API request is processed. This list can be
+// filtered to match a specified name or recording-configuration ARN. Filters
+// are mutually exclusive and cannot be used together. If you try to use both
+// filters, you will get an error (409 ConflictException).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1370,9 +1452,9 @@ func (c *IVS) ListChannelsRequest(input *ListChannelsInput) (req *request.Reques
 // API operation ListChannels for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//
 //   * AccessDeniedException
+//
+//   * ValidationException
 //
 //   * ConflictException
 //
@@ -1512,9 +1594,9 @@ func (c *IVS) ListPlaybackKeyPairsRequest(input *ListPlaybackKeyPairsInput) (req
 // API operation ListPlaybackKeyPairs for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//
 //   * AccessDeniedException
+//
+//   * ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListPlaybackKeyPairs
 func (c *IVS) ListPlaybackKeyPairs(input *ListPlaybackKeyPairsInput) (*ListPlaybackKeyPairsOutput, error) {
@@ -1641,7 +1723,7 @@ func (c *IVS) ListRecordingConfigurationsRequest(input *ListRecordingConfigurati
 // ListRecordingConfigurations API operation for Amazon Interactive Video Service.
 //
 // Gets summary information about all recording configurations in your account,
-// in the AWS region where the API request is processed.
+// in the Amazon Web Services region where the API request is processed.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1651,9 +1733,9 @@ func (c *IVS) ListRecordingConfigurationsRequest(input *ListRecordingConfigurati
 // API operation ListRecordingConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//
 //   * InternalServerException
+//
+//   * AccessDeniedException
 //
 //   * ValidationException
 //
@@ -1791,11 +1873,11 @@ func (c *IVS) ListStreamKeysRequest(input *ListStreamKeysInput) (req *request.Re
 // API operation ListStreamKeys for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
+//   * ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreamKeys
 func (c *IVS) ListStreamKeys(input *ListStreamKeysInput) (*ListStreamKeysOutput, error) {
@@ -1871,6 +1953,147 @@ func (c *IVS) ListStreamKeysPagesWithContext(ctx aws.Context, input *ListStreamK
 	return p.Err()
 }
 
+const opListStreamSessions = "ListStreamSessions"
+
+// ListStreamSessionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListStreamSessions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListStreamSessions for more information on using the ListStreamSessions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListStreamSessionsRequest method.
+//    req, resp := client.ListStreamSessionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreamSessions
+func (c *IVS) ListStreamSessionsRequest(input *ListStreamSessionsInput) (req *request.Request, output *ListStreamSessionsOutput) {
+	op := &request.Operation{
+		Name:       opListStreamSessions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/ListStreamSessions",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListStreamSessionsInput{}
+	}
+
+	output = &ListStreamSessionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListStreamSessions API operation for Amazon Interactive Video Service.
+//
+// Gets a summary of current and previous streams for a specified channel in
+// your account, in the AWS region where the API request is processed.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation ListStreamSessions for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//
+//   * AccessDeniedException
+//
+//   * ValidationException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreamSessions
+func (c *IVS) ListStreamSessions(input *ListStreamSessionsInput) (*ListStreamSessionsOutput, error) {
+	req, out := c.ListStreamSessionsRequest(input)
+	return out, req.Send()
+}
+
+// ListStreamSessionsWithContext is the same as ListStreamSessions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListStreamSessions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) ListStreamSessionsWithContext(ctx aws.Context, input *ListStreamSessionsInput, opts ...request.Option) (*ListStreamSessionsOutput, error) {
+	req, out := c.ListStreamSessionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListStreamSessionsPages iterates over the pages of a ListStreamSessions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListStreamSessions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListStreamSessions operation.
+//    pageNum := 0
+//    err := client.ListStreamSessionsPages(params,
+//        func(page *ivs.ListStreamSessionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *IVS) ListStreamSessionsPages(input *ListStreamSessionsInput, fn func(*ListStreamSessionsOutput, bool) bool) error {
+	return c.ListStreamSessionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListStreamSessionsPagesWithContext same as ListStreamSessionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) ListStreamSessionsPagesWithContext(ctx aws.Context, input *ListStreamSessionsInput, fn func(*ListStreamSessionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListStreamSessionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListStreamSessionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListStreamSessionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListStreams = "ListStreams"
 
 // ListStreamsRequest generates a "aws/request.Request" representing the
@@ -1921,8 +2144,8 @@ func (c *IVS) ListStreamsRequest(input *ListStreamsInput) (req *request.Request,
 
 // ListStreams API operation for Amazon Interactive Video Service.
 //
-// Gets summary information about live streams in your account, in the AWS region
-// where the API request is processed.
+// Gets summary information about live streams in your account, in the Amazon
+// Web Services region where the API request is processed.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1933,6 +2156,8 @@ func (c *IVS) ListStreamsRequest(input *ListStreamsInput) (req *request.Request,
 //
 // Returned Error Types:
 //   * AccessDeniedException
+//
+//   * ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreams
 func (c *IVS) ListStreams(input *ListStreamsInput) (*ListStreamsOutput, error) {
@@ -2039,12 +2264,6 @@ func (c *IVS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 		Name:       opListTagsForResource,
 		HTTPMethod: "GET",
 		HTTPPath:   "/tags/{resourceArn}",
-		Paginator: &request.Paginator{
-			InputTokens:     []string{"nextToken"},
-			OutputTokens:    []string{"nextToken"},
-			LimitToken:      "maxResults",
-			TruncationToken: "",
-		},
 	}
 
 	if input == nil {
@@ -2058,7 +2277,7 @@ func (c *IVS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 
 // ListTagsForResource API operation for Amazon Interactive Video Service.
 //
-// Gets information about AWS tags for the specified ARN.
+// Gets information about Amazon Web Services tags for the specified ARN.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2068,11 +2287,11 @@ func (c *IVS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
+//   * ResourceNotFoundException
+//
 //   * InternalServerException
 //
 //   * ValidationException
-//
-//   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListTagsForResource
 func (c *IVS) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2094,58 +2313,6 @@ func (c *IVS) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsFor
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
-}
-
-// ListTagsForResourcePages iterates over the pages of a ListTagsForResource operation,
-// calling the "fn" function with the response data for each page. To stop
-// iterating, return false from the fn function.
-//
-// See ListTagsForResource method for more information on how to use this operation.
-//
-// Note: This operation can generate multiple requests to a service.
-//
-//    // Example iterating over at most 3 pages of a ListTagsForResource operation.
-//    pageNum := 0
-//    err := client.ListTagsForResourcePages(params,
-//        func(page *ivs.ListTagsForResourceOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
-func (c *IVS) ListTagsForResourcePages(input *ListTagsForResourceInput, fn func(*ListTagsForResourceOutput, bool) bool) error {
-	return c.ListTagsForResourcePagesWithContext(aws.BackgroundContext(), input, fn)
-}
-
-// ListTagsForResourcePagesWithContext same as ListTagsForResourcePages except
-// it takes a Context and allows setting request options on the pages.
-//
-// The context must be non-nil and will be used for request cancellation. If
-// the context is nil a panic will occur. In the future the SDK may create
-// sub-contexts for http.Requests. See https://golang.org/pkg/context/
-// for more information on using Contexts.
-func (c *IVS) ListTagsForResourcePagesWithContext(ctx aws.Context, input *ListTagsForResourceInput, fn func(*ListTagsForResourceOutput, bool) bool, opts ...request.Option) error {
-	p := request.Pagination{
-		NewRequest: func() (*request.Request, error) {
-			var inCpy *ListTagsForResourceInput
-			if input != nil {
-				tmp := *input
-				inCpy = &tmp
-			}
-			req, _ := c.ListTagsForResourceRequest(inCpy)
-			req.SetContext(ctx)
-			req.ApplyOptions(opts...)
-			return req, nil
-		},
-	}
-
-	for p.Next() {
-		if !fn(p.Page().(*ListTagsForResourceOutput), !p.HasNextPage()) {
-			break
-		}
-	}
-
-	return p.Err()
 }
 
 const opPutMetadata = "PutMetadata"
@@ -2193,11 +2360,11 @@ func (c *IVS) PutMetadataRequest(input *PutMetadataInput) (req *request.Request,
 
 // PutMetadata API operation for Amazon Interactive Video Service.
 //
-// Inserts metadata into the active stream of the specified channel. A maximum
-// of 5 requests per second per channel is allowed, each with a maximum 1 KB
-// payload. (If 5 TPS is not sufficient for your needs, we recommend batching
-// your data into a single PutMetadata call.) Also see Embedding Metadata within
-// a Video Stream (https://docs.aws.amazon.com/ivs/latest/userguide/metadata.html)
+// Inserts metadata into the active stream of the specified channel. At most
+// 5 requests per second per channel are allowed, each with a maximum 1 KB payload.
+// (If 5 TPS is not sufficient for your needs, we recommend batching your data
+// into a single PutMetadata call.) At most 155 requests per second per account
+// are allowed. Also see Embedding Metadata within a Video Stream (https://docs.aws.amazon.com/ivs/latest/userguide/metadata.html)
 // in the Amazon IVS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2208,15 +2375,15 @@ func (c *IVS) PutMetadataRequest(input *PutMetadataInput) (req *request.Request,
 // API operation PutMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//
 //   * ResourceNotFoundException
 //
-//   * ChannelNotBroadcasting
+//   * AccessDeniedException
 //
 //   * ValidationException
 //
-//   * AccessDeniedException
+//   * ChannelNotBroadcasting
+//
+//   * ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/PutMetadata
 func (c *IVS) PutMetadata(input *PutMetadataInput) (*PutMetadataOutput, error) {
@@ -2302,11 +2469,11 @@ func (c *IVS) StopStreamRequest(input *StopStreamInput) (req *request.Request, o
 // Returned Error Types:
 //   * ResourceNotFoundException
 //
-//   * ChannelNotBroadcasting
+//   * AccessDeniedException
 //
 //   * ValidationException
 //
-//   * AccessDeniedException
+//   * ChannelNotBroadcasting
 //
 //   * StreamUnavailable
 //
@@ -2377,7 +2544,8 @@ func (c *IVS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 
 // TagResource API operation for Amazon Interactive Video Service.
 //
-// Adds or updates tags for the AWS resource with the specified ARN.
+// Adds or updates tags for the Amazon Web Services resource with the specified
+// ARN.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2387,11 +2555,11 @@ func (c *IVS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
+//   * ResourceNotFoundException
+//
 //   * InternalServerException
 //
 //   * ValidationException
-//
-//   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/TagResource
 func (c *IVS) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2470,11 +2638,11 @@ func (c *IVS) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
+//   * ResourceNotFoundException
+//
 //   * InternalServerException
 //
 //   * ValidationException
-//
-//   * ResourceNotFoundException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UntagResource
 func (c *IVS) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2554,15 +2722,15 @@ func (c *IVS) UpdateChannelRequest(input *UpdateChannelInput) (req *request.Requ
 // API operation UpdateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
+//   * ResourceNotFoundException
 //
 //   * AccessDeniedException
 //
-//   * ResourceNotFoundException
-//
-//   * ConflictException
+//   * ValidationException
 //
 //   * PendingVerification
+//
+//   * ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UpdateChannel
 func (c *IVS) UpdateChannel(input *UpdateChannelInput) (*UpdateChannelOutput, error) {
@@ -2650,6 +2818,68 @@ func (s *AccessDeniedException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Object specifying a stream’s audio configuration, as set up by the broadcaster
+// (usually in an encoder). This is part of the IngestConfiguration object and
+// used for monitoring stream health.
+type AudioConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Number of audio channels.
+	Channels *int64 `locationName:"channels" type:"long"`
+
+	// Codec used for the audio encoding.
+	Codec *string `locationName:"codec" type:"string"`
+
+	// Number of audio samples recorded per second.
+	SampleRate *int64 `locationName:"sampleRate" type:"long"`
+
+	// The expected ingest bitrate (bits per second). This is configured in the
+	// encoder.
+	TargetBitrate *int64 `locationName:"targetBitrate" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudioConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudioConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetChannels sets the Channels field's value.
+func (s *AudioConfiguration) SetChannels(v int64) *AudioConfiguration {
+	s.Channels = &v
+	return s
+}
+
+// SetCodec sets the Codec field's value.
+func (s *AudioConfiguration) SetCodec(v string) *AudioConfiguration {
+	s.Codec = &v
+	return s
+}
+
+// SetSampleRate sets the SampleRate field's value.
+func (s *AudioConfiguration) SetSampleRate(v int64) *AudioConfiguration {
+	s.SampleRate = &v
+	return s
+}
+
+// SetTargetBitrate sets the TargetBitrate field's value.
+func (s *AudioConfiguration) SetTargetBitrate(v int64) *AudioConfiguration {
+	s.TargetBitrate = &v
+	return s
 }
 
 // Error related to a specific channel, specified by its ARN.
@@ -2908,7 +3138,11 @@ type Channel struct {
 	// that recording is enabled. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// Channel type, which determines the allowable resolution and bitrate. If you
@@ -2917,12 +3151,13 @@ type Channel struct {
 	//
 	//    * STANDARD: Multiple qualities are generated from the original input,
 	//    to automatically give viewers the best experience for their devices and
-	//    network conditions. Vertical resolution can be up to 1080 and bitrate
-	//    can be up to 8.5 Mbps.
+	//    network conditions. Resolution can be up to 1080p and bitrate can be up
+	//    to 8.5 Mbps. Audio is transcoded only for renditions 360p and below; above
+	//    that, audio is passed through.
 	//
 	//    * BASIC: Amazon IVS delivers the original input to viewers. The viewer’s
-	//    video-quality choice is limited to the original input. Vertical resolution
-	//    can be up to 480 and bitrate can be up to 1.5 Mbps.
+	//    video-quality choice is limited to the original input. Resolution can
+	//    be up to 480p and bitrate can be up to 1.5 Mbps.
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -3088,7 +3323,11 @@ type ChannelSummary struct {
 	// that recording is enabled. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -3231,7 +3470,11 @@ type CreateChannelInput struct {
 	// Recording-configuration ARN. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// Channel type, which determines the allowable resolution and bitrate. If you
@@ -3240,12 +3483,13 @@ type CreateChannelInput struct {
 	//
 	//    * STANDARD: Multiple qualities are generated from the original input,
 	//    to automatically give viewers the best experience for their devices and
-	//    network conditions. Vertical resolution can be up to 1080 and bitrate
-	//    can be up to 8.5 Mbps.
+	//    network conditions. Resolution can be up to 1080p and bitrate can be up
+	//    to 8.5 Mbps. Audio is transcoded only for renditions 360p and below; above
+	//    that, audio is passed through.
 	//
 	//    * BASIC: Amazon IVS delivers the original input to viewers. The viewer’s
-	//    video-quality choice is limited to the original input. Vertical resolution
-	//    can be up to 480 and bitrate can be up to 1.5 Mbps.
+	//    video-quality choice is limited to the original input. Resolution can
+	//    be up to 480p and bitrate can be up to 1.5 Mbps.
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -3352,12 +3596,20 @@ type CreateRecordingConfigurationInput struct {
 	// DestinationConfiguration is a required field
 	DestinationConfiguration *DestinationConfiguration `locationName:"destinationConfiguration" type:"structure" required:"true"`
 
-	// An arbitrary string (a nickname) that helps the customer identify that resource.
-	// The value does not need to be unique.
+	// Recording-configuration name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// A complex type that allows you to enable/disable the recording of thumbnails
+	// for a live session and modify the interval at which thumbnails are generated
+	// for the live session.
+	ThumbnailConfiguration *ThumbnailConfiguration `locationName:"thumbnailConfiguration" type:"structure"`
 }
 
 // String returns the string representation.
@@ -3389,6 +3641,11 @@ func (s *CreateRecordingConfigurationInput) Validate() error {
 			invalidParams.AddNested("DestinationConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ThumbnailConfiguration != nil {
+		if err := s.ThumbnailConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ThumbnailConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3411,6 +3668,12 @@ func (s *CreateRecordingConfigurationInput) SetName(v string) *CreateRecordingCo
 // SetTags sets the Tags field's value.
 func (s *CreateRecordingConfigurationInput) SetTags(v map[string]*string) *CreateRecordingConfigurationInput {
 	s.Tags = v
+	return s
+}
+
+// SetThumbnailConfiguration sets the ThumbnailConfiguration field's value.
+func (s *CreateRecordingConfigurationInput) SetThumbnailConfiguration(v *ThumbnailConfiguration) *CreateRecordingConfigurationInput {
+	s.ThumbnailConfiguration = v
 	return s
 }
 
@@ -3453,7 +3716,11 @@ type CreateStreamKeyInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `locationName:"channelArn" min:"1" type:"string" required:"true"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -3584,7 +3851,7 @@ func (s *DeleteChannelInput) SetArn(v string) *DeleteChannelInput {
 }
 
 type DeleteChannelOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3655,7 +3922,7 @@ func (s *DeletePlaybackKeyPairInput) SetArn(v string) *DeletePlaybackKeyPairInpu
 }
 
 type DeletePlaybackKeyPairOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3723,7 +3990,7 @@ func (s *DeleteRecordingConfigurationInput) SetArn(v string) *DeleteRecordingCon
 }
 
 type DeleteRecordingConfigurationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3794,7 +4061,7 @@ func (s *DeleteStreamKeyInput) SetArn(v string) *DeleteStreamKeyInput {
 }
 
 type DeleteStreamKeyOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4261,11 +4528,104 @@ func (s *GetStreamOutput) SetStream(v *Stream) *GetStreamOutput {
 	return s
 }
 
+type GetStreamSessionInput struct {
+	_ struct{} `type:"structure"`
+
+	// ARN of the channel resource
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `locationName:"channelArn" min:"1" type:"string" required:"true"`
+
+	// Unique identifier for a live or previously live stream in the specified channel.
+	// If no streamId is provided, this returns the most recent stream session for
+	// the channel, if it exists.
+	StreamId *string `locationName:"streamId" min:"26" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStreamSessionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStreamSessionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetStreamSessionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetStreamSessionInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 1))
+	}
+	if s.StreamId != nil && len(*s.StreamId) < 26 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamId", 26))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *GetStreamSessionInput) SetChannelArn(v string) *GetStreamSessionInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *GetStreamSessionInput) SetStreamId(v string) *GetStreamSessionInput {
+	s.StreamId = &v
+	return s
+}
+
+type GetStreamSessionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List of stream details.
+	StreamSession *StreamSession `locationName:"streamSession" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStreamSessionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetStreamSessionOutput) GoString() string {
+	return s.String()
+}
+
+// SetStreamSession sets the StreamSession field's value.
+func (s *GetStreamSessionOutput) SetStreamSession(v *StreamSession) *GetStreamSessionOutput {
+	s.StreamSession = v
+	return s
+}
+
 type ImportPlaybackKeyPairInput struct {
 	_ struct{} `type:"structure"`
 
-	// An arbitrary string (a nickname) assigned to a playback key pair that helps
-	// the customer identify that resource. The value does not need to be unique.
+	// Playback-key-pair name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
 	// The public portion of a customer-generated key pair.
@@ -4274,6 +4634,10 @@ type ImportPlaybackKeyPairInput struct {
 	PublicKeyMaterial *string `locationName:"publicKeyMaterial" type:"string" required:"true"`
 
 	// Any tags provided with the request are added to the playback key pair tags.
+	// See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -4357,6 +4721,48 @@ func (s *ImportPlaybackKeyPairOutput) SetKeyPair(v *PlaybackKeyPair) *ImportPlay
 	return s
 }
 
+// Object specifying the ingest configuration set up by the broadcaster, usually
+// in an encoder.
+type IngestConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Encoder settings for audio.
+	Audio *AudioConfiguration `locationName:"audio" type:"structure"`
+
+	// Encoder settings for video.
+	Video *VideoConfiguration `locationName:"video" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IngestConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetAudio sets the Audio field's value.
+func (s *IngestConfiguration) SetAudio(v *AudioConfiguration) *IngestConfiguration {
+	s.Audio = v
+	return s
+}
+
+// SetVideo sets the Video field's value.
+func (s *IngestConfiguration) SetVideo(v *VideoConfiguration) *IngestConfiguration {
+	s.Video = v
+	return s
+}
+
 type InternalServerException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4432,7 +4838,7 @@ type ListChannelsInput struct {
 	// Filters the channel list to match the specified recording-configuration ARN.
 	FilterByRecordingConfigurationArn *string `locationName:"filterByRecordingConfigurationArn" type:"string"`
 
-	// Maximum number of channels to return. Default: 50.
+	// Maximum number of channels to return. Default: 100.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The first channel to retrieve. This is used for pagination; see the nextToken
@@ -4541,11 +4947,12 @@ func (s *ListChannelsOutput) SetNextToken(v string) *ListChannelsOutput {
 type ListPlaybackKeyPairsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The first key pair to retrieve. This is used for pagination; see the nextToken
-	// response field. Default: 50.
+	// Maximum number of key pairs to return. Default: your service quota or 100,
+	// whichever is smaller.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
-	// Maximum number of key pairs to return.
+	// The first key pair to retrieve. This is used for pagination; see the nextToken
+	// response field.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
@@ -4638,7 +5045,8 @@ func (s *ListPlaybackKeyPairsOutput) SetNextToken(v string) *ListPlaybackKeyPair
 type ListRecordingConfigurationsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Maximum number of recording configurations to return. Default: 50.
+	// Maximum number of recording configurations to return. Default: your service
+	// quota or 100, whichever is smaller.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The first recording configuration to retrieve. This is used for pagination;
@@ -4740,7 +5148,7 @@ type ListStreamKeysInput struct {
 	// ChannelArn is a required field
 	ChannelArn *string `locationName:"channelArn" min:"1" type:"string" required:"true"`
 
-	// Maximum number of streamKeys to return. Default: 50.
+	// Maximum number of streamKeys to return. Default: 1.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The first stream key to retrieve. This is used for pagination; see the nextToken
@@ -4846,10 +5254,127 @@ func (s *ListStreamKeysOutput) SetStreamKeys(v []*StreamKeySummary) *ListStreamK
 	return s
 }
 
+type ListStreamSessionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Channel ARN used to filter the list.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `locationName:"channelArn" min:"1" type:"string" required:"true"`
+
+	// Maximum number of streams to return. Default: 100.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The first stream to retrieve. This is used for pagination; see the nextToken
+	// response field.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStreamSessionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStreamSessionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListStreamSessionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListStreamSessionsInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *ListStreamSessionsInput) SetChannelArn(v string) *ListStreamSessionsInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListStreamSessionsInput) SetMaxResults(v int64) *ListStreamSessionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStreamSessionsInput) SetNextToken(v string) *ListStreamSessionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListStreamSessionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are more streams than maxResults, use nextToken in the request to
+	// get the next set.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// List of stream sessions.
+	//
+	// StreamSessions is a required field
+	StreamSessions []*StreamSessionSummary `locationName:"streamSessions" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStreamSessionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListStreamSessionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStreamSessionsOutput) SetNextToken(v string) *ListStreamSessionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStreamSessions sets the StreamSessions field's value.
+func (s *ListStreamSessionsOutput) SetStreamSessions(v []*StreamSessionSummary) *ListStreamSessionsOutput {
+	s.StreamSessions = v
+	return s
+}
+
 type ListStreamsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Maximum number of streams to return. Default: 50.
+	// Filters the stream list to match the specified criterion.
+	FilterBy *StreamFilters `locationName:"filterBy" type:"structure"`
+
+	// Maximum number of streams to return. Default: 100.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The first stream to retrieve. This is used for pagination; see the nextToken
@@ -4886,6 +5411,12 @@ func (s *ListStreamsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetFilterBy sets the FilterBy field's value.
+func (s *ListStreamsInput) SetFilterBy(v *StreamFilters) *ListStreamsInput {
+	s.FilterBy = v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -4944,16 +5475,9 @@ func (s *ListStreamsOutput) SetStreams(v []*StreamSummary) *ListStreamsOutput {
 }
 
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Maximum number of tags to return. Default: 50.
-	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
-
-	// The first tag to retrieve. This is used for pagination; see the nextToken
-	// response field.
-	NextToken *string `locationName:"nextToken" type:"string"`
-
-	// The ARN of the resource to be retrieved.
+	// The ARN of the resource to be retrieved. The ARN must be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
@@ -4980,9 +5504,6 @@ func (s ListTagsForResourceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListTagsForResourceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
 	if s.ResourceArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
 	}
@@ -4996,18 +5517,6 @@ func (s *ListTagsForResourceInput) Validate() error {
 	return nil
 }
 
-// SetMaxResults sets the MaxResults field's value.
-func (s *ListTagsForResourceInput) SetMaxResults(v int64) *ListTagsForResourceInput {
-	s.MaxResults = &v
-	return s
-}
-
-// SetNextToken sets the NextToken field's value.
-func (s *ListTagsForResourceInput) SetNextToken(v string) *ListTagsForResourceInput {
-	s.NextToken = &v
-	return s
-}
-
 // SetResourceArn sets the ResourceArn field's value.
 func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
 	s.ResourceArn = &v
@@ -5016,10 +5525,6 @@ func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResource
 
 type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
-
-	// If there are more tags than maxResults, use nextToken in the request to get
-	// the next set.
-	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// Tags is a required field
 	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
@@ -5041,12 +5546,6 @@ func (s ListTagsForResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s ListTagsForResourceOutput) GoString() string {
 	return s.String()
-}
-
-// SetNextToken sets the NextToken field's value.
-func (s *ListTagsForResourceOutput) SetNextToken(v string) *ListTagsForResourceOutput {
-	s.NextToken = &v
-	return s
 }
 
 // SetTags sets the Tags field's value.
@@ -5131,11 +5630,14 @@ type PlaybackKeyPair struct {
 	// Key-pair identifier.
 	Fingerprint *string `locationName:"fingerprint" type:"string"`
 
-	// An arbitrary string (a nickname) assigned to a playback key pair that helps
-	// the customer identify that resource. The value does not need to be unique.
+	// Playback-key-pair name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -5188,11 +5690,14 @@ type PlaybackKeyPairSummary struct {
 	// Key-pair ARN.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
-	// An arbitrary string (a nickname) assigned to a playback key pair that helps
-	// the customer identify that resource. The value does not need to be unique.
+	// Playback-key-pair name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -5243,8 +5748,12 @@ type PutMetadataInput struct {
 
 	// Metadata to insert into the stream. Maximum: 1 KB per request.
 	//
+	// Metadata is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PutMetadataInput's
+	// String and GoString methods.
+	//
 	// Metadata is a required field
-	Metadata *string `locationName:"metadata" min:"1" type:"string" required:"true"`
+	Metadata *string `locationName:"metadata" min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -5300,7 +5809,7 @@ func (s *PutMetadataInput) SetMetadata(v string) *PutMetadataInput {
 }
 
 type PutMetadataOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5336,9 +5845,7 @@ type RecordingConfiguration struct {
 	// DestinationConfiguration is a required field
 	DestinationConfiguration *DestinationConfiguration `locationName:"destinationConfiguration" type:"structure" required:"true"`
 
-	// An arbitrary string (a nickname) assigned to a recording configuration that
-	// helps the customer identify that resource. The value does not need to be
-	// unique.
+	// Recording-configuration name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
 	// Indicates the current state of the recording configuration. When the state
@@ -5347,8 +5854,17 @@ type RecordingConfiguration struct {
 	// State is a required field
 	State *string `locationName:"state" type:"string" required:"true" enum:"RecordingConfigurationState"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// A complex type that allows you to enable/disable the recording of thumbnails
+	// for a live session and modify the interval at which thumbnails are generated
+	// for the live session.
+	ThumbnailConfiguration *ThumbnailConfiguration `locationName:"thumbnailConfiguration" type:"structure"`
 }
 
 // String returns the string representation.
@@ -5399,6 +5915,12 @@ func (s *RecordingConfiguration) SetTags(v map[string]*string) *RecordingConfigu
 	return s
 }
 
+// SetThumbnailConfiguration sets the ThumbnailConfiguration field's value.
+func (s *RecordingConfiguration) SetThumbnailConfiguration(v *ThumbnailConfiguration) *RecordingConfiguration {
+	s.ThumbnailConfiguration = v
+	return s
+}
+
 // Summary information about a RecordingConfiguration.
 type RecordingConfigurationSummary struct {
 	_ struct{} `type:"structure"`
@@ -5414,9 +5936,7 @@ type RecordingConfigurationSummary struct {
 	// DestinationConfiguration is a required field
 	DestinationConfiguration *DestinationConfiguration `locationName:"destinationConfiguration" type:"structure" required:"true"`
 
-	// An arbitrary string (a nickname) assigned to a recording configuration that
-	// helps the customer identify that resource. The value does not need to be
-	// unique.
+	// Recording-configuration name. The value does not need to be unique.
 	Name *string `locationName:"name" type:"string"`
 
 	// Indicates the current state of the recording configuration. When the state
@@ -5425,7 +5945,11 @@ type RecordingConfigurationSummary struct {
 	// State is a required field
 	State *string `locationName:"state" type:"string" required:"true" enum:"RecordingConfigurationState"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -5710,7 +6234,7 @@ func (s *StopStreamInput) SetChannelArn(v string) *StopStreamInput {
 }
 
 type StopStreamOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5745,14 +6269,20 @@ type Stream struct {
 	// stream.
 	PlaybackUrl *string `locationName:"playbackUrl" type:"string"`
 
-	// ISO-8601 formatted timestamp of the stream’s start.
+	// Time of the stream’s start. This is an ISO 8601 timestamp; note that this
+	// is returned as a string.
 	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The stream’s state.
 	State *string `locationName:"state" type:"string" enum:"StreamState"`
 
-	// Number of current viewers of the stream. A value of -1 indicates that the
-	// request timed out; in this case, retry.
+	// Unique identifier for a live or previously live stream in the specified channel.
+	StreamId *string `locationName:"streamId" min:"26" type:"string"`
+
+	// A count of concurrent views of the stream. Typically, a new view appears
+	// in viewerCount within 15 seconds of when video playback starts and a view
+	// is removed from viewerCount within 1 minute of when video playback ends.
+	// A value of -1 indicates that the request timed out; in this case, retry.
 	ViewerCount *int64 `locationName:"viewerCount" type:"long"`
 }
 
@@ -5804,9 +6334,99 @@ func (s *Stream) SetState(v string) *Stream {
 	return s
 }
 
+// SetStreamId sets the StreamId field's value.
+func (s *Stream) SetStreamId(v string) *Stream {
+	s.StreamId = &v
+	return s
+}
+
 // SetViewerCount sets the ViewerCount field's value.
 func (s *Stream) SetViewerCount(v int64) *Stream {
 	s.ViewerCount = &v
+	return s
+}
+
+// Object specifying a stream’s events. For a list of events, see Using Amazon
+// EventBridge with Amazon IVS (https://docs.aws.amazon.com/ivs/latest/userguide/eventbridge.html).
+type StreamEvent struct {
+	_ struct{} `type:"structure"`
+
+	// Time when the event occurred. This is an ISO 8601 timestamp; note that this
+	// is returned as a string.
+	EventTime *time.Time `locationName:"eventTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Name that identifies the stream event within a type.
+	Name *string `locationName:"name" type:"string"`
+
+	// Logical group for certain events.
+	Type *string `locationName:"type" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamEvent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamEvent) GoString() string {
+	return s.String()
+}
+
+// SetEventTime sets the EventTime field's value.
+func (s *StreamEvent) SetEventTime(v time.Time) *StreamEvent {
+	s.EventTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *StreamEvent) SetName(v string) *StreamEvent {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *StreamEvent) SetType(v string) *StreamEvent {
+	s.Type = &v
+	return s
+}
+
+// Object specifying the stream attribute on which to filter.
+type StreamFilters struct {
+	_ struct{} `type:"structure"`
+
+	// The stream’s health.
+	Health *string `locationName:"health" type:"string" enum:"StreamHealth"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamFilters) GoString() string {
+	return s.String()
+}
+
+// SetHealth sets the Health field's value.
+func (s *StreamFilters) SetHealth(v string) *StreamFilters {
+	s.Health = &v
 	return s
 }
 
@@ -5820,11 +6440,19 @@ type StreamKey struct {
 	// Channel ARN for the stream.
 	ChannelArn *string `locationName:"channelArn" min:"1" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// Stream-key value.
-	Value *string `locationName:"value" type:"string"`
+	//
+	// Value is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by StreamKey's
+	// String and GoString methods.
+	Value *string `locationName:"value" type:"string" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -5879,7 +6507,11 @@ type StreamKeySummary struct {
 	// Channel ARN for the stream.
 	ChannelArn *string `locationName:"channelArn" min:"1" type:"string"`
 
-	// Array of 1-50 maps, each of the form string:string (key:value).
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -5919,6 +6551,159 @@ func (s *StreamKeySummary) SetTags(v map[string]*string) *StreamKeySummary {
 	return s
 }
 
+// Object that captures the Amazon IVS configuration that the customer provisioned,
+// the ingest configurations that the broadcaster used, and the most recent
+// Amazon IVS stream events it encountered.
+type StreamSession struct {
+	_ struct{} `type:"structure"`
+
+	// The properties of the channel at the time of going live.
+	Channel *Channel `locationName:"channel" type:"structure"`
+
+	// Time when the channel went offline. This is an ISO 8601 timestamp; note that
+	// this is returned as a string. For live streams, this is NULL.
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The properties of the incoming RTMP stream for the stream.
+	IngestConfiguration *IngestConfiguration `locationName:"ingestConfiguration" type:"structure"`
+
+	// The properties of recording the live stream.
+	RecordingConfiguration *RecordingConfiguration `locationName:"recordingConfiguration" type:"structure"`
+
+	// Time when the channel went live. This is an ISO 8601 timestamp; note that
+	// this is returned as a string.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Unique identifier for a live or previously live stream in the specified channel.
+	StreamId *string `locationName:"streamId" min:"26" type:"string"`
+
+	// List of Amazon IVS events that the stream encountered. The list is sorted
+	// by most recent events and contains up to 500 events. For Amazon IVS events,
+	// see Using Amazon EventBridge with Amazon IVS (https://docs.aws.amazon.com/ivs/latest/userguide/eventbridge.html).
+	TruncatedEvents []*StreamEvent `locationName:"truncatedEvents" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamSession) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamSession) GoString() string {
+	return s.String()
+}
+
+// SetChannel sets the Channel field's value.
+func (s *StreamSession) SetChannel(v *Channel) *StreamSession {
+	s.Channel = v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *StreamSession) SetEndTime(v time.Time) *StreamSession {
+	s.EndTime = &v
+	return s
+}
+
+// SetIngestConfiguration sets the IngestConfiguration field's value.
+func (s *StreamSession) SetIngestConfiguration(v *IngestConfiguration) *StreamSession {
+	s.IngestConfiguration = v
+	return s
+}
+
+// SetRecordingConfiguration sets the RecordingConfiguration field's value.
+func (s *StreamSession) SetRecordingConfiguration(v *RecordingConfiguration) *StreamSession {
+	s.RecordingConfiguration = v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *StreamSession) SetStartTime(v time.Time) *StreamSession {
+	s.StartTime = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *StreamSession) SetStreamId(v string) *StreamSession {
+	s.StreamId = &v
+	return s
+}
+
+// SetTruncatedEvents sets the TruncatedEvents field's value.
+func (s *StreamSession) SetTruncatedEvents(v []*StreamEvent) *StreamSession {
+	s.TruncatedEvents = v
+	return s
+}
+
+// Summary information about a stream session.
+type StreamSessionSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Time when the channel went offline. This is an ISO 8601 timestamp; note that
+	// this is returned as a string. For live streams, this is NULL.
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// If true, this stream encountered a quota breach or failure.
+	HasErrorEvent *bool `locationName:"hasErrorEvent" type:"boolean"`
+
+	// Time when the channel went live. This is an ISO 8601 timestamp; note that
+	// this is returned as a string.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Unique identifier for a live or previously live stream in the specified channel.
+	StreamId *string `locationName:"streamId" min:"26" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamSessionSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StreamSessionSummary) GoString() string {
+	return s.String()
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *StreamSessionSummary) SetEndTime(v time.Time) *StreamSessionSummary {
+	s.EndTime = &v
+	return s
+}
+
+// SetHasErrorEvent sets the HasErrorEvent field's value.
+func (s *StreamSessionSummary) SetHasErrorEvent(v bool) *StreamSessionSummary {
+	s.HasErrorEvent = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *StreamSessionSummary) SetStartTime(v time.Time) *StreamSessionSummary {
+	s.StartTime = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *StreamSessionSummary) SetStreamId(v string) *StreamSessionSummary {
+	s.StreamId = &v
+	return s
+}
+
 // Summary information about a stream.
 type StreamSummary struct {
 	_ struct{} `type:"structure"`
@@ -5929,14 +6714,20 @@ type StreamSummary struct {
 	// The stream’s health.
 	Health *string `locationName:"health" type:"string" enum:"StreamHealth"`
 
-	// ISO-8601 formatted timestamp of the stream’s start.
+	// Time of the stream’s start. This is an ISO 8601 timestamp; note that this
+	// is returned as a string.
 	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The stream’s state.
 	State *string `locationName:"state" type:"string" enum:"StreamState"`
 
-	// Number of current viewers of the stream. A value of -1 indicates that the
-	// request timed out; in this case, retry.
+	// Unique identifier for a live or previously live stream in the specified channel.
+	StreamId *string `locationName:"streamId" min:"26" type:"string"`
+
+	// A count of concurrent views of the stream. Typically, a new view appears
+	// in viewerCount within 15 seconds of when video playback starts and a view
+	// is removed from viewerCount within 1 minute of when video playback ends.
+	// A value of -1 indicates that the request timed out; in this case, retry.
 	ViewerCount *int64 `locationName:"viewerCount" type:"long"`
 }
 
@@ -5979,6 +6770,12 @@ func (s *StreamSummary) SetStartTime(v time.Time) *StreamSummary {
 // SetState sets the State field's value.
 func (s *StreamSummary) SetState(v string) *StreamSummary {
 	s.State = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *StreamSummary) SetStreamId(v string) *StreamSummary {
+	s.StreamId = &v
 	return s
 }
 
@@ -6057,12 +6854,17 @@ func (s *StreamUnavailable) RequestID() string {
 type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// ARN of the resource for which tags are to be added or updated.
+	// ARN of the resource for which tags are to be added or updated. The ARN must
+	// be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 
-	// Array of tags to be added or updated.
+	// Array of tags to be added or updated. See Tagging Amazon Web Services Resources
+	// (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) for more
+	// information, including restrictions that apply to tags and "Tag naming limits
+	// and requirements"; Amazon IVS has no service-specific constraints beyond
+	// what is documented there.
 	//
 	// Tags is a required field
 	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
@@ -6118,7 +6920,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6205,15 +7007,81 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// An object representing a configuration of thumbnails for recorded video.
+type ThumbnailConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Thumbnail recording mode. Default: INTERVAL.
+	RecordingMode *string `locationName:"recordingMode" type:"string" enum:"RecordingMode"`
+
+	// The targeted thumbnail-generation interval in seconds. This is configurable
+	// (and required) only if recordingMode is INTERVAL. Default: 60.
+	//
+	// Important: Setting a value for targetIntervalSeconds does not guarantee that
+	// thumbnails are generated at the specified interval. For thumbnails to be
+	// generated at the targetIntervalSeconds interval, the IDR/Keyframe value for
+	// the input video must be less than the targetIntervalSeconds value. See Amazon
+	// IVS Streaming Configuration (https://docs.aws.amazon.com/ivs/latest/userguide/streaming-config.html)
+	// for information on setting IDR/Keyframe to the recommended value in video-encoder
+	// settings.
+	TargetIntervalSeconds *int64 `locationName:"targetIntervalSeconds" min:"5" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThumbnailConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThumbnailConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ThumbnailConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ThumbnailConfiguration"}
+	if s.TargetIntervalSeconds != nil && *s.TargetIntervalSeconds < 5 {
+		invalidParams.Add(request.NewErrParamMinValue("TargetIntervalSeconds", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRecordingMode sets the RecordingMode field's value.
+func (s *ThumbnailConfiguration) SetRecordingMode(v string) *ThumbnailConfiguration {
+	s.RecordingMode = &v
+	return s
+}
+
+// SetTargetIntervalSeconds sets the TargetIntervalSeconds field's value.
+func (s *ThumbnailConfiguration) SetTargetIntervalSeconds(v int64) *ThumbnailConfiguration {
+	s.TargetIntervalSeconds = &v
+	return s
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// ARN of the resource for which tags are to be removed.
+	// ARN of the resource for which tags are to be removed. The ARN must be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"1" type:"string" required:"true"`
 
-	// Array of tags to be removed.
+	// Array of tags to be removed. See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
 	//
 	// TagKeys is a required field
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
@@ -6269,7 +7137,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6321,12 +7189,13 @@ type UpdateChannelInput struct {
 	//
 	//    * STANDARD: Multiple qualities are generated from the original input,
 	//    to automatically give viewers the best experience for their devices and
-	//    network conditions. Vertical resolution can be up to 1080 and bitrate
-	//    can be up to 8.5 Mbps.
+	//    network conditions. Resolution can be up to 1080p and bitrate can be up
+	//    to 8.5 Mbps. Audio is transcoded only for renditions 360p and below; above
+	//    that, audio is passed through.
 	//
 	//    * BASIC: Amazon IVS delivers the original input to viewers. The viewer’s
-	//    video-quality choice is limited to the original input. Vertical resolution
-	//    can be up to 480 and bitrate can be up to 1.5 Mbps.
+	//    video-quality choice is limited to the original input. Resolution can
+	//    be up to 480p and bitrate can be up to 1.5 Mbps.
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -6435,7 +7304,8 @@ type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
-	// The input fails to satisfy the constraints specified by an AWS service.
+	// The input fails to satisfy the constraints specified by an Amazon Web Services
+	// service.
 	ExceptionMessage *string `locationName:"exceptionMessage" type:"string"`
 
 	Message_ *string `locationName:"message" type:"string"`
@@ -6497,6 +7367,106 @@ func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Object specifying a stream’s video configuration, as set up by the broadcaster
+// (usually in an encoder). This is part of the IngestConfiguration object and
+// used for monitoring stream health.
+type VideoConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates the degree of required decoder performance for a profile. Normally
+	// this is set automatically by the encoder. For details, see the H.264 specification.
+	AvcLevel *string `locationName:"avcLevel" type:"string"`
+
+	// Indicates to the decoder the requirements for decoding the stream. For definitions
+	// of the valid values, see the H.264 specification.
+	AvcProfile *string `locationName:"avcProfile" type:"string"`
+
+	// Codec used for the video encoding.
+	Codec *string `locationName:"codec" type:"string"`
+
+	// Software or hardware used to encode the video.
+	Encoder *string `locationName:"encoder" type:"string"`
+
+	// The expected ingest bitrate (bits per second). This is configured in the
+	// encoder.
+	TargetBitrate *int64 `locationName:"targetBitrate" type:"long"`
+
+	// The expected ingest framerate. This is configured in the encoder.
+	TargetFramerate *int64 `locationName:"targetFramerate" type:"long"`
+
+	// Video-resolution height in pixels.
+	VideoHeight *int64 `locationName:"videoHeight" type:"long"`
+
+	// Video-resolution width in pixels.
+	VideoWidth *int64 `locationName:"videoWidth" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VideoConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VideoConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetAvcLevel sets the AvcLevel field's value.
+func (s *VideoConfiguration) SetAvcLevel(v string) *VideoConfiguration {
+	s.AvcLevel = &v
+	return s
+}
+
+// SetAvcProfile sets the AvcProfile field's value.
+func (s *VideoConfiguration) SetAvcProfile(v string) *VideoConfiguration {
+	s.AvcProfile = &v
+	return s
+}
+
+// SetCodec sets the Codec field's value.
+func (s *VideoConfiguration) SetCodec(v string) *VideoConfiguration {
+	s.Codec = &v
+	return s
+}
+
+// SetEncoder sets the Encoder field's value.
+func (s *VideoConfiguration) SetEncoder(v string) *VideoConfiguration {
+	s.Encoder = &v
+	return s
+}
+
+// SetTargetBitrate sets the TargetBitrate field's value.
+func (s *VideoConfiguration) SetTargetBitrate(v int64) *VideoConfiguration {
+	s.TargetBitrate = &v
+	return s
+}
+
+// SetTargetFramerate sets the TargetFramerate field's value.
+func (s *VideoConfiguration) SetTargetFramerate(v int64) *VideoConfiguration {
+	s.TargetFramerate = &v
+	return s
+}
+
+// SetVideoHeight sets the VideoHeight field's value.
+func (s *VideoConfiguration) SetVideoHeight(v int64) *VideoConfiguration {
+	s.VideoHeight = &v
+	return s
+}
+
+// SetVideoWidth sets the VideoWidth field's value.
+func (s *VideoConfiguration) SetVideoWidth(v int64) *VideoConfiguration {
+	s.VideoWidth = &v
+	return s
+}
+
 const (
 	// ChannelLatencyModeNormal is a ChannelLatencyMode enum value
 	ChannelLatencyModeNormal = "NORMAL"
@@ -6546,6 +7516,22 @@ func RecordingConfigurationState_Values() []string {
 		RecordingConfigurationStateCreating,
 		RecordingConfigurationStateCreateFailed,
 		RecordingConfigurationStateActive,
+	}
+}
+
+const (
+	// RecordingModeDisabled is a RecordingMode enum value
+	RecordingModeDisabled = "DISABLED"
+
+	// RecordingModeInterval is a RecordingMode enum value
+	RecordingModeInterval = "INTERVAL"
+)
+
+// RecordingMode_Values returns all elements of the RecordingMode enum
+func RecordingMode_Values() []string {
+	return []string{
+		RecordingModeDisabled,
+		RecordingModeInterval,
 	}
 }
 

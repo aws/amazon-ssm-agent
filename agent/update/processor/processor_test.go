@@ -20,28 +20,29 @@
 package processor
 
 import (
+	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
 	"testing"
-
-	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	updatemanifestmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition"
-	"github.com/aws/amazon-ssm-agent/agent/version"
-
 	updatepreconditionmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 	updates3utilmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -72,6 +73,7 @@ func (c *contextMgrStub) uploadOutput(log log.T, updateDetail *UpdateDetail, orc
 
 func TestStartOrResumeUpdateFromInstalledState(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	isMethodExecuted := false
 	updateDetail := createUpdateDetail(Installed)
@@ -88,6 +90,7 @@ func TestStartOrResumeUpdateFromInstalledState(t *testing.T) {
 
 func TestStartOrResumeUpdateFromInitializedState(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	isMethodExecuted := false
 	updateDetail := createUpdateDetail(Initialized)
@@ -104,6 +107,7 @@ func TestStartOrResumeUpdateFromInitializedState(t *testing.T) {
 
 func TestStartOrResumeUpdateFromStagedState(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	isMethodExecuted := false
 	updateDetail := createUpdateDetail(Staged)
@@ -120,6 +124,7 @@ func TestStartOrResumeUpdateFromStagedState(t *testing.T) {
 
 func TestInitializeUpdate(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail("")
 
@@ -134,6 +139,7 @@ func TestInitializeUpdate(t *testing.T) {
 
 func TestInitManifest_NoManifestURLNoSource(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
 	updateDetail.SourceLocation = ""
@@ -162,6 +168,7 @@ func TestInitManifest_NoManifestURLNoSource(t *testing.T) {
 
 func TestInitManifest_NoManifestURLButSuccess(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	s3Util := &updates3utilmocks.T{}
@@ -202,6 +209,7 @@ func TestInitManifest_NoManifestURLButSuccess(t *testing.T) {
 
 func TestInitManifest_ErrorDownloadManifest(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	s3Util := &updates3utilmocks.T{}
@@ -240,6 +248,7 @@ func TestInitManifest_ErrorDownloadManifest(t *testing.T) {
 
 func TestInitSelfUpdate_NoSelfUpdate(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -272,6 +281,7 @@ func TestInitSelfUpdate_NoSelfUpdate(t *testing.T) {
 
 func TestInitSelfUpdate_FailedCheckDeprecated(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -308,6 +318,7 @@ func TestInitSelfUpdate_FailedCheckDeprecated(t *testing.T) {
 
 func TestInitSelfUpdate_NotDeprecated(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -338,6 +349,7 @@ func TestInitSelfUpdate_NotDeprecated(t *testing.T) {
 
 func TestInitSelfUpdate_IsDeprecated_FailedGetLastestActive(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -369,6 +381,7 @@ func TestInitSelfUpdate_IsDeprecated_FailedGetLastestActive(t *testing.T) {
 
 func TestInitSelfUpdate_IsDeprecated_Success(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -410,8 +423,8 @@ func TestInitSelfUpdate_IsDeprecated_Success(t *testing.T) {
 
 func TestDetermineTarget_TargetVersionNone_FailedGetLatest(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
-
 	updateDetail := createUpdateDetail(Initialized)
 	updateDetail.TargetVersion = "None"
 
@@ -448,6 +461,7 @@ func TestDetermineTarget_TargetVersionNone_FailedGetLatest(t *testing.T) {
 
 func TestDetermineTarget_TargetVersionLatest_FailedGetLatest(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -485,6 +499,7 @@ func TestDetermineTarget_TargetVersionLatest_FailedGetLatest(t *testing.T) {
 
 func TestDetermineTarget_TargetVersionLatest_Success(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -522,7 +537,147 @@ func TestDetermineTarget_TargetVersionLatest_Success(t *testing.T) {
 	assert.Equal(t, "", updateDetail.StandardError)
 }
 
+func TestDetermineTarget_TargetVersionStable_FailedGetStableURL(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "stable"
+	updateDetail.ManifestURL = "someInvalidManifestUrl"
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to generate stable version from manifest url: ")
+	assert.Equal(t, "", updateDetail.StandardError)
+
+	finalizeCalled = false
+	tempCode := ""
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		tempCode = code
+		finalizeCalled = true
+		return nil
+	}
+	getStableManifestURL = func(manifestURL string) (string, error) {
+		return "", fmt.Errorf("err1")
+	}
+	finalizeCalled = false
+	// action
+	err = determineTarget(updater.mgr, logger, updateDetail)
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, finalizeCalled)
+	assert.Contains(t, tempCode, string(updateconstants.ErrorGetStableVersionS3))
+	assert.True(t, updateconstants.TargetVersionStable == updateDetail.TargetResolver)
+
+	getStableManifestURL = updateutil.GetManifestURLFromSourceUrl
+
+}
+
+func TestDetermineTarget_TargetVersionStable_FailedGetStableVersion(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	updater := createDefaultUpdaterStub()
+	getStableManifestURL = updateutil.GetStableURLFromManifestURL
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "stable"
+	updateDetail.ManifestURL = "https://some.bucket.url/ssm-agent-manifest.json"
+
+	s3Util := &updates3utilmocks.T{}
+	s3Util.On("GetStableVersion", "https://some.bucket.url/stable/VERSION", mock.Anything).Return("", fmt.Errorf("SomeGetStableVersionError"))
+	updater.mgr.S3util = s3Util
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to get stable version form s3: SomeGetStableVersionError")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestDetermineTarget_TargetVersionStable_Success(t *testing.T) {
+	// setup
+
+	var logger = logmocks.NewMockLog()
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "stable"
+	updateDetail.ManifestURL = "https://some.bucket.url/ssm-agent-manifest.json"
+
+	s3Util := &updates3utilmocks.T{}
+	s3Util.On("GetStableVersion", "https://some.bucket.url/stable/VERSION", mock.Anything).Return("3.1.1188.0", nil)
+	updater.mgr.S3util = s3Util
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, called)
+	assert.False(t, finalizeCalled)
+	assert.Equal(t, Initialized, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, updateDetail.Result)
+	assert.True(t, updateconstants.TargetVersionStable == updateDetail.TargetResolver)
+	assert.Equal(t, "3.1.1188.0", updateDetail.TargetVersion)
+
+	assert.Equal(t, "", updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
 func TestCleanAgentArtifacts_UpdateSuccess(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
 	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
 	getDirectoryNames = func(srcPath string) (directories []string, err error) {
@@ -545,6 +700,7 @@ func TestCleanAgentArtifacts_UpdateSuccess(t *testing.T) {
 }
 
 func TestCleanAgentArtifacts_UpdateFailed(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
 	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
 	getDirectoryNames = func(srcPath string) (directories []string, err error) {
@@ -567,6 +723,7 @@ func TestCleanAgentArtifacts_UpdateFailed(t *testing.T) {
 }
 
 func TestCleanUpdaterArtifacts_UpdateSuccess(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
 	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
 	getDirectoryNames = func(srcPath string) (directories []string, err error) {
@@ -589,6 +746,7 @@ func TestCleanUpdaterArtifacts_UpdateSuccess(t *testing.T) {
 }
 
 func TestCleanUpdaterArtifacts_UpdateFail(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
 	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
 	getDirectoryNames = func(srcPath string) (directories []string, err error) {
@@ -612,6 +770,7 @@ func TestCleanUpdaterArtifacts_UpdateFail(t *testing.T) {
 
 func TestDetermineTarget_CustomerDefinedVersion_InvalidTarget(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -646,6 +805,7 @@ func TestDetermineTarget_CustomerDefinedVersion_InvalidTarget(t *testing.T) {
 
 func TestDetermineTarget_CustomerDefinedVersion_Success(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -681,6 +841,7 @@ func TestDetermineTarget_CustomerDefinedVersion_Success(t *testing.T) {
 
 func TestValidateUpdateParam_FailedInvalidSourceVersion(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -714,6 +875,7 @@ func TestValidateUpdateParam_FailedInvalidSourceVersion(t *testing.T) {
 
 func TestValidateUpdateParam_VersionAlreadyInstalled(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -747,6 +909,7 @@ func TestValidateUpdateParam_VersionAlreadyInstalled(t *testing.T) {
 
 func TestValidateUpdateParam_FailedAttemptDowngrade_AllowDowngradeFalse(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -783,6 +946,7 @@ func TestValidateUpdateParam_FailedAttemptDowngrade_AllowDowngradeFalse(t *testi
 
 func TestValidateUpdateParam_AllowDowngrade_SourceVersionNotExist(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -823,6 +987,7 @@ func TestValidateUpdateParam_AllowDowngrade_SourceVersionNotExist(t *testing.T) 
 
 func TestValidateUpdateParam_TargetVersionNotExist(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -861,6 +1026,7 @@ func TestValidateUpdateParam_TargetVersionNotExist(t *testing.T) {
 }
 
 func TestValidateUpdateParam_FailInvalidVersion(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
 
@@ -897,6 +1063,7 @@ func TestValidateUpdateParam_FailInvalidVersion(t *testing.T) {
 
 func TestValidateUpdateParam_FailedPrecondition(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -946,6 +1113,7 @@ func TestValidateUpdateParam_FailedPrecondition(t *testing.T) {
 
 func TestValidateUpdateParam_SourceVersionV1UpdatePlugin(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -997,6 +1165,7 @@ func TestValidateUpdateParam_SourceVersionV1UpdatePlugin(t *testing.T) {
 
 func TestValidateUpdateParam_Success(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 
 	updateDetail := createUpdateDetail(Initialized)
@@ -1046,6 +1215,7 @@ func TestValidateUpdateParam_Success(t *testing.T) {
 
 func TestPrepareInstallationPackages(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
 
@@ -1076,6 +1246,7 @@ func TestPrepareInstallationPackages(t *testing.T) {
 
 func TestDownloadPackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
 
@@ -1098,6 +1269,7 @@ func TestDownloadPackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 
 func TestDownloadPackagesFailDownload(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failCreateUpdateDownloadFolder: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
@@ -1115,6 +1287,7 @@ func TestDownloadPackagesFailDownload(t *testing.T) {
 }
 
 func TestValidateUpdateVersion(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updateDetail := createUpdateDetail(Initialized)
 
 	info := &updateinfomocks.T{}
@@ -1126,6 +1299,7 @@ func TestValidateUpdateVersion(t *testing.T) {
 }
 
 func TestValidateUpdateVersionFailCentOs(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updateDetail := createUpdateDetail(Initialized)
 	updateDetail.TargetVersion = "1.0.0.0"
 	info := &updateinfomocks.T{}
@@ -1138,6 +1312,7 @@ func TestValidateUpdateVersionFailCentOs(t *testing.T) {
 
 func TestProceedUpdate(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	isVerifyCalled := false
@@ -1163,6 +1338,7 @@ func TestProceedUpdate(t *testing.T) {
 
 func TestProceedUpdateWithDowngrade(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	updateDetail.RequiresUninstall = true
@@ -1194,6 +1370,7 @@ func TestProceedUpdateWithDowngrade(t *testing.T) {
 
 func TestProceedUpdateWithUnsupportedServiceMgrForUpdateInstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	isInstallCalled := false
@@ -1220,6 +1397,7 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateInstall(t *testing.T) {
 
 func TestProceedUpdateWithUnsupportedServiceMgrForUpdateUninstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	updateDetail.RequiresUninstall = true
@@ -1246,6 +1424,7 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateUninstall(t *testing.T) 
 
 func TestProceedUpdateWithUnsupportedServiceMgrForRollbackUninstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Rollback)
@@ -1282,6 +1461,7 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackUninstall(t *testing.T
 
 func TestProceedUpdateWithUnsupportedServiceMgrForRollbackInstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Rollback)
@@ -1317,6 +1497,7 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackInstall(t *testing.T) 
 
 func TestProceedUpdateWithDowngradeFailUninstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	updateDetail.RequiresUninstall = true
@@ -1348,6 +1529,7 @@ func TestProceedUpdateWithDowngradeFailUninstall(t *testing.T) {
 
 func TestProceedUpdateFailInstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	isRollbackCalled := false
@@ -1373,6 +1555,7 @@ func TestProceedUpdateFailInstall(t *testing.T) {
 
 func TestVerifyInstallation(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Installed)
@@ -1387,6 +1570,7 @@ func TestVerifyInstallation(t *testing.T) {
 
 func TestVerifyInstallationFailedGetInstanceInfo(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failCreateInstanceContext: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Installed)
@@ -1401,6 +1585,7 @@ func TestVerifyInstallationFailedGetInstanceInfo(t *testing.T) {
 
 func TestVerifyInstallationCannotStartAgent(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Installed)
@@ -1424,6 +1609,7 @@ func TestVerifyInstallationCannotStartAgent(t *testing.T) {
 
 func TestVerifyRollback(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(RolledBack)
@@ -1440,6 +1626,7 @@ func TestVerifyRollback(t *testing.T) {
 
 func TestVerifyRollbackCannotStartAgent(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 
@@ -1456,6 +1643,7 @@ func TestVerifyRollbackCannotStartAgent(t *testing.T) {
 
 func TestRollbackInstallation(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Rollback)
@@ -1486,6 +1674,7 @@ func TestRollbackInstallation(t *testing.T) {
 
 func TestRollbackInstallationFailUninstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Rollback)
@@ -1516,6 +1705,7 @@ func TestRollbackInstallationFailUninstall(t *testing.T) {
 
 func TestRollbackInstallationFailInstall(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Rollback)
@@ -1546,6 +1736,7 @@ func TestRollbackInstallationFailInstall(t *testing.T) {
 
 func TestUninstallAgent(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failExeCommand: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
@@ -1560,6 +1751,7 @@ func TestUninstallAgent(t *testing.T) {
 
 func TestUninstallAgentFailExeCommand(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
@@ -1574,6 +1766,7 @@ func TestUninstallAgentFailExeCommand(t *testing.T) {
 
 func TestInstallAgent(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failExeCommand: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
@@ -1586,8 +1779,57 @@ func TestInstallAgent(t *testing.T) {
 	assert.Equal(t, 0, int(exitCode))
 }
 
+func TestInstallAgentUsingSnap_Success(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	control := &stubControl{failExeCommand: false}
+	updater := createUpdaterWithStubsForSnap(control)
+	updateDetail := createUpdateDetail(Initialized)
+
+	// action
+	exitCode, err := installAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.Equal(t, 0, int(exitCode))
+}
+
+func TestInstallAgentUsingSnap_Failed(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	control := &stubControl{failExeCommand: true}
+	updater := createUpdaterWithStubsForSnap(control)
+	updateDetail := createUpdateDetail(Initialized)
+
+	// action
+	exitCode, err := installAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
+
+	// assert
+	assert.Contains(t, "test", err.Error())
+	assert.Equal(t, 126, int(exitCode))
+}
+
+func createUpdaterWithStubsForSnap(control *stubControl) *Updater {
+	context := contextmocks.NewMockDefault()
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformUbuntu)
+	info.On("GetUninstallScriptName").Return("snap_" + updateconstants.UninstallScript)
+	info.On("GetInstallScriptName").Return("snap_" + updateconstants.InstallScript)
+
+	updater := NewUpdater(context, info, &updateutil.Utility{})
+	updater.mgr.svc = &serviceStub{}
+	util := &utilityStub{controller: control}
+	util.Context = context
+	updater.mgr.util = util
+	updater.mgr.ctxMgr = &contextMgrStub{}
+	updater.mgr.Context = context
+
+	return updater
+}
+
 func TestInstallAgentFailExeCommand(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
@@ -1600,8 +1842,45 @@ func TestInstallAgentFailExeCommand(t *testing.T) {
 	assert.Equal(t, 0, int(exitCode))
 }
 
+func TestProceedUpdate_SnapdIssue_RollbackInstall(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	control := &stubControl{serviceIsRunning: false}
+	updater := createUpdaterStubs(control)
+	updateDetail := createUpdateDetail(Rollback)
+	snapdIssue := "child process still running"
+
+	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
+
+	// stub install for updater
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
+		isInstallCalled = true
+		return updateconstants.ExitCodeUpdateFailedDueToSnapd, fmt.Errorf(snapdIssue)
+	}
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
+		isUninstallCalled = true
+		return exitCode, nil
+	}
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
+		isVerifyCalled = true
+		return nil
+	}
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		return nil
+	}
+	// action
+	err := rollbackInstallation(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, isUninstallCalled, isInstallCalled)
+	assert.False(t, isVerifyCalled)
+	assert.True(t, strings.Contains(updateDetail.StandardOut, snapdIssue))
+}
+
 func TestDownloadAndUnzipArtifact(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
@@ -1626,6 +1905,7 @@ func TestDownloadAndUnzipArtifact(t *testing.T) {
 
 func TestDownloadWithError(t *testing.T) {
 	// setup
+	var logger = logmocks.NewMockLog()
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
@@ -1651,13 +1931,13 @@ func createDefaultUpdaterStub() *Updater {
 }
 
 func createUpdaterStubs(control *stubControl) *Updater {
-	context := context.NewMockDefault()
+	context := contextmocks.NewMockDefault()
 	info := &updateinfomocks.T{}
 	info.On("GetPlatform").Return(updateconstants.PlatformRedHat)
 	info.On("GetUninstallScriptName").Return(updateconstants.UninstallScript)
 	info.On("GetInstallScriptName").Return(updateconstants.InstallScript)
 
-	updater := NewUpdater(context, info)
+	updater := NewUpdater(context, info, &updateutil.Utility{})
 	updater.mgr.svc = &serviceStub{}
 	util := &utilityStub{controller: control}
 	util.Context = context
@@ -1697,6 +1977,15 @@ func (u *utilityStub) ExeCommand(log log.T, cmd string, workingDir string, updat
 		return -1, exitCode, fmt.Errorf("cannot run script")
 	}
 	return 1, exitCode, nil
+}
+
+func (u *utilityStub) ExecCommandWithOutput(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string) (pid int, exitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error) {
+	var errBytes bytes.Buffer
+	errBytes.WriteString("snap \"amazon-ssm-agent\" has running apps")
+	if u.controller.failExeCommand {
+		return -1, exitCode, nil, &errBytes, fmt.Errorf("test")
+	}
+	return 1, exitCode, nil, nil, nil
 }
 
 func (u *utilityStub) SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *updateutil.UpdatePluginResult) (err error) {

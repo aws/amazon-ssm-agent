@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
@@ -159,7 +160,7 @@ func TestOutOfProcExecuter_Success(t *testing.T) {
 	teardown(t)
 }
 
-//TODO test Zombie and Orphan child separately
+// TODO test Zombie and Orphan child separately
 func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	testCase := setup(t)
 
@@ -225,7 +226,7 @@ func TestOutOfProcExecuter_ShutdownAndReconnect(t *testing.T) {
 	newDocStore.On("Save", resultDocState).Return(nil)
 	newDocStore.On("Save", resultDocStateBeforeProcess).Return(nil)
 
-	newContext := context.NewMockDefaultWithContext([]string{"NEWMASTER"})
+	newContext := contextmocks.NewMockDefaultWithContext([]string{"NEWMASTER"})
 	newOutofProcExe := NewOutOfProcExecuter(newContext)
 	newResChan := newOutofProcExe.Run(newCancelFlag, newDocStore)
 	//plugin1 update
@@ -368,9 +369,9 @@ func NewFakeProcess(t *testing.T) *FakeProcess {
 	}
 }
 
-//replicate the same procedure as the worker main function
+// replicate the same procedure as the worker main function
 func (p *FakeProcess) fakeWorker(t *testing.T, handle string) {
-	ctx := context.NewMockDefaultWithContext([]string{"FAKE-DOCUMENT-WORKER"})
+	ctx := contextmocks.NewMockDefaultWithContext([]string{"FAKE-DOCUMENT-WORKER"})
 	log := ctx.Log()
 	log.Infof("document: %v process started", handle)
 	//make sure the channel name is correct
@@ -389,8 +390,8 @@ func (p *FakeProcess) fakeWorker(t *testing.T, handle string) {
 	p.exitChan <- true
 }
 
-//Make the process to become an orphan when parent dies
-//In reality, Wait() is transferred to OS daemon. In our test cases, Wait() is held by the old Executer so we need to fail the new Executer's Wait() call
+// Make the process to become an orphan when parent dies
+// In reality, Wait() is transferred to OS daemon. In our test cases, Wait() is held by the old Executer so we need to fail the new Executer's Wait() call
 func (p *FakeProcess) detach() {
 	p.attached = false
 }

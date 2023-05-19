@@ -22,7 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem"
 )
@@ -86,6 +86,7 @@ func (bs *Bootstrap) Init() (context.ICoreAgentContext, error) {
 		return nil, logger.Errorf("failed to create IPC folder, %v", err)
 	}
 
+	bs.updateSSMUserShellProperties(logger)
 	for i := 0; i < 3; i++ {
 		ctx, err := context.NewCoreAgentContext(logger, &config, agentIdentity)
 		if err == nil {

@@ -72,6 +72,10 @@ type SageMakerAPI interface {
 	AssociateTrialComponentWithContext(aws.Context, *sagemaker.AssociateTrialComponentInput, ...request.Option) (*sagemaker.AssociateTrialComponentOutput, error)
 	AssociateTrialComponentRequest(*sagemaker.AssociateTrialComponentInput) (*request.Request, *sagemaker.AssociateTrialComponentOutput)
 
+	BatchDescribeModelPackage(*sagemaker.BatchDescribeModelPackageInput) (*sagemaker.BatchDescribeModelPackageOutput, error)
+	BatchDescribeModelPackageWithContext(aws.Context, *sagemaker.BatchDescribeModelPackageInput, ...request.Option) (*sagemaker.BatchDescribeModelPackageOutput, error)
+	BatchDescribeModelPackageRequest(*sagemaker.BatchDescribeModelPackageInput) (*request.Request, *sagemaker.BatchDescribeModelPackageOutput)
+
 	CreateAction(*sagemaker.CreateActionInput) (*sagemaker.CreateActionOutput, error)
 	CreateActionWithContext(aws.Context, *sagemaker.CreateActionInput, ...request.Option) (*sagemaker.CreateActionOutput, error)
 	CreateActionRequest(*sagemaker.CreateActionInput) (*request.Request, *sagemaker.CreateActionOutput)
@@ -120,6 +124,14 @@ type SageMakerAPI interface {
 	CreateDomainWithContext(aws.Context, *sagemaker.CreateDomainInput, ...request.Option) (*sagemaker.CreateDomainOutput, error)
 	CreateDomainRequest(*sagemaker.CreateDomainInput) (*request.Request, *sagemaker.CreateDomainOutput)
 
+	CreateEdgeDeploymentPlan(*sagemaker.CreateEdgeDeploymentPlanInput) (*sagemaker.CreateEdgeDeploymentPlanOutput, error)
+	CreateEdgeDeploymentPlanWithContext(aws.Context, *sagemaker.CreateEdgeDeploymentPlanInput, ...request.Option) (*sagemaker.CreateEdgeDeploymentPlanOutput, error)
+	CreateEdgeDeploymentPlanRequest(*sagemaker.CreateEdgeDeploymentPlanInput) (*request.Request, *sagemaker.CreateEdgeDeploymentPlanOutput)
+
+	CreateEdgeDeploymentStage(*sagemaker.CreateEdgeDeploymentStageInput) (*sagemaker.CreateEdgeDeploymentStageOutput, error)
+	CreateEdgeDeploymentStageWithContext(aws.Context, *sagemaker.CreateEdgeDeploymentStageInput, ...request.Option) (*sagemaker.CreateEdgeDeploymentStageOutput, error)
+	CreateEdgeDeploymentStageRequest(*sagemaker.CreateEdgeDeploymentStageInput) (*request.Request, *sagemaker.CreateEdgeDeploymentStageOutput)
+
 	CreateEdgePackagingJob(*sagemaker.CreateEdgePackagingJobInput) (*sagemaker.CreateEdgePackagingJobOutput, error)
 	CreateEdgePackagingJobWithContext(aws.Context, *sagemaker.CreateEdgePackagingJobInput, ...request.Option) (*sagemaker.CreateEdgePackagingJobOutput, error)
 	CreateEdgePackagingJobRequest(*sagemaker.CreateEdgePackagingJobInput) (*request.Request, *sagemaker.CreateEdgePackagingJobOutput)
@@ -159,6 +171,10 @@ type SageMakerAPI interface {
 	CreateImageVersion(*sagemaker.CreateImageVersionInput) (*sagemaker.CreateImageVersionOutput, error)
 	CreateImageVersionWithContext(aws.Context, *sagemaker.CreateImageVersionInput, ...request.Option) (*sagemaker.CreateImageVersionOutput, error)
 	CreateImageVersionRequest(*sagemaker.CreateImageVersionInput) (*request.Request, *sagemaker.CreateImageVersionOutput)
+
+	CreateInferenceRecommendationsJob(*sagemaker.CreateInferenceRecommendationsJobInput) (*sagemaker.CreateInferenceRecommendationsJobOutput, error)
+	CreateInferenceRecommendationsJobWithContext(aws.Context, *sagemaker.CreateInferenceRecommendationsJobInput, ...request.Option) (*sagemaker.CreateInferenceRecommendationsJobOutput, error)
+	CreateInferenceRecommendationsJobRequest(*sagemaker.CreateInferenceRecommendationsJobInput) (*request.Request, *sagemaker.CreateInferenceRecommendationsJobOutput)
 
 	CreateLabelingJob(*sagemaker.CreateLabelingJobInput) (*sagemaker.CreateLabelingJobOutput, error)
 	CreateLabelingJobWithContext(aws.Context, *sagemaker.CreateLabelingJobInput, ...request.Option) (*sagemaker.CreateLabelingJobOutput, error)
@@ -295,6 +311,14 @@ type SageMakerAPI interface {
 	DeleteDomain(*sagemaker.DeleteDomainInput) (*sagemaker.DeleteDomainOutput, error)
 	DeleteDomainWithContext(aws.Context, *sagemaker.DeleteDomainInput, ...request.Option) (*sagemaker.DeleteDomainOutput, error)
 	DeleteDomainRequest(*sagemaker.DeleteDomainInput) (*request.Request, *sagemaker.DeleteDomainOutput)
+
+	DeleteEdgeDeploymentPlan(*sagemaker.DeleteEdgeDeploymentPlanInput) (*sagemaker.DeleteEdgeDeploymentPlanOutput, error)
+	DeleteEdgeDeploymentPlanWithContext(aws.Context, *sagemaker.DeleteEdgeDeploymentPlanInput, ...request.Option) (*sagemaker.DeleteEdgeDeploymentPlanOutput, error)
+	DeleteEdgeDeploymentPlanRequest(*sagemaker.DeleteEdgeDeploymentPlanInput) (*request.Request, *sagemaker.DeleteEdgeDeploymentPlanOutput)
+
+	DeleteEdgeDeploymentStage(*sagemaker.DeleteEdgeDeploymentStageInput) (*sagemaker.DeleteEdgeDeploymentStageOutput, error)
+	DeleteEdgeDeploymentStageWithContext(aws.Context, *sagemaker.DeleteEdgeDeploymentStageInput, ...request.Option) (*sagemaker.DeleteEdgeDeploymentStageOutput, error)
+	DeleteEdgeDeploymentStageRequest(*sagemaker.DeleteEdgeDeploymentStageInput) (*request.Request, *sagemaker.DeleteEdgeDeploymentStageOutput)
 
 	DeleteEndpoint(*sagemaker.DeleteEndpointInput) (*sagemaker.DeleteEndpointOutput, error)
 	DeleteEndpointWithContext(aws.Context, *sagemaker.DeleteEndpointInput, ...request.Option) (*sagemaker.DeleteEndpointOutput, error)
@@ -460,6 +484,10 @@ type SageMakerAPI interface {
 	DescribeDomainWithContext(aws.Context, *sagemaker.DescribeDomainInput, ...request.Option) (*sagemaker.DescribeDomainOutput, error)
 	DescribeDomainRequest(*sagemaker.DescribeDomainInput) (*request.Request, *sagemaker.DescribeDomainOutput)
 
+	DescribeEdgeDeploymentPlan(*sagemaker.DescribeEdgeDeploymentPlanInput) (*sagemaker.DescribeEdgeDeploymentPlanOutput, error)
+	DescribeEdgeDeploymentPlanWithContext(aws.Context, *sagemaker.DescribeEdgeDeploymentPlanInput, ...request.Option) (*sagemaker.DescribeEdgeDeploymentPlanOutput, error)
+	DescribeEdgeDeploymentPlanRequest(*sagemaker.DescribeEdgeDeploymentPlanInput) (*request.Request, *sagemaker.DescribeEdgeDeploymentPlanOutput)
+
 	DescribeEdgePackagingJob(*sagemaker.DescribeEdgePackagingJobInput) (*sagemaker.DescribeEdgePackagingJobOutput, error)
 	DescribeEdgePackagingJobWithContext(aws.Context, *sagemaker.DescribeEdgePackagingJobInput, ...request.Option) (*sagemaker.DescribeEdgePackagingJobOutput, error)
 	DescribeEdgePackagingJobRequest(*sagemaker.DescribeEdgePackagingJobInput) (*request.Request, *sagemaker.DescribeEdgePackagingJobOutput)
@@ -479,6 +507,10 @@ type SageMakerAPI interface {
 	DescribeFeatureGroup(*sagemaker.DescribeFeatureGroupInput) (*sagemaker.DescribeFeatureGroupOutput, error)
 	DescribeFeatureGroupWithContext(aws.Context, *sagemaker.DescribeFeatureGroupInput, ...request.Option) (*sagemaker.DescribeFeatureGroupOutput, error)
 	DescribeFeatureGroupRequest(*sagemaker.DescribeFeatureGroupInput) (*request.Request, *sagemaker.DescribeFeatureGroupOutput)
+
+	DescribeFeatureMetadata(*sagemaker.DescribeFeatureMetadataInput) (*sagemaker.DescribeFeatureMetadataOutput, error)
+	DescribeFeatureMetadataWithContext(aws.Context, *sagemaker.DescribeFeatureMetadataInput, ...request.Option) (*sagemaker.DescribeFeatureMetadataOutput, error)
+	DescribeFeatureMetadataRequest(*sagemaker.DescribeFeatureMetadataInput) (*request.Request, *sagemaker.DescribeFeatureMetadataOutput)
 
 	DescribeFlowDefinition(*sagemaker.DescribeFlowDefinitionInput) (*sagemaker.DescribeFlowDefinitionOutput, error)
 	DescribeFlowDefinitionWithContext(aws.Context, *sagemaker.DescribeFlowDefinitionInput, ...request.Option) (*sagemaker.DescribeFlowDefinitionOutput, error)
@@ -500,9 +532,17 @@ type SageMakerAPI interface {
 	DescribeImageVersionWithContext(aws.Context, *sagemaker.DescribeImageVersionInput, ...request.Option) (*sagemaker.DescribeImageVersionOutput, error)
 	DescribeImageVersionRequest(*sagemaker.DescribeImageVersionInput) (*request.Request, *sagemaker.DescribeImageVersionOutput)
 
+	DescribeInferenceRecommendationsJob(*sagemaker.DescribeInferenceRecommendationsJobInput) (*sagemaker.DescribeInferenceRecommendationsJobOutput, error)
+	DescribeInferenceRecommendationsJobWithContext(aws.Context, *sagemaker.DescribeInferenceRecommendationsJobInput, ...request.Option) (*sagemaker.DescribeInferenceRecommendationsJobOutput, error)
+	DescribeInferenceRecommendationsJobRequest(*sagemaker.DescribeInferenceRecommendationsJobInput) (*request.Request, *sagemaker.DescribeInferenceRecommendationsJobOutput)
+
 	DescribeLabelingJob(*sagemaker.DescribeLabelingJobInput) (*sagemaker.DescribeLabelingJobOutput, error)
 	DescribeLabelingJobWithContext(aws.Context, *sagemaker.DescribeLabelingJobInput, ...request.Option) (*sagemaker.DescribeLabelingJobOutput, error)
 	DescribeLabelingJobRequest(*sagemaker.DescribeLabelingJobInput) (*request.Request, *sagemaker.DescribeLabelingJobOutput)
+
+	DescribeLineageGroup(*sagemaker.DescribeLineageGroupInput) (*sagemaker.DescribeLineageGroupOutput, error)
+	DescribeLineageGroupWithContext(aws.Context, *sagemaker.DescribeLineageGroupInput, ...request.Option) (*sagemaker.DescribeLineageGroupOutput, error)
+	DescribeLineageGroupRequest(*sagemaker.DescribeLineageGroupInput) (*request.Request, *sagemaker.DescribeLineageGroupOutput)
 
 	DescribeModel(*sagemaker.DescribeModelInput) (*sagemaker.DescribeModelOutput, error)
 	DescribeModelWithContext(aws.Context, *sagemaker.DescribeModelInput, ...request.Option) (*sagemaker.DescribeModelOutput, error)
@@ -611,6 +651,10 @@ type SageMakerAPI interface {
 	GetDeviceFleetReport(*sagemaker.GetDeviceFleetReportInput) (*sagemaker.GetDeviceFleetReportOutput, error)
 	GetDeviceFleetReportWithContext(aws.Context, *sagemaker.GetDeviceFleetReportInput, ...request.Option) (*sagemaker.GetDeviceFleetReportOutput, error)
 	GetDeviceFleetReportRequest(*sagemaker.GetDeviceFleetReportInput) (*request.Request, *sagemaker.GetDeviceFleetReportOutput)
+
+	GetLineageGroupPolicy(*sagemaker.GetLineageGroupPolicyInput) (*sagemaker.GetLineageGroupPolicyOutput, error)
+	GetLineageGroupPolicyWithContext(aws.Context, *sagemaker.GetLineageGroupPolicyInput, ...request.Option) (*sagemaker.GetLineageGroupPolicyOutput, error)
+	GetLineageGroupPolicyRequest(*sagemaker.GetLineageGroupPolicyInput) (*request.Request, *sagemaker.GetLineageGroupPolicyOutput)
 
 	GetModelPackageGroupPolicy(*sagemaker.GetModelPackageGroupPolicyInput) (*sagemaker.GetModelPackageGroupPolicyOutput, error)
 	GetModelPackageGroupPolicyWithContext(aws.Context, *sagemaker.GetModelPackageGroupPolicyInput, ...request.Option) (*sagemaker.GetModelPackageGroupPolicyOutput, error)
@@ -729,6 +773,13 @@ type SageMakerAPI interface {
 	ListDomainsPages(*sagemaker.ListDomainsInput, func(*sagemaker.ListDomainsOutput, bool) bool) error
 	ListDomainsPagesWithContext(aws.Context, *sagemaker.ListDomainsInput, func(*sagemaker.ListDomainsOutput, bool) bool, ...request.Option) error
 
+	ListEdgeDeploymentPlans(*sagemaker.ListEdgeDeploymentPlansInput) (*sagemaker.ListEdgeDeploymentPlansOutput, error)
+	ListEdgeDeploymentPlansWithContext(aws.Context, *sagemaker.ListEdgeDeploymentPlansInput, ...request.Option) (*sagemaker.ListEdgeDeploymentPlansOutput, error)
+	ListEdgeDeploymentPlansRequest(*sagemaker.ListEdgeDeploymentPlansInput) (*request.Request, *sagemaker.ListEdgeDeploymentPlansOutput)
+
+	ListEdgeDeploymentPlansPages(*sagemaker.ListEdgeDeploymentPlansInput, func(*sagemaker.ListEdgeDeploymentPlansOutput, bool) bool) error
+	ListEdgeDeploymentPlansPagesWithContext(aws.Context, *sagemaker.ListEdgeDeploymentPlansInput, func(*sagemaker.ListEdgeDeploymentPlansOutput, bool) bool, ...request.Option) error
+
 	ListEdgePackagingJobs(*sagemaker.ListEdgePackagingJobsInput) (*sagemaker.ListEdgePackagingJobsOutput, error)
 	ListEdgePackagingJobsWithContext(aws.Context, *sagemaker.ListEdgePackagingJobsInput, ...request.Option) (*sagemaker.ListEdgePackagingJobsOutput, error)
 	ListEdgePackagingJobsRequest(*sagemaker.ListEdgePackagingJobsInput) (*request.Request, *sagemaker.ListEdgePackagingJobsOutput)
@@ -799,6 +850,13 @@ type SageMakerAPI interface {
 	ListImagesPages(*sagemaker.ListImagesInput, func(*sagemaker.ListImagesOutput, bool) bool) error
 	ListImagesPagesWithContext(aws.Context, *sagemaker.ListImagesInput, func(*sagemaker.ListImagesOutput, bool) bool, ...request.Option) error
 
+	ListInferenceRecommendationsJobs(*sagemaker.ListInferenceRecommendationsJobsInput) (*sagemaker.ListInferenceRecommendationsJobsOutput, error)
+	ListInferenceRecommendationsJobsWithContext(aws.Context, *sagemaker.ListInferenceRecommendationsJobsInput, ...request.Option) (*sagemaker.ListInferenceRecommendationsJobsOutput, error)
+	ListInferenceRecommendationsJobsRequest(*sagemaker.ListInferenceRecommendationsJobsInput) (*request.Request, *sagemaker.ListInferenceRecommendationsJobsOutput)
+
+	ListInferenceRecommendationsJobsPages(*sagemaker.ListInferenceRecommendationsJobsInput, func(*sagemaker.ListInferenceRecommendationsJobsOutput, bool) bool) error
+	ListInferenceRecommendationsJobsPagesWithContext(aws.Context, *sagemaker.ListInferenceRecommendationsJobsInput, func(*sagemaker.ListInferenceRecommendationsJobsOutput, bool) bool, ...request.Option) error
+
 	ListLabelingJobs(*sagemaker.ListLabelingJobsInput) (*sagemaker.ListLabelingJobsOutput, error)
 	ListLabelingJobsWithContext(aws.Context, *sagemaker.ListLabelingJobsInput, ...request.Option) (*sagemaker.ListLabelingJobsOutput, error)
 	ListLabelingJobsRequest(*sagemaker.ListLabelingJobsInput) (*request.Request, *sagemaker.ListLabelingJobsOutput)
@@ -813,6 +871,13 @@ type SageMakerAPI interface {
 	ListLabelingJobsForWorkteamPages(*sagemaker.ListLabelingJobsForWorkteamInput, func(*sagemaker.ListLabelingJobsForWorkteamOutput, bool) bool) error
 	ListLabelingJobsForWorkteamPagesWithContext(aws.Context, *sagemaker.ListLabelingJobsForWorkteamInput, func(*sagemaker.ListLabelingJobsForWorkteamOutput, bool) bool, ...request.Option) error
 
+	ListLineageGroups(*sagemaker.ListLineageGroupsInput) (*sagemaker.ListLineageGroupsOutput, error)
+	ListLineageGroupsWithContext(aws.Context, *sagemaker.ListLineageGroupsInput, ...request.Option) (*sagemaker.ListLineageGroupsOutput, error)
+	ListLineageGroupsRequest(*sagemaker.ListLineageGroupsInput) (*request.Request, *sagemaker.ListLineageGroupsOutput)
+
+	ListLineageGroupsPages(*sagemaker.ListLineageGroupsInput, func(*sagemaker.ListLineageGroupsOutput, bool) bool) error
+	ListLineageGroupsPagesWithContext(aws.Context, *sagemaker.ListLineageGroupsInput, func(*sagemaker.ListLineageGroupsOutput, bool) bool, ...request.Option) error
+
 	ListModelBiasJobDefinitions(*sagemaker.ListModelBiasJobDefinitionsInput) (*sagemaker.ListModelBiasJobDefinitionsOutput, error)
 	ListModelBiasJobDefinitionsWithContext(aws.Context, *sagemaker.ListModelBiasJobDefinitionsInput, ...request.Option) (*sagemaker.ListModelBiasJobDefinitionsOutput, error)
 	ListModelBiasJobDefinitionsRequest(*sagemaker.ListModelBiasJobDefinitionsInput) (*request.Request, *sagemaker.ListModelBiasJobDefinitionsOutput)
@@ -826,6 +891,13 @@ type SageMakerAPI interface {
 
 	ListModelExplainabilityJobDefinitionsPages(*sagemaker.ListModelExplainabilityJobDefinitionsInput, func(*sagemaker.ListModelExplainabilityJobDefinitionsOutput, bool) bool) error
 	ListModelExplainabilityJobDefinitionsPagesWithContext(aws.Context, *sagemaker.ListModelExplainabilityJobDefinitionsInput, func(*sagemaker.ListModelExplainabilityJobDefinitionsOutput, bool) bool, ...request.Option) error
+
+	ListModelMetadata(*sagemaker.ListModelMetadataInput) (*sagemaker.ListModelMetadataOutput, error)
+	ListModelMetadataWithContext(aws.Context, *sagemaker.ListModelMetadataInput, ...request.Option) (*sagemaker.ListModelMetadataOutput, error)
+	ListModelMetadataRequest(*sagemaker.ListModelMetadataInput) (*request.Request, *sagemaker.ListModelMetadataOutput)
+
+	ListModelMetadataPages(*sagemaker.ListModelMetadataInput, func(*sagemaker.ListModelMetadataOutput, bool) bool) error
+	ListModelMetadataPagesWithContext(aws.Context, *sagemaker.ListModelMetadataInput, func(*sagemaker.ListModelMetadataOutput, bool) bool, ...request.Option) error
 
 	ListModelPackageGroups(*sagemaker.ListModelPackageGroupsInput) (*sagemaker.ListModelPackageGroupsOutput, error)
 	ListModelPackageGroupsWithContext(aws.Context, *sagemaker.ListModelPackageGroupsInput, ...request.Option) (*sagemaker.ListModelPackageGroupsOutput, error)
@@ -925,6 +997,13 @@ type SageMakerAPI interface {
 	ListProjectsPages(*sagemaker.ListProjectsInput, func(*sagemaker.ListProjectsOutput, bool) bool) error
 	ListProjectsPagesWithContext(aws.Context, *sagemaker.ListProjectsInput, func(*sagemaker.ListProjectsOutput, bool) bool, ...request.Option) error
 
+	ListStageDevices(*sagemaker.ListStageDevicesInput) (*sagemaker.ListStageDevicesOutput, error)
+	ListStageDevicesWithContext(aws.Context, *sagemaker.ListStageDevicesInput, ...request.Option) (*sagemaker.ListStageDevicesOutput, error)
+	ListStageDevicesRequest(*sagemaker.ListStageDevicesInput) (*request.Request, *sagemaker.ListStageDevicesOutput)
+
+	ListStageDevicesPages(*sagemaker.ListStageDevicesInput, func(*sagemaker.ListStageDevicesOutput, bool) bool) error
+	ListStageDevicesPagesWithContext(aws.Context, *sagemaker.ListStageDevicesInput, func(*sagemaker.ListStageDevicesOutput, bool) bool, ...request.Option) error
+
 	ListStudioLifecycleConfigs(*sagemaker.ListStudioLifecycleConfigsInput) (*sagemaker.ListStudioLifecycleConfigsOutput, error)
 	ListStudioLifecycleConfigsWithContext(aws.Context, *sagemaker.ListStudioLifecycleConfigsInput, ...request.Option) (*sagemaker.ListStudioLifecycleConfigsOutput, error)
 	ListStudioLifecycleConfigsRequest(*sagemaker.ListStudioLifecycleConfigsInput) (*request.Request, *sagemaker.ListStudioLifecycleConfigsOutput)
@@ -1006,6 +1085,13 @@ type SageMakerAPI interface {
 	PutModelPackageGroupPolicyWithContext(aws.Context, *sagemaker.PutModelPackageGroupPolicyInput, ...request.Option) (*sagemaker.PutModelPackageGroupPolicyOutput, error)
 	PutModelPackageGroupPolicyRequest(*sagemaker.PutModelPackageGroupPolicyInput) (*request.Request, *sagemaker.PutModelPackageGroupPolicyOutput)
 
+	QueryLineage(*sagemaker.QueryLineageInput) (*sagemaker.QueryLineageOutput, error)
+	QueryLineageWithContext(aws.Context, *sagemaker.QueryLineageInput, ...request.Option) (*sagemaker.QueryLineageOutput, error)
+	QueryLineageRequest(*sagemaker.QueryLineageInput) (*request.Request, *sagemaker.QueryLineageOutput)
+
+	QueryLineagePages(*sagemaker.QueryLineageInput, func(*sagemaker.QueryLineageOutput, bool) bool) error
+	QueryLineagePagesWithContext(aws.Context, *sagemaker.QueryLineageInput, func(*sagemaker.QueryLineageOutput, bool) bool, ...request.Option) error
+
 	RegisterDevices(*sagemaker.RegisterDevicesInput) (*sagemaker.RegisterDevicesOutput, error)
 	RegisterDevicesWithContext(aws.Context, *sagemaker.RegisterDevicesInput, ...request.Option) (*sagemaker.RegisterDevicesOutput, error)
 	RegisterDevicesRequest(*sagemaker.RegisterDevicesInput) (*request.Request, *sagemaker.RegisterDevicesOutput)
@@ -1033,6 +1119,10 @@ type SageMakerAPI interface {
 	SendPipelineExecutionStepSuccessWithContext(aws.Context, *sagemaker.SendPipelineExecutionStepSuccessInput, ...request.Option) (*sagemaker.SendPipelineExecutionStepSuccessOutput, error)
 	SendPipelineExecutionStepSuccessRequest(*sagemaker.SendPipelineExecutionStepSuccessInput) (*request.Request, *sagemaker.SendPipelineExecutionStepSuccessOutput)
 
+	StartEdgeDeploymentStage(*sagemaker.StartEdgeDeploymentStageInput) (*sagemaker.StartEdgeDeploymentStageOutput, error)
+	StartEdgeDeploymentStageWithContext(aws.Context, *sagemaker.StartEdgeDeploymentStageInput, ...request.Option) (*sagemaker.StartEdgeDeploymentStageOutput, error)
+	StartEdgeDeploymentStageRequest(*sagemaker.StartEdgeDeploymentStageInput) (*request.Request, *sagemaker.StartEdgeDeploymentStageOutput)
+
 	StartMonitoringSchedule(*sagemaker.StartMonitoringScheduleInput) (*sagemaker.StartMonitoringScheduleOutput, error)
 	StartMonitoringScheduleWithContext(aws.Context, *sagemaker.StartMonitoringScheduleInput, ...request.Option) (*sagemaker.StartMonitoringScheduleOutput, error)
 	StartMonitoringScheduleRequest(*sagemaker.StartMonitoringScheduleInput) (*request.Request, *sagemaker.StartMonitoringScheduleOutput)
@@ -1053,6 +1143,10 @@ type SageMakerAPI interface {
 	StopCompilationJobWithContext(aws.Context, *sagemaker.StopCompilationJobInput, ...request.Option) (*sagemaker.StopCompilationJobOutput, error)
 	StopCompilationJobRequest(*sagemaker.StopCompilationJobInput) (*request.Request, *sagemaker.StopCompilationJobOutput)
 
+	StopEdgeDeploymentStage(*sagemaker.StopEdgeDeploymentStageInput) (*sagemaker.StopEdgeDeploymentStageOutput, error)
+	StopEdgeDeploymentStageWithContext(aws.Context, *sagemaker.StopEdgeDeploymentStageInput, ...request.Option) (*sagemaker.StopEdgeDeploymentStageOutput, error)
+	StopEdgeDeploymentStageRequest(*sagemaker.StopEdgeDeploymentStageInput) (*request.Request, *sagemaker.StopEdgeDeploymentStageOutput)
+
 	StopEdgePackagingJob(*sagemaker.StopEdgePackagingJobInput) (*sagemaker.StopEdgePackagingJobOutput, error)
 	StopEdgePackagingJobWithContext(aws.Context, *sagemaker.StopEdgePackagingJobInput, ...request.Option) (*sagemaker.StopEdgePackagingJobOutput, error)
 	StopEdgePackagingJobRequest(*sagemaker.StopEdgePackagingJobInput) (*request.Request, *sagemaker.StopEdgePackagingJobOutput)
@@ -1060,6 +1154,10 @@ type SageMakerAPI interface {
 	StopHyperParameterTuningJob(*sagemaker.StopHyperParameterTuningJobInput) (*sagemaker.StopHyperParameterTuningJobOutput, error)
 	StopHyperParameterTuningJobWithContext(aws.Context, *sagemaker.StopHyperParameterTuningJobInput, ...request.Option) (*sagemaker.StopHyperParameterTuningJobOutput, error)
 	StopHyperParameterTuningJobRequest(*sagemaker.StopHyperParameterTuningJobInput) (*request.Request, *sagemaker.StopHyperParameterTuningJobOutput)
+
+	StopInferenceRecommendationsJob(*sagemaker.StopInferenceRecommendationsJobInput) (*sagemaker.StopInferenceRecommendationsJobOutput, error)
+	StopInferenceRecommendationsJobWithContext(aws.Context, *sagemaker.StopInferenceRecommendationsJobInput, ...request.Option) (*sagemaker.StopInferenceRecommendationsJobOutput, error)
+	StopInferenceRecommendationsJobRequest(*sagemaker.StopInferenceRecommendationsJobInput) (*request.Request, *sagemaker.StopInferenceRecommendationsJobOutput)
 
 	StopLabelingJob(*sagemaker.StopLabelingJobInput) (*sagemaker.StopLabelingJobOutput, error)
 	StopLabelingJobWithContext(aws.Context, *sagemaker.StopLabelingJobInput, ...request.Option) (*sagemaker.StopLabelingJobOutput, error)
@@ -1133,6 +1231,14 @@ type SageMakerAPI interface {
 	UpdateExperimentWithContext(aws.Context, *sagemaker.UpdateExperimentInput, ...request.Option) (*sagemaker.UpdateExperimentOutput, error)
 	UpdateExperimentRequest(*sagemaker.UpdateExperimentInput) (*request.Request, *sagemaker.UpdateExperimentOutput)
 
+	UpdateFeatureGroup(*sagemaker.UpdateFeatureGroupInput) (*sagemaker.UpdateFeatureGroupOutput, error)
+	UpdateFeatureGroupWithContext(aws.Context, *sagemaker.UpdateFeatureGroupInput, ...request.Option) (*sagemaker.UpdateFeatureGroupOutput, error)
+	UpdateFeatureGroupRequest(*sagemaker.UpdateFeatureGroupInput) (*request.Request, *sagemaker.UpdateFeatureGroupOutput)
+
+	UpdateFeatureMetadata(*sagemaker.UpdateFeatureMetadataInput) (*sagemaker.UpdateFeatureMetadataOutput, error)
+	UpdateFeatureMetadataWithContext(aws.Context, *sagemaker.UpdateFeatureMetadataInput, ...request.Option) (*sagemaker.UpdateFeatureMetadataOutput, error)
+	UpdateFeatureMetadataRequest(*sagemaker.UpdateFeatureMetadataInput) (*request.Request, *sagemaker.UpdateFeatureMetadataOutput)
+
 	UpdateImage(*sagemaker.UpdateImageInput) (*sagemaker.UpdateImageOutput, error)
 	UpdateImageWithContext(aws.Context, *sagemaker.UpdateImageInput, ...request.Option) (*sagemaker.UpdateImageOutput, error)
 	UpdateImageRequest(*sagemaker.UpdateImageInput) (*request.Request, *sagemaker.UpdateImageOutput)
@@ -1160,6 +1266,10 @@ type SageMakerAPI interface {
 	UpdatePipelineExecution(*sagemaker.UpdatePipelineExecutionInput) (*sagemaker.UpdatePipelineExecutionOutput, error)
 	UpdatePipelineExecutionWithContext(aws.Context, *sagemaker.UpdatePipelineExecutionInput, ...request.Option) (*sagemaker.UpdatePipelineExecutionOutput, error)
 	UpdatePipelineExecutionRequest(*sagemaker.UpdatePipelineExecutionInput) (*request.Request, *sagemaker.UpdatePipelineExecutionOutput)
+
+	UpdateProject(*sagemaker.UpdateProjectInput) (*sagemaker.UpdateProjectOutput, error)
+	UpdateProjectWithContext(aws.Context, *sagemaker.UpdateProjectInput, ...request.Option) (*sagemaker.UpdateProjectOutput, error)
+	UpdateProjectRequest(*sagemaker.UpdateProjectInput) (*request.Request, *sagemaker.UpdateProjectOutput)
 
 	UpdateTrainingJob(*sagemaker.UpdateTrainingJobInput) (*sagemaker.UpdateTrainingJobOutput, error)
 	UpdateTrainingJobWithContext(aws.Context, *sagemaker.UpdateTrainingJobInput, ...request.Option) (*sagemaker.UpdateTrainingJobOutput, error)

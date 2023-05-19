@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	replytypesmock "github.com/aws/amazon-ssm-agent/agent/messageservice/interactor/mgsinteractor/replytypes/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	controlChannelMock "github.com/aws/amazon-ssm-agent/agent/session/controlchannel/mocks"
 	"github.com/gorilla/websocket"
@@ -27,7 +27,7 @@ type SendReplyTestSuite struct {
 	suite.Suite
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSendReplyTestSuite(t *testing.T) {
 	suite.Run(t, new(SendReplyTestSuite))
 }
@@ -188,7 +188,7 @@ func (suite *SendReplyTestSuite) TestProcessReply_checkForWarningErrors_SkipRetr
 	mgsInteractor.processReply(reply)
 	time.Sleep(100 * time.Millisecond)
 	assert.False(suite.T(), ackChanPresent)
-	replyTypeMock.AssertNumberOfCalls(suite.T(), "IncrementRetries", 0)
+	replyTypeMock.AssertNumberOfCalls(suite.T(), "IncrementRetries", 1)
 }
 
 func (suite *SendReplyTestSuite) getReplyWithRetry(ackByte []byte, uuidVal uuid.UUID) (*replytypesmock.IReplyType, *agentReplyLocalContract) {

@@ -19,10 +19,15 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
 	"os/signal"
 	"path/filepath"
+	"regexp"
 	"runtime/debug"
+	"strconv"
+	"strings"
 	"syscall"
 	"time"
 	"unicode/utf8"
@@ -39,6 +44,7 @@ import (
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
+	"github.com/aws/amazon-ssm-agent/agent/session/shell/constants"
 	"github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
@@ -46,14 +52,19 @@ import (
 
 // Plugin is the type for the plugin.
 type ShellPlugin struct {
-	context     context.T
-	name        string
-	stdin       *os.File
-	stdout      *os.File
-	execCmd     execcmd.IExecCmd
-	runAsUser   string
-	dataChannel datachannel.IDataChannel
-	logger      logger
+	context        context.T
+	name           string
+	stdin          *os.File
+	stdout         *os.File
+	stdoutPipe     io.Reader
+	stderrPipe     io.Reader
+	execCmd        execcmd.IExecCmd
+	runAsUser      string
+	dataChannel    datachannel.IDataChannel
+	logger         logger
+	separateOutput bool
+	stdoutPrefix   string
+	stderrPrefix   string
 }
 
 // logger is used for storing the information related to logging of session data to S3/CW
@@ -73,6 +84,8 @@ type IShellPlugin interface {
 	Execute(config agentContracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel, shellProps mgsContracts.ShellProperties)
 	InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error
 }
+
+const separateOutputStreamPrefixRegex = "^[0-9a-zA-Z\r\n_:-]{0,30}$"
 
 // NewPlugin returns a new instance of the Shell Plugin
 func NewPlugin(context context.T, name string) (*ShellPlugin, error) {
@@ -123,6 +136,37 @@ func (p *ShellPlugin) validate(config agentContracts.Configuration) error {
 			return errors.New(mgsConfig.S3EncryptionErrorMsg)
 		}
 	}
+	return nil
+}
+
+// validPrefix checks whether the given prefix string is valid.
+func (p *ShellPlugin) validPrefix(prefix string) bool {
+	prefixRegex := regexp.MustCompile(separateOutputStreamPrefixRegex)
+	return prefixRegex.MatchString(prefix)
+}
+
+// setSeparateOutputStreamProperties validates separateOutputStream properties and set them to shell plugin context.
+func (p *ShellPlugin) setSeparateOutputStreamProperties(shellProps mgsContracts.ShellProperties) error {
+	separateOutput, err := constants.GetSeparateOutputStream(shellProps)
+	if err != nil {
+		return fmt.Errorf("fail to get separateOutPutStream property: %v", err)
+	}
+	p.separateOutput = separateOutput
+
+	if p.separateOutput {
+		stdoutPrefix := constants.GetStdOutSeparatorPrefix(shellProps)
+		if !p.validPrefix(stdoutPrefix) {
+			return fmt.Errorf("invalid stdoutSeparatorPrefix %v", stdoutPrefix)
+		}
+		p.stdoutPrefix = stdoutPrefix
+
+		stderrPrefix := constants.GetStdErrSeparatorPrefix(shellProps)
+		if !p.validPrefix(stderrPrefix) {
+			return fmt.Errorf("invalid stderrSeparatorPrefix %v", stderrPrefix)
+		}
+		p.stderrPrefix = stderrPrefix
+	}
+
 	return nil
 }
 
@@ -193,6 +237,16 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 		return
 	}
 
+	if appconfig.PluginNameNonInteractiveCommands == p.name {
+		if err := p.setSeparateOutputStreamProperties(shellProps); err != nil {
+			output.SetExitCode(appconfig.ErrorExitCode)
+			output.SetStatus(agentContracts.ResultStatusFailed)
+			sessionPluginResultOutput.Output = err.Error()
+			output.SetOutput(sessionPluginResultOutput)
+			log.Errorf("SeparateOutputStream properties validation failed, err: %s", err)
+			return
+		}
+	}
 	// Catch signals and send a signal to the "sigs" chan if it triggers
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGQUIT)
@@ -210,6 +264,10 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 		errorString := fmt.Errorf("Unable to start command: %s\n", err)
 		log.Error(errorString)
 		time.Sleep(2 * time.Second)
+		if appconfig.PluginNameNonInteractiveCommands == p.name {
+			// Error started before exec.cmd starts needs to be explicitly propagated to data channel.
+			p.sendErrorToDataChannel(log, errorString.Error())
+		}
 		output.MarkAsFailed(errorString)
 		return
 	}
@@ -342,39 +400,147 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 
 	log.Infof("Plugin %s started", p.name)
 
-	if err := p.execCmd.Start(); err != nil {
-		errorString := fmt.Errorf("Error occurred starting the command: %s\n", err)
-		log.Error(errorString)
-		output.MarkAsFailed(errorString)
-		return
-	}
-
 	// CW streaming logs is disabled for NonInteractiveCommands plugin, which is by far the only session plugin that uses exec.Cmd.
 	// However, leaving the startStreamingLogs call path here in case future session plugins use exec.Cmd differently and need streaming logs.
 	p.startStreamingLogs(ipcFile, config)
 
+	if p.separateOutput {
+		if err := p.processCommandsWithOutputStreamSeparate(cancelled, cancelFlag, output, ipcFile); err != nil {
+			p.sendErrorToDataChannel(log, err.Error())
+		}
+	} else {
+		if err := p.processCommandsWithExec(cancelled, cancelFlag, output, ipcFile); err != nil {
+			p.sendErrorToDataChannel(log, err.Error())
+		}
+		p.cleanupOutputFile(log, config)
+	}
+}
+
+// Handle go routines between session termination and command execution with exec.Cmd
+func (p *ShellPlugin) processCommandsWithOutputStreamSeparate(cancelled chan bool,
+	cancelFlag task.CancelFlag,
+	output iohandler.IOHandler,
+	ipcFile *os.File) (err error) {
+
+	log := p.context.Log()
+
+	writeStdOutDone := p.setupRoutineToWriteCmdPipelineOutput(log, ipcFile, false)
+	writeStdErrDone := p.setupRoutineToWriteCmdPipelineOutput(log, ipcFile, true)
+
+	if err := p.execCmd.Start(); err != nil {
+		errorString := fmt.Errorf("Error occurred starting the command: %s\n", err)
+		log.Error(errorString)
+		output.MarkAsFailed(errorString)
+		return err
+	}
+
 	// Wait for session to be completed/cancelled/interrupted
 	cmdWaitDone := make(chan error, 1)
+	cmdExitCode := make(chan int, 1)
+	writeStdOutResult, writeStdErrResult := appconfig.ErrorExitCode, appconfig.ErrorExitCode
+
 	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Errorf("Write Stdout thread crashed with message: %v\n", err)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		log.Debugf("Start separate go routine to wait for command to complete. Pid: %v", p.execCmd.Pid())
+		writeStdOutResult, writeStdErrResult = <-writeStdOutDone, <-writeStdErrDone
+		log.Debugf("writeStdOutResult: %v, writeStdErrResult: %v", writeStdOutResult, writeStdErrResult)
+		close(writeStdOutDone)
+		close(writeStdErrDone)
+
 		err := p.execCmd.Wait()
+		if err != nil {
+			if exiterr, ok := err.(*exec.ExitError); ok {
+				log.Infof("Command Exit Status: %d", exiterr.ExitCode())
+				cmdExitCode <- exiterr.ExitCode()
+
+			} else {
+				log.Errorf("Failed to get exit code, set it to %v", appconfig.ErrorExitCode)
+				cmdExitCode <- appconfig.ErrorExitCode
+			}
+		} else {
+			log.Infof("Command success with exit status 0")
+			cmdExitCode <- appconfig.SuccessExitCode
+		}
 		cmdWaitDone <- err
 	}()
 
-	p.processCommandsWithExec(cancelled, cmdWaitDone, cancelFlag, output, ipcFile)
+	select {
+	case <-cancelled:
+		log.Debug("Session cancelled. Attempting to stop the command execution.")
+		if err := p.execCmd.Kill(); err != nil {
+			log.Errorf("unable to terminate command execution process %s: %v", p.execCmd.Pid(), err)
+		}
+		output.SetExitCode(appconfig.SuccessExitCode)
+		output.SetStatus(agentContracts.ResultStatusSuccess)
+		log.Info("The session was cancelled")
 
-	p.cleanupOutputFile(log, config)
+	case cmdWaitErr := <-cmdWaitDone:
+		if cmdWaitErr != nil {
+			log.Errorf("received error when waiting for command to complete: %v", cmdWaitErr)
+		}
+		if cancelFlag.Canceled() {
+			log.Errorf("the cancellation failed to stop the session.")
+		}
 
+		if writeStdOutResult == appconfig.SuccessExitCode && writeStdErrResult == appconfig.SuccessExitCode {
+			log.Debugf("Writing session plugin output is done. Exit code: 0.")
+			output.SetExitCode(appconfig.SuccessExitCode)
+			output.SetStatus(agentContracts.ResultStatusSuccess)
+		} else {
+			log.Debugf("Writing session plugin output is done. Exit code: 1.")
+			output.SetExitCode(appconfig.ErrorExitCode)
+			output.SetStatus(agentContracts.ResultStatusFailed)
+		}
+		commandExitCode := <-cmdExitCode
+		close(cmdExitCode)
+		log.Infof("The session commandExitCode %d", commandExitCode)
+		p.sendExitCode(log, ipcFile, commandExitCode)
+	}
+
+	// Call datachannel PrepareToCloseChannel so all messages in the buffer are sent
+	p.dataChannel.PrepareToCloseChannel(log)
+
+	// Send session status as Terminating to service on completing command execution
+	if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+		log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
+	}
+
+	return nil
 }
 
 // Handle go routines between session termination and command execution with exec.Cmd
 func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
-	cmdWaitDone chan error,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
-	ipcFile *os.File) {
+	ipcFile *os.File) (err error) {
 
 	log := p.context.Log()
+
+	if err := p.execCmd.Start(); err != nil {
+		errorString := fmt.Errorf("Error occurred starting the command: %s\n", err)
+		log.Error(errorString)
+		output.MarkAsFailed(errorString)
+		return err
+	}
+
+	// Wait for session to be completed/cancelled/interrupted
+	cmdWaitDone := make(chan error, 1)
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Process commands with exec panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
+		log.Debugf("Start separate go routine to wait for command to complete. Pid: %v", p.execCmd.Pid())
+		err := p.execCmd.Wait()
+		cmdWaitDone <- err
+	}()
 
 	select {
 	case <-cancelled:
@@ -427,6 +593,8 @@ func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
 			log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
 		}
 	}
+
+	return nil
 }
 
 // initializeLogger initializes plugin logger to be used for s3/cw logging
@@ -481,11 +649,114 @@ func (p *ShellPlugin) setupRoutineToWriteCommandOutput(log log.T, ipcFile *os.Fi
 	return done
 }
 
+// Set up go routine to write command output to data channel
+func (p *ShellPlugin) setupRoutineToWriteCmdPipelineOutput(log log.T, ipcFile *os.File, isStderr bool) chan int {
+	done := make(chan int, 1)
+
+	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Errorf("Write pipeline output crashed with message: %v\n", err)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
+
+		var pipe io.Reader
+		var unprocessedBuf bytes.Buffer
+		var outputPrefix string
+		prefix := make([]byte, 128)
+		payloadType := mgsContracts.Output
+
+		if isStderr {
+			pipe = p.stderrPipe
+			outputPrefix = p.stderrPrefix
+			payloadType = mgsContracts.StdErr
+		} else {
+			pipe = p.stdoutPipe
+			outputPrefix = p.stdoutPrefix
+		}
+
+		prefixLen := len(outputPrefix)
+		if prefixLen > 0 {
+			r := strings.NewReader(outputPrefix)
+			len, err := r.Read(prefix)
+			if err != nil {
+				log.Debugf("Failed to read prefix: %s", err)
+			}
+			prefixLen = len
+		}
+
+		prefix = prefix[:prefixLen]
+		outputBytes := make([]byte, mgsConfig.StreamDataPayloadSize-prefixLen)
+		needPrefix := true
+		for {
+			if p.dataChannel.IsActive() {
+				outputBytesLen, err := pipe.Read(outputBytes)
+				if err == io.EOF {
+					log.Debugf("Pipeline closed, finish pipeline reading. Is StdErr pipe: %t", isStderr)
+					done <- appconfig.SuccessExitCode
+					break
+				} else if err != nil {
+					log.Errorf("Failed to read from command output pipeline: %s", err)
+					done <- appconfig.ErrorExitCode
+					break
+				}
+				// Add prefix for first none empty frame, later decide it based on content of last character
+				if needPrefix && outputBytesLen > 0 {
+					unprocessedBuf.Write(prefix)
+				}
+				if outputBytesLen > 0 && outputBytes[outputBytesLen-1] != '\n' {
+					needPrefix = false
+				} else {
+					needPrefix = true
+				}
+				// unprocessedBuf contains incomplete utf8 encoded unicode bytes returned after processing of stdoutBytes
+				if unprocessedBuf, err = p.processStdoutData(log, outputBytes, outputBytesLen, unprocessedBuf, ipcFile, payloadType); err != nil {
+					log.Errorf("Error processing command pipeline output data, %v", err)
+					done <- appconfig.ErrorExitCode
+					break
+				}
+			} else {
+				log.Errorf("Data Channel not in active status")
+				done <- appconfig.ErrorExitCode
+				break
+			}
+		}
+	}()
+
+	return done
+}
+
+// Write command exit code to data channel
+func (p *ShellPlugin) sendExitCode(log log.T, ipcFile *os.File, exitCode int) error {
+	var unprocessedBuf bytes.Buffer
+	outputBytes := make([]byte, 128)
+
+	output := "EXIT_CODE: " + strconv.Itoa(exitCode)
+	r := strings.NewReader(output)
+	outputBytesLen, err := r.Read(outputBytes)
+	if err != nil {
+		log.Debugf("Failed to read prefix for exit code: %s", err)
+		return err
+	}
+	log.Infof("Sending exit code: %d", exitCode)
+
+	if p.dataChannel.IsActive() {
+		if unprocessedBuf, err = p.processStdoutData(log, outputBytes, outputBytesLen, unprocessedBuf, ipcFile, mgsContracts.ExitCode); err != nil {
+			log.Errorf("Error processing command pipeline output data, %v", err)
+		}
+	} else {
+		return fmt.Errorf("failed to send exit code as data channel closed")
+	}
+
+	return nil
+}
+
 // writePump reads from pty stdout and writes to data channel.
 func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File, initialWaitSecond int) (errorCode int) {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("WritePump thread crashed with message: \n", err)
+			log.Errorf("WritePump thread crashed with message: %v\n", err)
 			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
@@ -506,7 +777,7 @@ func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File, initialWaitSecond i
 			}
 
 			// unprocessedBuf contains incomplete utf8 encoded unicode bytes returned after processing of stdoutBytes
-			if unprocessedBuf, err = p.processStdoutData(log, stdoutBytes, stdoutBytesLen, unprocessedBuf, ipcFile); err != nil {
+			if unprocessedBuf, err = p.processStdoutData(log, stdoutBytes, stdoutBytesLen, unprocessedBuf, ipcFile, mgsContracts.Output); err != nil {
 				log.Errorf("Error processing stdout data, %v", err)
 				return appconfig.ErrorExitCode
 			}
@@ -523,7 +794,8 @@ func (p *ShellPlugin) processStdoutData(
 	stdoutBytes []byte,
 	stdoutBytesLen int,
 	unprocessedBuf bytes.Buffer,
-	file *os.File) (bytes.Buffer, error) {
+	file *os.File,
+	payloadType mgsContracts.PayloadType) (bytes.Buffer, error) {
 
 	// append stdoutBytes to unprocessedBytes and then read rune from appended bytes to send it over websocket channel
 	unprocessedBytes := unprocessedBuf.Bytes()
@@ -559,7 +831,7 @@ func (p *ShellPlugin) processStdoutData(
 		i += stdoutRuneLen
 	}
 
-	if err := p.dataChannel.SendStreamDataMessage(log, mgsContracts.Output, processedBuf.Bytes()); err != nil {
+	if err := p.dataChannel.SendStreamDataMessage(log, payloadType, processedBuf.Bytes()); err != nil {
 		return processedBuf, fmt.Errorf("unable to send stream data message: %s", err)
 	}
 
@@ -689,5 +961,12 @@ func (p *ShellPlugin) finishLogging(
 func (p *ShellPlugin) cleanupOutputFile(log log.T, config agentContracts.Configuration) {
 	if err := os.Remove(filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)); err != nil {
 		log.Debugf("Unable to clean up output file, %v", err)
+	}
+}
+
+func (p *ShellPlugin) sendErrorToDataChannel(log log.T, errorString string) {
+	time.Sleep(1 * time.Second)
+	if dataChannelError := p.dataChannel.SendStreamDataMessage(log, mgsContracts.StdErr, []byte(errorString)); dataChannelError != nil {
+		log.Errorf("Unable to send error message to data channel: %v", dataChannelError)
 	}
 }

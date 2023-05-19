@@ -23,77 +23,76 @@ import (
 )
 
 var (
-	lock             sync.RWMutex
-	manifest         map[string]string = make(map[string]string)
-	initialized      bool              = false
-	vaultFolderPath  string            = filepath.Join(appconfig.DefaultDataStorePath, "Vault")
-	manifestFilePath string            = filepath.Join(vaultFolderPath, "Manifest")
-	storeFolderPath  string            = filepath.Join(vaultFolderPath, "Store")
+	lock                      sync.RWMutex
+	manifest                  map[string]string = make(map[string]string)
+	initialized               bool              = false
+	initializedManifestPrefix string            = ""
+	vaultFolderPath           string            = filepath.Join(appconfig.DefaultDataStorePath, "Vault")
+	manifestFileNameSuffix    string            = "Manifest"
+	storeFolderPath           string            = filepath.Join(vaultFolderPath, "Store")
 )
 
 // Store data.
-func Store(key string, data []byte) (err error) {
-
+func Store(manifestFileNamePrefix string, key string, data []byte) (err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
-	if err = ensureInitialized(); err != nil {
+	if err = ensureInitialized(manifestFileNamePrefix); err != nil {
 		return
 	}
 
 	p := filepath.Join(storeFolderPath, key)
 
 	if err = fs.HardenedWriteFile(p, []byte(data)); err != nil {
-		return fmt.Errorf("Failed to write data file for %s. %v\n", key, err)
+		return fmt.Errorf("failed to write data file for %s. %v\n", key, err)
 	}
 
 	manifest[key] = p
-	if err = saveManifest(); err != nil {
+	if err = saveManifest(manifestFileNamePrefix); err != nil {
 		delete(manifest, key)
-		return fmt.Errorf("Failed to save manifest when storing %s. %v\n", key, err)
+		return fmt.Errorf("failed to save manifest when storing %s. %v\n", key, err)
 	}
 
 	return
 }
 
-func IsManifestExists() bool {
-	return fs.Exists(manifestFilePath) || len(manifest) != 0
+func IsManifestExists(manifestFileNamePrefix string) bool {
+	isInitialized := initializedManifestPrefix == manifestFileNamePrefix && len(manifest) != 0
+	return isInitialized || fs.Exists(getManifestPath(manifestFileNamePrefix))
 }
 
 // Retrieve data.
-func Retrieve(key string) (data []byte, err error) {
-
+func Retrieve(manifestFileNamePrefix string, key string) (data []byte, err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
-	if err = ensureInitialized(); err != nil {
+	if err = ensureInitialized(manifestFileNamePrefix); err != nil {
 		return
 	}
 
 	p := manifest[key] // path to the stored value
 
 	if p == "" {
-		return nil, fmt.Errorf("%s does not exist.", key)
+		return nil, fmt.Errorf("%s does not exist", key)
 	}
 
 	if !fs.Exists(p) {
-		return nil, fmt.Errorf("Data file of %s is missing.", key)
+		return nil, fmt.Errorf("data file of %s is missing", key)
 	}
 
 	if data, err = fs.ReadFile(p); err != nil {
-		return nil, fmt.Errorf("Failed to read data file for %s. %v", key, err)
+		return nil, fmt.Errorf("failed to read data file for %s. %v", key, err)
 	}
 
 	return
 }
 
 // Remove data.
-func Remove(key string) (err error) {
-
+func Remove(manifestFileNamePrefix string, key string) (err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
-	if err = ensureInitialized(); err != nil {
+	if err = ensureInitialized(manifestFileNamePrefix); err != nil {
 		return
 	}
 
@@ -104,14 +103,14 @@ func Remove(key string) (err error) {
 	bkpKey := key
 	bkpData := manifest[key]
 	delete(manifest, key)
-	if err = saveManifest(); err != nil {
+	if err = saveManifest(manifestFileNamePrefix); err != nil {
 		manifest[bkpKey] = bkpData
-		err = fmt.Errorf("Failed to save manifest when removing %s. %v\n", key, err)
+		err = fmt.Errorf("failed to save manifest when removing %s. %v\n", key, err)
 		return
 	}
 
 	if err = fs.Remove(filepath.Join(storeFolderPath, key)); err != nil {
-		err = fmt.Errorf("Failed to remove value file for %s. %v", key, err)
+		err = fmt.Errorf("failed to remove value file for %s. %v", key, err)
 		return
 	}
 
@@ -120,16 +119,16 @@ func Remove(key string) (err error) {
 
 // ensureInitialized hardens the folders and files on start. Having this outside
 // of init() allows us to override filesystem interface for testing.
-var ensureInitialized = func() (err error) {
+var ensureInitialized = func(manifestFileNamePrefix string) (err error) {
 
-	if initialized {
+	if initialized && initializedManifestPrefix == manifestFileNamePrefix {
 		return
 	}
 
 	// store folder is under vault folder, creating the deepest folder and
 	// harden the top-level one.
 	if err = fs.MakeDirs(storeFolderPath); err != nil {
-		return fmt.Errorf("Failed to create vault folder. %v", err)
+		return fmt.Errorf("failed to create vault folder. %v", err)
 	}
 
 	// vault contains sensitive data, we have to make sure each of them are set
@@ -137,34 +136,41 @@ var ensureInitialized = func() (err error) {
 	// not guarantee child files' permission. In Windows, even though permission
 	// inheritance is default, it can be turned off.
 	if err = fs.RecursivelyHarden(vaultFolderPath); err != nil {
-		return fmt.Errorf("Failed to set permission for vault folder or its content. %v", err)
+		return fmt.Errorf("failed to set permission for vault folder or its content. %v", err)
 	}
 
 	// initialize manifest file
+	manifestFilePath := getManifestPath(manifestFileNamePrefix)
 	if fs.Exists(manifestFilePath) {
 		var content []byte
 		var err error
 		if content, err = fs.ReadFile(manifestFilePath); err != nil {
-			return fmt.Errorf("Failed to load vault from file system. %v", err)
+			return fmt.Errorf("failed to load vault from file system. %v", err)
 		}
 		if err = jh.Unmarshal(content, &manifest); err != nil {
-			return fmt.Errorf("Failed to unmarshal vault manifest. %v", err)
+			return fmt.Errorf("failed to unmarshal vault manifest. %v", err)
 		}
 	}
 
 	initialized = true
+	initializedManifestPrefix = manifestFileNamePrefix
 	return nil
 }
 
 // saveManifest to file system.
-var saveManifest = func() (err error) {
+var saveManifest = func(manifestFileNamePrefix string) (err error) {
 	var data []byte
 	if data, err = jh.Marshal(manifest); err != nil {
-		return fmt.Errorf("Failed to marshal manifest. %v", err)
+		return fmt.Errorf("failed to marshal manifest. %v", err)
 	}
 
-	if err = fs.HardenedWriteFile(manifestFilePath, data); err != nil {
-		return fmt.Errorf("Failed to save manifest with hardened permission. %v", err)
+	if err = fs.HardenedWriteFile(getManifestPath(manifestFileNamePrefix), data); err != nil {
+		return fmt.Errorf("failed to save manifest with hardened permission. %v", err)
 	}
 	return
+}
+
+func getManifestPath(manifestFileNamePrefix string) string {
+	manifestFileName := fmt.Sprintf("%s%s", manifestFileNamePrefix, manifestFileNameSuffix)
+	return filepath.Join(vaultFolderPath, manifestFileName)
 }

@@ -72,9 +72,17 @@ type AppRunnerAPI interface {
 	CreateConnectionWithContext(aws.Context, *apprunner.CreateConnectionInput, ...request.Option) (*apprunner.CreateConnectionOutput, error)
 	CreateConnectionRequest(*apprunner.CreateConnectionInput) (*request.Request, *apprunner.CreateConnectionOutput)
 
+	CreateObservabilityConfiguration(*apprunner.CreateObservabilityConfigurationInput) (*apprunner.CreateObservabilityConfigurationOutput, error)
+	CreateObservabilityConfigurationWithContext(aws.Context, *apprunner.CreateObservabilityConfigurationInput, ...request.Option) (*apprunner.CreateObservabilityConfigurationOutput, error)
+	CreateObservabilityConfigurationRequest(*apprunner.CreateObservabilityConfigurationInput) (*request.Request, *apprunner.CreateObservabilityConfigurationOutput)
+
 	CreateService(*apprunner.CreateServiceInput) (*apprunner.CreateServiceOutput, error)
 	CreateServiceWithContext(aws.Context, *apprunner.CreateServiceInput, ...request.Option) (*apprunner.CreateServiceOutput, error)
 	CreateServiceRequest(*apprunner.CreateServiceInput) (*request.Request, *apprunner.CreateServiceOutput)
+
+	CreateVpcConnector(*apprunner.CreateVpcConnectorInput) (*apprunner.CreateVpcConnectorOutput, error)
+	CreateVpcConnectorWithContext(aws.Context, *apprunner.CreateVpcConnectorInput, ...request.Option) (*apprunner.CreateVpcConnectorOutput, error)
+	CreateVpcConnectorRequest(*apprunner.CreateVpcConnectorInput) (*request.Request, *apprunner.CreateVpcConnectorOutput)
 
 	DeleteAutoScalingConfiguration(*apprunner.DeleteAutoScalingConfigurationInput) (*apprunner.DeleteAutoScalingConfigurationOutput, error)
 	DeleteAutoScalingConfigurationWithContext(aws.Context, *apprunner.DeleteAutoScalingConfigurationInput, ...request.Option) (*apprunner.DeleteAutoScalingConfigurationOutput, error)
@@ -84,9 +92,17 @@ type AppRunnerAPI interface {
 	DeleteConnectionWithContext(aws.Context, *apprunner.DeleteConnectionInput, ...request.Option) (*apprunner.DeleteConnectionOutput, error)
 	DeleteConnectionRequest(*apprunner.DeleteConnectionInput) (*request.Request, *apprunner.DeleteConnectionOutput)
 
+	DeleteObservabilityConfiguration(*apprunner.DeleteObservabilityConfigurationInput) (*apprunner.DeleteObservabilityConfigurationOutput, error)
+	DeleteObservabilityConfigurationWithContext(aws.Context, *apprunner.DeleteObservabilityConfigurationInput, ...request.Option) (*apprunner.DeleteObservabilityConfigurationOutput, error)
+	DeleteObservabilityConfigurationRequest(*apprunner.DeleteObservabilityConfigurationInput) (*request.Request, *apprunner.DeleteObservabilityConfigurationOutput)
+
 	DeleteService(*apprunner.DeleteServiceInput) (*apprunner.DeleteServiceOutput, error)
 	DeleteServiceWithContext(aws.Context, *apprunner.DeleteServiceInput, ...request.Option) (*apprunner.DeleteServiceOutput, error)
 	DeleteServiceRequest(*apprunner.DeleteServiceInput) (*request.Request, *apprunner.DeleteServiceOutput)
+
+	DeleteVpcConnector(*apprunner.DeleteVpcConnectorInput) (*apprunner.DeleteVpcConnectorOutput, error)
+	DeleteVpcConnectorWithContext(aws.Context, *apprunner.DeleteVpcConnectorInput, ...request.Option) (*apprunner.DeleteVpcConnectorOutput, error)
+	DeleteVpcConnectorRequest(*apprunner.DeleteVpcConnectorInput) (*request.Request, *apprunner.DeleteVpcConnectorOutput)
 
 	DescribeAutoScalingConfiguration(*apprunner.DescribeAutoScalingConfigurationInput) (*apprunner.DescribeAutoScalingConfigurationOutput, error)
 	DescribeAutoScalingConfigurationWithContext(aws.Context, *apprunner.DescribeAutoScalingConfigurationInput, ...request.Option) (*apprunner.DescribeAutoScalingConfigurationOutput, error)
@@ -99,9 +115,17 @@ type AppRunnerAPI interface {
 	DescribeCustomDomainsPages(*apprunner.DescribeCustomDomainsInput, func(*apprunner.DescribeCustomDomainsOutput, bool) bool) error
 	DescribeCustomDomainsPagesWithContext(aws.Context, *apprunner.DescribeCustomDomainsInput, func(*apprunner.DescribeCustomDomainsOutput, bool) bool, ...request.Option) error
 
+	DescribeObservabilityConfiguration(*apprunner.DescribeObservabilityConfigurationInput) (*apprunner.DescribeObservabilityConfigurationOutput, error)
+	DescribeObservabilityConfigurationWithContext(aws.Context, *apprunner.DescribeObservabilityConfigurationInput, ...request.Option) (*apprunner.DescribeObservabilityConfigurationOutput, error)
+	DescribeObservabilityConfigurationRequest(*apprunner.DescribeObservabilityConfigurationInput) (*request.Request, *apprunner.DescribeObservabilityConfigurationOutput)
+
 	DescribeService(*apprunner.DescribeServiceInput) (*apprunner.DescribeServiceOutput, error)
 	DescribeServiceWithContext(aws.Context, *apprunner.DescribeServiceInput, ...request.Option) (*apprunner.DescribeServiceOutput, error)
 	DescribeServiceRequest(*apprunner.DescribeServiceInput) (*request.Request, *apprunner.DescribeServiceOutput)
+
+	DescribeVpcConnector(*apprunner.DescribeVpcConnectorInput) (*apprunner.DescribeVpcConnectorOutput, error)
+	DescribeVpcConnectorWithContext(aws.Context, *apprunner.DescribeVpcConnectorInput, ...request.Option) (*apprunner.DescribeVpcConnectorOutput, error)
+	DescribeVpcConnectorRequest(*apprunner.DescribeVpcConnectorInput) (*request.Request, *apprunner.DescribeVpcConnectorOutput)
 
 	DisassociateCustomDomain(*apprunner.DisassociateCustomDomainInput) (*apprunner.DisassociateCustomDomainOutput, error)
 	DisassociateCustomDomainWithContext(aws.Context, *apprunner.DisassociateCustomDomainInput, ...request.Option) (*apprunner.DisassociateCustomDomainOutput, error)
@@ -121,6 +145,13 @@ type AppRunnerAPI interface {
 	ListConnectionsPages(*apprunner.ListConnectionsInput, func(*apprunner.ListConnectionsOutput, bool) bool) error
 	ListConnectionsPagesWithContext(aws.Context, *apprunner.ListConnectionsInput, func(*apprunner.ListConnectionsOutput, bool) bool, ...request.Option) error
 
+	ListObservabilityConfigurations(*apprunner.ListObservabilityConfigurationsInput) (*apprunner.ListObservabilityConfigurationsOutput, error)
+	ListObservabilityConfigurationsWithContext(aws.Context, *apprunner.ListObservabilityConfigurationsInput, ...request.Option) (*apprunner.ListObservabilityConfigurationsOutput, error)
+	ListObservabilityConfigurationsRequest(*apprunner.ListObservabilityConfigurationsInput) (*request.Request, *apprunner.ListObservabilityConfigurationsOutput)
+
+	ListObservabilityConfigurationsPages(*apprunner.ListObservabilityConfigurationsInput, func(*apprunner.ListObservabilityConfigurationsOutput, bool) bool) error
+	ListObservabilityConfigurationsPagesWithContext(aws.Context, *apprunner.ListObservabilityConfigurationsInput, func(*apprunner.ListObservabilityConfigurationsOutput, bool) bool, ...request.Option) error
+
 	ListOperations(*apprunner.ListOperationsInput) (*apprunner.ListOperationsOutput, error)
 	ListOperationsWithContext(aws.Context, *apprunner.ListOperationsInput, ...request.Option) (*apprunner.ListOperationsOutput, error)
 	ListOperationsRequest(*apprunner.ListOperationsInput) (*request.Request, *apprunner.ListOperationsOutput)
@@ -138,6 +169,13 @@ type AppRunnerAPI interface {
 	ListTagsForResource(*apprunner.ListTagsForResourceInput) (*apprunner.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *apprunner.ListTagsForResourceInput, ...request.Option) (*apprunner.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*apprunner.ListTagsForResourceInput) (*request.Request, *apprunner.ListTagsForResourceOutput)
+
+	ListVpcConnectors(*apprunner.ListVpcConnectorsInput) (*apprunner.ListVpcConnectorsOutput, error)
+	ListVpcConnectorsWithContext(aws.Context, *apprunner.ListVpcConnectorsInput, ...request.Option) (*apprunner.ListVpcConnectorsOutput, error)
+	ListVpcConnectorsRequest(*apprunner.ListVpcConnectorsInput) (*request.Request, *apprunner.ListVpcConnectorsOutput)
+
+	ListVpcConnectorsPages(*apprunner.ListVpcConnectorsInput, func(*apprunner.ListVpcConnectorsOutput, bool) bool) error
+	ListVpcConnectorsPagesWithContext(aws.Context, *apprunner.ListVpcConnectorsInput, func(*apprunner.ListVpcConnectorsOutput, bool) bool, ...request.Option) error
 
 	PauseService(*apprunner.PauseServiceInput) (*apprunner.PauseServiceOutput, error)
 	PauseServiceWithContext(aws.Context, *apprunner.PauseServiceInput, ...request.Option) (*apprunner.PauseServiceOutput, error)

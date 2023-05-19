@@ -60,7 +60,6 @@ const (
 	defaultConsoleRow                                = 60
 	winptyDllName                                    = "winpty.dll"
 	winptyDllFolderName                              = "SessionManagerShell"
-	winptyCmd                                        = "powershell"
 	startRecordSessionCmd                            = "Start-Transcript"
 	newLineCharacter                                 = "\r\n"
 	shellProfileNewLineCharacter                     = "\r"
@@ -72,11 +71,12 @@ const (
 )
 
 var (
+	winptyCmd         = appconfig.PowerShellPluginCommandName
 	winptyDllDir      = fileutil.BuildPath(appconfig.DefaultPluginPath, winptyDllFolderName)
 	winptyDllFilePath = filepath.Join(winptyDllDir, winptyDllName)
 )
 
-//StartCommandExecutor starts winpty agent and provides handles to stdin and stdout.
+// StartCommandExecutor starts winpty agent and provides handles to stdin and stdout.
 // isSessionLogger determines whether its a customer shell or shell used for logging.
 func StartCommandExecutor(
 	log log.T,
@@ -90,12 +90,13 @@ func StartCommandExecutor(
 		return fmt.Errorf("Missing %s file.", winptyDllFilePath)
 	}
 
-	var finalCmd string
+	var cmdStr string
 	if strings.TrimSpace(shellProps.Windows.Commands) == "" || isSessionLogger {
-		finalCmd = winptyCmd
+		cmdStr = ""
 	} else {
-		finalCmd = winptyCmd + " " + shellProps.Windows.Commands
+		cmdStr = shellProps.Windows.Commands
 	}
+	fullCmdToPty := winptyCmd + " " + cmdStr
 
 	appConfig := plugin.context.AppConfig()
 
@@ -128,7 +129,7 @@ func StartCommandExecutor(
 			if token, profile, err = u.LoadUserProfile(appconfig.DefaultRunAsUserName, newPassword); err != nil {
 				return fmt.Errorf("error loading user profile: %v", err)
 			}
-			return plugin.startExecCmd(finalCmd, log, config)
+			return plugin.startExecCmd(cmdStr, log, config)
 		}
 
 		var wg sync.WaitGroup
@@ -141,13 +142,13 @@ func StartCommandExecutor(
 				}
 			}()
 			defer wg.Done()
-			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, finalCmd)
+			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, fullCmdToPty)
 		}()
 		wg.Wait()
 	} else if !isSessionLogger && appconfig.PluginNameNonInteractiveCommands == plugin.name {
-		return plugin.startExecCmd(finalCmd, log, config)
+		return plugin.startExecCmd(cmdStr, log, config)
 	} else {
-		pty, err = winpty.Start(winptyDllFilePath, finalCmd, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
+		pty, err = winpty.Start(winptyDllFilePath, fullCmdToPty, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
 	}
 
 	if err != nil {
@@ -167,32 +168,47 @@ func (p *ShellPlugin) startExecCmd(finalCmd string, log log.T, config agentContr
 	if err != nil {
 		return fmt.Errorf("Failed to parse commands input: %s\n", err)
 	}
-	if len(commands) > 1 {
-		cmd = exec.Command(commands[0], commands[1:]...)
+	if len(commands) > 0 {
+		cmd = exec.Command(winptyCmd, commands[0:]...)
 	} else {
-		cmd = exec.Command(commands[0])
+		cmd = exec.Command(winptyCmd)
 	}
 
-	outputPath := filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)
-	outputWriter, err := os.OpenFile(outputPath, appconfig.FileFlagsCreateOrAppendReadWrite, appconfig.ReadWriteAccess)
-	if err != nil {
-		return fmt.Errorf("Failed to open file for writing command output. error: %s\n", err)
+	if p.separateOutput {
+		stdoutPipe, err := cmd.StdoutPipe()
+		if err != nil {
+			return fmt.Errorf("Failed to create command output pipe, error: %s\n", err)
+		}
+		errorPipe, err := cmd.StderrPipe()
+		if err != nil {
+			return fmt.Errorf("Failed to create command err pipe, error: %s\n", err)
+		}
+		p.stdin = nil
+		p.stdout = nil
+		p.stderrPipe = errorPipe
+		p.stdoutPipe = stdoutPipe
+	} else {
+		outputPath := filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)
+		outputWriter, err := os.OpenFile(outputPath, appconfig.FileFlagsCreateOrAppendReadWrite, appconfig.ReadWriteAccess)
+		if err != nil {
+			return fmt.Errorf("Failed to open file for writing command output. error: %s\n", err)
+		}
+		outputReader, err := os.Open(outputPath)
+		if err != nil {
+			return fmt.Errorf("Failed to read command output from file %s. error: %s\n", outputPath, err)
+		}
+		cmd.Stdout = outputWriter
+		cmd.Stderr = outputWriter
+		p.stdin = nil
+		p.stdout = outputReader
 	}
-	outputReader, err := os.Open(outputPath)
-	if err != nil {
-		return fmt.Errorf("Failed to read command output from file %s. error: %s\n", outputPath, err)
-	}
-	cmd.Stdout = outputWriter
-	cmd.Stderr = outputWriter
-	cmd.SysProcAttr = &syscall.SysProcAttr{Token: token}
 	p.runAsUser = appconfig.DefaultRunAsUserName
-	p.stdin = nil
-	p.stdout = outputReader
+	cmd.SysProcAttr = &syscall.SysProcAttr{Token: token}
 	p.execCmd = execcmd.NewExecCmd(cmd)
 	return nil
 }
 
-//stop closes winpty process handle and stdin/stdout.
+// stop closes winpty process handle and stdin/stdout.
 func (p *ShellPlugin) stop(log log.T) (err error) {
 	if pty != nil {
 		log.Info("Stopping winpty")
@@ -211,7 +227,7 @@ func (p *ShellPlugin) stop(log log.T) (err error) {
 	return nil
 }
 
-//SetSize sets size of console terminal window.
+// SetSize sets size of console terminal window.
 func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 	if pty == nil {
 		return nil
@@ -223,7 +239,7 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 	return nil
 }
 
-//startPtyAsUser starts a winpty process in runas user context.
+// startPtyAsUser starts a winpty process in runas user context.
 func (p *ShellPlugin) startPtyAsUser(log log.T, config agentContracts.Configuration, user string, pass string, shellCmd string) (transcriptDirPath string, err error) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
@@ -527,7 +543,7 @@ func (p *ShellPlugin) isCleanupOfControlCharactersRequired() bool {
 	return false
 }
 
-//cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
+// cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
 func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
 	if p.logger.transcriptDirPath != "" {
 		log.Debugf("Deleting transcript directory: %s", p.logger.transcriptDirPath)

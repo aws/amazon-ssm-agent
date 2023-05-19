@@ -20,8 +20,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-//Executer accepts an DocumentStore object, save when necessary for crash-recovery, and return when finshes the run, while
-//the caller will pick up the result from the same docStore object
+// Executer accepts an DocumentStore object, save when necessary for crash-recovery, and return when finshes the run, while
+// the caller will pick up the result from the same docStore object
 type Executer interface {
 	//TODO in future, docState should be de-composed into static/dynamic && plugin/document informations
 	// Given a document and run it, receiving results from status update channel, return a map of plugin results
@@ -29,7 +29,7 @@ type Executer interface {
 		docStore DocumentStore) chan contracts.DocumentResult
 }
 
-//DocumentStore is an wrapper over the document state class that provides additional persisting functions for the Executer
+// DocumentStore is an wrapper over the document state class that provides additional persisting functions for the Executer
 type DocumentStore interface {
 	Save(contracts.DocumentState)
 	Load() contracts.DocumentState

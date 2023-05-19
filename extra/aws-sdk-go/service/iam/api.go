@@ -5421,9 +5421,9 @@ func (c *IAM) GenerateServiceLastAccessedDetailsRequest(input *GenerateServiceLa
 // Generates a report that includes details about when an IAM resource (user,
 // group, role, or policy) was last used in an attempt to access Amazon Web
 // Services services. Recent activity usually appears within four hours. IAM
-// reports activity for the last 365 days, or less if your Region began supporting
-// this feature within the last year. For more information, see Regions where
-// data is tracked (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period).
+// reports activity for at least the last 400 days, or less if your Region began
+// supporting this feature within the last year. For more information, see Regions
+// where data is tracked (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period).
 //
 // The service last accessed data includes all attempts to access an Amazon
 // Web Services API, not just the successful ones. This includes all attempts
@@ -12378,8 +12378,8 @@ func (c *IAM) ListVirtualMFADevicesRequest(input *ListVirtualMFADevicesInput) (r
 //
 // IAM resource-listing operations return a subset of the available attributes
 // for the resource. For example, this operation does not return tags, even
-// though they are an attribute of the returned object. To view all of the information
-// for a virtual MFA device, see ListVirtualMFADevices.
+// though they are an attribute of the returned object. To view tag information
+// for a virtual MFA device, see ListMFADeviceTags.
 //
 // You can paginate the results using the MaxItems and Marker parameters.
 //
@@ -15991,12 +15991,12 @@ func (c *IAM) UpdateAccountPasswordPolicyRequest(input *UpdateAccountPasswordPol
 //
 // Updates the password policy settings for the Amazon Web Services account.
 //
-//    * This operation does not support partial updates. No parameters are required,
-//    but if you do not specify a parameter, that parameter's value reverts
-//    to its default value. See the Request Parameters section for each parameter's
-//    default value. Also note that some parameters do not allow the default
-//    parameter to be explicitly set. Instead, to invoke the default value,
-//    do not include that parameter when you invoke the operation.
+// This operation does not support partial updates. No parameters are required,
+// but if you do not specify a parameter, that parameter's value reverts to
+// its default value. See the Request Parameters section for each parameter's
+// default value. Also note that some parameters do not allow the default parameter
+// to be explicitly set. Instead, to invoke the default value, do not include
+// that parameter when you invoke the operation.
 //
 // For more information about using a password policy, see Managing an IAM password
 // policy (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html)
@@ -19901,8 +19901,8 @@ type CreateRoleInput struct {
 	Description *string `type:"string"`
 
 	// The maximum session duration (in seconds) that you want to set for the specified
-	// role. If you do not specify a value for this setting, the default maximum
-	// of one hour is applied. This setting can have a value from 1 hour to 12 hours.
+	// role. If you do not specify a value for this setting, the default value of
+	// one hour is applied. This setting can have a value from 1 hour to 12 hours.
 	//
 	// Anyone who assumes the role from the or API can use the DurationSeconds API
 	// parameter or the duration-seconds CLI parameter to request a longer session.
@@ -23869,7 +23869,7 @@ type GetAccountAuthorizationDetailsInput struct {
 	// The format for this parameter is a comma-separated (if more than one) list
 	// of strings. Each string value in the list must be one of the valid values
 	// listed below.
-	Filter []*string `type:"list"`
+	Filter []*string `type:"list" enum:"EntityType"`
 
 	// Use this parameter only when paginating results and only after you receive
 	// a response indicating that the results are truncated. Set it to the value
@@ -32263,7 +32263,11 @@ func (s *OrganizationsDecisionDetail) SetAllowedByOrganizations(v bool) *Organiz
 type PasswordPolicy struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies whether IAM users are allowed to change their own password.
+	// Specifies whether IAM users are allowed to change their own password. Gives
+	// IAM users permissions to iam:ChangePassword for only their user and to the
+	// iam:GetAccountPasswordPolicy action. This option does not attach a permissions
+	// policy to each user, rather the permissions are applied at the account-level
+	// for all users by IAM.
 	AllowUsersToChangePassword *bool `type:"boolean"`
 
 	// Indicates whether passwords in the account expire. Returns true if MaxPasswordAge
@@ -32271,8 +32275,11 @@ type PasswordPolicy struct {
 	// not present.
 	ExpirePasswords *bool `type:"boolean"`
 
-	// Specifies whether IAM users are prevented from setting a new password after
-	// their password has expired.
+	// Specifies whether IAM users are prevented from setting a new password via
+	// the Amazon Web Services Management Console after their password has expired.
+	// The IAM user cannot access the console until an administrator resets the
+	// password. IAM users with iam:ChangePassword permission and active access
+	// keys can reset their own expired console password using the CLI or API.
 	HardExpiry *bool `type:"boolean"`
 
 	// The number of days that an IAM user password is valid.
@@ -38115,8 +38122,8 @@ type UpdateAccountPasswordPolicyInput struct {
 	_ struct{} `type:"structure"`
 
 	// Allows all IAM users in your account to use the Amazon Web Services Management
-	// Console to change their own passwords. For more information, see Letting
-	// IAM users change their own passwords (https://docs.aws.amazon.com/IAM/latest/UserGuide/HowToPwdIAMUser.html)
+	// Console to change their own passwords. For more information, see Permitting
+	// IAM users to change their own passwords (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_enable-user-change.html)
 	// in the IAM User Guide.
 	//
 	// If you do not specify a value for this parameter, then the operation uses
@@ -38124,12 +38131,22 @@ type UpdateAccountPasswordPolicyInput struct {
 	// not automatically have permissions to change their own password.
 	AllowUsersToChangePassword *bool `type:"boolean"`
 
-	// Prevents IAM users from setting a new password after their password has expired.
-	// The IAM user cannot be accessed until an administrator resets the password.
+	// Prevents IAM users who are accessing the account via the Amazon Web Services
+	// Management Console from setting a new console password after their password
+	// has expired. The IAM user cannot access the console until an administrator
+	// resets the password.
 	//
 	// If you do not specify a value for this parameter, then the operation uses
 	// the default value of false. The result is that IAM users can change their
 	// passwords after they expire and continue to sign in as the user.
+	//
+	// In the Amazon Web Services Management Console, the custom password policy
+	// option Allow users to change their own password gives IAM users permissions
+	// to iam:ChangePassword for only their user and to the iam:GetAccountPasswordPolicy
+	// action. This option does not attach a permissions policy to each user, rather
+	// the permissions are applied at the account-level for all users by IAM. IAM
+	// users with iam:ChangePassword permission and active access keys can reset
+	// their own expired console password using the CLI or API.
 	HardExpiry *bool `type:"boolean"`
 
 	// The number of days that an IAM user password is valid.
@@ -38829,8 +38846,8 @@ type UpdateRoleInput struct {
 	Description *string `type:"string"`
 
 	// The maximum session duration (in seconds) that you want to set for the specified
-	// role. If you do not specify a value for this setting, the default maximum
-	// of one hour is applied. This setting can have a value from 1 hour to 12 hours.
+	// role. If you do not specify a value for this setting, the default value of
+	// one hour is applied. This setting can have a value from 1 hour to 12 hours.
 	//
 	// Anyone who assumes the role from the CLI or API can use the DurationSeconds
 	// API parameter or the duration-seconds CLI parameter to request a longer session.

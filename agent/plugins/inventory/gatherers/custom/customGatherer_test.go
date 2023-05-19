@@ -15,17 +15,15 @@
 package custom
 
 import (
-	"testing"
-
 	"encoding/json"
-	"os"
-	"time"
-
 	"errors"
 	"fmt"
+	"os"
 	"strings"
+	"testing"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )

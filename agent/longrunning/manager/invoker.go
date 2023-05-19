@@ -30,7 +30,7 @@ import (
 //todo: we are passing m.Context to p.Handler.Start & p.Handler.Stop -> we might want have to change StartPlugin and StopPlugin to accept context directly
 //todo: honor the cancel flag for both Start and Stop plugin functions
 
-//StopPlugin stops a given plugin from executing
+// StopPlugin stops a given plugin from executing
 func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error) {
 
 	//todo: if plugin wasn't even running then stop will have no effect -> for those cases we can return something for a better plugin level status
@@ -70,7 +70,7 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 	return nil
 }
 
-//StartPlugin starts the given plugin with the given configuration
+// StartPlugin starts the given plugin with the given configuration
 func (m *Manager) StartPlugin(name, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error) {
 	lock.Lock()
 	defer lock.Unlock()

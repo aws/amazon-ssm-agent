@@ -2,6 +2,7 @@ COPY := cp -p
 GO_BUILD_NOPIE := CGO_ENABLED=0 go build -ldflags "-s -w" -trimpath
 GO_BUILD_PIE := go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -trimpath
 GO_BUILD_STATIC_PIE := go build -ldflags '-linkmode external -s -w -extldflags "-static-pie -Wl,-z,relro,-z,defs"' -buildmode=pie -trimpath  -tags 'osusergo netgo static_build'
+GO_BUILD_DEBUG := go build -gcflags "all=-N -l"
 
 # Default build configuration, can be overridden at build time.
 GOARCH?=$(shell go env GOARCH)
@@ -81,7 +82,7 @@ quick-test-common: copy-src pre-build pre-release --quick-test-common
 quick-e2e: copy-src pre-build pre-release --quick-e2e --quick-e2e-core --quick-e2e-common
 
 .PHONY: test-all
-test-all: copy-src pre-build pre-release checkstyle --quick-integtest --quick-integtest-core --quick-integtest-common --quick-test --quick-test-core --quick-test-common --quick-e2e --quick-e2e-core --quick-e2e-common
+test-all: copy-src pre-build pre-release checkstyle --test-all
 
 .PHONY: pre-release
 pre-release:
@@ -144,6 +145,13 @@ build-linux: GOARCH=amd64
 build-linux: GOOS=linux
 build-linux: GO_BUILD=$(GO_BUILD_PIE)
 build-linux: build-any-amd64-linux
+
+.PHONY: build-linux-debug
+build-linux-debug: clean pre-release
+build-linux-debug: GOARCH=amd64
+build-linux-debug: GOOS=linux
+build-linux-debug: GO_BUILD=$(GO_BUILD_DEBUG)
+build-linux-debug: build-any-amd64-linux
 
 .PHONY: build-freebsd
 build-freebsd: GOARCH=amd64
@@ -265,6 +273,11 @@ prepack-any-%:
 	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/NOTICE.md
 
 # Predefined prepack recipes for various supported builds
+.PHONY: install-yum-rpm
+install-yum-rpm: build-linux package-rpm
+	yum erase amazon-ssm-agent -y
+	yum install -y bin/linux_amd64/amazon-ssm-agent.rpm
+
 .PHONY: prepack-linux
 prepack-linux: GOOS=linux
 prepack-linux: GOARCH=amd64
@@ -401,6 +414,12 @@ build-tests-windows: copy-src copy-tests-src pre-build
 # go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/...
 
+.PHONY: --test-all
+--test-all:
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags "e2e,integration" github.com/aws/amazon-ssm-agent/agent/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags "e2e,integration" github.com/aws/amazon-ssm-agent/core/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags "e2e,integration" github.com/aws/amazon-ssm-agent/common/...
+
 .PHONY: --quick-integtest-core
 --quick-integtest-core:
 # if you want to restrict to some specific package, sample below
@@ -445,8 +464,7 @@ build-tests-windows: copy-src copy-tests-src pre-build
 # go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/common/...
 
-.PHONY: lint-all
-lint-all: copy-package-dep
+.PHONY: lint
+lint:
 # if you want to configure what linters are run, edit .golangci.yml
-# if you want to restrict to some specific package edit Tools/src/run_golangci-lint.sh
 	$(GO_SPACE)/Tools/src/run_golangci-lint.sh

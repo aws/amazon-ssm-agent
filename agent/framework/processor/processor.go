@@ -151,7 +151,7 @@ func NewWorkerProcessorSpec(ctx context.T, workerLimit int, assignedDocType cont
 
 // NewEngineProcessor returns the newly initiated EngineProcessor
 // TODO worker pool should be triggered in the Start() function
-//supported document types indicate the domain of the documents the Processor with run upon. There'll be race-conditions if there're multiple Processors in a certain domain.
+// supported document types indicate the domain of the documents the Processor with run upon. There'll be race-conditions if there're multiple Processors in a certain domain.
 func NewEngineProcessor(ctx context.T, startWorker *workerProcessorSpec, cancelWorker *workerProcessorSpec) *EngineProcessor {
 	engineProcessorCtx := ctx.With("[EngineProcessor]")
 	log := engineProcessorCtx.Log()
@@ -275,7 +275,7 @@ func (p *EngineProcessor) decrementCommandBuffer(doc *contracts.DocumentState, s
 	logger.Infof("cleaned up command %v with doc type %v", jobId, doc.DocumentType)
 }
 
-//Submit submits to the pool a document in form of docState object, results will be streamed back from the channel returned by Start()
+// Submit submits to the pool a document in form of docState object, results will be streamed back from the channel returned by Start()
 func (p *EngineProcessor) Submit(docState contracts.DocumentState) (errorCode ErrorCode) {
 	return p.submit(&docState, false)
 }
@@ -416,7 +416,7 @@ func (p *EngineProcessor) hasProcessorStopCalledAlready() bool {
 	return false
 }
 
-//Stop set the cancel flags of all the running jobs, which are to be captured by the command worker and shutdown gracefully
+// Stop set the cancel flags of all the running jobs, which are to be captured by the command worker and shutdown gracefully
 func (p *EngineProcessor) Stop() {
 	if p.hasProcessorStopCalledAlready() {
 		p.context.Log().Info("Processor stop called already")
@@ -460,7 +460,7 @@ func (p *EngineProcessor) Stop() {
 	p.context.Log().Info("processor closed")
 }
 
-//TODO remove the direct file dependency once we encapsulate docmanager package
+// TODO remove the direct file dependency once we encapsulate docmanager package
 func (p *EngineProcessor) processPendingDocuments(files []os.FileInfo) {
 	log := p.context.Log()
 	//iterate through all pending messages
@@ -649,7 +649,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 
 }
 
-//TODO CancelCommand is currently treated as a special type of Command by the Processor, but in general Cancel operation should be seen as a probe to existing commands
+// TODO CancelCommand is currently treated as a special type of Command by the Processor, but in general Cancel operation should be seen as a probe to existing commands
 func processCancelCommand(context context.T, sendCommandPool task.Pool, docState *contracts.DocumentState, docMgr docmanager.DocumentMgr) {
 
 	log := context.Log()
@@ -677,8 +677,8 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 
 }
 
-//TODO remove this once CloudWatch plugin is reworked
-//temporary solution on plugins with shared responsibility with agent
+// TODO remove this once CloudWatch plugin is reworked
+// temporary solution on plugins with shared responsibility with agent
 func handleCloudwatchPlugin(context context.T, pluginResults map[string]*contracts.PluginResult, documentID string) {
 	log := context.Log()
 	instanceID, _ := context.Identity().InstanceID()

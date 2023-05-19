@@ -439,8 +439,8 @@ func (c *Redshift) AuthorizeDataShareRequest(input *AuthorizeDataShareInput) (re
 // AuthorizeDataShare API operation for Amazon Redshift.
 //
 // From a data producer account, authorizes the sharing of a datashare with
-// one or more consumer accounts. To authorize a datashare for a data consumer,
-// the producer account must have the correct access privileges.
+// one or more consumer accounts or managing entities. To authorize a datashare
+// for a data consumer, the producer account must have the correct access permissions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -648,6 +648,9 @@ func (c *Redshift) AuthorizeSnapshotAccessRequest(input *AuthorizeSnapshotAccess
 //
 //   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   The encryption key has exceeded its grant limit in Amazon Web Services KMS.
+//
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/AuthorizeSnapshotAccess
 func (c *Redshift) AuthorizeSnapshotAccess(input *AuthorizeSnapshotAccessInput) (*AuthorizeSnapshotAccessOutput, error) {
@@ -2287,8 +2290,8 @@ func (c *Redshift) CreateSnapshotCopyGrantRequest(input *CreateSnapshotCopyGrant
 
 // CreateSnapshotCopyGrant API operation for Amazon Redshift.
 //
-// Creates a snapshot copy grant that permits Amazon Redshift to use a customer
-// master key (CMK) from Key Management Service (KMS) to encrypt copied snapshots
+// Creates a snapshot copy grant that permits Amazon Redshift to use an encrypted
+// symmetric key from Key Management Service (KMS) to encrypt copied snapshots
 // in a destination region.
 //
 // For more information about managing snapshot copy grants, go to Amazon Redshift
@@ -2678,7 +2681,8 @@ func (c *Redshift) DeauthorizeDataShareRequest(input *DeauthorizeDataShareInput)
 
 // DeauthorizeDataShare API operation for Amazon Redshift.
 //
-// From the producer account, removes authorization from the specified datashare.
+// From a datashare producer account, removes authorization from the specified
+// datashare.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4956,6 +4960,9 @@ func (c *Redshift) DescribeClusterSnapshotsRequest(input *DescribeClusterSnapsho
 //   * ErrCodeInvalidTagFault "InvalidTagFault"
 //   The tag is invalid.
 //
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/DescribeClusterSnapshots
 func (c *Redshift) DescribeClusterSnapshots(input *DescribeClusterSnapshotsInput) (*DescribeClusterSnapshotsOutput, error) {
 	req, out := c.DescribeClusterSnapshotsRequest(input)
@@ -5644,6 +5651,12 @@ func (c *Redshift) DescribeDataSharesRequest(input *DescribeDataSharesInput) (re
 		Name:       opDescribeDataShares,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -5693,6 +5706,58 @@ func (c *Redshift) DescribeDataSharesWithContext(ctx aws.Context, input *Describ
 	return out, req.Send()
 }
 
+// DescribeDataSharesPages iterates over the pages of a DescribeDataShares operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDataShares method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDataShares operation.
+//    pageNum := 0
+//    err := client.DescribeDataSharesPages(params,
+//        func(page *redshift.DescribeDataSharesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeDataSharesPages(input *DescribeDataSharesInput, fn func(*DescribeDataSharesOutput, bool) bool) error {
+	return c.DescribeDataSharesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDataSharesPagesWithContext same as DescribeDataSharesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeDataSharesPagesWithContext(ctx aws.Context, input *DescribeDataSharesInput, fn func(*DescribeDataSharesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDataSharesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDataSharesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeDataSharesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeDataSharesForConsumer = "DescribeDataSharesForConsumer"
 
 // DescribeDataSharesForConsumerRequest generates a "aws/request.Request" representing the
@@ -5724,6 +5789,12 @@ func (c *Redshift) DescribeDataSharesForConsumerRequest(input *DescribeDataShare
 		Name:       opDescribeDataSharesForConsumer,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -5774,6 +5845,58 @@ func (c *Redshift) DescribeDataSharesForConsumerWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+// DescribeDataSharesForConsumerPages iterates over the pages of a DescribeDataSharesForConsumer operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDataSharesForConsumer method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDataSharesForConsumer operation.
+//    pageNum := 0
+//    err := client.DescribeDataSharesForConsumerPages(params,
+//        func(page *redshift.DescribeDataSharesForConsumerOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeDataSharesForConsumerPages(input *DescribeDataSharesForConsumerInput, fn func(*DescribeDataSharesForConsumerOutput, bool) bool) error {
+	return c.DescribeDataSharesForConsumerPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDataSharesForConsumerPagesWithContext same as DescribeDataSharesForConsumerPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeDataSharesForConsumerPagesWithContext(ctx aws.Context, input *DescribeDataSharesForConsumerInput, fn func(*DescribeDataSharesForConsumerOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDataSharesForConsumerInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDataSharesForConsumerRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeDataSharesForConsumerOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeDataSharesForProducer = "DescribeDataSharesForProducer"
 
 // DescribeDataSharesForProducerRequest generates a "aws/request.Request" representing the
@@ -5805,6 +5928,12 @@ func (c *Redshift) DescribeDataSharesForProducerRequest(input *DescribeDataShare
 		Name:       opDescribeDataSharesForProducer,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -5853,6 +5982,58 @@ func (c *Redshift) DescribeDataSharesForProducerWithContext(ctx aws.Context, inp
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribeDataSharesForProducerPages iterates over the pages of a DescribeDataSharesForProducer operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDataSharesForProducer method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDataSharesForProducer operation.
+//    pageNum := 0
+//    err := client.DescribeDataSharesForProducerPages(params,
+//        func(page *redshift.DescribeDataSharesForProducerOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeDataSharesForProducerPages(input *DescribeDataSharesForProducerInput, fn func(*DescribeDataSharesForProducerOutput, bool) bool) error {
+	return c.DescribeDataSharesForProducerPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDataSharesForProducerPagesWithContext same as DescribeDataSharesForProducerPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeDataSharesForProducerPagesWithContext(ctx aws.Context, input *DescribeDataSharesForProducerInput, fn func(*DescribeDataSharesForProducerOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDataSharesForProducerInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDataSharesForProducerRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeDataSharesForProducerOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeDefaultClusterParameters = "DescribeDefaultClusterParameters"
@@ -7097,6 +7278,9 @@ func (c *Redshift) DescribeNodeConfigurationOptionsRequest(input *DescribeNodeCo
 //   The owner of the specified snapshot has not authorized your account to access
 //   the snapshot.
 //
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/DescribeNodeConfigurationOptions
 func (c *Redshift) DescribeNodeConfigurationOptions(input *DescribeNodeConfigurationOptionsInput) (*DescribeNodeConfigurationOptionsOutput, error) {
 	req, out := c.DescribeNodeConfigurationOptionsRequest(input)
@@ -7391,6 +7575,150 @@ func (c *Redshift) DescribePartnersWithContext(ctx aws.Context, input *DescribeP
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opDescribeReservedNodeExchangeStatus = "DescribeReservedNodeExchangeStatus"
+
+// DescribeReservedNodeExchangeStatusRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeReservedNodeExchangeStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeReservedNodeExchangeStatus for more information on using the DescribeReservedNodeExchangeStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeReservedNodeExchangeStatusRequest method.
+//    req, resp := client.DescribeReservedNodeExchangeStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/DescribeReservedNodeExchangeStatus
+func (c *Redshift) DescribeReservedNodeExchangeStatusRequest(input *DescribeReservedNodeExchangeStatusInput) (req *request.Request, output *DescribeReservedNodeExchangeStatusOutput) {
+	op := &request.Operation{
+		Name:       opDescribeReservedNodeExchangeStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeReservedNodeExchangeStatusInput{}
+	}
+
+	output = &DescribeReservedNodeExchangeStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeReservedNodeExchangeStatus API operation for Amazon Redshift.
+//
+// Returns exchange status details and associated metadata for a reserved-node
+// exchange. Statuses include such values as in progress and requested.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Redshift's
+// API operation DescribeReservedNodeExchangeStatus for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeReservedNodeNotFoundFault "ReservedNodeNotFound"
+//   The specified reserved compute node not found.
+//
+//   * ErrCodeReservedNodeExchangeNotFoundFault "ReservedNodeExchangeNotFond"
+//   The reserved-node exchange status wasn't found.
+//
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/DescribeReservedNodeExchangeStatus
+func (c *Redshift) DescribeReservedNodeExchangeStatus(input *DescribeReservedNodeExchangeStatusInput) (*DescribeReservedNodeExchangeStatusOutput, error) {
+	req, out := c.DescribeReservedNodeExchangeStatusRequest(input)
+	return out, req.Send()
+}
+
+// DescribeReservedNodeExchangeStatusWithContext is the same as DescribeReservedNodeExchangeStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeReservedNodeExchangeStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeReservedNodeExchangeStatusWithContext(ctx aws.Context, input *DescribeReservedNodeExchangeStatusInput, opts ...request.Option) (*DescribeReservedNodeExchangeStatusOutput, error) {
+	req, out := c.DescribeReservedNodeExchangeStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeReservedNodeExchangeStatusPages iterates over the pages of a DescribeReservedNodeExchangeStatus operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeReservedNodeExchangeStatus method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeReservedNodeExchangeStatus operation.
+//    pageNum := 0
+//    err := client.DescribeReservedNodeExchangeStatusPages(params,
+//        func(page *redshift.DescribeReservedNodeExchangeStatusOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeReservedNodeExchangeStatusPages(input *DescribeReservedNodeExchangeStatusInput, fn func(*DescribeReservedNodeExchangeStatusOutput, bool) bool) error {
+	return c.DescribeReservedNodeExchangeStatusPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeReservedNodeExchangeStatusPagesWithContext same as DescribeReservedNodeExchangeStatusPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeReservedNodeExchangeStatusPagesWithContext(ctx aws.Context, input *DescribeReservedNodeExchangeStatusInput, fn func(*DescribeReservedNodeExchangeStatusOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeReservedNodeExchangeStatusInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeReservedNodeExchangeStatusRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeReservedNodeExchangeStatusOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeReservedNodeOfferings = "DescribeReservedNodeOfferings"
@@ -8857,9 +9185,9 @@ func (c *Redshift) DisableSnapshotCopyRequest(input *DisableSnapshotCopyInput) (
 // Disables the automatic copying of snapshots from one region to another region
 // for a specified cluster.
 //
-// If your cluster and its snapshots are encrypted using a customer master key
-// (CMK) from Key Management Service, use DeleteSnapshotCopyGrant to delete
-// the grant that grants Amazon Redshift permission to the CMK in the destination
+// If your cluster and its snapshots are encrypted using an encrypted symmetric
+// key from Key Management Service, use DeleteSnapshotCopyGrant to delete the
+// grant that grants Amazon Redshift permission to the key in the destination
 // region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -8948,7 +9276,7 @@ func (c *Redshift) DisassociateDataShareConsumerRequest(input *DisassociateDataS
 
 // DisassociateDataShareConsumer API operation for Amazon Redshift.
 //
-// From a consumer account, remove association for the specified datashare.
+// From a datashare consumer account, remove association for the specified datashare.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9264,7 +9592,7 @@ func (c *Redshift) GetClusterCredentialsRequest(input *GetClusterCredentialsInpu
 // action with access to the listed dbgroups.
 //
 // In addition, if the AutoCreate parameter is set to True, then the policy
-// must include the redshift:CreateClusterUser privilege.
+// must include the redshift:CreateClusterUser permission.
 //
 // If the DbName parameter is specified, the IAM policy must allow access to
 // the resource dbname for the specified database name.
@@ -9303,6 +9631,261 @@ func (c *Redshift) GetClusterCredentialsWithContext(ctx aws.Context, input *GetC
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opGetClusterCredentialsWithIAM = "GetClusterCredentialsWithIAM"
+
+// GetClusterCredentialsWithIAMRequest generates a "aws/request.Request" representing the
+// client's request for the GetClusterCredentialsWithIAM operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetClusterCredentialsWithIAM for more information on using the GetClusterCredentialsWithIAM
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetClusterCredentialsWithIAMRequest method.
+//    req, resp := client.GetClusterCredentialsWithIAMRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/GetClusterCredentialsWithIAM
+func (c *Redshift) GetClusterCredentialsWithIAMRequest(input *GetClusterCredentialsWithIAMInput) (req *request.Request, output *GetClusterCredentialsWithIAMOutput) {
+	op := &request.Operation{
+		Name:       opGetClusterCredentialsWithIAM,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetClusterCredentialsWithIAMInput{}
+	}
+
+	output = &GetClusterCredentialsWithIAMOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetClusterCredentialsWithIAM API operation for Amazon Redshift.
+//
+// Returns a database user name and temporary password with temporary authorization
+// to log in to an Amazon Redshift database. The database user is mapped 1:1
+// to the source Identity and Access Management (IAM) identity. For more information
+// about IAM identities, see IAM Identities (users, user groups, and roles)
+// (https://docs.aws.amazon.com/IAM/latest/UserGuide/id.html) in the Amazon
+// Web Services Identity and Access Management User Guide.
+//
+// The Identity and Access Management (IAM) identity that runs this operation
+// must have an IAM policy attached that allows access to all necessary actions
+// and resources. For more information about permissions, see Using identity-based
+// policies (IAM policies) (https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html)
+// in the Amazon Redshift Cluster Management Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Redshift's
+// API operation GetClusterCredentialsWithIAM for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeClusterNotFoundFault "ClusterNotFound"
+//   The ClusterIdentifier parameter does not refer to an existing cluster.
+//
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/GetClusterCredentialsWithIAM
+func (c *Redshift) GetClusterCredentialsWithIAM(input *GetClusterCredentialsWithIAMInput) (*GetClusterCredentialsWithIAMOutput, error) {
+	req, out := c.GetClusterCredentialsWithIAMRequest(input)
+	return out, req.Send()
+}
+
+// GetClusterCredentialsWithIAMWithContext is the same as GetClusterCredentialsWithIAM with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetClusterCredentialsWithIAM for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) GetClusterCredentialsWithIAMWithContext(ctx aws.Context, input *GetClusterCredentialsWithIAMInput, opts ...request.Option) (*GetClusterCredentialsWithIAMOutput, error) {
+	req, out := c.GetClusterCredentialsWithIAMRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetReservedNodeExchangeConfigurationOptions = "GetReservedNodeExchangeConfigurationOptions"
+
+// GetReservedNodeExchangeConfigurationOptionsRequest generates a "aws/request.Request" representing the
+// client's request for the GetReservedNodeExchangeConfigurationOptions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetReservedNodeExchangeConfigurationOptions for more information on using the GetReservedNodeExchangeConfigurationOptions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetReservedNodeExchangeConfigurationOptionsRequest method.
+//    req, resp := client.GetReservedNodeExchangeConfigurationOptionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/GetReservedNodeExchangeConfigurationOptions
+func (c *Redshift) GetReservedNodeExchangeConfigurationOptionsRequest(input *GetReservedNodeExchangeConfigurationOptionsInput) (req *request.Request, output *GetReservedNodeExchangeConfigurationOptionsOutput) {
+	op := &request.Operation{
+		Name:       opGetReservedNodeExchangeConfigurationOptions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetReservedNodeExchangeConfigurationOptionsInput{}
+	}
+
+	output = &GetReservedNodeExchangeConfigurationOptionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetReservedNodeExchangeConfigurationOptions API operation for Amazon Redshift.
+//
+// Gets the configuration options for the reserved-node exchange. These options
+// include information about the source reserved node and target reserved node
+// offering. Details include the node type, the price, the node count, and the
+// offering type.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Redshift's
+// API operation GetReservedNodeExchangeConfigurationOptions for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeReservedNodeNotFoundFault "ReservedNodeNotFound"
+//   The specified reserved compute node not found.
+//
+//   * ErrCodeInvalidReservedNodeStateFault "InvalidReservedNodeState"
+//   Indicates that the Reserved Node being exchanged is not in an active state.
+//
+//   * ErrCodeReservedNodeAlreadyMigratedFault "ReservedNodeAlreadyMigrated"
+//   Indicates that the reserved node has already been exchanged.
+//
+//   * ErrCodeReservedNodeOfferingNotFoundFault "ReservedNodeOfferingNotFound"
+//   Specified offering does not exist.
+//
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
+//
+//   * ErrCodeDependentServiceUnavailableFault "DependentServiceUnavailableFault"
+//   Your request cannot be completed because a dependent internal service is
+//   temporarily unavailable. Wait 30 to 60 seconds and try again.
+//
+//   * ErrCodeClusterNotFoundFault "ClusterNotFound"
+//   The ClusterIdentifier parameter does not refer to an existing cluster.
+//
+//   * ErrCodeClusterSnapshotNotFoundFault "ClusterSnapshotNotFound"
+//   The snapshot identifier does not refer to an existing cluster snapshot.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/GetReservedNodeExchangeConfigurationOptions
+func (c *Redshift) GetReservedNodeExchangeConfigurationOptions(input *GetReservedNodeExchangeConfigurationOptionsInput) (*GetReservedNodeExchangeConfigurationOptionsOutput, error) {
+	req, out := c.GetReservedNodeExchangeConfigurationOptionsRequest(input)
+	return out, req.Send()
+}
+
+// GetReservedNodeExchangeConfigurationOptionsWithContext is the same as GetReservedNodeExchangeConfigurationOptions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetReservedNodeExchangeConfigurationOptions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) GetReservedNodeExchangeConfigurationOptionsWithContext(ctx aws.Context, input *GetReservedNodeExchangeConfigurationOptionsInput, opts ...request.Option) (*GetReservedNodeExchangeConfigurationOptionsOutput, error) {
+	req, out := c.GetReservedNodeExchangeConfigurationOptionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetReservedNodeExchangeConfigurationOptionsPages iterates over the pages of a GetReservedNodeExchangeConfigurationOptions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetReservedNodeExchangeConfigurationOptions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetReservedNodeExchangeConfigurationOptions operation.
+//    pageNum := 0
+//    err := client.GetReservedNodeExchangeConfigurationOptionsPages(params,
+//        func(page *redshift.GetReservedNodeExchangeConfigurationOptionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) GetReservedNodeExchangeConfigurationOptionsPages(input *GetReservedNodeExchangeConfigurationOptionsInput, fn func(*GetReservedNodeExchangeConfigurationOptionsOutput, bool) bool) error {
+	return c.GetReservedNodeExchangeConfigurationOptionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetReservedNodeExchangeConfigurationOptionsPagesWithContext same as GetReservedNodeExchangeConfigurationOptionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) GetReservedNodeExchangeConfigurationOptionsPagesWithContext(ctx aws.Context, input *GetReservedNodeExchangeConfigurationOptionsInput, fn func(*GetReservedNodeExchangeConfigurationOptionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetReservedNodeExchangeConfigurationOptionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetReservedNodeExchangeConfigurationOptionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetReservedNodeExchangeConfigurationOptionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opGetReservedNodeExchangeOfferings = "GetReservedNodeExchangeOfferings"
@@ -9918,7 +10501,9 @@ func (c *Redshift) ModifyClusterIamRolesRequest(input *ModifyClusterIamRolesInpu
 // Modifies the list of Identity and Access Management (IAM) roles that can
 // be used by the cluster to access other Amazon Web Services services.
 //
-// A cluster can have up to 10 IAM roles associated at any time.
+// The maximum number of IAM roles that you can associate is subject to a quota.
+// For more information, go to Quotas and limits (https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html)
+// in the Amazon Redshift Cluster Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11286,7 +11871,7 @@ func (c *Redshift) RejectDataShareRequest(input *RejectDataShareInput) (req *req
 
 // RejectDataShare API operation for Amazon Redshift.
 //
-// From the consumer account, rejects the specified datashare.
+// From a datashare consumer account, rejects the specified datashare.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11503,6 +12088,25 @@ func (c *Redshift) ResizeClusterRequest(input *ResizeClusterInput) (req *request
 //   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   The encryption key has exceeded its grant limit in Amazon Web Services KMS.
 //
+//   * ErrCodeReservedNodeNotFoundFault "ReservedNodeNotFound"
+//   The specified reserved compute node not found.
+//
+//   * ErrCodeInvalidReservedNodeStateFault "InvalidReservedNodeState"
+//   Indicates that the Reserved Node being exchanged is not in an active state.
+//
+//   * ErrCodeReservedNodeAlreadyMigratedFault "ReservedNodeAlreadyMigrated"
+//   Indicates that the reserved node has already been exchanged.
+//
+//   * ErrCodeReservedNodeOfferingNotFoundFault "ReservedNodeOfferingNotFound"
+//   Specified offering does not exist.
+//
+//   * ErrCodeDependentServiceUnavailableFault "DependentServiceUnavailableFault"
+//   Your request cannot be completed because a dependent internal service is
+//   temporarily unavailable. Wait 30 to 60 seconds and try again.
+//
+//   * ErrCodeReservedNodeAlreadyExistsFault "ReservedNodeAlreadyExists"
+//   User already has a reservation with the given identifier.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/ResizeCluster
 func (c *Redshift) ResizeCluster(input *ResizeClusterInput) (*ResizeClusterOutput, error) {
 	req, out := c.ResizeClusterRequest(input)
@@ -11679,6 +12283,28 @@ func (c *Redshift) RestoreFromClusterSnapshotRequest(input *RestoreFromClusterSn
 //
 //   * ErrCodeInvalidTagFault "InvalidTagFault"
 //   The tag is invalid.
+//
+//   * ErrCodeReservedNodeNotFoundFault "ReservedNodeNotFound"
+//   The specified reserved compute node not found.
+//
+//   * ErrCodeInvalidReservedNodeStateFault "InvalidReservedNodeState"
+//   Indicates that the Reserved Node being exchanged is not in an active state.
+//
+//   * ErrCodeReservedNodeAlreadyMigratedFault "ReservedNodeAlreadyMigrated"
+//   Indicates that the reserved node has already been exchanged.
+//
+//   * ErrCodeReservedNodeOfferingNotFoundFault "ReservedNodeOfferingNotFound"
+//   Specified offering does not exist.
+//
+//   * ErrCodeDependentServiceUnavailableFault "DependentServiceUnavailableFault"
+//   Your request cannot be completed because a dependent internal service is
+//   temporarily unavailable. Wait 30 to 60 seconds and try again.
+//
+//   * ErrCodeReservedNodeAlreadyExistsFault "ReservedNodeAlreadyExists"
+//   User already has a reservation with the given identifier.
+//
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/RestoreFromClusterSnapshot
 func (c *Redshift) RestoreFromClusterSnapshot(input *RestoreFromClusterSnapshotInput) (*RestoreFromClusterSnapshotOutput, error) {
@@ -12157,6 +12783,9 @@ func (c *Redshift) RevokeSnapshotAccessRequest(input *RevokeSnapshotAccessInput)
 //
 //   * ErrCodeClusterSnapshotNotFoundFault "ClusterSnapshotNotFound"
 //   The snapshot identifier does not refer to an existing cluster snapshot.
+//
+//   * ErrCodeUnsupportedOperationFault "UnsupportedOperation"
+//   The requested operation isn't supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/RevokeSnapshotAccess
 func (c *Redshift) RevokeSnapshotAccess(input *RevokeSnapshotAccessInput) (*RevokeSnapshotAccessOutput, error) {
@@ -12727,6 +13356,10 @@ type AssociateDataShareConsumerInput struct {
 	// datashare.
 	ConsumerArn *string `type:"string"`
 
+	// From a datashare consumer account, associates a datashare with all existing
+	// and future namespaces in the specified Amazon Web Services Region.
+	ConsumerRegion *string `type:"string"`
+
 	// The Amazon Resource Name (ARN) of the datashare that the consumer is to use
 	// with the account or the namespace.
 	//
@@ -12777,6 +13410,12 @@ func (s *AssociateDataShareConsumerInput) SetConsumerArn(v string) *AssociateDat
 	return s
 }
 
+// SetConsumerRegion sets the ConsumerRegion field's value.
+func (s *AssociateDataShareConsumerInput) SetConsumerRegion(v string) *AssociateDataShareConsumerInput {
+	s.ConsumerRegion = &v
+	return s
+}
+
 // SetDataShareArn sets the DataShareArn field's value.
 func (s *AssociateDataShareConsumerInput) SetDataShareArn(v string) *AssociateDataShareConsumerInput {
 	s.DataShareArn = &v
@@ -12796,9 +13435,12 @@ type AssociateDataShareConsumerOutput struct {
 	// format.
 	DataShareArn *string `type:"string"`
 
-	// A value that specifies when the datashare has an association between a producer
+	// A value that specifies when the datashare has an association between producer
 	// and data consumers.
 	DataShareAssociations []*DataShareAssociation `type:"list"`
+
+	// The identifier of a datashare to show its managing entity.
+	ManagedBy *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the producer.
 	ProducerArn *string `type:"string"`
@@ -12837,6 +13479,12 @@ func (s *AssociateDataShareConsumerOutput) SetDataShareArn(v string) *AssociateD
 // SetDataShareAssociations sets the DataShareAssociations field's value.
 func (s *AssociateDataShareConsumerOutput) SetDataShareAssociations(v []*DataShareAssociation) *AssociateDataShareConsumerOutput {
 	s.DataShareAssociations = v
+	return s
+}
+
+// SetManagedBy sets the ManagedBy field's value.
+func (s *AssociateDataShareConsumerOutput) SetManagedBy(v string) *AssociateDataShareConsumerOutput {
+	s.ManagedBy = &v
 	return s
 }
 
@@ -13032,7 +13680,8 @@ type AuthorizeDataShareInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier of the data consumer that is authorized to access the datashare.
-	// This identifier is an AWS account ID.
+	// This identifier is an Amazon Web Services account ID or a keyword, such as
+	// ADX.
 	//
 	// ConsumerIdentifier is a required field
 	ConsumerIdentifier *string `type:"string" required:"true"`
@@ -13103,9 +13752,12 @@ type AuthorizeDataShareOutput struct {
 	// format.
 	DataShareArn *string `type:"string"`
 
-	// A value that specifies when the datashare has an association between a producer
+	// A value that specifies when the datashare has an association between producer
 	// and data consumers.
 	DataShareAssociations []*DataShareAssociation `type:"list"`
+
+	// The identifier of a datashare to show its managing entity.
+	ManagedBy *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the producer.
 	ProducerArn *string `type:"string"`
@@ -13144,6 +13796,12 @@ func (s *AuthorizeDataShareOutput) SetDataShareArn(v string) *AuthorizeDataShare
 // SetDataShareAssociations sets the DataShareAssociations field's value.
 func (s *AuthorizeDataShareOutput) SetDataShareAssociations(v []*DataShareAssociation) *AuthorizeDataShareOutput {
 	s.DataShareAssociations = v
+	return s
+}
+
+// SetManagedBy sets the ManagedBy field's value.
+func (s *AuthorizeDataShareOutput) SetManagedBy(v string) *AuthorizeDataShareOutput {
+	s.ManagedBy = &v
 	return s
 }
 
@@ -13334,15 +13992,16 @@ type AuthorizeSnapshotAccessInput struct {
 	// AccountWithRestoreAccess is a required field
 	AccountWithRestoreAccess *string `type:"string" required:"true"`
 
+	// The Amazon Resource Name (ARN) of the snapshot to authorize access to.
+	SnapshotArn *string `type:"string"`
+
 	// The identifier of the cluster the snapshot was created from. This parameter
 	// is required if your IAM user has a policy containing a snapshot resource
 	// element that specifies anything other than * for the cluster name.
 	SnapshotClusterIdentifier *string `type:"string"`
 
 	// The identifier of the snapshot the account is authorized to restore.
-	//
-	// SnapshotIdentifier is a required field
-	SnapshotIdentifier *string `type:"string" required:"true"`
+	SnapshotIdentifier *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -13369,9 +14028,6 @@ func (s *AuthorizeSnapshotAccessInput) Validate() error {
 	if s.AccountWithRestoreAccess == nil {
 		invalidParams.Add(request.NewErrParamRequired("AccountWithRestoreAccess"))
 	}
-	if s.SnapshotIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("SnapshotIdentifier"))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -13382,6 +14038,12 @@ func (s *AuthorizeSnapshotAccessInput) Validate() error {
 // SetAccountWithRestoreAccess sets the AccountWithRestoreAccess field's value.
 func (s *AuthorizeSnapshotAccessInput) SetAccountWithRestoreAccess(v string) *AuthorizeSnapshotAccessInput {
 	s.AccountWithRestoreAccess = &v
+	return s
+}
+
+// SetSnapshotArn sets the SnapshotArn field's value.
+func (s *AuthorizeSnapshotAccessInput) SetSnapshotArn(v string) *AuthorizeSnapshotAccessInput {
+	s.SnapshotArn = &v
 	return s
 }
 
@@ -14047,6 +14709,9 @@ type Cluster struct {
 	// with an incremental resize.
 	DataTransferProgress *DataTransferProgress `type:"structure"`
 
+	// The Amazon Resource Name (ARN) for the IAM role set as default for the cluster.
+	DefaultIamRoleArn *string `type:"string"`
+
 	// Describes a group of DeferredMaintenanceWindow objects.
 	DeferredMaintenanceWindows []*DeferredMaintenanceWindow `locationNameList:"DeferredMaintenanceWindow" type:"list"`
 
@@ -14142,6 +14807,10 @@ type Cluster struct {
 	// A boolean value that, if true, indicates that the cluster can be accessed
 	// from a public network.
 	PubliclyAccessible *bool `type:"boolean"`
+
+	// The status of the reserved-node exchange request. Statuses include in-progress
+	// and requested.
+	ReservedNodeExchangeStatus *ReservedNodeExchangeStatus `type:"structure"`
 
 	// Returns the following:
 	//
@@ -14314,6 +14983,12 @@ func (s *Cluster) SetDataTransferProgress(v *DataTransferProgress) *Cluster {
 	return s
 }
 
+// SetDefaultIamRoleArn sets the DefaultIamRoleArn field's value.
+func (s *Cluster) SetDefaultIamRoleArn(v string) *Cluster {
+	s.DefaultIamRoleArn = &v
+	return s
+}
+
 // SetDeferredMaintenanceWindows sets the DeferredMaintenanceWindows field's value.
 func (s *Cluster) SetDeferredMaintenanceWindows(v []*DeferredMaintenanceWindow) *Cluster {
 	s.DeferredMaintenanceWindows = v
@@ -14443,6 +15118,12 @@ func (s *Cluster) SetPreferredMaintenanceWindow(v string) *Cluster {
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *Cluster) SetPubliclyAccessible(v bool) *Cluster {
 	s.PubliclyAccessible = &v
+	return s
+}
+
+// SetReservedNodeExchangeStatus sets the ReservedNodeExchangeStatus field's value.
+func (s *Cluster) SetReservedNodeExchangeStatus(v *ReservedNodeExchangeStatus) *Cluster {
+	s.ReservedNodeExchangeStatus = v
 	return s
 }
 
@@ -15613,7 +16294,13 @@ type CreateClusterInput struct {
 	//    in the Amazon Redshift Database Developer Guide.
 	DBName *string `type:"string"`
 
-	// The Elastic IP (EIP) address for the cluster.
+	// The Amazon Resource Name (ARN) for the IAM role that was set as default for
+	// the cluster when the cluster was created.
+	DefaultIamRoleArn *string `type:"string"`
+
+	// The Elastic IP (EIP) address for the cluster. You don't have to specify the
+	// EIP for a publicly accessible cluster with AvailabilityZoneRelocation turned
+	// on.
 	//
 	// Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible
 	// through an Internet gateway. For more information about provisioning clusters
@@ -15647,15 +16334,19 @@ type CreateClusterInput struct {
 
 	// A list of Identity and Access Management (IAM) roles that can be used by
 	// the cluster to access other Amazon Web Services services. You must supply
-	// the IAM roles in their Amazon Resource Name (ARN) format. You can supply
-	// up to 10 IAM roles in a single request.
+	// the IAM roles in their Amazon Resource Name (ARN) format.
 	//
-	// A cluster can have up to 10 IAM roles associated with it at any time.
+	// The maximum number of IAM roles that you can associate is subject to a quota.
+	// For more information, go to Quotas and limits (https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html)
+	// in the Amazon Redshift Cluster Management Guide.
 	IamRoles []*string `locationNameList:"IamRoleArn" type:"list"`
 
 	// The Key Management Service (KMS) key ID of the encryption key that you want
 	// to use to encrypt data in the cluster.
 	KmsKeyId *string `type:"string"`
+
+	// A flag that specifies whether to load sample data once the cluster is created.
+	LoadSampleData *string `type:"string"`
 
 	// An optional parameter for the name of the maintenance track for the cluster.
 	// If you don't provide a maintenance track name, the cluster is assigned to
@@ -15682,8 +16373,8 @@ type CreateClusterInput struct {
 	//
 	//    * Must contain one number.
 	//
-	//    * Can be any printable ASCII character (ASCII code 33 to 126) except '
-	//    (single quote), " (double quote), \, /, @, or space.
+	//    * Can be any printable ASCII character (ASCII code 33-126) except ' (single
+	//    quote), " (double quote), \, /, or @.
 	//
 	// MasterUserPassword is a required field
 	MasterUserPassword *string `type:"string" required:"true"`
@@ -15890,6 +16581,12 @@ func (s *CreateClusterInput) SetDBName(v string) *CreateClusterInput {
 	return s
 }
 
+// SetDefaultIamRoleArn sets the DefaultIamRoleArn field's value.
+func (s *CreateClusterInput) SetDefaultIamRoleArn(v string) *CreateClusterInput {
+	s.DefaultIamRoleArn = &v
+	return s
+}
+
 // SetElasticIp sets the ElasticIp field's value.
 func (s *CreateClusterInput) SetElasticIp(v string) *CreateClusterInput {
 	s.ElasticIp = &v
@@ -15929,6 +16626,12 @@ func (s *CreateClusterInput) SetIamRoles(v []*string) *CreateClusterInput {
 // SetKmsKeyId sets the KmsKeyId field's value.
 func (s *CreateClusterInput) SetKmsKeyId(v string) *CreateClusterInput {
 	s.KmsKeyId = &v
+	return s
+}
+
+// SetLoadSampleData sets the LoadSampleData field's value.
+func (s *CreateClusterInput) SetLoadSampleData(v string) *CreateClusterInput {
+	s.LoadSampleData = &v
 	return s
 }
 
@@ -17435,8 +18138,8 @@ func (s *CreateScheduledActionOutput) SetTargetAction(v *ScheduledActionType) *C
 type CreateSnapshotCopyGrantInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the customer master key (CMK) to which to grant
-	// Amazon Redshift permission. If no key is specified, the default key is used.
+	// The unique identifier of the encrypted symmetric key to which to grant Amazon
+	// Redshift permission. If no key is specified, the default key is used.
 	KmsKeyId *string `type:"string"`
 
 	// The name of the snapshot copy grant. This name must be unique in the region
@@ -17514,8 +18217,8 @@ type CreateSnapshotCopyGrantOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The snapshot copy grant that grants Amazon Redshift permission to encrypt
-	// copied snapshots with the specified customer master key (CMK) from Amazon
-	// Web Services KMS in the destination region.
+	// copied snapshots with the specified encrypted symmetric key from Amazon Web
+	// Services KMS in the destination region.
 	//
 	// For more information about managing snapshot copy grants, go to Amazon Redshift
 	// Database Encryption (https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html)
@@ -17824,7 +18527,8 @@ type CreateUsageLimitInput struct {
 	// The type of limit. Depending on the feature type, this can be based on a
 	// time duration or data size. If FeatureType is spectrum, then LimitType must
 	// be data-scanned. If FeatureType is concurrency-scaling, then LimitType must
-	// be time.
+	// be time. If FeatureType is cross-region-datasharing, then LimitType must
+	// be data-scanned.
 	//
 	// LimitType is a required field
 	LimitType *string `type:"string" required:"true" enum:"UsageLimitLimitType"`
@@ -18037,9 +18741,12 @@ type DataShare struct {
 	// format.
 	DataShareArn *string `type:"string"`
 
-	// A value that specifies when the datashare has an association between a producer
+	// A value that specifies when the datashare has an association between producer
 	// and data consumers.
 	DataShareAssociations []*DataShareAssociation `type:"list"`
+
+	// The identifier of a datashare to show its managing entity.
+	ManagedBy *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the producer.
 	ProducerArn *string `type:"string"`
@@ -18081,6 +18788,12 @@ func (s *DataShare) SetDataShareAssociations(v []*DataShareAssociation) *DataSha
 	return s
 }
 
+// SetManagedBy sets the ManagedBy field's value.
+func (s *DataShare) SetManagedBy(v string) *DataShare {
+	s.ManagedBy = &v
+	return s
+}
+
 // SetProducerArn sets the ProducerArn field's value.
 func (s *DataShare) SetProducerArn(v string) *DataShare {
 	s.ProducerArn = &v
@@ -18094,6 +18807,10 @@ type DataShareAssociation struct {
 	// The name of the consumer accounts that have an association with a producer
 	// datashare.
 	ConsumerIdentifier *string `type:"string"`
+
+	// The Amazon Web Services Region of the consumer accounts that have an association
+	// with a producer datashare.
+	ConsumerRegion *string `type:"string"`
 
 	// The creation date of the datashare that is associated.
 	CreatedDate *time.Time `type:"timestamp"`
@@ -18126,6 +18843,12 @@ func (s DataShareAssociation) GoString() string {
 // SetConsumerIdentifier sets the ConsumerIdentifier field's value.
 func (s *DataShareAssociation) SetConsumerIdentifier(v string) *DataShareAssociation {
 	s.ConsumerIdentifier = &v
+	return s
+}
+
+// SetConsumerRegion sets the ConsumerRegion field's value.
+func (s *DataShareAssociation) SetConsumerRegion(v string) *DataShareAssociation {
+	s.ConsumerRegion = &v
 	return s
 }
 
@@ -18230,7 +18953,8 @@ type DeauthorizeDataShareInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier of the data consumer that is to have authorization removed
-	// from the datashare. This identifier is an AWS account ID.
+	// from the datashare. This identifier is an Amazon Web Services account ID
+	// or a keyword, such as ADX.
 	//
 	// ConsumerIdentifier is a required field
 	ConsumerIdentifier *string `type:"string" required:"true"`
@@ -18300,9 +19024,12 @@ type DeauthorizeDataShareOutput struct {
 	// format.
 	DataShareArn *string `type:"string"`
 
-	// A value that specifies when the datashare has an association between a producer
+	// A value that specifies when the datashare has an association between producer
 	// and data consumers.
 	DataShareAssociations []*DataShareAssociation `type:"list"`
+
+	// The identifier of a datashare to show its managing entity.
+	ManagedBy *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the producer.
 	ProducerArn *string `type:"string"`
@@ -18341,6 +19068,12 @@ func (s *DeauthorizeDataShareOutput) SetDataShareArn(v string) *DeauthorizeDataS
 // SetDataShareAssociations sets the DataShareAssociations field's value.
 func (s *DeauthorizeDataShareOutput) SetDataShareAssociations(v []*DataShareAssociation) *DeauthorizeDataShareOutput {
 	s.DataShareAssociations = v
+	return s
+}
+
+// SetManagedBy sets the ManagedBy field's value.
+func (s *DeauthorizeDataShareOutput) SetManagedBy(v string) *DeauthorizeDataShareOutput {
+	s.ManagedBy = &v
 	return s
 }
 
@@ -20588,6 +21321,10 @@ type DescribeClusterSnapshotsInput struct {
 	// or do not specify the parameter.
 	OwnerAccount *string `type:"string"`
 
+	// The Amazon Resource Name (ARN) of the snapshot associated with the message
+	// to describe cluster snapshots.
+	SnapshotArn *string `type:"string"`
+
 	// The snapshot identifier of the snapshot about which to return information.
 	SnapshotIdentifier *string `type:"string"`
 
@@ -20694,6 +21431,12 @@ func (s *DescribeClusterSnapshotsInput) SetMaxRecords(v int64) *DescribeClusterS
 // SetOwnerAccount sets the OwnerAccount field's value.
 func (s *DescribeClusterSnapshotsInput) SetOwnerAccount(v string) *DescribeClusterSnapshotsInput {
 	s.OwnerAccount = &v
+	return s
+}
+
+// SetSnapshotArn sets the SnapshotArn field's value.
+func (s *DescribeClusterSnapshotsInput) SetSnapshotArn(v string) *DescribeClusterSnapshotsInput {
+	s.SnapshotArn = &v
 	return s
 }
 
@@ -21282,10 +22025,10 @@ type DescribeDataSharesForConsumerInput struct {
 
 	// An optional parameter that specifies the starting point to return a set of
 	// response records. When the results of a DescribeDataSharesForConsumer request
-	// exceed the value specified in MaxRecords, AWS returns a value in the Marker
-	// field of the response. You can retrieve the next set of response records
-	// by providing the returned marker value in the Marker parameter and retrying
-	// the request.
+	// exceed the value specified in MaxRecords, Amazon Web Services returns a value
+	// in the Marker field of the response. You can retrieve the next set of response
+	// records by providing the returned marker value in the Marker parameter and
+	// retrying the request.
 	Marker *string `type:"string"`
 
 	// The maximum number of response records to return in each call. If the number
@@ -21350,10 +22093,10 @@ type DescribeDataSharesForConsumerOutput struct {
 
 	// An optional parameter that specifies the starting point to return a set of
 	// response records. When the results of a DescribeDataSharesForConsumer request
-	// exceed the value specified in MaxRecords, AWS returns a value in the Marker
-	// field of the response. You can retrieve the next set of response records
-	// by providing the returned marker value in the Marker parameter and retrying
-	// the request.
+	// exceed the value specified in MaxRecords, Amazon Web Services returns a value
+	// in the Marker field of the response. You can retrieve the next set of response
+	// records by providing the returned marker value in the Marker parameter and
+	// retrying the request.
 	Marker *string `type:"string"`
 }
 
@@ -21392,10 +22135,10 @@ type DescribeDataSharesForProducerInput struct {
 
 	// An optional parameter that specifies the starting point to return a set of
 	// response records. When the results of a DescribeDataSharesForProducer request
-	// exceed the value specified in MaxRecords, AWS returns a value in the Marker
-	// field of the response. You can retrieve the next set of response records
-	// by providing the returned marker value in the Marker parameter and retrying
-	// the request.
+	// exceed the value specified in MaxRecords, Amazon Web Services returns a value
+	// in the Marker field of the response. You can retrieve the next set of response
+	// records by providing the returned marker value in the Marker parameter and
+	// retrying the request.
 	Marker *string `type:"string"`
 
 	// The maximum number of response records to return in each call. If the number
@@ -21464,10 +22207,10 @@ type DescribeDataSharesForProducerOutput struct {
 
 	// An optional parameter that specifies the starting point to return a set of
 	// response records. When the results of a DescribeDataSharesForProducer request
-	// exceed the value specified in MaxRecords, AWS returns a value in the Marker
-	// field of the response. You can retrieve the next set of response records
-	// by providing the returned marker value in the Marker parameter and retrying
-	// the request.
+	// exceed the value specified in MaxRecords, Amazon Web Services returns a value
+	// in the Marker field of the response. You can retrieve the next set of response
+	// records by providing the returned marker value in the Marker parameter and
+	// retrying the request.
 	Marker *string `type:"string"`
 }
 
@@ -21509,9 +22252,10 @@ type DescribeDataSharesInput struct {
 
 	// An optional parameter that specifies the starting point to return a set of
 	// response records. When the results of a DescribeDataShares request exceed
-	// the value specified in MaxRecords, AWS returns a value in the Marker field
-	// of the response. You can retrieve the next set of response records by providing
-	// the returned marker value in the Marker parameter and retrying the request.
+	// the value specified in MaxRecords, Amazon Web Services returns a value in
+	// the Marker field of the response. You can retrieve the next set of response
+	// records by providing the returned marker value in the Marker parameter and
+	// retrying the request.
 	Marker *string `type:"string"`
 
 	// The maximum number of response records to return in each call. If the number
@@ -21565,9 +22309,10 @@ type DescribeDataSharesOutput struct {
 
 	// An optional parameter that specifies the starting point to return a set of
 	// response records. When the results of a DescribeDataShares request exceed
-	// the value specified in MaxRecords, AWS returns a value in the Marker field
-	// of the response. You can retrieve the next set of response records by providing
-	// the returned marker value in the Marker parameter and retrying the request.
+	// the value specified in MaxRecords, Amazon Web Services returns a value in
+	// the Marker field of the response. You can retrieve the next set of response
+	// records by providing the returned marker value in the Marker parameter and
+	// retrying the request.
 	Marker *string `type:"string"`
 }
 
@@ -22689,6 +23434,10 @@ type DescribeNodeConfigurationOptionsInput struct {
 	// if you are restoring a snapshot you do not own, optional if you own the snapshot.
 	OwnerAccount *string `type:"string"`
 
+	// The Amazon Resource Name (ARN) of the snapshot associated with the message
+	// to describe node configuration.
+	SnapshotArn *string `type:"string"`
+
 	// The identifier of the snapshot to evaluate for possible node configurations.
 	SnapshotIdentifier *string `type:"string"`
 }
@@ -22757,6 +23506,12 @@ func (s *DescribeNodeConfigurationOptionsInput) SetMaxRecords(v int64) *Describe
 // SetOwnerAccount sets the OwnerAccount field's value.
 func (s *DescribeNodeConfigurationOptionsInput) SetOwnerAccount(v string) *DescribeNodeConfigurationOptionsInput {
 	s.OwnerAccount = &v
+	return s
+}
+
+// SetSnapshotArn sets the SnapshotArn field's value.
+func (s *DescribeNodeConfigurationOptionsInput) SetSnapshotArn(v string) *DescribeNodeConfigurationOptionsInput {
+	s.SnapshotArn = &v
 	return s
 }
 
@@ -23044,6 +23799,113 @@ func (s DescribePartnersOutput) GoString() string {
 // SetPartnerIntegrationInfoList sets the PartnerIntegrationInfoList field's value.
 func (s *DescribePartnersOutput) SetPartnerIntegrationInfoList(v []*PartnerIntegrationInfo) *DescribePartnersOutput {
 	s.PartnerIntegrationInfoList = v
+	return s
+}
+
+type DescribeReservedNodeExchangeStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// An optional pagination token provided by a previous DescribeReservedNodeExchangeStatus
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by the MaxRecords parameter.
+	// You can retrieve the next set of response records by providing the returned
+	// marker value in the Marker parameter and retrying the request.
+	Marker *string `type:"string"`
+
+	// The maximum number of response records to return in each call. If the number
+	// of remaining response records exceeds the specified MaxRecords value, a value
+	// is returned in a Marker field of the response. You can retrieve the next
+	// set of records by retrying the command with the returned marker value.
+	MaxRecords *int64 `type:"integer"`
+
+	// The identifier of the reserved-node exchange request.
+	ReservedNodeExchangeRequestId *string `type:"string"`
+
+	// The identifier of the source reserved node in a reserved-node exchange request.
+	ReservedNodeId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeReservedNodeExchangeStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeReservedNodeExchangeStatusInput) GoString() string {
+	return s.String()
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeReservedNodeExchangeStatusInput) SetMarker(v string) *DescribeReservedNodeExchangeStatusInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxRecords sets the MaxRecords field's value.
+func (s *DescribeReservedNodeExchangeStatusInput) SetMaxRecords(v int64) *DescribeReservedNodeExchangeStatusInput {
+	s.MaxRecords = &v
+	return s
+}
+
+// SetReservedNodeExchangeRequestId sets the ReservedNodeExchangeRequestId field's value.
+func (s *DescribeReservedNodeExchangeStatusInput) SetReservedNodeExchangeRequestId(v string) *DescribeReservedNodeExchangeStatusInput {
+	s.ReservedNodeExchangeRequestId = &v
+	return s
+}
+
+// SetReservedNodeId sets the ReservedNodeId field's value.
+func (s *DescribeReservedNodeExchangeStatusInput) SetReservedNodeId(v string) *DescribeReservedNodeExchangeStatusInput {
+	s.ReservedNodeId = &v
+	return s
+}
+
+type DescribeReservedNodeExchangeStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A pagination token provided by a previous DescribeReservedNodeExchangeStatus
+	// request.
+	Marker *string `type:"string"`
+
+	// The details of the reserved-node exchange request, including the status,
+	// request time, source reserved-node identifier, and additional details.
+	ReservedNodeExchangeStatusDetails []*ReservedNodeExchangeStatus `locationNameList:"ReservedNodeExchangeStatus" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeReservedNodeExchangeStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeReservedNodeExchangeStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeReservedNodeExchangeStatusOutput) SetMarker(v string) *DescribeReservedNodeExchangeStatusOutput {
+	s.Marker = &v
+	return s
+}
+
+// SetReservedNodeExchangeStatusDetails sets the ReservedNodeExchangeStatusDetails field's value.
+func (s *DescribeReservedNodeExchangeStatusOutput) SetReservedNodeExchangeStatusDetails(v []*ReservedNodeExchangeStatus) *DescribeReservedNodeExchangeStatusOutput {
+	s.ReservedNodeExchangeStatusDetails = v
 	return s
 }
 
@@ -24561,6 +25423,11 @@ type DisassociateDataShareConsumerInput struct {
 	// is removed from.
 	ConsumerArn *string `type:"string"`
 
+	// From a datashare consumer account, removes association of a datashare from
+	// all the existing and future namespaces in the specified Amazon Web Services
+	// Region.
+	ConsumerRegion *string `type:"string"`
+
 	// The Amazon Resource Name (ARN) of the datashare to remove association for.
 	//
 	// DataShareArn is a required field
@@ -24608,6 +25475,12 @@ func (s *DisassociateDataShareConsumerInput) SetConsumerArn(v string) *Disassoci
 	return s
 }
 
+// SetConsumerRegion sets the ConsumerRegion field's value.
+func (s *DisassociateDataShareConsumerInput) SetConsumerRegion(v string) *DisassociateDataShareConsumerInput {
+	s.ConsumerRegion = &v
+	return s
+}
+
 // SetDataShareArn sets the DataShareArn field's value.
 func (s *DisassociateDataShareConsumerInput) SetDataShareArn(v string) *DisassociateDataShareConsumerInput {
 	s.DataShareArn = &v
@@ -24633,9 +25506,12 @@ type DisassociateDataShareConsumerOutput struct {
 	// format.
 	DataShareArn *string `type:"string"`
 
-	// A value that specifies when the datashare has an association between a producer
+	// A value that specifies when the datashare has an association between producer
 	// and data consumers.
 	DataShareAssociations []*DataShareAssociation `type:"list"`
+
+	// The identifier of a datashare to show its managing entity.
+	ManagedBy *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the producer.
 	ProducerArn *string `type:"string"`
@@ -24674,6 +25550,12 @@ func (s *DisassociateDataShareConsumerOutput) SetDataShareArn(v string) *Disasso
 // SetDataShareAssociations sets the DataShareAssociations field's value.
 func (s *DisassociateDataShareConsumerOutput) SetDataShareAssociations(v []*DataShareAssociation) *DisassociateDataShareConsumerOutput {
 	s.DataShareAssociations = v
+	return s
+}
+
+// SetManagedBy sets the ManagedBy field's value.
+func (s *DisassociateDataShareConsumerOutput) SetManagedBy(v string) *DisassociateDataShareConsumerOutput {
+	s.ManagedBy = &v
 	return s
 }
 
@@ -24794,9 +25676,7 @@ type EnableLoggingInput struct {
 	//    * Must be in the same region as the cluster
 	//
 	//    * The cluster must have read bucket and put object permissions
-	//
-	// BucketName is a required field
-	BucketName *string `type:"string" required:"true"`
+	BucketName *string `type:"string"`
 
 	// The identifier of the cluster on which logging is to be started.
 	//
@@ -24804,6 +25684,13 @@ type EnableLoggingInput struct {
 	//
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
+
+	// The log destination type. An enum with possible values of s3 and cloudwatch.
+	LogDestinationType *string `type:"string" enum:"LogDestinationType"`
+
+	// The collection of exported log types. Log types include the connection log,
+	// user log and user activity log.
+	LogExports []*string `type:"list"`
 
 	// The prefix applied to the log file names.
 	//
@@ -24838,9 +25725,6 @@ func (s EnableLoggingInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *EnableLoggingInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "EnableLoggingInput"}
-	if s.BucketName == nil {
-		invalidParams.Add(request.NewErrParamRequired("BucketName"))
-	}
 	if s.ClusterIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
 	}
@@ -24860,6 +25744,18 @@ func (s *EnableLoggingInput) SetBucketName(v string) *EnableLoggingInput {
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
 func (s *EnableLoggingInput) SetClusterIdentifier(v string) *EnableLoggingInput {
 	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetLogDestinationType sets the LogDestinationType field's value.
+func (s *EnableLoggingInput) SetLogDestinationType(v string) *EnableLoggingInput {
+	s.LogDestinationType = &v
+	return s
+}
+
+// SetLogExports sets the LogExports field's value.
+func (s *EnableLoggingInput) SetLogExports(v []*string) *EnableLoggingInput {
+	s.LogExports = v
 	return s
 }
 
@@ -25619,7 +26515,7 @@ type GetClusterCredentialsInput struct {
 	AutoCreate *bool `type:"boolean"`
 
 	// The unique identifier of the cluster that contains the database for which
-	// your are requesting credentials. This parameter is case sensitive.
+	// you are requesting credentials. This parameter is case sensitive.
 	//
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
@@ -25786,7 +26682,7 @@ type GetClusterCredentialsOutput struct {
 
 	// A database user name that is authorized to log on to the database DbName
 	// using the password DbPassword. If the specified DbUser exists in the database,
-	// the new user name has the same database privileges as the the user named
+	// the new user name has the same database permissions as the the user named
 	// in DbUser. By default, the user is added to PUBLIC. If the DbGroups parameter
 	// is specifed, DbUser is added to the listed groups for any sessions created
 	// using these credentials.
@@ -25829,6 +26725,274 @@ func (s *GetClusterCredentialsOutput) SetDbUser(v string) *GetClusterCredentials
 // SetExpiration sets the Expiration field's value.
 func (s *GetClusterCredentialsOutput) SetExpiration(v time.Time) *GetClusterCredentialsOutput {
 	s.Expiration = &v
+	return s
+}
+
+type GetClusterCredentialsWithIAMInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the cluster that contains the database for which
+	// you are requesting credentials.
+	//
+	// ClusterIdentifier is a required field
+	ClusterIdentifier *string `type:"string" required:"true"`
+
+	// The name of the database for which you are requesting credentials. If the
+	// database name is specified, the IAM policy must allow access to the resource
+	// dbname for the specified database name. If the database name is not specified,
+	// access to all databases is allowed.
+	DbName *string `type:"string"`
+
+	// The number of seconds until the returned temporary password expires.
+	//
+	// Range: 900-3600. Default: 900.
+	DurationSeconds *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetClusterCredentialsWithIAMInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetClusterCredentialsWithIAMInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetClusterCredentialsWithIAMInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetClusterCredentialsWithIAMInput"}
+	if s.ClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterIdentifier sets the ClusterIdentifier field's value.
+func (s *GetClusterCredentialsWithIAMInput) SetClusterIdentifier(v string) *GetClusterCredentialsWithIAMInput {
+	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetDbName sets the DbName field's value.
+func (s *GetClusterCredentialsWithIAMInput) SetDbName(v string) *GetClusterCredentialsWithIAMInput {
+	s.DbName = &v
+	return s
+}
+
+// SetDurationSeconds sets the DurationSeconds field's value.
+func (s *GetClusterCredentialsWithIAMInput) SetDurationSeconds(v int64) *GetClusterCredentialsWithIAMInput {
+	s.DurationSeconds = &v
+	return s
+}
+
+type GetClusterCredentialsWithIAMOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A temporary password that you provide when you connect to a database.
+	//
+	// DbPassword is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetClusterCredentialsWithIAMOutput's
+	// String and GoString methods.
+	DbPassword *string `type:"string" sensitive:"true"`
+
+	// A database user name that you provide when you connect to a database. The
+	// database user is mapped 1:1 to the source IAM identity.
+	DbUser *string `type:"string"`
+
+	// The time (UTC) when the temporary password expires. After this timestamp,
+	// a log in with the temporary password fails.
+	Expiration *time.Time `type:"timestamp"`
+
+	// Reserved for future use.
+	NextRefreshTime *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetClusterCredentialsWithIAMOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetClusterCredentialsWithIAMOutput) GoString() string {
+	return s.String()
+}
+
+// SetDbPassword sets the DbPassword field's value.
+func (s *GetClusterCredentialsWithIAMOutput) SetDbPassword(v string) *GetClusterCredentialsWithIAMOutput {
+	s.DbPassword = &v
+	return s
+}
+
+// SetDbUser sets the DbUser field's value.
+func (s *GetClusterCredentialsWithIAMOutput) SetDbUser(v string) *GetClusterCredentialsWithIAMOutput {
+	s.DbUser = &v
+	return s
+}
+
+// SetExpiration sets the Expiration field's value.
+func (s *GetClusterCredentialsWithIAMOutput) SetExpiration(v time.Time) *GetClusterCredentialsWithIAMOutput {
+	s.Expiration = &v
+	return s
+}
+
+// SetNextRefreshTime sets the NextRefreshTime field's value.
+func (s *GetClusterCredentialsWithIAMOutput) SetNextRefreshTime(v time.Time) *GetClusterCredentialsWithIAMOutput {
+	s.NextRefreshTime = &v
+	return s
+}
+
+type GetReservedNodeExchangeConfigurationOptionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The action type of the reserved-node configuration. The action type can be
+	// an exchange initiated from either a snapshot or a resize.
+	//
+	// ActionType is a required field
+	ActionType *string `type:"string" required:"true" enum:"ReservedNodeExchangeActionType"`
+
+	// The identifier for the cluster that is the source for a reserved-node exchange.
+	ClusterIdentifier *string `type:"string"`
+
+	// An optional pagination token provided by a previous GetReservedNodeExchangeConfigurationOptions
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by the MaxRecords parameter.
+	// You can retrieve the next set of response records by providing the returned
+	// marker value in the Marker parameter and retrying the request.
+	Marker *string `type:"string"`
+
+	// The maximum number of response records to return in each call. If the number
+	// of remaining response records exceeds the specified MaxRecords value, a value
+	// is returned in a Marker field of the response. You can retrieve the next
+	// set of records by retrying the command with the returned marker value.
+	MaxRecords *int64 `type:"integer"`
+
+	// The identifier for the snapshot that is the source for the reserved-node
+	// exchange.
+	SnapshotIdentifier *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReservedNodeExchangeConfigurationOptionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReservedNodeExchangeConfigurationOptionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetReservedNodeExchangeConfigurationOptionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetReservedNodeExchangeConfigurationOptionsInput"}
+	if s.ActionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ActionType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetActionType sets the ActionType field's value.
+func (s *GetReservedNodeExchangeConfigurationOptionsInput) SetActionType(v string) *GetReservedNodeExchangeConfigurationOptionsInput {
+	s.ActionType = &v
+	return s
+}
+
+// SetClusterIdentifier sets the ClusterIdentifier field's value.
+func (s *GetReservedNodeExchangeConfigurationOptionsInput) SetClusterIdentifier(v string) *GetReservedNodeExchangeConfigurationOptionsInput {
+	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *GetReservedNodeExchangeConfigurationOptionsInput) SetMarker(v string) *GetReservedNodeExchangeConfigurationOptionsInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxRecords sets the MaxRecords field's value.
+func (s *GetReservedNodeExchangeConfigurationOptionsInput) SetMaxRecords(v int64) *GetReservedNodeExchangeConfigurationOptionsInput {
+	s.MaxRecords = &v
+	return s
+}
+
+// SetSnapshotIdentifier sets the SnapshotIdentifier field's value.
+func (s *GetReservedNodeExchangeConfigurationOptionsInput) SetSnapshotIdentifier(v string) *GetReservedNodeExchangeConfigurationOptionsInput {
+	s.SnapshotIdentifier = &v
+	return s
+}
+
+type GetReservedNodeExchangeConfigurationOptionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A pagination token provided by a previous GetReservedNodeExchangeConfigurationOptions
+	// request.
+	Marker *string `type:"string"`
+
+	// the configuration options for the reserved-node exchange. These options include
+	// information about the source reserved node and target reserved node. Details
+	// include the node type, the price, the node count, and the offering type.
+	ReservedNodeConfigurationOptionList []*ReservedNodeConfigurationOption `locationNameList:"ReservedNodeConfigurationOption" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReservedNodeExchangeConfigurationOptionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReservedNodeExchangeConfigurationOptionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetMarker sets the Marker field's value.
+func (s *GetReservedNodeExchangeConfigurationOptionsOutput) SetMarker(v string) *GetReservedNodeExchangeConfigurationOptionsOutput {
+	s.Marker = &v
+	return s
+}
+
+// SetReservedNodeConfigurationOptionList sets the ReservedNodeConfigurationOptionList field's value.
+func (s *GetReservedNodeExchangeConfigurationOptionsOutput) SetReservedNodeConfigurationOptionList(v []*ReservedNodeConfigurationOption) *GetReservedNodeExchangeConfigurationOptionsOutput {
+	s.ReservedNodeConfigurationOptionList = v
 	return s
 }
 
@@ -26187,6 +27351,13 @@ type LoggingStatus struct {
 	// The last time that logs were delivered.
 	LastSuccessfulDeliveryTime *time.Time `type:"timestamp"`
 
+	// The log destination type. An enum with possible values of s3 and cloudwatch.
+	LogDestinationType *string `type:"string" enum:"LogDestinationType"`
+
+	// The collection of exported log types. Log types include the connection log,
+	// user log and user activity log.
+	LogExports []*string `type:"list"`
+
 	// true if logging is on, false if logging is off.
 	LoggingEnabled *bool `type:"boolean"`
 
@@ -26233,6 +27404,18 @@ func (s *LoggingStatus) SetLastFailureTime(v time.Time) *LoggingStatus {
 // SetLastSuccessfulDeliveryTime sets the LastSuccessfulDeliveryTime field's value.
 func (s *LoggingStatus) SetLastSuccessfulDeliveryTime(v time.Time) *LoggingStatus {
 	s.LastSuccessfulDeliveryTime = &v
+	return s
+}
+
+// SetLogDestinationType sets the LogDestinationType field's value.
+func (s *LoggingStatus) SetLogDestinationType(v string) *LoggingStatus {
+	s.LogDestinationType = &v
+	return s
+}
+
+// SetLogExports sets the LogExports field's value.
+func (s *LoggingStatus) SetLogExports(v []*string) *LoggingStatus {
+	s.LogExports = v
 	return s
 }
 
@@ -26594,8 +27777,7 @@ type ModifyClusterIamRolesInput struct {
 	_ struct{} `type:"structure"`
 
 	// Zero or more IAM roles to associate with the cluster. The roles must be in
-	// their Amazon Resource Name (ARN) format. You can associate up to 10 IAM roles
-	// with a single cluster in a single request.
+	// their Amazon Resource Name (ARN) format.
 	AddIamRoles []*string `locationNameList:"IamRoleArn" type:"list"`
 
 	// The unique identifier of the cluster for which you want to associate or disassociate
@@ -26604,8 +27786,11 @@ type ModifyClusterIamRolesInput struct {
 	// ClusterIdentifier is a required field
 	ClusterIdentifier *string `type:"string" required:"true"`
 
-	// Zero or more IAM roles in ARN format to disassociate from the cluster. You
-	// can disassociate up to 10 IAM roles from a single cluster in a single request.
+	// The Amazon Resource Name (ARN) for the IAM role that was set as default for
+	// the cluster when the cluster was last modified.
+	DefaultIamRoleArn *string `type:"string"`
+
+	// Zero or more IAM roles in ARN format to disassociate from the cluster.
 	RemoveIamRoles []*string `locationNameList:"IamRoleArn" type:"list"`
 }
 
@@ -26649,6 +27834,12 @@ func (s *ModifyClusterIamRolesInput) SetAddIamRoles(v []*string) *ModifyClusterI
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
 func (s *ModifyClusterIamRolesInput) SetClusterIdentifier(v string) *ModifyClusterIamRolesInput {
 	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetDefaultIamRoleArn sets the DefaultIamRoleArn field's value.
+func (s *ModifyClusterIamRolesInput) SetDefaultIamRoleArn(v string) *ModifyClusterIamRolesInput {
+	s.DefaultIamRoleArn = &v
 	return s
 }
 
@@ -26853,8 +28044,8 @@ type ModifyClusterInput struct {
 	//
 	//    * Must contain one number.
 	//
-	//    * Can be any printable ASCII character (ASCII code 33 to 126) except '
-	//    (single quote), " (double quote), \, /, @, or space.
+	//    * Can be any printable ASCII character (ASCII code 33-126) except ' (single
+	//    quote), " (double quote), \, /, or @.
 	MasterUserPassword *string `type:"string"`
 
 	// The new identifier for the cluster.
@@ -29582,9 +30773,12 @@ type RejectDataShareOutput struct {
 	// format.
 	DataShareArn *string `type:"string"`
 
-	// A value that specifies when the datashare has an association between a producer
+	// A value that specifies when the datashare has an association between producer
 	// and data consumers.
 	DataShareAssociations []*DataShareAssociation `type:"list"`
+
+	// The identifier of a datashare to show its managing entity.
+	ManagedBy *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the producer.
 	ProducerArn *string `type:"string"`
@@ -29623,6 +30817,12 @@ func (s *RejectDataShareOutput) SetDataShareArn(v string) *RejectDataShareOutput
 // SetDataShareAssociations sets the DataShareAssociations field's value.
 func (s *RejectDataShareOutput) SetDataShareAssociations(v []*DataShareAssociation) *RejectDataShareOutput {
 	s.DataShareAssociations = v
+	return s
+}
+
+// SetManagedBy sets the ManagedBy field's value.
+func (s *RejectDataShareOutput) SetManagedBy(v string) *RejectDataShareOutput {
+	s.ManagedBy = &v
 	return s
 }
 
@@ -29786,6 +30986,165 @@ func (s *ReservedNode) SetState(v string) *ReservedNode {
 // SetUsagePrice sets the UsagePrice field's value.
 func (s *ReservedNode) SetUsagePrice(v float64) *ReservedNode {
 	s.UsagePrice = &v
+	return s
+}
+
+// Details for a reserved-node exchange. Examples include the node type for
+// a reserved node, the price for a node, the node's state, and other details.
+type ReservedNodeConfigurationOption struct {
+	_ struct{} `type:"structure"`
+
+	// Describes a reserved node. You can call the DescribeReservedNodeOfferings
+	// API to obtain the available reserved node offerings.
+	SourceReservedNode *ReservedNode `type:"structure"`
+
+	// The target reserved-node count.
+	TargetReservedNodeCount *int64 `type:"integer"`
+
+	// Describes a reserved node offering.
+	TargetReservedNodeOffering *ReservedNodeOffering `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReservedNodeConfigurationOption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReservedNodeConfigurationOption) GoString() string {
+	return s.String()
+}
+
+// SetSourceReservedNode sets the SourceReservedNode field's value.
+func (s *ReservedNodeConfigurationOption) SetSourceReservedNode(v *ReservedNode) *ReservedNodeConfigurationOption {
+	s.SourceReservedNode = v
+	return s
+}
+
+// SetTargetReservedNodeCount sets the TargetReservedNodeCount field's value.
+func (s *ReservedNodeConfigurationOption) SetTargetReservedNodeCount(v int64) *ReservedNodeConfigurationOption {
+	s.TargetReservedNodeCount = &v
+	return s
+}
+
+// SetTargetReservedNodeOffering sets the TargetReservedNodeOffering field's value.
+func (s *ReservedNodeConfigurationOption) SetTargetReservedNodeOffering(v *ReservedNodeOffering) *ReservedNodeConfigurationOption {
+	s.TargetReservedNodeOffering = v
+	return s
+}
+
+// Reserved-node status details, such as the source reserved-node identifier,
+// the target reserved-node identifier, the node type, the node count, and other
+// details.
+type ReservedNodeExchangeStatus struct {
+	_ struct{} `type:"structure"`
+
+	// A date and time that indicate when the reserved-node exchange was requested.
+	RequestTime *time.Time `type:"timestamp"`
+
+	// The identifier of the reserved-node exchange request.
+	ReservedNodeExchangeRequestId *string `type:"string"`
+
+	// The source reserved-node count in the cluster.
+	SourceReservedNodeCount *int64 `type:"integer"`
+
+	// The identifier of the source reserved node.
+	SourceReservedNodeId *string `type:"string"`
+
+	// The source reserved-node type, for example ds2.xlarge.
+	SourceReservedNodeType *string `type:"string"`
+
+	// The status of the reserved-node exchange request. Statuses include in-progress
+	// and requested.
+	Status *string `type:"string" enum:"ReservedNodeExchangeStatusType"`
+
+	// The count of target reserved nodes in the cluster.
+	TargetReservedNodeCount *int64 `type:"integer"`
+
+	// The identifier of the target reserved node offering.
+	TargetReservedNodeOfferingId *string `type:"string"`
+
+	// The node type of the target reserved node, for example ra3.4xlarge.
+	TargetReservedNodeType *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReservedNodeExchangeStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReservedNodeExchangeStatus) GoString() string {
+	return s.String()
+}
+
+// SetRequestTime sets the RequestTime field's value.
+func (s *ReservedNodeExchangeStatus) SetRequestTime(v time.Time) *ReservedNodeExchangeStatus {
+	s.RequestTime = &v
+	return s
+}
+
+// SetReservedNodeExchangeRequestId sets the ReservedNodeExchangeRequestId field's value.
+func (s *ReservedNodeExchangeStatus) SetReservedNodeExchangeRequestId(v string) *ReservedNodeExchangeStatus {
+	s.ReservedNodeExchangeRequestId = &v
+	return s
+}
+
+// SetSourceReservedNodeCount sets the SourceReservedNodeCount field's value.
+func (s *ReservedNodeExchangeStatus) SetSourceReservedNodeCount(v int64) *ReservedNodeExchangeStatus {
+	s.SourceReservedNodeCount = &v
+	return s
+}
+
+// SetSourceReservedNodeId sets the SourceReservedNodeId field's value.
+func (s *ReservedNodeExchangeStatus) SetSourceReservedNodeId(v string) *ReservedNodeExchangeStatus {
+	s.SourceReservedNodeId = &v
+	return s
+}
+
+// SetSourceReservedNodeType sets the SourceReservedNodeType field's value.
+func (s *ReservedNodeExchangeStatus) SetSourceReservedNodeType(v string) *ReservedNodeExchangeStatus {
+	s.SourceReservedNodeType = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ReservedNodeExchangeStatus) SetStatus(v string) *ReservedNodeExchangeStatus {
+	s.Status = &v
+	return s
+}
+
+// SetTargetReservedNodeCount sets the TargetReservedNodeCount field's value.
+func (s *ReservedNodeExchangeStatus) SetTargetReservedNodeCount(v int64) *ReservedNodeExchangeStatus {
+	s.TargetReservedNodeCount = &v
+	return s
+}
+
+// SetTargetReservedNodeOfferingId sets the TargetReservedNodeOfferingId field's value.
+func (s *ReservedNodeExchangeStatus) SetTargetReservedNodeOfferingId(v string) *ReservedNodeExchangeStatus {
+	s.TargetReservedNodeOfferingId = &v
+	return s
+}
+
+// SetTargetReservedNodeType sets the TargetReservedNodeType field's value.
+func (s *ReservedNodeExchangeStatus) SetTargetReservedNodeType(v string) *ReservedNodeExchangeStatus {
+	s.TargetReservedNodeType = &v
 	return s
 }
 
@@ -29992,6 +31351,12 @@ type ResizeClusterInput struct {
 	// The new number of nodes for the cluster. If not specified, the cluster's
 	// current number of nodes is used.
 	NumberOfNodes *int64 `type:"integer"`
+
+	// The identifier of the reserved node.
+	ReservedNodeId *string `type:"string"`
+
+	// The identifier of the target reserved node offering.
+	TargetReservedNodeOfferingId *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -30055,6 +31420,18 @@ func (s *ResizeClusterInput) SetNumberOfNodes(v int64) *ResizeClusterInput {
 	return s
 }
 
+// SetReservedNodeId sets the ReservedNodeId field's value.
+func (s *ResizeClusterInput) SetReservedNodeId(v string) *ResizeClusterInput {
+	s.ReservedNodeId = &v
+	return s
+}
+
+// SetTargetReservedNodeOfferingId sets the TargetReservedNodeOfferingId field's value.
+func (s *ResizeClusterInput) SetTargetReservedNodeOfferingId(v string) *ResizeClusterInput {
+	s.TargetReservedNodeOfferingId = &v
+	return s
+}
+
 // Describes a resize cluster operation. For example, a scheduled action to
 // run the ResizeCluster API operation.
 type ResizeClusterMessage struct {
@@ -30080,6 +31457,12 @@ type ResizeClusterMessage struct {
 	// The new number of nodes for the cluster. If not specified, the cluster's
 	// current number of nodes is used.
 	NumberOfNodes *int64 `type:"integer"`
+
+	// The identifier of the reserved node.
+	ReservedNodeId *string `type:"string"`
+
+	// The identifier of the target reserved node offering.
+	TargetReservedNodeOfferingId *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -30140,6 +31523,18 @@ func (s *ResizeClusterMessage) SetNodeType(v string) *ResizeClusterMessage {
 // SetNumberOfNodes sets the NumberOfNodes field's value.
 func (s *ResizeClusterMessage) SetNumberOfNodes(v int64) *ResizeClusterMessage {
 	s.NumberOfNodes = &v
+	return s
+}
+
+// SetReservedNodeId sets the ReservedNodeId field's value.
+func (s *ResizeClusterMessage) SetReservedNodeId(v string) *ResizeClusterMessage {
+	s.ReservedNodeId = &v
+	return s
+}
+
+// SetTargetReservedNodeOfferingId sets the TargetReservedNodeOfferingId field's value.
+func (s *ResizeClusterMessage) SetTargetReservedNodeOfferingId(v string) *ResizeClusterMessage {
+	s.TargetReservedNodeOfferingId = &v
 	return s
 }
 
@@ -30307,8 +31702,19 @@ type RestoreFromClusterSnapshotInput struct {
 	// must provide subnet group name where you want the cluster restored.
 	ClusterSubnetGroupName *string `type:"string"`
 
-	// The elastic IP (EIP) address for the cluster.
+	// The Amazon Resource Name (ARN) for the IAM role that was set as default for
+	// the cluster when the cluster was last modified while it was restored from
+	// a snapshot.
+	DefaultIamRoleArn *string `type:"string"`
+
+	// The elastic IP (EIP) address for the cluster. You don't have to specify the
+	// EIP for a publicly accessible cluster with AvailabilityZoneRelocation turned
+	// on.
 	ElasticIp *string `type:"string"`
+
+	// Enables support for restoring an unencrypted snapshot to a cluster encrypted
+	// with Key Management Service (KMS) and a customer managed key.
+	Encrypted *bool `type:"boolean"`
 
 	// An option that specifies whether to create the cluster with enhanced VPC
 	// routing enabled. To create a cluster that uses enhanced VPC routing, the
@@ -30331,14 +31737,20 @@ type RestoreFromClusterSnapshotInput struct {
 
 	// A list of Identity and Access Management (IAM) roles that can be used by
 	// the cluster to access other Amazon Web Services services. You must supply
-	// the IAM roles in their Amazon Resource Name (ARN) format. You can supply
-	// up to 10 IAM roles in a single request.
+	// the IAM roles in their Amazon Resource Name (ARN) format.
 	//
-	// A cluster can have up to 10 IAM roles associated at any time.
+	// The maximum number of IAM roles that you can associate is subject to a quota.
+	// For more information, go to Quotas and limits (https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html)
+	// in the Amazon Redshift Cluster Management Guide.
 	IamRoles []*string `locationNameList:"IamRoleArn" type:"list"`
 
-	// The Key Management Service (KMS) key ID of the encryption key that you want
-	// to use to encrypt data in the cluster that you restore from a shared snapshot.
+	// The Key Management Service (KMS) key ID of the encryption key that encrypts
+	// data in the cluster restored from a shared snapshot. You can also provide
+	// the key ID when you restore from an unencrypted snapshot to an encrypted
+	// cluster in the same account. Additionally, you can specify a new KMS key
+	// ID when you restore from an encrypted snapshot in the same account in order
+	// to change it. In that case, the restored cluster is encrypted with the new
+	// KMS key ID.
 	KmsKeyId *string `type:"string"`
 
 	// The name of the maintenance track for the restored cluster. When you take
@@ -30404,6 +31816,13 @@ type RestoreFromClusterSnapshotInput struct {
 	// If true, the cluster can be accessed from a public network.
 	PubliclyAccessible *bool `type:"boolean"`
 
+	// The identifier of the target reserved node offering.
+	ReservedNodeId *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the snapshot associated with the message
+	// to restore from a cluster.
+	SnapshotArn *string `type:"string"`
+
 	// The name of the cluster the source snapshot was created from. This parameter
 	// is required if your IAM user has a policy containing a snapshot resource
 	// element that specifies anything other than * for the cluster name.
@@ -30413,12 +31832,13 @@ type RestoreFromClusterSnapshotInput struct {
 	// isn't case sensitive.
 	//
 	// Example: my-snapshot-id
-	//
-	// SnapshotIdentifier is a required field
-	SnapshotIdentifier *string `type:"string" required:"true"`
+	SnapshotIdentifier *string `type:"string"`
 
 	// A unique identifier for the snapshot schedule.
 	SnapshotScheduleIdentifier *string `type:"string"`
+
+	// The identifier of the target reserved node offering.
+	TargetReservedNodeOfferingId *string `type:"string"`
 
 	// A list of Virtual Private Cloud (VPC) security groups to be associated with
 	// the cluster.
@@ -30452,9 +31872,6 @@ func (s *RestoreFromClusterSnapshotInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RestoreFromClusterSnapshotInput"}
 	if s.ClusterIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClusterIdentifier"))
-	}
-	if s.SnapshotIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("SnapshotIdentifier"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -30523,9 +31940,21 @@ func (s *RestoreFromClusterSnapshotInput) SetClusterSubnetGroupName(v string) *R
 	return s
 }
 
+// SetDefaultIamRoleArn sets the DefaultIamRoleArn field's value.
+func (s *RestoreFromClusterSnapshotInput) SetDefaultIamRoleArn(v string) *RestoreFromClusterSnapshotInput {
+	s.DefaultIamRoleArn = &v
+	return s
+}
+
 // SetElasticIp sets the ElasticIp field's value.
 func (s *RestoreFromClusterSnapshotInput) SetElasticIp(v string) *RestoreFromClusterSnapshotInput {
 	s.ElasticIp = &v
+	return s
+}
+
+// SetEncrypted sets the Encrypted field's value.
+func (s *RestoreFromClusterSnapshotInput) SetEncrypted(v bool) *RestoreFromClusterSnapshotInput {
+	s.Encrypted = &v
 	return s
 }
 
@@ -30607,6 +32036,18 @@ func (s *RestoreFromClusterSnapshotInput) SetPubliclyAccessible(v bool) *Restore
 	return s
 }
 
+// SetReservedNodeId sets the ReservedNodeId field's value.
+func (s *RestoreFromClusterSnapshotInput) SetReservedNodeId(v string) *RestoreFromClusterSnapshotInput {
+	s.ReservedNodeId = &v
+	return s
+}
+
+// SetSnapshotArn sets the SnapshotArn field's value.
+func (s *RestoreFromClusterSnapshotInput) SetSnapshotArn(v string) *RestoreFromClusterSnapshotInput {
+	s.SnapshotArn = &v
+	return s
+}
+
 // SetSnapshotClusterIdentifier sets the SnapshotClusterIdentifier field's value.
 func (s *RestoreFromClusterSnapshotInput) SetSnapshotClusterIdentifier(v string) *RestoreFromClusterSnapshotInput {
 	s.SnapshotClusterIdentifier = &v
@@ -30622,6 +32063,12 @@ func (s *RestoreFromClusterSnapshotInput) SetSnapshotIdentifier(v string) *Resto
 // SetSnapshotScheduleIdentifier sets the SnapshotScheduleIdentifier field's value.
 func (s *RestoreFromClusterSnapshotInput) SetSnapshotScheduleIdentifier(v string) *RestoreFromClusterSnapshotInput {
 	s.SnapshotScheduleIdentifier = &v
+	return s
+}
+
+// SetTargetReservedNodeOfferingId sets the TargetReservedNodeOfferingId field's value.
+func (s *RestoreFromClusterSnapshotInput) SetTargetReservedNodeOfferingId(v string) *RestoreFromClusterSnapshotInput {
+	s.TargetReservedNodeOfferingId = &v
 	return s
 }
 
@@ -31389,15 +32836,17 @@ type RevokeSnapshotAccessInput struct {
 	// AccountWithRestoreAccess is a required field
 	AccountWithRestoreAccess *string `type:"string" required:"true"`
 
+	// The Amazon Resource Name (ARN) of the snapshot associated with the message
+	// to revoke access.
+	SnapshotArn *string `type:"string"`
+
 	// The identifier of the cluster the snapshot was created from. This parameter
 	// is required if your IAM user has a policy containing a snapshot resource
 	// element that specifies anything other than * for the cluster name.
 	SnapshotClusterIdentifier *string `type:"string"`
 
 	// The identifier of the snapshot that the account can no longer access.
-	//
-	// SnapshotIdentifier is a required field
-	SnapshotIdentifier *string `type:"string" required:"true"`
+	SnapshotIdentifier *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -31424,9 +32873,6 @@ func (s *RevokeSnapshotAccessInput) Validate() error {
 	if s.AccountWithRestoreAccess == nil {
 		invalidParams.Add(request.NewErrParamRequired("AccountWithRestoreAccess"))
 	}
-	if s.SnapshotIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("SnapshotIdentifier"))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -31437,6 +32883,12 @@ func (s *RevokeSnapshotAccessInput) Validate() error {
 // SetAccountWithRestoreAccess sets the AccountWithRestoreAccess field's value.
 func (s *RevokeSnapshotAccessInput) SetAccountWithRestoreAccess(v string) *RevokeSnapshotAccessInput {
 	s.AccountWithRestoreAccess = &v
+	return s
+}
+
+// SetSnapshotArn sets the SnapshotArn field's value.
+func (s *RevokeSnapshotAccessInput) SetSnapshotArn(v string) *RevokeSnapshotAccessInput {
+	s.SnapshotArn = &v
 	return s
 }
 
@@ -32189,8 +33641,8 @@ func (s *Snapshot) SetVpcId(v string) *Snapshot {
 }
 
 // The snapshot copy grant that grants Amazon Redshift permission to encrypt
-// copied snapshots with the specified customer master key (CMK) from Amazon
-// Web Services KMS in the destination region.
+// copied snapshots with the specified encrypted symmetric key from Amazon Web
+// Services KMS in the destination region.
 //
 // For more information about managing snapshot copy grants, go to Amazon Redshift
 // Database Encryption (https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html)
@@ -32198,7 +33650,7 @@ func (s *Snapshot) SetVpcId(v string) *Snapshot {
 type SnapshotCopyGrant struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the customer master key (CMK) in Amazon Web Services
+	// The unique identifier of the encrypted symmetric key in Amazon Web Services
 	// KMS to which Amazon Redshift is granted permission.
 	KmsKeyId *string `type:"string"`
 
@@ -33386,6 +34838,22 @@ func DataShareStatusForProducer_Values() []string {
 }
 
 const (
+	// LogDestinationTypeS3 is a LogDestinationType enum value
+	LogDestinationTypeS3 = "s3"
+
+	// LogDestinationTypeCloudwatch is a LogDestinationType enum value
+	LogDestinationTypeCloudwatch = "cloudwatch"
+)
+
+// LogDestinationType_Values returns all elements of the LogDestinationType enum
+func LogDestinationType_Values() []string {
+	return []string{
+		LogDestinationTypeS3,
+		LogDestinationTypeCloudwatch,
+	}
+}
+
+const (
 	// ModeStandard is a Mode enum value
 	ModeStandard = "standard"
 
@@ -33498,6 +34966,54 @@ func PartnerIntegrationStatus_Values() []string {
 		PartnerIntegrationStatusInactive,
 		PartnerIntegrationStatusRuntimeFailure,
 		PartnerIntegrationStatusConnectionFailure,
+	}
+}
+
+const (
+	// ReservedNodeExchangeActionTypeRestoreCluster is a ReservedNodeExchangeActionType enum value
+	ReservedNodeExchangeActionTypeRestoreCluster = "restore-cluster"
+
+	// ReservedNodeExchangeActionTypeResizeCluster is a ReservedNodeExchangeActionType enum value
+	ReservedNodeExchangeActionTypeResizeCluster = "resize-cluster"
+)
+
+// ReservedNodeExchangeActionType_Values returns all elements of the ReservedNodeExchangeActionType enum
+func ReservedNodeExchangeActionType_Values() []string {
+	return []string{
+		ReservedNodeExchangeActionTypeRestoreCluster,
+		ReservedNodeExchangeActionTypeResizeCluster,
+	}
+}
+
+const (
+	// ReservedNodeExchangeStatusTypeRequested is a ReservedNodeExchangeStatusType enum value
+	ReservedNodeExchangeStatusTypeRequested = "REQUESTED"
+
+	// ReservedNodeExchangeStatusTypePending is a ReservedNodeExchangeStatusType enum value
+	ReservedNodeExchangeStatusTypePending = "PENDING"
+
+	// ReservedNodeExchangeStatusTypeInProgress is a ReservedNodeExchangeStatusType enum value
+	ReservedNodeExchangeStatusTypeInProgress = "IN_PROGRESS"
+
+	// ReservedNodeExchangeStatusTypeRetrying is a ReservedNodeExchangeStatusType enum value
+	ReservedNodeExchangeStatusTypeRetrying = "RETRYING"
+
+	// ReservedNodeExchangeStatusTypeSucceeded is a ReservedNodeExchangeStatusType enum value
+	ReservedNodeExchangeStatusTypeSucceeded = "SUCCEEDED"
+
+	// ReservedNodeExchangeStatusTypeFailed is a ReservedNodeExchangeStatusType enum value
+	ReservedNodeExchangeStatusTypeFailed = "FAILED"
+)
+
+// ReservedNodeExchangeStatusType_Values returns all elements of the ReservedNodeExchangeStatusType enum
+func ReservedNodeExchangeStatusType_Values() []string {
+	return []string{
+		ReservedNodeExchangeStatusTypeRequested,
+		ReservedNodeExchangeStatusTypePending,
+		ReservedNodeExchangeStatusTypeInProgress,
+		ReservedNodeExchangeStatusTypeRetrying,
+		ReservedNodeExchangeStatusTypeSucceeded,
+		ReservedNodeExchangeStatusTypeFailed,
 	}
 }
 
@@ -33707,6 +35223,9 @@ const (
 
 	// UsageLimitFeatureTypeConcurrencyScaling is a UsageLimitFeatureType enum value
 	UsageLimitFeatureTypeConcurrencyScaling = "concurrency-scaling"
+
+	// UsageLimitFeatureTypeCrossRegionDatasharing is a UsageLimitFeatureType enum value
+	UsageLimitFeatureTypeCrossRegionDatasharing = "cross-region-datasharing"
 )
 
 // UsageLimitFeatureType_Values returns all elements of the UsageLimitFeatureType enum
@@ -33714,6 +35233,7 @@ func UsageLimitFeatureType_Values() []string {
 	return []string{
 		UsageLimitFeatureTypeSpectrum,
 		UsageLimitFeatureTypeConcurrencyScaling,
+		UsageLimitFeatureTypeCrossRegionDatasharing,
 	}
 }
 

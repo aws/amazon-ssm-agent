@@ -37,13 +37,19 @@ func (fileUtility) WriteAllText(filePath string, text string) (err error) {
 var vault iiVault = &iiFsVault{}
 
 type iiVault interface {
-	Retrieve(key string) (data []byte, err error)
-	Store(key string, data []byte) (err error)
-	IsManifestExists() bool
+	Retrieve(manifestFileNamePrefix string, key string) (data []byte, err error)
+	Store(manifestFileNamePrefix string, key string, data []byte) (err error)
+	IsManifestExists(manifestFileNamePrefix string) bool
 }
 
 type iiFsVault struct{}
 
-func (iiFsVault) Retrieve(key string) ([]byte, error) { return fsvault.Retrieve(key) }
-func (iiFsVault) Store(key string, data []byte) error { return fsvault.Store(key, data) }
-func (iiFsVault) IsManifestExists() bool              { return fsvault.IsManifestExists() }
+func (iiFsVault) Retrieve(manifestFileNamePrefix string, key string) ([]byte, error) {
+	return fsvault.Retrieve(manifestFileNamePrefix, key)
+}
+func (iiFsVault) Store(manifestFileNamePrefix string, key string, data []byte) error {
+	return fsvault.Store(manifestFileNamePrefix, key, data)
+}
+func (iiFsVault) IsManifestExists(manifestFileNamePrefix string) bool {
+	return fsvault.IsManifestExists(manifestFileNamePrefix)
+}

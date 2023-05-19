@@ -24,7 +24,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -53,7 +55,7 @@ var upgrader = websocket.Upgrader{
 }
 
 var dialerInput = &websocket.Dialer{
-	TLSClientConfig: network.GetDefaultTLSConfig(log.NewMockLog(), appconfig.DefaultConfig()),
+	TLSClientConfig: network.GetDefaultTLSConfig(logmocks.NewMockLog(), appconfig.DefaultConfig()),
 	Proxy:           http.ProxyFromEnvironment,
 	WriteBufferSize: mgsConfig.ControlChannelWriteBufferSizeLimit,
 }
@@ -70,7 +72,7 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 		mt, p, err := conn.ReadMessage()
 
 		if err != nil {
-			log.DefaultLogger().Errorf("error: %v", err)
+			logger.DefaultLogger().Errorf("error: %v", err)
 			return
 		}
 
@@ -85,7 +87,7 @@ func TestInitialize(t *testing.T) {
 	}
 
 	webControlChannel := &WebSocketChannel{}
-	webControlChannel.Initialize(context.NewMockDefault(), channelId, mgsConfig.ControlChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
+	webControlChannel.Initialize(contextmocks.NewMockDefault(), channelId, mgsConfig.ControlChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
 
 	assert.Equal(t, "wss://"+mgsHost+"/v1/control-channel/"+channelId+"?role=subscribe&stream=input", webControlChannel.Url)
 	assert.Equal(t, region, webControlChannel.Region)
@@ -93,7 +95,7 @@ func TestInitialize(t *testing.T) {
 	assert.Equal(t, signer, webControlChannel.Signer)
 
 	webDataChannel := &WebSocketChannel{}
-	webDataChannel.Initialize(context.NewMockDefault(), sessionId, mgsConfig.DataChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
+	webDataChannel.Initialize(contextmocks.NewMockDefault(), sessionId, mgsConfig.DataChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
 
 	assert.Equal(t, "wss://"+mgsHost+"/v1/data-channel/"+sessionId+"?role="+role, webDataChannel.Url)
 	assert.Equal(t, region, webDataChannel.Region)
@@ -122,11 +124,11 @@ func TestOpenCloseWebSocketChannel(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	websocketchannel := WebSocketChannel{
 		Url:     u.String(),
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 
 	err := websocketchannel.Open(log, nil)
@@ -145,11 +147,11 @@ func TestOpenCloseWebSocketChannelWithWriteBuffer(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	websocketchannel := WebSocketChannel{
 		Url:     u.String(),
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 
 	err := websocketchannel.Open(log, dialerInput)
@@ -168,7 +170,7 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -183,7 +185,7 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
-		Context:   context.NewMockDefault(),
+		Context:   contextmocks.NewMockDefault(),
 	}
 
 	// Open the websocket connection
@@ -206,7 +208,7 @@ func TestReadWriteBinaryToWebSocketChannel(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -221,7 +223,7 @@ func TestReadWriteBinaryToWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
-		Context:   context.NewMockDefault(),
+		Context:   contextmocks.NewMockDefault(),
 	}
 
 	// Open the websocket connection
@@ -244,7 +246,7 @@ func TestReadWriteBinaryToWebSocketChannelWithWriteBuffer(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -259,7 +261,7 @@ func TestReadWriteBinaryToWebSocketChannelWithWriteBuffer(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
-		Context:   context.NewMockDefault(),
+		Context:   contextmocks.NewMockDefault(),
 	}
 
 	// Open the websocket connection
@@ -282,7 +284,7 @@ func TestMultipleReadWriteWebSocketChannel(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	read1 := make(chan bool)
 	read2 := make(chan bool)
@@ -301,7 +303,7 @@ func TestMultipleReadWriteWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
-		Context:   context.NewMockDefault(),
+		Context:   contextmocks.NewMockDefault(),
 	}
 
 	// Open the websocket connection

@@ -51,7 +51,7 @@ var (
 	osStatFn = os.Stat
 )
 
-//TODO add unittest
+// TODO add unittest
 type fileWatcherChannel struct {
 	logger        log.T
 	path          string
@@ -146,10 +146,9 @@ func createIfNotExist(dir string) (err error) {
 }
 
 /*
-	drop a file in the destination path with the file name as sequence id
-	the file is first named as tmp, then quickly renamed to guarantee atomicity
-	sequence id format: {mode}-{command start time}-{counter} , squence id is guaranteed to be ascending order
-
+drop a file in the destination path with the file name as sequence id
+the file is first named as tmp, then quickly renamed to guarantee atomicity
+sequence id format: {mode}-{command start time}-{counter} , squence id is guaranteed to be ascending order
 */
 func (ch *fileWatcherChannel) Send(rawJson string) error {
 	ch.mu.Lock()
@@ -277,8 +276,8 @@ func (ch *fileWatcherChannel) closeIfNotClosed() bool {
 	return false
 }
 
-//parse the counter out of the sequence id, return -1 if parsing fails
-//counter is defined as the padding last element of - separated integer
+// parse the counter out of the sequence id, return -1 if parsing fails
+// counter is defined as the padding last element of - separated integer
 func parseSequenceCounter(pathname string) int {
 	name := filepath.Base(pathname)
 	parts := strings.Split(name, "-")
@@ -289,8 +288,8 @@ func parseSequenceCounter(pathname string) int {
 	return int(counter)
 }
 
-//read all messages in the consuming dir, with order guarantees -- ioutil.ReadDir() sort by name, and name is the lexicographical ascending sequence id.
-//filter out its own sent messages and tmp messages
+// read all messages in the consuming dir, with order guarantees -- ioutil.ReadDir() sort by name, and name is the lexicographical ascending sequence id.
+// filter out its own sent messages and tmp messages
 func (ch *fileWatcherChannel) consumeAll() {
 	ch.logger.Debug("consuming all the messages under: ", ch.path)
 	fileInfos, _ := ioutil.ReadDir(ch.path)
@@ -306,7 +305,7 @@ func (ch *fileWatcherChannel) consumeAll() {
 	}
 }
 
-//TODO add unittest
+// TODO add unittest
 func (ch *fileWatcherChannel) isReadable(filename string) bool {
 	matched, err := regexp.MatchString("[a-zA-Z]+-[0-9]+-[0-9]+", filename)
 	if !matched || err != nil {
@@ -315,7 +314,7 @@ func (ch *fileWatcherChannel) isReadable(filename string) bool {
 	return !strings.Contains(filename, string(ch.mode)) && !strings.Contains(filename, "tmp")
 }
 
-//read and remove a given file
+// read and remove a given file
 func (ch *fileWatcherChannel) consume(filepath string) {
 	log := ch.logger
 	log.Debugf("consuming message under path: %v", filepath)

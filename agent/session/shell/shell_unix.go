@@ -164,19 +164,35 @@ func StartCommandExecutor(
 	}
 
 	if appconfig.PluginNameNonInteractiveCommands == plugin.name {
-		outputPath := filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)
-		outputWriter, err := os.OpenFile(outputPath, appconfig.FileFlagsCreateOrAppendReadWrite, appconfig.ReadWriteAccess)
-		if err != nil {
-			return fmt.Errorf("Failed to open file for writing command output. error: %s\n", err)
+		if plugin.separateOutput {
+			//Open pipeline for reading only
+			stdoutPipe, err := cmd.StdoutPipe()
+			if err != nil {
+				return fmt.Errorf("Failed to create command output pipe, error: %s\n", err)
+			}
+			errorPipe, err := cmd.StderrPipe()
+			if err != nil {
+				return fmt.Errorf("Failed to create command err pipe, error: %s\n", err)
+			}
+			plugin.stdin = nil
+			plugin.stdout = nil
+			plugin.stderrPipe = errorPipe
+			plugin.stdoutPipe = stdoutPipe
+		} else {
+			outputPath := filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)
+			outputWriter, err := os.OpenFile(outputPath, appconfig.FileFlagsCreateOrAppendReadWrite, appconfig.ReadWriteAccess)
+			if err != nil {
+				return fmt.Errorf("Failed to open file for writing command output. error: %s\n", err)
+			}
+			outputReader, err := os.Open(outputPath)
+			if err != nil {
+				return fmt.Errorf("Failed to read command output from file %s. error: %s\n", outputPath, err)
+			}
+			cmd.Stdout = outputWriter
+			cmd.Stderr = outputWriter
+			plugin.stdin = nil
+			plugin.stdout = outputReader
 		}
-		outputReader, err := os.Open(outputPath)
-		if err != nil {
-			return fmt.Errorf("Failed to read command output from file %s. error: %s\n", outputPath, err)
-		}
-		cmd.Stdout = outputWriter
-		cmd.Stderr = outputWriter
-		plugin.stdin = nil
-		plugin.stdout = outputReader
 	} else {
 		ptyFile, err = pty.Start(cmd)
 		if err != nil {
@@ -192,7 +208,7 @@ func StartCommandExecutor(
 	return nil
 }
 
-//stop closes pty file.
+// stop closes pty file.
 func (p *ShellPlugin) stop(log log.T) (err error) {
 	if ptyFile == nil {
 		return nil
@@ -206,7 +222,7 @@ func (p *ShellPlugin) stop(log log.T) (err error) {
 	return nil
 }
 
-//SetSize sets size of console terminal window.
+// SetSize sets size of console terminal window.
 func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 	if ptyFile == nil {
 		return nil
@@ -397,7 +413,7 @@ var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *Shel
 	}
 }
 
-//cleanupLogFile prepares temporary files for the cleanup
+// cleanupLogFile prepares temporary files for the cleanup
 func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
 	// remove file property so deletion of the file can be done successfully
 	u := &utility.SessionUtil{}

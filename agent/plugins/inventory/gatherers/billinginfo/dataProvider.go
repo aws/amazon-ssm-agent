@@ -17,18 +17,18 @@ package billinginfo
 import (
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
-	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 )
 
 var isOnPremInstance = identity.IsOnPremInstance
 
-//decouples for easy testability
+// decouples for easy testability
 var queryIdentityDocument = queryInstanceIdentityDocument
 
 // CollectBillingInfoData collects billing information for linux
@@ -56,14 +56,14 @@ func CollectBillingInfoData(context context.T) (data []model.BillingInfoData) {
 
 }
 
-//Collects relevant fields (marketplaceProductCodes, billingProducts) from GetInstanceIdentityDocument output.
-//Here is a sample GetInstanceIdentityDocument output (some lines omitted):
-//{
-//"marketplaceProductCodes" : [],
-//"version" : "2017-09-30",
-//"instanceType" : "t2.micro",
-//"billingProducts" : [ "bp-878787", "bp-23478" ]
-//}
+// Collects relevant fields (marketplaceProductCodes, billingProducts) from GetInstanceIdentityDocument output.
+// Here is a sample GetInstanceIdentityDocument output (some lines omitted):
+// {
+// "marketplaceProductCodes" : [],
+// "version" : "2017-09-30",
+// "instanceType" : "t2.micro",
+// "billingProducts" : [ "bp-878787", "bp-23478" ]
+// }
 func queryInstanceIdentityDocument() (ec2metadata.EC2InstanceIdentityDocument, error) {
 	ec2MetadataService := ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(3)))
 	return ec2MetadataService.GetInstanceIdentityDocument()

@@ -2137,7 +2137,7 @@ func (s *CancelSigningProfileInput) SetProfileName(v string) *CancelSigningProfi
 }
 
 type CancelSigningProfileOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -2511,7 +2511,7 @@ type EncryptionAlgorithmOptions struct {
 	// job.
 	//
 	// AllowedValues is a required field
-	AllowedValues []*string `locationName:"allowedValues" type:"list" required:"true"`
+	AllowedValues []*string `locationName:"allowedValues" type:"list" required:"true" enum:"EncryptionAlgorithm"`
 
 	// The default encryption algorithm that is used by a code signing job.
 	//
@@ -2921,7 +2921,7 @@ type HashAlgorithmOptions struct {
 	// The set of accepted hash algorithms allowed in a code signing job.
 	//
 	// AllowedValues is a required field
-	AllowedValues []*string `locationName:"allowedValues" type:"list" required:"true"`
+	AllowedValues []*string `locationName:"allowedValues" type:"list" required:"true" enum:"HashAlgorithm"`
 
 	// The default hash algorithm that is used in a code signing job.
 	//
@@ -3454,7 +3454,7 @@ type ListSigningProfilesInput struct {
 
 	// Filters results to return only signing jobs with statuses in the specified
 	// list.
-	Statuses []*string `location:"querystring" locationName:"statuses" type:"list"`
+	Statuses []*string `location:"querystring" locationName:"statuses" type:"list" enum:"SigningProfileStatus"`
 }
 
 // String returns the string representation.
@@ -4190,7 +4190,7 @@ func (s *RevokeSignatureInput) SetReason(v string) *RevokeSignatureInput {
 }
 
 type RevokeSignatureOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4311,7 +4311,7 @@ func (s *RevokeSigningProfileInput) SetReason(v string) *RevokeSigningProfileInp
 }
 
 type RevokeSigningProfileOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4732,7 +4732,7 @@ type SigningImageFormat struct {
 	// The supported formats of a code signing image.
 	//
 	// SupportedFormats is a required field
-	SupportedFormats []*string `locationName:"supportedFormats" type:"list" required:"true"`
+	SupportedFormats []*string `locationName:"supportedFormats" type:"list" required:"true" enum:"ImageFormat"`
 }
 
 // String returns the string representation.
@@ -5601,7 +5601,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5827,7 +5827,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.

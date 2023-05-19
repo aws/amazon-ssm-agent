@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	context "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
@@ -35,7 +36,7 @@ type SelfUpdateTestSuite struct {
 	suite.Suite
 	contextMock     *context.ICoreAgentContext
 	identityMock    *identityMocks.IAgentIdentity
-	logMock         *log.Mock
+	logMock         *logmocks.Mock
 	appconfigMock   *appconfig.SsmagentConfig
 	selfUpdater     *SelfUpdate
 	platformNameMap map[string]string
@@ -43,7 +44,7 @@ type SelfUpdateTestSuite struct {
 
 // SetupTest will initialized the object for each test case before test function execution
 func (suite *SelfUpdateTestSuite) SetupTest() {
-	suite.logMock = log.NewMockLog()
+	suite.logMock = logmocks.NewMockLog()
 	suite.appconfigMock = &appconfig.SsmagentConfig{}
 	suite.contextMock = &context.ICoreAgentContext{}
 	suite.identityMock = &identityMocks.IAgentIdentity{}
@@ -167,7 +168,7 @@ func (suite *SelfUpdateTestSuite) TestFileName() {
 
 	fileName, err := suite.selfUpdater.getUpdaterFileName(suite.logMock, "amd64", updateconstants.CompressFormat)
 	assert.Nil(suite.T(), err)
-	assert.Equal(suite.T(), "amazon-ssm-agent-updater-linux-amd64.tar.gz", fileName)
+	assert.Equal(suite.T(), "amazon-ssm-agent-updater-linux-amd64."+updateconstants.CompressFormat, fileName)
 }
 
 func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
@@ -179,6 +180,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
 		os.RemoveAll(lockfilePath)
 	}()
 
+	suite.identityMock.On("Region").Return("us-west-2", nil)
+	suite.identityMock.On("InstanceID").Return("i-abc123", nil)
 	mockSelfUpdateObj := SelfUpdate{context: suite.contextMock}
 
 	err = mockSelfUpdateObj.updateFromS3()
@@ -186,8 +189,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
 }
 
 func (suite *SelfUpdateTestSuite) TestLockFileWithError() {
-	suite.identityMock.On("InstanceID").Return("i-123", nil).Once()
-	suite.identityMock.On("Region").Return("us-west-2", nil).Once()
+	suite.identityMock.On("InstanceID").Return("i-123", nil).Twice()
+	suite.identityMock.On("Region").Return("us-west-2", nil).Twice()
 	workingDir, _ := os.Getwd()
 	lockfilePath := filepath.Join(workingDir, "lockDir")
 	lockFileName = filepath.Join(lockfilePath, "test.lock")
@@ -210,6 +213,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileWithError() {
 	}
 	err = mockSelfUpdateObj.updateFromS3()
 	assert.Nil(suite.T(), err)
+
+	suite.identityMock.AssertExpectations(suite.T())
 }
 
 func (suite *SelfUpdateTestSuite) TestLockWithMultipleUpdates() {
@@ -236,7 +241,7 @@ func (suite *SelfUpdateTestSuite) TestLockWithMultipleUpdates() {
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSelfUpdateTestSuite(t *testing.T) {
 	suite.Run(t, new(SelfUpdateTestSuite))
 }

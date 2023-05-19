@@ -3574,7 +3574,7 @@ func (s *DeleteGroupInput) SetGroupName(v string) *DeleteGroupInput {
 }
 
 type DeleteGroupOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4963,7 +4963,7 @@ type GetInsightSummariesInput struct {
 	StartTime *time.Time `type:"timestamp" required:"true"`
 
 	// The list of insight states.
-	States []*string `type:"list"`
+	States []*string `type:"list" enum:"InsightState"`
 }
 
 // String returns the string representation.
@@ -6203,7 +6203,7 @@ type Insight struct {
 	_ struct{} `type:"structure"`
 
 	// The categories that label and describe the type of insight.
-	Categories []*string `type:"list"`
+	Categories []*string `type:"list" enum:"InsightCategory"`
 
 	// The impact statistics of the client side service. This includes the number
 	// of requests to the client service and whether the requests were faults or
@@ -6537,7 +6537,7 @@ type InsightSummary struct {
 	_ struct{} `type:"structure"`
 
 	// Categories The categories that label and describe the type of insight.
-	Categories []*string `type:"list"`
+	Categories []*string `type:"list" enum:"InsightCategory"`
 
 	// The impact statistics of the client side service. This includes the number
 	// of requests to the client service and whether the requests were faults or
@@ -7097,7 +7097,7 @@ func (s *PutTelemetryRecordsInput) SetTelemetryRecords(v []*TelemetryRecord) *Pu
 }
 
 type PutTelemetryRecordsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -8838,7 +8838,7 @@ func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9620,7 +9620,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.

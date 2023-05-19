@@ -18,7 +18,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -68,7 +68,7 @@ func TestDefer(t *testing.T) {
 	assert.Equal(t, expectedErr.Error(), trace.Error)
 	assert.NotNil(t, trace.Start)
 	assert.NotNil(t, trace.Stop)
-	assert.True(t, trace.Start < trace.Stop)
+	assert.LessOrEqual(t, trace.Start, trace.Stop)
 }
 
 func TestInvalidEndSection(t *testing.T) {

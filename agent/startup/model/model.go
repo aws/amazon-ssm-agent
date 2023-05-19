@@ -111,7 +111,6 @@ type EventLogProperties struct {
 
 // SPCR table defined.
 // See https://msdn.microsoft.com/en-us/library/windows/hardware/dn639132(v=vs.85).aspx
-//
 func get_struct_SPCR_TABLE() *interop.StructDef {
 	sd := interop.NewStructDef()
 	sd.AddField("Signature", 4)

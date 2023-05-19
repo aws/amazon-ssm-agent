@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 )
@@ -34,6 +35,7 @@ type DetailTestCase struct {
 }
 
 func TestUpdateStateChange(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	detail := generateTestCase().Detail
 	err := updater.mgr.inProgress(detail, logger, Initialized)
@@ -45,6 +47,7 @@ func TestUpdateStateChange(t *testing.T) {
 }
 
 func TestUpdateSucceed(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	detail := generateTestCase().Detail
 	detail.OutputS3BucketName = "test"
@@ -57,6 +60,7 @@ func TestUpdateSucceed(t *testing.T) {
 }
 
 func TestUpdateFailed(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	detail := generateTestCase().Detail
 	detail.OutputS3BucketName = "test"
@@ -69,6 +73,7 @@ func TestUpdateFailed(t *testing.T) {
 }
 
 func TestUpdateInactive(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
 	detail := generateTestCase().Detail
 	detail.OutputS3BucketName = "test"

@@ -29,10 +29,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
 
@@ -120,7 +120,7 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 	return &docState, nil
 }
 
-//generateCloudWatchLogStreamPrefix creates the LogStreamPrefix for cloudWatch output. LogStreamPrefix = <CommandID>/<InstanceID>
+// generateCloudWatchLogStreamPrefix creates the LogStreamPrefix for cloudWatch output. LogStreamPrefix = <CommandID>/<InstanceID>
 func generateCloudWatchLogStreamPrefix(context context.T, commandID string) (string, error) {
 
 	instanceID, err := context.Identity().ShortInstanceID()

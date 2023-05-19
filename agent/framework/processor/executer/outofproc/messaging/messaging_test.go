@@ -3,7 +3,7 @@ package messaging
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
 	"github.com/stretchr/testify/mock"
 )
@@ -40,7 +40,7 @@ func TestMessagingTerminate(t *testing.T) {
 	backendMock.AssertExpectations(t)
 }
 
-//soft stop, messaging will return only when the connection to data backend is closed and also the ipc is closed
+// soft stop, messaging will return only when the connection to data backend is closed and also the ipc is closed
 func TestMessagingShutdown(t *testing.T) {
 	testInputDatagram := "testinput"
 	testOutputDatagram := "testoutput"

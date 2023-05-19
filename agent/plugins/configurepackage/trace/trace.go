@@ -80,6 +80,13 @@ func NewTracer(logger log.T) Tracer {
 	}
 }
 
+func NewTracerCustomTime(timeProvider NanoTime, logger log.T) Tracer {
+	return &TracerImpl{
+		timeProvider: timeProvider,
+		logger:       logger,
+	}
+}
+
 // BeginSection will create a new trace and registers with the tracer
 func (t *TracerImpl) BeginSection(message string) *Trace {
 	t.logger.Debugf("starting with %s", message)
@@ -235,11 +242,11 @@ func (t *Trace) End() error {
 // EndWithError just combines two commonly used methods to be able to use it in
 // combination with defer
 //
-// func asdf(tracer Tracer) {
-//		var err error
-//		defer tracer.BeginSection("testtracemsg").EndWithError(err)
-//		...
-//	}
+//	func asdf(tracer Tracer) {
+//			var err error
+//			defer tracer.BeginSection("testtracemsg").EndWithError(err)
+//			...
+//		}
 func (t *Trace) EndWithError(err *error) *Trace {
 	t.WithError(*err)
 	t.End()

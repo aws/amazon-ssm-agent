@@ -25,7 +25,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	installerMock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer/mock"
@@ -391,7 +392,7 @@ func serviceUpdateMock() *serviceMock.Mock {
 }
 
 func createMockCancelFlag() task.CancelFlag {
-	mockCancelFlag := new(task.MockCancelFlag)
+	mockCancelFlag := new(taskmocks.MockCancelFlag)
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
 	mockCancelFlag.On("ShutDown").Return(false)

@@ -3979,7 +3979,7 @@ func (s *ApplyArchiveRuleInput) SetRuleName(v string) *ApplyArchiveRuleInput {
 }
 
 type ApplyArchiveRuleOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4119,7 +4119,7 @@ func (s *CancelPolicyGenerationInput) SetJobId(v string) *CancelPolicyGeneration
 }
 
 type CancelPolicyGenerationOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4819,7 +4819,7 @@ func (s *CreateArchiveRuleInput) SetRuleName(v string) *CreateArchiveRuleInput {
 }
 
 type CreateArchiveRuleOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4978,7 +4978,7 @@ func (s *DeleteAnalyzerInput) SetClientToken(v string) *DeleteAnalyzerInput {
 }
 
 type DeleteAnalyzerOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5076,7 +5076,7 @@ func (s *DeleteArchiveRuleInput) SetRuleName(v string) *DeleteArchiveRuleInput {
 }
 
 type DeleteArchiveRuleOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6431,7 +6431,7 @@ func (s *InternalServerException) RequestID() string {
 // This configuration sets the network origin for the Amazon S3 access point
 // or multi-region access point to Internet.
 type InternetConfiguration struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -6600,7 +6600,7 @@ type KmsGrantConfiguration struct {
 	// A list of operations that the grant permits.
 	//
 	// Operations is a required field
-	Operations []*string `locationName:"operations" type:"list" required:"true"`
+	Operations []*string `locationName:"operations" type:"list" required:"true" enum:"KmsGrantOperation"`
 
 	// The principal that is given permission to retire the grant by using RetireGrant
 	// (https://docs.aws.amazon.com/kms/latest/APIReference/API_RetireGrant.html)
@@ -8460,14 +8460,14 @@ func (s *S3PublicAccessBlockConfiguration) SetRestrictPublicBuckets(v bool) *S3P
 // the access preview assumes a secret without a policy. To propose deletion
 // of an existing policy, you can specify an empty string. If the proposed configuration
 // is for a new secret and you do not specify the KMS key ID, the access preview
-// uses the default CMK of the Amazon Web Services account. If you specify an
-// empty string for the KMS key ID, the access preview uses the default CMK
-// of the Amazon Web Services account. For more information about secret policy
-// limits, see Quotas for Secrets Manager. (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_limits.html).
+// uses the Amazon Web Services managed key aws/secretsmanager. If you specify
+// an empty string for the KMS key ID, the access preview uses the Amazon Web
+// Services managed key of the Amazon Web Services account. For more information
+// about secret policy limits, see Quotas for Secrets Manager. (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_limits.html).
 type SecretsManagerSecretConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The proposed ARN, key ID, or alias of the KMS customer master key (CMK).
+	// The proposed ARN, key ID, or alias of the KMS key.
 	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
 
 	// The proposed resource policy defining who can access or manage the secret.
@@ -8887,7 +8887,7 @@ func (s *StartResourceScanInput) SetResourceArn(v string) *StartResourceScanInpu
 }
 
 type StartResourceScanOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9057,7 +9057,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 
 // The response to the request.
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9332,7 +9332,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 
 // The response to the request.
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9455,7 +9455,7 @@ func (s *UpdateArchiveRuleInput) SetRuleName(v string) *UpdateArchiveRuleInput {
 }
 
 type UpdateArchiveRuleOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9568,7 +9568,7 @@ func (s *UpdateFindingsInput) SetStatus(v string) *UpdateFindingsInput {
 }
 
 type UpdateFindingsOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -9711,6 +9711,18 @@ type ValidatePolicyInput struct {
 	//
 	// PolicyType is a required field
 	PolicyType *string `locationName:"policyType" type:"string" required:"true" enum:"PolicyType"`
+
+	// The type of resource to attach to your resource policy. Specify a value for
+	// the policy validation resource type only if the policy type is RESOURCE_POLICY.
+	// For example, to validate a resource policy to attach to an Amazon S3 bucket,
+	// you can choose AWS::S3::Bucket for the policy validation resource type.
+	//
+	// For resource types not supported as valid values, IAM Access Analyzer runs
+	// policy checks that apply to all resource policies. For example, to validate
+	// a resource policy to attach to a KMS key, do not specify a value for the
+	// policy validation resource type and IAM Access Analyzer will run policy checks
+	// that apply to all resource policies.
+	ValidatePolicyResourceType *string `locationName:"validatePolicyResourceType" type:"string" enum:"ValidatePolicyResourceType"`
 }
 
 // String returns the string representation.
@@ -9774,6 +9786,12 @@ func (s *ValidatePolicyInput) SetPolicyDocument(v string) *ValidatePolicyInput {
 // SetPolicyType sets the PolicyType field's value.
 func (s *ValidatePolicyInput) SetPolicyType(v string) *ValidatePolicyInput {
 	s.PolicyType = &v
+	return s
+}
+
+// SetValidatePolicyResourceType sets the ValidatePolicyResourceType field's value.
+func (s *ValidatePolicyInput) SetValidatePolicyResourceType(v string) *ValidatePolicyInput {
+	s.ValidatePolicyResourceType = &v
 	return s
 }
 
@@ -10444,6 +10462,30 @@ func ValidatePolicyFindingType_Values() []string {
 		ValidatePolicyFindingTypeSecurityWarning,
 		ValidatePolicyFindingTypeSuggestion,
 		ValidatePolicyFindingTypeWarning,
+	}
+}
+
+const (
+	// ValidatePolicyResourceTypeAwsS3Bucket is a ValidatePolicyResourceType enum value
+	ValidatePolicyResourceTypeAwsS3Bucket = "AWS::S3::Bucket"
+
+	// ValidatePolicyResourceTypeAwsS3AccessPoint is a ValidatePolicyResourceType enum value
+	ValidatePolicyResourceTypeAwsS3AccessPoint = "AWS::S3::AccessPoint"
+
+	// ValidatePolicyResourceTypeAwsS3MultiRegionAccessPoint is a ValidatePolicyResourceType enum value
+	ValidatePolicyResourceTypeAwsS3MultiRegionAccessPoint = "AWS::S3::MultiRegionAccessPoint"
+
+	// ValidatePolicyResourceTypeAwsS3objectLambdaAccessPoint is a ValidatePolicyResourceType enum value
+	ValidatePolicyResourceTypeAwsS3objectLambdaAccessPoint = "AWS::S3ObjectLambda::AccessPoint"
+)
+
+// ValidatePolicyResourceType_Values returns all elements of the ValidatePolicyResourceType enum
+func ValidatePolicyResourceType_Values() []string {
+	return []string{
+		ValidatePolicyResourceTypeAwsS3Bucket,
+		ValidatePolicyResourceTypeAwsS3AccessPoint,
+		ValidatePolicyResourceTypeAwsS3MultiRegionAccessPoint,
+		ValidatePolicyResourceTypeAwsS3objectLambdaAccessPoint,
 	}
 }
 

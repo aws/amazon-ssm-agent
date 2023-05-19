@@ -182,10 +182,10 @@ func isErrorUnexpected(log log.T, err error, requestTime, responseTime time.Time
 	//response wasn't too quick
 	//checking if the class of errors are expected
 	if isServerBasedError(err.Error()) {
-		log.Debugf("server terminated connection after %v seconds - this is expected in long polling api calls.", timeDiff)
+		log.Warnf("Server terminated MDS long poll connection after %v seconds", timeDiff)
 		return false
 	} else if isClientBasedError(err.Error()) {
-		log.Debugf("client terminated connection after %v seconds - this is expected in long polling api calls.", timeDiff)
+		log.Warnf("Client terminated MDS long poll connection after %v seconds due to no response", timeDiff)
 		return false
 	} else {
 		//errors are truly unexpected

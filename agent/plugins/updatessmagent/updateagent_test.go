@@ -15,6 +15,7 @@
 package updatessmagent
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 	"time"
@@ -23,7 +24,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	lockmocks "github.com/aws/amazon-ssm-agent/agent/mocks/lockfile"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
@@ -38,7 +41,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var mockContext = context.NewMockDefault()
+var mockContext = contextmocks.NewMockDefault()
 
 func TestGenerateUpdateCmd(t *testing.T) {
 	pluginInput := createStubPluginInput()
@@ -358,12 +361,12 @@ func TestExecute(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -385,7 +388,7 @@ func TestExecute(t *testing.T) {
 	}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
@@ -415,15 +418,15 @@ func TestExecuteUpdateLocked(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 
 	// Setup mocks
@@ -447,11 +450,11 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -469,11 +472,10 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 		downloadFolder string) int {
 		methodCalled = true
 		panic(fmt.Errorf("Some Random Panic"))
-		return 1
 	}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 
 	// Setup mocks
@@ -503,11 +505,11 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	p[0] = pluginInput
 	config.Properties = p
 	plugin := &Plugin{
-		Context: context.NewMockDefault(),
+		Context: contextmocks.NewMockDefault(),
 	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockLockfile := lockfile.MockLockfile{}
+	mockLockfile := lockmocks.MockLockfile{}
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -529,7 +531,7 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
-		return mockLockfile, nil
+		return &mockLockfile, nil
 	}
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
@@ -625,6 +627,17 @@ func (u *fakeUtility) ExeCommand(
 	return u.pid, exitCode, u.execCommandError
 }
 
+func (u *fakeUtility) ExecCommandWithOutput(
+	log log.T,
+	cmd string,
+	workingDir string,
+	outputRoot string,
+	stdOut string,
+	stdErr string) (pId int, exitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error) {
+	u.retryCounter++
+	return u.pid, exitCode, nil, nil, u.execCommandError
+}
+
 func (u *fakeUtility) SaveUpdatePluginResult(
 	log log.T,
 	updateRoot string,
@@ -634,4 +647,12 @@ func (u *fakeUtility) SaveUpdatePluginResult(
 
 func (u *fakeUtility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
 	return !u.noDiskSpace, u.isDiskSpaceErr
+}
+
+func (u *fakeUtility) LoadUpdateDocumentState(ctx context.T, commandId string) error {
+	return nil
+}
+
+func (u *fakeUtility) UpdateInstallDelayer(ctx context.T, updateRoot string) error {
+	return nil
 }

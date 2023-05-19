@@ -8,6 +8,12 @@ import (
 
 const (
 
+	// ErrCodeAccessDeniedException for service response error code
+	// "AccessDeniedException".
+	//
+	// You do not have sufficient permissions to perform this action.
+	ErrCodeAccessDeniedException = "AccessDeniedException"
+
 	// ErrCodeContactFlowNotPublishedException for service response error code
 	// "ContactFlowNotPublishedException".
 	//
@@ -32,6 +38,12 @@ const (
 	// A resource with the specified name already exists.
 	ErrCodeDuplicateResourceException = "DuplicateResourceException"
 
+	// ErrCodeIdempotencyException for service response error code
+	// "IdempotencyException".
+	//
+	// An entity with the same name already exists.
+	ErrCodeIdempotencyException = "IdempotencyException"
+
 	// ErrCodeInternalServiceException for service response error code
 	// "InternalServiceException".
 	//
@@ -43,6 +55,12 @@ const (
 	//
 	// The contact flow is not valid.
 	ErrCodeInvalidContactFlowException = "InvalidContactFlowException"
+
+	// ErrCodeInvalidContactFlowModuleException for service response error code
+	// "InvalidContactFlowModuleException".
+	//
+	// The problems with the module. Please fix before trying again.
+	ErrCodeInvalidContactFlowModuleException = "InvalidContactFlowModuleException"
 
 	// ErrCodeInvalidParameterException for service response error code
 	// "InvalidParameterException".
@@ -67,6 +85,10 @@ const (
 	//
 	// The contact is not permitted.
 	ErrCodeOutboundContactNotPermittedException = "OutboundContactNotPermittedException"
+
+	// ErrCodePropertyValidationException for service response error code
+	// "PropertyValidationException".
+	ErrCodePropertyValidationException = "PropertyValidationException"
 
 	// ErrCodeResourceConflictException for service response error code
 	// "ResourceConflictException".
@@ -106,16 +128,20 @@ const (
 )
 
 var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"AccessDeniedException":                newErrorAccessDeniedException,
 	"ContactFlowNotPublishedException":     newErrorContactFlowNotPublishedException,
 	"ContactNotFoundException":             newErrorContactNotFoundException,
 	"DestinationNotAllowedException":       newErrorDestinationNotAllowedException,
 	"DuplicateResourceException":           newErrorDuplicateResourceException,
+	"IdempotencyException":                 newErrorIdempotencyException,
 	"InternalServiceException":             newErrorInternalServiceException,
 	"InvalidContactFlowException":          newErrorInvalidContactFlowException,
+	"InvalidContactFlowModuleException":    newErrorInvalidContactFlowModuleException,
 	"InvalidParameterException":            newErrorInvalidParameterException,
 	"InvalidRequestException":              newErrorInvalidRequestException,
 	"LimitExceededException":               newErrorLimitExceededException,
 	"OutboundContactNotPermittedException": newErrorOutboundContactNotPermittedException,
+	"PropertyValidationException":          newErrorPropertyValidationException,
 	"ResourceConflictException":            newErrorResourceConflictException,
 	"ResourceInUseException":               newErrorResourceInUseException,
 	"ResourceNotFoundException":            newErrorResourceNotFoundException,

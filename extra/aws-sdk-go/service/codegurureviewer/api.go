@@ -1958,9 +1958,9 @@ func (s *CodeCommitRepository) SetName(v string) *CodeCommitRepository {
 type CodeReview struct {
 	_ struct{} `type:"structure"`
 
-	// They types of analysis performed during a repository analysis or a pull request
+	// The types of analysis performed during a repository analysis or a pull request
 	// review. You can specify either Security, CodeQuality, or both.
-	AnalysisTypes []*string `type:"list"`
+	AnalysisTypes []*string `type:"list" enum:"AnalysisType"`
 
 	// The Amazon Resource Name (ARN) of the RepositoryAssociation (https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html)
 	// that contains the reviewed source code. You can retrieve associated repository
@@ -1970,6 +1970,11 @@ type CodeReview struct {
 	// The Amazon Resource Name (ARN) of the CodeReview (https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html)
 	// object.
 	CodeReviewArn *string `min:"1" type:"string"`
+
+	// The state of the aws-codeguru-reviewer.yml configuration file that allows
+	// the configuration of the CodeGuru Reviewer analysis. The file either exists,
+	// doesn't exist, or exists with errors at the root directory of your repository.
+	ConfigFileState *string `type:"string" enum:"ConfigFileState"`
 
 	// The time, in milliseconds since the epoch, when the code review was created.
 	CreatedTimeStamp *time.Time `type:"timestamp"`
@@ -2055,6 +2060,12 @@ func (s *CodeReview) SetAssociationArn(v string) *CodeReview {
 // SetCodeReviewArn sets the CodeReviewArn field's value.
 func (s *CodeReview) SetCodeReviewArn(v string) *CodeReview {
 	s.CodeReviewArn = &v
+	return s
+}
+
+// SetConfigFileState sets the ConfigFileState field's value.
+func (s *CodeReview) SetConfigFileState(v string) *CodeReview {
+	s.ConfigFileState = &v
 	return s
 }
 
@@ -2290,7 +2301,7 @@ type CodeReviewType struct {
 
 	// They types of analysis performed during a repository analysis or a pull request
 	// review. You can specify either Security, CodeQuality, or both.
-	AnalysisTypes []*string `type:"list"`
+	AnalysisTypes []*string `type:"list" enum:"AnalysisType"`
 
 	// A code review that analyzes all code under a specified branch in an associated
 	// repository. The associated repository is specified using its ARN in CreateCodeReview
@@ -3221,7 +3232,7 @@ type ListCodeReviewsInput struct {
 
 	// List of provider types for filtering that needs to be applied before displaying
 	// the result. For example, providerTypes=[GitHub] lists code reviews from GitHub.
-	ProviderTypes []*string `location:"querystring" locationName:"ProviderTypes" min:"1" type:"list"`
+	ProviderTypes []*string `location:"querystring" locationName:"ProviderTypes" min:"1" type:"list" enum:"ProviderType"`
 
 	// List of repository names for filtering that needs to be applied before displaying
 	// the result.
@@ -3239,7 +3250,7 @@ type ListCodeReviewsInput struct {
 	//    * Failed: The code review failed.
 	//
 	//    * Deleting: The code review is being deleted.
-	States []*string `location:"querystring" locationName:"States" min:"1" type:"list"`
+	States []*string `location:"querystring" locationName:"States" min:"1" type:"list" enum:"JobState"`
 
 	// The type of code reviews to list in the response.
 	//
@@ -3667,7 +3678,7 @@ type ListRepositoryAssociationsInput struct {
 	Owners []*string `location:"querystring" locationName:"Owner" min:"1" type:"list"`
 
 	// List of provider types to use as a filter.
-	ProviderTypes []*string `location:"querystring" locationName:"ProviderType" min:"1" type:"list"`
+	ProviderTypes []*string `location:"querystring" locationName:"ProviderType" min:"1" type:"list" enum:"ProviderType"`
 
 	// List of repository association states to use as a filter.
 	//
@@ -3696,7 +3707,7 @@ type ListRepositoryAssociationsInput struct {
 	//    For more information, see Using tags to control access to associated repositories
 	//    (https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/auth-and-access-control-using-tags.html)
 	//    in the Amazon CodeGuru Reviewer User Guide.
-	States []*string `location:"querystring" locationName:"State" min:"1" type:"list"`
+	States []*string `location:"querystring" locationName:"State" min:"1" type:"list" enum:"RepositoryAssociationState"`
 }
 
 // String returns the string representation.
@@ -3920,10 +3931,17 @@ type Metrics struct {
 	// Total number of recommendations found in the code review.
 	FindingsCount *int64 `type:"long"`
 
-	// MeteredLinesOfCode is the number of lines of code in the repository where
-	// the code review happened. This does not include non-code lines such as comments
-	// and blank lines.
+	// MeteredLinesOfCodeCount is the number of lines of code in the repository
+	// where the code review happened. This does not include non-code lines such
+	// as comments and blank lines.
 	MeteredLinesOfCodeCount *int64 `type:"long"`
+
+	// SuppressedLinesOfCodeCount is the number of lines of code in the repository
+	// where the code review happened that CodeGuru Reviewer did not analyze. The
+	// lines suppressed in the analysis is based on the excludeFiles variable in
+	// the aws-codeguru-reviewer.yml file. This number does not include non-code
+	// lines such as comments and blank lines.
+	SuppressedLinesOfCodeCount *int64 `type:"long"`
 }
 
 // String returns the string representation.
@@ -3956,6 +3974,12 @@ func (s *Metrics) SetMeteredLinesOfCodeCount(v int64) *Metrics {
 	return s
 }
 
+// SetSuppressedLinesOfCodeCount sets the SuppressedLinesOfCodeCount field's value.
+func (s *Metrics) SetSuppressedLinesOfCodeCount(v int64) *Metrics {
+	s.SuppressedLinesOfCodeCount = &v
+	return s
+}
+
 // Information about metrics summaries.
 type MetricsSummary struct {
 	_ struct{} `type:"structure"`
@@ -3975,6 +3999,21 @@ type MetricsSummary struct {
 	// files (5 * 500 = 2,500 lines), the new file (200 lines) and the 25 changed
 	// lines of code for a total of 2,725 lines of code.
 	MeteredLinesOfCodeCount *int64 `type:"long"`
+
+	// Lines of code suppressed in the code review based on the excludeFiles element
+	// in the aws-codeguru-reviewer.yml file. For full repository analyses, this
+	// number includes all lines of code in the files that are suppressed. For pull
+	// requests, this number only includes the changed lines of code that are suppressed.
+	// In both cases, this number does not include non-code lines such as comments
+	// and import statements. For example, if you initiate a full repository analysis
+	// on a repository containing 5 files, each file with 100 lines of code, and
+	// 2 files are listed as excluded in the aws-codeguru-reviewer.yml file, then
+	// SuppressedLinesOfCodeCount returns 200 (2 * 100) as the total number of lines
+	// of code suppressed. However, if you submit a pull request for the same repository,
+	// then SuppressedLinesOfCodeCount only includes the lines in the 2 files that
+	// changed. If only 1 of the 2 files changed in the pull request, then SuppressedLinesOfCodeCount
+	// returns 100 (1 * 100) as the total number of lines of code suppressed.
+	SuppressedLinesOfCodeCount *int64 `type:"long"`
 }
 
 // String returns the string representation.
@@ -4004,6 +4043,12 @@ func (s *MetricsSummary) SetFindingsCount(v int64) *MetricsSummary {
 // SetMeteredLinesOfCodeCount sets the MeteredLinesOfCodeCount field's value.
 func (s *MetricsSummary) SetMeteredLinesOfCodeCount(v int64) *MetricsSummary {
 	s.MeteredLinesOfCodeCount = &v
+	return s
+}
+
+// SetSuppressedLinesOfCodeCount sets the SuppressedLinesOfCodeCount field's value.
+func (s *MetricsSummary) SetSuppressedLinesOfCodeCount(v int64) *MetricsSummary {
+	s.SuppressedLinesOfCodeCount = &v
 	return s
 }
 
@@ -4084,7 +4129,7 @@ type PutRecommendationFeedbackInput struct {
 	// you send an empty list it clears all your feedback.
 	//
 	// Reactions is a required field
-	Reactions []*string `type:"list" required:"true"`
+	Reactions []*string `type:"list" required:"true" enum:"Reaction"`
 
 	// The recommendation ID that can be used to track the provided recommendations
 	// and then to collect the feedback.
@@ -4155,7 +4200,7 @@ func (s *PutRecommendationFeedbackInput) SetRecommendationId(v string) *PutRecom
 }
 
 type PutRecommendationFeedbackOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4192,7 +4237,7 @@ type RecommendationFeedback struct {
 
 	// List for storing reactions. Reactions are utf-8 text code for emojis. You
 	// can send an empty list to clear off all your feedback.
-	Reactions []*string `type:"list"`
+	Reactions []*string `type:"list" enum:"Reaction"`
 
 	// The recommendation ID that can be used to track the provided recommendations.
 	// Later on it can be used to collect the feedback.
@@ -4266,7 +4311,7 @@ type RecommendationFeedbackSummary struct {
 	_ struct{} `type:"structure"`
 
 	// List for storing reactions. Reactions are utf-8 text code for emojis.
-	Reactions []*string `type:"list"`
+	Reactions []*string `type:"list" enum:"Reaction"`
 
 	// The recommendation ID that can be used to track the provided recommendations.
 	// Later on it can be used to collect the feedback.
@@ -5551,7 +5596,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5791,7 +5836,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5889,6 +5934,26 @@ func AnalysisType_Values() []string {
 	return []string{
 		AnalysisTypeSecurity,
 		AnalysisTypeCodeQuality,
+	}
+}
+
+const (
+	// ConfigFileStatePresent is a ConfigFileState enum value
+	ConfigFileStatePresent = "Present"
+
+	// ConfigFileStateAbsent is a ConfigFileState enum value
+	ConfigFileStateAbsent = "Absent"
+
+	// ConfigFileStatePresentWithErrors is a ConfigFileState enum value
+	ConfigFileStatePresentWithErrors = "PresentWithErrors"
+)
+
+// ConfigFileState_Values returns all elements of the ConfigFileState enum
+func ConfigFileState_Values() []string {
+	return []string{
+		ConfigFileStatePresent,
+		ConfigFileStateAbsent,
+		ConfigFileStatePresentWithErrors,
 	}
 }
 

@@ -17,14 +17,26 @@ package updates3util
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"regexp"
 	"strings"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
+	"github.com/cenkalti/backoff/v4"
+)
+
+var (
+	s3FileRead     = artifact.S3FileRead
+	https3Download = httpDownload
 )
 
 func New(context context.T) T {
@@ -113,7 +125,7 @@ func (util *updateS3UtilImpl) DownloadManifest(manifest updatemanifest.T, manife
 	return nil
 }
 
-//DownloadUpdater downloads updater from the s3 bucket
+// DownloadUpdater downloads updater from the s3 bucket
 func (util *updateS3UtilImpl) DownloadUpdater(
 	manifest updatemanifest.T,
 	updaterPackageName string,
@@ -165,4 +177,70 @@ func (util *updateS3UtilImpl) DownloadUpdater(
 	logger.Infof("Successfully decompressed the updater")
 
 	return versionStr, nil
+}
+
+// GetStableVersion get the stable version from s3
+func (util *updateS3UtilImpl) GetStableVersion(stableVersionUrl string) (string, error) {
+	util.context.Log().Infof("Retrieving stable version from %s", stableVersionUrl)
+
+	exponentialBackOff, err := backoffconfig.GetDefaultExponentialBackoff()
+	if err != nil {
+		return "", fmt.Errorf("failed to initialize backoff module: %v", err)
+	}
+
+	var content string
+	err = backoff.Retry(func() error {
+		// read from s3
+		contentBytes, readErr := s3FileRead(util.context, stableVersionUrl)
+		if contentBytes == nil || readErr != nil {
+			util.context.Log().Infof("falling back to http download for stable version")
+			httpTimeout := 15 * time.Second
+			tr := network.GetDefaultTransport(util.context.Log(), util.context.AppConfig())
+			client := &http.Client{
+				Transport: tr,
+				Timeout:   httpTimeout,
+			}
+
+			// use http client to download
+			contentBytes, readErr = https3Download(stableVersionUrl, client)
+			if readErr != nil {
+				return fmt.Errorf("failed to read response from %s: %v", stableVersionUrl, readErr)
+			}
+			if contentBytes == nil {
+				return fmt.Errorf("response code is nil")
+			}
+		}
+		content = string(contentBytes)
+		return nil
+	}, exponentialBackOff)
+
+	if err != nil {
+		return "", fmt.Errorf("failed to get stable version from %s: %v", stableVersionUrl, err)
+	}
+	version := strings.TrimSpace(content)
+	if !regexp.MustCompile(`^\d+.\d+.\d+.\d+$`).Match([]byte(version)) {
+		return "", fmt.Errorf("invalid version format returned from %s: %s", stableVersionUrl, version)
+	}
+
+	util.context.Log().Infof("Got stable version: %s", version)
+	return version, nil
+}
+
+func httpDownload(stableVersionUrl string, client *http.Client) ([]byte, error) {
+	resp, err := client.Get(stableVersionUrl)
+	if err != nil {
+		return nil, err
+	}
+	if resp == nil {
+		return nil, fmt.Errorf("response code is nil")
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unsuccessful request: response code: %v", resp.StatusCode)
+	}
+	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return content, fmt.Errorf("failed to read response from %s: %v", stableVersionUrl, err)
+	}
+	return content, nil
 }

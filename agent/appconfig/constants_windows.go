@@ -69,7 +69,7 @@ const (
 	ItemPropertyName = "Environment"
 )
 
-//PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
+// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 var PowerShellPluginCommandName = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
 
 // Program Folder
@@ -78,16 +78,16 @@ var DefaultProgramFolder string
 // SSM Agent executable path
 var DefaultSSMAgentBinaryPath string
 
-//SSM Agent worker executable path
+// SSM Agent worker executable path
 var DefaultSSMAgentWorker string
 
-//Document executable path
+// Document executable path
 var DefaultDocumentWorker string
 
-//Session executable path
+// Session executable path
 var DefaultSessionWorker string
 
-//Session logger executable path
+// Session logger executable path
 var DefaultSessionLogger string
 
 // AppConfig Path
@@ -98,6 +98,9 @@ var SeelogFilePath string
 
 // DefaultDataStorePath represents the directory for storing system data
 var DefaultDataStorePath string
+
+// DefaultEC2SharedCredentialsFilePath represents the filepath for storing credentials for ec2 identity
+var DefaultEC2SharedCredentialsFilePath string
 
 // PackageRoot specifies the directory under which packages will be downloaded and installed
 var PackageRoot string
@@ -201,6 +204,7 @@ func init() {
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
 	SeelogFilePath = filepath.Join(DefaultProgramFolder, SeelogConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
+	DefaultEC2SharedCredentialsFilePath = filepath.Join(DefaultProgramFolder, "credentials")
 	PackageRoot = filepath.Join(SSMDataPath, "Packages")
 	PackageLockRoot = filepath.Join(SSMDataPath, "Locks\\Packages")
 	DaemonRoot = filepath.Join(SSMDataPath, "Daemons")
@@ -208,7 +212,7 @@ func init() {
 	LocalCommandRootSubmitted = filepath.Join(LocalCommandRoot, "Submitted")
 	LocalCommandRootCompleted = filepath.Join(LocalCommandRoot, "Completed")
 	LocalCommandRootInvalid = filepath.Join(LocalCommandRoot, "Invalid")
-	DownloadRoot = filepath.Join(SSMDataPath, "Download")
+	DownloadRoot = filepath.Join(SSMDataPath, "Download") + string(os.PathSeparator)
 	UpdaterArtifactsRoot = filepath.Join(SSMDataPath, "Update")
 	UpdaterPidLockfile = filepath.Join(SSMDataPath, "update.lock")
 	LegacyUpdateDownloadFolder = DownloadRoot

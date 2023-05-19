@@ -70,7 +70,7 @@ func (c *Mgn) ChangeServerLifeCycleStateRequest(input *ChangeServerLifeCycleStat
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -99,6 +99,91 @@ func (c *Mgn) ChangeServerLifeCycleState(input *ChangeServerLifeCycleStateInput)
 // for more information on using Contexts.
 func (c *Mgn) ChangeServerLifeCycleStateWithContext(ctx aws.Context, input *ChangeServerLifeCycleStateInput, opts ...request.Option) (*ChangeServerLifeCycleStateOutput, error) {
 	req, out := c.ChangeServerLifeCycleStateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateLaunchConfigurationTemplate = "CreateLaunchConfigurationTemplate"
+
+// CreateLaunchConfigurationTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateLaunchConfigurationTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateLaunchConfigurationTemplate for more information on using the CreateLaunchConfigurationTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateLaunchConfigurationTemplateRequest method.
+//    req, resp := client.CreateLaunchConfigurationTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateLaunchConfigurationTemplate
+func (c *Mgn) CreateLaunchConfigurationTemplateRequest(input *CreateLaunchConfigurationTemplateInput) (req *request.Request, output *CreateLaunchConfigurationTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateLaunchConfigurationTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/CreateLaunchConfigurationTemplate",
+	}
+
+	if input == nil {
+		input = &CreateLaunchConfigurationTemplateInput{}
+	}
+
+	output = &CreateLaunchConfigurationTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateLaunchConfigurationTemplate API operation for Application Migration Service.
+//
+// Creates a new ReplicationConfigurationTemplate.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation CreateLaunchConfigurationTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ValidationException
+//   Validate exception.
+//
+//   * AccessDeniedException
+//   Operating denied due to a file permission or access check error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateLaunchConfigurationTemplate
+func (c *Mgn) CreateLaunchConfigurationTemplate(input *CreateLaunchConfigurationTemplateInput) (*CreateLaunchConfigurationTemplateOutput, error) {
+	req, out := c.CreateLaunchConfigurationTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateLaunchConfigurationTemplateWithContext is the same as CreateLaunchConfigurationTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateLaunchConfigurationTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) CreateLaunchConfigurationTemplateWithContext(ctx aws.Context, input *CreateLaunchConfigurationTemplateInput, opts ...request.Option) (*CreateLaunchConfigurationTemplateOutput, error) {
+	req, out := c.CreateLaunchConfigurationTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -159,7 +244,7 @@ func (c *Mgn) CreateReplicationConfigurationTemplateRequest(input *CreateReplica
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ValidationException
 //   Validate exception.
@@ -245,7 +330,7 @@ func (c *Mgn) DeleteJobRequest(input *DeleteJobInput) (req *request.Request, out
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -271,6 +356,93 @@ func (c *Mgn) DeleteJob(input *DeleteJobInput) (*DeleteJobOutput, error) {
 // for more information on using Contexts.
 func (c *Mgn) DeleteJobWithContext(ctx aws.Context, input *DeleteJobInput, opts ...request.Option) (*DeleteJobOutput, error) {
 	req, out := c.DeleteJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteLaunchConfigurationTemplate = "DeleteLaunchConfigurationTemplate"
+
+// DeleteLaunchConfigurationTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteLaunchConfigurationTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteLaunchConfigurationTemplate for more information on using the DeleteLaunchConfigurationTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteLaunchConfigurationTemplateRequest method.
+//    req, resp := client.DeleteLaunchConfigurationTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteLaunchConfigurationTemplate
+func (c *Mgn) DeleteLaunchConfigurationTemplateRequest(input *DeleteLaunchConfigurationTemplateInput) (req *request.Request, output *DeleteLaunchConfigurationTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteLaunchConfigurationTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DeleteLaunchConfigurationTemplate",
+	}
+
+	if input == nil {
+		input = &DeleteLaunchConfigurationTemplateInput{}
+	}
+
+	output = &DeleteLaunchConfigurationTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteLaunchConfigurationTemplate API operation for Application Migration Service.
+//
+// Creates a new ReplicationConfigurationTemplate.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation DeleteLaunchConfigurationTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ResourceNotFoundException
+//   Resource not found exception.
+//
+//   * ConflictException
+//   The request could not be completed due to a conflict with the current state
+//   of the target resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteLaunchConfigurationTemplate
+func (c *Mgn) DeleteLaunchConfigurationTemplate(input *DeleteLaunchConfigurationTemplateInput) (*DeleteLaunchConfigurationTemplateOutput, error) {
+	req, out := c.DeleteLaunchConfigurationTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteLaunchConfigurationTemplateWithContext is the same as DeleteLaunchConfigurationTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteLaunchConfigurationTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) DeleteLaunchConfigurationTemplateWithContext(ctx aws.Context, input *DeleteLaunchConfigurationTemplateInput, opts ...request.Option) (*DeleteLaunchConfigurationTemplateOutput, error) {
+	req, out := c.DeleteLaunchConfigurationTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -332,7 +504,7 @@ func (c *Mgn) DeleteReplicationConfigurationTemplateRequest(input *DeleteReplica
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -419,7 +591,7 @@ func (c *Mgn) DeleteSourceServerRequest(input *DeleteSourceServerInput) (req *re
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -445,6 +617,92 @@ func (c *Mgn) DeleteSourceServer(input *DeleteSourceServerInput) (*DeleteSourceS
 // for more information on using Contexts.
 func (c *Mgn) DeleteSourceServerWithContext(ctx aws.Context, input *DeleteSourceServerInput, opts ...request.Option) (*DeleteSourceServerOutput, error) {
 	req, out := c.DeleteSourceServerRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteVcenterClient = "DeleteVcenterClient"
+
+// DeleteVcenterClientRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteVcenterClient operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteVcenterClient for more information on using the DeleteVcenterClient
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteVcenterClientRequest method.
+//    req, resp := client.DeleteVcenterClientRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteVcenterClient
+func (c *Mgn) DeleteVcenterClientRequest(input *DeleteVcenterClientInput) (req *request.Request, output *DeleteVcenterClientOutput) {
+	op := &request.Operation{
+		Name:       opDeleteVcenterClient,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DeleteVcenterClient",
+	}
+
+	if input == nil {
+		input = &DeleteVcenterClientInput{}
+	}
+
+	output = &DeleteVcenterClientOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteVcenterClient API operation for Application Migration Service.
+//
+// Deletes a given vCenter client by ID.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation DeleteVcenterClient for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ResourceNotFoundException
+//   Resource not found exception.
+//
+//   * ValidationException
+//   Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteVcenterClient
+func (c *Mgn) DeleteVcenterClient(input *DeleteVcenterClientInput) (*DeleteVcenterClientOutput, error) {
+	req, out := c.DeleteVcenterClientRequest(input)
+	return out, req.Send()
+}
+
+// DeleteVcenterClientWithContext is the same as DeleteVcenterClient with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteVcenterClient for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) DeleteVcenterClientWithContext(ctx aws.Context, input *DeleteVcenterClientInput, opts ...request.Option) (*DeleteVcenterClientOutput, error) {
+	req, out := c.DeleteVcenterClientRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -500,7 +758,7 @@ func (c *Mgn) DescribeJobLogItemsRequest(input *DescribeJobLogItemsInput) (req *
 
 // DescribeJobLogItems API operation for Application Migration Service.
 //
-// Retrieves detailed Job log with paging.
+// Retrieves detailed job log items with paging.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -511,7 +769,7 @@ func (c *Mgn) DescribeJobLogItemsRequest(input *DescribeJobLogItemsInput) (req *
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ValidationException
 //   Validate exception.
@@ -642,7 +900,7 @@ func (c *Mgn) DescribeJobsRequest(input *DescribeJobsInput) (req *request.Reques
 //
 // Returns a list of Jobs. Use the JobsID and fromDate and toData filters to
 // limit which jobs are returned. The response is sorted by creationDataTime
-// - latest date first. Jobs are normaly created by the StartTest, StartCutover,
+// - latest date first. Jobs are normally created by the StartTest, StartCutover,
 // and TerminateTargetInstances APIs. Jobs are also created by DiagnosticLaunch
 // and TerminateDiagnosticInstances, which are APIs available only to *Support*
 // and only used in response to relevant support tickets.
@@ -656,7 +914,7 @@ func (c *Mgn) DescribeJobsRequest(input *DescribeJobsInput) (req *request.Reques
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ValidationException
 //   Validate exception.
@@ -735,6 +993,149 @@ func (c *Mgn) DescribeJobsPagesWithContext(ctx aws.Context, input *DescribeJobsI
 	return p.Err()
 }
 
+const opDescribeLaunchConfigurationTemplates = "DescribeLaunchConfigurationTemplates"
+
+// DescribeLaunchConfigurationTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeLaunchConfigurationTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeLaunchConfigurationTemplates for more information on using the DescribeLaunchConfigurationTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeLaunchConfigurationTemplatesRequest method.
+//    req, resp := client.DescribeLaunchConfigurationTemplatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeLaunchConfigurationTemplates
+func (c *Mgn) DescribeLaunchConfigurationTemplatesRequest(input *DescribeLaunchConfigurationTemplatesInput) (req *request.Request, output *DescribeLaunchConfigurationTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeLaunchConfigurationTemplates,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DescribeLaunchConfigurationTemplates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeLaunchConfigurationTemplatesInput{}
+	}
+
+	output = &DescribeLaunchConfigurationTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeLaunchConfigurationTemplates API operation for Application Migration Service.
+//
+// Creates a new ReplicationConfigurationTemplate.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation DescribeLaunchConfigurationTemplates for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ResourceNotFoundException
+//   Resource not found exception.
+//
+//   * ValidationException
+//   Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeLaunchConfigurationTemplates
+func (c *Mgn) DescribeLaunchConfigurationTemplates(input *DescribeLaunchConfigurationTemplatesInput) (*DescribeLaunchConfigurationTemplatesOutput, error) {
+	req, out := c.DescribeLaunchConfigurationTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// DescribeLaunchConfigurationTemplatesWithContext is the same as DescribeLaunchConfigurationTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeLaunchConfigurationTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) DescribeLaunchConfigurationTemplatesWithContext(ctx aws.Context, input *DescribeLaunchConfigurationTemplatesInput, opts ...request.Option) (*DescribeLaunchConfigurationTemplatesOutput, error) {
+	req, out := c.DescribeLaunchConfigurationTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeLaunchConfigurationTemplatesPages iterates over the pages of a DescribeLaunchConfigurationTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeLaunchConfigurationTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeLaunchConfigurationTemplates operation.
+//    pageNum := 0
+//    err := client.DescribeLaunchConfigurationTemplatesPages(params,
+//        func(page *mgn.DescribeLaunchConfigurationTemplatesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Mgn) DescribeLaunchConfigurationTemplatesPages(input *DescribeLaunchConfigurationTemplatesInput, fn func(*DescribeLaunchConfigurationTemplatesOutput, bool) bool) error {
+	return c.DescribeLaunchConfigurationTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeLaunchConfigurationTemplatesPagesWithContext same as DescribeLaunchConfigurationTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) DescribeLaunchConfigurationTemplatesPagesWithContext(ctx aws.Context, input *DescribeLaunchConfigurationTemplatesInput, fn func(*DescribeLaunchConfigurationTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeLaunchConfigurationTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeLaunchConfigurationTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeLaunchConfigurationTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeReplicationConfigurationTemplates = "DescribeReplicationConfigurationTemplates"
 
 // DescribeReplicationConfigurationTemplatesRequest generates a "aws/request.Request" representing the
@@ -796,7 +1197,7 @@ func (c *Mgn) DescribeReplicationConfigurationTemplatesRequest(input *DescribeRe
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -939,7 +1340,7 @@ func (c *Mgn) DescribeSourceServersRequest(input *DescribeSourceServersInput) (r
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ValidationException
 //   Validate exception.
@@ -1018,6 +1419,149 @@ func (c *Mgn) DescribeSourceServersPagesWithContext(ctx aws.Context, input *Desc
 	return p.Err()
 }
 
+const opDescribeVcenterClients = "DescribeVcenterClients"
+
+// DescribeVcenterClientsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeVcenterClients operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeVcenterClients for more information on using the DescribeVcenterClients
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeVcenterClientsRequest method.
+//    req, resp := client.DescribeVcenterClientsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeVcenterClients
+func (c *Mgn) DescribeVcenterClientsRequest(input *DescribeVcenterClientsInput) (req *request.Request, output *DescribeVcenterClientsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeVcenterClients,
+		HTTPMethod: "GET",
+		HTTPPath:   "/DescribeVcenterClients",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeVcenterClientsInput{}
+	}
+
+	output = &DescribeVcenterClientsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeVcenterClients API operation for Application Migration Service.
+//
+// Returns a list of the installed vCenter clients.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation DescribeVcenterClients for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ResourceNotFoundException
+//   Resource not found exception.
+//
+//   * ValidationException
+//   Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeVcenterClients
+func (c *Mgn) DescribeVcenterClients(input *DescribeVcenterClientsInput) (*DescribeVcenterClientsOutput, error) {
+	req, out := c.DescribeVcenterClientsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeVcenterClientsWithContext is the same as DescribeVcenterClients with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeVcenterClients for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) DescribeVcenterClientsWithContext(ctx aws.Context, input *DescribeVcenterClientsInput, opts ...request.Option) (*DescribeVcenterClientsOutput, error) {
+	req, out := c.DescribeVcenterClientsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeVcenterClientsPages iterates over the pages of a DescribeVcenterClients operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeVcenterClients method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeVcenterClients operation.
+//    pageNum := 0
+//    err := client.DescribeVcenterClientsPages(params,
+//        func(page *mgn.DescribeVcenterClientsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Mgn) DescribeVcenterClientsPages(input *DescribeVcenterClientsInput, fn func(*DescribeVcenterClientsOutput, bool) bool) error {
+	return c.DescribeVcenterClientsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeVcenterClientsPagesWithContext same as DescribeVcenterClientsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) DescribeVcenterClientsPagesWithContext(ctx aws.Context, input *DescribeVcenterClientsInput, fn func(*DescribeVcenterClientsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeVcenterClientsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeVcenterClientsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeVcenterClientsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDisconnectFromService = "DisconnectFromService"
 
 // DisconnectFromServiceRequest generates a "aws/request.Request" representing the
@@ -1067,13 +1611,13 @@ func (c *Mgn) DisconnectFromServiceRequest(input *DisconnectFromServiceInput) (r
 // Migration Service for enabling the replication of these source servers will
 // be terminated / deleted within 90 minutes. Launched Test or Cutover instances
 // will NOT be terminated. If the agent on the source server has not been prevented
-// from communciating with the Application Migration Service service, then it
+// from communicating with the Application Migration Service service, then it
 // will receive a command to uninstall itself (within approximately 10 minutes).
 // The following properties of the SourceServer will be changed immediately:
 // dataReplicationInfo.dataReplicationState will be set to DISCONNECTED; The
 // totalStorageBytes property for each of dataReplicationInfo.replicatedDisks
-// will be set to zero; dataReplicationInfo.lagDuration and dataReplicationInfo.lagDurationwill
-// be nullified.
+// will be set to zero; dataReplicationInfo.lagDuration and dataReplicationInfo.lagDuration
+// will be nullified.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1084,7 +1628,7 @@ func (c *Mgn) DisconnectFromServiceRequest(input *DisconnectFromServiceInput) (r
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -1165,10 +1709,10 @@ func (c *Mgn) FinalizeCutoverRequest(input *FinalizeCutoverInput) (req *request.
 // Test or Cutover instances will NOT be terminated. The AWS Replication Agent
 // will receive a command to uninstall itself (within 10 minutes). The following
 // properties of the SourceServer will be changed immediately: dataReplicationInfo.dataReplicationState
-// will be to DISCONNECTED; The SourceServer.lifeCycle.state will be changed
-// to CUTOVER; The totalStorageBytes property fo each of dataReplicationInfo.replicatedDisks
-// will be set to zero; dataReplicationInfo.lagDuration and dataReplicationInfo.lagDurationwill
-// be nullified.
+// will be changed to DISCONNECTED; The SourceServer.lifeCycle.state will be
+// changed to CUTOVER; The totalStorageBytes property fo each of dataReplicationInfo.replicatedDisks
+// will be set to zero; dataReplicationInfo.lagDuration and dataReplicationInfo.lagDuration
+// will be nullified.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1179,7 +1723,7 @@ func (c *Mgn) FinalizeCutoverRequest(input *FinalizeCutoverInput) (req *request.
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -1268,7 +1812,7 @@ func (c *Mgn) GetLaunchConfigurationRequest(input *GetLaunchConfigurationInput) 
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -1350,7 +1894,7 @@ func (c *Mgn) GetReplicationConfigurationRequest(input *GetReplicationConfigurat
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -1598,7 +2142,7 @@ func (c *Mgn) MarkAsArchivedRequest(input *MarkAsArchivedInput) (req *request.Re
 //
 // Archives specific Source Servers by setting the SourceServer.isArchived property
 // to true for specified SourceServers by ID. This command only works for SourceServers
-// with a lifecycle.state which equals DISCONNECTED or CUTOVER.
+// with a lifecycle. state which equals DISCONNECTED or CUTOVER.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1609,7 +2153,7 @@ func (c *Mgn) MarkAsArchivedRequest(input *MarkAsArchivedInput) (req *request.Re
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -1698,7 +2242,7 @@ func (c *Mgn) RetryDataReplicationRequest(input *RetryDataReplicationInput) (req
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -1785,7 +2329,7 @@ func (c *Mgn) StartCutoverRequest(input *StartCutoverInput) (req *request.Reques
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ValidationException
 //   Validate exception.
@@ -1811,6 +2355,98 @@ func (c *Mgn) StartCutover(input *StartCutoverInput) (*StartCutoverOutput, error
 // for more information on using Contexts.
 func (c *Mgn) StartCutoverWithContext(ctx aws.Context, input *StartCutoverInput, opts ...request.Option) (*StartCutoverOutput, error) {
 	req, out := c.StartCutoverRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartReplication = "StartReplication"
+
+// StartReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the StartReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartReplication for more information on using the StartReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartReplicationRequest method.
+//    req, resp := client.StartReplicationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartReplication
+func (c *Mgn) StartReplicationRequest(input *StartReplicationInput) (req *request.Request, output *StartReplicationOutput) {
+	op := &request.Operation{
+		Name:       opStartReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/StartReplication",
+	}
+
+	if input == nil {
+		input = &StartReplicationInput{}
+	}
+
+	output = &StartReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartReplication API operation for Application Migration Service.
+//
+// Starts replication for SNAPSHOT_SHIPPING agents.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation StartReplication for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ResourceNotFoundException
+//   Resource not found exception.
+//
+//   * ValidationException
+//   Validate exception.
+//
+//   * ServiceQuotaExceededException
+//   The request could not be completed because its exceeded the service quota.
+//
+//   * ConflictException
+//   The request could not be completed due to a conflict with the current state
+//   of the target resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartReplication
+func (c *Mgn) StartReplication(input *StartReplicationInput) (*StartReplicationOutput, error) {
+	req, out := c.StartReplicationRequest(input)
+	return out, req.Send()
+}
+
+// StartReplicationWithContext is the same as StartReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) StartReplicationWithContext(ctx aws.Context, input *StartReplicationInput, opts ...request.Option) (*StartReplicationOutput, error) {
+	req, out := c.StartReplicationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1860,7 +2496,7 @@ func (c *Mgn) StartTestRequest(input *StartTestInput) (req *request.Request, out
 
 // StartTest API operation for Application Migration Service.
 //
-// Lauches a Test Instance for specific Source Servers. This command starts
+// Launches a Test Instance for specific Source Servers. This command starts
 // a LAUNCH job whose initiatedBy property is StartTest and changes the SourceServer.lifeCycle.state
 // property to TESTING.
 //
@@ -1873,7 +2509,7 @@ func (c *Mgn) StartTestRequest(input *StartTestInput) (req *request.Request, out
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ValidationException
 //   Validate exception.
@@ -2057,7 +2693,7 @@ func (c *Mgn) TerminateTargetInstancesRequest(input *TerminateTargetInstancesInp
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ValidationException
 //   Validate exception.
@@ -2237,7 +2873,7 @@ func (c *Mgn) UpdateLaunchConfigurationRequest(input *UpdateLaunchConfigurationI
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -2266,6 +2902,94 @@ func (c *Mgn) UpdateLaunchConfiguration(input *UpdateLaunchConfigurationInput) (
 // for more information on using Contexts.
 func (c *Mgn) UpdateLaunchConfigurationWithContext(ctx aws.Context, input *UpdateLaunchConfigurationInput, opts ...request.Option) (*UpdateLaunchConfigurationOutput, error) {
 	req, out := c.UpdateLaunchConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateLaunchConfigurationTemplate = "UpdateLaunchConfigurationTemplate"
+
+// UpdateLaunchConfigurationTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateLaunchConfigurationTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateLaunchConfigurationTemplate for more information on using the UpdateLaunchConfigurationTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateLaunchConfigurationTemplateRequest method.
+//    req, resp := client.UpdateLaunchConfigurationTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateLaunchConfigurationTemplate
+func (c *Mgn) UpdateLaunchConfigurationTemplateRequest(input *UpdateLaunchConfigurationTemplateInput) (req *request.Request, output *UpdateLaunchConfigurationTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateLaunchConfigurationTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/UpdateLaunchConfigurationTemplate",
+	}
+
+	if input == nil {
+		input = &UpdateLaunchConfigurationTemplateInput{}
+	}
+
+	output = &UpdateLaunchConfigurationTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateLaunchConfigurationTemplate API operation for Application Migration Service.
+//
+// Creates a new ReplicationConfigurationTemplate.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation UpdateLaunchConfigurationTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ResourceNotFoundException
+//   Resource not found exception.
+//
+//   * ValidationException
+//   Validate exception.
+//
+//   * AccessDeniedException
+//   Operating denied due to a file permission or access check error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateLaunchConfigurationTemplate
+func (c *Mgn) UpdateLaunchConfigurationTemplate(input *UpdateLaunchConfigurationTemplateInput) (*UpdateLaunchConfigurationTemplateOutput, error) {
+	req, out := c.UpdateLaunchConfigurationTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateLaunchConfigurationTemplateWithContext is the same as UpdateLaunchConfigurationTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateLaunchConfigurationTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) UpdateLaunchConfigurationTemplateWithContext(ctx aws.Context, input *UpdateLaunchConfigurationTemplateInput, opts ...request.Option) (*UpdateLaunchConfigurationTemplateOutput, error) {
+	req, out := c.UpdateLaunchConfigurationTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2327,7 +3051,7 @@ func (c *Mgn) UpdateReplicationConfigurationRequest(input *UpdateReplicationConf
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -2419,7 +3143,7 @@ func (c *Mgn) UpdateReplicationConfigurationTemplateRequest(input *UpdateReplica
 //
 // Returned Error Types:
 //   * UninitializedAccountException
-//   Unitialized account exception.
+//   Uninitialized account exception.
 //
 //   * ResourceNotFoundException
 //   Resource not found exception.
@@ -2447,6 +3171,96 @@ func (c *Mgn) UpdateReplicationConfigurationTemplate(input *UpdateReplicationCon
 // for more information on using Contexts.
 func (c *Mgn) UpdateReplicationConfigurationTemplateWithContext(ctx aws.Context, input *UpdateReplicationConfigurationTemplateInput, opts ...request.Option) (*UpdateReplicationConfigurationTemplateOutput, error) {
 	req, out := c.UpdateReplicationConfigurationTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateSourceServerReplicationType = "UpdateSourceServerReplicationType"
+
+// UpdateSourceServerReplicationTypeRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateSourceServerReplicationType operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateSourceServerReplicationType for more information on using the UpdateSourceServerReplicationType
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateSourceServerReplicationTypeRequest method.
+//    req, resp := client.UpdateSourceServerReplicationTypeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateSourceServerReplicationType
+func (c *Mgn) UpdateSourceServerReplicationTypeRequest(input *UpdateSourceServerReplicationTypeInput) (req *request.Request, output *UpdateSourceServerReplicationTypeOutput) {
+	op := &request.Operation{
+		Name:       opUpdateSourceServerReplicationType,
+		HTTPMethod: "POST",
+		HTTPPath:   "/UpdateSourceServerReplicationType",
+	}
+
+	if input == nil {
+		input = &UpdateSourceServerReplicationTypeInput{}
+	}
+
+	output = &UpdateSourceServerReplicationTypeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateSourceServerReplicationType API operation for Application Migration Service.
+//
+// Allows you to change between the AGENT_BASED replication type and the SNAPSHOT_SHIPPING
+// replication type.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation UpdateSourceServerReplicationType for usage and error information.
+//
+// Returned Error Types:
+//   * UninitializedAccountException
+//   Uninitialized account exception.
+//
+//   * ResourceNotFoundException
+//   Resource not found exception.
+//
+//   * ValidationException
+//   Validate exception.
+//
+//   * ConflictException
+//   The request could not be completed due to a conflict with the current state
+//   of the target resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateSourceServerReplicationType
+func (c *Mgn) UpdateSourceServerReplicationType(input *UpdateSourceServerReplicationTypeInput) (*UpdateSourceServerReplicationTypeOutput, error) {
+	req, out := c.UpdateSourceServerReplicationTypeRequest(input)
+	return out, req.Send()
+}
+
+// UpdateSourceServerReplicationTypeWithContext is the same as UpdateSourceServerReplicationType with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateSourceServerReplicationType for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) UpdateSourceServerReplicationTypeWithContext(ctx aws.Context, input *UpdateSourceServerReplicationTypeInput, opts ...request.Option) (*UpdateSourceServerReplicationTypeOutput, error) {
+	req, out := c.UpdateSourceServerReplicationTypeRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2646,6 +3460,9 @@ type ChangeServerLifeCycleStateOutput struct {
 	// Source server lifecycle state.
 	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
 
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
 	// Source server properties.
 	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
 
@@ -2658,6 +3475,9 @@ type ChangeServerLifeCycleStateOutput struct {
 	// replaced with "sensitive" in string returned by ChangeServerLifeCycleStateOutput's
 	// String and GoString methods.
 	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
 }
 
 // String returns the string representation.
@@ -2708,6 +3528,12 @@ func (s *ChangeServerLifeCycleStateOutput) SetLifeCycle(v *LifeCycle) *ChangeSer
 	return s
 }
 
+// SetReplicationType sets the ReplicationType field's value.
+func (s *ChangeServerLifeCycleStateOutput) SetReplicationType(v string) *ChangeServerLifeCycleStateOutput {
+	s.ReplicationType = &v
+	return s
+}
+
 // SetSourceProperties sets the SourceProperties field's value.
 func (s *ChangeServerLifeCycleStateOutput) SetSourceProperties(v *SourceProperties) *ChangeServerLifeCycleStateOutput {
 	s.SourceProperties = v
@@ -2723,6 +3549,12 @@ func (s *ChangeServerLifeCycleStateOutput) SetSourceServerID(v string) *ChangeSe
 // SetTags sets the Tags field's value.
 func (s *ChangeServerLifeCycleStateOutput) SetTags(v map[string]*string) *ChangeServerLifeCycleStateOutput {
 	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *ChangeServerLifeCycleStateOutput) SetVcenterClientID(v string) *ChangeServerLifeCycleStateOutput {
+	s.VcenterClientID = &v
 	return s
 }
 
@@ -2781,12 +3613,15 @@ type ConflictException struct {
 
 	Code_ *string `locationName:"code" type:"string"`
 
+	// Conflict Exception specific errors.
+	Errors []*ErrorDetails `locationName:"errors" type:"list"`
+
 	Message_ *string `locationName:"message" type:"string"`
 
-	// A conflict occured when prompting for the Resource ID.
+	// A conflict occurred when prompting for the Resource ID.
 	ResourceId *string `locationName:"resourceId" type:"string"`
 
-	// A conflict occured when prompting for resource type.
+	// A conflict occurred when prompting for resource type.
 	ResourceType *string `locationName:"resourceType" type:"string"`
 }
 
@@ -2846,6 +3681,131 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type CreateLaunchConfigurationTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// Request to associate the default Application Migration Service Security group
+	// with the Replication Settings template.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
+
+	// Request to associate the default Application Migration Service Security group
+	// with the Replication Settings template.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateLaunchConfigurationTemplateInput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLaunchConfigurationTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLaunchConfigurationTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateLaunchConfigurationTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateLaunchConfigurationTemplateInput"}
+	if s.PostLaunchActions != nil {
+		if err := s.PostLaunchActions.Validate(); err != nil {
+			invalidParams.AddNested("PostLaunchActions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *CreateLaunchConfigurationTemplateInput) SetPostLaunchActions(v *PostLaunchActions) *CreateLaunchConfigurationTemplateInput {
+	s.PostLaunchActions = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateLaunchConfigurationTemplateInput) SetTags(v map[string]*string) *CreateLaunchConfigurationTemplateInput {
+	s.Tags = v
+	return s
+}
+
+type CreateLaunchConfigurationTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Copy Private IP during Launch Configuration.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Copy Private IP during Launch Configuration.
+	//
+	// LaunchConfigurationTemplateID is a required field
+	LaunchConfigurationTemplateID *string `locationName:"launchConfigurationTemplateID" min:"21" type:"string" required:"true"`
+
+	// Copy Private IP during Launch Configuration.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
+
+	// Copy Private IP during Launch Configuration.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateLaunchConfigurationTemplateOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLaunchConfigurationTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLaunchConfigurationTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateLaunchConfigurationTemplateOutput) SetArn(v string) *CreateLaunchConfigurationTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetLaunchConfigurationTemplateID sets the LaunchConfigurationTemplateID field's value.
+func (s *CreateLaunchConfigurationTemplateOutput) SetLaunchConfigurationTemplateID(v string) *CreateLaunchConfigurationTemplateOutput {
+	s.LaunchConfigurationTemplateID = &v
+	return s
+}
+
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *CreateLaunchConfigurationTemplateOutput) SetPostLaunchActions(v *PostLaunchActions) *CreateLaunchConfigurationTemplateOutput {
+	s.PostLaunchActions = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateLaunchConfigurationTemplateOutput) SetTags(v map[string]*string) *CreateLaunchConfigurationTemplateOutput {
+	s.Tags = v
+	return s
+}
+
 type CreateReplicationConfigurationTemplateInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2872,18 +3832,19 @@ type CreateReplicationConfigurationTemplateInput struct {
 	// DataPlaneRouting is a required field
 	DataPlaneRouting *string `locationName:"dataPlaneRouting" type:"string" required:"true" enum:"ReplicationConfigurationDataPlaneRouting"`
 
-	// Request to configure the Staging Disk EBS volume type to "gp2" during Replication
-	// Settings template creation.
+	// Request to configure the default large staging disk EBS volume type during
+	// Replication Settings template creation.
 	//
 	// DefaultLargeStagingDiskType is a required field
 	DefaultLargeStagingDiskType *string `locationName:"defaultLargeStagingDiskType" type:"string" required:"true" enum:"ReplicationConfigurationDefaultLargeStagingDiskType"`
 
-	// Request to configure EBS enryption during Replication Settings template creation.
+	// Request to configure EBS encryption during Replication Settings template
+	// creation.
 	//
 	// EbsEncryption is a required field
 	EbsEncryption *string `locationName:"ebsEncryption" type:"string" required:"true" enum:"ReplicationConfigurationEbsEncryption"`
 
-	// Request to configure an EBS enryption key during Replication Settings template
+	// Request to configure an EBS encryption key during Replication Settings template
 	// creation.
 	EbsEncryptionKeyArn *string `locationName:"ebsEncryptionKeyArn" min:"20" type:"string"`
 
@@ -2893,7 +3854,7 @@ type CreateReplicationConfigurationTemplateInput struct {
 	// ReplicationServerInstanceType is a required field
 	ReplicationServerInstanceType *string `locationName:"replicationServerInstanceType" type:"string" required:"true"`
 
-	// Request to configure the Replication Server Secuirity group ID during Replication
+	// Request to configure the Replication Server Security group ID during Replication
 	// Settings template creation.
 	//
 	// ReplicationServersSecurityGroupsIDs is a required field
@@ -2905,7 +3866,7 @@ type CreateReplicationConfigurationTemplateInput struct {
 	// StagingAreaSubnetId is a required field
 	StagingAreaSubnetId *string `locationName:"stagingAreaSubnetId" type:"string" required:"true"`
 
-	// Request to configure Staiging Area tags during Replication Settings template
+	// Request to configure Staging Area tags during Replication Settings template
 	// creation.
 	//
 	// StagingAreaTags is a sensitive parameter and its value will be
@@ -3081,7 +4042,7 @@ type CreateReplicationConfigurationTemplateOutput struct {
 	// Service Security group.
 	AssociateDefaultSecurityGroup *bool `locationName:"associateDefaultSecurityGroup" type:"boolean"`
 
-	// Replication Configuration template bandwidth throtting.
+	// Replication Configuration template bandwidth throttling.
 	BandwidthThrottling *int64 `locationName:"bandwidthThrottling" type:"long"`
 
 	// Replication Configuration template create Public IP.
@@ -3090,7 +4051,7 @@ type CreateReplicationConfigurationTemplateOutput struct {
 	// Replication Configuration template data plane routing.
 	DataPlaneRouting *string `locationName:"dataPlaneRouting" type:"string" enum:"ReplicationConfigurationDataPlaneRouting"`
 
-	// Replication Configuration template use dedault large Staging Disk type.
+	// Replication Configuration template use default large Staging Disk type.
 	DefaultLargeStagingDiskType *string `locationName:"defaultLargeStagingDiskType" type:"string" enum:"ReplicationConfigurationDefaultLargeStagingDiskType"`
 
 	// Replication Configuration template EBS encryption.
@@ -3099,7 +4060,7 @@ type CreateReplicationConfigurationTemplateOutput struct {
 	// Replication Configuration template EBS encryption key ARN.
 	EbsEncryptionKeyArn *string `locationName:"ebsEncryptionKeyArn" min:"20" type:"string"`
 
-	// Replication Configuration template template ID.
+	// Replication Configuration template ID.
 	//
 	// ReplicationConfigurationTemplateID is a required field
 	ReplicationConfigurationTemplateID *string `locationName:"replicationConfigurationTemplateID" min:"21" type:"string" required:"true"`
@@ -3296,8 +4257,11 @@ type DataReplicationInfo struct {
 	// Request to query the time when data replication will be complete.
 	EtaDateTime *string `locationName:"etaDateTime" min:"19" type:"string"`
 
-	// Request to query data replication lag durating.
-	LagDuration *string `locationName:"lagDuration" min:"19" type:"string"`
+	// Request to query data replication lag duration.
+	LagDuration *string `locationName:"lagDuration" min:"1" type:"string"`
+
+	// Request to query data replication last snapshot time.
+	LastSnapshotDateTime *string `locationName:"lastSnapshotDateTime" min:"19" type:"string"`
 
 	// Request to query disks replicated.
 	ReplicatedDisks []*DataReplicationInfoReplicatedDisk `locationName:"replicatedDisks" type:"list"`
@@ -3348,6 +4312,12 @@ func (s *DataReplicationInfo) SetEtaDateTime(v string) *DataReplicationInfo {
 // SetLagDuration sets the LagDuration field's value.
 func (s *DataReplicationInfo) SetLagDuration(v string) *DataReplicationInfo {
 	s.LagDuration = &v
+	return s
+}
+
+// SetLastSnapshotDateTime sets the LastSnapshotDateTime field's value.
+func (s *DataReplicationInfo) SetLastSnapshotDateTime(v string) *DataReplicationInfo {
+	s.LastSnapshotDateTime = &v
 	return s
 }
 
@@ -3475,7 +4445,7 @@ func (s *DataReplicationInitiation) SetSteps(v []*DataReplicationInitiationStep)
 	return s
 }
 
-// Data replication intiation step.
+// Data replication initiation step.
 type DataReplicationInitiationStep struct {
 	_ struct{} `type:"structure"`
 
@@ -3566,7 +4536,7 @@ func (s *DeleteJobInput) SetJobID(v string) *DeleteJobInput {
 }
 
 type DeleteJobOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3584,6 +4554,77 @@ func (s DeleteJobOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DeleteJobOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteLaunchConfigurationTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of resource to be deleted.
+	//
+	// LaunchConfigurationTemplateID is a required field
+	LaunchConfigurationTemplateID *string `locationName:"launchConfigurationTemplateID" min:"21" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLaunchConfigurationTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLaunchConfigurationTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteLaunchConfigurationTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteLaunchConfigurationTemplateInput"}
+	if s.LaunchConfigurationTemplateID == nil {
+		invalidParams.Add(request.NewErrParamRequired("LaunchConfigurationTemplateID"))
+	}
+	if s.LaunchConfigurationTemplateID != nil && len(*s.LaunchConfigurationTemplateID) < 21 {
+		invalidParams.Add(request.NewErrParamMinLen("LaunchConfigurationTemplateID", 21))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLaunchConfigurationTemplateID sets the LaunchConfigurationTemplateID field's value.
+func (s *DeleteLaunchConfigurationTemplateInput) SetLaunchConfigurationTemplateID(v string) *DeleteLaunchConfigurationTemplateInput {
+	s.LaunchConfigurationTemplateID = &v
+	return s
+}
+
+type DeleteLaunchConfigurationTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLaunchConfigurationTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLaunchConfigurationTemplateOutput) GoString() string {
 	return s.String()
 }
 
@@ -3638,7 +4679,7 @@ func (s *DeleteReplicationConfigurationTemplateInput) SetReplicationConfiguratio
 }
 
 type DeleteReplicationConfigurationTemplateOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3709,7 +4750,7 @@ func (s *DeleteSourceServerInput) SetSourceServerID(v string) *DeleteSourceServe
 }
 
 type DeleteSourceServerOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -3727,6 +4768,77 @@ func (s DeleteSourceServerOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DeleteSourceServerOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteVcenterClientInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of resource to be deleted.
+	//
+	// VcenterClientID is a required field
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVcenterClientInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVcenterClientInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteVcenterClientInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteVcenterClientInput"}
+	if s.VcenterClientID == nil {
+		invalidParams.Add(request.NewErrParamRequired("VcenterClientID"))
+	}
+	if s.VcenterClientID != nil && len(*s.VcenterClientID) < 21 {
+		invalidParams.Add(request.NewErrParamMinLen("VcenterClientID", 21))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *DeleteVcenterClientInput) SetVcenterClientID(v string) *DeleteVcenterClientInput {
+	s.VcenterClientID = &v
+	return s
+}
+
+type DeleteVcenterClientOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVcenterClientOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteVcenterClientOutput) GoString() string {
 	return s.String()
 }
 
@@ -3844,14 +4956,12 @@ type DescribeJobsInput struct {
 	_ struct{} `type:"structure"`
 
 	// Request to describe Job log filters.
-	//
-	// Filters is a required field
-	Filters *DescribeJobsRequestFilters `locationName:"filters" type:"structure" required:"true"`
+	Filters *DescribeJobsRequestFilters `locationName:"filters" type:"structure"`
 
-	// Request to describe Job log by max results.
+	// Request to describe job log items by max results.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
-	// Request to describe Job logby next token.
+	// Request to describe job log items by next token.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
@@ -3876,9 +4986,6 @@ func (s DescribeJobsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeJobsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeJobsInput"}
-	if s.Filters == nil {
-		invalidParams.Add(request.NewErrParamRequired("Filters"))
-	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -3962,7 +5069,7 @@ type DescribeJobsRequestFilters struct {
 	// Request to describe Job log filters by job ID.
 	JobIDs []*string `locationName:"jobIDs" type:"list"`
 
-	// Request to describe Job log by last date.
+	// Request to describe job log items by last date.
 	ToDate *string `locationName:"toDate" min:"19" type:"string"`
 }
 
@@ -4018,6 +5125,108 @@ func (s *DescribeJobsRequestFilters) SetToDate(v string) *DescribeJobsRequestFil
 	return s
 }
 
+type DescribeLaunchConfigurationTemplatesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Request to disconnect Source Server from service by Server ID.
+	LaunchConfigurationTemplateIDs []*string `locationName:"launchConfigurationTemplateIDs" type:"list"`
+
+	// Request to disconnect Source Server from service by Server ID.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// Request to disconnect Source Server from service by Server ID.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeLaunchConfigurationTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeLaunchConfigurationTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeLaunchConfigurationTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeLaunchConfigurationTemplatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLaunchConfigurationTemplateIDs sets the LaunchConfigurationTemplateIDs field's value.
+func (s *DescribeLaunchConfigurationTemplatesInput) SetLaunchConfigurationTemplateIDs(v []*string) *DescribeLaunchConfigurationTemplatesInput {
+	s.LaunchConfigurationTemplateIDs = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeLaunchConfigurationTemplatesInput) SetMaxResults(v int64) *DescribeLaunchConfigurationTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeLaunchConfigurationTemplatesInput) SetNextToken(v string) *DescribeLaunchConfigurationTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeLaunchConfigurationTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Request to disconnect Source Server from service by Server ID.
+	Items []*LaunchConfigurationTemplate `locationName:"items" type:"list"`
+
+	// Request to disconnect Source Server from service by Server ID.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeLaunchConfigurationTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeLaunchConfigurationTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetItems sets the Items field's value.
+func (s *DescribeLaunchConfigurationTemplatesOutput) SetItems(v []*LaunchConfigurationTemplate) *DescribeLaunchConfigurationTemplatesOutput {
+	s.Items = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeLaunchConfigurationTemplatesOutput) SetNextToken(v string) *DescribeLaunchConfigurationTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
 type DescribeReplicationConfigurationTemplatesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4028,9 +5237,7 @@ type DescribeReplicationConfigurationTemplatesInput struct {
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// Request to describe Replication Configuration template by template IDs.
-	//
-	// ReplicationConfigurationTemplateIDs is a required field
-	ReplicationConfigurationTemplateIDs []*string `locationName:"replicationConfigurationTemplateIDs" type:"list" required:"true"`
+	ReplicationConfigurationTemplateIDs []*string `locationName:"replicationConfigurationTemplateIDs" type:"list"`
 }
 
 // String returns the string representation.
@@ -4056,9 +5263,6 @@ func (s *DescribeReplicationConfigurationTemplatesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeReplicationConfigurationTemplatesInput"}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-	if s.ReplicationConfigurationTemplateIDs == nil {
-		invalidParams.Add(request.NewErrParamRequired("ReplicationConfigurationTemplateIDs"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4129,9 +5333,7 @@ type DescribeSourceServersInput struct {
 	_ struct{} `type:"structure"`
 
 	// Request to filter Source Servers list.
-	//
-	// Filters is a required field
-	Filters *DescribeSourceServersRequestFilters `locationName:"filters" type:"structure" required:"true"`
+	Filters *DescribeSourceServersRequestFilters `locationName:"filters" type:"structure"`
 
 	// Request to filter Source Servers list by maximum results.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
@@ -4161,9 +5363,6 @@ func (s DescribeSourceServersInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeSourceServersInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeSourceServersInput"}
-	if s.Filters == nil {
-		invalidParams.Add(request.NewErrParamRequired("Filters"))
-	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -4239,6 +5438,12 @@ type DescribeSourceServersRequestFilters struct {
 	// Request to filter Source Servers list by archived.
 	IsArchived *bool `locationName:"isArchived" type:"boolean"`
 
+	// Request to filter Source Servers list by life cycle states.
+	LifeCycleStates []*string `locationName:"lifeCycleStates" type:"list" enum:"LifeCycleState"`
+
+	// Request to filter Source Servers list by replication type.
+	ReplicationTypes []*string `locationName:"replicationTypes" type:"list" enum:"ReplicationType"`
+
 	// Request to filter Source Servers list by Source Server ID.
 	SourceServerIDs []*string `locationName:"sourceServerIDs" type:"list"`
 }
@@ -4267,9 +5472,114 @@ func (s *DescribeSourceServersRequestFilters) SetIsArchived(v bool) *DescribeSou
 	return s
 }
 
+// SetLifeCycleStates sets the LifeCycleStates field's value.
+func (s *DescribeSourceServersRequestFilters) SetLifeCycleStates(v []*string) *DescribeSourceServersRequestFilters {
+	s.LifeCycleStates = v
+	return s
+}
+
+// SetReplicationTypes sets the ReplicationTypes field's value.
+func (s *DescribeSourceServersRequestFilters) SetReplicationTypes(v []*string) *DescribeSourceServersRequestFilters {
+	s.ReplicationTypes = v
+	return s
+}
+
 // SetSourceServerIDs sets the SourceServerIDs field's value.
 func (s *DescribeSourceServersRequestFilters) SetSourceServerIDs(v []*string) *DescribeSourceServersRequestFilters {
 	s.SourceServerIDs = v
+	return s
+}
+
+type DescribeVcenterClientsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Maximum results to be returned in DescribeVcenterClients.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// Next pagination token to be provided for DescribeVcenterClients.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVcenterClientsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVcenterClientsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeVcenterClientsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeVcenterClientsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeVcenterClientsInput) SetMaxResults(v int64) *DescribeVcenterClientsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeVcenterClientsInput) SetNextToken(v string) *DescribeVcenterClientsInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeVcenterClientsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List of items returned by DescribeVcenterClients.
+	Items []*VcenterClient `locationName:"items" type:"list"`
+
+	// Next pagination token returned from DescribeVcenterClients.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVcenterClientsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeVcenterClientsOutput) GoString() string {
+	return s.String()
+}
+
+// SetItems sets the Items field's value.
+func (s *DescribeVcenterClientsOutput) SetItems(v []*VcenterClient) *DescribeVcenterClientsOutput {
+	s.Items = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeVcenterClientsOutput) SetNextToken(v string) *DescribeVcenterClientsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -4340,6 +5650,9 @@ type DisconnectFromServiceOutput struct {
 	// Source server lifecycle state.
 	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
 
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
 	// Source server properties.
 	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
 
@@ -4352,6 +5665,9 @@ type DisconnectFromServiceOutput struct {
 	// replaced with "sensitive" in string returned by DisconnectFromServiceOutput's
 	// String and GoString methods.
 	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
 }
 
 // String returns the string representation.
@@ -4402,6 +5718,12 @@ func (s *DisconnectFromServiceOutput) SetLifeCycle(v *LifeCycle) *DisconnectFrom
 	return s
 }
 
+// SetReplicationType sets the ReplicationType field's value.
+func (s *DisconnectFromServiceOutput) SetReplicationType(v string) *DisconnectFromServiceOutput {
+	s.ReplicationType = &v
+	return s
+}
+
 // SetSourceProperties sets the SourceProperties field's value.
 func (s *DisconnectFromServiceOutput) SetSourceProperties(v *SourceProperties) *DisconnectFromServiceOutput {
 	s.SourceProperties = v
@@ -4417,6 +5739,12 @@ func (s *DisconnectFromServiceOutput) SetSourceServerID(v string) *DisconnectFro
 // SetTags sets the Tags field's value.
 func (s *DisconnectFromServiceOutput) SetTags(v map[string]*string) *DisconnectFromServiceOutput {
 	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *DisconnectFromServiceOutput) SetVcenterClientID(v string) *DisconnectFromServiceOutput {
+	s.VcenterClientID = &v
 	return s
 }
 
@@ -4461,10 +5789,69 @@ func (s *Disk) SetDeviceName(v string) *Disk {
 	return s
 }
 
+// Error details.
+type ErrorDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Error details code.
+	Code *string `locationName:"code" type:"string"`
+
+	// Error details message.
+	Message *string `locationName:"message" type:"string"`
+
+	// Error details resourceId.
+	ResourceId *string `locationName:"resourceId" type:"string"`
+
+	// Error details resourceType.
+	ResourceType *string `locationName:"resourceType" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ErrorDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ErrorDetails) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *ErrorDetails) SetCode(v string) *ErrorDetails {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *ErrorDetails) SetMessage(v string) *ErrorDetails {
+	s.Message = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *ErrorDetails) SetResourceId(v string) *ErrorDetails {
+	s.ResourceId = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ErrorDetails) SetResourceType(v string) *ErrorDetails {
+	s.ResourceType = &v
+	return s
+}
+
 type FinalizeCutoverInput struct {
 	_ struct{} `type:"structure"`
 
-	// Request to finalize Cutover by Soure Server ID.
+	// Request to finalize Cutover by Source Server ID.
 	//
 	// SourceServerID is a required field
 	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
@@ -4528,6 +5915,9 @@ type FinalizeCutoverOutput struct {
 	// Source server lifecycle state.
 	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
 
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
 	// Source server properties.
 	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
 
@@ -4540,6 +5930,9 @@ type FinalizeCutoverOutput struct {
 	// replaced with "sensitive" in string returned by FinalizeCutoverOutput's
 	// String and GoString methods.
 	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
 }
 
 // String returns the string representation.
@@ -4590,6 +5983,12 @@ func (s *FinalizeCutoverOutput) SetLifeCycle(v *LifeCycle) *FinalizeCutoverOutpu
 	return s
 }
 
+// SetReplicationType sets the ReplicationType field's value.
+func (s *FinalizeCutoverOutput) SetReplicationType(v string) *FinalizeCutoverOutput {
+	s.ReplicationType = &v
+	return s
+}
+
 // SetSourceProperties sets the SourceProperties field's value.
 func (s *FinalizeCutoverOutput) SetSourceProperties(v *SourceProperties) *FinalizeCutoverOutput {
 	s.SourceProperties = v
@@ -4605,6 +6004,12 @@ func (s *FinalizeCutoverOutput) SetSourceServerID(v string) *FinalizeCutoverOutp
 // SetTags sets the Tags field's value.
 func (s *FinalizeCutoverOutput) SetTags(v map[string]*string) *FinalizeCutoverOutput {
 	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *FinalizeCutoverOutput) SetVcenterClientID(v string) *FinalizeCutoverOutput {
+	s.VcenterClientID = &v
 	return s
 }
 
@@ -4660,28 +6065,34 @@ func (s *GetLaunchConfigurationInput) SetSourceServerID(v string) *GetLaunchConf
 type GetLaunchConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Launch configuration boot mode.
+	BootMode *string `locationName:"bootMode" type:"string" enum:"BootMode"`
+
 	// Copy Private IP during Launch Configuration.
 	CopyPrivateIp *bool `locationName:"copyPrivateIp" type:"boolean"`
 
 	// Copy Tags during Launch Configuration.
 	CopyTags *bool `locationName:"copyTags" type:"boolean"`
 
-	// Configure EC2 lauch configuration template ID.
+	// Launch configuration EC2 Launch template ID.
 	Ec2LaunchTemplateID *string `locationName:"ec2LaunchTemplateID" type:"string"`
 
-	// Configure launch dispostion for launch configuration.
+	// Launch disposition for launch configuration.
 	LaunchDisposition *string `locationName:"launchDisposition" type:"string" enum:"LaunchDisposition"`
 
-	// Configure launch configuration OS licensing.
+	// Launch configuration OS licensing.
 	Licensing *Licensing `locationName:"licensing" type:"structure"`
 
-	// Configure launch configuration name.
+	// Launch configuration name.
 	Name *string `locationName:"name" type:"string"`
 
-	// Configure launch configuration Source Server ID.
+	// Server participating in Job.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
+
+	// Launch configuration Source Server ID.
 	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
 
-	// Configure launch configuration Target instance type right sizing method.
+	// Launch configuration Target instance type right sizing method.
 	TargetInstanceTypeRightSizingMethod *string `locationName:"targetInstanceTypeRightSizingMethod" type:"string" enum:"TargetInstanceTypeRightSizingMethod"`
 }
 
@@ -4701,6 +6112,12 @@ func (s GetLaunchConfigurationOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetLaunchConfigurationOutput) GoString() string {
 	return s.String()
+}
+
+// SetBootMode sets the BootMode field's value.
+func (s *GetLaunchConfigurationOutput) SetBootMode(v string) *GetLaunchConfigurationOutput {
+	s.BootMode = &v
+	return s
 }
 
 // SetCopyPrivateIp sets the CopyPrivateIp field's value.
@@ -4739,6 +6156,12 @@ func (s *GetLaunchConfigurationOutput) SetName(v string) *GetLaunchConfiguration
 	return s
 }
 
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *GetLaunchConfigurationOutput) SetPostLaunchActions(v *PostLaunchActions) *GetLaunchConfigurationOutput {
+	s.PostLaunchActions = v
+	return s
+}
+
 // SetSourceServerID sets the SourceServerID field's value.
 func (s *GetLaunchConfigurationOutput) SetSourceServerID(v string) *GetLaunchConfigurationOutput {
 	s.SourceServerID = &v
@@ -4754,7 +6177,7 @@ func (s *GetLaunchConfigurationOutput) SetTargetInstanceTypeRightSizingMethod(v 
 type GetReplicationConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Request to get Replication Configuaration by Source Server ID.
+	// Request to get Replication Configuration by Source Server ID.
 	//
 	// SourceServerID is a required field
 	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
@@ -4975,6 +6398,9 @@ type IdentificationHints struct {
 	// Hostname identification hint.
 	Hostname *string `locationName:"hostname" type:"string"`
 
+	// vCenter VM path identification hint.
+	VmPath *string `locationName:"vmPath" type:"string"`
+
 	// vmWare UUID identification hint.
 	VmWareUuid *string `locationName:"vmWareUuid" type:"string"`
 }
@@ -5015,6 +6441,12 @@ func (s *IdentificationHints) SetHostname(v string) *IdentificationHints {
 	return s
 }
 
+// SetVmPath sets the VmPath field's value.
+func (s *IdentificationHints) SetVmPath(v string) *IdentificationHints {
+	s.VmPath = &v
+	return s
+}
+
 // SetVmWareUuid sets the VmWareUuid field's value.
 func (s *IdentificationHints) SetVmWareUuid(v string) *IdentificationHints {
 	s.VmWareUuid = &v
@@ -5044,7 +6476,7 @@ func (s InitializeServiceInput) GoString() string {
 }
 
 type InitializeServiceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -5161,7 +6593,7 @@ type Job struct {
 	// Job status.
 	Status *string `locationName:"status" type:"string" enum:"JobStatus"`
 
-	// Tags associated with spcific Job.
+	// Tags associated with specific Job.
 	//
 	// Tags is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by Job's
@@ -5353,17 +6785,149 @@ func (s *JobLogEventData) SetTargetInstanceID(v string) *JobLogEventData {
 	return s
 }
 
-// Configure launced instance.
+// Job type.
+type JobPostLaunchActionsLaunchStatus struct {
+	_ struct{} `type:"structure"`
+
+	// Job type.
+	ExecutionID *string `locationName:"executionID" type:"string"`
+
+	// Job type.
+	ExecutionStatus *string `locationName:"executionStatus" type:"string" enum:"PostLaunchActionExecutionStatus"`
+
+	// Job type.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// Job type.
+	SsmDocument *SsmDocument `locationName:"ssmDocument" type:"structure"`
+
+	// Job type.
+	SsmDocumentType *string `locationName:"ssmDocumentType" type:"string" enum:"SsmDocumentType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobPostLaunchActionsLaunchStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s JobPostLaunchActionsLaunchStatus) GoString() string {
+	return s.String()
+}
+
+// SetExecutionID sets the ExecutionID field's value.
+func (s *JobPostLaunchActionsLaunchStatus) SetExecutionID(v string) *JobPostLaunchActionsLaunchStatus {
+	s.ExecutionID = &v
+	return s
+}
+
+// SetExecutionStatus sets the ExecutionStatus field's value.
+func (s *JobPostLaunchActionsLaunchStatus) SetExecutionStatus(v string) *JobPostLaunchActionsLaunchStatus {
+	s.ExecutionStatus = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *JobPostLaunchActionsLaunchStatus) SetFailureReason(v string) *JobPostLaunchActionsLaunchStatus {
+	s.FailureReason = &v
+	return s
+}
+
+// SetSsmDocument sets the SsmDocument field's value.
+func (s *JobPostLaunchActionsLaunchStatus) SetSsmDocument(v *SsmDocument) *JobPostLaunchActionsLaunchStatus {
+	s.SsmDocument = v
+	return s
+}
+
+// SetSsmDocumentType sets the SsmDocumentType field's value.
+func (s *JobPostLaunchActionsLaunchStatus) SetSsmDocumentType(v string) *JobPostLaunchActionsLaunchStatus {
+	s.SsmDocumentType = &v
+	return s
+}
+
+type LaunchConfigurationTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// Copy Private IP during Launch Configuration.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Copy Private IP during Launch Configuration.
+	//
+	// LaunchConfigurationTemplateID is a required field
+	LaunchConfigurationTemplateID *string `locationName:"launchConfigurationTemplateID" min:"21" type:"string" required:"true"`
+
+	// Copy Private IP during Launch Configuration.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
+
+	// Copy Private IP during Launch Configuration.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by LaunchConfigurationTemplate's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LaunchConfigurationTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LaunchConfigurationTemplate) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *LaunchConfigurationTemplate) SetArn(v string) *LaunchConfigurationTemplate {
+	s.Arn = &v
+	return s
+}
+
+// SetLaunchConfigurationTemplateID sets the LaunchConfigurationTemplateID field's value.
+func (s *LaunchConfigurationTemplate) SetLaunchConfigurationTemplateID(v string) *LaunchConfigurationTemplate {
+	s.LaunchConfigurationTemplateID = &v
+	return s
+}
+
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *LaunchConfigurationTemplate) SetPostLaunchActions(v *PostLaunchActions) *LaunchConfigurationTemplate {
+	s.PostLaunchActions = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *LaunchConfigurationTemplate) SetTags(v map[string]*string) *LaunchConfigurationTemplate {
+	s.Tags = v
+	return s
+}
+
+// Launched instance.
 type LaunchedInstance struct {
 	_ struct{} `type:"structure"`
 
-	// Configure launced instance EC2 ID.
+	// Launched instance EC2 ID.
 	Ec2InstanceID *string `locationName:"ec2InstanceID" type:"string"`
 
-	// Configure launced instance first boot.
+	// Launched instance first boot.
 	FirstBoot *string `locationName:"firstBoot" type:"string" enum:"FirstBoot"`
 
-	// Configure launced instance Job ID.
+	// Launched instance Job ID.
 	JobID *string `locationName:"jobID" min:"24" type:"string"`
 }
 
@@ -5443,7 +7007,7 @@ type LifeCycle struct {
 	AddedToServiceDateTime *string `locationName:"addedToServiceDateTime" min:"19" type:"string"`
 
 	// Lifecycle elapsed time and duration.
-	ElapsedReplicationDuration *string `locationName:"elapsedReplicationDuration" min:"19" type:"string"`
+	ElapsedReplicationDuration *string `locationName:"elapsedReplicationDuration" min:"1" type:"string"`
 
 	// Lifecycle replication initiation date and time.
 	FirstByteDateTime *string `locationName:"firstByteDateTime" min:"19" type:"string"`
@@ -5679,7 +7243,7 @@ func (s *LifeCycleLastCutoverReverted) SetApiCallDateTime(v string) *LifeCycleLa
 type LifeCycleLastTest struct {
 	_ struct{} `type:"structure"`
 
-	// Lifecycle last Test finlized.
+	// Lifecycle last Test finalized.
 	Finalized *LifeCycleLastTestFinalized `locationName:"finalized" type:"structure"`
 
 	// Lifecycle last Test initiated.
@@ -5725,7 +7289,7 @@ func (s *LifeCycleLastTest) SetReverted(v *LifeCycleLastTestReverted) *LifeCycle
 	return s
 }
 
-// Lifecycle last Test finlized.
+// Lifecycle last Test finalized.
 type LifeCycleLastTestFinalized struct {
 	_ struct{} `type:"structure"`
 
@@ -5981,6 +7545,9 @@ type MarkAsArchivedOutput struct {
 	// Source server lifecycle state.
 	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
 
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
 	// Source server properties.
 	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
 
@@ -5993,6 +7560,9 @@ type MarkAsArchivedOutput struct {
 	// replaced with "sensitive" in string returned by MarkAsArchivedOutput's
 	// String and GoString methods.
 	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
 }
 
 // String returns the string representation.
@@ -6043,6 +7613,12 @@ func (s *MarkAsArchivedOutput) SetLifeCycle(v *LifeCycle) *MarkAsArchivedOutput 
 	return s
 }
 
+// SetReplicationType sets the ReplicationType field's value.
+func (s *MarkAsArchivedOutput) SetReplicationType(v string) *MarkAsArchivedOutput {
+	s.ReplicationType = &v
+	return s
+}
+
 // SetSourceProperties sets the SourceProperties field's value.
 func (s *MarkAsArchivedOutput) SetSourceProperties(v *SourceProperties) *MarkAsArchivedOutput {
 	s.SourceProperties = v
@@ -6058,6 +7634,12 @@ func (s *MarkAsArchivedOutput) SetSourceServerID(v string) *MarkAsArchivedOutput
 // SetTags sets the Tags field's value.
 func (s *MarkAsArchivedOutput) SetTags(v map[string]*string) *MarkAsArchivedOutput {
 	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *MarkAsArchivedOutput) SetVcenterClientID(v string) *MarkAsArchivedOutput {
+	s.VcenterClientID = &v
 	return s
 }
 
@@ -6151,7 +7733,15 @@ type ParticipatingServer struct {
 	LaunchStatus *string `locationName:"launchStatus" type:"string" enum:"LaunchStatus"`
 
 	// Participating server Source Server ID.
-	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
+	LaunchedEc2InstanceID *string `locationName:"launchedEc2InstanceID" type:"string"`
+
+	// Participating server Source Server ID.
+	PostLaunchActionsStatus *PostLaunchActionsStatus `locationName:"postLaunchActionsStatus" type:"structure"`
+
+	// Participating server Source Server ID.
+	//
+	// SourceServerID is a required field
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -6178,9 +7768,156 @@ func (s *ParticipatingServer) SetLaunchStatus(v string) *ParticipatingServer {
 	return s
 }
 
+// SetLaunchedEc2InstanceID sets the LaunchedEc2InstanceID field's value.
+func (s *ParticipatingServer) SetLaunchedEc2InstanceID(v string) *ParticipatingServer {
+	s.LaunchedEc2InstanceID = &v
+	return s
+}
+
+// SetPostLaunchActionsStatus sets the PostLaunchActionsStatus field's value.
+func (s *ParticipatingServer) SetPostLaunchActionsStatus(v *PostLaunchActionsStatus) *ParticipatingServer {
+	s.PostLaunchActionsStatus = v
+	return s
+}
+
 // SetSourceServerID sets the SourceServerID field's value.
 func (s *ParticipatingServer) SetSourceServerID(v string) *ParticipatingServer {
 	s.SourceServerID = &v
+	return s
+}
+
+// Server participating in Job.
+type PostLaunchActions struct {
+	_ struct{} `type:"structure"`
+
+	// Server participating in Job.
+	CloudWatchLogGroupName *string `locationName:"cloudWatchLogGroupName" min:"1" type:"string"`
+
+	// Server participating in Job.
+	Deployment *string `locationName:"deployment" type:"string" enum:"PostLaunchActionsDeploymentType"`
+
+	// Server participating in Job.
+	S3LogBucket *string `locationName:"s3LogBucket" min:"3" type:"string"`
+
+	// Server participating in Job.
+	S3OutputKeyPrefix *string `locationName:"s3OutputKeyPrefix" type:"string"`
+
+	// Server participating in Job.
+	SsmDocuments []*SsmDocument `locationName:"ssmDocuments" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostLaunchActions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostLaunchActions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PostLaunchActions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PostLaunchActions"}
+	if s.CloudWatchLogGroupName != nil && len(*s.CloudWatchLogGroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CloudWatchLogGroupName", 1))
+	}
+	if s.S3LogBucket != nil && len(*s.S3LogBucket) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3LogBucket", 3))
+	}
+	if s.SsmDocuments != nil {
+		for i, v := range s.SsmDocuments {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SsmDocuments", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCloudWatchLogGroupName sets the CloudWatchLogGroupName field's value.
+func (s *PostLaunchActions) SetCloudWatchLogGroupName(v string) *PostLaunchActions {
+	s.CloudWatchLogGroupName = &v
+	return s
+}
+
+// SetDeployment sets the Deployment field's value.
+func (s *PostLaunchActions) SetDeployment(v string) *PostLaunchActions {
+	s.Deployment = &v
+	return s
+}
+
+// SetS3LogBucket sets the S3LogBucket field's value.
+func (s *PostLaunchActions) SetS3LogBucket(v string) *PostLaunchActions {
+	s.S3LogBucket = &v
+	return s
+}
+
+// SetS3OutputKeyPrefix sets the S3OutputKeyPrefix field's value.
+func (s *PostLaunchActions) SetS3OutputKeyPrefix(v string) *PostLaunchActions {
+	s.S3OutputKeyPrefix = &v
+	return s
+}
+
+// SetSsmDocuments sets the SsmDocuments field's value.
+func (s *PostLaunchActions) SetSsmDocuments(v []*SsmDocument) *PostLaunchActions {
+	s.SsmDocuments = v
+	return s
+}
+
+// Server participating in Job.
+type PostLaunchActionsStatus struct {
+	_ struct{} `type:"structure"`
+
+	// Server participating in Job.
+	PostLaunchActionsLaunchStatusList []*JobPostLaunchActionsLaunchStatus `locationName:"postLaunchActionsLaunchStatusList" type:"list"`
+
+	// Server participating in Job.
+	SsmAgentDiscoveryDatetime *string `locationName:"ssmAgentDiscoveryDatetime" min:"19" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostLaunchActionsStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PostLaunchActionsStatus) GoString() string {
+	return s.String()
+}
+
+// SetPostLaunchActionsLaunchStatusList sets the PostLaunchActionsLaunchStatusList field's value.
+func (s *PostLaunchActionsStatus) SetPostLaunchActionsLaunchStatusList(v []*JobPostLaunchActionsLaunchStatus) *PostLaunchActionsStatus {
+	s.PostLaunchActionsLaunchStatusList = v
+	return s
+}
+
+// SetSsmAgentDiscoveryDatetime sets the SsmAgentDiscoveryDatetime field's value.
+func (s *PostLaunchActionsStatus) SetSsmAgentDiscoveryDatetime(v string) *PostLaunchActionsStatus {
+	s.SsmAgentDiscoveryDatetime = &v
 	return s
 }
 
@@ -6199,6 +7936,9 @@ type ReplicationConfigurationReplicatedDisk struct {
 
 	// Replication Configuration replicated disk staging disk type.
 	StagingDiskType *string `locationName:"stagingDiskType" type:"string" enum:"ReplicationConfigurationReplicatedDiskStagingDiskType"`
+
+	// Replication Configuration replicated disk throughput.
+	Throughput *int64 `locationName:"throughput" type:"long"`
 }
 
 // String returns the string representation.
@@ -6243,6 +7983,12 @@ func (s *ReplicationConfigurationReplicatedDisk) SetStagingDiskType(v string) *R
 	return s
 }
 
+// SetThroughput sets the Throughput field's value.
+func (s *ReplicationConfigurationReplicatedDisk) SetThroughput(v int64) *ReplicationConfigurationReplicatedDisk {
+	s.Throughput = &v
+	return s
+}
+
 type ReplicationConfigurationTemplate struct {
 	_ struct{} `type:"structure"`
 
@@ -6253,7 +7999,7 @@ type ReplicationConfigurationTemplate struct {
 	// Service Security group.
 	AssociateDefaultSecurityGroup *bool `locationName:"associateDefaultSecurityGroup" type:"boolean"`
 
-	// Replication Configuration template bandwidth throtting.
+	// Replication Configuration template bandwidth throttling.
 	BandwidthThrottling *int64 `locationName:"bandwidthThrottling" type:"long"`
 
 	// Replication Configuration template create Public IP.
@@ -6262,7 +8008,7 @@ type ReplicationConfigurationTemplate struct {
 	// Replication Configuration template data plane routing.
 	DataPlaneRouting *string `locationName:"dataPlaneRouting" type:"string" enum:"ReplicationConfigurationDataPlaneRouting"`
 
-	// Replication Configuration template use dedault large Staging Disk type.
+	// Replication Configuration template use default large Staging Disk type.
 	DefaultLargeStagingDiskType *string `locationName:"defaultLargeStagingDiskType" type:"string" enum:"ReplicationConfigurationDefaultLargeStagingDiskType"`
 
 	// Replication Configuration template EBS encryption.
@@ -6271,7 +8017,7 @@ type ReplicationConfigurationTemplate struct {
 	// Replication Configuration template EBS encryption key ARN.
 	EbsEncryptionKeyArn *string `locationName:"ebsEncryptionKeyArn" min:"20" type:"string"`
 
-	// Replication Configuration template template ID.
+	// Replication Configuration template ID.
 	//
 	// ReplicationConfigurationTemplateID is a required field
 	ReplicationConfigurationTemplateID *string `locationName:"replicationConfigurationTemplateID" min:"21" type:"string" required:"true"`
@@ -6550,6 +8296,9 @@ type RetryDataReplicationOutput struct {
 	// Source server lifecycle state.
 	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
 
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
 	// Source server properties.
 	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
 
@@ -6562,6 +8311,9 @@ type RetryDataReplicationOutput struct {
 	// replaced with "sensitive" in string returned by RetryDataReplicationOutput's
 	// String and GoString methods.
 	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
 }
 
 // String returns the string representation.
@@ -6612,6 +8364,12 @@ func (s *RetryDataReplicationOutput) SetLifeCycle(v *LifeCycle) *RetryDataReplic
 	return s
 }
 
+// SetReplicationType sets the ReplicationType field's value.
+func (s *RetryDataReplicationOutput) SetReplicationType(v string) *RetryDataReplicationOutput {
+	s.ReplicationType = &v
+	return s
+}
+
 // SetSourceProperties sets the SourceProperties field's value.
 func (s *RetryDataReplicationOutput) SetSourceProperties(v *SourceProperties) *RetryDataReplicationOutput {
 	s.SourceProperties = v
@@ -6628,6 +8386,93 @@ func (s *RetryDataReplicationOutput) SetSourceServerID(v string) *RetryDataRepli
 func (s *RetryDataReplicationOutput) SetTags(v map[string]*string) *RetryDataReplicationOutput {
 	s.Tags = v
 	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *RetryDataReplicationOutput) SetVcenterClientID(v string) *RetryDataReplicationOutput {
+	s.VcenterClientID = &v
+	return s
+}
+
+// The request could not be completed because its exceeded the service quota.
+type ServiceQuotaExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Code_ *string `locationName:"code" type:"string"`
+
+	Message_ *string `locationName:"message" type:"string"`
+
+	// Exceeded the service quota code.
+	QuotaCode *string `locationName:"quotaCode" type:"string"`
+
+	// Exceeded the service quota value.
+	QuotaValue *int64 `locationName:"quotaValue" min:"1" type:"integer"`
+
+	// Exceeded the service quota resource ID.
+	ResourceId *string `locationName:"resourceId" type:"string"`
+
+	// Exceeded the service quota resource type.
+	ResourceType *string `locationName:"resourceType" type:"string"`
+
+	// Exceeded the service quota service code.
+	ServiceCode *string `locationName:"serviceCode" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceQuotaExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceQuotaExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceQuotaExceededException(v protocol.ResponseMetadata) error {
+	return &ServiceQuotaExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceQuotaExceededException) Code() string {
+	return "ServiceQuotaExceededException"
+}
+
+// Message returns the exception's message.
+func (s *ServiceQuotaExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceQuotaExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceQuotaExceededException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceQuotaExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceQuotaExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Source server properties.
@@ -6743,6 +8588,9 @@ type SourceServer struct {
 	// Source server lifecycle state.
 	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
 
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
 	// Source server properties.
 	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
 
@@ -6755,6 +8603,9 @@ type SourceServer struct {
 	// replaced with "sensitive" in string returned by SourceServer's
 	// String and GoString methods.
 	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
 }
 
 // String returns the string representation.
@@ -6805,6 +8656,12 @@ func (s *SourceServer) SetLifeCycle(v *LifeCycle) *SourceServer {
 	return s
 }
 
+// SetReplicationType sets the ReplicationType field's value.
+func (s *SourceServer) SetReplicationType(v string) *SourceServer {
+	s.ReplicationType = &v
+	return s
+}
+
 // SetSourceProperties sets the SourceProperties field's value.
 func (s *SourceServer) SetSourceProperties(v *SourceProperties) *SourceServer {
 	s.SourceProperties = v
@@ -6820,6 +8677,151 @@ func (s *SourceServer) SetSourceServerID(v string) *SourceServer {
 // SetTags sets the Tags field's value.
 func (s *SourceServer) SetTags(v map[string]*string) *SourceServer {
 	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *SourceServer) SetVcenterClientID(v string) *SourceServer {
+	s.VcenterClientID = &v
+	return s
+}
+
+// Source server replication type.
+type SsmDocument struct {
+	_ struct{} `type:"structure"`
+
+	// Source server replication type.
+	//
+	// ActionName is a required field
+	ActionName *string `locationName:"actionName" type:"string" required:"true"`
+
+	// Source server replication type.
+	MustSucceedForCutover *bool `locationName:"mustSucceedForCutover" type:"boolean"`
+
+	// Source server replication type.
+	Parameters map[string][]*SsmParameterStoreParameter `locationName:"parameters" type:"map"`
+
+	// Source server replication type.
+	//
+	// SsmDocumentName is a required field
+	SsmDocumentName *string `locationName:"ssmDocumentName" min:"3" type:"string" required:"true"`
+
+	// Source server replication type.
+	TimeoutSeconds *int64 `locationName:"timeoutSeconds" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SsmDocument) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SsmDocument) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SsmDocument) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SsmDocument"}
+	if s.ActionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ActionName"))
+	}
+	if s.SsmDocumentName == nil {
+		invalidParams.Add(request.NewErrParamRequired("SsmDocumentName"))
+	}
+	if s.SsmDocumentName != nil && len(*s.SsmDocumentName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("SsmDocumentName", 3))
+	}
+	if s.TimeoutSeconds != nil && *s.TimeoutSeconds < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("TimeoutSeconds", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetActionName sets the ActionName field's value.
+func (s *SsmDocument) SetActionName(v string) *SsmDocument {
+	s.ActionName = &v
+	return s
+}
+
+// SetMustSucceedForCutover sets the MustSucceedForCutover field's value.
+func (s *SsmDocument) SetMustSucceedForCutover(v bool) *SsmDocument {
+	s.MustSucceedForCutover = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *SsmDocument) SetParameters(v map[string][]*SsmParameterStoreParameter) *SsmDocument {
+	s.Parameters = v
+	return s
+}
+
+// SetSsmDocumentName sets the SsmDocumentName field's value.
+func (s *SsmDocument) SetSsmDocumentName(v string) *SsmDocument {
+	s.SsmDocumentName = &v
+	return s
+}
+
+// SetTimeoutSeconds sets the TimeoutSeconds field's value.
+func (s *SsmDocument) SetTimeoutSeconds(v int64) *SsmDocument {
+	s.TimeoutSeconds = &v
+	return s
+}
+
+// Source server replication type.
+type SsmParameterStoreParameter struct {
+	_ struct{} `type:"structure"`
+
+	// Source server replication type.
+	//
+	// ParameterName is a required field
+	ParameterName *string `locationName:"parameterName" min:"1" type:"string" required:"true"`
+
+	// Source server replication type.
+	//
+	// ParameterType is a required field
+	ParameterType *string `locationName:"parameterType" type:"string" required:"true" enum:"SsmParameterStoreParameterType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SsmParameterStoreParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SsmParameterStoreParameter) GoString() string {
+	return s.String()
+}
+
+// SetParameterName sets the ParameterName field's value.
+func (s *SsmParameterStoreParameter) SetParameterName(v string) *SsmParameterStoreParameter {
+	s.ParameterName = &v
+	return s
+}
+
+// SetParameterType sets the ParameterType field's value.
+func (s *SsmParameterStoreParameter) SetParameterType(v string) *SsmParameterStoreParameter {
+	s.ParameterType = &v
 	return s
 }
 
@@ -6913,6 +8915,171 @@ func (s StartCutoverOutput) GoString() string {
 // SetJob sets the Job field's value.
 func (s *StartCutoverOutput) SetJob(v *Job) *StartCutoverOutput {
 	s.Job = v
+	return s
+}
+
+type StartReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of source server on which to start replication.
+	//
+	// SourceServerID is a required field
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartReplicationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartReplicationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartReplicationInput"}
+	if s.SourceServerID == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
+	}
+	if s.SourceServerID != nil && len(*s.SourceServerID) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceServerID", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *StartReplicationInput) SetSourceServerID(v string) *StartReplicationInput {
+	s.SourceServerID = &v
+	return s
+}
+
+type StartReplicationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Source server ARN.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source server data replication info.
+	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
+
+	// Source server archived status.
+	IsArchived *bool `locationName:"isArchived" type:"boolean"`
+
+	// Source server launched instance.
+	LaunchedInstance *LaunchedInstance `locationName:"launchedInstance" type:"structure"`
+
+	// Source server lifecycle state.
+	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
+
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
+	// Source server properties.
+	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
+
+	// Source server ID.
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
+
+	// Source server Tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by StartReplicationOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartReplicationOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *StartReplicationOutput) SetArn(v string) *StartReplicationOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetDataReplicationInfo sets the DataReplicationInfo field's value.
+func (s *StartReplicationOutput) SetDataReplicationInfo(v *DataReplicationInfo) *StartReplicationOutput {
+	s.DataReplicationInfo = v
+	return s
+}
+
+// SetIsArchived sets the IsArchived field's value.
+func (s *StartReplicationOutput) SetIsArchived(v bool) *StartReplicationOutput {
+	s.IsArchived = &v
+	return s
+}
+
+// SetLaunchedInstance sets the LaunchedInstance field's value.
+func (s *StartReplicationOutput) SetLaunchedInstance(v *LaunchedInstance) *StartReplicationOutput {
+	s.LaunchedInstance = v
+	return s
+}
+
+// SetLifeCycle sets the LifeCycle field's value.
+func (s *StartReplicationOutput) SetLifeCycle(v *LifeCycle) *StartReplicationOutput {
+	s.LifeCycle = v
+	return s
+}
+
+// SetReplicationType sets the ReplicationType field's value.
+func (s *StartReplicationOutput) SetReplicationType(v string) *StartReplicationOutput {
+	s.ReplicationType = &v
+	return s
+}
+
+// SetSourceProperties sets the SourceProperties field's value.
+func (s *StartReplicationOutput) SetSourceProperties(v *SourceProperties) *StartReplicationOutput {
+	s.SourceProperties = v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *StartReplicationOutput) SetSourceServerID(v string) *StartReplicationOutput {
+	s.SourceServerID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StartReplicationOutput) SetTags(v map[string]*string) *StartReplicationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *StartReplicationOutput) SetVcenterClientID(v string) *StartReplicationOutput {
+	s.VcenterClientID = &v
 	return s
 }
 
@@ -7077,7 +9244,7 @@ func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
 }
 
 type TagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7264,7 +9431,7 @@ func (s *ThrottlingException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Unitialized account exception.
+// Uninitialized account exception.
 type UninitializedAccountException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -7398,7 +9565,7 @@ func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
 }
 
 type UntagResourceOutput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7422,6 +9589,9 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateLaunchConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Update Launch configuration boot mode request.
+	BootMode *string `locationName:"bootMode" type:"string" enum:"BootMode"`
+
 	// Update Launch configuration copy Private IP request.
 	CopyPrivateIp *bool `locationName:"copyPrivateIp" type:"boolean"`
 
@@ -7436,6 +9606,9 @@ type UpdateLaunchConfigurationInput struct {
 
 	// Update Launch configuration name request.
 	Name *string `locationName:"name" type:"string"`
+
+	// Server participating in Job.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
 
 	// Update Launch configuration by Source Server ID request.
 	//
@@ -7473,11 +9646,22 @@ func (s *UpdateLaunchConfigurationInput) Validate() error {
 	if s.SourceServerID != nil && len(*s.SourceServerID) < 19 {
 		invalidParams.Add(request.NewErrParamMinLen("SourceServerID", 19))
 	}
+	if s.PostLaunchActions != nil {
+		if err := s.PostLaunchActions.Validate(); err != nil {
+			invalidParams.AddNested("PostLaunchActions", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetBootMode sets the BootMode field's value.
+func (s *UpdateLaunchConfigurationInput) SetBootMode(v string) *UpdateLaunchConfigurationInput {
+	s.BootMode = &v
+	return s
 }
 
 // SetCopyPrivateIp sets the CopyPrivateIp field's value.
@@ -7510,6 +9694,12 @@ func (s *UpdateLaunchConfigurationInput) SetName(v string) *UpdateLaunchConfigur
 	return s
 }
 
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *UpdateLaunchConfigurationInput) SetPostLaunchActions(v *PostLaunchActions) *UpdateLaunchConfigurationInput {
+	s.PostLaunchActions = v
+	return s
+}
+
 // SetSourceServerID sets the SourceServerID field's value.
 func (s *UpdateLaunchConfigurationInput) SetSourceServerID(v string) *UpdateLaunchConfigurationInput {
 	s.SourceServerID = &v
@@ -7525,28 +9715,34 @@ func (s *UpdateLaunchConfigurationInput) SetTargetInstanceTypeRightSizingMethod(
 type UpdateLaunchConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Launch configuration boot mode.
+	BootMode *string `locationName:"bootMode" type:"string" enum:"BootMode"`
+
 	// Copy Private IP during Launch Configuration.
 	CopyPrivateIp *bool `locationName:"copyPrivateIp" type:"boolean"`
 
 	// Copy Tags during Launch Configuration.
 	CopyTags *bool `locationName:"copyTags" type:"boolean"`
 
-	// Configure EC2 lauch configuration template ID.
+	// Launch configuration EC2 Launch template ID.
 	Ec2LaunchTemplateID *string `locationName:"ec2LaunchTemplateID" type:"string"`
 
-	// Configure launch dispostion for launch configuration.
+	// Launch disposition for launch configuration.
 	LaunchDisposition *string `locationName:"launchDisposition" type:"string" enum:"LaunchDisposition"`
 
-	// Configure launch configuration OS licensing.
+	// Launch configuration OS licensing.
 	Licensing *Licensing `locationName:"licensing" type:"structure"`
 
-	// Configure launch configuration name.
+	// Launch configuration name.
 	Name *string `locationName:"name" type:"string"`
 
-	// Configure launch configuration Source Server ID.
+	// Server participating in Job.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
+
+	// Launch configuration Source Server ID.
 	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
 
-	// Configure launch configuration Target instance type right sizing method.
+	// Launch configuration Target instance type right sizing method.
 	TargetInstanceTypeRightSizingMethod *string `locationName:"targetInstanceTypeRightSizingMethod" type:"string" enum:"TargetInstanceTypeRightSizingMethod"`
 }
 
@@ -7566,6 +9762,12 @@ func (s UpdateLaunchConfigurationOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateLaunchConfigurationOutput) GoString() string {
 	return s.String()
+}
+
+// SetBootMode sets the BootMode field's value.
+func (s *UpdateLaunchConfigurationOutput) SetBootMode(v string) *UpdateLaunchConfigurationOutput {
+	s.BootMode = &v
+	return s
 }
 
 // SetCopyPrivateIp sets the CopyPrivateIp field's value.
@@ -7604,6 +9806,12 @@ func (s *UpdateLaunchConfigurationOutput) SetName(v string) *UpdateLaunchConfigu
 	return s
 }
 
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *UpdateLaunchConfigurationOutput) SetPostLaunchActions(v *PostLaunchActions) *UpdateLaunchConfigurationOutput {
+	s.PostLaunchActions = v
+	return s
+}
+
 // SetSourceServerID sets the SourceServerID field's value.
 func (s *UpdateLaunchConfigurationOutput) SetSourceServerID(v string) *UpdateLaunchConfigurationOutput {
 	s.SourceServerID = &v
@@ -7613,6 +9821,133 @@ func (s *UpdateLaunchConfigurationOutput) SetSourceServerID(v string) *UpdateLau
 // SetTargetInstanceTypeRightSizingMethod sets the TargetInstanceTypeRightSizingMethod field's value.
 func (s *UpdateLaunchConfigurationOutput) SetTargetInstanceTypeRightSizingMethod(v string) *UpdateLaunchConfigurationOutput {
 	s.TargetInstanceTypeRightSizingMethod = &v
+	return s
+}
+
+type UpdateLaunchConfigurationTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// Update Launch configuration Target instance right sizing request.
+	//
+	// LaunchConfigurationTemplateID is a required field
+	LaunchConfigurationTemplateID *string `locationName:"launchConfigurationTemplateID" min:"21" type:"string" required:"true"`
+
+	// Update Launch configuration Target instance right sizing request.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLaunchConfigurationTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLaunchConfigurationTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateLaunchConfigurationTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateLaunchConfigurationTemplateInput"}
+	if s.LaunchConfigurationTemplateID == nil {
+		invalidParams.Add(request.NewErrParamRequired("LaunchConfigurationTemplateID"))
+	}
+	if s.LaunchConfigurationTemplateID != nil && len(*s.LaunchConfigurationTemplateID) < 21 {
+		invalidParams.Add(request.NewErrParamMinLen("LaunchConfigurationTemplateID", 21))
+	}
+	if s.PostLaunchActions != nil {
+		if err := s.PostLaunchActions.Validate(); err != nil {
+			invalidParams.AddNested("PostLaunchActions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLaunchConfigurationTemplateID sets the LaunchConfigurationTemplateID field's value.
+func (s *UpdateLaunchConfigurationTemplateInput) SetLaunchConfigurationTemplateID(v string) *UpdateLaunchConfigurationTemplateInput {
+	s.LaunchConfigurationTemplateID = &v
+	return s
+}
+
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *UpdateLaunchConfigurationTemplateInput) SetPostLaunchActions(v *PostLaunchActions) *UpdateLaunchConfigurationTemplateInput {
+	s.PostLaunchActions = v
+	return s
+}
+
+type UpdateLaunchConfigurationTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Copy Private IP during Launch Configuration.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Copy Private IP during Launch Configuration.
+	//
+	// LaunchConfigurationTemplateID is a required field
+	LaunchConfigurationTemplateID *string `locationName:"launchConfigurationTemplateID" min:"21" type:"string" required:"true"`
+
+	// Copy Private IP during Launch Configuration.
+	PostLaunchActions *PostLaunchActions `locationName:"postLaunchActions" type:"structure"`
+
+	// Copy Private IP during Launch Configuration.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateLaunchConfigurationTemplateOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLaunchConfigurationTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLaunchConfigurationTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateLaunchConfigurationTemplateOutput) SetArn(v string) *UpdateLaunchConfigurationTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetLaunchConfigurationTemplateID sets the LaunchConfigurationTemplateID field's value.
+func (s *UpdateLaunchConfigurationTemplateOutput) SetLaunchConfigurationTemplateID(v string) *UpdateLaunchConfigurationTemplateOutput {
+	s.LaunchConfigurationTemplateID = &v
+	return s
+}
+
+// SetPostLaunchActions sets the PostLaunchActions field's value.
+func (s *UpdateLaunchConfigurationTemplateOutput) SetPostLaunchActions(v *PostLaunchActions) *UpdateLaunchConfigurationTemplateOutput {
+	s.PostLaunchActions = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateLaunchConfigurationTemplateOutput) SetTags(v map[string]*string) *UpdateLaunchConfigurationTemplateOutput {
+	s.Tags = v
 	return s
 }
 
@@ -8152,7 +10487,7 @@ type UpdateReplicationConfigurationTemplateOutput struct {
 	// Service Security group.
 	AssociateDefaultSecurityGroup *bool `locationName:"associateDefaultSecurityGroup" type:"boolean"`
 
-	// Replication Configuration template bandwidth throtting.
+	// Replication Configuration template bandwidth throttling.
 	BandwidthThrottling *int64 `locationName:"bandwidthThrottling" type:"long"`
 
 	// Replication Configuration template create Public IP.
@@ -8161,7 +10496,7 @@ type UpdateReplicationConfigurationTemplateOutput struct {
 	// Replication Configuration template data plane routing.
 	DataPlaneRouting *string `locationName:"dataPlaneRouting" type:"string" enum:"ReplicationConfigurationDataPlaneRouting"`
 
-	// Replication Configuration template use dedault large Staging Disk type.
+	// Replication Configuration template use default large Staging Disk type.
 	DefaultLargeStagingDiskType *string `locationName:"defaultLargeStagingDiskType" type:"string" enum:"ReplicationConfigurationDefaultLargeStagingDiskType"`
 
 	// Replication Configuration template EBS encryption.
@@ -8170,7 +10505,7 @@ type UpdateReplicationConfigurationTemplateOutput struct {
 	// Replication Configuration template EBS encryption key ARN.
 	EbsEncryptionKeyArn *string `locationName:"ebsEncryptionKeyArn" min:"20" type:"string"`
 
-	// Replication Configuration template template ID.
+	// Replication Configuration template ID.
 	//
 	// ReplicationConfigurationTemplateID is a required field
 	ReplicationConfigurationTemplateID *string `locationName:"replicationConfigurationTemplateID" min:"21" type:"string" required:"true"`
@@ -8310,6 +10645,185 @@ func (s *UpdateReplicationConfigurationTemplateOutput) SetUseDedicatedReplicatio
 	return s
 }
 
+type UpdateSourceServerReplicationTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	// Replication type to which to update source server.
+	//
+	// ReplicationType is a required field
+	ReplicationType *string `locationName:"replicationType" type:"string" required:"true" enum:"ReplicationType"`
+
+	// ID of source server on which to update replication type.
+	//
+	// SourceServerID is a required field
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerReplicationTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerReplicationTypeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateSourceServerReplicationTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateSourceServerReplicationTypeInput"}
+	if s.ReplicationType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReplicationType"))
+	}
+	if s.SourceServerID == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
+	}
+	if s.SourceServerID != nil && len(*s.SourceServerID) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceServerID", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetReplicationType sets the ReplicationType field's value.
+func (s *UpdateSourceServerReplicationTypeInput) SetReplicationType(v string) *UpdateSourceServerReplicationTypeInput {
+	s.ReplicationType = &v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *UpdateSourceServerReplicationTypeInput) SetSourceServerID(v string) *UpdateSourceServerReplicationTypeInput {
+	s.SourceServerID = &v
+	return s
+}
+
+type UpdateSourceServerReplicationTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Source server ARN.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source server data replication info.
+	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
+
+	// Source server archived status.
+	IsArchived *bool `locationName:"isArchived" type:"boolean"`
+
+	// Source server launched instance.
+	LaunchedInstance *LaunchedInstance `locationName:"launchedInstance" type:"structure"`
+
+	// Source server lifecycle state.
+	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
+
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
+	// Source server properties.
+	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
+
+	// Source server ID.
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
+
+	// Source server Tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateSourceServerReplicationTypeOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerReplicationTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerReplicationTypeOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetArn(v string) *UpdateSourceServerReplicationTypeOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetDataReplicationInfo sets the DataReplicationInfo field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetDataReplicationInfo(v *DataReplicationInfo) *UpdateSourceServerReplicationTypeOutput {
+	s.DataReplicationInfo = v
+	return s
+}
+
+// SetIsArchived sets the IsArchived field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetIsArchived(v bool) *UpdateSourceServerReplicationTypeOutput {
+	s.IsArchived = &v
+	return s
+}
+
+// SetLaunchedInstance sets the LaunchedInstance field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetLaunchedInstance(v *LaunchedInstance) *UpdateSourceServerReplicationTypeOutput {
+	s.LaunchedInstance = v
+	return s
+}
+
+// SetLifeCycle sets the LifeCycle field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetLifeCycle(v *LifeCycle) *UpdateSourceServerReplicationTypeOutput {
+	s.LifeCycle = v
+	return s
+}
+
+// SetReplicationType sets the ReplicationType field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetReplicationType(v string) *UpdateSourceServerReplicationTypeOutput {
+	s.ReplicationType = &v
+	return s
+}
+
+// SetSourceProperties sets the SourceProperties field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetSourceProperties(v *SourceProperties) *UpdateSourceServerReplicationTypeOutput {
+	s.SourceProperties = v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetSourceServerID(v string) *UpdateSourceServerReplicationTypeOutput {
+	s.SourceServerID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetTags(v map[string]*string) *UpdateSourceServerReplicationTypeOutput {
+	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetVcenterClientID(v string) *UpdateSourceServerReplicationTypeOutput {
+	s.VcenterClientID = &v
+	return s
+}
+
 // Validate exception.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
@@ -8423,6 +10937,125 @@ func (s *ValidationExceptionField) SetName(v string) *ValidationExceptionField {
 	return s
 }
 
+// vCenter client.
+type VcenterClient struct {
+	_ struct{} `type:"structure"`
+
+	// Arn of vCenter client.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Datacenter name of vCenter client.
+	DatacenterName *string `locationName:"datacenterName" type:"string"`
+
+	// Hostname of vCenter client .
+	Hostname *string `locationName:"hostname" type:"string"`
+
+	// Last seen time of vCenter client.
+	LastSeenDatetime *string `locationName:"lastSeenDatetime" min:"19" type:"string"`
+
+	// Tags for Source Server of vCenter client.
+	//
+	// SourceServerTags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by VcenterClient's
+	// String and GoString methods.
+	SourceServerTags map[string]*string `locationName:"sourceServerTags" type:"map" sensitive:"true"`
+
+	// Tags for vCenter client.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by VcenterClient's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// ID of vCenter client.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
+
+	// Vcenter UUID of vCenter client.
+	VcenterUUID *string `locationName:"vcenterUUID" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VcenterClient) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VcenterClient) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *VcenterClient) SetArn(v string) *VcenterClient {
+	s.Arn = &v
+	return s
+}
+
+// SetDatacenterName sets the DatacenterName field's value.
+func (s *VcenterClient) SetDatacenterName(v string) *VcenterClient {
+	s.DatacenterName = &v
+	return s
+}
+
+// SetHostname sets the Hostname field's value.
+func (s *VcenterClient) SetHostname(v string) *VcenterClient {
+	s.Hostname = &v
+	return s
+}
+
+// SetLastSeenDatetime sets the LastSeenDatetime field's value.
+func (s *VcenterClient) SetLastSeenDatetime(v string) *VcenterClient {
+	s.LastSeenDatetime = &v
+	return s
+}
+
+// SetSourceServerTags sets the SourceServerTags field's value.
+func (s *VcenterClient) SetSourceServerTags(v map[string]*string) *VcenterClient {
+	s.SourceServerTags = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *VcenterClient) SetTags(v map[string]*string) *VcenterClient {
+	s.Tags = v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *VcenterClient) SetVcenterClientID(v string) *VcenterClient {
+	s.VcenterClientID = &v
+	return s
+}
+
+// SetVcenterUUID sets the VcenterUUID field's value.
+func (s *VcenterClient) SetVcenterUUID(v string) *VcenterClient {
+	s.VcenterUUID = &v
+	return s
+}
+
+const (
+	// BootModeLegacyBios is a BootMode enum value
+	BootModeLegacyBios = "LEGACY_BIOS"
+
+	// BootModeUefi is a BootMode enum value
+	BootModeUefi = "UEFI"
+)
+
+// BootMode_Values returns all elements of the BootMode enum
+func BootMode_Values() []string {
+	return []string{
+		BootModeLegacyBios,
+		BootModeUefi,
+	}
+}
+
 const (
 	// ChangeServerLifeCycleStateSourceServerLifecycleStateReadyForTest is a ChangeServerLifeCycleStateSourceServerLifecycleState enum value
 	ChangeServerLifeCycleStateSourceServerLifecycleStateReadyForTest = "READY_FOR_TEST"
@@ -8485,6 +11118,12 @@ const (
 
 	// DataReplicationErrorStringFailedToStartDataTransfer is a DataReplicationErrorString enum value
 	DataReplicationErrorStringFailedToStartDataTransfer = "FAILED_TO_START_DATA_TRANSFER"
+
+	// DataReplicationErrorStringUnsupportedVmConfiguration is a DataReplicationErrorString enum value
+	DataReplicationErrorStringUnsupportedVmConfiguration = "UNSUPPORTED_VM_CONFIGURATION"
+
+	// DataReplicationErrorStringLastSnapshotJobFailed is a DataReplicationErrorString enum value
+	DataReplicationErrorStringLastSnapshotJobFailed = "LAST_SNAPSHOT_JOB_FAILED"
 )
 
 // DataReplicationErrorString_Values returns all elements of the DataReplicationErrorString enum
@@ -8504,6 +11143,8 @@ func DataReplicationErrorString_Values() []string {
 		DataReplicationErrorStringFailedToPairReplicationServerWithAgent,
 		DataReplicationErrorStringFailedToConnectAgentToReplicationServer,
 		DataReplicationErrorStringFailedToStartDataTransfer,
+		DataReplicationErrorStringUnsupportedVmConfiguration,
+		DataReplicationErrorStringLastSnapshotJobFailed,
 	}
 }
 
@@ -8617,6 +11258,12 @@ const (
 
 	// DataReplicationStateDisconnected is a DataReplicationState enum value
 	DataReplicationStateDisconnected = "DISCONNECTED"
+
+	// DataReplicationStatePendingSnapshotShipping is a DataReplicationState enum value
+	DataReplicationStatePendingSnapshotShipping = "PENDING_SNAPSHOT_SHIPPING"
+
+	// DataReplicationStateShippingSnapshot is a DataReplicationState enum value
+	DataReplicationStateShippingSnapshot = "SHIPPING_SNAPSHOT"
 )
 
 // DataReplicationState_Values returns all elements of the DataReplicationState enum
@@ -8632,6 +11279,8 @@ func DataReplicationState_Values() []string {
 		DataReplicationStateRescan,
 		DataReplicationStateStalled,
 		DataReplicationStateDisconnected,
+		DataReplicationStatePendingSnapshotShipping,
+		DataReplicationStateShippingSnapshot,
 	}
 }
 
@@ -8859,6 +11508,9 @@ const (
 
 	// LifeCycleStateDisconnected is a LifeCycleState enum value
 	LifeCycleStateDisconnected = "DISCONNECTED"
+
+	// LifeCycleStateDiscovered is a LifeCycleState enum value
+	LifeCycleStateDiscovered = "DISCOVERED"
 )
 
 // LifeCycleState_Values returns all elements of the LifeCycleState enum
@@ -8872,6 +11524,43 @@ func LifeCycleState_Values() []string {
 		LifeCycleStateCuttingOver,
 		LifeCycleStateCutover,
 		LifeCycleStateDisconnected,
+		LifeCycleStateDiscovered,
+	}
+}
+
+const (
+	// PostLaunchActionExecutionStatusInProgress is a PostLaunchActionExecutionStatus enum value
+	PostLaunchActionExecutionStatusInProgress = "IN_PROGRESS"
+
+	// PostLaunchActionExecutionStatusSuccess is a PostLaunchActionExecutionStatus enum value
+	PostLaunchActionExecutionStatusSuccess = "SUCCESS"
+
+	// PostLaunchActionExecutionStatusFailed is a PostLaunchActionExecutionStatus enum value
+	PostLaunchActionExecutionStatusFailed = "FAILED"
+)
+
+// PostLaunchActionExecutionStatus_Values returns all elements of the PostLaunchActionExecutionStatus enum
+func PostLaunchActionExecutionStatus_Values() []string {
+	return []string{
+		PostLaunchActionExecutionStatusInProgress,
+		PostLaunchActionExecutionStatusSuccess,
+		PostLaunchActionExecutionStatusFailed,
+	}
+}
+
+const (
+	// PostLaunchActionsDeploymentTypeTestAndCutover is a PostLaunchActionsDeploymentType enum value
+	PostLaunchActionsDeploymentTypeTestAndCutover = "TEST_AND_CUTOVER"
+
+	// PostLaunchActionsDeploymentTypeCutoverOnly is a PostLaunchActionsDeploymentType enum value
+	PostLaunchActionsDeploymentTypeCutoverOnly = "CUTOVER_ONLY"
+)
+
+// PostLaunchActionsDeploymentType_Values returns all elements of the PostLaunchActionsDeploymentType enum
+func PostLaunchActionsDeploymentType_Values() []string {
+	return []string{
+		PostLaunchActionsDeploymentTypeTestAndCutover,
+		PostLaunchActionsDeploymentTypeCutoverOnly,
 	}
 }
 
@@ -8897,6 +11586,9 @@ const (
 
 	// ReplicationConfigurationDefaultLargeStagingDiskTypeSt1 is a ReplicationConfigurationDefaultLargeStagingDiskType enum value
 	ReplicationConfigurationDefaultLargeStagingDiskTypeSt1 = "ST1"
+
+	// ReplicationConfigurationDefaultLargeStagingDiskTypeGp3 is a ReplicationConfigurationDefaultLargeStagingDiskType enum value
+	ReplicationConfigurationDefaultLargeStagingDiskTypeGp3 = "GP3"
 )
 
 // ReplicationConfigurationDefaultLargeStagingDiskType_Values returns all elements of the ReplicationConfigurationDefaultLargeStagingDiskType enum
@@ -8904,6 +11596,7 @@ func ReplicationConfigurationDefaultLargeStagingDiskType_Values() []string {
 	return []string{
 		ReplicationConfigurationDefaultLargeStagingDiskTypeGp2,
 		ReplicationConfigurationDefaultLargeStagingDiskTypeSt1,
+		ReplicationConfigurationDefaultLargeStagingDiskTypeGp3,
 	}
 }
 
@@ -8941,6 +11634,12 @@ const (
 
 	// ReplicationConfigurationReplicatedDiskStagingDiskTypeStandard is a ReplicationConfigurationReplicatedDiskStagingDiskType enum value
 	ReplicationConfigurationReplicatedDiskStagingDiskTypeStandard = "STANDARD"
+
+	// ReplicationConfigurationReplicatedDiskStagingDiskTypeGp3 is a ReplicationConfigurationReplicatedDiskStagingDiskType enum value
+	ReplicationConfigurationReplicatedDiskStagingDiskTypeGp3 = "GP3"
+
+	// ReplicationConfigurationReplicatedDiskStagingDiskTypeIo2 is a ReplicationConfigurationReplicatedDiskStagingDiskType enum value
+	ReplicationConfigurationReplicatedDiskStagingDiskTypeIo2 = "IO2"
 )
 
 // ReplicationConfigurationReplicatedDiskStagingDiskType_Values returns all elements of the ReplicationConfigurationReplicatedDiskStagingDiskType enum
@@ -8952,6 +11651,52 @@ func ReplicationConfigurationReplicatedDiskStagingDiskType_Values() []string {
 		ReplicationConfigurationReplicatedDiskStagingDiskTypeSc1,
 		ReplicationConfigurationReplicatedDiskStagingDiskTypeSt1,
 		ReplicationConfigurationReplicatedDiskStagingDiskTypeStandard,
+		ReplicationConfigurationReplicatedDiskStagingDiskTypeGp3,
+		ReplicationConfigurationReplicatedDiskStagingDiskTypeIo2,
+	}
+}
+
+const (
+	// ReplicationTypeAgentBased is a ReplicationType enum value
+	ReplicationTypeAgentBased = "AGENT_BASED"
+
+	// ReplicationTypeSnapshotShipping is a ReplicationType enum value
+	ReplicationTypeSnapshotShipping = "SNAPSHOT_SHIPPING"
+)
+
+// ReplicationType_Values returns all elements of the ReplicationType enum
+func ReplicationType_Values() []string {
+	return []string{
+		ReplicationTypeAgentBased,
+		ReplicationTypeSnapshotShipping,
+	}
+}
+
+const (
+	// SsmDocumentTypeAutomation is a SsmDocumentType enum value
+	SsmDocumentTypeAutomation = "AUTOMATION"
+
+	// SsmDocumentTypeCommand is a SsmDocumentType enum value
+	SsmDocumentTypeCommand = "COMMAND"
+)
+
+// SsmDocumentType_Values returns all elements of the SsmDocumentType enum
+func SsmDocumentType_Values() []string {
+	return []string{
+		SsmDocumentTypeAutomation,
+		SsmDocumentTypeCommand,
+	}
+}
+
+const (
+	// SsmParameterStoreParameterTypeString is a SsmParameterStoreParameterType enum value
+	SsmParameterStoreParameterTypeString = "STRING"
+)
+
+// SsmParameterStoreParameterType_Values returns all elements of the SsmParameterStoreParameterType enum
+func SsmParameterStoreParameterType_Values() []string {
+	return []string{
+		SsmParameterStoreParameterTypeString,
 	}
 }
 

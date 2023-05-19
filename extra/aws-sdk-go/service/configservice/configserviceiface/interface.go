@@ -360,6 +360,10 @@ type ConfigServiceAPI interface {
 	GetConformancePackComplianceSummaryPages(*configservice.GetConformancePackComplianceSummaryInput, func(*configservice.GetConformancePackComplianceSummaryOutput, bool) bool) error
 	GetConformancePackComplianceSummaryPagesWithContext(aws.Context, *configservice.GetConformancePackComplianceSummaryInput, func(*configservice.GetConformancePackComplianceSummaryOutput, bool) bool, ...request.Option) error
 
+	GetCustomRulePolicy(*configservice.GetCustomRulePolicyInput) (*configservice.GetCustomRulePolicyOutput, error)
+	GetCustomRulePolicyWithContext(aws.Context, *configservice.GetCustomRulePolicyInput, ...request.Option) (*configservice.GetCustomRulePolicyOutput, error)
+	GetCustomRulePolicyRequest(*configservice.GetCustomRulePolicyInput) (*request.Request, *configservice.GetCustomRulePolicyOutput)
+
 	GetDiscoveredResourceCounts(*configservice.GetDiscoveredResourceCountsInput) (*configservice.GetDiscoveredResourceCountsOutput, error)
 	GetDiscoveredResourceCountsWithContext(aws.Context, *configservice.GetDiscoveredResourceCountsInput, ...request.Option) (*configservice.GetDiscoveredResourceCountsOutput, error)
 	GetDiscoveredResourceCountsRequest(*configservice.GetDiscoveredResourceCountsInput) (*request.Request, *configservice.GetDiscoveredResourceCountsOutput)
@@ -381,6 +385,10 @@ type ConfigServiceAPI interface {
 	GetOrganizationConformancePackDetailedStatusPages(*configservice.GetOrganizationConformancePackDetailedStatusInput, func(*configservice.GetOrganizationConformancePackDetailedStatusOutput, bool) bool) error
 	GetOrganizationConformancePackDetailedStatusPagesWithContext(aws.Context, *configservice.GetOrganizationConformancePackDetailedStatusInput, func(*configservice.GetOrganizationConformancePackDetailedStatusOutput, bool) bool, ...request.Option) error
 
+	GetOrganizationCustomRulePolicy(*configservice.GetOrganizationCustomRulePolicyInput) (*configservice.GetOrganizationCustomRulePolicyOutput, error)
+	GetOrganizationCustomRulePolicyWithContext(aws.Context, *configservice.GetOrganizationCustomRulePolicyInput, ...request.Option) (*configservice.GetOrganizationCustomRulePolicyOutput, error)
+	GetOrganizationCustomRulePolicyRequest(*configservice.GetOrganizationCustomRulePolicyInput) (*request.Request, *configservice.GetOrganizationCustomRulePolicyOutput)
+
 	GetResourceConfigHistory(*configservice.GetResourceConfigHistoryInput) (*configservice.GetResourceConfigHistoryOutput, error)
 	GetResourceConfigHistoryWithContext(aws.Context, *configservice.GetResourceConfigHistoryInput, ...request.Option) (*configservice.GetResourceConfigHistoryOutput, error)
 	GetResourceConfigHistoryRequest(*configservice.GetResourceConfigHistoryInput) (*request.Request, *configservice.GetResourceConfigHistoryOutput)
@@ -398,6 +406,13 @@ type ConfigServiceAPI interface {
 
 	ListAggregateDiscoveredResourcesPages(*configservice.ListAggregateDiscoveredResourcesInput, func(*configservice.ListAggregateDiscoveredResourcesOutput, bool) bool) error
 	ListAggregateDiscoveredResourcesPagesWithContext(aws.Context, *configservice.ListAggregateDiscoveredResourcesInput, func(*configservice.ListAggregateDiscoveredResourcesOutput, bool) bool, ...request.Option) error
+
+	ListConformancePackComplianceScores(*configservice.ListConformancePackComplianceScoresInput) (*configservice.ListConformancePackComplianceScoresOutput, error)
+	ListConformancePackComplianceScoresWithContext(aws.Context, *configservice.ListConformancePackComplianceScoresInput, ...request.Option) (*configservice.ListConformancePackComplianceScoresOutput, error)
+	ListConformancePackComplianceScoresRequest(*configservice.ListConformancePackComplianceScoresInput) (*request.Request, *configservice.ListConformancePackComplianceScoresOutput)
+
+	ListConformancePackComplianceScoresPages(*configservice.ListConformancePackComplianceScoresInput, func(*configservice.ListConformancePackComplianceScoresOutput, bool) bool) error
+	ListConformancePackComplianceScoresPagesWithContext(aws.Context, *configservice.ListConformancePackComplianceScoresInput, func(*configservice.ListConformancePackComplianceScoresOutput, bool) bool, ...request.Option) error
 
 	ListDiscoveredResources(*configservice.ListDiscoveredResourcesInput) (*configservice.ListDiscoveredResourcesOutput, error)
 	ListDiscoveredResourcesWithContext(aws.Context, *configservice.ListDiscoveredResourcesInput, ...request.Option) (*configservice.ListDiscoveredResourcesOutput, error)

@@ -21,7 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherarchive"
@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
+	envdetect2 "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/mocks/envdetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	cache_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
@@ -387,7 +388,7 @@ func TestExtractPackageInfo(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				testdata.osInfo,
@@ -501,7 +502,7 @@ func TestReportResult(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(testdata.collectDataResponseObj, testdata.collectDataResponseErr).Once()
 			ds := &PackageService{facadeClient: &testdata.facadeClient, manifestCache: packageservice.ManifestCacheMemNew(), collector: &mockedCollector, timeProvider: timemock}
@@ -609,7 +610,7 @@ func TestDownloadManifest(t *testing.T) {
 			context["packageVersion"] = testdata.packageVersion
 			context["manifest"] = testdata.manifest
 			testArchive := birdwatcherarchive.New(&testdata.facadeClient, context)
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 			envdata := &envdetect.Environment{
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
 				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
@@ -686,7 +687,7 @@ func TestDownloadDocument(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 			envdata := &envdetect.Environment{
 				&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
 				&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
@@ -729,8 +730,8 @@ func TestDownloadDocument(t *testing.T) {
 				cache.On("WriteManifest", packageName, docVersionForGetDoc, []byte(manifestStr)).Return(nil)
 			}
 
-			testArchive := documentarchive.NewDocumentArchive(&facadeMock, nil, &documentDescription, cache, manifestStr)
-			ds := &PackageService{facadeClient: &facadeMock, manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
+			testArchive := documentarchive.NewDocumentArchive(&facadeMock, nil, &documentDescription, &cache, manifestStr)
+			ds := &PackageService{facadeClient: &facadeMock, manifestCache: &cache, collector: &mockedCollector, packageArchive: testArchive}
 
 			_, manifestVersion, isSameAsCache, err := ds.DownloadManifest(tracer, testdata.packageName, testdata.packageVersion)
 
@@ -795,7 +796,7 @@ func TestDownloadManifestSameAsCacheManifest(t *testing.T) {
 
 	tracer.BeginSection("test successful getManifest same as cache")
 
-	mockedCollector := envdetect.CollectorMock{}
+	mockedCollector := envdetect2.CollectorMock{}
 
 	for _, testdata := range data {
 		context := make(map[string]string)
@@ -860,7 +861,7 @@ func TestDownloadManifestDifferentFromCacheManifest(t *testing.T) {
 	context["packageVersion"] = testdata.packageVersion
 	context["manifest"] = ""
 	testArchive := birdwatcherarchive.New(&testdata.facadeClient, context)
-	mockedCollector := envdetect.CollectorMock{}
+	mockedCollector := envdetect2.CollectorMock{}
 	envdata := &envdetect.Environment{
 		&osdetect.OperatingSystem{"abc", "567", "", "xyz", "", ""},
 		&ec2infradetect.Ec2Infrastructure{"instanceIDX", "Reg1", "", "AZ1", "instanceTypeZ"},
@@ -952,7 +953,7 @@ func TestFindFileFromManifest(t *testing.T) {
 
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},
@@ -1052,7 +1053,7 @@ func TestDownloadFile(t *testing.T) {
 			context["manifest"] = "manifest"
 			testArchive := birdwatcherarchive.New(&facade.FacadeStub{}, context)
 
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 			result, err := downloadFile(ds, tracer, testdata.file, packagename, version, true)
@@ -1178,7 +1179,7 @@ func TestDownloadFileFromDocumentArchive(t *testing.T) {
 			}
 			testArchive := documentarchive.NewDocumentArchive(&facadeClient, testdata.attachments, &documentDescription, cache, "manifestStr")
 
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 			ds := &PackageService{manifestCache: cache, collector: &mockedCollector, packageArchive: testArchive}
 
 			result, err := downloadFile(ds, tracer, testdata.file, packagename, version, true)
@@ -1250,7 +1251,7 @@ func TestDownloadArtifact(t *testing.T) {
 			context["packageVersion"] = testdata.packageVersion
 			context["manifest"] = manifestStr
 			testArchive := birdwatcherarchive.New(&facade.FacadeStub{}, context)
-			mockedCollector := envdetect.CollectorMock{}
+			mockedCollector := envdetect2.CollectorMock{}
 
 			mockedCollector.On("CollectData", mock.Anything).Return(&envdetect.Environment{
 				&osdetect.OperatingSystem{"platformName", "platformVersion", "", "architecture", "", ""},

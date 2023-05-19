@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWSKendraFrontendService.
 //    func myFunc(svc kendraiface.KendraAPI) bool {
-//        // Make svc.BatchDeleteDocument request
+//        // Make svc.AssociateEntitiesToExperience request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockKendraClient struct {
 //        kendraiface.KendraAPI
 //    }
-//    func (m *mockKendraClient) BatchDeleteDocument(input *kendra.BatchDeleteDocumentInput) (*kendra.BatchDeleteDocumentOutput, error) {
+//    func (m *mockKendraClient) AssociateEntitiesToExperience(input *kendra.AssociateEntitiesToExperienceInput) (*kendra.AssociateEntitiesToExperienceOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,14 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type KendraAPI interface {
+	AssociateEntitiesToExperience(*kendra.AssociateEntitiesToExperienceInput) (*kendra.AssociateEntitiesToExperienceOutput, error)
+	AssociateEntitiesToExperienceWithContext(aws.Context, *kendra.AssociateEntitiesToExperienceInput, ...request.Option) (*kendra.AssociateEntitiesToExperienceOutput, error)
+	AssociateEntitiesToExperienceRequest(*kendra.AssociateEntitiesToExperienceInput) (*request.Request, *kendra.AssociateEntitiesToExperienceOutput)
+
+	AssociatePersonasToEntities(*kendra.AssociatePersonasToEntitiesInput) (*kendra.AssociatePersonasToEntitiesOutput, error)
+	AssociatePersonasToEntitiesWithContext(aws.Context, *kendra.AssociatePersonasToEntitiesInput, ...request.Option) (*kendra.AssociatePersonasToEntitiesOutput, error)
+	AssociatePersonasToEntitiesRequest(*kendra.AssociatePersonasToEntitiesInput) (*request.Request, *kendra.AssociatePersonasToEntitiesOutput)
+
 	BatchDeleteDocument(*kendra.BatchDeleteDocumentInput) (*kendra.BatchDeleteDocumentOutput, error)
 	BatchDeleteDocumentWithContext(aws.Context, *kendra.BatchDeleteDocumentInput, ...request.Option) (*kendra.BatchDeleteDocumentOutput, error)
 	BatchDeleteDocumentRequest(*kendra.BatchDeleteDocumentInput) (*request.Request, *kendra.BatchDeleteDocumentOutput)
@@ -76,9 +84,17 @@ type KendraAPI interface {
 	ClearQuerySuggestionsWithContext(aws.Context, *kendra.ClearQuerySuggestionsInput, ...request.Option) (*kendra.ClearQuerySuggestionsOutput, error)
 	ClearQuerySuggestionsRequest(*kendra.ClearQuerySuggestionsInput) (*request.Request, *kendra.ClearQuerySuggestionsOutput)
 
+	CreateAccessControlConfiguration(*kendra.CreateAccessControlConfigurationInput) (*kendra.CreateAccessControlConfigurationOutput, error)
+	CreateAccessControlConfigurationWithContext(aws.Context, *kendra.CreateAccessControlConfigurationInput, ...request.Option) (*kendra.CreateAccessControlConfigurationOutput, error)
+	CreateAccessControlConfigurationRequest(*kendra.CreateAccessControlConfigurationInput) (*request.Request, *kendra.CreateAccessControlConfigurationOutput)
+
 	CreateDataSource(*kendra.CreateDataSourceInput) (*kendra.CreateDataSourceOutput, error)
 	CreateDataSourceWithContext(aws.Context, *kendra.CreateDataSourceInput, ...request.Option) (*kendra.CreateDataSourceOutput, error)
 	CreateDataSourceRequest(*kendra.CreateDataSourceInput) (*request.Request, *kendra.CreateDataSourceOutput)
+
+	CreateExperience(*kendra.CreateExperienceInput) (*kendra.CreateExperienceOutput, error)
+	CreateExperienceWithContext(aws.Context, *kendra.CreateExperienceInput, ...request.Option) (*kendra.CreateExperienceOutput, error)
+	CreateExperienceRequest(*kendra.CreateExperienceInput) (*request.Request, *kendra.CreateExperienceOutput)
 
 	CreateFaq(*kendra.CreateFaqInput) (*kendra.CreateFaqOutput, error)
 	CreateFaqWithContext(aws.Context, *kendra.CreateFaqInput, ...request.Option) (*kendra.CreateFaqOutput, error)
@@ -96,9 +112,17 @@ type KendraAPI interface {
 	CreateThesaurusWithContext(aws.Context, *kendra.CreateThesaurusInput, ...request.Option) (*kendra.CreateThesaurusOutput, error)
 	CreateThesaurusRequest(*kendra.CreateThesaurusInput) (*request.Request, *kendra.CreateThesaurusOutput)
 
+	DeleteAccessControlConfiguration(*kendra.DeleteAccessControlConfigurationInput) (*kendra.DeleteAccessControlConfigurationOutput, error)
+	DeleteAccessControlConfigurationWithContext(aws.Context, *kendra.DeleteAccessControlConfigurationInput, ...request.Option) (*kendra.DeleteAccessControlConfigurationOutput, error)
+	DeleteAccessControlConfigurationRequest(*kendra.DeleteAccessControlConfigurationInput) (*request.Request, *kendra.DeleteAccessControlConfigurationOutput)
+
 	DeleteDataSource(*kendra.DeleteDataSourceInput) (*kendra.DeleteDataSourceOutput, error)
 	DeleteDataSourceWithContext(aws.Context, *kendra.DeleteDataSourceInput, ...request.Option) (*kendra.DeleteDataSourceOutput, error)
 	DeleteDataSourceRequest(*kendra.DeleteDataSourceInput) (*request.Request, *kendra.DeleteDataSourceOutput)
+
+	DeleteExperience(*kendra.DeleteExperienceInput) (*kendra.DeleteExperienceOutput, error)
+	DeleteExperienceWithContext(aws.Context, *kendra.DeleteExperienceInput, ...request.Option) (*kendra.DeleteExperienceOutput, error)
+	DeleteExperienceRequest(*kendra.DeleteExperienceInput) (*request.Request, *kendra.DeleteExperienceOutput)
 
 	DeleteFaq(*kendra.DeleteFaqInput) (*kendra.DeleteFaqOutput, error)
 	DeleteFaqWithContext(aws.Context, *kendra.DeleteFaqInput, ...request.Option) (*kendra.DeleteFaqOutput, error)
@@ -120,9 +144,17 @@ type KendraAPI interface {
 	DeleteThesaurusWithContext(aws.Context, *kendra.DeleteThesaurusInput, ...request.Option) (*kendra.DeleteThesaurusOutput, error)
 	DeleteThesaurusRequest(*kendra.DeleteThesaurusInput) (*request.Request, *kendra.DeleteThesaurusOutput)
 
+	DescribeAccessControlConfiguration(*kendra.DescribeAccessControlConfigurationInput) (*kendra.DescribeAccessControlConfigurationOutput, error)
+	DescribeAccessControlConfigurationWithContext(aws.Context, *kendra.DescribeAccessControlConfigurationInput, ...request.Option) (*kendra.DescribeAccessControlConfigurationOutput, error)
+	DescribeAccessControlConfigurationRequest(*kendra.DescribeAccessControlConfigurationInput) (*request.Request, *kendra.DescribeAccessControlConfigurationOutput)
+
 	DescribeDataSource(*kendra.DescribeDataSourceInput) (*kendra.DescribeDataSourceOutput, error)
 	DescribeDataSourceWithContext(aws.Context, *kendra.DescribeDataSourceInput, ...request.Option) (*kendra.DescribeDataSourceOutput, error)
 	DescribeDataSourceRequest(*kendra.DescribeDataSourceInput) (*request.Request, *kendra.DescribeDataSourceOutput)
+
+	DescribeExperience(*kendra.DescribeExperienceInput) (*kendra.DescribeExperienceOutput, error)
+	DescribeExperienceWithContext(aws.Context, *kendra.DescribeExperienceInput, ...request.Option) (*kendra.DescribeExperienceOutput, error)
+	DescribeExperienceRequest(*kendra.DescribeExperienceInput) (*request.Request, *kendra.DescribeExperienceOutput)
 
 	DescribeFaq(*kendra.DescribeFaqInput) (*kendra.DescribeFaqOutput, error)
 	DescribeFaqWithContext(aws.Context, *kendra.DescribeFaqInput, ...request.Option) (*kendra.DescribeFaqOutput, error)
@@ -148,9 +180,31 @@ type KendraAPI interface {
 	DescribeThesaurusWithContext(aws.Context, *kendra.DescribeThesaurusInput, ...request.Option) (*kendra.DescribeThesaurusOutput, error)
 	DescribeThesaurusRequest(*kendra.DescribeThesaurusInput) (*request.Request, *kendra.DescribeThesaurusOutput)
 
+	DisassociateEntitiesFromExperience(*kendra.DisassociateEntitiesFromExperienceInput) (*kendra.DisassociateEntitiesFromExperienceOutput, error)
+	DisassociateEntitiesFromExperienceWithContext(aws.Context, *kendra.DisassociateEntitiesFromExperienceInput, ...request.Option) (*kendra.DisassociateEntitiesFromExperienceOutput, error)
+	DisassociateEntitiesFromExperienceRequest(*kendra.DisassociateEntitiesFromExperienceInput) (*request.Request, *kendra.DisassociateEntitiesFromExperienceOutput)
+
+	DisassociatePersonasFromEntities(*kendra.DisassociatePersonasFromEntitiesInput) (*kendra.DisassociatePersonasFromEntitiesOutput, error)
+	DisassociatePersonasFromEntitiesWithContext(aws.Context, *kendra.DisassociatePersonasFromEntitiesInput, ...request.Option) (*kendra.DisassociatePersonasFromEntitiesOutput, error)
+	DisassociatePersonasFromEntitiesRequest(*kendra.DisassociatePersonasFromEntitiesInput) (*request.Request, *kendra.DisassociatePersonasFromEntitiesOutput)
+
 	GetQuerySuggestions(*kendra.GetQuerySuggestionsInput) (*kendra.GetQuerySuggestionsOutput, error)
 	GetQuerySuggestionsWithContext(aws.Context, *kendra.GetQuerySuggestionsInput, ...request.Option) (*kendra.GetQuerySuggestionsOutput, error)
 	GetQuerySuggestionsRequest(*kendra.GetQuerySuggestionsInput) (*request.Request, *kendra.GetQuerySuggestionsOutput)
+
+	GetSnapshots(*kendra.GetSnapshotsInput) (*kendra.GetSnapshotsOutput, error)
+	GetSnapshotsWithContext(aws.Context, *kendra.GetSnapshotsInput, ...request.Option) (*kendra.GetSnapshotsOutput, error)
+	GetSnapshotsRequest(*kendra.GetSnapshotsInput) (*request.Request, *kendra.GetSnapshotsOutput)
+
+	GetSnapshotsPages(*kendra.GetSnapshotsInput, func(*kendra.GetSnapshotsOutput, bool) bool) error
+	GetSnapshotsPagesWithContext(aws.Context, *kendra.GetSnapshotsInput, func(*kendra.GetSnapshotsOutput, bool) bool, ...request.Option) error
+
+	ListAccessControlConfigurations(*kendra.ListAccessControlConfigurationsInput) (*kendra.ListAccessControlConfigurationsOutput, error)
+	ListAccessControlConfigurationsWithContext(aws.Context, *kendra.ListAccessControlConfigurationsInput, ...request.Option) (*kendra.ListAccessControlConfigurationsOutput, error)
+	ListAccessControlConfigurationsRequest(*kendra.ListAccessControlConfigurationsInput) (*request.Request, *kendra.ListAccessControlConfigurationsOutput)
+
+	ListAccessControlConfigurationsPages(*kendra.ListAccessControlConfigurationsInput, func(*kendra.ListAccessControlConfigurationsOutput, bool) bool) error
+	ListAccessControlConfigurationsPagesWithContext(aws.Context, *kendra.ListAccessControlConfigurationsInput, func(*kendra.ListAccessControlConfigurationsOutput, bool) bool, ...request.Option) error
 
 	ListDataSourceSyncJobs(*kendra.ListDataSourceSyncJobsInput) (*kendra.ListDataSourceSyncJobsOutput, error)
 	ListDataSourceSyncJobsWithContext(aws.Context, *kendra.ListDataSourceSyncJobsInput, ...request.Option) (*kendra.ListDataSourceSyncJobsOutput, error)
@@ -166,13 +220,40 @@ type KendraAPI interface {
 	ListDataSourcesPages(*kendra.ListDataSourcesInput, func(*kendra.ListDataSourcesOutput, bool) bool) error
 	ListDataSourcesPagesWithContext(aws.Context, *kendra.ListDataSourcesInput, func(*kendra.ListDataSourcesOutput, bool) bool, ...request.Option) error
 
+	ListEntityPersonas(*kendra.ListEntityPersonasInput) (*kendra.ListEntityPersonasOutput, error)
+	ListEntityPersonasWithContext(aws.Context, *kendra.ListEntityPersonasInput, ...request.Option) (*kendra.ListEntityPersonasOutput, error)
+	ListEntityPersonasRequest(*kendra.ListEntityPersonasInput) (*request.Request, *kendra.ListEntityPersonasOutput)
+
+	ListEntityPersonasPages(*kendra.ListEntityPersonasInput, func(*kendra.ListEntityPersonasOutput, bool) bool) error
+	ListEntityPersonasPagesWithContext(aws.Context, *kendra.ListEntityPersonasInput, func(*kendra.ListEntityPersonasOutput, bool) bool, ...request.Option) error
+
+	ListExperienceEntities(*kendra.ListExperienceEntitiesInput) (*kendra.ListExperienceEntitiesOutput, error)
+	ListExperienceEntitiesWithContext(aws.Context, *kendra.ListExperienceEntitiesInput, ...request.Option) (*kendra.ListExperienceEntitiesOutput, error)
+	ListExperienceEntitiesRequest(*kendra.ListExperienceEntitiesInput) (*request.Request, *kendra.ListExperienceEntitiesOutput)
+
+	ListExperienceEntitiesPages(*kendra.ListExperienceEntitiesInput, func(*kendra.ListExperienceEntitiesOutput, bool) bool) error
+	ListExperienceEntitiesPagesWithContext(aws.Context, *kendra.ListExperienceEntitiesInput, func(*kendra.ListExperienceEntitiesOutput, bool) bool, ...request.Option) error
+
+	ListExperiences(*kendra.ListExperiencesInput) (*kendra.ListExperiencesOutput, error)
+	ListExperiencesWithContext(aws.Context, *kendra.ListExperiencesInput, ...request.Option) (*kendra.ListExperiencesOutput, error)
+	ListExperiencesRequest(*kendra.ListExperiencesInput) (*request.Request, *kendra.ListExperiencesOutput)
+
+	ListExperiencesPages(*kendra.ListExperiencesInput, func(*kendra.ListExperiencesOutput, bool) bool) error
+	ListExperiencesPagesWithContext(aws.Context, *kendra.ListExperiencesInput, func(*kendra.ListExperiencesOutput, bool) bool, ...request.Option) error
+
 	ListFaqs(*kendra.ListFaqsInput) (*kendra.ListFaqsOutput, error)
 	ListFaqsWithContext(aws.Context, *kendra.ListFaqsInput, ...request.Option) (*kendra.ListFaqsOutput, error)
 	ListFaqsRequest(*kendra.ListFaqsInput) (*request.Request, *kendra.ListFaqsOutput)
 
+	ListFaqsPages(*kendra.ListFaqsInput, func(*kendra.ListFaqsOutput, bool) bool) error
+	ListFaqsPagesWithContext(aws.Context, *kendra.ListFaqsInput, func(*kendra.ListFaqsOutput, bool) bool, ...request.Option) error
+
 	ListGroupsOlderThanOrderingId(*kendra.ListGroupsOlderThanOrderingIdInput) (*kendra.ListGroupsOlderThanOrderingIdOutput, error)
 	ListGroupsOlderThanOrderingIdWithContext(aws.Context, *kendra.ListGroupsOlderThanOrderingIdInput, ...request.Option) (*kendra.ListGroupsOlderThanOrderingIdOutput, error)
 	ListGroupsOlderThanOrderingIdRequest(*kendra.ListGroupsOlderThanOrderingIdInput) (*request.Request, *kendra.ListGroupsOlderThanOrderingIdOutput)
+
+	ListGroupsOlderThanOrderingIdPages(*kendra.ListGroupsOlderThanOrderingIdInput, func(*kendra.ListGroupsOlderThanOrderingIdOutput, bool) bool) error
+	ListGroupsOlderThanOrderingIdPagesWithContext(aws.Context, *kendra.ListGroupsOlderThanOrderingIdInput, func(*kendra.ListGroupsOlderThanOrderingIdOutput, bool) bool, ...request.Option) error
 
 	ListIndices(*kendra.ListIndicesInput) (*kendra.ListIndicesOutput, error)
 	ListIndicesWithContext(aws.Context, *kendra.ListIndicesInput, ...request.Option) (*kendra.ListIndicesOutput, error)
@@ -185,6 +266,9 @@ type KendraAPI interface {
 	ListQuerySuggestionsBlockListsWithContext(aws.Context, *kendra.ListQuerySuggestionsBlockListsInput, ...request.Option) (*kendra.ListQuerySuggestionsBlockListsOutput, error)
 	ListQuerySuggestionsBlockListsRequest(*kendra.ListQuerySuggestionsBlockListsInput) (*request.Request, *kendra.ListQuerySuggestionsBlockListsOutput)
 
+	ListQuerySuggestionsBlockListsPages(*kendra.ListQuerySuggestionsBlockListsInput, func(*kendra.ListQuerySuggestionsBlockListsOutput, bool) bool) error
+	ListQuerySuggestionsBlockListsPagesWithContext(aws.Context, *kendra.ListQuerySuggestionsBlockListsInput, func(*kendra.ListQuerySuggestionsBlockListsOutput, bool) bool, ...request.Option) error
+
 	ListTagsForResource(*kendra.ListTagsForResourceInput) (*kendra.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *kendra.ListTagsForResourceInput, ...request.Option) (*kendra.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*kendra.ListTagsForResourceInput) (*request.Request, *kendra.ListTagsForResourceOutput)
@@ -192,6 +276,9 @@ type KendraAPI interface {
 	ListThesauri(*kendra.ListThesauriInput) (*kendra.ListThesauriOutput, error)
 	ListThesauriWithContext(aws.Context, *kendra.ListThesauriInput, ...request.Option) (*kendra.ListThesauriOutput, error)
 	ListThesauriRequest(*kendra.ListThesauriInput) (*request.Request, *kendra.ListThesauriOutput)
+
+	ListThesauriPages(*kendra.ListThesauriInput, func(*kendra.ListThesauriOutput, bool) bool) error
+	ListThesauriPagesWithContext(aws.Context, *kendra.ListThesauriInput, func(*kendra.ListThesauriOutput, bool) bool, ...request.Option) error
 
 	PutPrincipalMapping(*kendra.PutPrincipalMappingInput) (*kendra.PutPrincipalMappingOutput, error)
 	PutPrincipalMappingWithContext(aws.Context, *kendra.PutPrincipalMappingInput, ...request.Option) (*kendra.PutPrincipalMappingOutput, error)
@@ -221,9 +308,17 @@ type KendraAPI interface {
 	UntagResourceWithContext(aws.Context, *kendra.UntagResourceInput, ...request.Option) (*kendra.UntagResourceOutput, error)
 	UntagResourceRequest(*kendra.UntagResourceInput) (*request.Request, *kendra.UntagResourceOutput)
 
+	UpdateAccessControlConfiguration(*kendra.UpdateAccessControlConfigurationInput) (*kendra.UpdateAccessControlConfigurationOutput, error)
+	UpdateAccessControlConfigurationWithContext(aws.Context, *kendra.UpdateAccessControlConfigurationInput, ...request.Option) (*kendra.UpdateAccessControlConfigurationOutput, error)
+	UpdateAccessControlConfigurationRequest(*kendra.UpdateAccessControlConfigurationInput) (*request.Request, *kendra.UpdateAccessControlConfigurationOutput)
+
 	UpdateDataSource(*kendra.UpdateDataSourceInput) (*kendra.UpdateDataSourceOutput, error)
 	UpdateDataSourceWithContext(aws.Context, *kendra.UpdateDataSourceInput, ...request.Option) (*kendra.UpdateDataSourceOutput, error)
 	UpdateDataSourceRequest(*kendra.UpdateDataSourceInput) (*request.Request, *kendra.UpdateDataSourceOutput)
+
+	UpdateExperience(*kendra.UpdateExperienceInput) (*kendra.UpdateExperienceOutput, error)
+	UpdateExperienceWithContext(aws.Context, *kendra.UpdateExperienceInput, ...request.Option) (*kendra.UpdateExperienceOutput, error)
+	UpdateExperienceRequest(*kendra.UpdateExperienceInput) (*request.Request, *kendra.UpdateExperienceOutput)
 
 	UpdateIndex(*kendra.UpdateIndexInput) (*kendra.UpdateIndexOutput, error)
 	UpdateIndexWithContext(aws.Context, *kendra.UpdateIndexInput, ...request.Option) (*kendra.UpdateIndexOutput, error)

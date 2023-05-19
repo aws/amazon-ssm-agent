@@ -22,13 +22,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
+	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/executers"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -42,7 +43,7 @@ type TestCase struct {
 	MessageID      string
 }
 
-type CommandTester func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
+type CommandTester func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
 
 const (
 	orchestrationDirectory  = "OrchesDir"
@@ -58,10 +59,10 @@ var TestCases = []TestCase{
 	generateTestCaseFail("3"),
 }
 
-var logger = log.NewMockLog()
+var ctx = context.NewMockDefault()
 
 func generateTestCaseOk(id string) TestCase {
-	return TestCase{
+	testCase := TestCase{
 		Input: PSModulePluginInput{
 			RunCommand:       []string{"echo " + id},
 			ID:               id + ".aws:runScript",
@@ -77,12 +78,14 @@ func generateTestCaseOk(id string) TestCase {
 	testCase.Output.SetStderr("standard error of test case " + id)
 	testCase.Output.ExitCode = 0
 	testCase.Output.Status = "Success"
+
+	return testCase
 }
 
 func generateTestCaseFail(id string) TestCase {
 	t := generateTestCaseOk(id)
-	t.ExecuterError = fmt.Errorf("Error happened for cmd %v", id)
-	t.Output.SetStderr(combinedErrorOutput(t.ExecuterStdErr, t.ExecuterError))
+	t.ExecuterErrors = fmt.Errorf("Error happened for cmd %v", id)
+	t.Output.SetStderr(t.ExecuterErrors.Error())
 	t.Output.ExitCode = 1
 	t.Output.Status = "Failed"
 	return t
@@ -98,9 +101,7 @@ func TestRunCommands(t *testing.T) {
 
 // testRunCommands tests the runCommands or the runCommandsRawInput method for one testcase.
 func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
-	logger.On("Error", mock.Anything).Return(nil)
-	logger.Infof("test run commands %v", testCase)
-	runCommandTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runCommandTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
@@ -112,9 +113,9 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 			err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 			assert.Nil(t, err)
 
-			p.runCommandsRawInput(logger, rawPluginInput, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
+			p.runCommandsRawInput("", rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler)
 		} else {
-			p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
+			p.runCommands("", testCase.Input, orchestrationDirectory, mockCancelFlag, mockIOHandler)
 		}
 	}
 
@@ -131,15 +132,13 @@ func TestBucketsInDifferentRegions(t *testing.T) {
 
 // testBucketsInDifferentRegions tests the runCommands with S3 buckets present in IAD and PDX region.
 func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucketsInDifferentRegions bool) {
-	logger.On("Error", mock.Anything).Return(nil)
-	logger.Infof("test run commands %v", testCase)
-	runCommandTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runCommandTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
 
 		// call method under test
-		p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, s3BucketName, s3KeyPrefix)
+		p.runCommands("", testCase.Input, orchestrationDirectory, mockCancelFlag, mockIOHandler)
 	}
 
 	testExecution(t, runCommandTester)
@@ -155,14 +154,9 @@ func TestExecute(t *testing.T) {
 
 // testExecute tests the run command plugin's Execute method.
 func testExecute(t *testing.T, testCase TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
-		// setup expectations and correct outputs
-		var pluginProperties []interface{}
-		var correctOutputs string
-		mockContext := context.NewMockDefault()
-
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
-		setCancelFlagExpectations(mockCancelFlag)
+		setCancelFlagExpectations(mockCancelFlag, 0)
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
 
@@ -171,23 +165,19 @@ func testExecute(t *testing.T, testCase TestCase) {
 		err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 		assert.Nil(t, err)
 
-		pluginProperties = append(pluginProperties, rawPluginInput)
-		correctOutputs = testCase.Output.String()
-
 		//Create messageId which is in the format of aws.ssm.<commandID>.<InstanceID>
 		commandID := uuid.NewV4().String()
 
 		// call plugin
 		p.Execute(
-			mockContext,
 			contracts.Configuration{
-				Properties:             pluginProperties,
+				Properties:             rawPluginInput,
 				OutputS3BucketName:     s3BucketName,
 				OutputS3KeyPrefix:      s3KeyPrefix,
 				OrchestrationDirectory: orchestrationDirectory,
 				BookKeepingFileName:    commandID,
 				PluginID:               "aws:runCommand1",
-			}, mockCancelFlag, runpluginutil.PluginRunner{})
+			}, mockCancelFlag, mockIOHandler)
 
 		// assert that the flag is checked after every set of commands
 		mockCancelFlag.AssertNumberOfCalls(t, "Canceled", 1)
@@ -202,7 +192,7 @@ func testExecute(t *testing.T, testCase TestCase) {
 // and assert specific result conditions.
 func testExecution(t *testing.T, commandtester CommandTester) {
 	// create mocked objects
-	mockCancelFlag := new(task.MockCancelFlag)
+	mockCancelFlag := new(taskmocks.MockCancelFlag)
 	mockExecuter := new(executers.MockCommandExecuter)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
@@ -222,8 +212,8 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 }
 
 func setExecuterExpectations(mockExecuter *executers.MockCommandExecuter, t TestCase, cancelFlag task.CancelFlag, p *Plugin) {
-	mockExecuter.On("NewExecute", mock.Anything, t.Input.WorkingDirectory, t.Output.StdoutWriter, t.Output.StderrWriter, cancelFlag, mock.Anything, mock.Anything, mock.Anything).Return(
-		t.Output.ExitCode, t.ExecuterError)
+	mockExecuter.On("NewExecute", mock.Anything, t.Input.WorkingDirectory, t.Output.StdoutWriter, t.Output.StderrWriter, cancelFlag, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(
+		t.Output.ExitCode, t.ExecuterErrors)
 }
 
 func setIOHandlerExpectations(mockIOHandler *iohandlermocks.MockIOHandler, t TestCase) {
@@ -231,14 +221,14 @@ func setIOHandlerExpectations(mockIOHandler *iohandlermocks.MockIOHandler, t Tes
 	mockIOHandler.On("GetStderrWriter").Return(t.Output.StderrWriter)
 	mockIOHandler.On("SetExitCode", t.Output.ExitCode).Return()
 	mockIOHandler.On("SetStatus", t.Output.Status).Return()
-	if t.ExecuterError != nil {
+	if t.ExecuterErrors != nil {
 		mockIOHandler.On("GetStatus").Return(t.Output.Status)
-		mockIOHandler.On("MarkAsFailed", mock.Anything, fmt.Errorf("failed to run commands: %v", t.ExecuterError)).Return()
+		mockIOHandler.On("MarkAsFailed", fmt.Errorf("failed to run commands: %v", t.ExecuterErrors)).Return()
 		mockIOHandler.On("SetStatus", contracts.ResultStatusFailed).Return()
 	}
 }
 
-func setCancelFlagExpectations(mockCancelFlag *task.MockCancelFlag, times int) {
+func setCancelFlagExpectations(mockCancelFlag *taskmocks.MockCancelFlag, times int) {
 	mockCancelFlag.On("Canceled").Return(false).Times(times)
 	mockCancelFlag.On("ShutDown").Return(false).Times(times)
 }

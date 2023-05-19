@@ -136,8 +136,8 @@ func flagUsage() {
 	fmt.Fprintln(os.Stderr, "\t\t-id                    \tSSM activation ID                                                                          \t(REQUIRED with activation registration)")
 	fmt.Fprintln(os.Stderr, "\t\t-code                  \tSSM activation code                                                                        \t(REQUIRED with activation registration)")
 	fmt.Fprintln(os.Stderr, "\t\t-role                  \tIAM role name the agent should assume                                                      \t(REQUIRED with greengrass registration)")
-	fmt.Fprintln(os.Stderr, "\t\t-region                \tSSM region                                                                                 \t(REQUIRED with greengrass registration)")
-	fmt.Fprintln(os.Stderr, "\t\t-tags                  \tSSM activation code                                                                        \t(OPTIONAL with greengrass registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-tags                  \tSSM tags for greengrass registration                                                       \t(OPTIONAL with greengrass registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-region                \tSSM region                                                                                 \t(REQUIRED with registration)")
 	fmt.Fprintln(os.Stderr, "\t\t-disableSimilarityCheck\tDisable the agent hardware/fingerprint similarity check (similarity threshold is set to -1)\t(OPTIONAL)")
 	fmt.Fprintln(os.Stderr, "\n\t\t-clear\tClears the previously saved SSM registration")
 	fmt.Fprintln(os.Stderr, "\t-fingerprint\tWhether to update the machine fingerprint similarity threshold\t(OPTIONAL)")
@@ -158,7 +158,7 @@ func processRegistration(log logger.T) (exitCode int) {
 	}
 
 	// check if previously registered
-	if !force && registration.InstanceID(log) != "" {
+	if !force && registration.InstanceID(log, "", registration.RegVaultKey) != "" {
 		confirmation, err := askForConfirmation()
 		if err != nil {
 			log.Errorf("Registration failed due to %v", err)
@@ -199,7 +199,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 	}
 
 	// checking write access before registering
-	err = registration.UpdateServerInfo("", "", privateKey, keyType)
+	err = registration.UpdateServerInfo("", "", "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
 		return "",
 			fmt.Errorf("Unable to save registration information. %v\nTry running as sudo/administrator.", err)
@@ -222,7 +222,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 	}
 
 	if role != "" {
-		authRegisterService := authregister.NewAuthRegisterService(log, region)
+		authRegisterService := authregister.NewClient(log, region, nil)
 		managedInstanceID, err = authRegisterService.RegisterManagedInstance(
 			publicKey,
 			keyType,
@@ -231,7 +231,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 			tagsJson,
 		)
 	} else {
-		service := anonauth.NewAnonymousService(log, region)
+		service := anonauth.NewClient(log, region)
 		managedInstanceID, err = service.RegisterManagedInstance(
 			activationCode,
 			activationID,
@@ -245,7 +245,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 		return managedInstanceID, fmt.Errorf("error registering the instance with AWS SSM. %v", err)
 	}
 
-	err = registration.UpdateServerInfo(managedInstanceID, region, privateKey, keyType)
+	err = registration.UpdateServerInfo(managedInstanceID, region, "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error persisting the instance registration information. %v", err)
 	}
@@ -270,7 +270,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 
 // clearRegistration clears any existing registration data
 func clearRegistration(log logger.T) (exitCode int) {
-	err := registration.UpdateServerInfo("", "", "", "")
+	err := registration.UpdateServerInfo("", "", "", "", "", "", registration.RegVaultKey)
 	if err == nil {
 		log.Info("Registration information has been removed from the instance.")
 		return 0

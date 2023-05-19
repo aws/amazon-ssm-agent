@@ -248,10 +248,11 @@ type SessionDocumentContent struct {
 
 // AdditionalInfo section in agent response
 type AdditionalInfo struct {
-	Agent               AgentInfo      `json:"agent"`
-	DateTime            string         `json:"dateTime"`
-	RunID               string         `json:"runId"`
-	RuntimeStatusCounts map[string]int `json:"runtimeStatusCounts"`
+	Agent                   AgentInfo      `json:"agent"`
+	DateTime                string         `json:"dateTime"`
+	RunID                   string         `json:"runId"`
+	RuntimeStatusCounts     map[string]int `json:"runtimeStatusCounts"`
+	AbleToOpenMGSConnection *bool          `json:"ableToOpenMGSConnection,omitempty"`
 }
 
 // AgentInfo represents the agent response
@@ -308,3 +309,10 @@ const (
 	// SessionResult represents result sent by session worker to service
 	SessionResult ResultType = "SessionResult"
 )
+
+// StatusComm is a struct that holds channels to pass status
+// between ssmAgentCore go routine and agent's main go routine
+type StatusComm struct {
+	TerminationChan chan struct{}
+	DoneChan        chan struct{}
+}

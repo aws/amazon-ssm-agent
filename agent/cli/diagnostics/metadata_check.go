@@ -24,7 +24,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/diagnosticsutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -64,7 +64,7 @@ func (metadataCheckQuery) GetPriority() int {
 }
 
 func (metadataCheckQuery) getRegionAndInstanceId(resChan chan stringStringErrorTuple) {
-	log := logger.NewSilentMockLog()
+	log := logger.NewSilentLogger()
 	config := appconfig.DefaultConfig()
 
 	tr := network.GetDefaultTransport(log, config)

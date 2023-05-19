@@ -8,7 +8,7 @@ github.com/Microsoft/go-winio/pkg/guid
 ## explicit
 github.com/Workiva/go-datastructures/cache
 github.com/Workiva/go-datastructures/queue
-# github.com/aws/aws-sdk-go v1.41.4 => ./extra/aws-sdk-go
+# github.com/aws/aws-sdk-go v1.44.78 => ./extra/aws-sdk-go
 ## explicit
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
@@ -33,6 +33,7 @@ github.com/aws/aws-sdk-go/aws/signer/v4
 github.com/aws/aws-sdk-go/awstesting
 github.com/aws/aws-sdk-go/awstesting/mock
 github.com/aws/aws-sdk-go/internal/context
+github.com/aws/aws-sdk-go/internal/encoding/gzip
 github.com/aws/aws-sdk-go/internal/ini
 github.com/aws/aws-sdk-go/internal/s3shared
 github.com/aws/aws-sdk-go/internal/s3shared/arn
@@ -258,7 +259,7 @@ golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/agent
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 golang.org/x/crypto/ssh/knownhosts
-# golang.org/x/net v0.0.0-20210614182718-04defd469f4e
+# golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 ## explicit
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
@@ -326,7 +327,8 @@ gopkg.in/warnings.v0
 # gopkg.in/yaml.v2 v2.3.0
 ## explicit
 gopkg.in/yaml.v2
-# gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+# gopkg.in/yaml.v3 v3.0.1
+## explicit
 gopkg.in/yaml.v3
 # github.com/aws/aws-sdk-go => ./extra/aws-sdk-go
 # github.com/nightlyone/lockfile => ./extra/lockfile

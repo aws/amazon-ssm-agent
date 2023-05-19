@@ -43,7 +43,8 @@ const (
 	// "InvalidPaginationTokenException".
 	//
 	// Exception that indicates that the NextToken specified in the request is invalid.
-	// Submit the request using the NextToken value that was returned in the response.
+	// Submit the request using the NextToken value that was returned in the prior
+	// response.
 	ErrCodeInvalidPaginationTokenException = "InvalidPaginationTokenException"
 
 	// ErrCodeInvalidParameterException for service response error code
@@ -78,7 +79,7 @@ const (
 	// ErrCodeNoAssociatedRoleException for service response error code
 	// "NoAssociatedRoleException".
 	//
-	// The ARN of the role that you specifed does not exist.
+	// The ARN of the role that you specified does not exist.
 	ErrCodeNoAssociatedRoleException = "NoAssociatedRoleException"
 
 	// ErrCodeOptimisticLockException for service response error code

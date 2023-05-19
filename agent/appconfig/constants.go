@@ -21,8 +21,10 @@ import (
 
 const (
 	// Agent defaults
-	DefaultAgentName   = "amazon-ssm-agent"
-	SSMAgentWorkerName = "ssm-agent-worker"
+	DefaultAgentName      = "amazon-ssm-agent"
+	SSMAgentWorkerName    = "ssm-agent-worker"
+	SSMDocumentWorkerName = "ssm-document-worker"
+	SSMSessionWorkerName  = "ssm-session-worker"
 
 	DefaultTelemetryNamespace = "amazon-ssm-agent-telemetry"
 

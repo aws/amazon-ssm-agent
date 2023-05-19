@@ -17,7 +17,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers"
 	pmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
