@@ -15,6 +15,7 @@
 package ec2roleprovider
 
 import (
+	"context"
 	"fmt"
 	"runtime"
 	"sync"
@@ -85,14 +86,14 @@ func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 	return p.InnerProviders.IPRProvider
 }
 
-// Retrieve returns shared credentials if specified in runtime config
+// RetrieveWithContext returns shared credentials if specified in runtime config
 // and returns instance profile role credentials otherwise.
 // If neither can be retrieved then empty credentials are returned
-func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
+func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	if runtimeConfig, err := p.RuntimeConfigClient.GetConfig(); err != nil {
 		p.Log.Errorf("Failed to read runtime config for ShareFile information")
 	} else if runtimeConfig.ShareFile != "" {
-		sharedCreds, err := p.InnerProviders.SharedCredentialsProvider.Retrieve()
+		sharedCreds, err := p.InnerProviders.SharedCredentialsProvider.RetrieveWithContext(ctx)
 		if err != nil {
 			err = fmt.Errorf("unable to load shared credentials. Err: %w", err)
 			p.Log.Error(err)
@@ -104,7 +105,7 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 	}
 
 	p.credentialSource = CredentialSourceEC2
-	iprCredentials, err := p.InnerProviders.IPRProvider.Retrieve()
+	iprCredentials, err := p.InnerProviders.IPRProvider.RetrieveWithContext(ctx)
 	if err != nil {
 		err = fmt.Errorf("failed to retrieve instance profile role credentials. Err: %w", err)
 		p.Log.Error(err)
@@ -115,7 +116,7 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 }
 
 // RemoteRetrieve uses network calls to retrieve credentials for EC2 instances
-func (p *EC2RoleProvider) RemoteRetrieve() (credentials.Value, error) {
+func (p *EC2RoleProvider) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(p.SsmEndpoint); err != nil {
 		errCode := sdkutil.GetAwsErrorCode(err)
@@ -142,6 +143,12 @@ func (p *EC2RoleProvider) RemoteRetrieve() (credentials.Value, error) {
 	}
 
 	return iprEmptyCredential, fmt.Errorf("no valid credentials could be retrieved for ec2 identity")
+}
+
+// Retrieve returns instance profile role credentials if it has sufficient systems manager permissions and
+// returns ssm provided credentials otherwise. If neither can be retrieved then empty credentials are returned
+func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
+	return p.RetrieveWithContext(context.Background())
 }
 
 // iprCredentials retrieves instance profile role credentials and returns an error if the returned credentials cannot

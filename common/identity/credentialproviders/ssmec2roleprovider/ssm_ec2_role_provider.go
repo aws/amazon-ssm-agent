@@ -15,6 +15,7 @@
 package ssmec2roleprovider
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -82,8 +83,7 @@ func (p *SSMEC2RoleProvider) isEC2InstanceRegistered() bool {
 	return p.registrationInfo.PrivateKey != "" && p.registrationInfo.KeyType != ""
 }
 
-// Retrieve retrieves EC2 credentials from Systems Manager
-func (p *SSMEC2RoleProvider) Retrieve() (credentials.Value, error) {
+func (p *SSMEC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	var err error
 	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
 
@@ -108,7 +108,7 @@ func (p *SSMEC2RoleProvider) Retrieve() (credentials.Value, error) {
 	}
 
 	// Get role token
-	roleCreds, err = p.tokenRequestClient.RequestManagedInstanceRoleToken(p.InstanceInfo.InstanceId)
+	roleCreds, err = p.tokenRequestClient.RequestManagedInstanceRoleTokenWithContext(ctx, p.InstanceInfo.InstanceId)
 	if err != nil {
 		p.SetExpiration(time.Time{}, 0)
 		return EmptyCredentials(), fmt.Errorf("error calling RequestManagedInstanceRoleToken: %w", err)
@@ -123,6 +123,11 @@ func (p *SSMEC2RoleProvider) Retrieve() (credentials.Value, error) {
 		SessionToken:    *roleCreds.SessionToken,
 		ProviderName:    ProviderName,
 	}, nil
+}
+
+// Retrieve retrieves EC2 credentials from Systems Manager
+func (p *SSMEC2RoleProvider) Retrieve() (credentials.Value, error) {
+	return p.RetrieveWithContext(context.Background())
 }
 
 // EmptyCredentials returns empty SSMEC2RoleProvider credentials

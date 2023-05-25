@@ -15,6 +15,7 @@
 package ec2roleprovider
 
 import (
+	"context"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
@@ -46,7 +47,8 @@ var (
 type IInnerProvider interface {
 	credentials.Provider
 	credentials.Expirer
-
+	Retrieve() (credentials.Value, error)
+	RetrieveWithContext(ctx context.Context) (credentials.Value, error)
 	SetExpiration(expiration time.Time, window time.Duration)
 }
 
@@ -64,4 +66,6 @@ type IEC2RoleProvider interface {
 	ShareFile() string
 	ShareProfile() string
 	SharesCredentials() bool
+	RetrieveWithContext(ctx context.Context) (credentials.Value, error)
+	RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error)
 }

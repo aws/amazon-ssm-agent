@@ -15,6 +15,7 @@
 package credentialproviders
 
 import (
+	"context"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -27,6 +28,6 @@ type IRemoteProvider interface {
 	ShareFile() string
 	SharesCredentials() bool
 	CredentialSource() string
-	RemoteRetrieve() (credentials.Value, error)
+	RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error)
 	RemoteExpiresAt() time.Time
 }

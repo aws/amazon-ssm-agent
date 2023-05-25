@@ -16,6 +16,7 @@
 package onpremprovider
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"testing"
@@ -262,14 +263,22 @@ func (r *RsaSignedServiceStub) getErr() error {
 	return err
 }
 
-func (r *RsaSignedServiceStub) RequestManagedInstanceRoleToken(fingerprint string) (response *ssm.RequestManagedInstanceRoleTokenOutput, err error) {
+func (r *RsaSignedServiceStub) RequestManagedInstanceRoleTokenWithContext(ctx context.Context, fingerprint string) (response *ssm.RequestManagedInstanceRoleTokenOutput, err error) {
 	r.roleCalled += 1
 	return &r.roleResponse, r.getErr()
 }
 
-func (r *RsaSignedServiceStub) UpdateManagedInstancePublicKey(publicKey, publicKeyType string) (response *ssm.UpdateManagedInstancePublicKeyOutput, err error) {
+func (r *RsaSignedServiceStub) RequestManagedInstanceRoleToken(fingerprint string) (response *ssm.RequestManagedInstanceRoleTokenOutput, err error) {
+	return r.RequestManagedInstanceRoleTokenWithContext(context.Background(), fingerprint)
+}
+
+func (r *RsaSignedServiceStub) UpdateManagedInstancePublicKeyWithContext(ctx context.Context, publicKey, publicKeyType string) (response *ssm.UpdateManagedInstancePublicKeyOutput, err error) {
 	r.updateCalled += 1
 	return &r.keyResponse, r.getErr()
+}
+
+func (r *RsaSignedServiceStub) UpdateManagedInstancePublicKey(publicKey, publicKeyType string) (response *ssm.UpdateManagedInstancePublicKeyOutput, err error) {
+	return r.UpdateManagedInstancePublicKeyWithContext(context.Background(), publicKey, publicKeyType)
 }
 
 // registration stub

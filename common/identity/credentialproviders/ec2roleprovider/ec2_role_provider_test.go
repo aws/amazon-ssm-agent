@@ -15,6 +15,7 @@
 package ec2roleprovider
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"testing"
@@ -413,7 +414,7 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			ec2RoleProvider := arrangeRetrieveEmptyTest(j)
 
 			// Act
-			creds, err := ec2RoleProvider.RemoteRetrieve()
+			creds, err := ec2RoleProvider.RemoteRetrieveWithContext(context.Background())
 
 			//Assert
 			assert.Error(t, err)

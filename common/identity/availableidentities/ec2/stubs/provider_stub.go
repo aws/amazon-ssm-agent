@@ -1,6 +1,7 @@
 package stubs
 
 import (
+	"context"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider"
@@ -25,14 +26,24 @@ func (p *ProviderStub) SetExpiration(expiration time.Time, window time.Duration)
 	return
 }
 
-func (p *ProviderStub) Retrieve() (credentials.Value, error) {
+func (p *ProviderStub) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	return credentials.Value{
 		ProviderName: p.ProviderName,
 	}, nil
 }
 
+func (p *ProviderStub) Retrieve() (credentials.Value, error) {
+	return p.RetrieveWithContext(context.Background())
+}
+
 func (p *ProviderStub) RemoteRetrieve() (credentials.Value, error) {
-	return p.Retrieve()
+	return p.RemoteRetrieveWithContext(context.Background())
+}
+
+func (p *ProviderStub) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+	return credentials.Value{
+		ProviderName: p.ProviderName,
+	}, nil
 }
 
 func (p *ProviderStub) IsExpired() bool {

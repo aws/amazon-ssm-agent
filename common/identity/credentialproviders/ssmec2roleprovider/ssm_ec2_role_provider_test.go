@@ -113,7 +113,7 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsCredentials(t *testing.T) {
 	}
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
-	tokenRequestService.On("RequestManagedInstanceRoleToken", mock.Anything).Return(roleCreds, nil)
+	tokenRequestService.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(roleCreds, nil)
 	newIirRsaAuth = func(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, region, encodedPrivateKey string) authtokenrequest.IClient {
 		return tokenRequestService
 	}
@@ -151,7 +151,7 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_NoRetry(t *testing.
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
 
-	tokenRequestService.On("RequestManagedInstanceRoleToken", mock.Anything).Return(nil, unauthorizedRequestFailure).Repeatability = 1
+	tokenRequestService.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(nil, unauthorizedRequestFailure).Repeatability = 1
 	newIirRsaAuth = func(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, region, encodedPrivateKey string) authtokenrequest.IClient {
 		return tokenRequestService
 	}
@@ -182,7 +182,7 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_Retries(t *testing.
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
 
-	tokenRequestService.On("RequestManagedInstanceRoleToken", mock.Anything).Return(nil, unauthorizedRequestFailure)
+	tokenRequestService.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(nil, unauthorizedRequestFailure)
 	newIirRsaAuth = func(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, region, encodedPrivateKey string) authtokenrequest.IClient {
 		return tokenRequestService
 	}

@@ -1,6 +1,7 @@
 package stubs
 
 import (
+	"context"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -12,7 +13,7 @@ type InnerProvider struct {
 	Expiry       time.Time
 }
 
-func (p *InnerProvider) Retrieve() (credentials.Value, error) {
+func (p *InnerProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	if p.RetrieveErr != nil {
 		return credentials.Value{}, p.RetrieveErr
 	}
@@ -20,6 +21,10 @@ func (p *InnerProvider) Retrieve() (credentials.Value, error) {
 	return credentials.Value{
 		ProviderName: p.ProviderName,
 	}, nil
+}
+
+func (p *InnerProvider) Retrieve() (credentials.Value, error) {
+	return p.RetrieveWithContext(context.Background())
 }
 
 func (p *InnerProvider) IsExpired() bool {

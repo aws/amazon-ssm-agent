@@ -14,6 +14,7 @@
 package credentialrefresher
 
 import (
+	"context"
 	"fmt"
 	"math"
 	"math/rand"
@@ -31,7 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-	"github.com/aws/amazon-ssm-agent/core/app/context"
+	agentctx "github.com/aws/amazon-ssm-agent/core/app/context"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -86,7 +87,7 @@ type credentialsRefresher struct {
 	timeAfterFunc      func(time.Duration) <-chan time.Time
 }
 
-func NewCredentialRefresher(context context.ICoreAgentContext) ICredentialRefresher {
+func NewCredentialRefresher(context agentctx.ICoreAgentContext) ICredentialRefresher {
 	return &credentialsRefresher{
 		log:                          context.Log().WithContext("[CredentialRefresher]"),
 		agentIdentity:                context.Identity(),
@@ -194,10 +195,10 @@ func getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
 }
 
 // retrieveCredsWithRetry will never exit unless it receives a message on stopChan or is able to successfully call Retrieve
-func (c *credentialsRefresher) retrieveCredsWithRetry() (credentials.Value, bool) {
+func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (credentials.Value, bool) {
 	retryCount := 0
 	for {
-		creds, err := c.provider.RemoteRetrieve()
+		creds, err := c.provider.RemoteRetrieveWithContext(ctx)
 		if err == nil {
 			return creds, false
 		}
@@ -284,6 +285,9 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 	}
 
 	c.log.Info("Starting credentials refresher loop")
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	for {
 		select {
 		case <-c.stopCredentialRefresherChan:
@@ -292,7 +296,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 			return
 		case <-c.timeAfterFunc(c.durationUntilRefresh()):
 			c.log.Debug("Calling Retrieve on credentials provider")
-			creds, stopped := c.retrieveCredsWithRetry()
+			creds, stopped := c.retrieveCredsWithRetry(ctx)
 			credentialsRetrievedAt := c.getCurrentTimeFunc()
 			if stopped {
 				c.log.Info("Stopping credentials refresher")

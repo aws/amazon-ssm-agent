@@ -14,6 +14,7 @@
 package sharedprovider
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"time"
@@ -39,6 +40,7 @@ type ISharedCredentialsProvider interface {
 	credentials.Provider
 	credentials.Expirer
 	SetExpiration(expiration time.Time, window time.Duration)
+	RetrieveWithContext(ctx context.Context) (credentials.Value, error)
 }
 
 // sharedCredentialsProvider implements the AWS SDK credential provider, and is used to create AWS client.
@@ -66,6 +68,13 @@ func NewCredentialsProvider(log log.T) ISharedCredentialsProvider {
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 func (s *sharedCredentialsProvider) Retrieve() (credentials.Value, error) {
+	return s.RetrieveWithContext(context.Background())
+}
+
+// RetrieveWithContext retrieves credentials from the shared profile
+// Error will be returned if the request fails, or unable to extract
+// the desired credentials.
+func (s *sharedCredentialsProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	runtimeConfigClient := newRuntimeConfig()
 	// before sharedCredentialsProvider is initialized, we check if the runtime config exists
 	config, err := runtimeConfigClient.GetConfig()

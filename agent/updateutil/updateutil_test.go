@@ -578,14 +578,14 @@ func TestUtility_setShareCredsEnvironment_SetsCommandAWSEnvironmentVariables_Whe
 	ctx.On("Identity").Return(agentIdentity)
 	ctx.On("Log").Return(log.NewMockLog())
 
-	remoteProvier := &mocks.IRemoteProvider{}
-	remoteProvier.On("SharesCredentials").Return(true)
+	remoteProvider := &mocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
 	expectedShareProfile := "SomeShareFileLocation"
 	expectedShareFile := "SomeShareFileLocation"
-	remoteProvier.On("ShareProfile").Return(expectedShareProfile)
-	remoteProvier.On("ShareFile").Return(expectedShareFile)
+	remoteProvider.On("ShareProfile").Return(expectedShareProfile)
+	remoteProvider.On("ShareFile").Return(expectedShareFile)
 	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
-		return remoteProvier, true
+		return remoteProvider, true
 	}
 
 	utility := &Utility{

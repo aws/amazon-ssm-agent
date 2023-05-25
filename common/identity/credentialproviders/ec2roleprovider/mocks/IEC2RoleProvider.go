@@ -3,8 +3,11 @@
 package mocks
 
 import (
+	context "context"
+
 	ec2roleprovider "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider"
 	credentials "github.com/aws/aws-sdk-go/aws/credentials"
+
 	mock "github.com/stretchr/testify/mock"
 
 	time "time"
@@ -87,23 +90,23 @@ func (_m *IEC2RoleProvider) RemoteExpiresAt() time.Time {
 	return r0
 }
 
-// RemoteRetrieve provides a mock function with given fields:
-func (_m *IEC2RoleProvider) RemoteRetrieve() (credentials.Value, error) {
-	ret := _m.Called()
+// RemoteRetrieveWithContext provides a mock function with given fields: ctx
+func (_m *IEC2RoleProvider) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+	ret := _m.Called(ctx)
 
 	var r0 credentials.Value
 	var r1 error
-	if rf, ok := ret.Get(0).(func() (credentials.Value, error)); ok {
-		return rf()
+	if rf, ok := ret.Get(0).(func(context.Context) (credentials.Value, error)); ok {
+		return rf(ctx)
 	}
-	if rf, ok := ret.Get(0).(func() credentials.Value); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(context.Context) credentials.Value); ok {
+		r0 = rf(ctx)
 	} else {
 		r0 = ret.Get(0).(credentials.Value)
 	}
 
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -128,6 +131,30 @@ func (_m *IEC2RoleProvider) Retrieve() (credentials.Value, error) {
 
 	if rf, ok := ret.Get(1).(func() error); ok {
 		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// RetrieveWithContext provides a mock function with given fields: ctx
+func (_m *IEC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+	ret := _m.Called(ctx)
+
+	var r0 credentials.Value
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context) (credentials.Value, error)); ok {
+		return rf(ctx)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context) credentials.Value); ok {
+		r0 = rf(ctx)
+	} else {
+		r0 = ret.Get(0).(credentials.Value)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
 	} else {
 		r1 = ret.Error(1)
 	}

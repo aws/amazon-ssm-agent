@@ -3,7 +3,10 @@
 package mocks
 
 import (
+	context "context"
+
 	credentials "github.com/aws/aws-sdk-go/aws/credentials"
+
 	mock "github.com/stretchr/testify/mock"
 
 	time "time"
@@ -56,23 +59,23 @@ func (_m *IRemoteProvider) RemoteExpiresAt() time.Time {
 	return r0
 }
 
-// RemoteRetrieve provides a mock function with given fields:
-func (_m *IRemoteProvider) RemoteRetrieve() (credentials.Value, error) {
-	ret := _m.Called()
+// RemoteRetrieveWithContext provides a mock function with given fields: ctx
+func (_m *IRemoteProvider) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+	ret := _m.Called(ctx)
 
 	var r0 credentials.Value
 	var r1 error
-	if rf, ok := ret.Get(0).(func() (credentials.Value, error)); ok {
-		return rf()
+	if rf, ok := ret.Get(0).(func(context.Context) (credentials.Value, error)); ok {
+		return rf(ctx)
 	}
-	if rf, ok := ret.Get(0).(func() credentials.Value); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(context.Context) credentials.Value); ok {
+		r0 = rf(ctx)
 	} else {
 		r0 = ret.Get(0).(credentials.Value)
 	}
 
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
 	} else {
 		r1 = ret.Error(1)
 	}
