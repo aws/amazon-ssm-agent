@@ -1,5 +1,12 @@
 Latest
 ===============
+- Add retry to handle stream data acknowledge messages
+- Support latest as a version in configurePackage plugin
+- Updated AWS GO SDK to v1.44.261 and disabled IMDSv1 fallback logic
+- Use IP address to connect to destination server in port session
+
+3.2.985.0
+===============
 - Add Domain Join support for RHEL 8.7 and AL2022
 - Add Support to send aws:updateSSMAgent replies through MGS
 - Retrieve and set interface name dynamically in aws:domainJoin plugin for Ubuntu
