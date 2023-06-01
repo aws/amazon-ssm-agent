@@ -1,13 +1,14 @@
 package registrar
 
 import (
-	"github.com/stretchr/testify/mock"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	identitymocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRetryableRegistrar_RegisterWithRetry_Success(t *testing.T) {

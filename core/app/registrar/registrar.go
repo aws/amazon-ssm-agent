@@ -54,19 +54,22 @@ func NewRetryableRegistrar(agentCtx agentCtx.ICoreAgentContext) *RetryableRegist
 		return nil
 	}
 
+	isRegistrarRunning := atomic.Value{}
+	isRegistrarRunning.Store(false)
 	return &RetryableRegistrar{
 		log:                       log,
 		identityRegistrar:         identityRegistrar,
 		registrationAttemptedChan: make(chan struct{}, 1),
 		stopRegistrarChan:         make(chan struct{}),
 		timeAfterFunc:             time.After,
+		isRegistrarRunning:        isRegistrarRunning,
 	}
 }
 
 func (r *RetryableRegistrar) Start() error {
 	r.log.Info("Starting registrar module")
-	go r.RegisterWithRetry()
 	r.isRegistrarRunning.Store(true)
+	go r.RegisterWithRetry()
 	// Block until registration attempted at least once
 	<-r.registrationAttemptedChan
 	return nil
