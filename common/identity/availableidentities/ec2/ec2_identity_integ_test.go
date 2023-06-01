@@ -62,7 +62,7 @@ func TestEC2Identity_Register_CancelTest(t *testing.T) {
 	identity := &Identity{
 		Log:                 log,
 		Client:              imdsClient,
-		authRegisterService: newAuthRegisterService(log, region, imdsClient),
+		AuthRegisterService: newAuthRegisterService(log, region, imdsClient),
 		shareLock:           &sync.RWMutex{},
 		runtimeConfigClient: runtimeconfig.NewIdentityRuntimeConfigClient(),
 	}

@@ -71,6 +71,7 @@ func (i *Identity) Region() (region string, err error) {
 	return i.RegionWithContext(context.Background())
 }
 
+// RegionWithContext returns the region of the ec2 instance
 func (i *Identity) RegionWithContext(ctx context.Context) (region string, err error) {
 	if region, err = i.Client.RegionWithContext(ctx); err == nil {
 		return
@@ -158,6 +159,7 @@ func (i *Identity) RegisterWithContext(ctx context.Context) error {
 		return fmt.Errorf("unable to get instance id for identity %w", err)
 	}
 
+	i.Log.Info("Checking disk for registration info")
 	registrationInfo := i.loadRegistrationInfo(instanceId)
 	if registrationInfo.InstanceId != "" {
 		i.Log.Info("Registration info found for ec2 instance")
@@ -168,17 +170,19 @@ func (i *Identity) RegisterWithContext(ctx context.Context) error {
 
 	var publicKey, privateKey, keyType string
 	if registrationInfo.PrivateKey != "" && registrationInfo.PublicKey != "" && registrationInfo.KeyType != "" {
+		i.Log.Info("Found registration keys")
 		publicKey = registrationInfo.PublicKey
 		privateKey = registrationInfo.PrivateKey
 		keyType = registrationInfo.KeyType
 	} else {
+		i.Log.Info("Generating registration keypair")
 		publicKey, privateKey, keyType, err = registration.GenerateKeyPair()
 		if err != nil {
-			return fmt.Errorf("error generating signing keys. %w", err)
+			return fmt.Errorf("error generating registration keypair. %w", err)
 		}
 	}
 
-	i.Log.Debug("checking write access before registering")
+	i.Log.Info("Checking write access before registering")
 	err = updateServerInfo("", "", publicKey, privateKey, keyType, IdentityType, registration.EC2RegistrationVaultKey)
 	if err != nil {
 		return fmt.Errorf("unable to save registration information. %w\nTry running as sudo/administrator.", err)
@@ -189,7 +193,8 @@ func (i *Identity) RegisterWithContext(ctx context.Context) error {
 		return fmt.Errorf("unable to set up backoff config for registration. Aborting. %w", err)
 	}
 
-	_, err = i.authRegisterService.RegisterManagedInstanceWithContext(ctx, publicKey, keyType, instanceId, "", "")
+	i.Log.Info("Registering EC2 instance with Systems Manager")
+	_, err = i.AuthRegisterService.RegisterManagedInstanceWithContext(ctx, publicKey, keyType, instanceId, "", "")
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			if aerr.Code() == ssm.ErrCodeInstanceAlreadyRegistered {
@@ -237,11 +242,8 @@ func (i *Identity) loadRegistrationInfo(instanceId string) *authregister.Registr
 	return registrationInfo
 }
 
-// NewEC2Identity initializes the ec2 identity
-func NewEC2Identity(log log.T) *Identity {
-	awsConfig := &aws.Config{}
-	awsConfig = awsConfig.WithMaxRetries(3).WithEC2MetadataEnableFallback(false)
-	sess, err := session.NewSession(awsConfig)
+func NewEC2IdentityWithConfig(log log.T, imdsAwsConfig *aws.Config) *Identity {
+	sess, err := session.NewSession(imdsAwsConfig)
 	if err != nil {
 		log.Errorf("Failed to create session with aws config. Err: %v", err)
 		return nil
@@ -263,9 +265,9 @@ func NewEC2Identity(log log.T) *Identity {
 
 	// Ensure IMDS client is initialized before attempting to get instance info
 	identity.initIMDSClient(sess)
-	instanceInfo, err := getInstanceInfo(identity)
+	instanceInfo, err := getInstanceInfo(context.Background(), identity)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("Failed to get instance info from IMDS. Err: %v", err)
 		return nil
 	}
 
@@ -273,6 +275,13 @@ func NewEC2Identity(log log.T) *Identity {
 	identity.initAuthRegisterService(instanceInfo.Region)
 	identity.initEc2RoleProvider(endpointHelper, instanceInfo)
 	return identity
+}
+
+// NewEC2Identity initializes the ec2 identity
+func NewEC2Identity(log log.T) *Identity {
+	awsConfig := &aws.Config{}
+	awsConfig = awsConfig.WithMaxRetries(3).WithEC2MetadataEnableFallback(false)
+	return NewEC2IdentityWithConfig(log, awsConfig)
 }
 
 // initEc2RoleProvider initializes the role provider for the EC2 identity
@@ -309,14 +318,14 @@ func (i *Identity) initEc2RoleProvider(endpointHelper endpoint.IEndpointHelper, 
 }
 
 // getInstanceInfo queries identity for instanceId and region
-func getInstanceInfo(identity *Identity) (*ssmec2roleprovider.InstanceInfo, error) {
-	instanceId, err := identity.InstanceID()
+func getInstanceInfo(ctx context.Context, identity *Identity) (*ssmec2roleprovider.InstanceInfo, error) {
+	instanceId, err := identity.InstanceIDWithContext(ctx)
 	if err != nil {
 		err = fmt.Errorf("failed to get identity instance id. Error: %w", err)
 		return nil, err
 	}
 
-	region, err := identity.Region()
+	region, err := identity.RegionWithContext(ctx)
 	if err != nil {
 		err = fmt.Errorf("failed to get identity region. Error: %w", err)
 		return nil, err
@@ -340,9 +349,9 @@ func (i *Identity) initIMDSClient(sess *session.Session) {
 
 // initAuthRegisterService initializes the client used to make requests to RegisterManagedInstance
 func (i *Identity) initAuthRegisterService(region string) {
-	if i.authRegisterService != nil {
+	if i.AuthRegisterService != nil {
 		return
 	}
 
-	i.authRegisterService = newAuthRegisterService(i.Log.WithContext("[AuthRegisterService]"), region, i.Client)
+	i.AuthRegisterService = newAuthRegisterService(i.Log.WithContext("[AuthRegisterService]"), region, i.Client)
 }

@@ -27,6 +27,7 @@ func getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
 type IRetryableRegistrar interface {
 	Start() error
 	Stop()
+	GetRegistrationAttemptedChan() chan struct{}
 }
 
 type RetryableRegistrar struct {
@@ -70,8 +71,6 @@ func (r *RetryableRegistrar) Start() error {
 	r.log.Info("Starting registrar module")
 	r.isRegistrarRunning.Store(true)
 	go r.RegisterWithRetry()
-	// Block until registration attempted at least once
-	<-r.registrationAttemptedChan
 	return nil
 }
 
@@ -142,6 +141,12 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 		case <-r.timeAfterFunc(sleepDuration):
 		}
 	}
+}
+
+// GetRegistrationAttemptedChan returns a channel that is written to and closed
+// after registration is attempted or has succeeded
+func (r *RetryableRegistrar) GetRegistrationAttemptedChan() chan struct{} {
+	return r.registrationAttemptedChan
 }
 
 func (r *RetryableRegistrar) Stop() {

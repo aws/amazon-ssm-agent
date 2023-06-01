@@ -37,7 +37,7 @@ func TestRetryableRegistrar_RegisterWithRetry_Success(t *testing.T) {
 	// Assert
 	assert.False(t, registrar.isRegistrarRunning.Load().(bool))
 	select {
-	case <-registrar.registrationAttemptedChan:
+	case <-registrar.GetRegistrationAttemptedChan():
 		break
 	case <-time.After(time.Second):
 		assert.Fail(t, "expected registrationAttemptedChan to contain value")

@@ -32,7 +32,7 @@ func TestNewAgentIdentity_ContainerMode_MissingIdentityFunc(t *testing.T) {
 	config.Agent.ContainerMode = true
 
 	selector := &identitymocks.IAgentIdentitySelectorMock{}
-	identityGenerators := make(map[string]createIdentityFunc)
+	identityGenerators := make(map[string]CreateIdentityFunc)
 
 	ident, err := newAgentIdentityInner(logmocks.NewMockLog(), &config, selector, appconfig.DefaultIdentityConsumptionOrder, identityGenerators)
 	assert.Nil(t, ident)
@@ -46,7 +46,7 @@ func TestNewAgentIdentity_ContainerMode_NoIdentitySelected(t *testing.T) {
 	selector := &identitymocks.IAgentIdentitySelectorMock{}
 
 	selector.On("SelectAgentIdentity", mock.Anything, mock.Anything).Return(nil, fmt.Errorf("some error"))
-	identityGenerators := make(map[string]createIdentityFunc)
+	identityGenerators := make(map[string]CreateIdentityFunc)
 	identityGenerators["ECS"] = func(log.T, *appconfig.SsmagentConfig) []identity.IAgentIdentityInner {
 		return []identity.IAgentIdentityInner{}
 	}
@@ -64,7 +64,7 @@ func TestNewAgentIdentity_ContainerMode_BackwardsCompatibilityOverride(t *testin
 
 	agentIdentity := &mocks.IEC2Identity{}
 	selector.On("SelectAgentIdentity", mock.Anything, mock.Anything).Return(agentIdentity, nil)
-	identityGenerators := make(map[string]createIdentityFunc)
+	identityGenerators := make(map[string]CreateIdentityFunc)
 	onPremCalled := false
 	identityGenerators["OnPrem"] = func(log.T, *appconfig.SsmagentConfig) []identity.IAgentIdentityInner {
 		onPremCalled = true
@@ -84,7 +84,7 @@ func TestNewAgentIdentity_ContainerMode_IdentitySelected(t *testing.T) {
 	agentIdentity := &mocks.IEC2Identity{}
 	selector := &identitymocks.IAgentIdentitySelectorMock{}
 	selector.On("SelectAgentIdentity", mock.Anything, mock.Anything).Return(agentIdentity, nil)
-	identityGenerators := make(map[string]createIdentityFunc)
+	identityGenerators := make(map[string]CreateIdentityFunc)
 	identityGenerators["ECS"] = func(log.T, *appconfig.SsmagentConfig) []identity.IAgentIdentityInner {
 		return []identity.IAgentIdentityInner{}
 	}
@@ -98,7 +98,7 @@ func TestNewAgentIdentity_MissingIdentityFunc(t *testing.T) {
 	var config appconfig.SsmagentConfig
 
 	selector := &identitymocks.IAgentIdentitySelectorMock{}
-	identityGenerators := make(map[string]createIdentityFunc)
+	identityGenerators := make(map[string]CreateIdentityFunc)
 
 	ident, err := newAgentIdentityInner(logmocks.NewMockLog(), &config, selector, []string{"SomeRandomIdentity"}, identityGenerators)
 	assert.Nil(t, ident)
@@ -111,7 +111,7 @@ func TestNewAgentIdentity_NoIdentitySelected(t *testing.T) {
 	selector := &identitymocks.IAgentIdentitySelectorMock{}
 
 	selector.On("SelectAgentIdentity", mock.Anything, mock.Anything).Return(nil, fmt.Errorf("some error"))
-	identityGenerators := make(map[string]createIdentityFunc)
+	identityGenerators := make(map[string]CreateIdentityFunc)
 	identityGenerators["SomeRandomIdentity"] = func(log.T, *appconfig.SsmagentConfig) []identity.IAgentIdentityInner {
 		return []identity.IAgentIdentityInner{}
 	}
@@ -127,7 +127,7 @@ func TestNewAgentIdentity_IdentitySelected(t *testing.T) {
 	agentIdentity := &mocks.IEC2Identity{}
 	selector := &identitymocks.IAgentIdentitySelectorMock{}
 	selector.On("SelectAgentIdentity", mock.Anything, mock.Anything).Return(agentIdentity, nil)
-	identityGenerators := make(map[string]createIdentityFunc)
+	identityGenerators := make(map[string]CreateIdentityFunc)
 	identityGenerators["SomeRandomIdentity"] = func(log.T, *appconfig.SsmagentConfig) []identity.IAgentIdentityInner {
 		return []identity.IAgentIdentityInner{}
 	}

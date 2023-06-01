@@ -68,9 +68,19 @@ func (agent *SSMCoreAgent) Start(statusChan *agentcontracts.StatusComm) error {
 	log.Info("Starting Core Agent")
 
 	if agent.registrar != nil {
-		log.Info("registrar detected. Attempting registration")
+		log.Info("Registrar detected. Attempting registration")
 		if err := agent.registrar.Start(); err != nil {
 			return err
+		}
+
+		select {
+		case <-agent.registrar.GetRegistrationAttemptedChan():
+			log.Info("Registration attempted. Resuming core agent startup.")
+			break
+		case <-statusChan.TerminationChan:
+			log.Info("Received stop/termination signal from main routine")
+			statusChan.DoneChan <- struct{}{}
+			return nil
 		}
 	}
 
@@ -94,6 +104,7 @@ func (agent *SSMCoreAgent) Start(statusChan *agentcontracts.StatusComm) error {
 		log.Info("Received stop/termination signal from main routine")
 		break
 	}
+
 	statusChan.DoneChan <- struct{}{}
 	return nil
 }

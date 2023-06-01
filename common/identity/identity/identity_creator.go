@@ -23,7 +23,7 @@ import (
 )
 
 func init() {
-	allIdentityGenerators = make(map[string]createIdentityFunc)
+	allIdentityGenerators = make(map[string]CreateIdentityFunc)
 
 	allIdentityGenerators[ec2.IdentityType] = newEC2Identity
 	allIdentityGenerators[ecs.IdentityType] = newECSIdentity

@@ -49,10 +49,10 @@ func NewRuntimeConfigIdentitySelector(log log.T) IAgentIdentitySelector {
 	}
 }
 
-func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector IAgentIdentitySelector, identitySelectionOrder []string, identityGenerators map[string]createIdentityFunc) (identity.IAgentIdentity, error) {
+func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector IAgentIdentitySelector, identitySelectionOrder []string, identityGenerators map[string]CreateIdentityFunc) (identity.IAgentIdentity, error) {
 	var agentIdentity identity.IAgentIdentityInner
 
-	var selectedIdentityFunc createIdentityFunc
+	var selectedIdentityFunc CreateIdentityFunc
 	var found bool
 
 	// For backwards compatibility, if container mode is enabled and the identity consumption order is not overwritten in the config, default to ECS identity only

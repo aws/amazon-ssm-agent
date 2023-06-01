@@ -35,7 +35,7 @@ type AgentTestSuite struct {
 	suite.Suite
 	coreAgent               CoreAgent
 	context                 *contextmocks.ICoreAgentContext
-	mockconatiner           *containermocks.IContainer
+	mockContainer           *containermocks.IContainer
 	mockselfupdate          *selfupdatemocks.ISelfUpdate
 	mockCredentialRefresher *refresherMocks.ICredentialRefresher
 	mockIdentity            *MockIdentity
@@ -45,7 +45,7 @@ type AgentTestSuite struct {
 // SetupTest makes sure that all the components referenced in the test case are initialized
 // before each test
 func (suite *AgentTestSuite) SetupTest() {
-	suite.mockconatiner = &containermocks.IContainer{}
+	suite.mockContainer = &containermocks.IContainer{}
 	suite.context = &contextmocks.ICoreAgentContext{}
 	suite.mockselfupdate = &selfupdatemocks.ISelfUpdate{}
 	suite.mockCredentialRefresher = &refresherMocks.ICredentialRefresher{}
@@ -53,7 +53,7 @@ func (suite *AgentTestSuite) SetupTest() {
 	suite.mockInnerIdentity = &MockInnerIdentityRegistrar{}
 	suite.coreAgent = &SSMCoreAgent{
 		context:        suite.context,
-		container:      suite.mockconatiner,
+		container:      suite.mockContainer,
 		selfupdate:     suite.mockselfupdate,
 		credsRefresher: suite.mockCredentialRefresher,
 	}
@@ -70,8 +70,8 @@ func TestAgentTestSuite(t *testing.T) {
 // TestAgentStart tests that agent starts the core manager when it starts
 func (suite *AgentTestSuite) TestAgentStart() {
 	credentialsReadyChan := make(chan struct{}, 1)
-	suite.mockconatiner.On("Monitor").Return()
-	suite.mockconatiner.On("Start").Return([]error{})
+	suite.mockContainer.On("Monitor").Return()
+	suite.mockContainer.On("Start").Return([]error{})
 	suite.mockselfupdate.On("Start").Return()
 	suite.mockCredentialRefresher.On("Start").Return(nil)
 	suite.context.On("Identity").Return(suite.mockIdentity)
@@ -91,13 +91,13 @@ func (suite *AgentTestSuite) TestAgentStart() {
 	suite.NotNil(<-statusComm.DoneChan)
 	time.Sleep(10 * time.Millisecond)
 	suite.Equal(len(statusComm.DoneChan), 0)
-	suite.mockconatiner.AssertExpectations(suite.T())
+	suite.mockContainer.AssertExpectations(suite.T())
 }
 
 func (suite *AgentTestSuite) TestAgentStart_WithStartWorkerError() {
 	credentialsReadyChan := make(chan struct{}, 1)
-	suite.mockconatiner.On("Monitor").Return()
-	suite.mockconatiner.On("Start").Return(
+	suite.mockContainer.On("Monitor").Return()
+	suite.mockContainer.On("Start").Return(
 		[]error{fmt.Errorf("test1"), fmt.Errorf("test2")})
 	suite.mockselfupdate.On("Start").Return()
 	suite.mockCredentialRefresher.On("Start").Return(nil)
@@ -118,12 +118,12 @@ func (suite *AgentTestSuite) TestAgentStart_WithStartWorkerError() {
 	suite.NotNil(<-statusComm.DoneChan)
 	time.Sleep(10 * time.Millisecond)
 	suite.Equal(len(statusComm.DoneChan), 0)
-	suite.mockconatiner.AssertExpectations(suite.T())
+	suite.mockContainer.AssertExpectations(suite.T())
 }
 
 func (suite *AgentTestSuite) TestAgentStart_WithCredentialRefresherError() {
-	suite.mockconatiner.On("Monitor").Return()
-	suite.mockconatiner.On("Start").Return([]error{})
+	suite.mockContainer.On("Monitor").Return()
+	suite.mockContainer.On("Start").Return([]error{})
 	suite.mockselfupdate.On("Start").Return()
 	suite.mockCredentialRefresher.On("Start").Return(fmt.Errorf("SomeStartError"))
 	suite.context.On("Identity").Return(suite.mockIdentity)

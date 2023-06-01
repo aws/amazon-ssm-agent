@@ -232,7 +232,7 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingInstanceId(t *testing.T) {
 	client.On("GetMetadataWithContext", mock.Anything, ec2InstanceIDResource).Return(instanceId, fmt.Errorf("failed to get instanceId")).Once()
 
 	// Act
-	result, err := getInstanceInfo(identity)
+	result, err := getInstanceInfo(context.Background(), identity)
 
 	// Assert
 	assert.Error(t, err)
@@ -256,7 +256,7 @@ func TestGetInstanceInfo_ReturnsError_WhenErrorGettingRegion(t *testing.T) {
 		Once()
 
 	// Act
-	result, err := getInstanceInfo(identity)
+	result, err := getInstanceInfo(context.Background(), identity)
 
 	// Assert
 	assert.Error(t, err)
@@ -278,7 +278,7 @@ func TestGetInstanceInfo_ReturnsInstanceInfo(t *testing.T) {
 	client.On("RegionWithContext", mock.Anything).Return(region, nil).Once()
 
 	// Act
-	result, err := getInstanceInfo(identity)
+	result, err := getInstanceInfo(context.Background(), identity)
 
 	// Assert
 	assert.NoError(t, err)
@@ -335,7 +335,7 @@ func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *t
 	identity := &Identity{
 		Log:                 logmocks.NewMockLog(),
 		Client:              client,
-		authRegisterService: authRegisterService,
+		AuthRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -383,7 +383,7 @@ func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *test
 	identity := &Identity{
 		Log:                 logmocks.NewMockLog(),
 		Client:              client,
-		authRegisterService: authRegisterService,
+		AuthRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -438,7 +438,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	identity := &Identity{
 		Log:                 logmocks.NewMockLog(),
 		Client:              client,
-		authRegisterService: authRegisterService,
+		AuthRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -489,7 +489,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_Blank(t *testing.T) {
 	identity := &Identity{
 		Log:                 logmocks.NewMockLog(),
 		Client:              client,
-		authRegisterService: authRegisterService,
+		AuthRegisterService: authRegisterService,
 	}
 
 	// Act
@@ -581,7 +581,7 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 	identity := &Identity{
 		Log:                 logmocks.NewMockLog(),
 		Client:              client,
-		authRegisterService: authRegisterService,
+		AuthRegisterService: authRegisterService,
 	}
 
 	// Act

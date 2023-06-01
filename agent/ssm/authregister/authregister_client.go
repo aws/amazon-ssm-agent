@@ -54,6 +54,25 @@ type RegistrationInfo struct {
 	InstanceId string
 }
 
+func NewClientWithConfig(log logger.T, appConfig appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, awsConfig aws.Config) IClient {
+	if imdsClient != nil {
+		awsConfig.Credentials = credentials.NewCredentials(&iirprovider.IIRRoleProvider{
+			ExpiryWindow: iirprovider.EarlyExpiryTimeWindow,
+			Config:       &appConfig,
+			Log:          log,
+			IMDSClient:   imdsClient,
+		})
+	} else {
+		awsConfig.Credentials = credentialproviders.GetRemoteCreds()
+	}
+
+	sess := session.New(&awsConfig)
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	ssmService := ssm.New(sess)
+
+	return &Client{sdk: ssmService}
+}
+
 // NewClient creates a new SSM client instance
 func NewClient(log logger.T, region string, imdsClient iirprovider.IEC2MdsSdkClient) IClient {
 	appConfig, appErr := appconfig.Config(true)
@@ -72,22 +91,8 @@ func NewClient(log logger.T, region string, imdsClient iirprovider.IEC2MdsSdkCli
 			awsConfig.Region = &appConfig.Agent.Region
 		}
 	}
-	if imdsClient != nil {
-		awsConfig.Credentials = credentials.NewCredentials(&iirprovider.IIRRoleProvider{
-			ExpiryWindow: iirprovider.EarlyExpiryTimeWindow,
-			Config:       &appConfig,
-			Log:          log,
-			IMDSClient:   imdsClient,
-		})
-	} else {
-		awsConfig.Credentials = credentialproviders.GetRemoteCreds()
-	}
 
-	sess := session.New(awsConfig)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
-	ssmService := ssm.New(sess)
-
-	return &Client{sdk: ssmService}
+	return NewClientWithConfig(log, appConfig, imdsClient, *awsConfig)
 }
 
 // RegisterManagedInstanceWithContext calls the RegisterManagedInstance SSM API

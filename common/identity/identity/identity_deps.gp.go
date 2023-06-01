@@ -25,7 +25,7 @@ type agentIdentityCacher struct {
 	endpointHelper     endpoint.IEndpointHelper
 }
 
-type createIdentityFunc func(log.T, *appconfig.SsmagentConfig) []identityinterface.IAgentIdentityInner
+type CreateIdentityFunc func(log.T, *appconfig.SsmagentConfig) []identityinterface.IAgentIdentityInner
 
 // allIdentityGenerators store all the available identity types and their generator functions. init inside identity definition add to
-var allIdentityGenerators map[string]createIdentityFunc
+var allIdentityGenerators map[string]CreateIdentityFunc
