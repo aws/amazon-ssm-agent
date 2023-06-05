@@ -129,6 +129,7 @@ func DefaultConfig() SsmagentConfig {
 		TelemetryMetricsNamespace:               DefaultTelemetryNamespace,
 		AuditExpirationDay:                      DefaultAuditExpirationDay,
 		LongRunningWorkerMonitorIntervalSeconds: defaultLongRunningWorkerMonitorIntervalSeconds,
+		ShouldPurgeInstanceProfileRoleCreds:     false,
 		ForceFileIPC:                            false,
 		GoMaxProcForAgentWorker:                 0,
 	}

@@ -348,7 +348,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 func (c *credentialsRefresher) tryPurgeCreds(configCopy *runtimeconfig.IdentityRuntimeConfig) {
 	// Credentials are not purged until agent versions where EC2 agent workers
 	// only consume shared credentials are fully deprecated
-	shouldPurgeCreds := configCopy.ShareFile != c.identityRuntimeConfig.ShareFile && false
+	shouldPurgeCreds := configCopy.ShareFile != c.identityRuntimeConfig.ShareFile && c.appConfig.Agent.ShouldPurgeInstanceProfileRoleCreds
 	purgeFileLocation := c.identityRuntimeConfig.ShareFile
 
 	if shouldPurgeCreds && purgeFileLocation != "" {

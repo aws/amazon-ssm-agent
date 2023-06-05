@@ -15,6 +15,7 @@ package credentialrefresher
 
 import (
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -133,6 +134,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				runtimeConfigClient:   tt.fields.runtimeConfigClient,
 				identityRuntimeConfig: tt.fields.identityRuntimeConfig,
 				getCurrentTimeFunc:    tt.fields.getCurrentTimeFunc,
+				appConfig:             &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 			}
 			if got := c.durationUntilRefresh(); got != tt.want {
 				t.Errorf("durationUntilRefresh() = %v, want %v", got, tt.want)
@@ -172,6 +174,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
 		timeAfterFunc:                time.After,
+		appConfig:                    &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 	}
 
 	go c.credentialRefresherRoutine()
@@ -220,6 +223,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
 		timeAfterFunc:                time.After,
+		appConfig:                    &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 	}
 
 	go c.credentialRefresherRoutine()
@@ -278,6 +282,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
 		timeAfterFunc:                time.After,
+		appConfig:                    &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 	}
 
 	go c.credentialRefresherRoutine()
@@ -330,6 +335,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallS
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
 		timeAfterFunc:                time.After,
+		appConfig:                    &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 	}
 
 	go c.credentialRefresherRoutine()
@@ -356,6 +362,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_Purge(t *testing.T) {
 		oldShareFileLocation string
 		newShareFileLocation string
 		shouldPurge          bool
+		purgeConfigVal       bool
 	}{
 		{
 			testName:             "DoesNotPurgeWhenOldShareFileEmpty",
@@ -367,7 +374,15 @@ func Test_credentialsRefresher_credentialRefresherRoutine_Purge(t *testing.T) {
 			testName:             "PurgesWhenOldShareFileNotEmpty",
 			oldShareFileLocation: "SomeShareFile",
 			newShareFileLocation: "",
+			shouldPurge:          true,
+			purgeConfigVal:       true,
+		},
+		{
+			testName:             "PurgesWhenOldShareFileNotEmpty",
+			oldShareFileLocation: "SomeShareFile",
+			newShareFileLocation: "",
 			shouldPurge:          false,
+			purgeConfigVal:       false,
 		},
 		{
 			testName:             "DoesNotPurgeWhenShareFileSameAndNotEmpty",
@@ -429,7 +444,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_Purge(t *testing.T) {
 
 			purgeSharedCredentials = func(shareFilePath string) error {
 				purgeCalled.Store(true)
-				if !tc.shouldPurge {
+				if !tc.shouldPurge || !tc.purgeConfigVal {
 					assert.Fail(t, fmt.Sprintf("Purging credentials at path %q when credentials should not be purged", shareFilePath))
 				}
 
@@ -453,6 +468,9 @@ func Test_credentialsRefresher_credentialRefresherRoutine_Purge(t *testing.T) {
 				isCredentialRefresherRunning: true,
 				getCurrentTimeFunc:           func() time.Time { return currentTime },
 				timeAfterFunc:                time.After,
+				appConfig: &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{
+					ShouldPurgeInstanceProfileRoleCreds: tc.purgeConfigVal,
+				}},
 			}
 
 			go c.credentialRefresherRoutine()
@@ -527,6 +545,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
 		timeAfterFunc:                time.After,
+		appConfig:                    &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 	}
 
 	go c.credentialRefresherRoutine()
@@ -578,6 +597,7 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testin
 				c := make(chan time.Time)
 				return c
 			},
+			appConfig: &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 		}
 
 		waitGrp := sync.WaitGroup{}
@@ -626,6 +646,7 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilS
 			c <- time.Now()
 			return c
 		},
+		appConfig: &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
 	}
 
 	_, stopped := c.retrieveCredsWithRetry()

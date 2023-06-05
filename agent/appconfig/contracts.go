@@ -65,8 +65,10 @@ type AgentInfo struct {
 	TelemetryMetricsToSSM                   bool
 	TelemetryMetricsNamespace               string
 	LongRunningWorkerMonitorIntervalSeconds int
-	AuditExpirationDay                      int
-	ForceFileIPC                            bool
+	// Temp config to purge cached EC2 credentials on disk if using instance profile role
+	ShouldPurgeInstanceProfileRoleCreds bool
+	AuditExpirationDay                  int
+	ForceFileIPC                        bool
 	// denotes GOMAXPROCS value for legacy agent worker
 	GoMaxProcForAgentWorker int
 }
