@@ -14,42 +14,58 @@
 package credentialrefresher
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"io"
 	"math"
 	"math/rand"
 	"net/http"
+	"os"
+	"path/filepath"
 	"runtime/debug"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	agentctx "github.com/aws/amazon-ssm-agent/core/app/context"
-
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
-
 	"github.com/cenkalti/backoff/v4"
 )
 
 const credentialSourceEC2 = "EC2"
 
-var storeSharedCredentials = sharedCredentials.Store
-var purgeSharedCredentials = sharedCredentials.Purge
-var backoffRetry = backoff.Retry
-var newSharedCredentials = credentials.NewSharedCredentials
+var (
+	storeSharedCredentials = sharedCredentials.Store
+	purgeSharedCredentials = sharedCredentials.Purge
+	backoffRetry           = backoff.Retry
+	newSharedCredentials   = credentials.NewSharedCredentials
 
-// Indicates the retrier should retry call for systems manager provided credentials
-var shouldRetry = true
+	// Indicates the retrier should retry call for systems manager provided credentials
+	shouldRetry = true
+
+	fileExists                                         = fileutil.Exists
+	getFileNames                                       = fileutil.GetFileNames
+	newProcessExecutor                                 = executor.NewProcessExecutor
+	osOpen                                             = os.Open
+	isCredSaveDefaultSSMAgentVersionPresentUsingReader = isCredSaveDefaultSSMAgentVersionPresentUsingIoReader
+)
 
 // Map of known http responses when requesting credentials from systems manager
 var statusCodes = map[int]bool{
@@ -60,6 +76,12 @@ var statusCodes = map[int]bool{
 	http.StatusForbidden:           !shouldRetry,
 	http.StatusMethodNotAllowed:    !shouldRetry,
 }
+
+const (
+	// last version in 3.2 that share cred file between workers for EC2
+	defaultSSMEC2SharedFileUsageLastVersion = "3.2.1241.0"
+	defaultSSMStartVersion                  = "3.2.0.0"
+)
 
 type ICredentialRefresher interface {
 	Start() error
@@ -305,10 +327,45 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 				c.log.Flush()
 				return
 			}
+			credentialSource := c.provider.CredentialSource()
+			isEC2CredentialSource := credentialSource == ec2roleprovider.CredentialSourceEC2
+			isEc2CredFilePresent := fileExists(appconfig.DefaultEC2SharedCredentialsFilePath)
+
+			c.log.Tracef("Credential source %v", isEC2CredentialSource)
+			c.log.Tracef("Cred file present %v", isEc2CredFilePresent)
+
+			isCredFilePurged := false
+
+			if isEC2CredentialSource && isEc2CredFilePresent {
+				documentSessionWorkerRunning := c.isDocumentSessionWorkerProcessRunning()
+				credSaveDefaultSSMAgentPresent := c.credentialFileConsumerPresent()
+				c.log.Tracef("Document/session worker source %v", documentSessionWorkerRunning)
+				c.log.Tracef("Cred save default ssm agent %v", credSaveDefaultSSMAgentPresent)
+				if !(documentSessionWorkerRunning && credSaveDefaultSSMAgentPresent) {
+					c.log.Info("Starting credential purging")
+					err = backoffRetry(func() error {
+						return purgeSharedCredentials(appconfig.DefaultEC2SharedCredentialsFilePath)
+					}, c.backoffConfig)
+					if err != nil {
+						c.log.Warnf("error while purging cred file: %v", err)
+					} else {
+						isCredFilePurged = true
+					}
+				}
+			}
 
 			// ShareFile may be updated after retrieveCredsWithRetry()
 			newShareFile := c.provider.ShareFile()
-			if newShareFile != "" {
+			if isCredFilePurged {
+				c.log.Info("Credential file purged")
+			} else {
+				// when ShouldPurgeInstanceProfileRoleCreds config is used,
+				// the credential file created in 3.2 for EC2 will be deleted irrespective of whether doc/session worker is running or not
+				c.tryPurgeCreds(newShareFile)
+			}
+
+			// skip saving when the credential source is EC2
+			if !isEC2CredentialSource && newShareFile != "" {
 				err = backoffRetry(func() error {
 					return storeSharedCredentials(c.log, creds.AccessKeyID, creds.SecretAccessKey, creds.SessionToken,
 						newShareFile, c.identityRuntimeConfig.ShareProfile, false)
@@ -335,7 +392,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 			configCopy.CredentialsRetrievedAt = credentialsRetrievedAt
 			configCopy.CredentialsExpiresAt = c.provider.RemoteExpiresAt()
 			configCopy.ShareFile = newShareFile
-			configCopy.CredentialSource = c.provider.CredentialSource()
+			configCopy.CredentialSource = credentialSource
 			err = backoffRetry(func() error {
 				return c.runtimeConfigClient.SaveConfig(configCopy)
 			}, c.backoffConfig)
@@ -344,17 +401,16 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 				continue
 			}
 
-			c.tryPurgeCreds(&configCopy)
 			c.identityRuntimeConfig = configCopy
 			c.sendCredentialsReadyMessage()
 		}
 	}
 }
 
-func (c *credentialsRefresher) tryPurgeCreds(configCopy *runtimeconfig.IdentityRuntimeConfig) {
+func (c *credentialsRefresher) tryPurgeCreds(newShareFile string) {
 	// Credentials are not purged until agent versions where EC2 agent workers
 	// only consume shared credentials are fully deprecated
-	shouldPurgeCreds := configCopy.ShareFile != c.identityRuntimeConfig.ShareFile && c.appConfig.Agent.ShouldPurgeInstanceProfileRoleCreds
+	shouldPurgeCreds := newShareFile != c.identityRuntimeConfig.ShareFile && c.appConfig.Agent.ShouldPurgeInstanceProfileRoleCreds
 	purgeFileLocation := c.identityRuntimeConfig.ShareFile
 
 	if shouldPurgeCreds && purgeFileLocation != "" {
@@ -365,6 +421,114 @@ func (c *credentialsRefresher) tryPurgeCreds(configCopy *runtimeconfig.IdentityR
 			c.log.Warn("Skipping purge of default aws shared credentials path")
 		} else if err = purgeSharedCredentials(purgeFileLocation); err != nil {
 			c.log.Warnf("Failed to purge old credentials. Err: %v", err)
+		} else {
+			c.log.Info("Credential file purged")
 		}
 	}
+}
+
+// isDocumentSessionWorkerProcessRunning checks whether document and session worker is running or not
+func (c *credentialsRefresher) isDocumentSessionWorkerProcessRunning() bool {
+	var isDocumentSessionWorkerFound = false
+	var allProcesses []executor.OsProcess
+	var err error
+	processExecutor := newProcessExecutor(c.log)
+	if allProcesses, err = processExecutor.Processes(); err != nil {
+		c.log.Warnf("error while getting process list: %v", err)
+		return isDocumentSessionWorkerFound
+	}
+	for _, process := range allProcesses {
+		executableName := strings.ToLower(process.Executable)
+		if strings.Contains(executableName, appconfig.SSMDocumentWorkerName) {
+			c.log.Infof("document worker with pid <%v> running", process.Pid)
+			isDocumentSessionWorkerFound = true
+			break
+		}
+		if strings.Contains(executableName, appconfig.SSMSessionWorkerName) {
+			c.log.Infof("session worker with pid <%v> running", process.Pid)
+			isDocumentSessionWorkerFound = true
+			break
+		}
+	}
+	return isDocumentSessionWorkerFound
+}
+
+// credentialFileConsumerPresent checks whether default SSM agent which saves credential file was installed
+// during the last 72 hours by looking into audit file
+func (c *credentialsRefresher) credentialFileConsumerPresent() bool {
+	credSaveDefaultSSMAgentVersionPresent := false
+	auditFileDateTimeFormat := "2006-01-02"
+	auditFolderPath := filepath.Join(logger.DefaultLogDir, logger.AuditFolderName)
+	auditFileNames, err := getFileNames(auditFolderPath)
+	if err != nil {
+		c.log.Warnf("error while getting file names: %v", err)
+		return credSaveDefaultSSMAgentVersionPresent
+	}
+	currentTimeStamp := time.Now()
+	threeDaysBeforeDate := time.Date(currentTimeStamp.Year(), currentTimeStamp.Month(), currentTimeStamp.Day(), 0, 0, 0, 0, time.UTC).AddDate(0, 0, -3)
+
+	for _, fileName := range auditFileNames {
+		// get date time from audit file name considering datetime format will be in "2006-01-02"
+		dateFromAuditFileName := fileName[len(fileName)-len(auditFileDateTimeFormat):]
+
+		// checks whether datetime in file name matches with format "2006-01-02"
+		eventFileDateStamp, err := time.Parse(auditFileDateTimeFormat, dateFromAuditFileName)
+		if err != nil {
+			c.log.Warnf("error while parsing audit file name for date stamp: %v", err)
+			credSaveDefaultSSMAgentVersionPresent = false
+		}
+
+		eventFileDateStampUTC := eventFileDateStamp.UTC()
+		if err == nil && eventFileDateStampUTC.After(threeDaysBeforeDate) {
+			func() {
+				file, err := osOpen(filepath.Join(auditFolderPath, fileName))
+				if err != nil {
+					c.log.Warnf("error while reading audit file: %v", err)
+					return
+				}
+				defer file.Close()
+
+				if isCredSaveDefaultSSMAgentVersionPresentUsingReader(file) {
+					credSaveDefaultSSMAgentVersionPresent = true
+				}
+			}()
+		}
+
+		if credSaveDefaultSSMAgentVersionPresent == true {
+			c.log.Infof("audit file with cred save default SSM Agent present")
+			break
+		}
+	}
+	return credSaveDefaultSSMAgentVersionPresent
+}
+
+// isCredSaveDefaultSSMAgentVersionPresentUsingIoReader checks whether default SSM agent which saves
+// credential file is present in reader or not
+func isCredSaveDefaultSSMAgentVersionPresentUsingIoReader(reader io.Reader) bool {
+	credSaveDefaultSSMAgentVersionPresent := false
+	// Create a new scanner for the file.
+	scanner := bufio.NewScanner(reader)
+	// Loop over the lines in the file.
+	for scanner.Scan() {
+		splitVal := strings.Split(scanner.Text(), " ")
+		// agent_telemetry event type should have only four fields
+		if len(splitVal) != 4 {
+			continue
+		}
+		// not an agent telemetry event type
+		if splitVal[0] != logger.AgentTelemetryMessage {
+			continue
+		}
+		versionCompare, err := versionutil.VersionCompare(splitVal[2], defaultSSMEC2SharedFileUsageLastVersion)
+		if err != nil || versionCompare > 0 {
+			continue
+		}
+		versionCompare, err = versionutil.VersionCompare(splitVal[2], defaultSSMStartVersion)
+		if err != nil || versionCompare < 0 {
+			continue
+		}
+		credSaveDefaultSSMAgentVersionPresent = true
+		break
+	}
+	return credSaveDefaultSSMAgentVersionPresent
 }

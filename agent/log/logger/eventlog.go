@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package log is used to initialize the logger(main logger and event logger). This package should be imported once, usually from main, then call GetLogger.
+// Package logger is used to initialize the logger(main logger and event logger). This package should be imported once, usually from main, then call GetLogger.
 package logger
 
 import (
@@ -32,6 +32,7 @@ import (
 var (
 	eventLogInst       *EventLog
 	singleSpacePattern = regexp.MustCompile(`\s+`)
+	AuditFolderName    = "audits"
 )
 
 // GetEventLog returns the Event log instance and is called by the SSM Logger during app startup
@@ -48,7 +49,7 @@ func GetEventLog(logFilePath string, logFileName string) (eventLog *EventLog) {
 		eventChannel:     make(chan string, 2),
 		noOfHistoryFiles: maxRollsDay,
 		schemaVersion:    "1",
-		eventLogPath:     filepath.Join(logFilePath, "audits"),
+		eventLogPath:     filepath.Join(logFilePath, AuditFolderName),
 		eventLogName:     logFileName,
 		datePattern:      "2006-01-02",
 		fileSystem:       filesystem.NewFileSystem(),

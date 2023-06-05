@@ -26,7 +26,12 @@ const (
 	identityConfig = "identity_config.json"
 )
 
+const (
+	runtimeConfigSchemaVersion = "1.1"
+)
+
 type IdentityRuntimeConfig struct {
+	SchemaVersion          string
 	InstanceId             string
 	IdentityType           string
 	ShareFile              string
@@ -101,13 +106,15 @@ func (i *identityRuntimeConfigClient) GetConfigWithRetry() (out IdentityRuntimeC
 }
 
 func (i *identityRuntimeConfigClient) SaveConfig(config IdentityRuntimeConfig) error {
+
+	// update runtime config version
+	config.SchemaVersion = runtimeConfigSchemaVersion
+
 	bytesContent, err := json.Marshal(config)
 	if err != nil {
 		return fmt.Errorf("error encoding identity runtime config: %v", err)
 	}
-
 	err = i.configHandler.SaveConfig(bytesContent)
-
 	if err != nil {
 		return err
 	}
