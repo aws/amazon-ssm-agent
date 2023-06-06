@@ -43,6 +43,10 @@ func TestRetryableRegistrar_RegisterWithRetry_WhenIMDSAvailable_AndSSMUnavailabl
 	imdsClient.On("GetMetadataWithContext", mock.Anything, mock.Anything).
 		Return("SomeInstanceId", nil).
 		Repeatability = 0
+	// TODO: GetMetadata is still called by the IIRRoleProvider Retrieve() method instead of GetMetadataWithContext
+	imdsClient.On("GetMetadata", mock.Anything).
+		Return("SomeInstanceId", nil).
+		Repeatability = 0
 	imdsClient.On("RegionWithContext", mock.Anything).
 		Return("SomeRegion", nil).
 		Repeatability = 0
