@@ -33,6 +33,7 @@ var makeAwsConfig = sdkutil.AwsConfigForRegion
 var getS3Endpoint = GetS3Endpoint
 var getFallbackS3EndpointFunc = getFallbackS3Endpoint
 var backoffRetry = backoff.Retry
+var getBucketRegionFromSignedHeadBucketRequestFunc = getBucketRegionFromSignedHeadBucketRequest
 
 var getHttpProvider = func(logger log.T, appConfig appconfig.SsmagentConfig) HttpProvider {
 	return HttpProviderImpl{
