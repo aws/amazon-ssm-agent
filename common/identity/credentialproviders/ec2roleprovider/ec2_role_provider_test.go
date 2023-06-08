@@ -70,15 +70,15 @@ func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISS
 	ssmClient := &mocks.ISSMClient{}
 	updateInstanceInfoOutput := &ssm.UpdateInstanceInformationOutput{}
 	if testCase.iprRetrieveErr != nil {
-		ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(updateInstanceInfoOutput, testCase.iprRetrieveErr).Once()
+		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, testCase.iprRetrieveErr).Once()
 	}
 
 	if testCase.iprUpdateInstanceInformationErr != nil {
-		ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(updateInstanceInfoOutput, testCase.iprUpdateInstanceInformationErr).Once()
+		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, testCase.iprUpdateInstanceInformationErr).Once()
 	}
 
 	if testCase.ssmRetrieveErr != nil {
-		ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(updateInstanceInfoOutput, testCase.ssmRetrieveErr).Once()
+		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, testCase.ssmRetrieveErr).Once()
 	}
 
 	newV4ServiceWithCreds = func(log log.T, appConfig *appconfig.SsmagentConfig, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
@@ -113,7 +113,7 @@ func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISS
 func arrangeUpdateInstanceInformation(err error) (*mocks.ISSMClient, *EC2RoleProvider) {
 	ssmClient := &mocks.ISSMClient{}
 	updateInstanceInfoOutput := &ssm.UpdateInstanceInformationOutput{}
-	ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(updateInstanceInfoOutput, err).Repeatability = 1
+	ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, err).Repeatability = 1
 	newV4ServiceWithCreds = func(log log.T, appConfig *appconfig.SsmagentConfig, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
 		return ssmClient
 	}
@@ -141,7 +141,7 @@ func TestEC2RoleProvider_UpdateEmptyInstanceInformation_Success(t *testing.T) {
 	defaultEndpoint := "ssm.amazon.com"
 
 	// Act
-	err := ec2RoleProvider.updateEmptyInstanceInformation(defaultEndpoint, &credentials.Credentials{})
+	err := ec2RoleProvider.updateEmptyInstanceInformation(context.Background(), defaultEndpoint, &credentials.Credentials{})
 
 	// Assert
 	assert.NoError(t, err)
@@ -172,7 +172,7 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With1HrSession(t *
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{IPRProvider: innerProvider}
 
 	// Act
-	creds, err := ec2RoleProvider.iprCredentials(defaultEndpoint)
+	creds, err := ec2RoleProvider.iprCredentials(context.Background(), defaultEndpoint)
 	credValue, _ := creds.Get()
 
 	// Assert
@@ -209,7 +209,7 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_WithLessThan30MinS
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{IPRProvider: innerProvider}
 
 	// Act
-	creds, err := ec2RoleProvider.iprCredentials(defaultEndpoint)
+	creds, err := ec2RoleProvider.iprCredentials(context.Background(), defaultEndpoint)
 	credValue, _ := creds.Get()
 
 	// Assert
@@ -229,39 +229,7 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsError(t *testing.T) {
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{IPRProvider: innerProvider}
 
 	// Act
-	creds, err := ec2RoleProvider.iprCredentials(defaultEndpoint)
-
-	// Assert
-	assert.Nil(t, creds)
-	assert.Error(t, err)
-}
-
-func TestEC2RoleProvider_SsmEc2Credentials_ReturnsSsmEc2Credentials(t *testing.T) {
-	// Arrange
-	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
-	innerProvider := &stubs.InnerProvider{ProviderName: SsmEc2ProviderName}
-	ec2RoleProvider.InnerProviders = &EC2InnerProviders{SsmEc2Provider: innerProvider}
-
-	// Act
-	creds, err := ec2RoleProvider.ssmEc2Credentials()
-	credValue, _ := creds.Get()
-
-	// Assert
-	assert.NoError(t, err)
-	assert.Equal(t, innerProvider.ProviderName, credValue.ProviderName)
-}
-
-func TestEC2RoleProvider_SsmEc2Credentials_ReturnsError(t *testing.T) {
-	// Arrange
-	ec2RoleProvider := &EC2RoleProvider{
-		Log: logmocks.NewMockLog(),
-	}
-
-	innerProvider := &stubs.InnerProvider{ProviderName: SsmEc2ProviderName, RetrieveErr: fmt.Errorf("unauthorized")}
-	ec2RoleProvider.InnerProviders = &EC2InnerProviders{SsmEc2Provider: innerProvider}
-
-	// Act
-	creds, err := ec2RoleProvider.ssmEc2Credentials()
+	creds, err := ec2RoleProvider.iprCredentials(context.Background(), defaultEndpoint)
 
 	// Assert
 	assert.Nil(t, creds)
@@ -279,7 +247,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsIPRCredentials(t *testing.T) {
 	}
 
 	runtimeConfigClient := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
-	runtimeConfigClient.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{ShareFile: ""}, nil)
+	runtimeConfigClient.On("GetConfigWithRetry").Return(runtimeconfig.IdentityRuntimeConfig{ShareFile: ""}, nil)
 	ec2RoleProvider.RuntimeConfigClient = runtimeConfigClient
 
 	// Act
@@ -311,7 +279,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsSharedCredentials(t *testing.T) {
 		t.Run(tc.testName, func(t *testing.T) {
 			// Arrange
 			ssmClient, ec2RoleProvider := arrangeUpdateInstanceInformationFromTestCase(tc)
-			ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(&ssm.UpdateInstanceInformationOutput{}, nil).Once()
+			ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(&ssm.UpdateInstanceInformationOutput{}, nil).Once()
 			iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName}
 			ssmProvider := &stubs.InnerProvider{ProviderName: SsmEc2ProviderName}
 			sharedProvider := &stubs.InnerProvider{ProviderName: "SharedCredentialsProvider"}
@@ -323,7 +291,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsSharedCredentials(t *testing.T) {
 
 			ec2RoleProvider.credentialSource = CredentialSourceSSM
 			runtimeConfigClient := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
-			runtimeConfigClient.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{ShareFile: "/some/file/location"}, nil)
+			runtimeConfigClient.On("GetConfigWithRetry").Return(runtimeconfig.IdentityRuntimeConfig{ShareFile: "/some/file/location"}, nil)
 			ec2RoleProvider.RuntimeConfigClient = runtimeConfigClient
 
 			// Act
@@ -351,9 +319,10 @@ func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials(t *testing.T) {
 			iprRetrieveErr: errNoInstanceProfileRole,
 		},
 		{
-			testName:          "WhenRuntimeConfigShareFileNotEmpty_AndShareCredentialLoadError",
+			testName:          "WhenRuntimeConfigShareFileNotEmpty_AndShareCredentialLoadError_AndInstanceProfileRoleRetrieveError",
 			runtimeConfig:     runtimeconfig.IdentityRuntimeConfig{ShareFile: "/shared/creds/path"},
 			sharedRetrieveErr: couldNotLoadSharedCredentialsErr,
+			iprRetrieveErr:    errNoInstanceProfileRole,
 		},
 	}
 
@@ -368,7 +337,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials(t *testing.T) {
 			//Assert
 			assert.Error(t, err)
 			assert.Equal(t, iprEmptyCredential, creds)
-			assert.Equal(t, CredentialSourceEC2, ec2RoleProvider.credentialSource)
+			assert.Equal(t, CredentialSourceSSM, ec2RoleProvider.credentialSource)
 		})
 	}
 }
@@ -431,17 +400,17 @@ func arrangeRetrieveEmptyTest(j testCase) *EC2RoleProvider {
 	runtimeConfigClient := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
 
 	if j.iprUpdateInstanceInformationErr != nil {
-		ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(updateInstanceInfoOutput, j.iprUpdateInstanceInformationErr)
+		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, j.iprUpdateInstanceInformationErr)
 	}
 
 	if j.ssmRetrieveErr != nil {
-		ssmClient.On("UpdateInstanceInformation", mock.Anything).Return(updateInstanceInfoOutput, j.ssmRetrieveErr)
+		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, j.ssmRetrieveErr)
 	}
 
 	if j.ssmRetrieveErr != nil {
-		runtimeConfigClient.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, j.ssmRetrieveErr)
+		runtimeConfigClient.On("GetConfigWithRetry").Return(runtimeconfig.IdentityRuntimeConfig{}, j.ssmRetrieveErr)
 	} else {
-		runtimeConfigClient.On("GetConfig").Return(j.runtimeConfig, j.ssmRetrieveErr)
+		runtimeConfigClient.On("GetConfigWithRetry").Return(j.runtimeConfig, j.ssmRetrieveErr)
 	}
 
 	newV4ServiceWithCreds = func(log log.T, appConfig *appconfig.SsmagentConfig, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {

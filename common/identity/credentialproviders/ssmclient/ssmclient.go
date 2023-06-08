@@ -15,6 +15,8 @@
 package ssmclient
 
 import (
+	"context"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
@@ -28,6 +30,7 @@ import (
 // ISSMClient defines the functions needed for role providers send health pings to Systems Manager
 type ISSMClient interface {
 	UpdateInstanceInformation(input *ssm.UpdateInstanceInformationInput) (*ssm.UpdateInstanceInformationOutput, error)
+	UpdateInstanceInformationWithContext(ctx context.Context, input *ssm.UpdateInstanceInformationInput, opts ...request.Option) (*ssm.UpdateInstanceInformationOutput, error)
 }
 
 // Initializer is a function that initializes and returns an ISSMClient

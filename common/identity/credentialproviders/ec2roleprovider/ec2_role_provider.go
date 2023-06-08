@@ -52,16 +52,16 @@ type EC2RoleProvider struct {
 
 // NewEC2RoleProvider initializes a new EC2RoleProvider using runtime config values
 func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProviders *EC2InnerProviders, instanceInfo *ssmec2roleprovider.InstanceInfo, ssmEndpoint string, runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient) *EC2RoleProvider {
-	runtimeConfig, err := runtimeConfigClient.GetConfig()
+	runtimeConfig, err := runtimeConfigClient.GetConfigWithRetry()
 	if err != nil {
 		log.Warnf("Failed to load runtime config. Assuming initial credential source is %s", CredentialSourceEC2)
 	}
 
 	var credentialSource string
-	if runtimeConfig.CredentialSource == CredentialSourceSSM && runtimeConfig.IdentityType == IdentityTypeEC2 {
-		credentialSource = CredentialSourceSSM
-	} else {
+	if runtimeConfig.CredentialSource == CredentialSourceEC2 && runtimeConfig.IdentityType == IdentityTypeEC2 {
 		credentialSource = CredentialSourceEC2
+	} else {
+		credentialSource = CredentialSourceSSM
 	}
 
 	return &EC2RoleProvider{
@@ -90,8 +90,8 @@ func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 // and returns instance profile role credentials otherwise.
 // If neither can be retrieved then empty credentials are returned
 func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
-	if runtimeConfig, err := p.RuntimeConfigClient.GetConfig(); err != nil {
-		p.Log.Errorf("Failed to read runtime config for ShareFile information")
+	if runtimeConfig, err := p.RuntimeConfigClient.GetConfigWithRetry(); err != nil {
+		p.Log.Errorf("Failed to read runtime config for ShareFile information. Err: %v", err)
 	} else if runtimeConfig.ShareFile != "" {
 		sharedCreds, err := p.InnerProviders.SharedCredentialsProvider.RetrieveWithContext(ctx)
 		if err != nil {
@@ -104,21 +104,21 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 		return sharedCreds, nil
 	}
 
-	p.credentialSource = CredentialSourceEC2
 	iprCredentials, err := p.InnerProviders.IPRProvider.RetrieveWithContext(ctx)
 	if err != nil {
 		err = fmt.Errorf("failed to retrieve instance profile role credentials. Err: %w", err)
 		p.Log.Error(err)
 		return iprEmptyCredential, err
 	}
+	p.credentialSource = CredentialSourceEC2
 
 	return iprCredentials, nil
 }
 
-// RemoteRetrieve uses network calls to retrieve credentials for EC2 instances
+// RemoteRetrieveWithContext uses network calls to retrieve credentials for EC2 instances
 func (p *EC2RoleProvider) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
-	if iprCredentials, err := p.iprCredentials(p.SsmEndpoint); err != nil {
+	if iprCredentials, err := p.iprCredentials(ctx, p.SsmEndpoint); err != nil {
 		errCode := sdkutil.GetAwsErrorCode(err)
 		if _, ok := exceptionsForDefaultHostMgmt[errCode]; ok {
 			p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
@@ -133,13 +133,13 @@ func (p *EC2RoleProvider) RemoteRetrieveWithContext(ctx context.Context) (creden
 	}
 
 	p.Log.Debug("Attempting to retrieve credentials from Systems Manager")
-	if ssmCredentials, err := p.ssmEc2Credentials(); err != nil {
+	if ssmCredentials, err := p.InnerProviders.SsmEc2Provider.RetrieveWithContext(ctx); err != nil {
 		p.Log.Warnf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
 		p.credentialSource = CredentialSourceEC2
 	} else {
 		p.Log.Info("Successfully connected with Systems Manager role credentials")
 		p.credentialSource = CredentialSourceSSM
-		return ssmCredentials.Get()
+		return ssmCredentials, nil
 	}
 
 	return iprEmptyCredential, fmt.Errorf("no valid credentials could be retrieved for ec2 identity")
@@ -153,10 +153,10 @@ func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 
 // iprCredentials retrieves instance profile role credentials and returns an error if the returned credentials cannot
 // connect to Systems Manager
-func (p *EC2RoleProvider) iprCredentials(ssmEndpoint string) (*credentials.Credentials, error) {
+func (p *EC2RoleProvider) iprCredentials(ctx context.Context, ssmEndpoint string) (*credentials.Credentials, error) {
 	// Setup SSM client with instance profile role credentials
 	iprCredentials := newCredentials(p.InnerProviders.IPRProvider)
-	err := p.updateEmptyInstanceInformation(ssmEndpoint, iprCredentials)
+	err := p.updateEmptyInstanceInformation(ctx, ssmEndpoint, iprCredentials)
 	if err != nil {
 		if awsErr, ok := err.(awserr.RequestFailure); ok {
 			err = fmt.Errorf("retrieved credentials failed to report to ssm. RequestId: %s Error: %w", awsErr.RequestID(), awsErr)
@@ -169,7 +169,7 @@ func (p *EC2RoleProvider) iprCredentials(ssmEndpoint string) (*credentials.Crede
 
 	err = p.updateIprExpiry(iprCredentials)
 	if err != nil {
-		p.Log.Errorf("failed to update role provider expiry")
+		p.Log.Errorf("Failed to update role provider expiry. Err: %v", err)
 	}
 
 	return iprCredentials, nil
@@ -195,7 +195,7 @@ func (p *EC2RoleProvider) updateIprExpiry(iprCredentials *credentials.Credential
 }
 
 // updateEmptyInstanceInformation calls UpdateInstanceInformation with minimal parameters
-func (p *EC2RoleProvider) updateEmptyInstanceInformation(ssmEndpoint string, roleCredentials *credentials.Credentials) error {
+func (p *EC2RoleProvider) updateEmptyInstanceInformation(ctx context.Context, ssmEndpoint string, roleCredentials *credentials.Credentials) error {
 	ssmClient := newV4ServiceWithCreds(p.Log.WithContext("SSMService"), p.Config, roleCredentials, p.InstanceInfo.Region, ssmEndpoint)
 
 	p.Log.Debugf("Calling UpdateInstanceInformation with agent version %s", p.Config.Agent.Version)
@@ -216,21 +216,8 @@ func (p *EC2RoleProvider) updateEmptyInstanceInformation(ssmEndpoint string, rol
 		input.PlatformType = aws.String(ssm.PlatformTypeMacOs)
 	}
 
-	_, err := ssmClient.UpdateInstanceInformation(input)
+	_, err := ssmClient.UpdateInstanceInformationWithContext(ctx, input)
 	return err
-}
-
-// ssmEc2Credentials sends an instance identity role signed request for an instance role token to Systems Manager
-func (p *EC2RoleProvider) ssmEc2Credentials() (*credentials.Credentials, error) {
-	// Return credentials if retrievable
-	ssmEc2Credentials := credentials.NewCredentials(p.InnerProviders.SsmEc2Provider)
-	_, err := p.InnerProviders.SsmEc2Provider.Retrieve()
-	if err != nil {
-		err = fmt.Errorf("failed to get valid credentials from Systems Manager. Error: %w", err)
-		return nil, err
-	}
-
-	return ssmEc2Credentials, nil
 }
 
 // ShareFile is the credentials file where the agent should write shared credentials

@@ -16,6 +16,7 @@ package runtimeconfig
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cenkalti/backoff/v4"
 	"time"
 
 	rch "github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler"
@@ -53,6 +54,7 @@ func NewIdentityRuntimeConfigClient() IIdentityRuntimeConfigClient {
 type IIdentityRuntimeConfigClient interface {
 	ConfigExists() (bool, error)
 	GetConfig() (IdentityRuntimeConfig, error)
+	GetConfigWithRetry() (IdentityRuntimeConfig, error)
 	SaveConfig(IdentityRuntimeConfig) error
 }
 
@@ -78,6 +80,18 @@ func (i *identityRuntimeConfigClient) GetConfig() (IdentityRuntimeConfig, error)
 	}
 
 	return config, nil
+}
+
+func (i *identityRuntimeConfigClient) GetConfigWithRetry() (out IdentityRuntimeConfig, err error) {
+	backoffConfig := backoff.NewExponentialBackOff()
+	// Attempts GetConfig up to 6 times with exponential backoff
+	backoffConfig.MaxElapsedTime = time.Second * 4
+	err = backoff.Retry(func() error {
+		out, err = i.GetConfig()
+		return err
+	}, backoffConfig)
+
+	return
 }
 
 func (i *identityRuntimeConfigClient) SaveConfig(config IdentityRuntimeConfig) error {
