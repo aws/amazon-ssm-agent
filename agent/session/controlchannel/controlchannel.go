@@ -57,6 +57,7 @@ type ControlChannel struct {
 	AuditLogScheduler               telemetry.IAuditLogTelemetry
 	channelType                     string
 	agentMessageIncomingMessageChan chan mgsContracts.AgentMessage
+	readyMessageChan                chan bool
 }
 
 // Initialize populates controlchannel object and opens controlchannel to communicate with mgs.
@@ -72,6 +73,7 @@ func (controlChannel *ControlChannel) Initialize(context context.T,
 	controlChannel.wsChannel = &communicator.WebSocketChannel{}
 	controlChannel.AuditLogScheduler = telemetry.GetAuditLogTelemetryInstance(context, controlChannel.wsChannel)
 	controlChannel.agentMessageIncomingMessageChan = agentMessageIncomingMessageChan
+	controlChannel.readyMessageChan = make(chan bool)
 	controlChannel.context = context
 	log.Debugf("Initialized controlchannel for instance: %s", instanceId)
 }
@@ -92,7 +94,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	}
 
 	onMessageHandler := func(input []byte) {
-		controlChannelIncomingMessageHandler(context, input, controlChannel.agentMessageIncomingMessageChan)
+		controlChannelIncomingMessageHandler(context, input, controlChannel.agentMessageIncomingMessageChan, controlChannel.readyMessageChan)
 	}
 	onErrorHandler := func(err error) {
 		callable := func() (channel interface{}, err error) {
@@ -216,11 +218,12 @@ func (controlChannel *ControlChannel) Open(log log.T, ableToOpenMGSConnection *u
 	instancePlatformType, _ := platform.PlatformType(log)
 
 	openControlChannelInput := service.OpenControlChannelInput{
-		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
-		RequestId:            aws.String(uid),
-		TokenValue:           aws.String(controlChannel.wsChannel.GetChannelToken()),
-		AgentVersion:         aws.String(version.Version),
-		PlatformType:         aws.String(instancePlatformType),
+		MessageSchemaVersion:   aws.String(mgsConfig.MessageSchemaVersion),
+		RequestId:              aws.String(uid),
+		TokenValue:             aws.String(controlChannel.wsChannel.GetChannelToken()),
+		AgentVersion:           aws.String(version.Version),
+		PlatformType:           aws.String(instancePlatformType),
+		RequireAcknowledgement: aws.Bool(true),
 	}
 
 	jsonValue, err := json.Marshal(openControlChannelInput)
@@ -228,16 +231,26 @@ func (controlChannel *ControlChannel) Open(log log.T, ableToOpenMGSConnection *u
 		return fmt.Errorf("error serializing openControlChannelInput: %s", err)
 	}
 
-	if err = controlChannel.SendMessage(log, jsonValue, websocket.TextMessage); err == nil {
-		controlChannel.AuditLogScheduler.SendAuditMessage()
+	if err = controlChannel.SendMessage(log, jsonValue, websocket.TextMessage); err != nil {
+		return err
 	}
-	return err
+
+	select {
+	case ready := <-controlChannel.readyMessageChan:
+		log.Infof("Control channel ready message received: %v", ready)
+		controlChannel.AuditLogScheduler.SendAuditMessage()
+		return nil
+	case <-time.After(mgsConfig.ControlChannelReadyTimeout):
+		log.Errorf("Did not receive control channel ready notification before the timeout")
+		return fmt.Errorf("control channel readiness check timed out")
+	}
 }
 
 // controlChannelIncomingMessageHandler handles the incoming messages coming to the agent.
 func controlChannelIncomingMessageHandler(context context.T,
 	rawMessage []byte,
-	incomingAgentMessageChan chan mgsContracts.AgentMessage) error {
+	incomingAgentMessageChan chan mgsContracts.AgentMessage,
+	readyMessageChan chan bool) error {
 
 	log := context.Log()
 	agentMessage := &mgsContracts.AgentMessage{}
@@ -250,8 +263,19 @@ func controlChannelIncomingMessageHandler(context context.T,
 		log.Debugf("Invalid AgentMessage: %s, err: %v.", agentMessage.MessageId, err)
 		return err
 	}
-	log.Infof("received message through control channel %v", agentMessage.MessageId)
-	incomingAgentMessageChan <- *agentMessage
+	log.Infof("received message through control channel %v, message type: %s", agentMessage.MessageId, agentMessage.MessageType)
+
+	if agentMessage.MessageType == mgsContracts.ControlChannelReady {
+		select {
+		case readyMessageChan <- true:
+			log.Tracef("Send true to readyMessageChan")
+			close(readyMessageChan)
+		case <-time.After(mgsConfig.ControlChannelReadyTimeout):
+			log.Warnf("The control_channel_ready message is not processed before the timeout. Break from select statement.")
+		}
+	} else {
+		incomingAgentMessageChan <- *agentMessage
+	}
 	return nil
 }
 

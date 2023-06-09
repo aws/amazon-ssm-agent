@@ -55,6 +55,8 @@ const (
 	AgentJobReplyAck string = "agent_job_reply_ack"
 	// AgentJobReply represents message type for agent job reply
 	AgentJobReply string = "agent_job_reply"
+	// ControlChannelReady represents notification that MGS has completed processing the OpenControlChannelRequest
+	ControlChannelReady string = "control_channel_ready"
 )
 
 type ShellProperties struct {
