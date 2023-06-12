@@ -1,5 +1,11 @@
 Latest
 ===============
+- Get bucket region using signed HeadBucket request
+- Updated golang.org/x/net version to 0.10.0 and golang.org/x/crypto version to 0.9.0
+- Update go version to 1.19.10
+
+3.2.1041.0
+===============
 - Add retry to handle stream data acknowledge messages
 - Support latest as a version in configurePackage plugin
 - Updated AWS GO SDK to v1.44.261 and disabled IMDSv1 fallback logic
