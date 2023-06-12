@@ -176,7 +176,7 @@ func (p *EC2RoleProvider) iprCredentials(ssmEndpoint string) (*credentials.Crede
 }
 
 // updateIprExpiry updates the expiry of the EC2RoleProvider
-// If the token life is greater than 30 minutes then the EC2RoleProvider expiry is set to 30 min
+// If the token life is greater than 1hr then the EC2RoleProvider expiry is set to 1hr
 func (p *EC2RoleProvider) updateIprExpiry(iprCredentials *credentials.Credentials) error {
 	expiresAt, err := iprCredentials.ExpiresAt()
 	if err != nil {
@@ -184,11 +184,11 @@ func (p *EC2RoleProvider) updateIprExpiry(iprCredentials *credentials.Credential
 	}
 
 	durationUntilExpiration := expiresAt.Sub(timeNowFunc())
-	if durationUntilExpiration > 30*time.Minute {
-		p.Log.Debugf("Reducing instance profile role session duration to 30 minutes")
+	if durationUntilExpiration > 1*time.Hour {
+		p.Log.Debugf("Reducing instance profile role session duration to 1 hour")
 		p.expirationUpdateLock.Lock()
 		defer p.expirationUpdateLock.Unlock()
-		p.InnerProviders.IPRProvider.SetExpiration(expiresAt, durationUntilExpiration-30*time.Minute)
+		p.InnerProviders.IPRProvider.SetExpiration(expiresAt, durationUntilExpiration-1*time.Hour)
 	}
 
 	return nil

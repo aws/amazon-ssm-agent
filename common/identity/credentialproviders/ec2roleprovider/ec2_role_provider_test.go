@@ -147,7 +147,7 @@ func TestEC2RoleProvider_UpdateEmptyInstanceInformation_Success(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With30MinSession(t *testing.T) {
+func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With1HrSession(t *testing.T) {
 	// Arrange
 	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
 	defaultEndpoint := "ssm.amazon.com"
@@ -162,7 +162,7 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With30MinSession(t
 		return creds
 	}
 
-	expectedExpiry := now.Add(30 * time.Minute)
+	expectedExpiry := now.Add(1 * time.Hour)
 
 	innerProvider := &stubs.InnerProvider{
 		ProviderName: IPRProviderName,
