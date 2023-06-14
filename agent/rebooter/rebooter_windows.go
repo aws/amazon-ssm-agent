@@ -19,7 +19,9 @@ package rebooter
 
 import (
 	"bytes"
+	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -28,20 +30,38 @@ const (
 	timeOutInSecondsBeforeReboot = "60"
 )
 
+var shutdownEXELocation = filepath.Join(os.Getenv("SystemRoot"), "System32", "shutdown.exe")
+
 // reboot is performed by running the following command
 // shutdown -r -t 60
 // The above command will cause the machine to reboot after 60 seconds
-func reboot(log log.T) (err error) {
+func reboot(log log.T) error {
 	log.Infof("rebooting the machine in %v seconds..", timeOutInSecondsBeforeReboot)
 	command := exec.Command("shutdown", "-r", "-t", timeOutInSecondsBeforeReboot)
 	var stdout, stderr bytes.Buffer
 	command.Stderr = &stderr
 	command.Stdout = &stdout
-	err = command.Start()
+	err := command.Start()
 	log.Infof("shutdown output: %v\n", stdout.String())
 
 	if stderr.Len() != 0 {
-		log.Errorf("shutdown error: %v\n", stderr.String())
+		log.Warnf("shutdown error: %v\n", stderr.String())
 	}
-	return
+
+	if err != nil {
+		log.Info("Retrying shutdown with at System32 location")
+		stdout = bytes.Buffer{}
+		stderr = bytes.Buffer{}
+		command := exec.Command(shutdownEXELocation, "-r")
+		command.Stdout = &stdout
+		command.Stderr = &stderr
+		err = command.Start()
+		log.Infof("Shutdown output: %v\n", stdout.String())
+		if stderr.Len() != 0 || err != nil {
+			log.Errorf("Shutdown error: %v\n", stderr.String())
+			return err
+		}
+	}
+
+	return nil
 }

@@ -14,7 +14,9 @@
 // Package rebooter provides utilities used to reboot a machine.
 package rebooter
 
-import "github.com/aws/amazon-ssm-agent/agent/log"
+import (
+	"github.com/aws/amazon-ssm-agent/agent/log"
+)
 
 type RebootType string
 
@@ -22,7 +24,7 @@ type RebootType string
 type IRebootType interface {
 	GetChannel() chan RebootType
 
-	RebootMachine(log log.T)
+	RebootMachine(log log.T) error
 }
 
 type SSMRebooter struct {
@@ -40,11 +42,12 @@ func (r *SSMRebooter) GetChannel() chan RebootType {
 }
 
 // RebootMachine reboots the machine
-func (r *SSMRebooter) RebootMachine(log log.T) {
+func (r *SSMRebooter) RebootMachine(log log.T) error {
 	if err := reboot(log); err != nil {
-		log.Error("error in rebooting the machine", err)
-		return
+		return err
 	}
+
+	return nil
 }
 
 func RequestPendingReboot(log log.T) bool {

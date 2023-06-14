@@ -290,7 +290,10 @@ func (c *CoreManager) watchForReboot() {
 	if val == rebooter.RebootRequestTypeReboot {
 		log.Info("Processing reboot request...")
 		c.stopCoreModules(softStopTimeout)
-		c.rebooter.RebootMachine(log)
+		err := c.rebooter.RebootMachine(log)
+		if err != nil {
+			log.Criticalf("Error rebooting the machine. Agent restart required Err: %v", err)
+		}
 	} else {
 		log.Error("reboot type not supported yet")
 	}
