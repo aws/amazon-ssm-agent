@@ -98,6 +98,21 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 	for {
 		errChan := make(chan error, 1)
 		go func() {
+			defer func() {
+				if err := recover(); err != nil {
+					r.log.Errorf("identity register panic: %v", err)
+					r.log.Errorf("Stacktrace:\n%s", debug.Stack())
+					r.log.Flush()
+				}
+
+				// Close errChan if still open
+				select {
+				case <-errChan:
+				default:
+					close(errChan)
+				}
+			}()
+
 			errChan <- r.identityRegistrar.RegisterWithContext(ctx)
 			defer close(errChan)
 		}()
