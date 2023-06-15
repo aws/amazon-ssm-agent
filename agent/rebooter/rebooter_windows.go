@@ -52,7 +52,7 @@ func reboot(log log.T) error {
 		log.Info("Retrying shutdown with at System32 location")
 		stdout = bytes.Buffer{}
 		stderr = bytes.Buffer{}
-		command := exec.Command(shutdownEXELocation, "-r")
+		command := exec.Command(shutdownEXELocation, "-r", "-t", timeOutInSecondsBeforeReboot)
 		command.Stdout = &stdout
 		command.Stderr = &stderr
 		err = command.Start()
