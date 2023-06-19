@@ -324,6 +324,60 @@ func TestParseAgentJobCancelCommandMessage(t *testing.T) {
 	assert.Equal(t, "aws.ssm.e8b9850d-930a-4366-a5a6-34060e003170.i-0094d85abec5ef507", docState.CancelInformation.CancelMessageID)
 }
 
+func TestGetAgentJobId(t *testing.T) {
+	u, _ := uuid.Parse(messageId)
+
+	agentJSON := "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.2\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"55b78ece-7a7f-4198-aaf4-d8c8a3e960e6\",\"DocumentName\":\"AWS-RunPowerShellScript\",\"CloudWatchOutputEnabled\":\"true\"}"
+
+	agentJobPayload := AgentJobPayload{
+		Payload:       agentJSON,
+		JobId:         taskId,
+		Topic:         "aws.ssm.sendCommand",
+		SchemaVersion: 1,
+	}
+	agentJobPayloadJson, _ := json.Marshal(agentJobPayload)
+	agentMessage := &AgentMessage{
+		HeaderLength:   20,
+		MessageType:    AgentJobMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      u,
+		Payload:        agentJobPayloadJson,
+	}
+
+	agentJobId, _ := agentMessage.GetAgentJobId(context.NewMockDefault())
+	assert.Equal(t, taskId, agentJobId)
+}
+
+func TestGetAgentJobIdWithInvalidMessageType(t *testing.T) {
+	u, _ := uuid.Parse(messageId)
+
+	agentJSON := "{\"Parameters\":{\"workingDirectory\":\"\",\"runCommand\":[\"echo hello; sleep 10\"]},\"DocumentContent\":{\"schemaVersion\":\"1.2\",\"description\":\"This document defines the PowerShell command to run or path to a script which is to be executed.\",\"runtimeConfig\":{\"aws:runScript\":{\"properties\":[{\"workingDirectory\":\"{{ workingDirectory }}\",\"timeoutSeconds\":\"{{ timeoutSeconds }}\",\"runCommand\":\"{{ runCommand }}\",\"id\":\"0.aws:runScript\"}]}},\"parameters\":{\"workingDirectory\":{\"default\":\"\",\"description\":\"Path to the working directory (Optional)\",\"type\":\"String\"},\"timeoutSeconds\":{\"default\":\"\",\"description\":\"Timeout in seconds (Optional)\",\"type\":\"String\"},\"runCommand\":{\"description\":\"List of commands to run (Required)\",\"type\":\"Array\"}}},\"CommandId\":\"55b78ece-7a7f-4198-aaf4-d8c8a3e960e6\",\"DocumentName\":\"AWS-RunPowerShellScript\",\"CloudWatchOutputEnabled\":\"true\"}"
+
+	agentJobPayload := AgentJobPayload{
+		Payload:       agentJSON,
+		JobId:         taskId,
+		Topic:         "aws.ssm.sendCommand",
+		SchemaVersion: 1,
+	}
+	agentJobPayloadJson, _ := json.Marshal(agentJobPayload)
+	agentMessage := &AgentMessage{
+		HeaderLength:   20,
+		MessageType:    InteractiveShellMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      u,
+		Payload:        agentJobPayloadJson,
+	}
+
+	agentJobId, _ := agentMessage.GetAgentJobId(context.NewMockDefault())
+	assert.Equal(t, "", agentJobId)
+}
+
 func TestValidateReturnsErrorWithEmptyAgentMessage(t *testing.T) {
 	agentMessage := &AgentMessage{}
 	err := agentMessage.Validate()

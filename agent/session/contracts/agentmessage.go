@@ -300,6 +300,24 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T, messagesO
 	return nil, fmt.Errorf("invalid agentmessage type: %s", agentMessage.MessageType)
 }
 
+func (agentMessage *AgentMessage) GetAgentJobId(context context.T) (string, error) {
+	log := context.Log()
+
+	if agentMessage.MessageType == AgentJobMessage {
+		log.Debugf("Getting AgentJobId.")
+
+		var agentJobPayload AgentJobPayload
+		err := json.Unmarshal(agentMessage.Payload, &agentJobPayload)
+		if err != nil {
+			log.Errorf("Could not deserialize AgentJob rawMessage: %v.", err)
+			return "", err
+		}
+		return agentJobPayload.JobId, nil
+	}
+
+	return "", fmt.Errorf("invalid agentmessage type: %s", agentMessage.MessageType)
+}
+
 // parseAgentTaskMessage parses session message to documentState object for processor.
 func parseAgentTaskMessage(context context.T,
 	messagesOrchestrationRootDir string,
