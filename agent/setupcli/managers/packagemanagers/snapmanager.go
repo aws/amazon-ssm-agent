@@ -15,10 +15,10 @@ package packagemanagers
 
 import (
 	"fmt"
-	"path/filepath"
-
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
+	"path/filepath"
+	"time"
 )
 
 type snapManager struct {
@@ -26,9 +26,12 @@ type snapManager struct {
 }
 
 const (
-	assertFile = "amazon-ssm-agent.assert"
-	snapFile   = "amazon-ssm-agent.snap"
+	assertFile                        = "amazon-ssm-agent.assert"
+	snapFile                          = "amazon-ssm-agent.snap"
+	snapAutoRefreshInProgressExitCode = 10
 )
+
+var waitTimeInterval = 10 * time.Second
 
 func (m *snapManager) GetFilesReqForInstall() []string {
 	return []string{
@@ -66,6 +69,29 @@ func (m *snapManager) UninstallAgent() error {
 	if err != nil {
 		if m.managerHelper.IsTimeoutError(err) {
 			return fmt.Errorf("snap uninstall: Command timed out")
+		}
+
+		if m.managerHelper.IsExitCodeError(err) && m.managerHelper.GetExitCode(err) == snapAutoRefreshInProgressExitCode {
+			// Note: Greengrass install step has a default timeout of 120 seconds
+			const maxAttempts = 11
+			for i := 1; i < maxAttempts; i++ {
+				output, err = m.managerHelper.RunCommand("snap", "remove", "amazon-ssm-agent")
+				if err == nil {
+					return nil
+				}
+
+				if m.managerHelper.IsTimeoutError(err) {
+					return fmt.Errorf("snap uninstall: Command timed out")
+				}
+
+				isUpdateInProgressError := m.managerHelper.IsExitCodeError(err) && m.managerHelper.GetExitCode(err) == snapAutoRefreshInProgressExitCode
+				if !isUpdateInProgressError {
+					break
+				}
+
+				time.Sleep(waitTimeInterval)
+			}
+
 		}
 
 		return fmt.Errorf("snap uninstall: Failed with output '%s' and error: %v", output, err)

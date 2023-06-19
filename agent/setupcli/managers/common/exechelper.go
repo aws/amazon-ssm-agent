@@ -48,7 +48,7 @@ func (m *ManagerHelper) RunCommand(cmd string, args ...string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), m.Timeout)
 	defer cancel()
 
-	byteArr, err := exec.CommandContext(ctx, cmd, args...).Output()
+	byteArr, err := exec.CommandContext(ctx, cmd, args...).CombinedOutput()
 	output := strings.TrimSpace(string(byteArr))
 
 	return output, err
