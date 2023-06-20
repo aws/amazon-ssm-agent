@@ -5,7 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"runtime/debug"
-	"sync/atomic"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -36,7 +36,8 @@ type RetryableRegistrar struct {
 	stopRegistrarChan         chan struct{}
 	identityRegistrar         identity.Registrar
 	timeAfterFunc             func(time.Duration) <-chan time.Time
-	isRegistrarRunning        atomic.Value
+	isRegistrarRunning        bool
+	isRegistrarRunningLock    *sync.RWMutex
 }
 
 func NewRetryableRegistrar(agentCtx agentCtx.ICoreAgentContext) *RetryableRegistrar {
@@ -55,21 +56,20 @@ func NewRetryableRegistrar(agentCtx agentCtx.ICoreAgentContext) *RetryableRegist
 		return nil
 	}
 
-	isRegistrarRunning := atomic.Value{}
-	isRegistrarRunning.Store(false)
 	return &RetryableRegistrar{
 		log:                       log,
 		identityRegistrar:         identityRegistrar,
 		registrationAttemptedChan: make(chan struct{}, 1),
 		stopRegistrarChan:         make(chan struct{}),
 		timeAfterFunc:             time.After,
-		isRegistrarRunning:        isRegistrarRunning,
+		isRegistrarRunning:        false,
+		isRegistrarRunningLock:    &sync.RWMutex{},
 	}
 }
 
 func (r *RetryableRegistrar) Start() error {
 	r.log.Info("Starting registrar module")
-	r.isRegistrarRunning.Store(true)
+	r.isRegistrarRunning = true
 	go r.RegisterWithRetry()
 	return nil
 }
@@ -80,7 +80,7 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 			r.log.Errorf("registrar panic: %v", err)
 			r.log.Errorf("Stacktrace:\n%s", debug.Stack())
 			r.log.Flush()
-			r.isRegistrarRunning.Store(false)
+			r.setIsRegistrarRunning(false)
 			select {
 			case <-r.registrationAttemptedChan:
 				//channel open, write to channel to unblock and close
@@ -126,13 +126,13 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 			if err != nil {
 				r.log.Errorf("failed to register identity: %v", err)
 			} else {
-				r.isRegistrarRunning.Store(false)
+				r.setIsRegistrarRunning(false)
 				return
 			}
 		case <-r.stopRegistrarChan:
 			cancel()
 			r.log.Info("Stopping registrar")
-			r.isRegistrarRunning.Store(false)
+			r.getIsRegistrarRunning()
 			r.log.Flush()
 			return
 		}
@@ -150,12 +150,26 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 		case <-r.stopRegistrarChan:
 			cancel()
 			r.log.Info("Stopping registrar")
-			r.isRegistrarRunning.Store(false)
+			r.setIsRegistrarRunning(false)
 			r.log.Flush()
 			return
 		case <-r.timeAfterFunc(sleepDuration):
 		}
 	}
+}
+
+func (r *RetryableRegistrar) setIsRegistrarRunning(isRegistrarRunning bool) {
+	r.isRegistrarRunningLock.Lock()
+	defer r.isRegistrarRunningLock.Unlock()
+
+	r.isRegistrarRunning = isRegistrarRunning
+}
+
+func (r *RetryableRegistrar) getIsRegistrarRunning() bool {
+	r.isRegistrarRunningLock.RLock()
+	defer r.isRegistrarRunningLock.RUnlock()
+
+	return r.isRegistrarRunning
 }
 
 // GetRegistrationAttemptedChan returns a channel that is written to and closed
@@ -165,7 +179,7 @@ func (r *RetryableRegistrar) GetRegistrationAttemptedChan() chan struct{} {
 }
 
 func (r *RetryableRegistrar) Stop() {
-	if !r.isRegistrarRunning.Load().(bool) {
+	if !r.getIsRegistrarRunning() {
 		r.log.Info("Registrar is already stopped")
 		r.log.Flush()
 		return

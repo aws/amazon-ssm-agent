@@ -24,7 +24,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/stretchr/testify/mock"
 	"net/http"
-	"sync/atomic"
+	"sync"
 	"testing"
 	"time"
 
@@ -62,15 +62,14 @@ func TestRetryableRegistrar_RegisterWithRetry_WhenIMDSAvailable_AndSSMUnavailabl
 		AuthRegisterService: authRegisterService,
 	}
 
-	isRegistrarRunning := atomic.Value{}
-	isRegistrarRunning.Store(true)
 	registrar := &RetryableRegistrar{
 		log:                       log,
 		identityRegistrar:         ec2Identity,
 		registrationAttemptedChan: make(chan struct{}, 1),
 		stopRegistrarChan:         make(chan struct{}, 1),
 		timeAfterFunc:             time.After,
-		isRegistrarRunning:        isRegistrarRunning,
+		isRegistrarRunning:        true,
+		isRegistrarRunningLock:    &sync.RWMutex{},
 	}
 
 	// Act
@@ -94,7 +93,7 @@ func TestRetryableRegistrar_RegisterWithRetry_WhenIMDSAvailable_AndSSMUnavailabl
 	}
 
 	// Assert
-	assert.False(t, registrar.isRegistrarRunning.Load().(bool), "Registrar still running after Stop() called")
+	assert.False(t, registrar.getIsRegistrarRunning(), "Registrar still running after Stop() called")
 	select {
 	case <-registrar.registrationAttemptedChan:
 		// Registration attempted chan closed successfully

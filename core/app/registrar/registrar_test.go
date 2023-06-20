@@ -1,6 +1,7 @@
 package registrar
 
 import (
+	"sync"
 	"testing"
 	"time"
 
@@ -29,13 +30,14 @@ func TestRetryableRegistrar_RegisterWithRetry_Success(t *testing.T) {
 		registrationAttemptedChan: make(chan struct{}, 1),
 		stopRegistrarChan:         make(chan struct{}),
 		timeAfterFunc:             timeAfterFunc,
+		isRegistrarRunningLock:    &sync.RWMutex{},
 	}
 
 	// Act
 	registrar.RegisterWithRetry()
 
 	// Assert
-	assert.False(t, registrar.isRegistrarRunning.Load().(bool))
+	assert.False(t, registrar.getIsRegistrarRunning())
 	select {
 	case <-registrar.GetRegistrationAttemptedChan():
 		break
