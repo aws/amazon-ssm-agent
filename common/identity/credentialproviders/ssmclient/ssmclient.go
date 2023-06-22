@@ -29,7 +29,6 @@ import (
 
 // ISSMClient defines the functions needed for role providers send health pings to Systems Manager
 type ISSMClient interface {
-	UpdateInstanceInformation(input *ssm.UpdateInstanceInformationInput) (*ssm.UpdateInstanceInformationOutput, error)
 	UpdateInstanceInformationWithContext(ctx context.Context, input *ssm.UpdateInstanceInformationInput, opts ...request.Option) (*ssm.UpdateInstanceInformationOutput, error)
 }
 

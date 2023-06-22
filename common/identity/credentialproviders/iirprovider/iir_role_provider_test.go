@@ -58,10 +58,9 @@ func TestRetrieve_ReturnsCredentials(t *testing.T) {
 	mockIMDSClient.On("GetMetadata", iirCredentialsPath).Return(string(respJSONBytes), nil)
 
 	roleProvider := &IIRRoleProvider{
-		IMDSClient:   mockIMDSClient,
-		ExpiryWindow: EarlyExpiryTimeWindow,
-		Config:       &ssmConfig,
-		Log:          logger,
+		IMDSClient: mockIMDSClient,
+		Config:     &ssmConfig,
+		Log:        logger,
 	}
 
 	result, err := roleProvider.Retrieve()

@@ -49,10 +49,9 @@ func NewRsaClient(log log.T, appConfig *appconfig.SsmagentConfig, serverId, regi
 func NewIirRsaClient(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, region, encodedPrivateKey string) authtokenrequest.IClient {
 	awsConfig := deps.AwsConfig(log, *appConfig, "ssm", region)
 	awsConfig.Credentials = deps.NewCredentials(&iirprovider.IIRRoleProvider{
-		ExpiryWindow: iirprovider.EarlyExpiryTimeWindow, // Triggers credential refresh, updated on Retrieve()
-		Config:       appConfig,
-		Log:          log,
-		IMDSClient:   imdsClient,
+		Config:     appConfig,
+		Log:        log,
+		IMDSClient: imdsClient,
 	})
 
 	if appConfig.Ssm.Endpoint != "" {

@@ -28,6 +28,6 @@ type IRemoteProvider interface {
 	ShareFile() string
 	SharesCredentials() bool
 	CredentialSource() string
-	RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error)
+	RemoteRetrieve(ctx context.Context) (credentials.Value, error)
 	RemoteExpiresAt() time.Time
 }

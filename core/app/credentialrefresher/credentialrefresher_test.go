@@ -48,7 +48,7 @@ var (
 func init() {
 	newSharedCredentials = func(_, _ string) *credentials.Credentials {
 		provider := &credentialmocks.Provider{}
-		provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, nil).Once()
+		provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 		provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
 		provider.On("ShareFile").Return("", nil).Times(2)
 		provider.On("CredentialSource").Return("SSM").Times(3)
@@ -263,7 +263,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 	}
 
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("RemoteRetrieveWithContext", mock.Anything).Return(func(context.Context) credentials.Value { return credentials.Value{} }, func(context.Context) error {
+	provider.On("RemoteRetrieve", mock.Anything).Return(func(context.Context) credentials.Value { return credentials.Value{} }, func(context.Context) error {
 		// Sleep here because we know that if we reach this point and have not got message in credentialsReadyChan, the time is set correctly
 		time.Sleep(time.Second)
 		return fmt.Errorf("SomeRetrieveErr")
@@ -318,7 +318,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallS
 
 	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("Retrieve").Return(credentials.Value{}, nil).Repeatability = 0
-	provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, nil).Repeatability = 0
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Repeatability = 0
 	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Repeatability = 0
 	provider.On("ShareFile").Return("SomeShareFile", nil).Repeatability = 0
 	provider.On("CredentialSource").Return("SSM").Repeatability = 0
@@ -436,7 +436,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_Purge(t *testing.T) {
 			runtimeConfigClient.On("SaveConfig", mock.Anything).Return(nil).Once()
 			provider := &credentialmocks.IRemoteProvider{}
 			provider.On("ShareFile").Return(tc.newShareFileLocation, nil).Once()
-			provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, nil).Once()
+			provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 			provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
 			provider.On("CredentialSource").Return("").Once()
 
@@ -526,7 +526,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("ShareFile").Return("SomeShareFile", nil).Times(2)
 	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("share file doesn't exist")).Once()
-	provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, nil).Once()
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
 	provider.On("CredentialSource").Return("SSM").Once()
 
@@ -585,7 +585,7 @@ func (a awsTestError) Code() string    { return a.errCode }
 func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testing.T) {
 	for _, awsErr := range []error{awsTestError{"AccessDeniedException"}, awsTestError{"MachineFingerprintDoesNotMatch"}} {
 		provider := &credentialmocks.IRemoteProvider{}
-		provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, awsErr).Once()
+		provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, awsErr).Once()
 
 		var timeAfterParamVal time.Duration
 		c := &credentialsRefresher{
@@ -626,9 +626,9 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testin
 
 func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilSuccess(t *testing.T) {
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
-	provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
-	provider.On("RemoteRetrieveWithContext", mock.Anything).Return(credentials.Value{}, nil).Once()
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 
 	numSleeps := 0
 	c := &credentialsRefresher{

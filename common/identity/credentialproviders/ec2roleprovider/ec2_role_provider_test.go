@@ -383,7 +383,7 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			ec2RoleProvider := arrangeRetrieveEmptyTest(j)
 
 			// Act
-			creds, err := ec2RoleProvider.RemoteRetrieveWithContext(context.Background())
+			creds, err := ec2RoleProvider.RemoteRetrieve(context.Background())
 
 			//Assert
 			assert.Error(t, err)

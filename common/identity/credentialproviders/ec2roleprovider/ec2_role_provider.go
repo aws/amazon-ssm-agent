@@ -21,19 +21,18 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
-
-	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+	"github.com/aws/aws-sdk-go/service/ssm"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 // EC2RoleProvider provides credentials for the agent when on an EC2 instance
@@ -115,8 +114,8 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 	return iprCredentials, nil
 }
 
-// RemoteRetrieveWithContext uses network calls to retrieve credentials for EC2 instances
-func (p *EC2RoleProvider) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+// RemoteRetrieve uses network calls to retrieve credentials for EC2 instances
+func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(ctx, p.SsmEndpoint); err != nil {
 		errCode := sdkutil.GetAwsErrorCode(err)

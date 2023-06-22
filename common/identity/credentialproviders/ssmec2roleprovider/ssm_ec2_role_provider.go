@@ -17,7 +17,6 @@ package ssmec2roleprovider
 import (
 	"context"
 	"fmt"
-	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -41,7 +40,6 @@ var (
 	getStoredPrivateKey     = registration.PrivateKey
 	getStoredPublicKey      = registration.PublicKey
 	getStoredPrivateKeyType = registration.PrivateKeyType
-	loadRegistrationLock    = &sync.Mutex{}
 )
 
 // SSMEC2RoleProvider sends requests for credentials to systems manager signed with AWS SigV4
@@ -75,8 +73,6 @@ func (p *SSMEC2RoleProvider) isEC2InstanceRegistered() bool {
 			return false
 		}
 
-		loadRegistrationLock.Lock()
-		defer loadRegistrationLock.Unlock()
 		p.registrationInfo = registrationInfo
 	}
 

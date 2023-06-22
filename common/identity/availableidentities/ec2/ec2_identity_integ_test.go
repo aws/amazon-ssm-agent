@@ -71,7 +71,7 @@ func TestEC2Identity_Register_CancelTest(t *testing.T) {
 	complete := make(chan struct{})
 
 	go func() {
-		err := identity.RegisterWithContext(ctx)
+		err := identity.Register(ctx)
 		assert.Error(t, err)
 		complete <- struct{}{}
 		close(complete)

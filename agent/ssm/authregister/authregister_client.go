@@ -57,10 +57,9 @@ type RegistrationInfo struct {
 func NewClientWithConfig(log logger.T, appConfig appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, awsConfig aws.Config) IClient {
 	if imdsClient != nil {
 		awsConfig.Credentials = credentials.NewCredentials(&iirprovider.IIRRoleProvider{
-			ExpiryWindow: iirprovider.EarlyExpiryTimeWindow,
-			Config:       &appConfig,
-			Log:          log,
-			IMDSClient:   imdsClient,
+			Config:     &appConfig,
+			Log:        log,
+			IMDSClient: imdsClient,
 		})
 	} else {
 		awsConfig.Credentials = credentialproviders.GetRemoteCreds()

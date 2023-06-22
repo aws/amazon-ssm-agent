@@ -339,7 +339,7 @@ func TestEC2Identity_Register_RegistersEC2InstanceWithSSM_WhenNotRegistered(t *t
 	}
 
 	// Act
-	err := identity.RegisterWithContext(context.Background())
+	err := identity.Register(context.Background())
 
 	//Assert
 	assert.NoError(t, err)
@@ -387,7 +387,7 @@ func TestEC2Identity_Register_New_WhenAlreadyRegisteredWithOldInstanceId(t *test
 	}
 
 	// Act
-	err := identity.RegisterWithContext(context.Background())
+	err := identity.Register(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -442,7 +442,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_NotBlank(t *testing.T) {
 	}
 
 	// Act
-	err := identity.RegisterWithContext(context.Background())
+	err := identity.Register(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -493,7 +493,7 @@ func TestEC2Identity_ReRegister_InfoPublicKey_Blank(t *testing.T) {
 	}
 
 	// Act
-	err := identity.RegisterWithContext(context.Background())
+	err := identity.Register(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -529,7 +529,7 @@ func TestEC2Identity_Register_ReturnsRegistrationInfo_WhenAlreadyRegistered(t *t
 	}
 
 	// Act
-	err := identity.RegisterWithContext(context.Background())
+	err := identity.Register(context.Background())
 
 	// Assert
 	assert.NoError(t, err)
@@ -585,7 +585,7 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 	}
 
 	// Act
-	err := identity.RegisterWithContext(context.Background())
+	err := identity.Register(context.Background())
 
 	// Assert
 	assert.NoError(t, err)

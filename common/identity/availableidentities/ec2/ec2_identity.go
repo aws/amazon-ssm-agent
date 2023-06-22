@@ -147,8 +147,8 @@ func (i *Identity) CredentialProvider() credentialproviders.IRemoteProvider {
 	return i.credentialsProvider
 }
 
-// RegisterWithContext registers the EC2 identity with Systems Manager
-func (i *Identity) RegisterWithContext(ctx context.Context) error {
+// Register registers the EC2 identity with Systems Manager
+func (i *Identity) Register(ctx context.Context) error {
 	region, err := i.RegionWithContext(ctx)
 	if err != nil {
 		return fmt.Errorf("unable to get region for identity %w", err)

@@ -198,7 +198,7 @@ func getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
 func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (credentials.Value, bool) {
 	retryCount := 0
 	for {
-		creds, err := c.provider.RemoteRetrieveWithContext(ctx)
+		creds, err := c.provider.RemoteRetrieve(ctx)
 		if err == nil {
 			return creds, false
 		}

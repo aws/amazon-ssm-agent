@@ -13,8 +13,8 @@ type Registrar struct {
 	mock.Mock
 }
 
-// RegisterWithContext provides a mock function with given fields: _a0
-func (_m *Registrar) RegisterWithContext(_a0 context.Context) error {
+// Register provides a mock function with given fields: _a0
+func (_m *Registrar) Register(_a0 context.Context) error {
 	ret := _m.Called(_a0)
 
 	var r0 error

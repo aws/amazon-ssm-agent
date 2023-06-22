@@ -90,8 +90,8 @@ func (_m *IEC2RoleProvider) RemoteExpiresAt() time.Time {
 	return r0
 }
 
-// RemoteRetrieveWithContext provides a mock function with given fields: ctx
-func (_m *IEC2RoleProvider) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+// RemoteRetrieve provides a mock function with given fields: ctx
+func (_m *IEC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
 	ret := _m.Called(ctx)
 
 	var r0 credentials.Value

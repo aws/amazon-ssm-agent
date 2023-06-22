@@ -16,10 +16,10 @@ package runtimeconfig
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cenkalti/backoff/v4"
 	"time"
 
 	rch "github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler"
+	"github.com/cenkalti/backoff/v4"
 )
 
 const (
@@ -87,6 +87,12 @@ func (i *identityRuntimeConfigClient) GetConfigWithRetry() (out IdentityRuntimeC
 	// Attempts GetConfig up to 6 times with exponential backoff
 	backoffConfig.MaxElapsedTime = time.Second * 4
 	err = backoff.Retry(func() error {
+		if configExists, existsError := i.ConfigExists(); err != nil {
+			return fmt.Errorf("failed to check whether config extists. Err: %w", existsError)
+		} else if !configExists {
+			return nil
+		}
+
 		out, err = i.GetConfig()
 		return err
 	}, backoffConfig)

@@ -15,7 +15,7 @@ import (
 func TestRetryableRegistrar_RegisterWithRetry_Success(t *testing.T) {
 	// Arrange
 	identityRegistrar := &identitymocks.Registrar{}
-	identityRegistrar.On("RegisterWithContext", mock.Anything).Return(nil)
+	identityRegistrar.On("Register", mock.Anything).Return(nil)
 
 	timeAfterFunc := func(duration time.Duration) <-chan time.Time {
 		assert.Fail(t, "expected no registration retry or sleep")

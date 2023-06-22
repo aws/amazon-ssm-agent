@@ -67,5 +67,5 @@ type IEC2RoleProvider interface {
 	ShareProfile() string
 	SharesCredentials() bool
 	RetrieveWithContext(ctx context.Context) (credentials.Value, error)
-	RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error)
+	RemoteRetrieve(ctx context.Context) (credentials.Value, error)
 }

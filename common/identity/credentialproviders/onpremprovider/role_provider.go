@@ -92,13 +92,13 @@ func shouldRetryAwsRequest(err error) bool {
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
-	return m.RemoteRetrieveWithContext(context.Background())
+	return m.RemoteRetrieve(context.Background())
 }
 
-// RemoteRetrieveWithContext retrieves OnPrem credentials from the SSM Auth service.
+// RemoteRetrieve retrieves OnPrem credentials from the SSM Auth service.
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
-func (m *onpremCredentialsProvider) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+func (m *onpremCredentialsProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
 	var err error
 	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
 
@@ -163,13 +163,6 @@ func (m *onpremCredentialsProvider) RemoteRetrieveWithContext(ctx context.Contex
 		SessionToken:    *roleCreds.SessionToken,
 		ProviderName:    ProviderName,
 	}, nil
-}
-
-// RemoteRetrieve retrieves OnPrem credentials from the SSM Auth service.
-// Error will be returned if the request fails, or unable to extract
-// the desired credentials.
-func (m *onpremCredentialsProvider) RemoteRetrieve() (credentials.Value, error) {
-	return m.RemoteRetrieveWithContext(context.Background())
 }
 
 func (m *onpremCredentialsProvider) RemoteExpiresAt() time.Time {

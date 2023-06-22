@@ -14,10 +14,8 @@
 
 package ssmec2roleprovider
 
-const (
-	// ProviderName is the role provider name that is returned with credentials
-	ProviderName = "SSMEC2RoleProvider"
-)
+// ProviderName is the role provider name that is returned with credentials
+const ProviderName = "SSMEC2RoleProvider"
 
 // InstanceInfo contains information about current EC2 instance
 type InstanceInfo struct {

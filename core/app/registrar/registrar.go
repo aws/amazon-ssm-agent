@@ -69,7 +69,7 @@ func NewRetryableRegistrar(agentCtx agentCtx.ICoreAgentContext) *RetryableRegist
 
 func (r *RetryableRegistrar) Start() error {
 	r.log.Info("Starting registrar module")
-	r.isRegistrarRunning = true
+	r.setIsRegistrarRunning(true)
 	go r.RegisterWithRetry()
 	return nil
 }
@@ -113,8 +113,7 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 				}
 			}()
 
-			errChan <- r.identityRegistrar.RegisterWithContext(ctx)
-			defer close(errChan)
+			errChan <- r.identityRegistrar.Register(ctx)
 		}()
 		select {
 		case err := <-errChan:
@@ -132,7 +131,7 @@ func (r *RetryableRegistrar) RegisterWithRetry() {
 		case <-r.stopRegistrarChan:
 			cancel()
 			r.log.Info("Stopping registrar")
-			r.getIsRegistrarRunning()
+			r.setIsRegistrarRunning(false)
 			r.log.Flush()
 			return
 		}

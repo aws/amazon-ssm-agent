@@ -8,11 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
-const (
-	SharedProviderName    = "SharedProvider"
-	NonSharedProviderName = "NonSharedProvider"
-)
-
 type ProviderStub struct {
 	ProviderName  string
 	Profile       string
@@ -36,11 +31,7 @@ func (p *ProviderStub) Retrieve() (credentials.Value, error) {
 	return p.RetrieveWithContext(context.Background())
 }
 
-func (p *ProviderStub) RemoteRetrieve() (credentials.Value, error) {
-	return p.RemoteRetrieveWithContext(context.Background())
-}
-
-func (p *ProviderStub) RemoteRetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+func (p *ProviderStub) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
 	return credentials.Value{
 		ProviderName: p.ProviderName,
 	}, nil

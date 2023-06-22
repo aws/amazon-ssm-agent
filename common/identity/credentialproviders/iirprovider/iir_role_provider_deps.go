@@ -19,12 +19,6 @@ import (
 )
 
 const (
-	// EarlyExpiryTimeWindow set a short amount of time that will mark the credentials as expired, this can avoid
-	// calls being made with expired credentials. This value should not be too big that's greater than the default token
-	// expiry time. For example, the token expires after 30 min and we set it to 40 min which expires the token
-	// immediately. The value should also not be too small that it should trigger credential rotation before it expires.
-	EarlyExpiryTimeWindow = 1 * time.Minute
-
 	// ProviderName is the role provider name that is returned with credentials
 	ProviderName       = "EC2IdentityRoleProvider"
 	iirCredentialsPath = "identity-credentials/ec2/security-credentials/ec2-instance"

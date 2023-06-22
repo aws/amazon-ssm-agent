@@ -34,7 +34,7 @@ type IAgentIdentity interface {
 
 // Registrar identity registers the agent on startup
 type Registrar interface {
-	RegisterWithContext(context.Context) error
+	Register(context.Context) error
 }
 type IInnerIdentityGetter interface {
 	GetInner() IAgentIdentityInner
