@@ -5,13 +5,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeMock "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
-
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRetrieve_ErrGetConfig(t *testing.T) {

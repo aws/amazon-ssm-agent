@@ -26,10 +26,11 @@ import (
 )
 
 const (
-	agentName           = "amazon-ssm-agent"
-	CredentialSourceSSM = "SSM"
-	CredentialSourceEC2 = "EC2"
-	IdentityTypeEC2     = "EC2"
+	agentName               = "amazon-ssm-agent"
+	DefaultCredentialSource = CredentialSourceSSM
+	CredentialSourceSSM     = "SSM"
+	CredentialSourceEC2     = "EC2"
+	IdentityTypeEC2         = "EC2"
 )
 
 var (

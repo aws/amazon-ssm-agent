@@ -16,15 +16,15 @@ package onprem
 import (
 	"sync"
 
-	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/sharedprovider"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 // InstanceID returns the managed instance ID
@@ -57,7 +57,7 @@ func (*Identity) ServiceDomain() (string, error) {
 	return "", nil
 }
 
-// initShareCreds initializes credentials using shared credentials provider that reads credentials from shared location, falls back to non shared credentials provider for any failure
+// initShareCreds initializes credentials using shared credentials provider that reads credentials from shared location
 func (i *Identity) initShareCreds() {
 	shareCredsProvider := sharedprovider.NewCredentialsProvider(i.Log)
 	i.credentials = credentials.NewCredentials(shareCredsProvider)

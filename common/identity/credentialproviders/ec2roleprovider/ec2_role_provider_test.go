@@ -21,8 +21,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -31,11 +34,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 )
 
 const (
@@ -184,7 +184,7 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With1HrSession(t *
 
 }
 
-func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_WithLessThan30MinSession(t *testing.T) {
+func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_ExpiresAtBeforeNow(t *testing.T) {
 	// Arrange
 	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
 	defaultEndpoint := "ssm.amazon.com"
@@ -199,11 +199,11 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_WithLessThan30MinS
 		return creds
 	}
 
-	expectedExpiry := now.Add(20 * time.Minute)
+	expectedExpiry := now.Add(1 * time.Hour)
 
 	innerProvider := &stubs.InnerProvider{
 		ProviderName: IPRProviderName,
-		Expiry:       now.Add(20 * time.Minute),
+		Expiry:       now.Add(-20 * time.Minute),
 	}
 
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{IPRProvider: innerProvider}
@@ -217,7 +217,7 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_WithLessThan30MinS
 	assert.Equal(t, innerProvider.ProviderName, credValue.ProviderName)
 	actualExpiry, err := creds.ExpiresAt()
 	assert.NoError(t, err)
-	assert.Equal(t, expectedExpiry, actualExpiry)
+	assert.Equal(t, expectedExpiry.Round(time.Second), actualExpiry.Round(time.Second))
 
 }
 
@@ -388,7 +388,7 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			//Assert
 			assert.Error(t, err)
 			assert.Equal(t, iprEmptyCredential, creds)
-			assert.Equal(t, CredentialSourceEC2, ec2RoleProvider.credentialSource)
+			assert.Equal(t, CredentialSourceSSM, ec2RoleProvider.credentialSource)
 		})
 	}
 

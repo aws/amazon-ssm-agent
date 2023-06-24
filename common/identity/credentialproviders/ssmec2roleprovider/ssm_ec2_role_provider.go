@@ -84,7 +84,6 @@ func (p *SSMEC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentia
 	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
 
 	if !p.isEC2InstanceRegistered() {
-		p.SetExpiration(time.Time{}, 0)
 		return EmptyCredentials(), fmt.Errorf("ec2 instance not yet registered with Systems Manager")
 	}
 
@@ -99,14 +98,12 @@ func (p *SSMEC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentia
 	exponentialBackoff, err := backoffconfig.GetDefaultExponentialBackoff()
 	if err != nil {
 		p.Log.Errorf("failed to create backoff Config. Error: %v", exponentialBackoff)
-		p.SetExpiration(time.Time{}, 0)
 		return EmptyCredentials(), err
 	}
 
 	// Get role token
 	roleCreds, err = p.tokenRequestClient.RequestManagedInstanceRoleTokenWithContext(ctx, p.InstanceInfo.InstanceId)
 	if err != nil {
-		p.SetExpiration(time.Time{}, 0)
 		return EmptyCredentials(), fmt.Errorf("error calling RequestManagedInstanceRoleToken: %w", err)
 	}
 

@@ -19,9 +19,10 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws/credentials"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 const (
@@ -71,7 +72,7 @@ func (s *sharedCredentialsProvider) Retrieve() (credentials.Value, error) {
 	return s.RetrieveWithContext(context.Background())
 }
 
-// RetrieveWithContext retrieves credentials from the shared profile
+// RetrieveWithContext retrieves credentials from the shared credentials file
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 func (s *sharedCredentialsProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {

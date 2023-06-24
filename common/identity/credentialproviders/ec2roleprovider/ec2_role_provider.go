@@ -53,14 +53,14 @@ type EC2RoleProvider struct {
 func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProviders *EC2InnerProviders, instanceInfo *ssmec2roleprovider.InstanceInfo, ssmEndpoint string, runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient) *EC2RoleProvider {
 	runtimeConfig, err := runtimeConfigClient.GetConfigWithRetry()
 	if err != nil {
-		log.Warnf("Failed to load runtime config. Assuming initial credential source is %s", CredentialSourceEC2)
+		log.Warnf("Failed to load runtime config. Assuming initial credential source is %s", DefaultCredentialSource)
 	}
 
 	var credentialSource string
 	if runtimeConfig.CredentialSource == CredentialSourceEC2 && runtimeConfig.IdentityType == IdentityTypeEC2 {
 		credentialSource = CredentialSourceEC2
 	} else {
-		credentialSource = CredentialSourceSSM
+		credentialSource = DefaultCredentialSource
 	}
 
 	return &EC2RoleProvider{
@@ -88,6 +88,7 @@ func (p *EC2RoleProvider) GetInnerProvider() IInnerProvider {
 // RetrieveWithContext returns shared credentials if specified in runtime config
 // and returns instance profile role credentials otherwise.
 // If neither can be retrieved then empty credentials are returned
+// This function is intended for use by agent workers that require credentials
 func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
 	if runtimeConfig, err := p.RuntimeConfigClient.GetConfigWithRetry(); err != nil {
 		p.Log.Errorf("Failed to read runtime config for ShareFile information. Err: %v", err)
@@ -115,6 +116,7 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 }
 
 // RemoteRetrieve uses network calls to retrieve credentials for EC2 instances
+// This function is intended for use by the core module's credential refresher routine
 func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(ctx, p.SsmEndpoint); err != nil {
@@ -122,8 +124,8 @@ func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value
 		if _, ok := exceptionsForDefaultHostMgmt[errCode]; ok {
 			p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
 		} else {
-			p.credentialSource = CredentialSourceEC2
-			return iprEmptyCredential, fmt.Errorf("failed to call ssm:UpdateInstanceInformation with instance profile role. Err: %w", err)
+			p.credentialSource = DefaultCredentialSource
+			return iprEmptyCredential, fmt.Errorf("unexpected error getting instance profile role credentials or calling UpdateInstanceInformation. Skipping default host management fallback: %w", err)
 		}
 	} else {
 		p.Log.Info("Successfully connected with instance profile role credentials")
@@ -133,8 +135,8 @@ func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value
 
 	p.Log.Debug("Attempting to retrieve credentials from Systems Manager")
 	if ssmCredentials, err := p.InnerProviders.SsmEc2Provider.RetrieveWithContext(ctx); err != nil {
-		p.Log.Warnf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
-		p.credentialSource = CredentialSourceEC2
+		p.Log.Errorf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
+		p.credentialSource = DefaultCredentialSource
 	} else {
 		p.Log.Info("Successfully connected with Systems Manager role credentials")
 		p.credentialSource = CredentialSourceSSM
@@ -146,6 +148,7 @@ func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value
 
 // Retrieve returns instance profile role credentials if it has sufficient systems manager permissions and
 // returns ssm provided credentials otherwise. If neither can be retrieved then empty credentials are returned
+// This function is intended for use by agent workers that require credentials
 func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
 	return p.RetrieveWithContext(context.Background())
 }
@@ -166,31 +169,10 @@ func (p *EC2RoleProvider) iprCredentials(ctx context.Context, ssmEndpoint string
 		return nil, err
 	}
 
-	err = p.updateIprExpiry(iprCredentials)
-	if err != nil {
-		p.Log.Errorf("Failed to update role provider expiry. Err: %v", err)
-	}
+	// Trusting instance profile role credentials are valid for at least 1 hour when retrieved
+	p.InnerProviders.IPRProvider.SetExpiration(timeNowFunc().Add(1*time.Hour), 0)
 
 	return iprCredentials, nil
-}
-
-// updateIprExpiry updates the expiry of the EC2RoleProvider
-// If the token life is greater than 1hr then the EC2RoleProvider expiry is set to 1hr
-func (p *EC2RoleProvider) updateIprExpiry(iprCredentials *credentials.Credentials) error {
-	expiresAt, err := iprCredentials.ExpiresAt()
-	if err != nil {
-		return fmt.Errorf("unable to get expiration for instance profile role credentials. Err: %w", err)
-	}
-
-	durationUntilExpiration := expiresAt.Sub(timeNowFunc())
-	if durationUntilExpiration > 1*time.Hour {
-		p.Log.Debugf("Reducing instance profile role session duration to 1 hour")
-		p.expirationUpdateLock.Lock()
-		defer p.expirationUpdateLock.Unlock()
-		p.InnerProviders.IPRProvider.SetExpiration(expiresAt, durationUntilExpiration-1*time.Hour)
-	}
-
-	return nil
 }
 
 // updateEmptyInstanceInformation calls UpdateInstanceInformation with minimal parameters
@@ -220,6 +202,7 @@ func (p *EC2RoleProvider) updateEmptyInstanceInformation(ctx context.Context, ss
 }
 
 // ShareFile is the credentials file where the agent should write shared credentials
+// Only default host management role credentials are shared across workers
 func (p *EC2RoleProvider) ShareFile() string {
 	switch p.credentialSource {
 	case CredentialSourceSSM:
@@ -259,6 +242,7 @@ func (p *EC2RoleProvider) ExpiresAt() time.Time {
 }
 
 // RemoteExpiresAt returns the expiry of the remote inner provider currently in use
+// This function is intended for use by the core module's credential refresher routine
 func (p *EC2RoleProvider) RemoteExpiresAt() time.Time {
 	return p.GetInnerProvider().ExpiresAt()
 }

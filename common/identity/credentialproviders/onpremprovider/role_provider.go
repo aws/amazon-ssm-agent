@@ -91,6 +91,7 @@ func shouldRetryAwsRequest(err error) bool {
 // Retrieve retrieves OnPrem credentials from the SSM Auth service.
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
+// This function is intended for use by agent workers that require credentials
 func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 	return m.RemoteRetrieve(context.Background())
 }
@@ -98,6 +99,7 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 // RemoteRetrieve retrieves OnPrem credentials from the SSM Auth service.
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
+// This function is intended for use by the core module's credential refresher routine
 func (m *onpremCredentialsProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
 	var err error
 	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
@@ -165,6 +167,7 @@ func (m *onpremCredentialsProvider) RemoteRetrieve(ctx context.Context) (credent
 	}, nil
 }
 
+// RemoteExpiresAt is used by the core module's credential refresher to check credential expiry
 func (m *onpremCredentialsProvider) RemoteExpiresAt() time.Time {
 	return m.ExpiresAt()
 }
