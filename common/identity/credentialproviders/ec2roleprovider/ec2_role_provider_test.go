@@ -337,7 +337,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials(t *testing.T) {
 			//Assert
 			assert.Error(t, err)
 			assert.Equal(t, iprEmptyCredential, creds)
-			assert.Equal(t, CredentialSourceSSM, ec2RoleProvider.credentialSource)
+			assert.Equal(t, CredentialSourceNone, ec2RoleProvider.credentialSource)
 		})
 	}
 }
@@ -388,7 +388,7 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			//Assert
 			assert.Error(t, err)
 			assert.Equal(t, iprEmptyCredential, creds)
-			assert.Equal(t, CredentialSourceSSM, ec2RoleProvider.credentialSource)
+			assert.Equal(t, CredentialSourceNone, ec2RoleProvider.credentialSource)
 		})
 	}
 

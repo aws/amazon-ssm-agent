@@ -524,7 +524,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	runtimeConfigClient.On("SaveConfig", mock.Anything).Return(nil).Once()
 
 	provider := &credentialmocks.IRemoteProvider{}
-	provider.On("ShareFile").Return("SomeShareFile", nil).Times(2)
+	provider.On("ShareFile").Return("SomeShareFile", nil).Times(1)
 	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("share file doesn't exist")).Once()
 	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()

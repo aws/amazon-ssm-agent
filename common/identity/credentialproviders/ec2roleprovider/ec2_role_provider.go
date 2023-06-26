@@ -53,14 +53,16 @@ type EC2RoleProvider struct {
 func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProviders *EC2InnerProviders, instanceInfo *ssmec2roleprovider.InstanceInfo, ssmEndpoint string, runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient) *EC2RoleProvider {
 	runtimeConfig, err := runtimeConfigClient.GetConfigWithRetry()
 	if err != nil {
-		log.Warnf("Failed to load runtime config. Assuming initial credential source is %s", DefaultCredentialSource)
+		log.Warnf("Failed to get credential source from runtime config. Err: %v", err)
 	}
 
 	var credentialSource string
 	if runtimeConfig.CredentialSource == CredentialSourceEC2 && runtimeConfig.IdentityType == IdentityTypeEC2 {
 		credentialSource = CredentialSourceEC2
+	} else if runtimeConfig.CredentialSource == CredentialSourceSSM && runtimeConfig.IdentityType == IdentityTypeEC2 {
+		credentialSource = CredentialSourceSSM
 	} else {
-		credentialSource = DefaultCredentialSource
+		credentialSource = CredentialSourceNone
 	}
 
 	return &EC2RoleProvider{
@@ -117,6 +119,7 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 
 // RemoteRetrieve uses network calls to retrieve credentials for EC2 instances
 // This function is intended for use by the core module's credential refresher routine
+// When an error is returned, credential source is updated to CredentialSourceNone
 func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(ctx, p.SsmEndpoint); err != nil {
@@ -124,7 +127,7 @@ func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value
 		if _, ok := exceptionsForDefaultHostMgmt[errCode]; ok {
 			p.Log.Warnf("Failed to connect to Systems Manager with instance profile role credentials. Err: %v", err)
 		} else {
-			p.credentialSource = DefaultCredentialSource
+			p.credentialSource = CredentialSourceNone
 			return iprEmptyCredential, fmt.Errorf("unexpected error getting instance profile role credentials or calling UpdateInstanceInformation. Skipping default host management fallback: %w", err)
 		}
 	} else {
@@ -136,13 +139,13 @@ func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value
 	p.Log.Debug("Attempting to retrieve credentials from Systems Manager")
 	if ssmCredentials, err := p.InnerProviders.SsmEc2Provider.RetrieveWithContext(ctx); err != nil {
 		p.Log.Errorf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
-		p.credentialSource = DefaultCredentialSource
 	} else {
 		p.Log.Info("Successfully connected with Systems Manager role credentials")
 		p.credentialSource = CredentialSourceSSM
 		return ssmCredentials, nil
 	}
 
+	p.credentialSource = CredentialSourceNone
 	return iprEmptyCredential, fmt.Errorf("no valid credentials could be retrieved for ec2 identity")
 }
 

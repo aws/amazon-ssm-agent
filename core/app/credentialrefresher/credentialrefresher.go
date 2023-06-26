@@ -41,6 +41,8 @@ import (
 	"github.com/cenkalti/backoff/v4"
 )
 
+const credentialSourceEC2 = "EC2"
+
 var storeSharedCredentials = sharedCredentials.Store
 var purgeSharedCredentials = sharedCredentials.Purge
 var backoffRetry = backoff.Retry
@@ -270,7 +272,7 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 
 	// if credentials are not expired, verify that credentials are available.
 	if c.identityRuntimeConfig.CredentialsExpiresAt.After(c.getCurrentTimeFunc()) {
-		if c.provider.ShareFile() == "" {
+		if c.identityRuntimeConfig.ShareFile == "" && c.identityRuntimeConfig.CredentialSource == credentialSourceEC2 {
 			c.sendCredentialsReadyMessage()
 		} else {
 			localCredsProvider := newSharedCredentials(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile)
