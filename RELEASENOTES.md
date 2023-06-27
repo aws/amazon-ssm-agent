@@ -1,5 +1,15 @@
 Latest
 ===============
+- Added retries to snap uninstall call in setupcli
+- Fix for windows shutdown executable not found when compiled with golang1.19+
+- Fix to return correct Agent Job ID for ack after AgentJobParseError
+- Pass golang contexts for network calls in agent core to terminate cleanly
+- Remove credential file dependency in agent workers implemented in 3.2.x.x versions
+- Report MGS Connection Channel status to Health table
+- Update Dockerfile to use Golang image from ECR repository
+
+3.2.1241.0
+===============
 - Get bucket region using signed HeadBucket request
 - Updated golang.org/x/net version to 0.10.0 and golang.org/x/crypto version to 0.9.0
 - Update go version to 1.19.10
