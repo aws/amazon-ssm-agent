@@ -20,6 +20,14 @@ checkstyle::
 #   Run checkstyle script
 	$(GO_SPACE)/Tools/src/checkstyle.sh
 
+analyze-install::
+	$(GO_SPACE)/Tools/src/static_analysis.sh -I ${analyze-flags}
+  		  
+analyze::
+#Runs analysis script
+#Please install gosec and govulncheck using `make analyze-install`
+	$(GO_SPACE)/Tools/src/static_analysis.sh -d ${analyze-flags}
+  		  
 coverage:: build-linux
 	$(GO_SPACE)/Tools/src/coverage.sh \
 	  github.com/aws/amazon-ssm-agent/agent/... \

@@ -119,6 +119,8 @@ The following targets are available. Each may be run with `make <target>`.
 | `package`                | `package` packages build result into a RPM, DEB and ZIP package |
 | `pre-build`              | `pre-build` goes through Tools/src folder to make sure all the script files are executable |
 | `checkstyle`             | `checkstyle` runs the checkstyle script |
+| `analyze-install`        | `analyze-install` install static analysis dependencies for local use |
+| `analyze`                | `analyze` runs static analysis script to find possible vulnerabilities |
 | `quick-integtest`        | `quick-integtest` runs all tests tagged with integration using `go test` |
 | `quick-test`             | `quick-test` runs all the tests including integration and unit tests using `go test` |
 | `coverage`               | `coverage` runs all tests and calculate code coverage |
