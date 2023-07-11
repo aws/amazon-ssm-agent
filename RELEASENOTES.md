@@ -1,5 +1,11 @@
 Latest
 ===============
+- Stopped saving instance profile credentials to disk
+- Added static agent security scans to makefile
+- Updated Greengrass component minor version
+
+3.2.1297.0
+===============
 - Added retries to snap uninstall call in setupcli
 - Fix for windows shutdown executable not found when compiled with golang1.19+
 - Fix to return correct Agent Job ID for ack after AgentJobParseError
