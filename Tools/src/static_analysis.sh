@@ -2,18 +2,28 @@
 	
 # Static security analysis script
 #
-# Installation & Use:
+# Installation:
 # 1. install git for file change tracking
-# 2. Install scans. gosec and govulncheck scans must be installed to pass approval workflow. golangci-lint and staticcheck are recommended but optional linters
-# |- gosec
-# |- govulncheck
-# |- staticcheck
-# |- golangci-lint
-# 3. It is very important that the version of go installed matches the one used by the makefile! Some of these scanner use the go version to check for errors
-# 4. Configuration for staticcheck and golangci-lint can be created by adding in staticcheck.conf and .golangci.yml files
-# 5. Use the -h options for help with this tool
-# 6. Run make analyze to use recommended options. (Approvol workflow uses this target!)
-# 7. Using -o=dir or -o=file will create formated markdown files
+# 2. install golang. go must be atleast 1.18 for script to work
+# 3. install scans (gosec, govulncheck). This can do done using `./static_analyis.sh -I` or `make Analyze-Install`
+# 4. Use the -h options for help with this tool and the -d option for default scan location
+# 5. This script should be ran through the makefile using `make analyze` to use the recommended flags.
+# 6. Using -o=dir or -o=file will create formated markdown files for easier debugging
+# 7. This script is designed to scan packages not files. To scan ./agent/agent/agent.go, pass in ./agent/agent/
+#
+# Example commands:
+# 1) ./static_analysis.sh -d -o=file -n="results.md" -s="gosec govulncheck" 
+# -> [-d] Uses default package locations
+# -> [-o=file] Output to file
+# -> [-n="results.md"] Renames file to results.md
+# -> [-s="gosec govulncheck"] Use gosec and govulncheck scan
+#
+# 2) ./static_analysis.sh -o=dir -f -t ./agent/agent/agent/ ./core
+# -> [-o=dir] Output to a directory with default name
+# -> [-f] enables fast fail. Exits on first scan that fails
+# -> [-t] scans test files to
+# -> [./agent/agent/agent/] location 1
+# -> [./core] location 2
 
 # Configurations Information
 #======================================================================================================

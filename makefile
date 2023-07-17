@@ -21,12 +21,13 @@ checkstyle::
 	$(GO_SPACE)/Tools/src/checkstyle.sh
 
 analyze-install::
-	$(GO_SPACE)/Tools/src/static_analysis.sh -I ${analyze-flags}
+	$(GO_SPACE)/Tools/src/static_analysis.sh -I
   		  
 analyze::
-#Runs analysis script
-#Please install gosec and govulncheck using `make analyze-install`
-	$(GO_SPACE)/Tools/src/static_analysis.sh -d ${analyze-flags}
+#	Runs analysis script located inside Tools/src
+#	Please install gosec and govulncheck using `make analyze-install`
+#	script flags can be passed into make file by converting space -> , and "" -> []
+	$(GO_SPACE)/Tools/src/static_analysis.sh -d $(shell echo ${flags} | tr ",\[\]" " \"")  
   		  
 coverage:: build-linux
 	$(GO_SPACE)/Tools/src/coverage.sh \
