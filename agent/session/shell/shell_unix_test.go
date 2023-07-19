@@ -739,6 +739,9 @@ func (suite *ShellTestSuite) TestExecuteWithExecAndCommandFailedToStart() {
 	suite.mockIohandler.On("MarkAsFailed", mock.Anything)
 	suite.mockCmd.On("Start").Return(errors.New("failed to start command"))
 
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
 	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
@@ -822,6 +825,9 @@ func (suite *ShellTestSuite) TestExecuteWithFailureToGetExec() {
 	suite.mockIohandler.On("MarkAsFailed", mock.Anything)
 	suite.mockCmd.On("Start").Return(errors.New("failed to start command"))
 
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
 	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {

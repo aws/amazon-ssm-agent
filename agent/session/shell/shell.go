@@ -407,10 +407,22 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 	if p.separateOutput {
 		if err := p.processCommandsWithOutputStreamSeparate(cancelled, cancelFlag, output, ipcFile); err != nil {
 			p.sendErrorToDataChannel(log, err.Error())
+			// Call datachannel PrepareToCloseChannel so all messages in the buffer are sent
+			p.dataChannel.PrepareToCloseChannel(log)
+			// Send session status as Terminating to service on completing command execution
+			if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
+			}
 		}
 	} else {
 		if err := p.processCommandsWithExec(cancelled, cancelFlag, output, ipcFile); err != nil {
 			p.sendErrorToDataChannel(log, err.Error())
+			// Call datachannel PrepareToCloseChannel so all messages in the buffer are sent
+			p.dataChannel.PrepareToCloseChannel(log)
+			// Send session status as Terminating to service on completing command execution
+			if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
+			}
 		}
 		p.cleanupOutputFile(log, config)
 	}
@@ -430,6 +442,8 @@ func (p *ShellPlugin) processCommandsWithOutputStreamSeparate(cancelled chan boo
 	if err := p.execCmd.Start(); err != nil {
 		errorString := fmt.Errorf("Error occurred starting the command: %s\n", err)
 		log.Error(errorString)
+		commandExitCode := appconfig.ErrorExitCode
+		p.sendExitCode(log, ipcFile, commandExitCode)
 		output.MarkAsFailed(errorString)
 		return err
 	}

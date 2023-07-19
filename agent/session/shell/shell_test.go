@@ -18,6 +18,7 @@
 package shell
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -262,6 +263,70 @@ func (suite *ShellTestSuite) TestExecuteForNonInteractiveCommandsWithSeparateOut
 	suite.mockCmd.On("Start").Return(nil)
 	suite.mockCmd.On("Wait").Return(nil)
 	suite.mockCmd.On("Pid").Return(234)
+
+	stdoutPipe, stdoutPipeinput, _ := os.Pipe()
+	stdoutPipeinput.Write(payload)
+	stderrPipe, stderrPipeinput, _ := os.Pipe()
+	stderrPipeinput.Write(payload)
+
+	shellConfig := mgsContracts.ShellConfig{
+		"ls", false, "true", "STD_OUT:\n", "STD_ERR:\n"}
+	shellProperties := mgsContracts.ShellProperties{shellConfig, shellConfig, shellConfig}
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		plugin.stdoutPipe = stdoutPipe
+		plugin.stderrPipe = stderrPipe
+		return nil
+	}
+
+	plugin := &ShellPlugin{
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		context:     suite.mockContext,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	go func() {
+		time.Sleep(1000 * time.Millisecond)
+		stdoutPipeinput.Close()
+		stderrPipeinput.Close()
+		time.Sleep(500 * time.Millisecond)
+		stdoutPipe.Close()
+		stderrPipe.Close()
+	}()
+
+	plugin.Execute(
+		contracts.Configuration{
+			CloudWatchLogGroup:         testCwLogGroupName,
+			CloudWatchStreamingEnabled: false,
+			SessionId:                  sessionId,
+			SessionOwner:               sessionOwner,
+		},
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		suite.mockDataChannel,
+		shellProperties)
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
+}
+
+// Testing Execute for NonInteractiveCommand with separate output stream enabled
+func (suite *ShellTestSuite) TestExecuteForNonInteractiveCommandsWithSeparateOutputStreamWhenCmdFailsToStart() {
+	suite.mockCancelFlag.On("Canceled").Return(false)
+	suite.mockCancelFlag.On("ShutDown").Return(false)
+	suite.mockCancelFlag.On("Wait").Return(task.Completed)
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockIohandler.On("MarkAsFailed", mock.Anything).Return()
+	suite.mockDataChannel.On("IsActive").Return(true)
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	suite.mockCmd.On("Start").Return(fmt.Errorf("some error"))
 
 	stdoutPipe, stdoutPipeinput, _ := os.Pipe()
 	stdoutPipeinput.Write(payload)
