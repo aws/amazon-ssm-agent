@@ -21,7 +21,7 @@ checkstyle::
 	$(GO_SPACE)/Tools/src/checkstyle.sh
 
 analyze-install::
-	$(GO_SPACE)/Tools/src/static_analysis.sh -I
+	$(GO_SPACE)/Tools/src/static_analysis.sh $(shell echo ${flags} | tr ",\[\]" " \"") -I
   		  
 analyze::
 #	Runs analysis script located inside Tools/src

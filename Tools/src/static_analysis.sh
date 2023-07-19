@@ -10,7 +10,9 @@
 # 5. This script should be ran through the makefile using `make analyze` to use the recommended flags.
 # 6. Using -o=dir or -o=file will create formated markdown files for easier debugging
 # 7. This script is designed to scan packages not files. To scan ./agent/agent/agent.go, pass in ./agent/agent/
-#
+# 8. The order of flags matters! For example, using ./static_analysis.sh -I -s=gosec will install all 
+#    dependencies but then only scan with gosec. While ./static_analysis.sh -s=gosec -I will tell the intaller to only install gosec
+#   
 # Example commands:
 # 1) ./static_analysis.sh -d -o=file -n="results.md" -s="gosec govulncheck" 
 # -> [-d] Uses default package locations
@@ -72,13 +74,13 @@ PATH=${PATH}:$(go env GOPATH)/bin
 
 # Color and text constants for shell. Checks that we are not inside a dumb terminal which has no color features
 if [[ ${TERM} != "dumb" ]]; then
-  RED=$(tput setaf 1) 
-  GREEN=$(tput setaf 2) 
-  YELLOW=$(tput setaf 3) 
+  RED=$(tput setaf 1)
+  GREEN=$(tput setaf 2)
+  YELLOW=$(tput setaf 3)
   BLUE=$(tput setaf 4)
   MAGENTA=$(tput setaf 5)
   CYAN=$(tput setaf 6)
-  RESET_COLOR=$(tput init) 
+  RESET_COLOR=$(tput init)
   BOLD=$(tput bold)
   UNDERLINE=$(tput smul)
   NORMAL=$(tput sgr0)
@@ -86,23 +88,24 @@ fi
 
 # Help Message
 help="
-${YELLOW}This script uses multiple static security analysis libraries to scan and find known CVEs and vulnerabilities within golang packages${RESET_COLOR}\n
+${YELLOW}This script uses multiple static security analysis libraries to scan and find known CVEs and vulnerabilities within Golang packages${RESET_COLOR}\n
    ${BOLD}${UNDERLINE}Usage${NORMAL}:
 \t$(basename $0) [options] [files...]
    ${BOLD}${UNDERLINE}Options${NORMAL}:
-\t-s  --scanner=\"arg...\"    List of security scanners that will be used currently there ${SCANNERS} are avalible
+\t-s  --scanner=\"arg...\"    List of security scanners that will be used currently there ${SCANNERS} are available
 \t    --[scanner]=\"flags\"   Pass in additional command flags to scanner
 \t-d  --default             Runs scans on specified default locations
 \t-f  --fail                Prevents script from exiting after first failure
 \t-r  --rel=<path>          Set the path all commands are run relative to
-\t-i  --install             Installs latest scanners automatically if missing
-\t-I                        Installs scanners depenedencies and exits          
+\t-i  --install             Installs latest scanners automatically if missing just before a scan start
+\t-I                        Installs scanners dependencies before all scanners        
 \t-q  --quiet               Disables additional prints
 \t-c  --color               Disables color output 
 \t-t  --tests               Enable scanning on test code
 \t-o  --out=<file|dir>      Set location for debugging output. Defaults to console
 \t-n  --name=\"name\"         Names of the output file/directory
 \t${GREEN}-h  --help                Help information${RESET_COLOR}
+\t-g  --go=\"version\"        Go version override
    ${BOLD}${UNDERLINE}Arguments${NORMAL}:
 \t[files...]                Defaults to ./... which recursively scans all subpackages of the project 
 "
@@ -122,6 +125,28 @@ indexOf() {
     fi
   done
   return ${#NAMES[@]}
+}
+
+# Checks installation of scanners and install based on provided options:
+# $1: command we are running
+# $2: installation command
+checkInstallation() { 
+  if  [[ -x $(command -v $1) ]]; then
+    print "${GREEN}Found ${CYAN}$1${RESET_COLOR} executable"
+    return 0
+  elif [[ $3 == true ]]; then
+    print "${YELLOW}Installing ${CYAN}$1${RESET_COLOR} using \"$2\""
+    eval $2 
+    if  [[ $(command -v $1) ]]; then
+      print "${GREEN}Installation Successfull!${RESET_COLOR} continuing"
+      return 0
+    fi
+    print "${BOLD}${RED}Installation Failed!${NORMAL}${RESET_COLOR} There may be something wrong with installation link"
+    exit 1
+  else
+    print "${BOLD}${RED}Error!${NORMAL}${RESET_COLOR} ${CYAN}$1${RESET_COLOR} executable not found. Please install or use ${YELLOW}${name} -i${RESET_COLOR} flag"
+    exit 1
+  fi
 }
 
 # Default option values
@@ -169,6 +194,11 @@ special_args() {
     n|name)
       filename="$2"
       ;;
+    g|go)
+      go install golang.org/dl/$2@latest
+      $2 download
+      export PATH=$($2 env GOROOT)/bin:$PATH
+      ;;
     *)
       indexOf ${1}
       index=$?
@@ -195,12 +225,12 @@ while (( $# )); do
       ;;
     -I)
       print "${GREEN}Installing dependencies"
-      for val in "${SCANNER_INSTALLATION_URL[@]}"; do
-        print "${BLUE}Installing:${RESET_COLOR} ${val}"
-        eval ${val}
+      for scanner in ${option_s[@]}; do
+        indexOf ${scanner}
+        index=$?
+        checkInstallation "${scanner}" "${SCANNER_INSTALLATION_URL[${index}]}" "true"
       done
       print "${GREEN}Installation complete!${RESET_COLOR} Exiting"
-      exit 0
       ;;
     -q|--quiet)
       option_q=true
@@ -248,31 +278,9 @@ done
 # Append test flags if -t (--test) is set
 if [[ ${option_t} == true ]]; then
   for index in ${!FLAGS[@]}; do
-    FLAGS[${index}]="${TEST_FLAGS[${index}]} ${FLAGS[${index}]}"
+    FLAGS[${index}]="${FLAGS[${index}]} ${TEST_FLAGS[${index}]}"
   done
 fi
-
-# Checks installation of scanners and install based on provided options:
-# $1: command we are running
-# $2: installation command
-checkInstallation() { 
-  if  [[ -x $(command -v $1) ]]; then
-    print "${GREEN}Found ${CYAN}$1${RESET_COLOR} executable"
-    return 0
-  elif [[ ${option_i} == true ]]; then
-    print "${YELLOW}Installing ${CYAN}$1${RESET_COLOR} using \"$2\""
-    eval $2 
-    if  [[ $(command -v $1) ]]; then
-      print "${GREEN}Installation Successfull!${RESET_COLOR} continuing"
-      return 0
-    fi
-    print "${BOLD}${RED}Installation Failed!${NORMAL}${RESET_COLOR} There may be something wrong with installation link"
-    return 1
-  else
-    print "${BOLD}${RED}Error!${NORMAL}${RESET_COLOR} ${CYAN}$1${RESET_COLOR} executable not found. Please install or use ${YELLOW}${name} -i${RESET_COLOR} flag"
-    return 1
-  fi
-}
 
 # Run the scans depending on options provide
 runScan() {
@@ -343,9 +351,8 @@ elif [[  $# == 0 ]]; then
     print "${GREEN}No package changes found since last commit${RESET_COLOR}. Specify package paths manually or use ${YELLOW}${name} -d${RESET_COLOR} for defaults locations"
     exit 0
   fi
-else
-    scan_packages=( $@ )
-fi
+fi 
+scan_packages=" $@ ${scan_packages[@]} "
 
 # Creating logfiles if necessary
 if [[ ${option_o} == "file" ]]; then
@@ -360,12 +367,13 @@ elif [[ ${option_o} == "dir" ]]; then
 fi
 
 # Start scanner code
+print "${BOLD}${GREEN}Running analysis ${NORMAL}${RESET_COLOR}script using $(go version)"
 exitcode=0
 for scanner in ${option_s[@]}; do
   indexOf ${scanner} 
   index=$?
   print "${BOLD}${GREEN}Starting ${NORMAL}${CYAN}${scanner}${RESET_COLOR} scanner"
-  checkInstallation "${scanner}" "${SCANNER_INSTALLATION_URL[${index}]}"
+  checkInstallation "${scanner}" "${SCANNER_INSTALLATION_URL[${index}]}" ${option_i}
   if [[ $? == 0 ]]; then
     runScan "${scanner}" "${FLAGS[${index}]}"
     result=$?
