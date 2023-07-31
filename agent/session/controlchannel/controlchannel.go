@@ -269,7 +269,6 @@ func controlChannelIncomingMessageHandler(context context.T,
 		select {
 		case readyMessageChan <- true:
 			log.Tracef("Send true to readyMessageChan")
-			close(readyMessageChan)
 		case <-time.After(mgsConfig.ControlChannelReadyTimeout):
 			log.Warnf("The control_channel_ready message is not processed before the timeout. Break from select statement.")
 		}
