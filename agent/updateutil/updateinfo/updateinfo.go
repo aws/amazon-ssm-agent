@@ -181,6 +181,7 @@ func newInner(context context.T) (updateInfo *updateInfoImpl, err error) {
 	} else if strings.Contains(platformName, updateconstants.PlatformAlmaLinux) {
 		log.Info("Detected platform AlmaLinux")
 		platformName = updateconstants.PlatformAlmaLinux
+		downloadPlatformOverride = updateconstants.PlatformAlmaLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformFlatcar) {
 		log.Info("Detected platform Flatcar")
 		platformName = updateconstants.PlatformFlatcar
