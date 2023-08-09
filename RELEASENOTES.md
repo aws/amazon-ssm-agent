@@ -1,5 +1,15 @@
 Latest
 ===============
+- Added fix to propagate exit code properly when command fails to start
+- Added control channel acknowledgement functionalities
+- Added flag to specify go version used for gosec and govulncheck in static analysis script
+- Added support for RHEL 8.7, 8.8, 9.1, 9.2
+- Added support for Rocky Linux 8.7, 9.0, 9.1, 9.2
+- Added support for Oracle Linux 8.7, 9.1, 9.2
+- Update go version to 1.20.7
+
+3.2.1377.0
+===============
 - Stopped saving instance profile credentials to disk
 - Added static agent security scans to makefile
 - Updated Greengrass component minor version
