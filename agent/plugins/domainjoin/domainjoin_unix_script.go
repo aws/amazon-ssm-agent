@@ -421,19 +421,24 @@ install_components() {
          fi
     fi
 
-    check_awscli_install_dir
-    if uname -a | grep -e "x86_64" -e "amd64"; then
-        download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-    elif uname -a | grep "aarch64"; then
-        download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
+    if $AWSCLI --version | awk '{print $1}' | cut -d / -f 2 | grep -q ^2.; then
+        echo "Local AWS CLI found at $AWSCLI. Domain join to use the existing AWS CLI."
     else
-        echo "***Failed: install_components processor type is unsupported." && exit 1
-    fi
+        echo "No AWS CLI found in the instance. Proceeding to download and install of the AWS CLI."
+        check_awscli_install_dir
+        if uname -a | grep -e "x86_64" -e "amd64"; then
+            download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        elif uname -a | grep "aarch64"; then
+            download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
+        else
+            echo "***Failed: install_components processor type is unsupported." && exit 1
+        fi
 
-    unzip -o "$AWS_CLI_INSTALL_DIR"/awscliv2.zip 1>/dev/null
-    if [ $? -ne 0 ]; then echo "***Failed: unzip of awscliv2.zip" && exit 1; fi
-    "$AWS_CLI_INSTALL_DIR"/aws/install -u 1>/dev/null
-    if [ $? -ne 0 ]; then echo "***Failed: aws cli install" && exit 1; fi
+        unzip -o "$AWS_CLI_INSTALL_DIR"/awscliv2.zip 1>/dev/null
+        if [ $? -ne 0 ]; then echo "***Failed: unzip of awscliv2.zip" && exit 1; fi
+        "$AWS_CLI_INSTALL_DIR"/aws/install -u 1>/dev/null
+        if [ $? -ne 0 ]; then echo "***Failed: aws cli install" && exit 1; fi
+    fi
     return 0
 }
 
