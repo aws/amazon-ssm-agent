@@ -28,6 +28,11 @@ import (
 	_ "go.nanomsg.org/mangos/v3/transport/ipc"
 )
 
+const (
+	recvErrSleepTime = 30 * time.Second
+	maxRecvErrCount  = 5
+)
+
 // IMessageBus is the interface for process the core agent broadcast request
 type IMessageBus interface {
 	ProcessHealthRequest()
@@ -93,12 +98,25 @@ func (bus *MessageBus) ProcessHealthRequest() {
 	}
 
 	log.Infof("Start to listen to Core Agent health channel")
+	errRecvCount := 0
+
 	for {
 		var request *message.Message
 		if msg, err = bus.healthChannel.Recv(); err != nil {
-			log.Errorf("Failed to receive from health channel: %s", err.Error())
+			errRecvCount++
+			log.Errorf("failed to receive from health channel: %s", err.Error())
+			if errRecvCount >= maxRecvErrCount {
+				// Agent core will still consider worker healthy as the ssm-agent-worker exists in the system process tree
+				log.Errorf("failed to receive from agent core health channel %v times. Stopping health ipc listener", errRecvCount)
+				return
+			}
+
+			log.Debugf("Retrying receive from core agent health channel in %v seconds", recvErrSleepTime.Seconds())
+			bus.sleepFunc(recvErrSleepTime)
 			continue
 		}
+
+		errRecvCount = 0
 		log.Debugf("Received health request from core agent %s", string(msg))
 
 		if err = json.Unmarshal(msg, &request); err != nil {
@@ -158,15 +176,33 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 
 	log.Infof("Start to listen to Core Agent termination channel")
 	bus.terminationChannelConnected <- true
+	errRecvCount := 0
 
 	for {
 		var request *message.Message
 		if msg, err = bus.terminationChannel.Recv(); err != nil {
-			log.Errorf("cannot recv: %s", err.Error())
+			log.Errorf("cannot receive message from core agent termination channel: %s", err.Error())
+			errRecvCount++
+			if errRecvCount >= maxRecvErrCount {
+				// Consider communication channel to agent core to be broken
+				// When ssm-agent-worker exits agent-ssm-agent (agent core) creates new worker with updated communication channel
+				log.Errorf("failed to receive message from core agent termination channel %v times. Initiating worker shutdown", errRecvCount)
+				// Unblock main() function to allow agent worker to exit
+				bus.terminationRequestChannel <- true
+				close(bus.terminationRequestChannel)
+				// exit termination channel goroutine
+				break
+			}
+
+			log.Debugf("Retrying receive from core agent termination channel in %v seconds", recvErrSleepTime.Seconds())
+			bus.sleepFunc(recvErrSleepTime)
 			continue
 		}
+
 		log.Infof("Received termination message from core agent %s", string(msg))
+		errRecvCount = 0
 		if err = json.Unmarshal(msg, &request); err != nil {
+			// Incoming message is dropped and not retried
 			log.Errorf("failed to unmarshal message: %s", err.Error())
 			continue
 		}
@@ -180,10 +216,12 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 				message.LongRunning,
 				os.Getpid(),
 				true); err != nil {
+				// Response message is dropped and not retried
 				log.Errorf("failed to create termination response: %s", err.Error())
 			}
 
 			if err = bus.terminationChannel.Send(result); err != nil {
+				// Response message is dropped and not retried
 				log.Errorf("failed to send termination response: %s", err.Error())
 				continue
 			}
