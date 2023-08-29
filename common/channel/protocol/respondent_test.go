@@ -43,11 +43,19 @@ func TestRespondentSuite(t *testing.T) {
 	suite.Run(t, new(IRespondentSuite))
 }
 
+// getRespondentInstance returns the respondent instance
+func getRespondentInstance(log log.T, identity identity.IAgentIdentity) *respondent {
+	return &respondent{
+		log:      log,
+		identity: identity,
+	}
+}
+
 // SetupTest initializes Setup
 func (suite *IRespondentSuite) SetupTest() {
 	suite.log = logmocks.NewMockLog()
 	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
-	suite.respondentInstance = GetRespondentInstance(suite.log, suite.identity)
+	suite.respondentInstance = getRespondentInstance(suite.log, suite.identity)
 }
 
 // TestBasicTest tests basic functionality

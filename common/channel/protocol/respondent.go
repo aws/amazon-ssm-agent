@@ -28,8 +28,19 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
+type IRespondent interface {
+	Initialize()
+	GetCommProtocolInfo() utils.SocketType
+	Send(message *message.Message) error
+	Close() error
+	Recv() ([]byte, error)
+	SetOption(name string, value interface{}) (err error)
+	Listen(address string) error
+	Dial(path string) error
+}
+
 // GetRespondentInstance returns the respondent instance
-func GetRespondentInstance(log log.T, identity identity.IAgentIdentity) *respondent {
+func GetRespondentInstance(log log.T, identity identity.IAgentIdentity) IRespondent {
 	return &respondent{
 		log:      log,
 		identity: identity,
@@ -109,6 +120,9 @@ func (res *respondent) Dial(path string) error {
 		return fmt.Errorf("file channel not present to dial : %v", err)
 	}
 	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(res.log, res.identity, filewatcherbasedipc.ModeRespondent, channelName, true)
+	if err != nil {
+		return fmt.Errorf("error while dialing to path %v: %v", path, err)
+	}
 	res.fileChannel = channel
 	return err
 }

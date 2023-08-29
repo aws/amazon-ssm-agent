@@ -44,11 +44,19 @@ func TestSurveySuite(t *testing.T) {
 	suite.Run(t, new(ISurveySuite))
 }
 
+// getSurveyInstance returns the surveyor instance
+func getSurveyInstance(log log.T, identity identity.IAgentIdentity) *survey {
+	return &survey{
+		log:      log,
+		identity: identity,
+	}
+}
+
 // SetupTest initializes Setup
 func (suite *ISurveySuite) SetupTest() {
 	suite.log = logmocks.NewMockLog()
 	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
-	suite.surveyInstance = GetSurveyInstance(suite.log, suite.identity)
+	suite.surveyInstance = getSurveyInstance(suite.log, suite.identity)
 }
 
 // TestBasicTest tests basic functionality

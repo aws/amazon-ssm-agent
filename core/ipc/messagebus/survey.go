@@ -94,7 +94,7 @@ func (bus *MessageBus) SendSurveyMessage(survey *message.Message) ([]*message.Me
 		return []*message.Message{}, fmt.Errorf("unsupported topic: %s", survey.Topic)
 	}
 
-	if surveyChannel, ok := bus.surveyChannels[survey.Topic]; !ok || !surveyChannel.IsConnect() {
+	if surveyChannel, ok := bus.surveyChannels[survey.Topic]; !ok || !surveyChannel.IsChannelInitialized() {
 		if err := bus.createMessageChannelWithRetry(survey.Topic); err != nil {
 			return []*message.Message{}, err
 		}

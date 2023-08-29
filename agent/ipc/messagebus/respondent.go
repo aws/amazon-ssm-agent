@@ -76,14 +76,14 @@ func (bus *MessageBus) ProcessHealthRequest() {
 	var msg []byte
 
 	defer func() {
-		if bus.healthChannel.IsConnect() {
+		if bus.healthChannel.IsChannelInitialized() {
 			if err = bus.healthChannel.Close(); err != nil {
 				bus.context.Log().Errorf("failed to close health channel: %v", err)
 			}
 		}
 	}()
 
-	for !bus.healthChannel.IsConnect() {
+	for !bus.healthChannel.IsDialSuccessful() {
 		if err = bus.dialToCoreAgentChannel(message.GetWorkerHealthRequest, message.GetWorkerHealthChannel); err != nil {
 			// This happens when worker started before core agent is
 			//   and when the amazon-ssm-agent is terminated milliseconds after the ssm-agent-worker has been started
@@ -140,14 +140,14 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 	var err error
 	var msg []byte
 	defer func() {
-		if bus.terminationChannel.IsConnect() {
+		if bus.terminationChannel.IsChannelInitialized() {
 			if err = bus.terminationChannel.Close(); err != nil {
 				bus.context.Log().Errorf("failed to close termination channel: %v", err)
 			}
 		}
 	}()
 
-	for !bus.terminationChannel.IsConnect() {
+	for !bus.terminationChannel.IsDialSuccessful() {
 		if err = bus.dialToCoreAgentChannel(message.TerminateWorkerRequest, message.TerminationWorkerChannel); err != nil {
 			// This happens when worker started before core agent is
 			//   and when the amazon-ssm-agent is terminated milliseconds after the ssm-agent-worker has been started

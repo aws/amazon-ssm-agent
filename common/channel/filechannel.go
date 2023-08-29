@@ -24,7 +24,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
+var (
+	getSurveyInstance     = commProtocol.GetSurveyInstance
+	getRespondentInstance = commProtocol.GetRespondentInstance
+)
+
 // NewFileChannel creates an new instance of FileChannel which internally uses file watcher based ipc channel
+// This channel does not have multi-threading support. Currently, the invocations happen only in one go-routine
 func NewFileChannel(log log.T, identity identity.IAgentIdentity) IChannel {
 	return &fileChannel{
 		log:      log,
@@ -38,6 +44,8 @@ type fileChannel struct {
 	log                      log.T
 	identity                 identity.IAgentIdentity
 	isFileChannelInitialized bool
+	isDialSuccessful         bool
+	isListenSuccessful       bool
 	msgProtocol              utils.IFileChannelCommProtocol
 }
 
@@ -45,18 +53,26 @@ type fileChannel struct {
 func (fc *fileChannel) Initialize(socketType utils.SocketType) error {
 	fc.log.Info("using file channel for IPC")
 	if socketType == utils.Surveyor {
-		fc.msgProtocol = commProtocol.GetSurveyInstance(fc.log, fc.identity)
+		fc.msgProtocol = getSurveyInstance(fc.log, fc.identity)
 	} else if socketType == utils.Respondent {
-		fc.msgProtocol = commProtocol.GetRespondentInstance(fc.log, fc.identity)
+		fc.msgProtocol = getRespondentInstance(fc.log, fc.identity)
 	} else {
 		return fmt.Errorf("unsupported socket type")
 	}
 	fc.isFileChannelInitialized = true
+	fc.isDialSuccessful = false
+	fc.isListenSuccessful = false
 	return nil
 }
 
 // Send puts the message on the outbound send queue.
 func (fc *fileChannel) Send(message *message.Message) error {
+	if !fc.IsChannelInitialized() {
+		return ErrIPCChannelClosed
+	}
+	if !(fc.IsListenSuccessful() || fc.IsDialSuccessful()) {
+		return ErrDialListenUnSuccessful
+	}
 	return fc.msgProtocol.Send(message)
 }
 
@@ -69,6 +85,12 @@ func (fc *fileChannel) Close() error {
 // Recv gets the message from the IPC file channel created
 // message is returned whenever the worker creates a new file
 func (fc *fileChannel) Recv() ([]byte, error) {
+	if !fc.IsChannelInitialized() {
+		return nil, ErrIPCChannelClosed
+	}
+	if !(fc.IsListenSuccessful() || fc.IsDialSuccessful()) {
+		return nil, ErrDialListenUnSuccessful
+	}
 	return fc.msgProtocol.Recv()
 }
 
@@ -79,14 +101,37 @@ func (fc *fileChannel) SetOption(name string, value interface{}) (err error) {
 
 // Listen creates a new channel in the main worker side
 func (fc *fileChannel) Listen(addr string) error {
-	return fc.msgProtocol.Listen(addr)
+	err := fc.msgProtocol.Listen(addr)
+	if err != nil {
+		return err
+	}
+	fc.isListenSuccessful = true
+	return nil
 }
 
 // Dial creates a new channel in the worker side
 func (fc *fileChannel) Dial(addr string) error {
-	return fc.msgProtocol.Dial(addr)
+	err := fc.msgProtocol.Dial(addr)
+	if err != nil {
+		return err
+	}
+	fc.isDialSuccessful = true
+	return nil
 }
 
-func (fc *fileChannel) IsConnect() bool {
+// IsChannelInitialized returns true if channel initialization is successful.
+func (fc *fileChannel) IsChannelInitialized() bool {
 	return fc.isFileChannelInitialized
+}
+
+// IsDialSuccessful returns true if Dial() successfully connects to IPC channels.
+// In Dial(), we connect to the IPC with address being the parameter.
+func (fc *fileChannel) IsDialSuccessful() bool {
+	return fc.isDialSuccessful
+}
+
+// IsListenSuccessful returns true if Listen() successfully creates IPC channels.
+// In Listen(), we will create named pipes on Windows and sockets on Linux/Darwin for IPC.
+func (fc *fileChannel) IsListenSuccessful() bool {
+	return fc.isListenSuccessful
 }

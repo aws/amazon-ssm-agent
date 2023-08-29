@@ -112,7 +112,7 @@ func (suite *MessageBusTestSuite) TestSendSurveyMessage_Successful() {
 
 	resultString, _ := json.Marshal(healthResult)
 
-	suite.mockHealthChannel.On("IsConnect").Return(true)
+	suite.mockHealthChannel.On("IsChannelInitialized").Return(true)
 	suite.mockHealthChannel.On("Send", mock.Anything).Return(nil)
 	suite.mockHealthChannel.On("Recv").Return(resultString, nil).Once()
 	suite.mockHealthChannel.On("Recv").Return(nil, errors.New("stop")).Once()
@@ -140,7 +140,7 @@ func (suite *MessageBusTestSuite) TestSendSurveyMessage_Successful() {
 func (suite *MessageBusTestSuite) TestSendSurveyMessage_Fail() {
 	resultString := "can not deserialize"
 
-	suite.mockHealthChannel.On("IsConnect").Return(true)
+	suite.mockHealthChannel.On("IsChannelInitialized").Return(true)
 	suite.mockHealthChannel.On("Send", mock.Anything).Return(nil)
 	suite.mockHealthChannel.On("Recv").Return([]byte(resultString), nil).Once()
 	suite.mockHealthChannel.On("Recv").Return(nil, errors.New("stop")).Once()

@@ -15,6 +15,7 @@
 package channel
 
 import (
+	"errors"
 	"runtime"
 	"runtime/debug"
 	"time"
@@ -35,12 +36,17 @@ type IChannel interface {
 	SetOption(name string, value interface{}) error
 	Listen(addr string) error
 	Dial(addr string) error
-	IsConnect() bool
+	IsChannelInitialized() bool
+	IsDialSuccessful() bool
+	IsListenSuccessful() bool
 }
 
 var (
 	newNamedPipeChannelRef     = NewNamedPipeChannel
 	isDefaultChannelPresentRef = utils.IsDefaultChannelPresent
+
+	ErrIPCChannelClosed       = errors.New("channel is closed")
+	ErrDialListenUnSuccessful = errors.New("IPC connection is not established")
 )
 
 // GetChannelCreator returns function reference for channel creation based
@@ -55,11 +61,11 @@ func GetChannelCreator(log log.T, appConfig appconfig.SsmagentConfig, identity i
 // canUseNamedPipe checks whether named pipe can be used for IPC or not
 func canUseNamedPipe(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity) (useNamedPipe bool) {
 	// named pipes '.Listen' halts randomly on windows 2012, disabling named pipes on windows and using file channel instead
-	if runtime.GOOS == "windows" {
-		log.Info("Not using named pipe on windows")
+	// On few mac2.metal instances, socket creation is getting blocked. Hence, permanently falling back to File based IPC for Darwin.
+	if runtime.GOOS == "windows" || runtime.GOOS == "darwin" {
+		log.Infof("Not using named pipe on %v", runtime.GOOS)
 		return false
 	}
-
 	if appConfig.Agent.ForceFileIPC {
 		log.Info("Not using named pipe as force file IPC is set")
 		return false

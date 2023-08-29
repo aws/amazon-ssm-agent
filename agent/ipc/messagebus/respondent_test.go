@@ -72,7 +72,8 @@ func TestMessageBusTestSuite(t *testing.T) {
 }
 
 func (suite *MessageBusTestSuite) TestProcessTerminationRequest_Successful() {
-	suite.mockTerminateChannel.On("IsConnect").Return(true).Twice()
+	suite.mockTerminateChannel.On("IsChannelInitialized").Return(true).Once()
+	suite.mockTerminateChannel.On("IsDialSuccessful").Return(true).Once()
 	suite.mockTerminateChannel.On("Close").Return(nil).Once()
 
 	request := message.CreateTerminateWorkerRequest()
@@ -91,35 +92,36 @@ func (suite *MessageBusTestSuite) TestProcessTerminationRequest_Successful() {
 
 func (suite *MessageBusTestSuite) TestProcessTerminationRequest_SuccessfulConnectionRetry() {
 	// First try channel not connected but fails initialize
-	suite.mockTerminateChannel.On("IsConnect").Return(false).Once()
+	suite.mockTerminateChannel.On("IsDialSuccessful").Return(false).Once()
 	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(fmt.Errorf("SomeErr")).Once()
 	suite.mockTerminateChannel.On("Close").Return(nil).Once()
 
 	// Second try channel not connected but fails dial
-	suite.mockTerminateChannel.On("IsConnect").Return(false).Once()
-	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(nil).Once()
+	suite.mockTerminateChannel.On("IsDialSuccessful").Return(false).Once()
+	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(nil)
 	suite.mockTerminateChannel.On("Dial", mock.Anything).Return(fmt.Errorf("SomeDialError")).Once()
 	suite.mockTerminateChannel.On("Close").Return(nil).Once()
 
 	// Third try channel not connected but finally succeeds
-	suite.mockTerminateChannel.On("IsConnect").Return(false).Once()
-	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(nil).Once()
+	suite.mockTerminateChannel.On("IsDialSuccessful").Return(false).Once()
+	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(nil)
 	suite.mockTerminateChannel.On("Dial", mock.Anything).Return(nil).Once()
-
-	// Fourth call to isConnect succeeds, fourth call is for defer where it will call close
-	suite.mockTerminateChannel.On("IsConnect").Return(true).Twice()
-	suite.mockTerminateChannel.On("Close").Return(nil).Once()
+	suite.mockTerminateChannel.On("IsDialSuccessful").Return(true).Once()
 
 	request := message.CreateTerminateWorkerRequest()
 	requestString, _ := jsonutil.Marshal(request)
 	suite.mockTerminateChannel.On("Recv").Return([]byte(requestString), nil)
 	suite.mockTerminateChannel.On("Send", mock.Anything).Return(nil)
 
-	suite.messageBus.ProcessTerminationRequest()
+	// Fourth call to isConnect succeeds, fourth call is for defer where it will call close
+	suite.mockTerminateChannel.On("IsChannelInitialized").Return(true).Once()
+	suite.mockTerminateChannel.On("Close").Return(nil).Once()
 
-	suite.mockTerminateChannel.AssertExpectations(suite.T())
+	suite.messageBus.ProcessTerminationRequest()
 
 	// Assert termination channel connected and that a termination message is sent
 	suite.Assertions.Equal(true, <-suite.messageBus.GetTerminationChannelConnectedChan())
 	suite.Assertions.Equal(true, <-suite.messageBus.GetTerminationRequestChan())
+
+	suite.mockTerminateChannel.AssertExpectations(suite.T())
 }
