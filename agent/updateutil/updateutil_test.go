@@ -477,27 +477,35 @@ func TestCompareVersion(t *testing.T) {
 
 func TestGetStableURLFromManifestURL(t *testing.T) {
 	// Empty URL
-	url, err := GetStableURLFromManifestURL("")
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
+	agentIdentity.On("Region").Return("us-east-1", nil)
+
+	url, err := GetStableURLFromManifestURL("", agentIdentity)
 	assert.Error(t, err)
 	assert.Equal(t, "", url)
 
 	// Invalid URL
-	url, err = GetStableURLFromManifestURL("InvalidUrl")
+	url, err = GetStableURLFromManifestURL("InvalidUrl", agentIdentity)
 	assert.Error(t, err)
 	assert.Equal(t, "", url)
 
 	// Invalid manifest url - artifact url
-	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz", agentIdentity)
 	assert.Error(t, err)
 	assert.Equal(t, "", url)
 
+	// Prod manifest url with region placeholder
+	url, err = GetStableURLFromManifestURL("https://s3.{Region}.amazonaws.com/amazon-ssm-{Region}/ssm-agent-manifest.json", agentIdentity)
+	assert.NoError(t, err)
+	assert.Equal(t, "https://s3.us-east-1.amazonaws.com/amazon-ssm-us-east-1/stable/VERSION", url)
+
 	// Valid s3 manifest link bucket in Path
-	url, err = GetStableURLFromManifestURL("https://s3.region.amazonaws.com/bucket/ssm-agent-manifest.json")
+	url, err = GetStableURLFromManifestURL("https://s3.region.amazonaws.com/bucket/ssm-agent-manifest.json", agentIdentity)
 	assert.NoError(t, err)
 	assert.Equal(t, "https://s3.region.amazonaws.com/bucket/stable/VERSION", url)
 
 	// Valid s3 manifest link with bucket in url
-	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json")
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json", agentIdentity)
 	assert.NoError(t, err)
 	assert.Equal(t, "https://bucket.s3.region.amazonaws.com/stable/VERSION", url)
 }

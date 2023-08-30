@@ -740,12 +740,19 @@ func GetManifestURLFromSourceUrl(sourceURL string) (string, error) {
 	return u.String(), nil
 }
 
-func GetStableURLFromManifestURL(manifestURL string) (string, error) {
+func GetStableURLFromManifestURL(manifestURL string, identity identity.IAgentIdentity) (string, error) {
 	if !strings.HasSuffix(manifestURL, "/"+updateconstants.ManifestFile) {
 		return "", fmt.Errorf("unexpected manifest url does not end with manifest file: %s", manifestURL)
 	}
+	stableVersionPath := "stable/VERSION"
+	region, err := identity.Region()
+	if err != nil {
+		return "", err
+	}
 
-	return strings.TrimRight(manifestURL, updateconstants.ManifestFile) + "stable/VERSION", nil
+	stableVersionURL := strings.TrimRight(manifestURL, updateconstants.ManifestFile) + stableVersionPath
+	stableVersionURL = strings.Replace(stableVersionURL, updateconstants.RegionHolder, region, -1)
+	return stableVersionURL, nil
 }
 
 // ResolveAgentReleaseBucketURL makes best effort to generate an url for the ssm agent bucket

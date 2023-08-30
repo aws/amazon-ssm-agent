@@ -26,6 +26,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/common/identity"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -578,7 +580,7 @@ func TestDetermineTarget_TargetVersionStable_FailedGetStableURL(t *testing.T) {
 		finalizeCalled = true
 		return nil
 	}
-	getStableManifestURL = func(manifestURL string) (string, error) {
+	getStableManifestURL = func(manifestURL string, identity identity.IAgentIdentity) (string, error) {
 		return "", fmt.Errorf("err1")
 	}
 	finalizeCalled = false
@@ -589,9 +591,6 @@ func TestDetermineTarget_TargetVersionStable_FailedGetStableURL(t *testing.T) {
 	assert.True(t, finalizeCalled)
 	assert.Contains(t, tempCode, string(updateconstants.ErrorGetStableVersionS3))
 	assert.True(t, updateconstants.TargetVersionStable == updateDetail.TargetResolver)
-
-	getStableManifestURL = updateutil.GetManifestURLFromSourceUrl
-
 }
 
 func TestDetermineTarget_TargetVersionStable_FailedGetStableVersion(t *testing.T) {
