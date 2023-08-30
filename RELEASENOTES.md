@@ -1,5 +1,13 @@
 Latest
 ===============
+- Add aws:updateSSMAgent plugin support for Flatcar Linux
+- Add fix to resolve manifest url during agent update when using stable keyword
+- Fix multiple issues causing tight loops during IPC connection scenarios
+- Sign deb and rpm installer packages for Linux instances using new key
+- Use file based IPC by default for amazon-ssm-agent and ssm-agent-worker communication in Darwin
+
+3.2.1478.0
+===============
 - Added fix to propagate exit code properly when command fails to start
 - Added control channel acknowledgement functionalities
 - Added flag to specify go version used for gosec and govulncheck in static analysis script
