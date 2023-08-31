@@ -119,7 +119,7 @@ func VersionCompare(versionl string, versionr string) (result int, err error) {
 
 func versionOrdinal(version string) (string, error) {
 	// validate if string is a valid version string
-	if matched, err := regexp.MatchString("\\d+(\\.\\d+)?", version); matched == false || err != nil {
+	if matched, err := regexp.MatchString("^\\d+(\\.\\d+)*$", version); matched == false || err != nil {
 		return "", fmt.Errorf("Invalid version string %v", version)
 	}
 

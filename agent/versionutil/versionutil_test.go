@@ -126,6 +126,10 @@ func TestIsValidVersion(t *testing.T) {
 		success bool
 	}{
 		{"somestring", false},
+		{"../../string1", false},
+		{"1.", false},
+		{"1..", false},
+		{"23.0", true},
 		{"1.3.3.7", true},
 		{"1.0", true},
 		{"1", true},
