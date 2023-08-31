@@ -89,7 +89,8 @@ func (fileWatcher *FileWatcher) fileEventHandler() {
 		fileWatcher.log.Debugf("Event on file %v : %v", event.Name, event)
 		if event.Name == fileWatcher.configFilePath {
 			// Event on the file being watched
-			if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create || event.Op&fsnotify.Rename == fsnotify.Rename {
+			if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create ||
+				event.Op&fsnotify.Rename == fsnotify.Rename || event.Op&fsnotify.Remove == fsnotify.Remove {
 				// One of Write or Create or Rename Event
 				fileWatcher.log.Debugf("File Watcher Triggers Function Execution: %v", fileWatcher.configFilePath)
 				// Execute the function
