@@ -1804,11 +1804,10 @@ func TestInstallAgent(t *testing.T) {
 	control := &stubControl{failExeCommand: false}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
-
 	// action
 	exitCode, err := installAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
-
 	// assert
+
 	assert.NoError(t, err)
 	assert.Equal(t, 0, int(exitCode))
 }

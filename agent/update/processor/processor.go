@@ -682,7 +682,10 @@ func installAgent(mgr *updateManager, log log.T, version string, updateDetail *U
 	if updateDetail.State == Staged {
 		installRetryCount = 4 // this value is taken because previous updater version had total 4 retries (2 target install + 2 rollback install)
 	}
+	defaultTimeOut := mgr.util.GetExecutionTimeOut()
+
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
+		updateExecutionTimeoutIfNeeded(retryCounter, defaultTimeOut, mgr.util)
 		if retryCounter == installRetryCount && strings.Contains(mgr.Info.GetInstallScriptName(), "snap") {
 			log.Info("execute command and fetch error output for agent install using snap")
 			var errBytes *bytes.Buffer

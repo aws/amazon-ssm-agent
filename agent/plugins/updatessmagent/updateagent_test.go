@@ -640,6 +640,13 @@ func (u *fakeUtility) ExecCommandWithOutput(
 	return u.pid, exitCode, nil, nil, u.execCommandError
 }
 
+func (u *fakeUtility) UpdateExecutionTimeOut(int) {
+	return
+}
+func (u *fakeUtility) GetExecutionTimeOut() int {
+	return 0
+}
+
 func (u *fakeUtility) SaveUpdatePluginResult(
 	log log.T,
 	updateRoot string,

@@ -57,6 +57,8 @@ type T interface {
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
 	UpdateInstallDelayer(ctx context.T, updateRoot string) error
 	LoadUpdateDocumentState(ctx context.T, commandId string) error
+	UpdateExecutionTimeOut(int)
+	GetExecutionTimeOut() int
 }
 
 // Utility implements interface T
@@ -103,6 +105,16 @@ func (util *Utility) CreateUpdateDownloadFolder() (folder string, err error) {
 	}
 
 	return root, nil
+}
+
+// UpdateExecutionTimeOut updates the command execution timeout
+func (util *Utility) UpdateExecutionTimeOut(timeout int) {
+	util.CustomUpdateExecutionTimeoutInSeconds = timeout
+}
+
+// GetExecutionTimeOut returns the command execution timeout
+func (util *Utility) GetExecutionTimeOut() int {
+	return util.CustomUpdateExecutionTimeoutInSeconds
 }
 
 // ExecCommandWithOutput executes shell command and returns output and error of command execution
