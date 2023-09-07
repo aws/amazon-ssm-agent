@@ -18,28 +18,31 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/cenkalti/backoff/v4"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
-	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
 	credentialmocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeconfigmocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/executor/mocks"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/cenkalti/backoff/v4"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 var (
@@ -47,7 +50,6 @@ var (
 	currentTime       = time.Date(2021, time.January, 1, 12, 15, 30, 0, time.UTC).Round(0)
 	fiveMinAfterTime  = time.Date(2021, time.January, 1, 12, 20, 30, 0, time.UTC).Round(0)
 	tenMinAfterTime   = time.Date(2021, time.January, 1, 12, 25, 30, 0, time.UTC).Round(0)
-	mockAgentIdentity = &identityMock.IAgentIdentity{}
 )
 
 func init() {
@@ -63,15 +65,10 @@ func init() {
 
 func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 	type fields struct {
-		log                         log.T
-		agentIdentity               identity.IAgentIdentity
-		provider                    credentials.Provider
-		runtimeConfigClient         runtimeconfig.IIdentityRuntimeConfigClient
-		identityRuntimeConfig       runtimeconfig.IdentityRuntimeConfig
-		backoffConfig               *backoff.ExponentialBackOff
-		credentialsReadyChan        chan struct{}
-		stopCredentialRefresherChan chan struct{}
-		getCurrentTimeFunc          func() time.Time
+		log                   log.T
+		runtimeConfigClient   runtimeconfig.IIdentityRuntimeConfigClient
+		identityRuntimeConfig runtimeconfig.IdentityRuntimeConfig
+		getCurrentTimeFunc    func() time.Time
 	}
 	tests := []struct {
 		name   string
@@ -171,7 +168,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 	provider.On("ShareFile").Return("SomeSharedCredentialsFile").Once()
 	c := &credentialsRefresher{
 		log:                          logmocks.NewMockLog(),
-		agentIdentity:                mockAgentIdentity,
+		agentIdentity:                &identityMock.IAgentIdentity{},
 		provider:                     provider,
 		identityRuntimeConfig:        runtimeConfig,
 		credsReadyOnce:               sync.Once{},
@@ -276,6 +273,8 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 	provider.On("ShareFile").Return("SomeShareFile").Repeatability = 0
 	provider.On("CredentialSource").Return("SSM").Repeatability = 0
 	provider.On("RemoteExpiresAt").Return(tenMinAfterTime).Once()
+	mockAgentIdentity := &identityMock.IAgentIdentity{}
+	mockAgentIdentity.On("IdentityType").Return(onprem.IdentityType)
 
 	c := &credentialsRefresher{
 		log:                          logmocks.NewMockLog(),
@@ -327,9 +326,12 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallS
 	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Repeatability = 0
 	provider.On("ShareFile").Return("SomeShareFile", nil).Repeatability = 0
 	provider.On("CredentialSource").Return("SSM").Repeatability = 0
+	mockAgentIdentity := &identityMock.IAgentIdentity{}
+	mockAgentIdentity.On("IdentityType").Return(onprem.IdentityType)
 	newSharedCredentials = func(filename, profile string) *credentials.Credentials {
 		return credentials.NewCredentials(provider)
 	}
+
 	c := &credentialsRefresher{
 		log:                          logmocks.NewMockLog(),
 		agentIdentity:                mockAgentIdentity,
@@ -444,6 +446,8 @@ func Test_credentialsRefresher_credentialRefresherRoutine_Purge(t *testing.T) {
 			provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 			provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
 			provider.On("CredentialSource").Return("").Once()
+			mockAgentIdentity := &identityMock.IAgentIdentity{}
+			mockAgentIdentity.On("IdentityType").Return(onprem.IdentityType)
 
 			purgeCalled := atomic.Value{}
 			purgeCalled.Store(false)
@@ -534,6 +538,8 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 	provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
 	provider.On("CredentialSource").Return("SSM").Once()
+	mockAgentIdentity := &identityMock.IAgentIdentity{}
+	mockAgentIdentity.On("IdentityType").Return(onprem.IdentityType)
 
 	newSharedCredentials = func(filename, profile string) *credentials.Credentials {
 		return credentials.NewCredentials(provider)
@@ -587,45 +593,196 @@ func (a awsTestError) Message() string { return "" }
 func (a awsTestError) OrigErr() error  { return fmt.Errorf("SomeErr") }
 func (a awsTestError) Code() string    { return a.errCode }
 
-func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testing.T) {
-	for _, awsErr := range []error{awsTestError{"AccessDeniedException"}, awsTestError{"MachineFingerprintDoesNotMatch"}} {
-		provider := &credentialmocks.IRemoteProvider{}
-		provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, awsErr).Once()
+func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *testing.T) {
+	const ec2MaxLongSleepDuration = 30 * time.Minute
+	const ec2MinLongSleepDuration = 25 * time.Minute
+	const maxLongSleepDuration = 26 * time.Hour
+	const minLongSleepDuration = 24 * time.Hour
+	const minSleepDuration = 1 * time.Second
+	// About 22 hours
+	const maxSleepDuration = 78644 * time.Second
+	const minUnknownAwsErrorSleepDuration = minSleepDuration + 10*time.Second
+	const maxUnknownAwsErrorSleepDuration = maxSleepDuration + 20*time.Second
 
-		var timeAfterParamVal time.Duration
-		c := &credentialsRefresher{
-			log:                         logmocks.NewMockLog(),
-			agentIdentity:               mockAgentIdentity,
-			provider:                    provider,
-			stopCredentialRefresherChan: make(chan struct{}),
-			timeAfterFunc: func(duration time.Duration) <-chan time.Time {
-				timeAfterParamVal = duration
-				c := make(chan time.Time)
-				return c
-			},
-			appConfig: &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
-		}
+	testCases := []struct {
+		TestName         string
+		IdentityType     string
+		Error            error
+		MaxSleepDuration time.Duration
+		MinSleepDuration time.Duration
+	}{
+		{
+			TestName:         "EC2IdentityLongSleepOnAccessDenied",
+			IdentityType:     ec2.IdentityType,
+			Error:            awsTestError{ErrCodeAccessDeniedException},
+			MinSleepDuration: ec2MinLongSleepDuration,
+			MaxSleepDuration: ec2MaxLongSleepDuration,
+		},
+		{
+			TestName:         "EC2IdentityLongSleepOnInvalidInstanceId",
+			IdentityType:     ec2.IdentityType,
+			Error:            awsTestError{ErrCodeInvalidInstanceId},
+			MinSleepDuration: ec2MinLongSleepDuration,
+			MaxSleepDuration: ec2MaxLongSleepDuration,
+		},
+		{
+			TestName:         "EC2IdentityShortSleepOnInternalFailure",
+			IdentityType:     ec2.IdentityType,
+			Error:            awsTestError{ErrCodeInternalFailure},
+			MinSleepDuration: minSleepDuration,
+			MaxSleepDuration: maxSleepDuration,
+		},
+		{
+			TestName:         "EC2IdentityMediumSleepOnUnknownError",
+			IdentityType:     ec2.IdentityType,
+			Error:            awsTestError{"UnknownError"},
+			MinSleepDuration: minUnknownAwsErrorSleepDuration,
+			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
+		},
+		{
+			TestName:         "NoExplicitIdentityErrorHandleLongSleepOnKnownError",
+			IdentityType:     ec2.IdentityType,
+			Error:            awsTestError{ErrCodeOptInRequired},
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "EC2IdentityLongSleepOnHttpStatusNotFound",
+			IdentityType:     ec2.IdentityType,
+			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusNotFound, ""),
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "EC2IdentityShortSleepOnHttpStatusTooManyRequests",
+			IdentityType:     ec2.IdentityType,
+			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusTooManyRequests, ""),
+			MinSleepDuration: minSleepDuration,
+			MaxSleepDuration: maxSleepDuration,
+		},
+		{
+			TestName:         "EC2IdentityLongSleepOnUnrecognizedHttpStatusCode",
+			IdentityType:     ec2.IdentityType,
+			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusUpgradeRequired, ""),
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "EC2IdentityShortSleepOnGenericError",
+			IdentityType:     ec2.IdentityType,
+			Error:            fmt.Errorf("generic non-aws error"),
+			MinSleepDuration: minSleepDuration,
+			MaxSleepDuration: maxSleepDuration,
+		},
+		{
+			TestName:         "OnPremIdentityLongSleepOnAccessDeniedException",
+			IdentityType:     onprem.IdentityType,
+			Error:            awsTestError{ErrCodeAccessDeniedException},
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "OnPremIdentityLongSleepOnMachineFingerprintDoesNotMatch",
+			IdentityType:     onprem.IdentityType,
+			Error:            awsTestError{"MachineFingerprintDoesNotMatch"},
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "OnPremIdentityShortSleepOnInvalidInstanceId",
+			IdentityType:     onprem.IdentityType,
+			Error:            awsTestError{ErrCodeInvalidInstanceId},
+			MinSleepDuration: minSleepDuration,
+			MaxSleepDuration: maxSleepDuration,
+		},
+		{
+			TestName:         "OnPremIdentityLongSleepOnHttpNotFound",
+			IdentityType:     onprem.IdentityType,
+			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusNotFound, ""),
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "OnPremIdentityLongSleepOnUnrecognizedHttpStatusCode",
+			IdentityType:     onprem.IdentityType,
+			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusUpgradeRequired, ""),
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "OnPremIdentityShortSleepOnGenericError",
+			IdentityType:     onprem.IdentityType,
+			Error:            fmt.Errorf("generic non-aws error"),
+			MinSleepDuration: minSleepDuration,
+			MaxSleepDuration: maxSleepDuration,
+		},
+		{
+			TestName:         "UnrecognizedIdentityLongSleepOnKnownAwsError",
+			IdentityType:     "UnrecognizedIdentity",
+			Error:            awsTestError{ErrCodeOptInRequired},
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
+		},
+		{
+			TestName:         "UnrecognizedIdentityShortSleepOnKnownAwsError",
+			IdentityType:     "UnrecognizedIdentity",
+			Error:            awsTestError{ErrCodeThrottlingException},
+			MinSleepDuration: minSleepDuration,
+			MaxSleepDuration: maxSleepDuration,
+		},
+		{
+			TestName:         "UnrecognizedIdentityMediumSleepOnKnownAwsError",
+			IdentityType:     "UnrecognizedIdentity",
+			Error:            awsTestError{"UnknownError"},
+			MinSleepDuration: minUnknownAwsErrorSleepDuration,
+			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
+		},
+	}
 
-		waitGrp := sync.WaitGroup{}
-		waitGrp.Add(1)
-		stopped := false
-		go func() {
-			defer waitGrp.Done()
-			_, stopped = c.retrieveCredsWithRetry(nil)
-		}()
+	for _, tc := range testCases {
+		t.Run(tc.TestName, func(t *testing.T) {
+			provider := &credentialmocks.IRemoteProvider{}
+			provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, tc.Error).Once()
+			mockAgentIdentity := &identityMock.IAgentIdentity{}
+			mockAgentIdentity.On("IdentityType").Return(tc.IdentityType)
+			var timeAfterParamVal time.Duration
+			c := &credentialsRefresher{
+				log:                         logmocks.NewMockLog(),
+				agentIdentity:               mockAgentIdentity,
+				provider:                    provider,
+				stopCredentialRefresherChan: make(chan struct{}),
+				timeAfterFunc: func(duration time.Duration) <-chan time.Time {
+					timeAfterParamVal = duration
+					c := make(chan time.Time)
+					return c
+				},
+				appConfig: &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
+			}
 
-		// Allow retrieve to finish one round
-		time.Sleep(time.Millisecond * 100)
+			waitGrp := sync.WaitGroup{}
+			waitGrp.Add(1)
+			stopped := false
+			go func() {
+				defer waitGrp.Done()
+				_, stopped = c.retrieveCredsWithRetry(nil)
+			}()
 
-		// Verify sleep was at least 24 hours
-		assert.True(t, timeAfterParamVal >= time.Hour*24)
-		provider.AssertExpectations(t)
+			// Allow retrieve to finish one round
+			time.Sleep(time.Millisecond * 100)
 
-		// stop
-		c.stopCredentialRefresherChan <- struct{}{}
+			// Verify sleep duration
+			assert.True(t, timeAfterParamVal >= tc.MinSleepDuration,
+				fmt.Sprintf("duration until retry should be greater than or equal to %vs but is %vs", tc.MinSleepDuration.Seconds(), timeAfterParamVal.Seconds()))
+			assert.True(t, timeAfterParamVal < tc.MaxSleepDuration,
+				fmt.Sprintf("duration until retry should be less than %vs but is %vs", tc.MaxSleepDuration.Seconds(), timeAfterParamVal.Seconds()))
+			provider.AssertExpectations(t)
 
-		waitGrp.Wait()
-		assert.True(t, stopped, "expected retrieve to have been stopped by channel message")
+			// stop
+			c.stopCredentialRefresherChan <- struct{}{}
+
+			waitGrp.Wait()
+			assert.True(t, stopped, "expected retrieve to have been stopped by channel message")
+		})
 	}
 }
 
@@ -634,6 +791,8 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilS
 	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
 	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
 	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
+	mockAgentIdentity := &identityMock.IAgentIdentity{}
+	mockAgentIdentity.On("IdentityType").Return(onprem.IdentityType)
 
 	numSleeps := 0
 	c := &credentialsRefresher{
@@ -945,6 +1104,8 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredFilePurge(t *testi
 		provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 		provider.On("RemoteExpiresAt").Return(time.Now().Add(1 * time.Hour)).Once()
 		provider.On("CredentialSource").Return(tc.credentialSource).Once()
+		mockAgentIdentity := &identityMock.IAgentIdentity{}
+		mockAgentIdentity.On("IdentityType").Return(onprem.IdentityType)
 
 		purgeCalled := atomic.Value{}
 		purgeCalled.Store(false)

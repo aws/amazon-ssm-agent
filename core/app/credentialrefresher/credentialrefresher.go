@@ -16,9 +16,9 @@ package credentialrefresher
 import (
 	"bufio"
 	"context"
+	"errors"
 	"fmt"
 	"io"
-	"math"
 	"math/rand"
 	"net/http"
 	"os"
@@ -27,6 +27,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/cenkalti/backoff/v4"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
@@ -43,13 +47,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	agentctx "github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/executor"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/cenkalti/backoff/v4"
 )
 
-const credentialSourceEC2 = "EC2"
+const (
+	// last version in 3.2 that share cred file between workers for EC2
+	defaultSSMEC2SharedFileUsageLastVersion = "3.2.1241.0"
+	defaultSSMStartVersion                  = "3.2.0.0"
+	credentialSourceEC2                     = ec2roleprovider.CredentialSourceEC2
+)
 
 var (
 	storeSharedCredentials = sharedCredentials.Store
@@ -57,30 +62,11 @@ var (
 	backoffRetry           = backoff.Retry
 	newSharedCredentials   = credentials.NewSharedCredentials
 
-	// Indicates the retrier should retry call for systems manager provided credentials
-	shouldRetry = true
-
 	fileExists                                         = fileutil.Exists
 	getFileNames                                       = fileutil.GetFileNames
 	newProcessExecutor                                 = executor.NewProcessExecutor
 	osOpen                                             = os.Open
 	isCredSaveDefaultSSMAgentVersionPresentUsingReader = isCredSaveDefaultSSMAgentVersionPresentUsingIoReader
-)
-
-// Map of known http responses when requesting credentials from systems manager
-var statusCodes = map[int]bool{
-	http.StatusInternalServerError: shouldRetry,
-	http.StatusTooManyRequests:     shouldRetry,
-	http.StatusBadRequest:          !shouldRetry,
-	http.StatusUnauthorized:        !shouldRetry,
-	http.StatusForbidden:           !shouldRetry,
-	http.StatusMethodNotAllowed:    !shouldRetry,
-}
-
-const (
-	// last version in 3.2 that share cred file between workers for EC2
-	defaultSSMEC2SharedFileUsageLastVersion = "3.2.1241.0"
-	defaultSSMStartVersion                  = "3.2.0.0"
 )
 
 type ICredentialRefresher interface {
@@ -213,69 +199,71 @@ func (c *credentialsRefresher) sendCredentialsReadyMessage() {
 	})
 }
 
-func getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
-	expBackoff := math.Pow(2, float64(retryCount))
-	return time.Duration(int(expBackoff)+rand.Intn(int(math.Ceil(expBackoff*0.2)))) * time.Second
-}
-
 // retrieveCredsWithRetry will never exit unless it receives a message on stopChan or is able to successfully call Retrieve
 func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (credentials.Value, bool) {
 	retryCount := 0
+	identityGetDurationMap, ok := identityGetDurationMaps[c.agentIdentity.IdentityType()]
+	if !ok {
+		c.log.Warnf("Failed to find AWS error code handler map for identity %s. Using default.", c.agentIdentity.IdentityType())
+		identityGetDurationMap = defaultErrorCodeGetDurationMap
+	}
+
 	for {
 		creds, err := c.provider.RemoteRetrieve(ctx)
 		if err == nil {
 			return creds, false
 		}
 
-		// Default sleep duration for non-aws errors
-		sleepDuration := getBackoffRetryJitterSleepDuration(retryCount)
+		sleepDuration := getDefaultBackoffRetryJitterSleepDuration(retryCount)
+
+		var awsErr awserr.Error
+		if isAwsErr := errors.As(err, &awsErr); !isAwsErr {
+			c.log.Errorf("Retrieve credentials produced error: %v", err)
+		} else if getSleepDurationFunc, ok := identityGetDurationMap[awsErr.Code()]; ok {
+			c.log.Errorf("Retrieve credentials produced aws error: %v", err)
+			c.log.Tracef("Found %s identity error handler for %s error code", c.agentIdentity.IdentityType(), awsErr.Code())
+			sleepDuration = getSleepDurationFunc(retryCount)
+		} else if getSleepDurationFunc, ok = defaultErrorCodeGetDurationMap[awsErr.Code()]; ok {
+			c.log.Errorf("Retrieve credentials produced aws error: %v", err)
+			c.log.Tracef("Found default error handler for %s error code", awsErr.Code())
+			sleepDuration = getSleepDurationFunc(retryCount)
+		} else if awsRequestFailure, isRequestFailure := err.(awserr.RequestFailure); isRequestFailure {
+			// Get error details
+			c.log.Errorf("Status code %s returned from AWS API. RequestId: %s Message: %s",
+				awsRequestFailure.StatusCode(),
+				awsRequestFailure.RequestID(),
+				awsRequestFailure.Message())
+
+			statusCode := awsRequestFailure.StatusCode()
+			if statusCode == http.StatusNotFound {
+				c.log.Debug("This feature is not yet available in current region")
+			}
+
+			if getSleepDurationFunc, ok = httpStatusCodeGetDurationMap[statusCode]; ok {
+				sleepDuration = getSleepDurationFunc(retryCount)
+			} else {
+				sleepDuration = getLongSleepDuration(retryCount)
+			}
+		} else {
+			c.log.Errorf("Retrieve credentials produced aws error: %v", err)
+			c.log.Tracef("No specific error handler found for %s error code", awsErr.Code())
+			// Sleep additional 10 - 20 seconds in case of an aws error
+			sleepDuration += time.Second * time.Duration(10+rand.Intn(10))
+		}
+
+		c.log.Infof("Sleeping for %v before retrying retrieve credentials", sleepDuration)
+
 		// Max retry count is 16, which will sleep for about 18-22 hours
 		if retryCount < 16 {
 			retryCount++
 		}
 
-		// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
-		if awsErr, isAwsErr := err.(awserr.Error); isAwsErr &&
-			(awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == "AccessDeniedException") {
-			sleepDuration = getLongSleepDuration(sleepDuration)
-			c.log.Errorf("Retrieve credentials produced unrecoverable aws error: %v", awsErr)
-		} else if awsRequestFailure, isRequestFailure := err.(awserr.RequestFailure); isRequestFailure {
-			// Get error details
-			c.log.Warnf("Status code %s returned from AWS API. RequestId: %s Message: %s",
-				awsRequestFailure.StatusCode(),
-				awsRequestFailure.RequestID(),
-				awsRequestFailure.Message())
-			statusCode := awsRequestFailure.StatusCode()
-
-			if statusCode == http.StatusNotFound {
-				c.log.Debug("This feature is not yet available in current region")
-			}
-
-			if shouldRetry, found := statusCodes[statusCode]; !found || !shouldRetry {
-				sleepDuration = getLongSleepDuration(sleepDuration)
-			}
-		} else if isAwsErr {
-			// Sleep additional 10 - 20 seconds in case of an aws error
-			sleepDuration += time.Second * time.Duration(10+rand.Intn(10))
-		} else {
-			c.log.Errorf("Retrieve credentials produced error: %v", err)
-		}
-
-		c.log.Infof("Sleeping for %v before retrying retrieve credentials", sleepDuration)
 		select {
 		case <-c.stopCredentialRefresherChan:
 			return creds, true
 		case <-c.timeAfterFunc(sleepDuration):
 		}
 	}
-}
-
-func getLongSleepDuration(sleepDuration time.Duration) time.Duration {
-	// Sleep 24 hours with random jitter of up to 2 hour if error is
-	// non-retryable to make sure we spread retries for large de-registered fleets
-	jitter := time.Second * time.Duration(rand.Intn(7200))
-	sleepDuration = 24*time.Hour + jitter
-	return sleepDuration
 }
 
 func (c *credentialsRefresher) credentialRefresherRoutine() {
