@@ -16,6 +16,7 @@ package ec2roleprovider
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 	"testing"
@@ -64,6 +65,7 @@ type testCase struct {
 	sharedRetrieveErr               error
 	runtimeConfigRetrieveErr        error
 	runtimeConfig                   runtimeconfig.IdentityRuntimeConfig
+	expectedAwsErr                  string
 }
 
 func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISSMClient, *EC2RoleProvider) {
@@ -348,28 +350,34 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			testName:       "NoIpr_RetrieveDhmrAccessDenied",
 			iprRetrieveErr: errNoInstanceProfileRole,
 			ssmRetrieveErr: rmirtAccessDeniedError,
+			expectedAwsErr: ErrCodeAccessDeniedException,
 		},
 		{
 			testName:       "IprAssumeRoleErr_RetrieveDhmrAccessDenied",
 			iprRetrieveErr: instanceProfileRoleAssumeRoleError,
 			ssmRetrieveErr: rmirtAccessDeniedError,
+			expectedAwsErr: ErrCodeAccessDeniedException,
 		},
 		{
 			testName:       "NoIpr_RetrieveDhmrInternalServerError",
 			iprRetrieveErr: awserr.New(ErrCodeAssumeRoleUnauthorizedAccess, "Failed to assume instance profile role", nil),
 			ssmRetrieveErr: &ssm.InternalServerError{},
+			expectedAwsErr: ssm.ErrCodeInternalServerError,
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationThrottle",
 			iprUpdateInstanceInformationErr: uiiThrottleError,
+			expectedAwsErr:                  "RateExceeded",
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationInternalServerError",
 			iprUpdateInstanceInformationErr: &ssm.InternalServerError{},
+			expectedAwsErr:                  ssm.ErrCodeInternalServerError,
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationThrottle",
 			iprUpdateInstanceInformationErr: uiiThrottleError,
+			expectedAwsErr:                  "RateExceeded",
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationClientError",
@@ -386,7 +394,12 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			creds, err := ec2RoleProvider.RemoteRetrieve(context.Background())
 
 			//Assert
-			assert.Error(t, err)
+			if j.expectedAwsErr != "" {
+				var awsErr awserr.Error
+				isAwsErr := errors.As(err, &awsErr)
+				assert.True(t, isAwsErr)
+				assert.Equal(t, j.expectedAwsErr, awsErr.Code())
+			}
 			assert.Equal(t, iprEmptyCredential, creds)
 			assert.Equal(t, CredentialSourceNone, ec2RoleProvider.credentialSource)
 		})
