@@ -98,6 +98,30 @@ func (m *dpkgManager) IsAgentInstalled() (bool, error) {
 	return false, fmt.Errorf("dpkg isInstalled: Unexpected error with output '%s' and error: %v", output, err)
 }
 
+func (m *dpkgManager) GetInstalledAgentVersion() (string, error) {
+	// Because packages are available in dpkg unless it is removed with --purge we need to check if agent is installed
+	isInstalled, err := m.IsAgentInstalled()
+	if !isInstalled || err != nil {
+		return "", fmt.Errorf("agent is not installed with dpkg")
+	}
+
+	output, err := m.managerHelper.RunCommand("dpkg-query", "-f=${version}", "-W", "amazon-ssm-agent")
+	if err == nil {
+		return cleanupVersion(output), nil
+	}
+
+	if m.managerHelper.IsExitCodeError(err) {
+		exitCode := m.managerHelper.GetExitCode(err)
+		return "", fmt.Errorf("dpkg getVersion: Unexpected exit code, output '%s' and exit code: %v", output, exitCode)
+	}
+
+	if m.managerHelper.IsTimeoutError(err) {
+		return "", fmt.Errorf("dpkg getVersion: Command timed out")
+	}
+
+	return "", fmt.Errorf("dpkg getVersion: Unexpected error with output '%s' and error: %w", output, err)
+}
+
 func (m *dpkgManager) IsManagerEnvironment() bool {
 	return m.managerHelper.IsCommandAvailable("dpkg")
 }

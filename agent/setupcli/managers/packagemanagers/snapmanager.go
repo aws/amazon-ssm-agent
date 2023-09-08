@@ -18,6 +18,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -29,6 +30,7 @@ const (
 	assertFile                        = "amazon-ssm-agent.assert"
 	snapFile                          = "amazon-ssm-agent.snap"
 	snapAutoRefreshInProgressExitCode = 10
+	snapAgentdir                      = "/snap/amazon-ssm-agent/current/amazon-ssm-agent"
 )
 
 var waitTimeInterval = 10 * time.Second
@@ -57,6 +59,30 @@ func (m *snapManager) InstallAgent(folderPath string) error {
 		if m.managerHelper.IsTimeoutError(err) {
 			return fmt.Errorf("snap install: Command timed out")
 		}
+
+		if m.managerHelper.IsExitCodeError(err) && m.managerHelper.GetExitCode(err) == snapAutoRefreshInProgressExitCode {
+			// Note: Greengrass install step has a default timeout of 120 seconds
+			const maxAttempts = 6
+			for i := 1; i < maxAttempts; i++ {
+				output, err = m.managerHelper.RunCommand("snap", "install", snapPath, "--classic")
+				if err == nil {
+					return nil
+				}
+
+				if m.managerHelper.IsTimeoutError(err) {
+					return fmt.Errorf("snap install: Command timed out")
+				}
+
+				isUpdateInProgressError := m.managerHelper.IsExitCodeError(err) && m.managerHelper.GetExitCode(err) == snapAutoRefreshInProgressExitCode
+				if !isUpdateInProgressError {
+					break
+				}
+
+				time.Sleep(waitTimeInterval)
+			}
+
+		}
+
 		return fmt.Errorf("snap install: Failed to install snap with output '%s' and error: %v", output, err)
 	}
 
@@ -73,7 +99,7 @@ func (m *snapManager) UninstallAgent() error {
 
 		if m.managerHelper.IsExitCodeError(err) && m.managerHelper.GetExitCode(err) == snapAutoRefreshInProgressExitCode {
 			// Note: Greengrass install step has a default timeout of 120 seconds
-			const maxAttempts = 11
+			const maxAttempts = 5
 			for i := 1; i < maxAttempts; i++ {
 				output, err = m.managerHelper.RunCommand("snap", "remove", "amazon-ssm-agent")
 				if err == nil {
@@ -107,20 +133,83 @@ func (m *snapManager) IsAgentInstalled() (bool, error) {
 		return true, nil
 	}
 
-	if m.managerHelper.IsExitCodeError(err) {
-		exitCode := m.managerHelper.GetExitCode(err)
-		if exitCode == packageNotInstalledExitCode {
-			return false, nil
+	if err != nil {
+		if m.managerHelper.IsExitCodeError(err) {
+			exitCode := m.managerHelper.GetExitCode(err)
+			if exitCode == packageNotInstalledExitCode {
+				return false, nil
+			}
+
+			if exitCode == snapAutoRefreshInProgressExitCode {
+				output, err := m.managerHelper.RunCommand(snapAgentdir, "--version")
+
+				if err != nil {
+					return false, fmt.Errorf("agent not installed with snap: %w", err)
+				}
+
+				if output != "" {
+					return true, nil
+				}
+			}
+
+			return false, fmt.Errorf("snap isInstalled: Unexpected exit code with output '%s' and exit code: %v", output, exitCode)
 		}
 
-		return false, fmt.Errorf("snap isInstalled: Unexpected exit code with output '%s' and exit code: %v", output, exitCode)
+		if m.managerHelper.IsTimeoutError(err) {
+			return false, fmt.Errorf("snap isInstalled: Command timed out")
+		}
 	}
 
-	if m.managerHelper.IsTimeoutError(err) {
-		return false, fmt.Errorf("snap isInstalled: Command timed out")
+	return false, fmt.Errorf("snap isInstalled: Unexpected error with output '%s' and error: %w", output, err)
+}
+
+func (m *snapManager) GetInstalledAgentVersion() (string, error) {
+	output, err := m.managerHelper.RunCommand("snap", "list", "amazon-ssm-agent")
+
+	if err != nil {
+		if m.managerHelper.IsExitCodeError(err) {
+			exitCode := m.managerHelper.GetExitCode(err)
+			if exitCode == packageNotInstalledExitCode {
+				return "", fmt.Errorf("agent not installed with snap")
+			}
+
+			if exitCode == snapAutoRefreshInProgressExitCode {
+				output, err := m.managerHelper.RunCommand(snapAgentdir, "--version")
+
+				if err != nil {
+					return "", fmt.Errorf("agent not installed with snap: %w", err)
+				}
+
+				snapInfoVersionOutput := strings.Split(output, ":")
+				if len(snapInfoVersionOutput) == 2 {
+					return cleanupVersion(strings.TrimSpace(snapInfoVersionOutput[len(snapInfoVersionOutput)-1])), nil
+				}
+			}
+
+			return "", fmt.Errorf("snap getVersion: Unexpected exit code with output '%s' and exit code: %v", output, exitCode)
+		}
+
+		if m.managerHelper.IsTimeoutError(err) {
+			return "", fmt.Errorf("snap getVersion: Command timed out")
+		}
+
+		return "", fmt.Errorf("snap getVersion: Unexpected error with output '%s' and error: %w", output, err)
 	}
 
-	return false, fmt.Errorf("snap isInstalled: Unexpected error with output '%s' and error: %v", output, err)
+	snapInfoLines := strings.Split(strings.TrimSpace(output), "\n")
+	if len(snapInfoLines) == 2 {
+		headerFields := strings.Fields(snapInfoLines[0])
+		agentFields := strings.Fields(snapInfoLines[1])
+		for i, header := range headerFields {
+			if header == "Version" {
+				return cleanupVersion(agentFields[i]), nil
+			}
+		}
+
+		return "", fmt.Errorf("failed to extract agent version from snap info output")
+	}
+
+	return "", fmt.Errorf("failed to extract agent version because of unexpected output from snap info")
 }
 
 func (m *snapManager) IsManagerEnvironment() bool {

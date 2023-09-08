@@ -30,11 +30,13 @@ import (
 	rmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/registermanager/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
 	smMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers/mocks"
+	agentbuildversion "github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 const breakOutWithPanicMessage = "BREAKOUT_WITH_PANIC"
+const AgentBuildVersion = agentbuildversion.Version
 
 func storeMockedFunctions() func() {
 	getPackageManagerStorage := getPackageManager
@@ -227,7 +229,7 @@ func TestMain_Install_FailedCheckAgentInstalled(t *testing.T) {
 	assert.True(t, false, "Should never reach here because of exit")
 }
 
-func TestMain_Install_AgentIsInstalled_UninstallAgentFailed(t *testing.T) {
+func TestMain_Install_AgentIsInstalled_GetInstalledAgentVersionSuccess_UninstallAgentFailed(t *testing.T) {
 	initializeArgs()
 	defer storeMockedFunctions()()
 
@@ -236,6 +238,8 @@ func TestMain_Install_AgentIsInstalled_UninstallAgentFailed(t *testing.T) {
 	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
 		managerMock := &pmMock.IPackageManager{}
 		managerMock.On("IsAgentInstalled").Return(true, nil)
+		managerMock.On("GetInstalledAgentVersion").Return("3.1.0.0", nil)
+
 		managerMock.On("UninstallAgent").Return(fmt.Errorf("SomeUninstallError"))
 		return managerMock, nil
 	}
@@ -267,7 +271,7 @@ func TestMain_Install_AgentIsInstalled_UninstallAgentFailed(t *testing.T) {
 	assert.True(t, false, "Should never reach here because of exit")
 }
 
-func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallFailed(t *testing.T) {
+func TestMain_Install_AgentIsInstalled_GetInstalledAgentVersionSuccess_UninstallSuccess_InstallFailed(t *testing.T) {
 	initializeArgs()
 	defer storeMockedFunctions()()
 
@@ -276,6 +280,7 @@ func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallFailed(t *testing
 	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
 		managerMock := &pmMock.IPackageManager{}
 		managerMock.On("IsAgentInstalled").Return(true, nil)
+		managerMock.On("GetInstalledAgentVersion").Return("3.1.0.0", nil)
 		managerMock.On("UninstallAgent").Return(nil)
 
 		managerMock.On("GetFilesReqForInstall").Return([]string{})
@@ -311,7 +316,7 @@ func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallFailed(t *testing
 	assert.True(t, false, "Should never reach here because of exit")
 }
 
-func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallSuccess_ReloadServiceFailed(t *testing.T) {
+func TestMain_Install_AgentIsInstalled_GetInstalledAgentVersionSuccess_UninstallSuccess_InstallSuccess_ReloadServiceFailed(t *testing.T) {
 	initializeArgs()
 	defer storeMockedFunctions()()
 
@@ -320,6 +325,7 @@ func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallSuccess_ReloadSer
 	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
 		managerMock := &pmMock.IPackageManager{}
 		managerMock.On("IsAgentInstalled").Return(true, nil)
+		managerMock.On("GetInstalledAgentVersion").Return("3.1.0.0", nil)
 		managerMock.On("UninstallAgent").Return(nil)
 
 		managerMock.On("GetFilesReqForInstall").Return([]string{})
@@ -341,7 +347,6 @@ func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallSuccess_ReloadSer
 
 	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
 		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to install agent")
 		assert.Equal(t, "FailedReloadManager", args[0].(error).Error())
 
 		panic(breakOutWithPanicMessage)
@@ -388,9 +393,168 @@ func TestMain_Install_AgentNotInstalled_InstallSuccess(t *testing.T) {
 			assert.Fail(t, "Should not get panic")
 		}
 	}()
-
 	main()
 	assert.True(t, true, "Should never reach here because of exit")
+}
+
+func TestMain_Install_AgentIsInstalled_GetInstalledAgentVersionSuccessAndEqual_InstallSkipped(t *testing.T) {
+	initializeArgs()
+	defer storeMockedFunctions()()
+
+	defer setArgsAndRestore("/some/path/setupcli", "-install")()
+
+	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
+		managerMock := &pmMock.IPackageManager{}
+		managerMock.On("IsAgentInstalled").Return(true, nil)
+		managerMock.On("GetInstalledAgentVersion").Return(AgentBuildVersion, nil)
+		return managerMock, nil
+	}
+
+	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
+		managerMock := &smMock.IServiceManager{}
+		return managerMock, nil
+	}
+
+	getConfigurationManager = func() configurationmanager.IConfigurationManager {
+		managerMock := &cmMock.IConfigurationManager{}
+		managerMock.On("IsAgentAlreadyConfigured").Return(true)
+		return managerMock
+	}
+
+	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
+		assert.Equal(t, 0, exitCode)
+		assert.Contains(t, message, "Version is already installed, not attempting to install agent")
+
+		panic(breakOutWithPanicMessage)
+	}
+
+	defer func() {
+		if errInterface := recover(); errInterface != nil {
+			assert.Equal(t, breakOutWithPanicMessage, errInterface)
+		}
+	}()
+	main()
+	assert.True(t, false, "Should never reach here because of exit")
+}
+
+func TestMain_Install_AgentIsInstalled_GetInstalledAgentVersionFailed_UninstallSuccess_InstallSuccess(t *testing.T) {
+	initializeArgs()
+	defer storeMockedFunctions()()
+
+	defer setArgsAndRestore("/some/path/setupcli", "-install")()
+
+	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
+		managerMock := &pmMock.IPackageManager{}
+		managerMock.On("IsAgentInstalled").Return(true, nil)
+		managerMock.On("GetInstalledAgentVersion").Return("", fmt.Errorf("FailedGetInstalledAgentVersion"))
+		managerMock.On("UninstallAgent").Return(nil)
+
+		managerMock.On("GetFilesReqForInstall").Return([]string{})
+		managerMock.On("InstallAgent", mock.Anything).Return(nil)
+		return managerMock, nil
+	}
+
+	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
+		managerMock := &smMock.IServiceManager{}
+		managerMock.On("ReloadManager").Return(nil)
+		return managerMock, nil
+	}
+
+	getConfigurationManager = func() configurationmanager.IConfigurationManager {
+		managerMock := &cmMock.IConfigurationManager{}
+		managerMock.On("IsAgentAlreadyConfigured").Return(true)
+		return managerMock
+	}
+
+	defer func() {
+		if errInterface := recover(); errInterface != nil {
+			assert.Fail(t, "Should not get panic")
+		}
+	}()
+	main()
+	assert.True(t, true, "Should never reach here because of exit")
+}
+
+func TestMain_Install_AgentIsInstalled_GetInstalledAgentVersionSuccessAndHigher_UninstallSuccess_InstallFailed(t *testing.T) {
+	initializeArgs()
+	defer storeMockedFunctions()()
+
+	defer setArgsAndRestore("/some/path/setupcli", "-install")()
+
+	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
+		managerMock := &pmMock.IPackageManager{}
+		managerMock.On("IsAgentInstalled").Return(true, nil)
+		managerMock.On("GetInstalledAgentVersion").Return("3.3.0.0", nil)
+		managerMock.On("UninstallAgent").Return(nil)
+
+		managerMock.On("GetFilesReqForInstall").Return([]string{})
+		managerMock.On("InstallAgent", mock.Anything).Return(fmt.Errorf("FailedInstallAgent"))
+		return managerMock, nil
+	}
+
+	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
+		managerMock := &smMock.IServiceManager{}
+		return managerMock, nil
+	}
+
+	getConfigurationManager = func() configurationmanager.IConfigurationManager {
+		managerMock := &cmMock.IConfigurationManager{}
+		managerMock.On("IsAgentAlreadyConfigured").Return(true)
+		return managerMock
+	}
+
+	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
+		assert.Equal(t, 1, exitCode)
+		assert.Contains(t, message, "Failed to install agent")
+		assert.Equal(t, "FailedInstallAgent", args[0].(error).Error())
+
+		panic(breakOutWithPanicMessage)
+	}
+
+	defer func() {
+		if errInterface := recover(); errInterface != nil {
+			assert.Equal(t, breakOutWithPanicMessage, errInterface)
+		}
+	}()
+	main()
+	assert.True(t, false, "Should never reach here because of exit")
+}
+
+func TestHasAgentAlreadyInstalled(t *testing.T) {
+	var isAgentEqual bool
+	var err error
+
+	// Test invalid version
+	isAgentEqual, err = hasAgentAlreadyInstalled("some.invalid.version.format")
+	assert.False(t, isAgentEqual)
+	assert.Error(t, err)
+
+	// Test older version
+	isAgentEqual, err = hasAgentAlreadyInstalled("3.1.0.0")
+	assert.False(t, isAgentEqual)
+	assert.NoError(t, err)
+
+	isAgentEqual, err = hasAgentAlreadyInstalled("2.9999.9999.0")
+	assert.False(t, isAgentEqual)
+	assert.NoError(t, err)
+
+	// Test equivalent version
+	isAgentEqual, err = hasAgentAlreadyInstalled(AgentBuildVersion)
+	assert.True(t, isAgentEqual)
+	assert.NoError(t, err)
+
+	// Test newer version
+	isAgentEqual, err = hasAgentAlreadyInstalled("3.3.0.0")
+	assert.False(t, isAgentEqual)
+	assert.NoError(t, err)
+
+	isAgentEqual, err = hasAgentAlreadyInstalled("3.12.12.0")
+	assert.False(t, isAgentEqual)
+	assert.NoError(t, err)
+
+	isAgentEqual, err = hasAgentAlreadyInstalled("12.0.0.0")
+	assert.False(t, isAgentEqual)
+	assert.NoError(t, err)
 }
 
 func TestMain_Register_ErrorCheckingAgentInstalled(t *testing.T) {

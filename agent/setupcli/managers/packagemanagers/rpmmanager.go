@@ -36,7 +36,9 @@ func (m *rpmManager) GetFilesReqForInstall() []string {
 func (m *rpmManager) InstallAgent(folderPath string) error {
 	rpmPath := filepath.Join(folderPath, rpmFile)
 
-	output, err := m.managerHelper.RunCommand("rpm", "-i", rpmPath)
+	// Using update flag since if agent is installed this flag is required
+	// If agent is not installed, rpm will just install the agent
+	output, err := m.managerHelper.RunCommand("rpm", "-U", rpmPath)
 	if err != nil {
 		if m.managerHelper.IsTimeoutError(err) {
 			return fmt.Errorf("rpm install: Command timed out")
@@ -83,6 +85,29 @@ func (m *rpmManager) IsAgentInstalled() (bool, error) {
 	}
 
 	return false, fmt.Errorf("rpm isInstalled: Unexpected error with output '%s' and error: %v", output, err)
+}
+
+func (m *rpmManager) GetInstalledAgentVersion() (string, error) {
+	output, err := m.managerHelper.RunCommand("rpm", "-q", "--qf", "%{VERSION}", "amazon-ssm-agent")
+
+	if err == nil {
+		return cleanupVersion(output), nil
+	}
+
+	if m.managerHelper.IsExitCodeError(err) {
+		exitCode := m.managerHelper.GetExitCode(err)
+		if exitCode == packageNotInstalledExitCode {
+			return "", fmt.Errorf("agent not installed with rpm")
+		}
+
+		return "", fmt.Errorf("rpm getVersion: Unexpected exit code, output '%s' and exit code: %v", output, exitCode)
+	}
+
+	if m.managerHelper.IsTimeoutError(err) {
+		return "", fmt.Errorf("rpm getVersion: Command timed out")
+	}
+
+	return "", fmt.Errorf("rpm getVersion: Unexpected error with output '%s' and error: %w", output, err)
 }
 
 func (m *rpmManager) IsManagerEnvironment() bool {

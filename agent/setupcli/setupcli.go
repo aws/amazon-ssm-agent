@@ -28,6 +28,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
+	buildversion "github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/cihub/seelog"
 )
 
@@ -63,6 +65,8 @@ var osExit = func(exitCode int, log log.T, message string, messageArgs ...interf
 	os.Exit(exitCode)
 }
 
+const currentAgentBuildVersion = buildversion.Version
+
 func main() {
 	var packageManager packagemanagers.IPackageManager
 	var serviceManager servicemanagers.IServiceManager
@@ -85,25 +89,49 @@ func main() {
 		configManager := getConfigurationManager()
 		log.Infof("Attempting to configure agent")
 		if err = configurationmanager.ConfigureAgent(log, configManager, artifactsDir); err != nil {
-			log.Warnf("Failed to configure agent with error: %v", err)
+			log.Warnf("Failed to configure agent with error: %w", err)
 		}
 
 		log.Info("Starting amazon-ssm-agent install")
-		if isInstalled, err := packageManager.IsAgentInstalled(); err != nil {
-			osExit(1, log, "Failed to determine if agent is installed: %v", err)
+		var isInstalled bool
+		var reInstallAgent bool
+		if isInstalled, err = packageManager.IsAgentInstalled(); err != nil {
+			osExit(1, log, "Failed to determine if agent is installed: %w", err)
 		} else if isInstalled {
-			log.Infof("Found existing agent installation, uninstalling current agent for potential upgrade")
-			// TODO: Check agent version to determine if uninstall/install is required, introduce update flag for updates
-			if err = packagemanagers.UninstallAgent(packageManager); err != nil {
-				osExit(1, log, "Failed to uninstall the agent: %v", err)
+			log.Infof("Agent already installed, checking version")
+			if version, err := packageManager.GetInstalledAgentVersion(); err != nil {
+				log.Warnf("Failed to get agent version, falling back to re-installation: %w", err)
+				reInstallAgent = true
+			} else {
+				log.Infof("Agent version installed is %s", version)
+				if isVersionAlreadyInstalled, err := hasAgentAlreadyInstalled(version); err != nil || !isVersionAlreadyInstalled {
+					log.Warnf("Installed version is older/higher than expected Agent Version or Failed to compare, attempting to reinstall the agent: %w", err)
+					reInstallAgent = true
+				} else if isVersionAlreadyInstalled {
+					osExit(0, log, "Version is already installed, not attempting to install agent")
+				}
 			}
 		}
 
-		log.Infof("Starting agent installation")
-		if err := packagemanagers.InstallAgent(packageManager, serviceManager, artifactsDir); err != nil {
-			osExit(1, log, "Failed to install agent: %v", err)
+		if reInstallAgent {
+			log.Infof("Starting agent uninstallation")
+			if err := packagemanagers.UninstallAgent(packageManager); err != nil {
+				osExit(1, log, "Failed to uninstall the agent: %w", err)
+			}
+			log.Infof("Agent uninstalled successfully")
+
+			log.Infof("Starting agent installation")
+			if err := packagemanagers.InstallAgent(packageManager, serviceManager, artifactsDir); err != nil {
+				osExit(1, log, "Failed to install agent: %w", err)
+			}
+			log.Infof("Agent installed successfully")
+		} else {
+			log.Infof("Agent is not installed on the system, Starting agent installation")
+			if err := packagemanagers.InstallAgent(packageManager, serviceManager, artifactsDir); err != nil {
+				osExit(1, log, "Failed to install agent: %w", err)
+			}
+			log.Infof("Agent installed successfully")
 		}
-		log.Infof("Agent installed successfully")
 	}
 
 	// register
@@ -216,6 +244,15 @@ func setParams(log log.T) {
 			log.Warnf("Failed to get path of executable to set artifacts dir: %v", err)
 		}
 	}
+}
+
+func hasAgentAlreadyInstalled(versionStr string) (bool, error) {
+	val, err := versionutil.VersionCompare(versionStr, currentAgentBuildVersion)
+	if err != nil {
+		return false, fmt.Errorf("failed to compare with already installed agent version: %w", err)
+	}
+
+	return val == 0, nil
 }
 
 func getExecutableFolderPath() (string, error) {

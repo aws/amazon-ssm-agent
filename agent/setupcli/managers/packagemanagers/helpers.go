@@ -16,6 +16,7 @@ package packagemanagers
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
@@ -46,4 +47,10 @@ func InstallAgent(pManager IPackageManager, sManager servicemanagers.IServiceMan
 // UninstallAgent calls uninstall of the manager for ease of extension in case we need retries
 func UninstallAgent(manager IPackageManager) error {
 	return manager.UninstallAgent()
+}
+
+// cleanupVersion is used to remove additional characters from version
+func cleanupVersion(version string) string {
+	versionExtractor := regexp.MustCompile(`\d+.\d+.\d+.\d+`)
+	return versionExtractor.FindString(version)
 }

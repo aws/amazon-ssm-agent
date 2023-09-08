@@ -24,6 +24,8 @@ type IPackageManager interface {
 	UninstallAgent() error
 	// IsAgentInstalled returns true if agent is installed using package manager, returns error for any unexpected errors
 	IsAgentInstalled() (bool, error)
+	// GetInstalledAgentVersion returns the version of the installed agent
+	GetInstalledAgentVersion() (string, error)
 	// IsManagerEnvironment returns true if all commands required by the package manager are available
 	IsManagerEnvironment() bool
 	// GetName returns the package manager name
