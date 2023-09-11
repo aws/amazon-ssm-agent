@@ -990,6 +990,30 @@ func Test_credentialsRefresher_checkCredSaveDefaultSSMAgentPresent_Success(t *te
 	isPresent := c.credentialFileConsumerPresent()
 	assert.True(t, isPresent, "version not present")
 	assert.Equal(t, 1, visitedCount)
+
+	getFileNames = func(srcPath string) (files []string, err error) {
+		return []string{"testFileName-" + dateTimeNow}, nil
+	}
+	visitedCount = 0
+	isCredSaveDefaultSSMAgentVersionPresentUsingReader = func(reader io.Reader) bool {
+		visitedCount++
+		return true
+	}
+	isPresent = c.credentialFileConsumerPresent()
+	assert.False(t, isPresent, "version present")
+	assert.Equal(t, 0, visitedCount)
+
+	getFileNames = func(srcPath string) (files []string, err error) {
+		return []string{dateTimeNow}, nil
+	}
+	visitedCount = 0
+	isCredSaveDefaultSSMAgentVersionPresentUsingReader = func(reader io.Reader) bool {
+		visitedCount++
+		return true
+	}
+	isPresent = c.credentialFileConsumerPresent()
+	assert.False(t, isPresent, "version present")
+	assert.Equal(t, 0, visitedCount)
 }
 
 func Test_credentialsRefresher_checkCredSaveDefaultSSMAgentPresent_Failed(t *testing.T) {

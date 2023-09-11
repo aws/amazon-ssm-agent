@@ -477,6 +477,12 @@ func (c *credentialsRefresher) credentialFileConsumerPresent() bool {
 	threeDaysBeforeDate := time.Date(currentTimeStamp.Year(), currentTimeStamp.Month(), currentTimeStamp.Day(), 0, 0, 0, 0, time.UTC).AddDate(0, 0, -3)
 
 	for _, fileName := range auditFileNames {
+		// In random cases, non audit files are present on customer instances.
+		// Ignore non audit files created in this folder
+		if !strings.HasPrefix(fileName, logger.EventLogFile) {
+			continue
+		}
+
 		// get date time from audit file name considering datetime format will be in "2006-01-02"
 		dateFromAuditFileName := fileName[len(fileName)-len(auditFileDateTimeFormat):]
 
