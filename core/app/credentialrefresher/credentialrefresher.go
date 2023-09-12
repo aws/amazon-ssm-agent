@@ -16,21 +16,15 @@ package credentialrefresher
 import (
 	"bufio"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"math/rand"
-	"net/http"
 	"os"
 	"path/filepath"
 	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/cenkalti/backoff/v4"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
@@ -47,6 +41,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	agentctx "github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/executor"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/cenkalti/backoff/v4"
 )
 
 const (
@@ -204,56 +202,47 @@ func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (cred
 	retryCount := 0
 	identityGetDurationMap, ok := identityGetDurationMaps[c.agentIdentity.IdentityType()]
 	if !ok {
-		c.log.Warnf("Failed to find AWS error code handler map for identity %s. Using default.", c.agentIdentity.IdentityType())
-		identityGetDurationMap = defaultErrorCodeGetDurationMap
+		c.log.Errorf("Unexpected identity retrieved: %v", c.agentIdentity.IdentityType())
+		return credentials.Value{}, true
 	}
-
 	for {
 		creds, err := c.provider.RemoteRetrieve(ctx)
 		if err == nil {
 			return creds, false
 		}
 
-		sleepDuration := getDefaultBackoffRetryJitterSleepDuration(retryCount)
-
-		var awsErr awserr.Error
-		if isAwsErr := errors.As(err, &awsErr); !isAwsErr {
-			c.log.Errorf("Retrieve credentials produced error: %v", err)
-		} else if getSleepDurationFunc, ok := identityGetDurationMap[awsErr.Code()]; ok {
-			c.log.Errorf("Retrieve credentials produced aws error: %v", err)
-			c.log.Tracef("Found %s identity error handler for %s error code", c.agentIdentity.IdentityType(), awsErr.Code())
-			sleepDuration = getSleepDurationFunc(retryCount)
-		} else if getSleepDurationFunc, ok = defaultErrorCodeGetDurationMap[awsErr.Code()]; ok {
-			c.log.Errorf("Retrieve credentials produced aws error: %v", err)
-			c.log.Tracef("Found default error handler for %s error code", awsErr.Code())
-			sleepDuration = getSleepDurationFunc(retryCount)
-		} else if awsRequestFailure, isRequestFailure := err.(awserr.RequestFailure); isRequestFailure {
-			// Get error details
-			c.log.Errorf("Status code %s returned from AWS API. RequestId: %s Message: %s",
-				awsRequestFailure.StatusCode(),
-				awsRequestFailure.RequestID(),
-				awsRequestFailure.Message())
-
-			statusCode := awsRequestFailure.StatusCode()
-			if statusCode == http.StatusNotFound {
-				c.log.Debug("This feature is not yet available in current region")
-			}
-
-			if getSleepDurationFunc, ok = httpStatusCodeGetDurationMap[statusCode]; ok {
-				sleepDuration = getSleepDurationFunc(retryCount)
-			} else {
-				sleepDuration = getLongSleepDuration(retryCount)
-			}
+		c.log.Errorf("Retrieve credentials produced error: %v", err)
+		var sleepDuration time.Duration
+		// initialize default sleep duration
+		if sleepDurationFunc, ok := identityGetDurationMap[ErrAllOtherNonAWSErrors]; ok {
+			sleepDuration = sleepDurationFunc(retryCount)
 		} else {
-			c.log.Errorf("Retrieve credentials produced aws error: %v", err)
-			c.log.Tracef("No specific error handler found for %s error code", awsErr.Code())
-			// Sleep additional 10 - 20 seconds in case of an aws error
-			sleepDuration += time.Second * time.Duration(10+rand.Intn(10))
+			sleepDuration = getDefaultBackoffRetryJitterSleepDuration(retryCount)
+		}
+
+		// aws error
+		if awsErr, isAwsErr := err.(awserr.Error); isAwsErr {
+			// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
+			if awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == ErrCodeAccessDeniedException {
+				if sleepDurationFunc, ok := identityGetDurationMap[awsErr.Code()]; ok {
+					sleepDuration = sleepDurationFunc(retryCount)
+				}
+			} else {
+				if sleepDurationFunc, ok := identityGetDurationMap[ErrAllOtherAWSErrors]; ok {
+					sleepDuration = sleepDurationFunc(retryCount)
+				}
+				if awsRequestFailure, isRequestFailure := err.(awserr.RequestFailure); isRequestFailure {
+					c.log.Errorf("Status code %v returned from AWS API. RequestId: %s Message: %s",
+						awsRequestFailure.StatusCode(),
+						awsRequestFailure.RequestID(),
+						awsRequestFailure.Message())
+				}
+			}
 		}
 
 		c.log.Infof("Sleeping for %v before retrying retrieve credentials", sleepDuration)
 
-		// Max retry count is 16, which will sleep for about 18-22 hours
+		// Max retry count is 16, which will sleep for about 18-22 hours for long sleep strategy
 		if retryCount < 16 {
 			retryCount++
 		}

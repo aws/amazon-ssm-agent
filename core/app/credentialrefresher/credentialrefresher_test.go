@@ -25,12 +25,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/cenkalti/backoff/v4"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
@@ -43,6 +37,11 @@ import (
 	runtimeconfigmocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/executor/mocks"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/cenkalti/backoff/v4"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var (
@@ -603,7 +602,9 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 	const maxSleepDuration = 78644 * time.Second
 	const minUnknownAwsErrorSleepDuration = minSleepDuration + 10*time.Second
 	const maxUnknownAwsErrorSleepDuration = maxSleepDuration + 20*time.Second
-
+	const ec2PreEndueSleepMinDuration = 5 * time.Minute
+	const ec2PreEndueSleepMaxDuration = 1 * time.Hour
+	const unrecognizedIdentity = "UnrecognizedIdentity"
 	testCases := []struct {
 		TestName         string
 		IdentityType     string
@@ -622,57 +623,43 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 			TestName:         "EC2IdentityLongSleepOnInvalidInstanceId",
 			IdentityType:     ec2.IdentityType,
 			Error:            awsTestError{ErrCodeInvalidInstanceId},
-			MinSleepDuration: ec2MinLongSleepDuration,
-			MaxSleepDuration: ec2MaxLongSleepDuration,
-		},
-		{
-			TestName:         "EC2IdentityShortSleepOnInternalFailure",
-			IdentityType:     ec2.IdentityType,
-			Error:            awsTestError{ErrCodeInternalFailure},
-			MinSleepDuration: minSleepDuration,
-			MaxSleepDuration: maxSleepDuration,
+			MinSleepDuration: ec2PreEndueSleepMinDuration,
+			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
 			TestName:         "EC2IdentityMediumSleepOnUnknownError",
 			IdentityType:     ec2.IdentityType,
 			Error:            awsTestError{"UnknownError"},
-			MinSleepDuration: minUnknownAwsErrorSleepDuration,
-			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
-		},
-		{
-			TestName:         "NoExplicitIdentityErrorHandleLongSleepOnKnownError",
-			IdentityType:     ec2.IdentityType,
-			Error:            awsTestError{ErrCodeOptInRequired},
-			MinSleepDuration: minLongSleepDuration,
-			MaxSleepDuration: maxLongSleepDuration,
+			MinSleepDuration: ec2PreEndueSleepMinDuration,
+			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
 			TestName:         "EC2IdentityLongSleepOnHttpStatusNotFound",
 			IdentityType:     ec2.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusNotFound, ""),
-			MinSleepDuration: minLongSleepDuration,
-			MaxSleepDuration: maxLongSleepDuration,
+			MinSleepDuration: ec2PreEndueSleepMinDuration,
+			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
 			TestName:         "EC2IdentityShortSleepOnHttpStatusTooManyRequests",
 			IdentityType:     ec2.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusTooManyRequests, ""),
-			MinSleepDuration: minSleepDuration,
-			MaxSleepDuration: maxSleepDuration,
+			MinSleepDuration: ec2PreEndueSleepMinDuration,
+			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
 			TestName:         "EC2IdentityLongSleepOnUnrecognizedHttpStatusCode",
 			IdentityType:     ec2.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusUpgradeRequired, ""),
-			MinSleepDuration: minLongSleepDuration,
-			MaxSleepDuration: maxLongSleepDuration,
+			MinSleepDuration: ec2PreEndueSleepMinDuration,
+			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
 			TestName:         "EC2IdentityShortSleepOnGenericError",
 			IdentityType:     ec2.IdentityType,
 			Error:            fmt.Errorf("generic non-aws error"),
-			MinSleepDuration: minSleepDuration,
-			MaxSleepDuration: maxSleepDuration,
+			MinSleepDuration: ec2PreEndueSleepMinDuration,
+			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
 			TestName:         "OnPremIdentityLongSleepOnAccessDeniedException",
@@ -699,15 +686,15 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 			TestName:         "OnPremIdentityLongSleepOnHttpNotFound",
 			IdentityType:     onprem.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusNotFound, ""),
-			MinSleepDuration: minLongSleepDuration,
-			MaxSleepDuration: maxLongSleepDuration,
+			MinSleepDuration: minUnknownAwsErrorSleepDuration,
+			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
 		},
 		{
 			TestName:         "OnPremIdentityLongSleepOnUnrecognizedHttpStatusCode",
 			IdentityType:     onprem.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusUpgradeRequired, ""),
-			MinSleepDuration: minLongSleepDuration,
-			MaxSleepDuration: maxLongSleepDuration,
+			MinSleepDuration: minUnknownAwsErrorSleepDuration,
+			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
 		},
 		{
 			TestName:         "OnPremIdentityShortSleepOnGenericError",
@@ -717,22 +704,8 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 			MaxSleepDuration: maxSleepDuration,
 		},
 		{
-			TestName:         "UnrecognizedIdentityLongSleepOnKnownAwsError",
-			IdentityType:     "UnrecognizedIdentity",
-			Error:            awsTestError{ErrCodeOptInRequired},
-			MinSleepDuration: minLongSleepDuration,
-			MaxSleepDuration: maxLongSleepDuration,
-		},
-		{
-			TestName:         "UnrecognizedIdentityShortSleepOnKnownAwsError",
-			IdentityType:     "UnrecognizedIdentity",
-			Error:            awsTestError{ErrCodeThrottlingException},
-			MinSleepDuration: minSleepDuration,
-			MaxSleepDuration: maxSleepDuration,
-		},
-		{
 			TestName:         "UnrecognizedIdentityMediumSleepOnKnownAwsError",
-			IdentityType:     "UnrecognizedIdentity",
+			IdentityType:     unrecognizedIdentity,
 			Error:            awsTestError{"UnknownError"},
 			MinSleepDuration: minUnknownAwsErrorSleepDuration,
 			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
@@ -770,6 +743,12 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 			// Allow retrieve to finish one round
 			time.Sleep(time.Millisecond * 100)
 
+			// When unrecognized identity present, return from cred refresher
+			if tc.IdentityType == unrecognizedIdentity {
+				assert.True(t, stopped, "cred refresher is not stopped")
+				return
+			}
+
 			// Verify sleep duration
 			assert.True(t, timeAfterParamVal >= tc.MinSleepDuration,
 				fmt.Sprintf("duration until retry should be greater than or equal to %vs but is %vs", tc.MinSleepDuration.Seconds(), timeAfterParamVal.Seconds()))
@@ -784,6 +763,58 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 			assert.True(t, stopped, "expected retrieve to have been stopped by channel message")
 		})
 	}
+}
+
+func TestCredUtilityFunctions_sleepRetry_minMaxTesting(t *testing.T) {
+	minSeconds := getDefaultBackoffRetryJitterSleepDuration(0).Seconds()
+	for i := 0; i < 17; i++ {
+		seconds := getDefaultBackoffRetryJitterSleepDuration(i)
+		assert.True(t, seconds >= 0, "non negative value not allowed")
+		assert.NotNil(t, seconds, "No Panic in backoff jitter")
+	}
+	maxSeconds := getDefaultBackoffRetryJitterSleepDuration(16).Seconds()
+	assert.True(t, 1 <= minSeconds && minSeconds <= 3, "wrong min value for backoff jitter")
+	assert.True(t, 18*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for backoff jitter")
+
+	minSeconds = getEC2PreDefaultSSMSleepDuration(0).Seconds()
+	for i := 0; i < 17; i++ {
+		seconds := getEC2PreDefaultSSMSleepDuration(i)
+		assert.True(t, seconds >= 0, "non negative value not allowed")
+		assert.NotNil(t, seconds, "No Panic in ec2 pre default jitter")
+	}
+	maxSeconds = getEC2PreDefaultSSMSleepDuration(16).Seconds()
+	assert.True(t, 300 <= minSeconds && minSeconds <= 300, "wrong min value for ec2 pre default jitter")
+	assert.True(t, 3200 <= maxSeconds && maxSeconds <= 3600, "wrong max value for ec2 pre default jitter")
+
+	minSeconds = getEc2LongSleepDuration(0).Seconds()
+	for i := 0; i < 17; i++ {
+		seconds := getEc2LongSleepDuration(i)
+		assert.True(t, seconds >= 0, "non negative value not allowed")
+		assert.NotNil(t, seconds, "No Panic in ec2 long sleep jitter")
+	}
+	maxSeconds = getEc2LongSleepDuration(16).Seconds()
+	assert.True(t, 24*60 <= minSeconds && minSeconds <= 30*60, "wrong min value for ec2 long sleep jitter")
+	assert.True(t, 24*60 <= maxSeconds && maxSeconds <= 30*60, "wrong max value for ec2 long sleep jitter")
+
+	minSeconds = getMediumBackoffRetryJitterSleepDuration(0).Seconds()
+	for i := 0; i < 17; i++ {
+		seconds := getMediumBackoffRetryJitterSleepDuration(i)
+		assert.True(t, seconds >= 0, "non negative value not allowed")
+		assert.NotNil(t, seconds, "No Panic in ec2 medium sleep jitter")
+	}
+	maxSeconds = getMediumBackoffRetryJitterSleepDuration(16).Seconds()
+	assert.True(t, 10 <= minSeconds && minSeconds <= 30, "wrong min value for ec2 medium sleep jitter")
+	assert.True(t, 18*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for ec2 medium sleep jitter")
+
+	minSeconds = getLongSleepDuration(0).Seconds()
+	for i := 0; i < 17; i++ {
+		seconds := getLongSleepDuration(i)
+		assert.True(t, seconds >= 0, "non negative value not allowed")
+		assert.NotNil(t, seconds, "No Panic in long sleep jitter")
+	}
+	maxSeconds = getLongSleepDuration(16).Seconds()
+	assert.True(t, 24*60*60 <= minSeconds && minSeconds <= 26*60*60, "wrong min value for long sleep jitter")
+	assert.True(t, 24*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for long sleep jitter")
 }
 
 func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilSuccess(t *testing.T) {
