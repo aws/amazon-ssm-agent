@@ -16,6 +16,7 @@ package credentialrefresher
 import (
 	"bufio"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"math/rand"
@@ -34,6 +35,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
@@ -45,6 +47,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/cenkalti/backoff/v4"
+	"github.com/cihub/seelog"
 )
 
 const (
@@ -202,7 +205,7 @@ func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (cred
 	retryCount := 0
 	identityGetDurationMap, ok := identityGetDurationMaps[c.agentIdentity.IdentityType()]
 	if !ok {
-		c.log.Errorf("Unexpected identity retrieved: %v", c.agentIdentity.IdentityType())
+		c.log.Errorf("Unexpected identity retrieved: %v. Stopping credential refresher.", c.agentIdentity.IdentityType())
 		return credentials.Value{}, true
 	}
 	for {
@@ -211,7 +214,10 @@ func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (cred
 			return creds, false
 		}
 
-		c.log.Errorf("Retrieve credentials produced error: %v", err)
+		// this will log as debug when the credential refresher retries exceeds 3
+		logMessage := fmt.Sprintf("Retrieve credentials produced error: %v", err)
+		c.minLog(seelog.ErrorLvl, logMessage, retryCount)
+
 		var sleepDuration time.Duration
 		// initialize default sleep duration
 		if sleepDurationFunc, ok := identityGetDurationMap[ErrAllOtherNonAWSErrors]; ok {
@@ -220,8 +226,9 @@ func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (cred
 			sleepDuration = getDefaultBackoffRetryJitterSleepDuration(retryCount)
 		}
 
-		// aws error
-		if awsErr, isAwsErr := err.(awserr.Error); isAwsErr {
+		// override sleep duration for aws errors
+		var awsErr awserr.Error
+		if isAwsErr := errors.As(err, &awsErr); isAwsErr {
 			// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
 			if awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == ErrCodeAccessDeniedException {
 				if sleepDurationFunc, ok := identityGetDurationMap[awsErr.Code()]; ok {
@@ -231,16 +238,21 @@ func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (cred
 				if sleepDurationFunc, ok := identityGetDurationMap[ErrAllOtherAWSErrors]; ok {
 					sleepDuration = sleepDurationFunc(retryCount)
 				}
-				if awsRequestFailure, isRequestFailure := err.(awserr.RequestFailure); isRequestFailure {
-					c.log.Errorf("Status code %v returned from AWS API. RequestId: %s Message: %s",
+				var awsRequestFailure awserr.RequestFailure
+				if isRequestFailure := errors.As(err, &awsRequestFailure); isRequestFailure {
+					logMessage = fmt.Sprintf("Status code %v returned from AWS API. RequestId: %s Message: %s",
 						awsRequestFailure.StatusCode(),
 						awsRequestFailure.RequestID(),
 						awsRequestFailure.Message())
+					// this will log as debug when the credential refresher retries exceeds 3
+					c.minLog(seelog.ErrorLvl, logMessage, retryCount)
 				}
 			}
 		}
 
-		c.log.Infof("Sleeping for %v before retrying retrieve credentials", sleepDuration)
+		logMessage = fmt.Sprintf("Sleeping for %v before retrying retrieve credentials", sleepDuration)
+		// this will log as debug when the credential refresher retries exceeds 3
+		c.minLog(seelog.InfoLvl, logMessage, retryCount)
 
 		// Max retry count is 16, which will sleep for about 18-22 hours for long sleep strategy
 		if retryCount < 16 {
@@ -252,6 +264,26 @@ func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (cred
 			return creds, true
 		case <-c.timeAfterFunc(sleepDuration):
 		}
+	}
+}
+
+func (c *credentialsRefresher) minLog(defaultLevel int, logMessage string, retryCount int) {
+	isEc2 := c.agentIdentity.IdentityType() == ec2.IdentityType
+	maxRetryCount := 3
+	if retryCount >= maxRetryCount && isEc2 {
+		c.log.Debug(logMessage)
+		return
+	}
+
+	switch defaultLevel {
+	case seelog.ErrorLvl:
+		c.log.Error(logMessage)
+	case seelog.InfoLvl:
+		c.log.Info(logMessage)
+	case seelog.DebugLvl:
+		c.log.Debug(logMessage)
+	default:
+		c.log.Info(logMessage)
 	}
 }
 

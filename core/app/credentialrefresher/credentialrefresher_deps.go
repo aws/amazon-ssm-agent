@@ -29,8 +29,8 @@ var identityGetDurationMaps = map[string]map[string]getBackoffDurationFunc{
 var ec2ErrorCodeGetBackoffDurationMap = map[string]getBackoffDurationFunc{
 	ErrCodeAccessDeniedException:          getEc2LongSleepDuration,
 	ErrCodeMachineFingerprintDoesNotMatch: getEc2LongSleepDuration,
-	ErrAllOtherAWSErrors:                  getEC2PreDefaultSSMSleepDuration,
-	ErrAllOtherNonAWSErrors:               getEC2PreDefaultSSMSleepDuration,
+	ErrAllOtherAWSErrors:                  getEC2DefaultSSMSleepDuration,
+	ErrAllOtherNonAWSErrors:               getEC2DefaultSSMSleepDuration,
 }
 
 // Check if error is a non-retryable error if fingerprint changes or response is access denied exception
@@ -72,9 +72,9 @@ func getEc2LongSleepDuration(retryCount int) time.Duration {
 	return 25*time.Minute + jitter
 }
 
-// getEC2PreDefaultSSMSleepDuration returns the duration similar to existing retry logic in hibernation module in agent.
+// getEC2DefaultSSMSleepDuration returns the duration similar to existing retry logic in hibernation module in agent.
 // Min Value will be 5 minutes and max value will be 1 hr
-func getEC2PreDefaultSSMSleepDuration(retryCount int) time.Duration {
+func getEC2DefaultSSMSleepDuration(retryCount int) time.Duration {
 	// These values are picked from hibernation go module in our agent package
 	defaultHealthPingRate := 5 * 60 // 5 minutes
 	maxInterval64 := float64(3600)

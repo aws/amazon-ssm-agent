@@ -57,6 +57,11 @@ func NewSilentMockLog() *Mock {
 	return log
 }
 
+func NewEmptyLogMock() *Mock {
+	log := new(Mock)
+	return log
+}
+
 func NewMockLogWithContext(ctx string) *Mock {
 	log := new(Mock)
 	log.context = "[" + ctx + "]"

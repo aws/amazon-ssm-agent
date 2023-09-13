@@ -595,16 +595,19 @@ func (a awsTestError) Code() string    { return a.errCode }
 func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *testing.T) {
 	const ec2MaxLongSleepDuration = 30 * time.Minute
 	const ec2MinLongSleepDuration = 25 * time.Minute
+
 	const maxLongSleepDuration = 26 * time.Hour
 	const minLongSleepDuration = 24 * time.Hour
+
 	const minSleepDuration = 1 * time.Second
-	// About 22 hours
-	const maxSleepDuration = 78644 * time.Second
+	const maxSleepDuration = 10 * time.Second
+
 	const minUnknownAwsErrorSleepDuration = minSleepDuration + 10*time.Second
 	const maxUnknownAwsErrorSleepDuration = maxSleepDuration + 20*time.Second
 	const ec2PreEndueSleepMinDuration = 5 * time.Minute
-	const ec2PreEndueSleepMaxDuration = 1 * time.Hour
+	const ec2PreEndueSleepMaxDuration = 10 * time.Minute
 	const unrecognizedIdentity = "UnrecognizedIdentity"
+
 	testCases := []struct {
 		TestName         string
 		IdentityType     string
@@ -613,49 +616,49 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 		MinSleepDuration time.Duration
 	}{
 		{
-			TestName:         "EC2IdentityLongSleepOnAccessDenied",
+			TestName:         "EC2IdentityEC2LongSleepOnAccessDenied",
 			IdentityType:     ec2.IdentityType,
-			Error:            awsTestError{ErrCodeAccessDeniedException},
+			Error:            fmt.Errorf("ADE: %w", awsTestError{ErrCodeAccessDeniedException}),
 			MinSleepDuration: ec2MinLongSleepDuration,
 			MaxSleepDuration: ec2MaxLongSleepDuration,
 		},
 		{
-			TestName:         "EC2IdentityLongSleepOnInvalidInstanceId",
+			TestName:         "EC2IdentityEC2DefaultSleepOnInvalidInstanceId",
 			IdentityType:     ec2.IdentityType,
-			Error:            awsTestError{ErrCodeInvalidInstanceId},
+			Error:            fmt.Errorf("invalid instance id: %w", awsTestError{ErrCodeInvalidInstanceId}),
 			MinSleepDuration: ec2PreEndueSleepMinDuration,
 			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
-			TestName:         "EC2IdentityMediumSleepOnUnknownError",
+			TestName:         "EC2IdentityEC2DefaultSleepOnUnknownError",
 			IdentityType:     ec2.IdentityType,
-			Error:            awsTestError{"UnknownError"},
+			Error:            fmt.Errorf("unknown error: %w", awsTestError{"UnknownError"}),
 			MinSleepDuration: ec2PreEndueSleepMinDuration,
 			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
-			TestName:         "EC2IdentityLongSleepOnHttpStatusNotFound",
+			TestName:         "EC2IdentityEC2DefaultSleepOnHttpStatusNotFound",
 			IdentityType:     ec2.IdentityType,
-			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusNotFound, ""),
+			Error:            fmt.Errorf("http status error: %w", awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusNotFound, "")),
 			MinSleepDuration: ec2PreEndueSleepMinDuration,
 			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
-			TestName:         "EC2IdentityShortSleepOnHttpStatusTooManyRequests",
+			TestName:         "EC2IdentityEC2DefaultOnHttpStatusTooManyRequests",
 			IdentityType:     ec2.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusTooManyRequests, ""),
 			MinSleepDuration: ec2PreEndueSleepMinDuration,
 			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
-			TestName:         "EC2IdentityLongSleepOnUnrecognizedHttpStatusCode",
+			TestName:         "EC2IdentityEC2DefaultOnUnrecognizedHttpStatusCode",
 			IdentityType:     ec2.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusUpgradeRequired, ""),
 			MinSleepDuration: ec2PreEndueSleepMinDuration,
 			MaxSleepDuration: ec2PreEndueSleepMaxDuration,
 		},
 		{
-			TestName:         "EC2IdentityShortSleepOnGenericError",
+			TestName:         "EC2IdentityEC2DefaultSleepOnGenericError",
 			IdentityType:     ec2.IdentityType,
 			Error:            fmt.Errorf("generic non-aws error"),
 			MinSleepDuration: ec2PreEndueSleepMinDuration,
@@ -676,21 +679,21 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 			MaxSleepDuration: maxLongSleepDuration,
 		},
 		{
-			TestName:         "OnPremIdentityShortSleepOnInvalidInstanceId",
+			TestName:         "OnPremIdentityMediumSleepOnInvalidInstanceId",
 			IdentityType:     onprem.IdentityType,
 			Error:            awsTestError{ErrCodeInvalidInstanceId},
-			MinSleepDuration: minSleepDuration,
-			MaxSleepDuration: maxSleepDuration,
+			MinSleepDuration: minUnknownAwsErrorSleepDuration,
+			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
 		},
 		{
-			TestName:         "OnPremIdentityLongSleepOnHttpNotFound",
+			TestName:         "OnPremIdentityMediumSleepOnHttpNotFound",
 			IdentityType:     onprem.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusNotFound, ""),
 			MinSleepDuration: minUnknownAwsErrorSleepDuration,
 			MaxSleepDuration: maxUnknownAwsErrorSleepDuration,
 		},
 		{
-			TestName:         "OnPremIdentityLongSleepOnUnrecognizedHttpStatusCode",
+			TestName:         "OnPremIdentityMediumSleepOnUnrecognizedHttpStatusCode",
 			IdentityType:     onprem.IdentityType,
 			Error:            awserr.NewRequestFailure(awsTestError{"NotKnownErrorCode"}, http.StatusUpgradeRequired, ""),
 			MinSleepDuration: minUnknownAwsErrorSleepDuration,
@@ -776,13 +779,13 @@ func TestCredUtilityFunctions_sleepRetry_minMaxTesting(t *testing.T) {
 	assert.True(t, 1 <= minSeconds && minSeconds <= 3, "wrong min value for backoff jitter")
 	assert.True(t, 18*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for backoff jitter")
 
-	minSeconds = getEC2PreDefaultSSMSleepDuration(0).Seconds()
+	minSeconds = getEC2DefaultSSMSleepDuration(0).Seconds()
 	for i := 0; i < 17; i++ {
-		seconds := getEC2PreDefaultSSMSleepDuration(i)
+		seconds := getEC2DefaultSSMSleepDuration(i)
 		assert.True(t, seconds >= 0, "non negative value not allowed")
 		assert.NotNil(t, seconds, "No Panic in ec2 pre default jitter")
 	}
-	maxSeconds = getEC2PreDefaultSSMSleepDuration(16).Seconds()
+	maxSeconds = getEC2DefaultSSMSleepDuration(16).Seconds()
 	assert.True(t, 300 <= minSeconds && minSeconds <= 300, "wrong min value for ec2 pre default jitter")
 	assert.True(t, 3200 <= maxSeconds && maxSeconds <= 3600, "wrong max value for ec2 pre default jitter")
 
@@ -817,17 +820,20 @@ func TestCredUtilityFunctions_sleepRetry_minMaxTesting(t *testing.T) {
 	assert.True(t, 24*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for long sleep jitter")
 }
 
-func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilSuccess(t *testing.T) {
+func Test_credentialsRefresher_retrieveCredsWithRetry_OnpremRetry2000TimesNoExitUntilSuccess(t *testing.T) {
+	mockLog := logmocks.NewEmptyLogMock()
 	provider := &credentialmocks.IRemoteProvider{}
 	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
-	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr1")).Times(1000)
+	mockLog.On("Info", mock.Anything).Times(2000)
+	mockLog.On("Error", mock.Anything).Times(2000)
 	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
 	mockAgentIdentity := &identityMock.IAgentIdentity{}
 	mockAgentIdentity.On("IdentityType").Return(onprem.IdentityType)
 
 	numSleeps := 0
 	c := &credentialsRefresher{
-		log:                         logmocks.NewMockLog(),
+		log:                         mockLog,
 		agentIdentity:               mockAgentIdentity,
 		provider:                    provider,
 		stopCredentialRefresherChan: make(chan struct{}),
@@ -846,7 +852,51 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilS
 	}
 
 	_, stopped := c.retrieveCredsWithRetry(nil)
+
 	provider.AssertExpectations(t)
+	mockLog.AssertExpectations(t)
+	assert.Equal(t, 2000, numSleeps, "Number of retries was not correct")
+	assert.False(t, stopped, "expected retrieve to not have been stopped by channel message")
+}
+
+func Test_credentialsRefresher_retrieveCredsWithRetry_EC2Retry2000TimesNoExitUntilSuccess(t *testing.T) {
+	mockLog := logmocks.NewEmptyLogMock()
+	provider := &credentialmocks.IRemoteProvider{}
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr1")).Times(1000)
+
+	mockLog.On("Info", mock.Anything).Times(3)
+	mockLog.On("Error", mock.Anything).Times(3)
+	mockLog.On("Debug", mock.Anything).Times(1997 * 2)
+
+	provider.On("RemoteRetrieve", mock.Anything).Return(credentials.Value{}, nil).Once()
+	mockAgentIdentity := &identityMock.IAgentIdentity{}
+	mockAgentIdentity.On("IdentityType").Return(ec2.IdentityType)
+
+	numSleeps := 0
+	c := &credentialsRefresher{
+		log:                         mockLog,
+		agentIdentity:               mockAgentIdentity,
+		provider:                    provider,
+		stopCredentialRefresherChan: make(chan struct{}),
+		timeAfterFunc: func(duration time.Duration) <-chan time.Time {
+			numSleeps++
+			// assumes random aws error first 3 retries which would never produce a retry below 6 seconds
+			assert.True(t, duration > time.Second*5, "AWS Error produced retry below 6 seconds")
+
+			// Retry for errors that are not invalid instance id nor machine fingerprint should never produce sleep longer than 22 hours
+			assert.True(t, duration < time.Hour*22, "sleep for longer than 22 hours")
+			c := make(chan time.Time, 1)
+			c <- time.Now()
+			return c
+		},
+		appConfig: &appconfig.SsmagentConfig{Agent: appconfig.AgentInfo{}},
+	}
+
+	_, stopped := c.retrieveCredsWithRetry(nil)
+
+	provider.AssertExpectations(t)
+	mockLog.AssertExpectations(t)
 	assert.Equal(t, 2000, numSleeps, "Number of retries was not correct")
 	assert.False(t, stopped, "expected retrieve to not have been stopped by channel message")
 }
