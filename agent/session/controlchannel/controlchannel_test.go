@@ -45,7 +45,6 @@ var (
 	mockWsChannel                       = &communicatorMocks.IWebSocketChannel{}
 	mockEventLog                        = eventlogMock.IAuditLogTelemetry{}
 	messageId                           = "dd01e56b-ff48-483e-a508-b5f073f31b16"
-	mockTaskAckChan                     = make(chan mgsContracts.AcknowledgeTaskContent)
 	mockAgentMessageIncomingMessageChan = make(chan mgsContracts.AgentMessage, 10)
 	mockReadyMessageChan                = make(chan bool)
 	schemaVersion                       = uint32(1)
@@ -423,19 +422,42 @@ func TestControlChannelIncomingMessageHandlerForTaskAcknowledgeMessage(t *testin
 		Payload:        payload,
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
+	timeout := 20 * time.Millisecond
+	tooLong := 10 * time.Millisecond
+
+	readDone := make(chan struct{})
+
+	writeDone := make(chan struct{})
 
 	go func() {
+		defer close(readDone)
+		defer func() { readDone <- struct{}{} }()
+		startTime := time.Now()
+		consumedTaskAcknowledgeMessage := false
+		var timeToConsumeMessage time.Duration
+
 		select {
-		case <-mockTaskAckChan:
+		case <-mockAgentMessageIncomingMessageChan:
+			timeToConsumeMessage = time.Since(startTime)
+			consumedTaskAcknowledgeMessage = true
 			break
-		case <-time.After(10 * time.Millisecond):
-			assert.Fail(t, "Channel should have the message")
+		case <-time.After(timeout):
+			break
 		}
-		close(mockTaskAckChan)
+
+		assert.Truef(t, consumedTaskAcknowledgeMessage, "Channel did not receive message. Waited %vs", timeout.Seconds())
+		assert.LessOrEqual(t, timeToConsumeMessage, tooLong, "Channel took too long to receive message. Waited %vs", timeToConsumeMessage.Seconds())
 	}()
 
-	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
-	assert.Nil(t, err)
+	go func() {
+		defer close(writeDone)
+		defer func() { writeDone <- struct{}{} }()
+		err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
+		assert.Nil(t, err)
+	}()
+
+	<-writeDone
+	<-readDone
 }
 
 func TestControlChannelIncomingMessageHandlerForControlChannelReadyMessage(t *testing.T) {
