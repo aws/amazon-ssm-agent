@@ -1,5 +1,15 @@
 Latest
 ===============
+- Fix credential retrieval retry logic in credential refresher
+- Reducing retrieval log level to debug in the credential refresher after more than 3 retrieval retries
+- Fix for EC2 credential retrieval errors not being propagated to the credential refresher
+- Fixing agent version input format validation
+- Fix downloadPlatformOverride for AlmaLinux
+- Fixed issue where removing seelog.xml file doesn't revert minimum log level back to INFO
+- Ignore non-audit files in audit folder
+
+3.2.1542.0
+===============
 - Add aws:updateSSMAgent plugin support for Flatcar Linux
 - Add fix to resolve manifest url during agent update when using stable keyword
 - Fix multiple issues causing tight loops during IPC connection scenarios
