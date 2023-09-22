@@ -409,7 +409,17 @@ func (mgs *MGSInteractor) processAgentJobMessage(agentMessage mgsContracts.Agent
 	if err != nil {
 		log.Errorf("dropping message because cannot parse AgentJob message %s to Document State, err: %v", agentMessage.MessageId.String(), err)
 		agentJobId, _ := agentMessage.GetAgentJobId(mgs.context)
+		commandId, _ := messageContracts.GetCommandID(agentJobId)
 		mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, agentJobId, agentMessage.CreatedDate, messagehandler.AgentJobMessageParseError)
+		docState = &contracts.DocumentState{
+			DocumentInformation: contracts.DocumentInfo{
+				MessageID: agentJobId,
+				CommandID: commandId,
+			},
+			DocumentType: contracts.SendCommand,
+		}
+		payloadDoc := utils.PrepareReplyPayloadToUpdateDocumentStatus(mgs.agentConfig.AgentInfo, contracts.ResultStatusFailed, "", nil)
+		mgs.sendDocResponse(payloadDoc, docState)
 		return
 	} else {
 		if mgs.context.AppConfig().Agent.ContainerMode {

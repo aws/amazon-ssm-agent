@@ -274,7 +274,7 @@ func (suite *MGSInteractorTestSuite) TestAgentJobSendAcknowledgeWhenMessageParsi
 		Payload:        payload,
 	}
 	mgsInteractor.processAgentJobMessage(agentMessage)
-	mockControlChannel.AssertNumberOfCalls(suite.T(), "SendMessage", 1)
+	mockControlChannel.AssertNumberOfCalls(suite.T(), "SendMessage", 2)
 }
 
 func (suite *MGSInteractorTestSuite) TestGetMgsEndpoint() {
