@@ -395,7 +395,7 @@ install_components() {
             exit 1
          fi
          if [ "$SUSE_MAJOR_VERSION" -eq "15" ]; then
-            sudo SUSEConnect -p PackageHub/15.1/x86_64
+            sudo SUSEConnect -p PackageHub/$SUSE_MAJOR_VERSION.$SUSE_MINOR_VERSION/x86_64
             if [ $? -ne 0 ]; then
                sudo SUSEConnect
             fi
