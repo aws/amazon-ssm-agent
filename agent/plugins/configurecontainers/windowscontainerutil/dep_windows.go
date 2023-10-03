@@ -74,6 +74,7 @@ func (DepWindows) UpdateUtilExeCommandOutput(
 	stdErr string,
 	usePlatformSpecificCommand bool) (output string, err error) {
 	util := updateutil.Utility{
+		Context:                               context,
 		CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds,
 	}
 	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
