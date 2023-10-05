@@ -1,5 +1,14 @@
 Latest
 ===============
+- Updated MGS Interactor to send 'Failed' status on agentJob parsing error
+- Added error handling for Linux DomainJoin when service account credentials empty
+- Fix for panic scenario in when running aws:configureDocker plugin
+- Upgraded GoLang to version 1.20.8
+- Upgraded golang.org/x/net to v0.15.0
+- Added support for macOS 13 (Ventura)
+
+3.2.1630.0
+===============
 - Fix credential retrieval retry logic in credential refresher
 - Reducing retrieval log level to debug in the credential refresher after more than 3 retrieval retries
 - Fix for EC2 credential retrieval errors not being propagated to the credential refresher
