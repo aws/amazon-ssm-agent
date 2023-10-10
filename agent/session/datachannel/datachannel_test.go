@@ -244,12 +244,20 @@ func TestSendStreamDataMessageWithStreamDataSequenceNumberMutexLocked(t *testing
 
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockCipher.On("EncryptWithAESGCM", payload).Return([]byte("testPayload"), nil)
-
+	isLockedChan := make(chan struct{})
 	go func() {
 		dataChannel.StreamDataSequenceNumberMutex.Lock()
+		isLockedChan <- struct{}{}
 		time.Sleep(1000 * time.Millisecond)
 		dataChannel.StreamDataSequenceNumberMutex.Unlock()
 	}()
+
+	select {
+	case <-isLockedChan:
+	case <-time.After(1000 * time.Millisecond):
+		assert.Fail(t, "test setup timed out")
+	}
+
 	go func() {
 		dataChannel.SendStreamDataMessage(mockLog, mgsContracts.Output, payload)
 	}()
