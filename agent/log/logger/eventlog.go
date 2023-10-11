@@ -184,6 +184,7 @@ func (e *EventLog) isValidFileName(fileName string) bool {
 // When the file is not available, Creates a new file and inserts the header
 // When the file is available, updates the file
 func (e *EventLog) writeFile(content string, header string) (createdFlag bool) {
+	e.nextFileName = e.eventLogName + e.fileDelimiter + time.Now().Format(e.datePattern)
 	logFilePathWithDate := filepath.Join(e.eventLogPath, e.nextFileName)
 	if !e.currentDateFileExists() {
 		createdFlag = true

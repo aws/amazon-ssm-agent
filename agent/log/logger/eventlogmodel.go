@@ -15,8 +15,9 @@
 package logger
 
 const (
-	AmazonAgentStartEvent       = "amazon-ssm-agent.start" // Amazon core agent Start Event
-	AmazonAgentWorkerStartEvent = "ssm-agent-worker.start" //Amazon agent worker start event
+	AmazonAgentStartEvent               = "amazon-ssm-agent.start"          // Amazon core agent start event
+	AmazonAgentWorkerStartEvent         = "ssm-agent-worker.start"          // Amazon agent worker start event
+	AmazonAgentInProcExecuterStartEvent = "ssm-agent-inproc-executer.start" // Amazon agent inproc executer start event
 
 	AuditSentSuccessFooter = "AuditSent="
 	SchemaVersionHeader    = "SchemaVersion="
