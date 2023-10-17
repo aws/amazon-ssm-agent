@@ -67,9 +67,12 @@ func (logReceiver *CloudWatchCustomReceiver) ReceiveMessage(message string, leve
 
 // AfterParse extracts the log group and stream from the XML args and sets them in a new log data facade instance
 func (logReceiver *CloudWatchCustomReceiver) AfterParse(initArgs seelog.CustomReceiverInitArgs) error {
-
 	// Creating the facade instance at initialization
-	return cloudwatchlogsqueue.CreateCloudWatchDataInstance(initArgs)
+	if err := cloudwatchlogsqueue.CreateCloudWatchDataInstance(initArgs); err != nil {
+		fmt.Printf("[ERROR] Failed to create cloudwatch log custom receiver. Err: %v\n", err)
+	}
+
+	return nil
 }
 
 // Flush flush the logs in the queue

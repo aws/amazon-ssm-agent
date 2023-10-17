@@ -25,9 +25,10 @@ import (
 	"time"
 
 	"github.com/Workiva/go-datastructures/queue"
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
 const (
@@ -70,7 +71,7 @@ var CloudWatchLogsEventsChannel = make(chan CloudWatchLogsEvents)
 // CreateCloudWatchDataInstance creates an instance of logDataFacade if not created
 func CreateCloudWatchDataInstance(initArgs seelog.CustomReceiverInitArgs) (err error) {
 	// Acquiring Read Write Lock on the instance to ensure enqueue/dequeue not happening
-	fmt.Println("Create Instance")
+	fmt.Println("Creating CloudWatch Log Emitter for Agent Logs")
 	mutex.Lock()
 	defer mutex.Unlock()
 	if err := verifyLogGroupName(initArgs, os.Args); err != nil {
@@ -103,6 +104,11 @@ func CreateCloudWatchDataInstance(initArgs seelog.CustomReceiverInitArgs) (err e
 
 // setLogDestination updates the logGroup if needed
 func setLogDestination(initArgs seelog.CustomReceiverInitArgs) {
+	if !IsActive() {
+		fmt.Println("[ERROR] CloudWatch Log Data Facade not yet initialized")
+		return
+	}
+
 	logGroup, sharingDestination, logSharingEnabled := parseXMLConfigs(initArgs)
 	if logDataFacadeInstance.logGroup == logGroup && logDataFacadeInstance.logSharingEnabled == logSharingEnabled && logDataFacadeInstance.sharingDestination == sharingDestination {
 		return
@@ -238,38 +244,48 @@ func Dequeue(pollingWaitTime time.Duration) ([]*cloudwatchlogs.InputLogEvent, er
 
 // GetLogGroup returns the log group intended for logging
 func GetLogGroup() string {
+	if !IsActive() {
+		return ""
+	}
+
 	return logDataFacadeInstance.logGroup
 }
 
 // IsLogSharingEnabled returns true if log sharing is enabled
 func IsLogSharingEnabled() bool {
-	return logDataFacadeInstance.logSharingEnabled
+	return IsActive() && logDataFacadeInstance.logSharingEnabled
 }
 
 // GetSharingDestination returns the destination for sharing
 func GetSharingDestination() string {
+	if !IsActive() {
+		return ""
+	}
+
 	return logDataFacadeInstance.sharingDestination
 }
 
 // Enqueue to add message to queue
 func Enqueue(message *cloudwatchlogs.InputLogEvent) error {
+	// Acquiring Read Lock on the instance to allow multiple enquequers/dequeuers to access queue
+	mutex.RLock()
+	defer mutex.RUnlock()
+
+	if !IsActive() {
+		return errors.New("CloudWatchLogs Queue not initialized or destroyed on Enqueue")
+	}
 	// skip log group when log group or logGroup is not set
 	if logDataFacadeInstance.logGroup == "" {
 		if logDataFacadeInstance.sharingDestination == "" || !logDataFacadeInstance.logSharingEnabled {
 			return fmt.Errorf("log group not found")
 		}
 	}
-	// Acquiring Read Lock on the instance to allow multiple enquequers/dequeuers to access queue
-	mutex.RLock()
-	defer mutex.RUnlock()
+
 	// Enqueue if the queue is present
-	if IsActive() {
-		if logDataFacadeInstance.messageQueue.Len() < queueLimit {
-			return logDataFacadeInstance.messageQueue.Put(message)
-		}
-		return errors.New("CloudWatchLogs Queue Overflow. Enqueue failed")
+	if logDataFacadeInstance.messageQueue.Len() < queueLimit {
+		return logDataFacadeInstance.messageQueue.Put(message)
 	}
-	return errors.New("CloudWatchLogs Queue not initialized or destroyed on Enqueue")
+	return errors.New("CloudWatchLogs Queue Overflow. Enqueue failed")
 }
 
 // createQueue creates a cloudwatchlogs queue
