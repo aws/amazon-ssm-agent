@@ -1,5 +1,54 @@
 Latest
 ===============
+- Bump golang.org/x/net from 0.15.0 to 0.17.0
+- Upgraded GoLang to version 1.20.10
+- Fixing race condition in session datachannel unit test
+
+3.2.1705.0
+===============
+- Updated MGS Interactor to send 'Failed' status on agentJob parsing error
+- Added error handling for Linux DomainJoin when service account credentials empty
+- Fix for panic scenario in when running aws:configureDocker plugin
+- Upgraded GoLang to version 1.20.8
+- Upgraded golang.org/x/net to v0.15.0
+- Added support for macOS 13 (Ventura)
+
+3.2.1630.0
+===============
+- Fix credential retrieval retry logic in credential refresher
+- Reducing retrieval log level to debug in the credential refresher after more than 3 retrieval retries
+- Fix for EC2 credential retrieval errors not being propagated to the credential refresher
+- Fixing agent version input format validation
+- Fix downloadPlatformOverride for AlmaLinux
+- Fixed issue where removing seelog.xml file doesn't revert minimum log level back to INFO
+- Ignore non-audit files in audit folder
+
+3.2.1542.0
+===============
+- Add aws:updateSSMAgent plugin support for Flatcar Linux
+- Add fix to resolve manifest url during agent update when using stable keyword
+- Fix multiple issues causing tight loops during IPC connection scenarios
+- Sign deb and rpm installer packages for Linux instances using new key
+- Use file based IPC by default for amazon-ssm-agent and ssm-agent-worker communication in Darwin
+
+3.2.1478.0
+===============
+- Added fix to propagate exit code properly when command fails to start
+- Added control channel acknowledgement functionalities
+- Added flag to specify go version used for gosec and govulncheck in static analysis script
+- Added support for RHEL 8.7, 8.8, 9.1, 9.2
+- Added support for Rocky Linux 8.7, 9.0, 9.1, 9.2
+- Added support for Oracle Linux 8.7, 9.1, 9.2
+- Update go version to 1.20.7
+
+3.2.1377.0
+===============
+- Stopped saving instance profile credentials to disk
+- Added static agent security scans to makefile
+- Updated Greengrass component minor version
+
+3.2.1297.0
+===============
 - Added retries to snap uninstall call in setupcli
 - Fix for windows shutdown executable not found when compiled with golang1.19+
 - Fix to return correct Agent Job ID for ack after AgentJobParseError
