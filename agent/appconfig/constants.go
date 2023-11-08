@@ -101,6 +101,10 @@ const (
 	DefaultAuditExpirationDayMax = 30 // 30 days max audit files count
 	DefaultAuditExpirationDayMin = 3  // 3 days min audit files count
 
+	// log destination for session manager
+	SessionLogsDestinationDisk = "disk"
+	SessionLogsDestinationNone = "none"
+
 	//aws-ssm-agent bookkeeping constants for long running plugins
 	LongRunningPluginsLocation         = "longrunningplugins"
 	LongRunningPluginsHealthCheck      = "healthcheck"

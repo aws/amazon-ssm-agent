@@ -18,6 +18,7 @@
 package shell
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -593,4 +594,237 @@ func (suite *ShellTestSuite) TestSetupRoutineToWriteCmdPipelineOutputWhenDataCha
 
 	suite.Equal(<-result, 1)
 	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+// Testing if ipc file should be written to when destination is none
+func (suite *ShellTestSuite) TestIfShouldWriteToIpcFileWhenDestinationIsNone() {
+	agentConfig := appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{
+			SessionLogsDestination: "none",
+		},
+	}
+	mockContext := context.NewMockDefaultWithConfig(agentConfig)
+	plugin := &ShellPlugin{
+		context: mockContext,
+		logger: logger{
+			writeToIpcFile: false,
+		},
+	}
+	noLoggingConfig := contracts.Configuration{
+		CloudWatchLogGroup: "",
+		OutputS3BucketName: "",
+	}
+
+	cwConfig := contracts.Configuration{
+		CloudWatchLogGroup: "loggroup",
+		OutputS3BucketName: "",
+	}
+	s3Config := contracts.Configuration{
+		CloudWatchLogGroup: "",
+		OutputS3BucketName: "bucketname",
+	}
+	cws3Config := contracts.Configuration{
+		CloudWatchLogGroup: "loggroup",
+		OutputS3BucketName: "bucketname",
+	}
+
+	// do not write to ipc file when all logging is disabled
+	plugin.initializeLogger(suite.mockLog, noLoggingConfig)
+	suite.False(plugin.logger.writeToIpcFile)
+
+	// write to ipc file when cw or s3 logging enabled
+	plugin.initializeLogger(suite.mockLog, cwConfig)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, s3Config)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, cws3Config)
+	suite.True(plugin.logger.writeToIpcFile)
+}
+
+// Testing if ipc file should be written to when destination is not provided
+func (suite *ShellTestSuite) TestWhenWriteToIpcFileWhenDestinationNotProvided() {
+	agentConfig := appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{},
+	}
+	mockContext := context.NewMockDefaultWithConfig(agentConfig)
+	plugin := &ShellPlugin{
+		context: mockContext,
+		logger: logger{
+			writeToIpcFile: false,
+		},
+	}
+	noLoggingConfig := contracts.Configuration{
+		CloudWatchLogGroup: "",
+		OutputS3BucketName: "",
+	}
+	cwConfig := contracts.Configuration{
+		CloudWatchLogGroup: "loggroup",
+		OutputS3BucketName: "",
+	}
+	s3Config := contracts.Configuration{
+		CloudWatchLogGroup: "",
+		OutputS3BucketName: "bucketname",
+	}
+	cws3Config := contracts.Configuration{
+		CloudWatchLogGroup: "loggroup",
+		OutputS3BucketName: "bucketname",
+	}
+
+	// write to ipc file in all cases
+	plugin.initializeLogger(suite.mockLog, noLoggingConfig)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, cwConfig)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, s3Config)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, cws3Config)
+	suite.True(plugin.logger.writeToIpcFile)
+}
+
+// Testing if ipc file should be written to when destination is disk
+func (suite *ShellTestSuite) TestWhenWriteToIpcFileWhenDestinationIsDisk() {
+	agentConfig := appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{
+			SessionLogsDestination: "disk",
+		},
+	}
+	mockContext := context.NewMockDefaultWithConfig(agentConfig)
+	plugin := &ShellPlugin{
+		context: mockContext,
+		logger: logger{
+			writeToIpcFile: false,
+		},
+	}
+	noLoggingConfig := contracts.Configuration{
+		CloudWatchLogGroup: "",
+		OutputS3BucketName: "",
+	}
+	cwConfig := contracts.Configuration{
+		CloudWatchLogGroup: "loggroup",
+		OutputS3BucketName: "",
+	}
+	s3Config := contracts.Configuration{
+		CloudWatchLogGroup: "",
+		OutputS3BucketName: "bucketname",
+	}
+	cws3Config := contracts.Configuration{
+		CloudWatchLogGroup: "loggroup",
+		OutputS3BucketName: "bucketname",
+	}
+
+	// write to ipc file in all cases
+	plugin.initializeLogger(suite.mockLog, noLoggingConfig)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, cwConfig)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, s3Config)
+	suite.True(plugin.logger.writeToIpcFile)
+
+	plugin.initializeLogger(suite.mockLog, cws3Config)
+	suite.True(plugin.logger.writeToIpcFile)
+}
+
+// Test ipc file is not created when writeToIpcFile is false
+func (suite *ShellTestSuite) TestIpcFileIsNotCreated() {
+	ipcFileName := "shell_util_test_file"
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		dataChannel: suite.mockDataChannel,
+		logger: logger{
+			writeToIpcFile: false,
+			ipcFilePath:    ipcFileName,
+		},
+	}
+
+	empty, _ := plugin.createIpcFile()
+	suite.True(empty == nil)
+}
+
+// Test ipc file is created when writeToIpcFile is true
+func (suite *ShellTestSuite) TestIpcFileIsCreated() {
+	ipcFileName := "shell_util_test_file"
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		dataChannel: suite.mockDataChannel,
+		logger: logger{
+			writeToIpcFile: true,
+			ipcFilePath:    ipcFileName,
+		},
+	}
+
+	ipcFile, _ := plugin.createIpcFile()
+
+	// Deleting file
+	defer func() {
+		ipcFile.Close()
+		os.Remove(ipcFileName)
+	}()
+
+	_, err := os.Stat(ipcFileName)
+	suite.True(err == nil)
+}
+
+// Test ipc file is not written to
+func (suite *ShellTestSuite) TestIpcFileIsNotWrittenTo() {
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		dataChannel: suite.mockDataChannel,
+		logger: logger{
+			writeToIpcFile: false,
+		},
+	}
+	ipcFileName := "shell_util_test_file"
+	ipcFile, _ := os.Create(ipcFileName)
+
+	// Deleting file
+	defer func() {
+		ipcFile.Close()
+		os.Remove(ipcFileName)
+	}()
+
+	stdoutBytes := make([]byte, 1)
+	stdoutBytesLen := 1
+
+	var unprocessedBuf bytes.Buffer
+
+	plugin.processStdoutData(suite.mockLog, stdoutBytes, stdoutBytesLen, unprocessedBuf, ipcFile, mgsContracts.Output)
+	empty, _ := ipcFile.Stat()
+	suite.True(empty.Size() == 0)
+}
+
+// Test if ipc file is written to
+func (suite *ShellTestSuite) TestIfIpcFileIsWrittenTo() {
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		dataChannel: suite.mockDataChannel,
+		logger: logger{
+			writeToIpcFile: true,
+		},
+	}
+	ipcFileName := "shell_util_test_file"
+	ipcFile, _ := os.Create(ipcFileName)
+
+	// Deleting file
+	defer func() {
+		ipcFile.Close()
+		os.Remove(ipcFileName)
+	}()
+
+	stdoutBytes := make([]byte, 1)
+	stdoutBytesLen := 1
+
+	var unprocessedBuf bytes.Buffer
+
+	plugin.processStdoutData(suite.mockLog, stdoutBytes, stdoutBytesLen, unprocessedBuf, ipcFile, mgsContracts.Output)
+	stat, _ := ipcFile.Stat()
+	suite.True(stat.Size() == 1)
 }

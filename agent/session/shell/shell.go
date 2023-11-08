@@ -76,6 +76,7 @@ type logger struct {
 	ptyTerminated               chan bool
 	cloudWatchStreamingFinished chan bool
 	streamLogsToCloudWatch      bool
+	writeToIpcFile              bool
 	s3Util                      s3util.IAmazonS3Util
 	cwl                         cloudwatchlogsinterface.ICloudWatchLogsService
 }
@@ -273,7 +274,7 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 	}
 
 	// Create ipcFile used for logging session data temporarily on disk
-	ipcFile, err := os.Create(p.logger.ipcFilePath)
+	ipcFile, err := p.createIpcFile()
 	if err != nil {
 		errorString := fmt.Errorf("encountered an error while creating file %s: %s", p.logger.ipcFilePath, err)
 		log.Error(errorString)
@@ -305,6 +306,15 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 	p.finishLogging(config, output, sessionPluginResultOutput, ipcFile)
 
 	log.Debug("Shell session execution complete")
+}
+
+// Creates ipc temp file
+func (p *ShellPlugin) createIpcFile() (*os.File, error) {
+	if !p.logger.writeToIpcFile {
+		return nil, nil
+	}
+	ipcFile, err := os.Create(p.logger.ipcFilePath)
+	return ipcFile, err
 }
 
 // Executes command in pseudo terminal with pty
@@ -613,6 +623,11 @@ func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
 
 // initializeLogger initializes plugin logger to be used for s3/cw logging
 func (p *ShellPlugin) initializeLogger(log log.T, config agentContracts.Configuration) {
+	p.logger.writeToIpcFile = !(config.OutputS3BucketName == "" && config.CloudWatchLogGroup == "" && p.context.AppConfig().Ssm.SessionLogsDestination == appconfig.SessionLogsDestinationNone)
+	if p.logger.writeToIpcFile && p.context.AppConfig().Ssm.SessionLogsDestination == appconfig.SessionLogsDestinationNone {
+		log.Warn("Overriding SessionLogsDestination: \"none\" since logging session data to CloudWatch or S3 is enabled.")
+	}
+
 	if config.OutputS3BucketName != "" {
 		var err error
 		p.logger.s3Util, err = s3util.NewAmazonS3Util(p.context, config.OutputS3BucketName)
@@ -849,8 +864,10 @@ func (p *ShellPlugin) processStdoutData(
 		return processedBuf, fmt.Errorf("unable to send stream data message: %s", err)
 	}
 
-	if _, err := file.Write(processedBuf.Bytes()); err != nil {
-		return processedBuf, fmt.Errorf("encountered an error while writing to file: %s", err)
+	if p.logger.writeToIpcFile {
+		if _, err := file.Write(processedBuf.Bytes()); err != nil {
+			return processedBuf, fmt.Errorf("encountered an error while writing to file: %s", err)
+		}
 	}
 
 	// return incomplete utf8 encoded unicode bytes to be processed with next batch of stdoutBytes
