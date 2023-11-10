@@ -224,7 +224,7 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 		return
 	}
 
-	manifest := updatemanifest.New(p.Context, updateInfo)
+	manifest := updatemanifest.New(p.Context, updateInfo, "")
 	updateS3Util := updates3util.New(p.Context)
 
 	if cancelFlag.ShutDown() {

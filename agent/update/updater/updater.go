@@ -199,7 +199,7 @@ func updateAgent() int {
 		StartDateTime:       time.Now().UTC(),
 		RequiresUninstall:   false,
 		ManifestURL:         *manifestURL,
-		Manifest:            updatemanifest.New(agentContext, updateInfo),
+		Manifest:            updatemanifest.New(agentContext, updateInfo, ""),
 		SelfUpdate:          *selfUpdate,
 		AllowDowngrade:      !*disableDowngrade,
 		UpstreamServiceName: *upstreamServiceName,

@@ -115,6 +115,28 @@ func (i *updateInfoImpl) GenerateCompressedFileName(packageName string) string {
 	return fileName
 }
 
+// GeneratePlatformBasedFolderName generates platform based folder name where artifacts are present
+func (i *updateInfoImpl) GeneratePlatformBasedFolderName() string {
+	platformReplacement := i.platform
+	if i.downloadPlatformOverride != "" {
+		platformReplacement = i.downloadPlatformOverride
+	}
+	const nanoStr = "nano"
+	folderName := "{Platform}_{Arch}"
+	// nano folder name should be "windows_nano"
+	if strings.Contains(platformReplacement, updateconstants.PlatformWindowsNano) {
+		folderName = strings.Replace(folderName, updateconstants.PlatformHolder, updateconstants.PlatformWindows, -1)
+		folderName = strings.Replace(folderName, updateconstants.ArchHolder, nanoStr, -1)
+		return folderName
+	}
+	if strings.Contains(platformReplacement, updateconstants.PlatformUbuntu) {
+		platformReplacement = updateconstants.PlatformDebian
+	}
+	folderName = strings.Replace(folderName, updateconstants.PlatformHolder, platformReplacement, -1)
+	folderName = strings.Replace(folderName, updateconstants.ArchHolder, i.arch, -1)
+	return folderName
+}
+
 var getPlatformName = platform.PlatformName
 var getPlatformVersion = platform.PlatformVersion
 
@@ -236,5 +258,4 @@ func isAgentInstalledUsingSnap(log log.T) (result bool, err error) {
 	}
 	log.Debug("Agent is installed using snap")
 	return true, nil
-
 }
