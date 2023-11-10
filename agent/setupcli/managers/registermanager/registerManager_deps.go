@@ -11,15 +11,21 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//go:build freebsd || linux || netbsd || openbsd
-// +build freebsd linux netbsd openbsd
-
 // Package registermanager contains functions related to register
 package registermanager
 
-import "github.com/aws/amazon-ssm-agent/agent/appconfig"
+// RegisterAgentInputModel represents the input model used for registering agent
+type RegisterAgentInputModel struct {
+	Region             string
+	Role               string
+	Tags               string
+	ActivationCode     string
+	ActivationId       string
+	IsFirstTimeInstall bool // will be used only for Windows
+}
 
-var possibleAgentPaths = []string{
-	appconfig.DefaultSSMAgentBinaryPath,
-	"/snap/amazon-ssm-agent/current/amazon-ssm-agent",
+type IRegisterManager interface {
+	// RegisterAgent registers the agent using aws credentials registration,
+	// this call will override existing registration using force flag
+	RegisterAgent(registerAgentInpModel *RegisterAgentInputModel) error
 }
