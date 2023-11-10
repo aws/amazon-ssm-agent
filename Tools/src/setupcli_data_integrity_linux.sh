@@ -11,6 +11,7 @@ if [ -z "$1" ] ; then
 
 if [ -z "$2" ] ; then
   echo "missing sig file path. Please pass valid sig file path"
+  exit 1
 
 echo "SSM Setup CLI binary path: $1"
 echo "Sig file path: $2"

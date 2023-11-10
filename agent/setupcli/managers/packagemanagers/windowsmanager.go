@@ -245,10 +245,14 @@ func (m *windowsManager) installOnWindowsNano(log log.T, installedAgentVersionPa
 
 func (m *windowsManager) uninstallOnWindowsNano(log log.T, installedAgentVersionPath string) error {
 	netExecPath := "C:\\Windows\\System32\\net.exe"
-	_, _ = m.managerHelper.RunCommand(netExecPath, "stop", "AmazonSSMAgent")
-
-	_, _ = m.managerHelper.RunCommand("Get-CimInstance", "-ClassName", "Win32_Service", "-Filter", "'Name=\"AmazonSSMAgent\"'", "|", "Invoke-CimMethod", "-MethodName", "Delete")
-
+	_, err := m.managerHelper.RunCommand(netExecPath, "stop", "AmazonSSMAgent")
+	if err != nil {
+		log.Warnf("error while agent stop: %v", err)
+	}
+	_, err = m.managerHelper.RunCommand("Get-CimInstance", "-ClassName", "Win32_Service", "-Filter", "'Name=\"AmazonSSMAgent\"'", "|", "Invoke-CimMethod", "-MethodName", "Delete")
+	if err != nil {
+		log.Warnf("error while querying agent info: %v", err)
+	}
 	files := make([]string, 0)
 	skipFiles := map[string]interface{}{appconfig.SeelogConfigFileName: struct{}{}, appconfig.AppConfigFileName: struct{}{}}
 	if list, err := ioUtilReadDir(appconfig.DefaultProgramFolder); err == nil {

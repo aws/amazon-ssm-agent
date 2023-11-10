@@ -18,17 +18,22 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/downloadmanager"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/registermanager"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/verificationmanagers"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 )
 
 var selectedServiceManagerCache = servicemanagers.Undefined
 var selectedPackageManagerCache = packagemanagers.Undefined
+var selectedVerificationManagerCache = verificationmanagers.Undefined
 
 var getServiceManager = servicemanagers.GetServiceManager
 var getPackageManager = packagemanagers.GetPackageManager
 var getAllPackageManagers = packagemanagers.GetAllPackageManagers
+var getVerificationManager = verificationmanagers.GetVerificationManager
 
 func setServiceManager(log log.T) error {
 	if selectedPackageManagerCache == packagemanagers.Undefined {
@@ -57,6 +62,23 @@ func setServiceManager(log log.T) error {
 
 	// If we are unable to find service manager we don't want to return error
 	// because package managers can support one or more service managers
+	return nil
+}
+
+func setVerificationManager() error {
+	if selectedPackageManagerCache == packagemanagers.Undefined {
+		// Should never happen
+		panic("Package manager must be selected first before service manager")
+	}
+	if selectedVerificationManagerCache == verificationmanagers.Undefined {
+		pm, ok := getPackageManager(selectedPackageManagerCache)
+		if !ok {
+			// Should never happen
+			panic("Tried to get verification manager when selected package manager does not exist")
+		}
+		selectedVerificationManagerCache = pm.GetSupportedVerificationManager()
+	}
+
 	return nil
 }
 
@@ -104,6 +126,21 @@ func setPackageManager(log log.T) error {
 	return nil
 }
 
+// GetVerificationManager returns the selected verification manager, using cache if already selected
+func GetVerificationManager() (verificationmanagers.IVerificationManager, error) {
+	if err := setVerificationManager(); err != nil {
+		return nil, err
+	}
+
+	if selectedVerificationManagerCache == verificationmanagers.Skip {
+		return nil, nil
+	} else if manager, ok := getVerificationManager(selectedVerificationManagerCache); ok {
+		return manager, nil
+	}
+
+	return nil, fmt.Errorf("unable to find verification manager with index type %v", selectedServiceManagerCache)
+}
+
 // GetPackageManager returns the selected package manager, using cache if already selected
 func GetPackageManager(log log.T) (packagemanagers.IPackageManager, error) {
 	if err := setPackageManager(log); err != nil {
@@ -136,4 +173,9 @@ func GetRegisterManager() registermanager.IRegisterManager {
 // GetConfigurationManager returns a new configuration manager
 func GetConfigurationManager() configurationmanager.IConfigurationManager {
 	return configurationmanager.New()
+}
+
+// GetDownloadManager returns a new download manager
+func GetDownloadManager(log log.T, region string, manifestUrl string, updateInfo updateinfo.T, setupCLIArtifactsPath string, isNano bool) downloadmanager.IDownloadManager {
+	return downloadmanager.New(log, region, manifestUrl, updateInfo, setupCLIArtifactsPath, isNano)
 }

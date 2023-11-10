@@ -77,9 +77,9 @@ func TestWindowsManager_InstallAgent_Nano_Success(t *testing.T) {
 	timeSleep = func(d time.Duration) {
 		return
 	}
-	tempFolder := "temp"
-	tempPath := filepath.Join(installedAgentVersionPath, tempFolder)
-	amazonExecutable := filepath.Join(tempPath, common.AmazonSSMExecutable)
+	amazonExecutable := filepath.Join(appconfig.DefaultProgramFolder, common.AmazonSSMExecutable)
+	helperMock.On("RunCommand", "C:\\Windows\\System32\\net.exe", "stop", "AmazonSSMAgent").Return("", nil).Once()
+	helperMock.On("RunCommand", "Get-CimInstance", "-ClassName", "Win32_Service", "-Filter", "'Name=\"AmazonSSMAgent\"'", "|", "Invoke-CimMethod", "-MethodName", "Delete").Return("", nil).Once()
 	helperMock.On("RunCommand", "sc.exe", "create", "AmazonSSMAgent", "binpath='"+amazonExecutable+"'", "start=auto", "displayname='Amazon SSM Agent'").Return("", nil).Once()
 	helperMock.On("RunCommand", "sc.exe", "description", "AmazonSSMAgent", "'Amazon SSM Agent'").Return("", nil).Once()
 	helperMock.On("RunCommand", "sc.exe", "failureflag", "AmazonSSMAgent", "1").Return("", nil).Once()
@@ -106,9 +106,9 @@ func TestWindowsManager_InstallAgent_NonTimeout_Failure(t *testing.T) {
 	timeSleep = func(d time.Duration) {
 		return
 	}
-	tempFolder := "temp"
-	tempPath := filepath.Join(installedAgentVersionPath, tempFolder)
-	amazonExecutable := filepath.Join(tempPath, common.AmazonSSMExecutable)
+	amazonExecutable := filepath.Join(appconfig.DefaultProgramFolder, common.AmazonSSMExecutable)
+	helperMock.On("RunCommand", "C:\\Windows\\System32\\net.exe", "stop", "AmazonSSMAgent").Return("", nil)
+	helperMock.On("RunCommand", "Get-CimInstance", "-ClassName", "Win32_Service", "-Filter", "'Name=\"AmazonSSMAgent\"'", "|", "Invoke-CimMethod", "-MethodName", "Delete").Return("", nil)
 	helperMock.On("RunCommand", "sc.exe", "create", "AmazonSSMAgent", "binpath='"+amazonExecutable+"'", "start=auto", "displayname='Amazon SSM Agent'").Return("", fmt.Errorf("err1")).Once()
 	helperMock.On("IsTimeoutError", mock.Anything).Return(false)
 
@@ -136,9 +136,9 @@ func TestWindowsManager_InstallAgent_Timeout_Failure(t *testing.T) {
 	timeSleep = func(d time.Duration) {
 		return
 	}
-	tempFolder := "temp"
-	tempPath := filepath.Join(installedAgentVersionPath, tempFolder)
-	amazonExecutable := filepath.Join(tempPath, common.AmazonSSMExecutable)
+	amazonExecutable := filepath.Join(appconfig.DefaultProgramFolder, common.AmazonSSMExecutable)
+	helperMock.On("RunCommand", "C:\\Windows\\System32\\net.exe", "stop", "AmazonSSMAgent").Return("", nil)
+	helperMock.On("RunCommand", "Get-CimInstance", "-ClassName", "Win32_Service", "-Filter", "'Name=\"AmazonSSMAgent\"'", "|", "Invoke-CimMethod", "-MethodName", "Delete").Return("", nil)
 	helperMock.On("RunCommand", "sc.exe", "create", "AmazonSSMAgent", "binpath='"+amazonExecutable+"'", "start=auto", "displayname='Amazon SSM Agent'").Return("", fmt.Errorf("err1")).Once()
 	helperMock.On("IsTimeoutError", mock.Anything).Return(true)
 

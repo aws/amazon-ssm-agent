@@ -36,15 +36,15 @@
             "SSM_OVERRIDE_EXISTING_REGISTRATION": "{configuration:/SSMOverrideExistingRegistration}"
           },
           "Install": {
-            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -install",
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -env greengrass -install",
             "RequiresPrivilege": true
           },
           "Startup": {
-            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -register",
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -env greengrass -register",
             "RequiresPrivilege": true
           },
           "Shutdown": {
-            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -shutdown",
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -env greengrass -shutdown",
             "RequiresPrivilege": true
           }
         },
