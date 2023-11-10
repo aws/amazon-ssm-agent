@@ -1,4 +1,4 @@
-// Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//go:build freebsd || linux || netbsd || openbsd
-// +build freebsd linux netbsd openbsd
+//go:build windows
+// +build windows
 
 // Package servicemanagers contains functions related to service manager
 package servicemanagers
@@ -22,17 +22,5 @@ import (
 )
 
 func init() {
-	registerServiceManager(SystemCtl, &systemCtlManager{
-		&common.ManagerHelper{},
-		"amazon-ssm-agent.service",
-		"Systemctl",
-		SystemCtl,
-		[]string{"systemctl"}})
-
-	registerServiceManager(Snap, &systemCtlManager{
-		&common.ManagerHelper{},
-		"snap.amazon-ssm-agent.amazon-ssm-agent.service",
-		"SnapSystemctl",
-		Snap,
-		[]string{"systemctl", "snap"}})
+	registerServiceManager(Windows, &windowsManager{&common.ManagerHelper{}})
 }

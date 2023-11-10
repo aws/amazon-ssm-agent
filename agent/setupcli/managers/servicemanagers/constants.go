@@ -11,11 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// Package servicemanagers contains functions related to service manager
 package servicemanagers
 
 const (
 	systemCtlServiceStoppedExitCode  = 3
 	systemCtlServiceNotFoundExitCode = 4
-
-	upstartServiceNotFoundExitCode = 1
+	upstartServiceNotFoundExitCode   = 1
 )
