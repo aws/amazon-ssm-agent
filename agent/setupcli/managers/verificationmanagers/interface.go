@@ -11,15 +11,12 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//go:build freebsd || linux || netbsd || openbsd
-// +build freebsd linux netbsd openbsd
+// Package verificationmanagers is used to verify the agent packages
+package verificationmanagers
 
-package packagemanagers
+import "github.com/aws/amazon-ssm-agent/agent/log"
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
-)
-
-func init() {
-	registerPackageManager(Dpkg, &dpkgManager{&common.ManagerHelper{}})
+type IVerificationManager interface {
+	// VerifySignature verifies the agent binary signature
+	VerifySignature(log log.T, signaturePath string, artifactsPath string, fileExtension string) error
 }

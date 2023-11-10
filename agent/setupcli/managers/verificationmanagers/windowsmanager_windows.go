@@ -11,15 +11,14 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//go:build freebsd || linux || netbsd || openbsd
-// +build freebsd linux netbsd openbsd
+//go:build windows
+// +build windows
 
-package packagemanagers
+// Package verificationmanagers is used to verify the agent packages
+package verificationmanagers
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
-)
+import "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 
 func init() {
-	registerPackageManager(Dpkg, &dpkgManager{&common.ManagerHelper{}})
+	registerVerificationManager(Windows, &windowsManager{&common.ManagerHelper{}})
 }

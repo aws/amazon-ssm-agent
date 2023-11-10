@@ -11,8 +11,15 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
+// +build windows
+
 package packagemanagers
 
-const (
-	packageNotInstalledExitCode = 1
+import (
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 )
+
+func init() {
+	registerPackageManager(Windows, &windowsManager{&common.ManagerHelper{}})
+}

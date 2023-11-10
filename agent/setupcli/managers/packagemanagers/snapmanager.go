@@ -11,15 +11,20 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// Package packagemanagers holds functions querying using local package manager
 package packagemanagers
 
 import (
 	"fmt"
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/verificationmanagers"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/utility"
 )
 
 type snapManager struct {
@@ -35,14 +40,16 @@ const (
 
 var waitTimeInterval = 10 * time.Second
 
-func (m *snapManager) GetFilesReqForInstall() []string {
+// GetFilesReqForInstall returns all the files the package manager needs to install the agent
+func (m *snapManager) GetFilesReqForInstall(log log.T) []string {
 	return []string{
 		assertFile,
 		snapFile,
 	}
 }
 
-func (m *snapManager) InstallAgent(folderPath string) error {
+// InstallAgent installs the agent using package manager, folderPath should contain all files required for installation
+func (m *snapManager) InstallAgent(log log.T, folderPath string) error {
 	assertPath := filepath.Join(folderPath, assertFile)
 	snapPath := filepath.Join(folderPath, snapFile)
 
@@ -89,7 +96,8 @@ func (m *snapManager) InstallAgent(folderPath string) error {
 	return nil
 }
 
-func (m *snapManager) UninstallAgent() error {
+// UninstallAgent uninstalls the agent using the package manager
+func (m *snapManager) UninstallAgent(log log.T, installedAgentVersionPath string) error {
 	output, err := m.managerHelper.RunCommand("snap", "remove", "amazon-ssm-agent")
 
 	if err != nil {
@@ -126,6 +134,7 @@ func (m *snapManager) UninstallAgent() error {
 	return nil
 }
 
+// IsAgentInstalled returns true if agent is installed using package manager, returns error for any unexpected errors
 func (m *snapManager) IsAgentInstalled() (bool, error) {
 	output, err := m.managerHelper.RunCommand("snap", "list", "amazon-ssm-agent")
 
@@ -136,7 +145,7 @@ func (m *snapManager) IsAgentInstalled() (bool, error) {
 	if err != nil {
 		if m.managerHelper.IsExitCodeError(err) {
 			exitCode := m.managerHelper.GetExitCode(err)
-			if exitCode == packageNotInstalledExitCode {
+			if exitCode == common.PackageNotInstalledExitCode {
 				return false, nil
 			}
 
@@ -151,7 +160,6 @@ func (m *snapManager) IsAgentInstalled() (bool, error) {
 					return true, nil
 				}
 			}
-
 			return false, fmt.Errorf("snap isInstalled: Unexpected exit code with output '%s' and exit code: %v", output, exitCode)
 		}
 
@@ -163,13 +171,14 @@ func (m *snapManager) IsAgentInstalled() (bool, error) {
 	return false, fmt.Errorf("snap isInstalled: Unexpected error with output '%s' and error: %w", output, err)
 }
 
+// GetInstalledAgentVersion returns the version of the installed agent
 func (m *snapManager) GetInstalledAgentVersion() (string, error) {
 	output, err := m.managerHelper.RunCommand("snap", "list", "amazon-ssm-agent")
 
 	if err != nil {
 		if m.managerHelper.IsExitCodeError(err) {
 			exitCode := m.managerHelper.GetExitCode(err)
-			if exitCode == packageNotInstalledExitCode {
+			if exitCode == common.PackageNotInstalledExitCode {
 				return "", fmt.Errorf("agent not installed with snap")
 			}
 
@@ -182,7 +191,7 @@ func (m *snapManager) GetInstalledAgentVersion() (string, error) {
 
 				snapInfoVersionOutput := strings.Split(output, ":")
 				if len(snapInfoVersionOutput) == 2 {
-					return cleanupVersion(strings.TrimSpace(snapInfoVersionOutput[len(snapInfoVersionOutput)-1])), nil
+					return utility.CleanupVersion(strings.TrimSpace(snapInfoVersionOutput[len(snapInfoVersionOutput)-1])), nil
 				}
 			}
 
@@ -202,7 +211,7 @@ func (m *snapManager) GetInstalledAgentVersion() (string, error) {
 		agentFields := strings.Fields(snapInfoLines[1])
 		for i, header := range headerFields {
 			if header == "Version" {
-				return cleanupVersion(agentFields[i]), nil
+				return utility.CleanupVersion(agentFields[i]), nil
 			}
 		}
 
@@ -212,18 +221,32 @@ func (m *snapManager) GetInstalledAgentVersion() (string, error) {
 	return "", fmt.Errorf("failed to extract agent version because of unexpected output from snap info")
 }
 
+// IsManagerEnvironment returns true if all commands required by the package manager are available
 func (m *snapManager) IsManagerEnvironment() bool {
 	return m.managerHelper.IsCommandAvailable("snap") && m.managerHelper.IsCommandAvailable("systemctl")
 }
 
+// GetName returns the package manager name
 func (m *snapManager) GetName() string {
 	return "snap"
 }
 
+// GetSupportedServiceManagers returns all the service manager types that the package manager supports
 func (m *snapManager) GetSupportedServiceManagers() []servicemanagers.ServiceManager {
 	return []servicemanagers.ServiceManager{servicemanagers.Snap}
 }
 
+// GetType returns the package manager type
 func (m *snapManager) GetType() PackageManager {
 	return Snap
+}
+
+// GetSupportedVerificationManager returns verification manager types that the package manager supports
+func (m *snapManager) GetSupportedVerificationManager() verificationmanagers.VerificationManager {
+	return verificationmanagers.Skip
+}
+
+// GetFileExtension returns the file extension of the agent using the package manager
+func (m *snapManager) GetFileExtension() string {
+	return ".snap"
 }
