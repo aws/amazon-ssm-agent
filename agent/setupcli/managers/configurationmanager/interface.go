@@ -13,11 +13,12 @@
 
 package configurationmanager
 
+// IConfigurationManager contains functions for handling agent configurations
 type IConfigurationManager interface {
-	// IsAgentAlreadyConfigured returns true if agent already has a configuration file
-	IsAgentAlreadyConfigured() bool
-	// IsConfigAvailable returns true if config file is available in folder to configure the agent with
+	// IsConfigAvailable returns true if config file is available else false
 	IsConfigAvailable(folderPath string) bool
 	// ConfigureAgent copies the config in the folder to the applicable location to configure the agent
 	ConfigureAgent(folderPath string) error
+	// CreateUpdateAgentConfigWithOnPremIdentity copies the config in the folder to the applicable location to configure the agent
+	CreateUpdateAgentConfigWithOnPremIdentity() error
 }
