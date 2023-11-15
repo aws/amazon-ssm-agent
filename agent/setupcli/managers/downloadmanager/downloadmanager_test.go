@@ -11,6 +11,9 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build !darwin
+// +build !darwin
+
 // Package downloadmanager helps us with file download related functions in ssm-setup-cli
 package downloadmanager
 
@@ -171,7 +174,8 @@ func (suite *DownloadManagerTestSuite) TestDownloadManager_GetLatestVersion_Fail
 
 func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadLatestSSMSetupCLI_Success() {
 	info := &updateinfomocks.T{}
-	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64")
+	info.On("GenerateCompressedFileName", appconfig.DefaultAgentName).Return("linux_amd64").Once()
+	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64").Once()
 	path := "path1"
 	utilHttpDownload = func(log log.T, fileURL string, destinationPath string) (string, error) {
 		return destinationPath, nil
@@ -200,7 +204,8 @@ func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadLatestSSMSetu
 
 func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadLatestSSMSetupCLI_HttpDownloadFailure() {
 	info := &updateinfomocks.T{}
-	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64")
+	info.On("GenerateCompressedFileName", appconfig.DefaultAgentName).Return("linux_amd64").Once()
+	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64").Once()
 	path := "path1"
 	utilHttpDownload = func(log log.T, fileURL string, destinationPath string) (string, error) {
 		return destinationPath, nil
@@ -232,7 +237,8 @@ func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadLatestSSMSetu
 
 func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadLatestSSMSetupCLI_CheckSumFailure() {
 	info := &updateinfomocks.T{}
-	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64")
+	info.On("GenerateCompressedFileName", appconfig.DefaultAgentName).Return("linux_amd64").Once()
+	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64").Once()
 	path := "path1"
 	utilHttpDownload = func(log log.T, fileURL string, destinationPath string) (string, error) {
 		return destinationPath, nil
@@ -261,7 +267,8 @@ func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadLatestSSMSetu
 
 func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadArtifacts_Success() {
 	info := &updateinfomocks.T{}
-	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64")
+	info.On("GenerateCompressedFileName", appconfig.DefaultAgentName).Return("linux_amd64").Once()
+	info.On("GeneratePlatformBasedFolderName").Return("linux_amd64").Once()
 	path := "path1"
 	tempPath := "temp2"
 	version := "3.2.3.5"
@@ -269,7 +276,7 @@ func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadArtifacts_Suc
 	utilHttpDownload = func(log log.T, fileURL string, destinationPath string) (string, error) {
 		return destinationPath, nil
 	}
-	expectedLatestSSMSetupCLIURL := "https://s3.us-east-1.amazonaws.com/amazon-ssm-us-east-1/ssm-agent-manifest.json"
+	expectedLatestSSMSetupCLIURL := "https://s3.us-east-1.amazonaws.com/amazon-ssm-us-east-1/amazon-ssm-agent/3.2.3.5/linux_amd64"
 
 	updateManifestNew = func(context context.T, info updateinfo.T, region string) updatemanifest.T {
 		updateManifestMock := &updatemanifestmocks.T{}

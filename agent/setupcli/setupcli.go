@@ -11,6 +11,9 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build !darwin
+// +build !darwin
+
 // Package main represents the entry point of the ssm agent setup manager.
 package main
 
@@ -23,8 +26,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/downloadmanager"
-
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
@@ -33,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/downloadmanager"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/helpers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/registermanager"
@@ -76,7 +78,6 @@ var (
 	getVerificationManager  = managers.GetVerificationManager
 	getDownloadManager      = managers.GetDownloadManager
 	startAgent              = servicemanagers.StartAgent
-	rootPermCheck           = utility.HasRootPermissions
 	hasElevatedPermissions  = utility.IsRunningElevatedPermissions
 
 	osExecutable         = os.Executable
@@ -186,17 +187,14 @@ func main() {
 func performGreengrassSteps(log log.T, packageManager packagemanagers.IPackageManager, serviceManager servicemanagers.IServiceManager) {
 	var err error
 
+	// Check whether the SSM Setup CLI is running with elevated permissions or not
+	err = hasElevatedPermissions()
+	if err != nil {
+		osExit(1, log, "ssm-setup-cli is not executed by root")
+	}
+
 	// download and install
 	if install {
-		isRoot, err := rootPermCheck(artifactsDir)
-		if err != nil {
-			log.Warnf("Failed to check root permissions: %v", err)
-		}
-
-		if !isRoot {
-			osExit(1, log, "Artifacts directory is not root only accessible")
-		}
-
 		// Configure ssm agent using configuration in artifacts folder if not already configured
 		configManager := getConfigurationManager()
 		log.Infof("Attempting to configure agent")

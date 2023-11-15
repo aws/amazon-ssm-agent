@@ -85,22 +85,7 @@ func New(log log.T, region string, manifestURL string, updateInfo updateinfo.T, 
 		return nil
 	}
 	s3Endpoint := endpointHelper.GetServiceEndpoint(s3Service, region)
-
-	// downloads manifest based on the URL retrieved above and stores it in local path
-	manifestFilePath, err := utilHttpDownload(ctx.Log(), manifestURL, setupCLIArtifactsPath)
-	if err != nil || manifestFilePath == "" {
-		downloadMgrLog.Errorf("Error while initiating endpoint helper: %v", err)
-		return nil
-	}
-
-	updateManifestObj := updateManifestNew(ctx, updateInfo, region)
-	err = updateManifestObj.LoadManifest(manifestFilePath)
-	if err != nil {
-		downloadMgrLog.Errorf("Error while initiating endpoint helper: %v", err)
-		return nil
-	}
-
-	return &downloadManager{
+	downloadManagerRef := &downloadManager{
 		log:           downloadMgrLog,
 		ctx:           ctx,
 		region:        region,
@@ -108,9 +93,33 @@ func New(log log.T, region string, manifestURL string, updateInfo updateinfo.T, 
 		bucketUrl:     s3Endpoint,
 		manifestURL:   manifestURL, // field is optional
 		isNano:        isNano,
-		manifestInfo:  updateManifestObj,
 		artifactsPath: setupCLIArtifactsPath,
 	}
+	err = downloadManagerRef.Init()
+	if err != nil {
+		downloadMgrLog.Errorf("initialization failed: %v", err)
+		return nil
+	}
+	return downloadManagerRef
+}
+
+func (d *downloadManager) Init() error {
+	s3Url := d.getRegionManifestUrl()
+
+	// downloads manifest based on the URL retrieved above and stores it in local path
+	manifestFilePath, err := utilHttpDownload(d.log, s3Url, d.artifactsPath)
+	if err != nil || manifestFilePath == "" {
+		return fmt.Errorf("error while downloading manifest: %v", err)
+	}
+
+	updateManifestObj := updateManifestNew(d.ctx, d.updateInfo, d.region)
+	d.manifestInfo = updateManifestObj
+
+	err = updateManifestObj.LoadManifest(manifestFilePath)
+	if err != nil {
+		return fmt.Errorf("error while loading manifest: %v", err)
+	}
+	return nil
 }
 
 // DownloadArtifacts downloads agent artifacts from S3 bucket
@@ -118,8 +127,6 @@ func (d *downloadManager) DownloadArtifacts(installVersion string, manifestUrl s
 	var agentDownloadURL, agentHashInManifest string
 
 	logger := d.log
-	// Get manifest URL based on region passed
-	manifestUrl = d.getRegionManifestUrl()
 
 	var err error
 	// generate agent artifacts URL and checksum using the manifest loaded
@@ -127,8 +134,14 @@ func (d *downloadManager) DownloadArtifacts(installVersion string, manifestUrl s
 		return fmt.Errorf("error while getting target location and target hash: %v", err)
 	}
 
+	generatedUrl := d.getS3BucketUrl() + "/"
+	generatedUrl += appconfig.DefaultAgentName + "/" + installVersion + "/" + d.updateInfo.GenerateCompressedFileName(appconfig.DefaultAgentName)
+	if generatedUrl != agentDownloadURL {
+		d.log.Warnf("URL does not match %v %v", generatedUrl, agentDownloadURL)
+	}
+
 	// download agent artifacts using the generated URL before and store in local path
-	agentSetupFilePath, err := utilHttpDownload(logger, agentDownloadURL, artifactsStorePath)
+	agentSetupFilePath, err := utilHttpDownload(logger, generatedUrl, artifactsStorePath)
 	if err != nil || agentSetupFilePath == "" {
 		return fmt.Errorf("error while downloading agent artifacts file: %v", err)
 	}
@@ -218,7 +231,7 @@ func (d *downloadManager) getLatestVersionURL() (string, error) {
 	latestVersionURL := fmt.Sprintf("%s/%s/%s", d.getS3BucketUrl(), utility.LatestVersionString, utility.VersionFile)
 	s3URL, err := url.Parse(latestVersionURL)
 	if err != nil {
-		return "", fmt.Errorf("error while parsing s3URL")
+		return "", fmt.Errorf("error while parsing s3URL: %v", err)
 	}
 	return s3URL.String(), nil
 }

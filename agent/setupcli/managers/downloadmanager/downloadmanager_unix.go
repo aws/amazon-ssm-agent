@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//go:build freebsd || linux || netbsd || openbsd
-// +build freebsd linux netbsd openbsd
+//go:build freebsd || linux || netbsd || openbsd || darwin
+// +build freebsd linux netbsd openbsd darwin
 
 // Package downloadmanager helps us with file download related functions in ssm-setup-cli
 package downloadmanager

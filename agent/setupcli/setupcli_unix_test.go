@@ -51,8 +51,8 @@ func storeMockedFunctions() func() {
 	getServiceManagerStorage := getServiceManager
 	getRegisterManagerStorage := getRegisterManager
 	getRegistrationInfoStorage := getRegistrationInfo
-	rootPermCheck = func(folderPath string) (bool, error) {
-		return true, nil
+	hasElevatedPermissions = func() error {
+		return nil
 	}
 	return func() {
 		getPackageManager = getPackageManagerStorage
