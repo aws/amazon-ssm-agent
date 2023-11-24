@@ -10,7 +10,7 @@ github.com/Microsoft/go-winio/pkg/guid
 github.com/Workiva/go-datastructures/cache
 github.com/Workiva/go-datastructures/queue
 # github.com/aws/aws-sdk-go v1.44.261 => ./extra/aws-sdk-go
-## explicit; go 1.11
+## explicit; go 1.20
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
 github.com/aws/aws-sdk-go/aws/awserr
@@ -213,7 +213,7 @@ github.com/mitchellh/go-homedir
 ## explicit; go 1.13
 github.com/mitchellh/go-ps
 # github.com/nightlyone/lockfile v0.0.0 => ./extra/lockfile
-## explicit; go 1.15
+## explicit; go 1.20
 github.com/nightlyone/lockfile
 # github.com/pborman/ansi v1.0.0
 ## explicit
