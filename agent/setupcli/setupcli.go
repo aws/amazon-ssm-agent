@@ -763,14 +763,14 @@ func greengrassParamVerification() string {
 
 func flagUsage() {
 
-	fmt.Fprintln(os.Stderr, "\n-env   \tInstruct cli what environment you are installing to ('greengrass'/'onprem'). Default set to 'greengrass'")
+	fmt.Fprintln(os.Stderr, "\n-env   \tInstruct cli what environment you are installing to ('greengrass'/'onprem'). Default set to 'onprem'  \t(OPTIONAL)")
 
 	fmt.Fprintln(os.Stderr, "\nCommand-line Usage for ONPREM environment:")
-	fmt.Fprintln(os.Stderr, "\t-region        \tRegion used for ssm agent download location and registration")
-	fmt.Fprintln(os.Stderr, "\t-version\tVersion of the ssm agent to download ('stable' or 'latest'). Default set to 'stable' if agent is not already installed")
-	fmt.Fprintln(os.Stderr, "\t-downgrade\tSet when the agent needs to be downgraded")
-	fmt.Fprintln(os.Stderr, "\t-skip-signature-validation\tSkip signature validation")
-	fmt.Fprintln(os.Stderr, "\t-register      \tRegister ssm agent if unregistered or override is set")
+	fmt.Fprintln(os.Stderr, "\t-region        \tRegion used for ssm agent download location and registration \t(REQUIRED)")
+	fmt.Fprintln(os.Stderr, "\t-version\tVersion of the ssm agent to download ('stable' or 'latest'). Default set to 'stable' if agent is not already installed \t(OPTIONAL)")
+	fmt.Fprintln(os.Stderr, "\t-downgrade\tSet when the agent needs to be downgraded \t(OPTIONAL but REQUIRED during downgrade)")
+	fmt.Fprintln(os.Stderr, "\t-skip-signature-validation\tSkip signature validation \t(OPTIONAL)")
+	fmt.Fprintln(os.Stderr, "\t-register      \tRegister ssm agent if unregistered or override is set \t(REQUIRED)")
 	fmt.Fprintln(os.Stderr, "\t\t-activation-code  \tSSM Activation Code for Onprem environment \t(REQUIRED and paired with activation-id)")
 	fmt.Fprintln(os.Stderr, "\t\t-activation-id  \tSSM Activation ID for Onprem environment \t(REQUIRED and paired with Activation code)")
 	fmt.Fprintln(os.Stderr, "\t\t-override \t\tOverride existing registration if present \t(OPTIONAL)")
@@ -780,7 +780,7 @@ func flagUsage() {
 	fmt.Fprintln(os.Stderr, "\t-region        \tRegion used for ssm agent download location and registration")
 	fmt.Fprintln(os.Stderr, "\t-download      \tDownload ssm agent install package based on platform")
 	fmt.Fprintln(os.Stderr, "\t-install       \tInstall ssm agent based on platform")
-	fmt.Fprintln(os.Stderr, "\t-shutdown       \tStop SSM Agent")
+	fmt.Fprintln(os.Stderr, "\t-shutdown      \tStop SSM Agent")
 	fmt.Fprintln(os.Stderr, "\t-register      \tRegister ssm agent if unregistered or override is set")
 	fmt.Fprintln(os.Stderr, "\t\t-role     \t\tRole ssm agent will be registered with           \t(REQUIRED and paired with tags)")
 	fmt.Fprintln(os.Stderr, "\t\t-tags     \t\tTags to attach to ssm instance on registrations  \t(OPTIONAL and paired WITH role)")
