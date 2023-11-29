@@ -91,6 +91,7 @@ func (exec ExecDocumentImpl) ExecuteDocument(config contracts.Configuration, con
 			OutputS3KeyPrefix:      "",
 		},
 		InstancePluginsInformation: pluginInput,
+		UpstreamServiceName:        config.UpstreamServiceName,
 	}
 
 	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent, &docState,
