@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo "Starting data integrity check for linux setupcli binary"
 
 binary_path="$1"
