@@ -265,3 +265,64 @@ func TestCollectApplicationData_FindsRpmButEncountersExecutorError(t *testing.T)
 	data := collectPlatformDependentApplicationData(mockContext)
 	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
 }
+
+func TestCollectApplicationData_FindsDpkgAndRpmButEncountersExecutorErrorWithDpkg(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
+
+	returnList := []bool{true, true}
+	checkCommandExists = func(string) bool {
+		if len(returnList) == 2 {
+			cmdExecutor = MockTestExecutorWithError
+		} else if len(returnList) == 1 {
+			cmdExecutor = MockTestExecutorWithoutError
+		}
+		retVal := returnList[0]
+		returnList = returnList[1:]
+
+		return retVal
+	}
+	cmdExecutor = MockTestExecutorWithoutError
+	data := collectPlatformDependentApplicationData(mockContext)
+	assertEqual(t, sampleDataParsed, data)
+}
+
+func TestCollectApplicationData_FindsDpkgAndRpmButEncountersExecutorErrorWithRpm(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
+
+	returnList := []bool{true, true}
+	checkCommandExists = func(string) bool {
+		if len(returnList) == 2 {
+			cmdExecutor = MockTestExecutorWithoutError
+		} else if len(returnList) == 1 {
+			cmdExecutor = MockTestExecutorWithError
+		}
+		retVal := returnList[0]
+		returnList = returnList[1:]
+
+		return retVal
+	}
+	cmdExecutor = MockTestExecutorWithoutError
+	data := collectPlatformDependentApplicationData(mockContext)
+	assertEqual(t, sampleDataParsed, data)
+}
+
+func TestCollectApplicationData_FindsDpkgAndRpmButEncountersExecutorErrorWithAll(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
+
+	returnList := []bool{true, true}
+	checkCommandExists = func(string) bool {
+		retVal := returnList[0]
+		returnList = returnList[1:]
+
+		return retVal
+	}
+	cmdExecutor = MockTestExecutorWithError
+	data := collectPlatformDependentApplicationData(mockContext)
+	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
+}

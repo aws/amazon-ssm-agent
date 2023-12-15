@@ -137,13 +137,13 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 		cmd = dpkgCmd
 		args = []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
 		var dpkgAppData []model.ApplicationData
-		log.Infof("using '%s' to gather application information", cmd)
+		log.Infof("Using '%s' to gather application information", cmd)
 		if dpkgAppData, err = getApplicationData(context, cmd, args); err != nil {
-			log.Errorf("failed to gather inventory data for %v: %v", GathererName, err)
-			return
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Found %v dpkg packages", len(dpkgAppData))
+			appData = append(appData, dpkgAppData...)
 		}
-		log.Infof("found %v dpkg packages", len(dpkgAppData))
-		appData = append(appData, dpkgAppData...)
 	}
 
 	if checkCommandExists(rpmCmd) {
@@ -151,13 +151,13 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 		cmd = rpmCmd
 		args = []string{rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs}
 		var rpmAppData []model.ApplicationData
-		log.Infof("using '%s' to gather application information", cmd)
+		log.Infof("Using '%s' to gather application information", cmd)
 		if rpmAppData, err = getApplicationData(context, cmd, args); err != nil {
-			log.Errorf("failed to gather inventory data for %v: %v", GathererName, err)
-			return
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Found %v rpm packages", len(rpmAppData))
+			appData = append(appData, rpmAppData...)
 		}
-		log.Infof("found %v rpm packages", len(rpmAppData))
-		appData = append(appData, rpmAppData...)
 	}
 
 	// Ubuntu 18 also uses snap, so add getApplicationData for it here
@@ -166,18 +166,18 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 		args = []string{snapArgsToGetAllInstalledSnaps}
 		var snapAppData []model.ApplicationData
 		if snapAppData, err = getApplicationData(context, cmd, args); err != nil {
-			log.Errorf("getting applications information using snap failed. Skipping.")
-			return
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Appending application information found using snap to application data.")
+			log.Infof("Found %v snap packages", len(snapAppData))
+			appData = append(appData, snapAppData...)
 		}
-		log.Infof("appending application information found using snap to application data.")
-		log.Infof("found %v snap packages", len(snapAppData))
-		appData = append(appData, snapAppData...)
 	}
 
-	log.Infof("found %v packages in total", len(appData))
+	log.Infof("Found %v packages in total", len(appData))
 
 	if noPackageManagerFound {
-		log.Errorf("unable to detect package manager - hence no inventory data for %v", GathererName)
+		log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
 		return
 	}
 	return
