@@ -1,5 +1,16 @@
 Latest
 ===============
+- Added Agent config to configure session logs destination
+- Added data channel acknowledgement functionalities
+- Added redirect handler and timeout for HTTP client
+- Added steps to verify aws-cli installation for domainJoin plugin
+- Added support for Ubuntu 23.04, Debian 11.7 & 12, and SUSE 15.5
+- Adjusted random number generator logic used to get filename in downloadContent plugin
+- Fixed Agent to gather application inventory from both rpm and dpkg package managers if present in Unix instances
+- Bump golang.org/x/crypto/ssh from 0.14.0 to 0.17.0
+
+3.2.2016.0
+===============
 - Added telemetry for agent core in-proc executor usage
 - Added retries for Agent installation with snap on Greengrass 
 - Added code to update Agent config to use only Onprem Identity in Greengrass
