@@ -402,7 +402,7 @@ install_components() {
          fi
          LINUX_DISTRO='SUSE'
          sudo zypper update -y
-         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3 openldap2-client NetworkManager
+         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3 openldap2-client
          if [ $? -ne 0 ]; then
             return 1
          fi
