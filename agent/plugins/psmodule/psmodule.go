@@ -99,6 +99,9 @@ func (p *Plugin) runCommandsRawInput(pluginID string, rawPluginInput interface{}
 		return
 	}
 
+	// Make sure parsed commands list is empty before appending commands
+	pluginInput.ParsedCommands = nil
+
 	pluginInput.ParsedCommands = pluginutil.ParseRunCommand(pluginInput.RunCommand, pluginInput.ParsedCommands)
 	p.runCommands(pluginID, pluginInput, orchestrationDirectory, cancelFlag, output)
 }
