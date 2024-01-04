@@ -201,3 +201,19 @@ func TestAddSingleQuotesAroundValue(t *testing.T) {
 		assert.Equal(t, output, result)
 	}
 }
+
+func TestValidateIdInput(t *testing.T) {
+	var idValue string
+
+	idValue = "Test"
+	validity := ValidatePluginId(idValue)
+	assert.True(t, validity)
+
+	idValue = "../../../test"
+	validity2 := ValidatePluginId(idValue)
+	assert.False(t, validity2)
+
+	idValue = "~/Test"
+	validity3 := ValidatePluginId(idValue)
+	assert.False(t, validity3)
+}

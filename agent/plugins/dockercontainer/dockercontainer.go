@@ -124,6 +124,10 @@ func (p *Plugin) runCommands(pluginID string, pluginInput DockerContainerPluginI
 	log := p.context.Log()
 	var err error
 
+	if !pluginutil.ValidatePluginId(pluginInput.ID) {
+		pluginInput.ID = ""
+	}
+
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
@@ -330,7 +334,7 @@ func validateInputs(pluginInput DockerContainerPluginInput) (err error) {
 	}
 	validMemoryValue := regexp.MustCompile(`^[0-9]*[bkmg]?$`)
 	if !validMemoryValue.MatchString(pluginInput.Memory) {
-		return errors.New("Invalid CpuShares value")
+		return errors.New("Invalid Memory value")
 	}
 	validPublishValue := regexp.MustCompile(`^[0-9a-zA-Z:\-\/.]*$`)
 	if !validPublishValue.MatchString(pluginInput.Publish) {

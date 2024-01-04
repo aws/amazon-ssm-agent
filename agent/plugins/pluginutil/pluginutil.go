@@ -19,6 +19,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -287,4 +288,13 @@ func addSingleQuotesToStringValue(stringValue string) string {
 	stringValue = strings.Replace(stringValue, "'", "''", -1)
 	stringValue = "'" + stringValue + "'"
 	return stringValue
+}
+
+// ValidatePluginId checks that id values are not allowing file injections
+func ValidatePluginId(id string) bool {
+	validIdValue := regexp.MustCompile(`^(\.{2}\/|~\/).*$`)
+	if validIdValue.MatchString(id) {
+		return false
+	}
+	return true
 }

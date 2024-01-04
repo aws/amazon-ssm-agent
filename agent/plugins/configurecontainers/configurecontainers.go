@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -92,6 +93,10 @@ func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput 
 // runCommands executes one set of commands and returns their output.
 func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	var err error
+
+	if !pluginutil.ValidatePluginId(pluginInput.ID) {
+		pluginInput.ID = ""
+	}
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)

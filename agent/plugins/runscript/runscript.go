@@ -149,6 +149,10 @@ func (p *Plugin) runCommands(pluginID string, pluginInput RunScriptPluginInput, 
 	var err error
 	var workingDir string
 
+	if !pluginutil.ValidatePluginId(pluginInput.ID) {
+		pluginInput.ID = ""
+	}
+
 	if filepath.IsAbs(pluginInput.WorkingDirectory) {
 		workingDir = pluginInput.WorkingDirectory
 	} else {

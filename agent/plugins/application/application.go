@@ -110,6 +110,10 @@ func (p *Plugin) runCommands(pluginID string, pluginInput ApplicationPluginInput
 	log := p.context.Log()
 	var err error
 
+	if !pluginutil.ValidatePluginId(pluginInput.ID) {
+		pluginInput.ID = ""
+	}
+
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
