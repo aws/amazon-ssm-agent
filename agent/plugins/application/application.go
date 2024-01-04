@@ -40,6 +40,9 @@ const (
 
 	// defaultWorkingDirectory represents the default working directory
 	defaultWorkingDirectory = ""
+
+	// SourceHashType is set as default sha256.
+	Sha256SourceHashType = "sha256"
 )
 
 // msiExecCommand is the command for installing msi applications
@@ -132,6 +135,8 @@ func (p *Plugin) runCommands(pluginID string, pluginInput ApplicationPluginInput
 		return
 	}
 	log.Debugf("mode is %v", mode)
+
+	pluginInput.SourceHashType = Sha256SourceHashType
 
 	var localFilePath string
 	// Download file from source if available
