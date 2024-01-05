@@ -112,16 +112,6 @@ func prepareConfigurePackage(
 	case InstallAction:
 		trace := tracer.BeginSection("determine update type")
 		if len(input.InstallationType) > 0 && input.InstallationType == InstallationTypeInPlace {
-			// Only allow in-place update for Distributor service as the in-place update type is only exposed in Distributor.
-			// Birdwatcher customers will be migrated to Distributor next.
-			var err error
-			if packageservice.PackageServiceName_document != packageService.PackageServiceName() {
-				err = fmt.Errorf("in-place update is not supported for %v", input.Name)
-				trace.WithError(err).End()
-				output.MarkAsFailed(nil, nil)
-				return
-			}
-
 			isUpdateInPlace = true
 		}
 		trace.AppendDebugf("update is in place: %v", isUpdateInPlace).End()

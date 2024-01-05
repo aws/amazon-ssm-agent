@@ -122,9 +122,17 @@ func repoUpdateMock_PackageNotInstalled(pluginInformation *ConfigurePackagePlugi
 	return &mockRepo
 }
 
-func repoUpdateMock_BirdwatcherNotAllowed() *repoMock.MockedRepository {
+func repoUpdateMock_Birdwatcher(pluginInformation *ConfigurePackagePluginInput, installerMock installer.Installer) *repoMock.MockedRepository {
 	mockRepo := repoMock.MockedRepository{}
 	mockRepo.On("LockPackage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("GetInstalledVersion", mock.Anything, mock.Anything, mock.Anything).Return("0.1")
+	mockRepo.On("GetInstallState", mock.Anything, mock.Anything, mock.Anything).Return(localpackages.Installed, "")
+	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.1").Return(nil)
+	mockRepo.On("ValidatePackage", mock.Anything, mock.Anything, "0.0.2").Return(nil)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.1", pluginInformation.AdditionalArguments).Return(installerMock)
+	mockRepo.On("GetInstaller", mock.Anything, mock.Anything, mock.Anything, "0.0.2", pluginInformation.AdditionalArguments).Return(installerMock)
+	mockRepo.On("SetInstallState", mock.Anything, pluginInformation.Name, "0.0.2", mock.Anything).Return(nil)
+	mockRepo.On("RemovePackage", mock.Anything, pluginInformation.Name, pluginInformation.Version).Return(nil)
 	mockRepo.On("UnlockPackage", mock.Anything, mock.Anything).Return()
 	mockRepo.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 	return &mockRepo
@@ -371,7 +379,6 @@ func birdwatcherServiceMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
 	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return("packageArn", "0.0.2")
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, "0.0.2").Return("packageArn", "0.0.2", false, nil)
-	mockService.On("PackageServiceName").Return(packageservice.PackageServiceName_birdwatcher)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
 	return &mockService
 }
@@ -386,7 +393,6 @@ func serviceUpdateMock() *serviceMock.Mock {
 	mockService := serviceMock.Mock{}
 	mockService.On("GetPackageArnAndVersion", mock.Anything, mock.Anything).Return("packageArn", "0.0.2")
 	mockService.On("DownloadManifest", mock.Anything, mock.Anything, "0.0.2").Return("packageArn", "0.0.2", false, nil)
-	mockService.On("PackageServiceName").Return(packageservice.PackageServiceName_document)
 	mockService.On("ReportResult", mock.Anything, mock.Anything).Return(nil)
 	return &mockService
 }

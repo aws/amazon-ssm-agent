@@ -582,19 +582,19 @@ func TestPrepareUpdateWithAdditionalArguments(t *testing.T) {
 	repoMock.AssertExpectations(t)
 }
 
-func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
+func TestPrepareUpgrade_BirdwatcherService_InPlaceInstallationType(t *testing.T) {
 	// file stubs are needed for ensurePackage because it handles the unzip
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
-	repoMock := repoMockNotInvoked()
+	repoMock := repoUpdateMock_Birdwatcher(pluginInformation, installerMock)
 	serviceMock := birdwatcherServiceMockForPrepareUpdate()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -605,9 +605,15 @@ func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *tes
 		false,
 		output)
 
+	assert.NotNil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.True(t, isUpdateInPlace)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
 	installerMock.AssertExpectations(t)
-	repoMock.AssertExpectations(t)
-	serviceMock.AssertExpectations(t)
 }
 
 // Test that if Update is triggered but the requested package does not exist, use the install script to install
@@ -963,10 +969,10 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 }
 
-func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
+func TestConfigurePackageForUpdate_BirdwatcherService_InPlaceInstallationType(t *testing.T) {
 	pluginInformation := createStubPluginInputUpdate()
-	installerMock := installerNotCalledMock()
-	repoMock := repoUpdateMock_BirdwatcherNotAllowed()
+	installerMock := trueUpdateInstallerMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoUpdateMock_Birdwatcher(pluginInformation, installerMock)
 	serviceMock := birdwatcherServiceMock()
 
 	plugin := &Plugin{
