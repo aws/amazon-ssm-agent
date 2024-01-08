@@ -1,5 +1,12 @@
 Latest
 ===============
+- Fixed plugin path traversal logic
+- Updated aws:application plugin default param
+- Fixed default param in psmodule
+- Upgraded GoLang to version 1.21.5
+
+3.2.2086.0
+===============
 - Added Agent config to configure session logs destination
 - Added data channel acknowledgement functionalities
 - Added redirect handler and timeout for HTTP client
