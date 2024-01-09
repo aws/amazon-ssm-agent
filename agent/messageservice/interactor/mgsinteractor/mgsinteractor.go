@@ -196,14 +196,18 @@ func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error
 	log.Info("SSM Agent is trying to setup control channel for MGSInteractor")
 	mgs.controlChannel, err = setupControlChannel(mgs.context, mgs.mgsService, mgs.agentConfig.InstanceID, mgs.incomingAgentMessageChan, ableToOpenMGSConnection)
 	if err != nil {
+		if ableToOpenMGSConnection != nil {
+			atomic.StoreUint32(ableToOpenMGSConnection, 0)
+		}
+		ssmconnectionchannel.SetConnectionChannel(mgs.context, ssmconnectionchannel.MGSFailed)
 		log.Errorf("Error setting up control channel: %v", err)
 		return err
 	}
 	log.Info("Set up control channel successfully")
 	if ableToOpenMGSConnection != nil {
 		atomic.StoreUint32(ableToOpenMGSConnection, 1)
-		ssmconnectionchannel.SetConnectionChannel(ableToOpenMGSConnection)
 	}
+	ssmconnectionchannel.SetConnectionChannel(mgs.context, ssmconnectionchannel.MGSSuccess)
 	return nil
 }
 
@@ -262,6 +266,9 @@ func (mgs *MGSInteractor) Close() (err error) {
 			return err
 		}
 	}
+	// This function closes golang channel used in MDSInteractor for switching ON/OFF MDS long polling based on MGS status.
+	// CloseMDSSwitchChannel is called at the end of MGS interactor close to make sure that we do not push to a closed channel.
+	ssmconnectionchannel.CloseMDSSwitchChannel()
 	return nil
 }
 
@@ -546,7 +553,7 @@ var setupControlChannel = func(context context.T, mgsService service.Service, in
 				return nil, err
 			}
 
-			if err := controlChannel.Open(context.Log(), ableToOpenMGSConnection); err != nil {
+			if err := controlChannel.Open(context, ableToOpenMGSConnection); err != nil {
 				return nil, err
 			}
 			controlChannel.AuditLogScheduler.ScheduleAuditEvents()

@@ -33,9 +33,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/interactor"
 	messageHandler "github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/utils"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/carlescere/scheduler"
 )
@@ -56,6 +58,10 @@ type MDSInteractor struct {
 	replyChan               chan contracts.DocumentResult
 	ackSkipCodes            map[messageHandler.ErrorCode]struct{}
 	ableToOpenMGSConnection *uint32
+	mdsState                MDSState
+	mdsStateMutex           sync.RWMutex
+	stopJobChannel          chan interface{}
+	stopPollingJobGrp       sync.WaitGroup
 }
 
 const (
@@ -68,6 +74,21 @@ const (
 
 	// the default stoppolicy error threshold. After 10 consecutive errors the plugin will stop for 15 minutes.
 	stopPolicyErrorThreshold = 10
+)
+
+type MDSState string
+
+const (
+	MDSStartInProgress MDSState = "MDSStartInProgress"
+	MDSStartCompleted  MDSState = "MDSStartCompleted"
+	MDSStopInProgress  MDSState = "MDSStopInProgress"
+	MDSStopCompleted   MDSState = "MDSStopCompleted"
+	MDSShutDown        MDSState = "MDSShutDown"
+)
+
+var (
+	timeAfter                            = time.After
+	isPlatformWindowsServer2012OrEarlier = platform.IsPlatformWindowsServer2012OrEarlier
 )
 
 // New initiates and returns MDS Interactor when needed
@@ -126,6 +147,7 @@ func New(context context.T, msgHandler messageHandler.IMessageHandler, service m
 		replyChan:            make(chan contracts.DocumentResult),
 		messageHandler:       msgHandler,
 		ackSkipCodes:         ackSkipCodes,
+		stopJobChannel:       make(chan interface{}, 1),
 	}
 	// registers reply chan to message handler for receiving replies with UpstreamServiceName as MessageDeliveryService
 	msgHandler.RegisterReply(contracts.MessageDeliveryService, mdsInteract.replyChan)
@@ -197,11 +219,9 @@ func (mds *MDSInteractor) Close() error {
 // postCommandProcessorInitialization is the post initialization handler which will get executed after the CommandProcessor is launched in the MessageHandler.
 // this function basically schedules messagePollLoop
 func (mds *MDSInteractor) postCommandProcessorInitialization() {
-	log := mds.context.Log()
-	var err error
-	if mds.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(mds.messagePollLoop); err != nil {
-		log.Errorf("Unable to schedule message poll job. %v", err)
-	}
+	mds.startMDSPollingJob()
+	// This goroutine will be closed when the channel is closed in MGS Interactor
+	go mds.mdsSwitcher()
 	return
 }
 
@@ -235,14 +255,147 @@ func (mds *MDSInteractor) listenReply() {
 	}
 }
 
+// mdsSwitcher is responsible for turning on and off MDS based on MGS status.
+// The decision logic can be found in ssmconnectionchannel module
+func (mds *MDSInteractor) mdsSwitcher() {
+	log := mds.context.Log()
+	defer func() {
+		log.Info("MdsSwitcher thread ended")
+		if r := recover(); r != nil {
+			log.Errorf("MdsSwitcher panicked: \n%v", r)
+			log.Errorf("stacktrace:\n%s", debug.Stack())
+		}
+	}()
+	isWindows2012OrEarlier, isPlatformWindowsServer2012OrEarlierErr := isPlatformWindowsServer2012OrEarlier(log)
+	if isPlatformWindowsServer2012OrEarlierErr != nil {
+		log.Errorf("Unable to determine if platform is Windows Server 2012 or earlier: %v", isPlatformWindowsServer2012OrEarlierErr)
+	}
+	for mdsTurnOnFlag := range ssmconnectionchannel.GetMDSSwitchChannel() {
+		// document with updateAgent plugin comes only via MDS.
+		// Hence, the switch won't happen for Windows 2012 as this plugin is supported only for this platform.
+		if isWindows2012OrEarlier || isPlatformWindowsServer2012OrEarlierErr != nil {
+			log.Info("Single message channel will be disabled for Windows 2012 and earlier")
+			continue
+		}
+		if mdsTurnOnFlag {
+			mds.startMDSPollingJob()
+		} else {
+			mds.stopMDSPollingJob()
+		}
+	}
+}
+
+// startMDSPollingJob starts MDS long polling job
+// This function is thread safe
+func (mds *MDSInteractor) startMDSPollingJob() {
+	mds.mdsStateMutex.Lock()
+	defer mds.mdsStateMutex.Unlock()
+	log := mds.context.Log()
+
+	// If MDS is in shutdown status, do not switch ON MDS again
+	if mds.mdsState == MDSShutDown {
+		log.Info("MDS will not be started as it is already in shutdown status.")
+		return
+	}
+
+	// Wait until the stop job is done
+	mds.stopPollingJobGrp.Wait()
+
+	mds.mdsState = MDSStartInProgress
+	var err error
+	mds.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(mds.messagePollLoop)
+	mds.mdsState = MDSStartCompleted
+	if err != nil {
+		// We do not retry during any errors. Sticking to current behavior
+		log.Errorf("MDS Polling job started with errors. %v", err)
+		return
+	}
+	log.Info("MDS Polling job started.")
+}
+
+// stopMDSPollingJob stops MDS long polling job
+func (mds *MDSInteractor) stopMDSPollingJob() {
+
+	mds.context.Log().Info("MDS Polling stop job started.")
+	// If MDS is in shutdown status, do not switch OFF MDS again
+	if mds.getMDSState() == MDSShutDown {
+		mds.context.Log().Info("MDS will not be stopped again as it is already in shutdown status.")
+		return
+	}
+
+	mds.stopPollingJobGrp.Add(1)
+	mds.setMDSState(MDSStopInProgress)
+
+	// stop only when start completed
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				mds.context.Log().Errorf("StopMDSPollingJob panic: %v", r)
+				mds.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+			mds.setMDSState(MDSStopCompleted)
+			mds.stopPollingJobGrp.Done()
+		}()
+
+		// We have this 1 min interval to make sure that we give an opportunity for agent to pull from MDS before shutting down MDS.
+		select {
+		case <-timeAfter(1 * time.Minute):
+			mds.context.Log().Info("Moving to stop poll job after a minute")
+			break
+		case <-mds.stopJobChannel:
+			mds.context.Log().Info("Received stop poll job request")
+			return
+		}
+
+		if mds.messagePollJob != nil {
+			// will stop the scheduler. In progress job will stop in next run
+			mds.messagePollJob.Quit <- true
+			mds.context.Log().Info("Sent termination signal to message poll job.")
+		}
+		mds.context.Log().Info("MDS Polling job stopped.")
+	}()
+}
+
+func (mds *MDSInteractor) setMDSState(state MDSState) {
+	mds.mdsStateMutex.Lock()
+	defer mds.mdsStateMutex.Unlock()
+	mds.mdsState = state
+}
+
+func (mds *MDSInteractor) getMDSState() MDSState {
+	mds.mdsStateMutex.Lock()
+	defer mds.mdsStateMutex.Unlock()
+	return mds.mdsState
+}
+
+func (mds *MDSInteractor) sendStopSignalTsoStopJob() {
+	select {
+	case mds.stopJobChannel <- struct{}{}:
+		break
+	default:
+		break
+	}
+}
+
 // preDocumentProcessorClose does operations based on pre
 func (mds *MDSInteractor) preDocumentProcessorClose() {
 	log := mds.context.Log()
 	log.Debugf("pre-closing %v", Name)
 
-	// Ask scheduler not to schedule more jobs
-	if mds.messagePollJob != nil {
-		mds.messagePollJob.Quit <- true
+	mds.setMDSState(MDSShutDown)
+
+	// Stop polling job takes 1 min to complete. This signal preempts this job to stop the agent quickly
+	mds.sendStopSignalTsoStopJob()
+
+	// get current MDS state
+	currentState := mds.getMDSState()
+
+	// If stop already triggered, do not initiate stop again
+	if currentState == MDSStopInProgress || currentState == MDSStopCompleted {
+		mds.stopPollingJobGrp.Wait()
+	} else {
+		// stop MDS long polling job
+		mds.stopMDSPollingJob()
 	}
 
 	if mds.sendReplyJob != nil {

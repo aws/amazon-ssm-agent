@@ -65,6 +65,10 @@ func getPlatformSku(log log.T) (value string, err error) {
 	return
 }
 
+func isPlatformWindowsServer2012OrEarlier(log log.T) (bool, error) {
+	return false, nil
+}
+
 func getPlatformDetails(log log.T) (name string, version string, err error) {
 	log.Debugf(gettingPlatformDetailsMessage)
 	contents := ""

@@ -119,6 +119,7 @@ var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request [
 	if err != nil {
 		return nil, fmt.Errorf("failed to read bytes from http response: %s", err)
 	}
+
 	if resp.StatusCode == httpStatusCodeCreated {
 		return body, nil
 	} else {

@@ -23,12 +23,14 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/mocks"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
@@ -142,6 +144,220 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_PicksUpMGSStatusUpdate() 
 
 	close(mdsInteractor.replyChan)
 	close(incomingChan)
+}
+
+func (suite *MDSInteractorTestSuite) TestMDSInteractor_MDSSwitcher() {
+	contextMock := suite.contextMock
+	mdsServiceMock := suite.mdsMock
+	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&ssmmds.GetMessagesOutput{}, nil)
+	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{})
+	var ableToOpenMGSConnection uint32
+	tempMdsInteractor := &MDSInteractor{
+		context:                 contextMock,
+		service:                 mdsServiceMock,
+		messagePollWaitGroup:    &sync.WaitGroup{},
+		processorStopPolicy:     sdkutil.NewStopPolicy(Name, testStopPolicyThreshold),
+		ableToOpenMGSConnection: &ableToOpenMGSConnection,
+	}
+
+	err := tempMdsInteractor.Initialize(&ableToOpenMGSConnection)
+	assert.NoError(suite.T(), err)
+
+	timeAfter = func(d time.Duration) <-chan time.Time {
+		return time.After(100 * time.Millisecond)
+	}
+
+	isPlatformWindowsServer2012OrEarlier = func(log log.T) (bool, error) {
+		return false, nil
+	}
+	go func() {
+		tempMdsInteractor.mdsSwitcher()
+	}()
+
+	// Test for successful MGS connection state
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MGS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSStopCompleted)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Test for successful MGS connection state
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSFailed)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MGS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSStopCompleted)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Test for AccessDenied MGS connection state
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSFailedDueToAccessDenied)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MDS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSStartCompleted)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Test for successful MGS connection state
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSFailed)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MDS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSStartCompleted)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Check the values when we receive message after MDS shutdown state.
+	// This edge case, happens during agent stop. Even if wrong state is maintained, we do not have any issue here as we contact MDS and MGS after agent startup
+	tempMdsInteractor.setMDSState(MDSShutDown)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MGS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSShutDown)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+}
+
+func (suite *MDSInteractorTestSuite) TestMDSInteractor_MDSSwitcher_Windows2012() {
+	contextMock := suite.contextMock
+	mdsServiceMock := suite.mdsMock
+	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&ssmmds.GetMessagesOutput{}, nil)
+	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{})
+	var ableToOpenMGSConnection uint32
+	tempMdsInteractor := &MDSInteractor{
+		context:                 contextMock,
+		service:                 mdsServiceMock,
+		messagePollWaitGroup:    &sync.WaitGroup{},
+		processorStopPolicy:     sdkutil.NewStopPolicy(Name, testStopPolicyThreshold),
+		ableToOpenMGSConnection: &ableToOpenMGSConnection,
+	}
+
+	err := tempMdsInteractor.Initialize(&ableToOpenMGSConnection)
+	assert.NoError(suite.T(), err)
+
+	timeAfter = func(d time.Duration) <-chan time.Time {
+		return time.After(100 * time.Millisecond)
+	}
+	isPlatformWindowsServer2012OrEarlier = func(log log.T) (bool, error) {
+		return true, nil
+	}
+	go func() {
+		tempMdsInteractor.mdsSwitcher()
+	}()
+	// Test for successful MGS connection state
+
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MGS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSState(""))
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Test for successful MGS connection state
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSFailed)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MGS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSState(""))
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Test for AccessDenied MGS connection state
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSFailedDueToAccessDenied)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MDS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSState(""))
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Test for successful MGS connection state
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSFailed)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MDS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSState(""))
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+	// Check the values when we receive message after MDS shutdown state.
+	// This edge case, happens during agent stop. Even if wrong state is maintained, we do not have any issue here as we contact MDS and MGS after agent startup
+	tempMdsInteractor.setMDSState(MDSShutDown)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(suite.T(), ssmconnectionchannel.GetConnectionChannel(), contracts.MGS)
+	assert.Equal(suite.T(), tempMdsInteractor.getMDSState(), MDSShutDown)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
 }
 
 func (suite *MDSInteractorTestSuite) TestMDSInteractor_ListenReply() {

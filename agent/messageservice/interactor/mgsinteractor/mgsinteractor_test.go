@@ -16,14 +16,14 @@ package mgsinteractor
 
 import (
 	"encoding/json"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	messageHandler "github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
-	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
+	"fmt"
 	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	messageHandler "github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/mocks"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/controlchannel"
 	controlChannelMock "github.com/aws/amazon-ssm-agent/agent/session/controlchannel/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -79,12 +80,22 @@ func (suite *MGSInteractorTestSuite) TestInitialize() {
 	}
 
 	var ableToOpenMGSConnection uint32
-	mgsInteractor.Initialize(&ableToOpenMGSConnection)
+	go func() {
+		mgsInteractor.Initialize(&ableToOpenMGSConnection)
+	}()
+	select {
+	case mdsSwitch := <-ssmconnectionchannel.GetMDSSwitchChannel():
+		assert.Equal(suite.T(), mdsSwitch, false)
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "timeout")
+
+	}
+	ssmConnectionChannelStatus := ssmconnectionchannel.GetConnectionChannel()
+	assert.Equal(suite.T(), ssmConnectionChannelStatus, contracts.MGS)
 	assert.True(suite.T(), true, "initialize passed")
 }
 
 func (suite *MGSInteractorTestSuite) TestInitializeHandlesNilAbleToOpenMGSConnection() {
-
 	mockContext := contextmocks.NewMockDefault()
 	messageHandlerMock := &mocks.IMessageHandler{}
 	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
@@ -103,10 +114,65 @@ func (suite *MGSInteractorTestSuite) TestInitializeHandlesNilAbleToOpenMGSConnec
 	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *uint32) (controlchannel.IControlChannel, error) {
 		return mockControlChannel, nil
 	}
+	suite.resetConnectionChannel()
+	var ableToOpenMGSConnection *uint32 = nil
+	go func() {
+		mgsInteractor.Initialize(ableToOpenMGSConnection)
+	}()
+	select {
+	case mdsSwitch := <-ssmconnectionchannel.GetMDSSwitchChannel():
+		assert.Equal(suite.T(), mdsSwitch, false)
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "timeout")
 
+	}
+	ssmConnectionChannelStatus := ssmconnectionchannel.GetConnectionChannel()
+	assert.Equal(suite.T(), ssmConnectionChannelStatus, contracts.MGS)
+	assert.True(suite.T(), true, "initialize passed")
+}
+
+func (suite *MGSInteractorTestSuite) TestInitialize_SetupFailed() {
+	mockContext := contextmocks.NewMockDefault()
+	messageHandlerMock := &mocks.IMessageHandler{}
+	messageHandlerMock.On("RegisterReply", mock.Anything, mock.Anything)
+	mgsInteractorRef, err := New(mockContext, messageHandlerMock)
+	assert.Nil(suite.T(), err, "initialize passed")
+	mgsInteractor := mgsInteractorRef.(*MGSInteractor)
+	defer func() {
+		close(mgsInteractor.incomingAgentMessageChan)
+		close(mgsInteractor.replyChan)
+		close(mgsInteractor.sendReplyProp.reply)
+		close(mgsInteractor.updateWatcherDone)
+	}()
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+
+	setupControlChannel = func(context context.T, mgsService service.Service, instanceId string, agentMessageIncomingMessageChan chan mgsContracts.AgentMessage, ableToOpenMGSConnection *uint32) (controlchannel.IControlChannel, error) {
+		return mockControlChannel, fmt.Errorf("err1")
+	}
+	suite.resetConnectionChannel()
 	var ableToOpenMGSConnection *uint32 = nil
 	mgsInteractor.Initialize(ableToOpenMGSConnection)
+	assert.Equal(suite.T(), len(ssmconnectionchannel.GetMDSSwitchChannel()), 0)
+	ssmConnectionChannelStatus := ssmconnectionchannel.GetConnectionChannel()
+	assert.Equal(suite.T(), ssmConnectionChannelStatus, contracts.MDS)
 	assert.True(suite.T(), true, "initialize passed")
+}
+
+func (suite *MGSInteractorTestSuite) resetConnectionChannel() {
+	go func() {
+		mockContext := contextmocks.NewMockDefault()
+		ssmconnectionchannel.SetConnectionChannel(mockContext, ssmconnectionchannel.MGSFailedDueToAccessDenied)
+	}()
+	go func() {
+		select {
+		case <-time.After(500 * time.Millisecond):
+			break
+		case <-ssmconnectionchannel.GetMDSSwitchChannel():
+			break
+		}
+	}()
+	time.Sleep(500 * time.Millisecond)
 }
 
 func (suite *MGSInteractorTestSuite) TestInitializeReportsHealthyMGSConnectionIfControlChannelOpened() {
@@ -122,8 +188,21 @@ func (suite *MGSInteractorTestSuite) TestInitializeReportsHealthyMGSConnectionIf
 		return mockControlChannel, nil
 	}
 
+	suite.resetConnectionChannel()
 	var ableToOpenMGSConnection uint32
-	mgsInteractor.Initialize(&ableToOpenMGSConnection)
+	go func() {
+		mgsInteractor.Initialize(&ableToOpenMGSConnection)
+	}()
+
+	select {
+	case mdsSwitch := <-ssmconnectionchannel.GetMDSSwitchChannel():
+		assert.Equal(suite.T(), mdsSwitch, false)
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "timeout")
+	}
+
+	ssmConnectionChannelStatus := ssmconnectionchannel.GetConnectionChannel()
+	assert.Equal(suite.T(), ssmConnectionChannelStatus, contracts.MGS)
 	assert.True(suite.T(), atomic.LoadUint32(&ableToOpenMGSConnection) != 0)
 	assert.Equal(suite.T(), contracts.MGS, ssmconnectionchannel.GetConnectionChannel())
 }

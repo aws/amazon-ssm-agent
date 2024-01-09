@@ -43,6 +43,10 @@ func getPlatformName(log log.T) (value string, err error) {
 	return
 }
 
+func isPlatformWindowsServer2012OrEarlier(log log.T) (bool, error) {
+	return false, nil
+}
+
 func getPlatformType(log log.T) (value string, err error) {
 	return "macos", nil
 }

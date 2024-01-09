@@ -23,6 +23,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -40,7 +41,26 @@ const (
 
 	// PRODUCT_STANDARD_NANO_SERVER = 144
 	ProductStandardNanoServer = "144"
+
+	// WindowsServer2016Version represents Win32_OperatingSystemVersion https://learn.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
+	WindowsServer2016Version = 10
 )
+
+// isPlatformWindowsServer2012OrEarlier returns true if platform is Windows Server 2012 or earlier
+func isPlatformWindowsServer2012OrEarlier(log log.T) (bool, error) {
+	var platformVersion string
+	var platformVersionInt int
+	var err error
+
+	if platformVersion, err = getPlatformVersion(log); err != nil {
+		return false, err
+	}
+	if platformVersionInt, err = strconv.Atoi(platformVersion); err != nil {
+		return false, err
+	}
+
+	return platformVersionInt < WindowsServer2016Version, nil
+}
 
 // IsPlatformNanoServer returns true if SKU is 143 or 144
 func isPlatformNanoServer(log log.T) (bool, error) {

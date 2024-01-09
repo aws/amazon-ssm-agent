@@ -11,33 +11,96 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package ssmconnectionchannel contains logic for tracking the Agent's primary upstream connection channel.
+// Package ssmconnectionchannel contains logic for tracking the Agent's primary upstream connection channel and its various states.
 package ssmconnectionchannel
 
 import (
 	"sync"
-	"sync/atomic"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 )
 
-var (
-	connectionChannel      = contracts.ConnectionChannel{}
-	connectionChannelMutex = sync.Mutex{}
+// MGSState shows the current MGS connection state
+type MGSState string
+
+const (
+	// MGSSuccess denotes that the current MGS connection state is successful
+	MGSSuccess MGSState = "MGSSuccess"
+
+	// MGSFailed denotes that the current MGS connection state has failed
+	MGSFailed MGSState = "MGSFailed"
+
+	// MGSFailedDueToAccessDenied denotes that the current MGS connection state threw access denied
+	MGSFailedDueToAccessDenied MGSState = "MGSFailedDueToAccessDenied"
 )
 
-func SetConnectionChannel(ableToOpenMGSConnection *uint32) {
+var (
+	connectionChannel      = contracts.ConnectionChannel{SSMConnectionChannel: contracts.MDS}
+	connectionChannelMutex = sync.RWMutex{}
+
+	// mdsSwitchChannel is used by MDSInteractor to switch ON/OFF MDS
+	mdsSwitchChannel = make(chan bool)
+)
+
+// SetConnectionChannel sets the Upstream SSM connection channel(MDS or MGS)
+func SetConnectionChannel(context context.T, state MGSState) {
 	connectionChannelMutex.Lock()
-	defer connectionChannelMutex.Unlock()
-	if ableToOpenMGSConnection != nil && atomic.LoadUint32(ableToOpenMGSConnection) == 1 {
+	defer func() {
+		log := context.Log()
+		log.Infof("SSM Connection channel status is set to %v", connectionChannel.SSMConnectionChannel)
+		connectionChannelMutex.Unlock()
+	}()
+
+	// MDS is never turned off for container mode.
+	// Hence, the SSMConnectionChannel status is always set to MGS
+	if context.AppConfig().Agent.ContainerMode {
 		connectionChannel.SSMConnectionChannel = contracts.MGS
-	} else {
-		connectionChannel.SSMConnectionChannel = contracts.MDS
+		return
 	}
+
+	// case for MGS is successfully established
+	if state == MGSSuccess {
+		// If SSMConnectionChannel status is MGS, it means that the MDS shutdown was retried before.
+		// Hence, when we received MGS Success again, return from this function without trying to shut down MDS
+		if connectionChannel.SSMConnectionChannel == contracts.MGS {
+			return
+		}
+
+		// Shutdown MDS when MGS connection is successful
+		connectionChannel.SSMConnectionChannel = contracts.MGS
+		mdsSwitchChannel <- false
+		return
+	}
+
+	// case for MGS failed due ot AccessDenied
+	if state == MGSFailedDueToAccessDenied {
+		// If SSMConnectionChannel status is MDS, it means that the MDS is still running.
+		// Hence, when we receive MGS Access Denied error, we return from this function without trying to launch MDS as it is already running
+		if connectionChannel.SSMConnectionChannel == contracts.MDS {
+			return
+		}
+		// Turn ON MDS when MGS connection fails with AccessDenied
+		connectionChannel.SSMConnectionChannel = contracts.MDS
+		mdsSwitchChannel <- true
+	}
+
+	// No operation for all other MGS states
 }
 
+// GetConnectionChannel returns the SSM Connection channel(MDS or MGS)
 func GetConnectionChannel() contracts.SSMConnectionChannel {
-	connectionChannelMutex.Lock()
-	defer connectionChannelMutex.Unlock()
+	connectionChannelMutex.RLock()
+	defer connectionChannelMutex.RUnlock()
 	return connectionChannel.SSMConnectionChannel
+}
+
+// GetMDSSwitchChannel returns the golang channel containing values to switch ON or OFF MDS
+func GetMDSSwitchChannel() chan bool {
+	return mdsSwitchChannel
+}
+
+// CloseMDSSwitchChannel close MDS switch golang channel
+func CloseMDSSwitchChannel() {
+	close(mdsSwitchChannel)
 }

@@ -113,8 +113,19 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 
 	ssmConnectionChannel := "ssmmessages"
 	var ableToOpenMGSConnection uint32
+
+	// reset
+	suite.resetConnectionChannel()
+
 	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
-	ssmconnectionchannel.SetConnectionChannel(&ableToOpenMGSConnection)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+	}()
+
+	mdsSwitchFlag := <-ssmconnectionchannel.GetMDSSwitchChannel()
+	suite.False(mdsSwitchFlag, "MDS flag is invalid")
 
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
@@ -124,6 +135,13 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel)
+
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "setConnection Go Routine not killed")
+	}
 }
 
 // Testing the ModuleExecute method
@@ -158,10 +176,20 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithOnPremIdentity() {
 	}
 	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
 
+	// reset
+	suite.resetConnectionChannel()
+
 	ssmConnectionChannel := "ssmmessages"
 	var ableToOpenMGSConnection uint32
 	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
-	ssmconnectionchannel.SetConnectionChannel(&ableToOpenMGSConnection)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+	}()
+
+	mdsSwitchFlag := <-ssmconnectionchannel.GetMDSSwitchChannel()
+	suite.False(mdsSwitchFlag, "MDS flag is invalid")
 
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
@@ -172,6 +200,13 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithOnPremIdentity() {
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "", ssmConnectionChannel)
 	suite.serviceMock.AssertNotCalled(suite.T(), "IsIdentityEnvironment", true)
+
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
 }
 
 // Testing the ModuleExecute method
@@ -204,10 +239,21 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithNilOnPremIdentity() {
 	}
 	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
 
+	// reset
+	suite.resetConnectionChannel()
+
 	ssmConnectionChannel := "ssmmessages"
 	var ableToOpenMGSConnection uint32
 	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
-	ssmconnectionchannel.SetConnectionChannel(&ableToOpenMGSConnection)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+
+	}()
+
+	mdsSwitchFlag := <-ssmconnectionchannel.GetMDSSwitchChannel()
+	suite.False(mdsSwitchFlag, "MDS flag is invalid")
 
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
@@ -217,6 +263,12 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithNilOnPremIdentity() {
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
 }
 
 // Testing the ModuleExecute method with MDS connection
@@ -250,10 +302,19 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithMDSConnection() {
 	}
 	mockOnPremIdentity.On("IsIdentityEnvironment").Return(false)
 
+	// reset
+	suite.resetConnectionChannel()
+
 	ssmConnectionChannel := "ec2messages"
 	var ableToOpenMGSConnection uint32
 	atomic.StoreUint32(&ableToOpenMGSConnection, 0)
-	ssmconnectionchannel.SetConnectionChannel(&ableToOpenMGSConnection)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSFailedDueToAccessDenied)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(1 * time.Second)
 
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
@@ -263,6 +324,27 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithMDSConnection() {
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+}
+
+func (suite *HealthCheckTestSuite) resetConnectionChannel() {
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSFailedDueToAccessDenied)
+	}()
+	go func() {
+		select {
+		case <-time.After(500 * time.Millisecond):
+			break
+		case <-ssmconnectionchannel.GetMDSSwitchChannel():
+			break
+		}
+	}()
+	time.Sleep(500 * time.Millisecond)
 }
 
 // Testing the ModuleStop method with healthjob define

@@ -31,6 +31,11 @@ const (
 
 var getPlatformNameFn = getPlatformName
 
+// IsPlatformWindowsServer2012OrEarlier represents whether it is Windows 2012 and earlier or not
+func IsPlatformWindowsServer2012OrEarlier(log log.T) (bool, error) {
+	return isPlatformWindowsServer2012OrEarlier(log)
+}
+
 // PlatformName gets the OS specific platform name.
 func PlatformName(log log.T) (name string, err error) {
 	name, err = getPlatformNameFn(log)

@@ -238,6 +238,7 @@ func (msgSvc *MessageService) ModuleStop() error {
 		}(interactRef)
 	}
 	wg.Wait()
+
 	log.Infof("Stopped %v", msgSvc.name)
 	return nil
 }
