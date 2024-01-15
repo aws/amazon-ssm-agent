@@ -295,13 +295,14 @@ func (util *Utility) ExeCommandOutput(
 	// Run the command and return its output
 	var out []byte
 	out, err = cmdOutput(command)
+	output = string(out)
 	// Write the returned output so that we can upload it if needed
 	stdoutWriter.Write(out)
 	if err != nil {
 		return
 	}
 
-	return string(out), err
+	return output, err
 }
 
 // TODO move to commandUtil
@@ -333,13 +334,14 @@ func (util *Utility) NewExeCommandOutput(
 	// Run the command and return its output
 	var out []byte
 	out, err = cmdOutput(command)
+	output = string(out)
 	// Write the returned output so that we can upload it if needed
 	stdoutWriter.Write(out)
 	if err != nil {
 		return
 	}
 
-	return string(out), err
+	return output, err
 }
 
 // IsServiceRunning returns is service running

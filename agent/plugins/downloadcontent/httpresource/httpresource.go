@@ -17,8 +17,10 @@
 package httpresource
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math"
+	"math/big"
 	"net/http"
 	"net/url"
 	"os"
@@ -77,7 +79,11 @@ func NewHTTPResource(context context.T, info string, bridge ssmparameterresolver
 // DownloadRemoteResource downloads a HTTP resource into a specific download path
 func (resource *HTTPResource) DownloadRemoteResource(fileSystem filemanager.FileSystem, downloadPath string) (err error, result *remoteresource.DownloadResult) {
 	log := resource.context.Log()
-	downloadPath = resource.adjustDownloadPath(downloadPath, fmt.Sprintf("%d", rand.Int()), fileSystem)
+	randInt, randErr := rand.Int(rand.Reader, big.NewInt(math.MaxInt64))
+	if randErr != nil {
+		return fmt.Errorf("error in generating a random int: %w", randErr), nil
+	}
+	downloadPath = resource.adjustDownloadPath(downloadPath, fmt.Sprintf("%d", randInt), fileSystem)
 
 	err = fileSystem.MakeDirs(filepath.Dir(downloadPath))
 	if err != nil {

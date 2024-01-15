@@ -40,7 +40,7 @@ func TestParseSimpleManifest_HasVersion(t *testing.T) {
 	packageName := "amazon-ssm-agent"
 	updateInfo.On("GenerateCompressedFileName", packageName).Return(packageName + "-linux-amd64.tar.gz").Once()
 
-	manifest := New(context, updateInfo)
+	manifest := New(context, updateInfo, "")
 	err := manifest.LoadManifest(sampleManifests)
 
 	// check results
@@ -71,7 +71,7 @@ func TestParseSimpleManifest_GetDownloadURLHash(t *testing.T) {
 	// parse manifest
 	packageName := "amazon-ssm-agent"
 	updateInfo.On("GenerateCompressedFileName", packageName).Return(packageName + "-linux-amd64.tar.gz").Once()
-	manifest := New(context, updateInfo)
+	manifest := New(context, updateInfo, "")
 	err := manifest.LoadManifest(sampleManifests)
 
 	// check results
@@ -107,7 +107,7 @@ func TestParseManifestWithError(t *testing.T) {
 	updateInfo := &updateinfomocks.T{}
 
 	// parse manifest
-	manifest := New(context, updateInfo)
+	manifest := New(context, updateInfo, "")
 	err := manifest.LoadManifest(errorManifests)
 
 	// check results
@@ -125,7 +125,7 @@ func TestParseManifestWithStatusUpdater(t *testing.T) {
 	updateInfo.On("GenerateCompressedFileName", mock.Anything).Return(func(arg string) string { return arg + "-linux-amd64.tar.gz" })
 
 	// parse manifest
-	manifest := New(context, updateInfo)
+	manifest := New(context, updateInfo, "")
 	err := manifest.LoadManifest(sampleManifestWithStatus)
 
 	// check results
@@ -178,7 +178,7 @@ func TestParseManifestWithStatusAgent(t *testing.T) {
 	updateInfo.On("GenerateCompressedFileName", mock.Anything).Return(func(arg string) string { return arg + "-linux-" + arch + ".tar.gz" })
 
 	// parse manifest
-	manifest := New(context, updateInfo)
+	manifest := New(context, updateInfo, "")
 	err := manifest.LoadManifest(sampleManifestWithStatus)
 
 	// check results

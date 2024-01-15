@@ -15,6 +15,7 @@
 package util
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -32,10 +33,14 @@ func AwsConfig(logger log.T, appConfig appconfig.SsmagentConfig, service, region
 	return &aws.Config{
 		Retryer:    newRetryer(),
 		SleepDelay: sleepDelay,
-		HTTPClient: &http.Client{Transport: network.GetDefaultTransport(logger, appConfig)},
-		Region:     aws.String(region),
-		Endpoint:   aws.String(endpointHelper.GetServiceEndpoint(service, region)),
-		Logger:     logger,
+		HTTPClient: &http.Client{
+			Transport:     network.GetDefaultTransport(logger, appConfig),
+			CheckRedirect: disableHTTPDowngrade,
+			Timeout:       60 * time.Second,
+		},
+		Region:   aws.String(region),
+		Endpoint: aws.String(endpointHelper.GetServiceEndpoint(service, region)),
+		Logger:   logger,
 	}
 
 }
@@ -48,4 +53,18 @@ var newRetryer = func() aws.RequestRetryer {
 
 var sleepDelay = func(d time.Duration) {
 	time.Sleep(d)
+}
+
+func disableHTTPDowngrade(req *http.Request, via []*http.Request) error {
+	//Go's http.DefaultClient allows 10 redirects before returning an error.
+	if len(via) >= 10 {
+		return fmt.Errorf("stopped after 10 redirects")
+	}
+
+	//Send an error on HTTP redirect attempt
+	if len(via) > 0 && via[0].URL.Scheme == "https" && req.URL.Scheme != "https" {
+		lastHop := via[len(via)-1].URL
+		return fmt.Errorf("redirected from secure URL %s to insecure URL %s", lastHop, req.URL)
+	}
+	return nil
 }

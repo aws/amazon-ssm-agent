@@ -11,9 +11,15 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package registermanager
+//go:build windows
+// +build windows
 
-type IRegisterManager interface {
-	// RegisterAgent registers the agent using aws credentials registration, this call will override existing registration using force flag
-	RegisterAgent(region, role, tags string) error
+package packagemanagers
+
+import (
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
+)
+
+func init() {
+	registerPackageManager(Windows, &windowsManager{&common.ManagerHelper{}})
 }

@@ -44,6 +44,8 @@ type SsmCfg struct {
 	RunCommandLogsRetentionDurationHours int
 	// Hours to retain session logs in the orchestration folder
 	SessionLogsRetentionDurationHours int
+	// Configure where you want Session Manager to write session data
+	SessionLogsDestination string
 	// Configure when after execution it is safe to delete local plugin output files in orchestration folder
 	PluginLocalOutputCleanup string
 	// Configure only when it is safe to delete orchestration folder after document execution. This config overrides PluginLocalOutputCleanup when set.

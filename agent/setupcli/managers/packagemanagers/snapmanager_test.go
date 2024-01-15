@@ -2,10 +2,12 @@ package packagemanagers
 
 import (
 	"fmt"
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common/mocks"
-	"github.com/stretchr/testify/mock"
 	"testing"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common/mocks"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestSnapManager_UninstallAgent(t *testing.T) {
@@ -55,7 +57,7 @@ func TestSnapManager_UninstallAgent(t *testing.T) {
 				}
 			}
 
-			manager.UninstallAgent()
+			manager.UninstallAgent(log.NewMockLog(), "")
 			managerHelper.AssertExpectations(t)
 		})
 	}

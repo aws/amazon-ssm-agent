@@ -14,6 +14,7 @@
 //go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
+// Package servicemanagers contains functions related to service manager
 package servicemanagers
 
 import (

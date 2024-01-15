@@ -214,3 +214,47 @@ func TestFacadeCWGroupNameTest(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "test3", verifiedLogGroupName)
 }
+
+func TestGetLogGroup_ReturnsEmptyString_WhenNotActive(t *testing.T) {
+	if IsActive() {
+		DestroyCloudWatchDataInstance()
+	}
+
+	actualLogGroup := GetLogGroup()
+	assert.Equal(t, "", actualLogGroup)
+}
+
+func TestGetSharingDestination_ReturnsEmptyString_WhenNotActive(t *testing.T) {
+	if IsActive() {
+		DestroyCloudWatchDataInstance()
+	}
+
+	actualSharingDestination := GetSharingDestination()
+	assert.Equal(t, "", actualSharingDestination)
+}
+
+func TestIsLogSharingEnabled_ReturnsFalse_WhenNotActive(t *testing.T) {
+	if IsActive() {
+		DestroyCloudWatchDataInstance()
+	}
+
+	assert.False(t, IsLogSharingEnabled())
+}
+
+func TestEnqueue_ReturnsError_WhenNotActive(t *testing.T) {
+	if IsActive() {
+		DestroyCloudWatchDataInstance()
+	}
+
+	err := Enqueue(&cloudwatchlogs.InputLogEvent{})
+	assert.Error(t, err)
+}
+
+func TestDequeue_ReturnsError_WhenNotActive(t *testing.T) {
+	if IsActive() {
+		DestroyCloudWatchDataInstance()
+	}
+
+	_, err := Dequeue(1000 * time.Millisecond)
+	assert.Error(t, err)
+}

@@ -55,7 +55,7 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 	}
 	log.Debug("Platform Version:", platformVersion)
 	if !strings.HasPrefix(platformVersion, "10") {
-		out.MarkAsFailed(errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
+		out.MarkAsFailed(errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016 and above."))
 		return
 	}
 
@@ -165,11 +165,7 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 
 	//Create docker config if it does not exist
 	daemonConfigPath := os.Getenv("ProgramData") + "\\docker\\config\\daemon.json"
-	daemonConfigContent := `
-{
-    "fixed-cidr": "172.17.0.0/16"
-}
-`
+	daemonConfigContent := `{}`
 
 	if err := dep.SetDaemonConfig(daemonConfigPath, daemonConfigContent); err != nil {
 		log.Error("Error writing Docker daemon config file", err)
@@ -324,7 +320,7 @@ func RunUninstallCommands(context context.T, orchestrationDirectory string, out 
 	}
 	log.Debug("Platform Version:", platformVersion)
 	if !strings.HasPrefix(platformVersion, "10") {
-		out.MarkAsFailed(errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016."))
+		out.MarkAsFailed(errors.New("ConfigureDocker is only supported on Microsoft Windows Server 2016 and above."))
 		return
 	}
 
@@ -359,10 +355,11 @@ func RunUninstallCommands(context context.T, orchestrationDirectory string, out 
 	//Unregister Service
 	if len(strings.TrimSpace(dockerServiceStatusOutput)) > 0 {
 		out.AppendInfo("Unregistering dockerd service.")
-		command = "(Get-WmiObject -Class Win32_Service -Filter \"Name='docker'\").delete()"
 
-		parameters = make([]string, 0)
-		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, DOCKER_INSTALLED_DIRECTORY, "", "", "", true)
+		command = `dockerd`
+		log.Debug("dockerd cmd:", command)
+		parameters = []string{"--unregister-service"}
+		dockerServiceStatusOutput, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", true)
 		if err != nil {
 			log.Error("Error unregistering Docker service", err)
 			out.MarkAsFailed(fmt.Errorf("Error unregistering Docker service: %v", err))

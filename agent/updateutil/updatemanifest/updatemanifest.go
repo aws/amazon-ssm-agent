@@ -27,10 +27,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
-func New(context context.T, info updateinfo.T) T {
+func New(context context.T, info updateinfo.T, region string) T {
 	return &manifestImpl{
 		context:  context,
 		info:     info,
+		region:   region,
 		manifest: &jsonManifest{},
 	}
 }
@@ -162,10 +163,13 @@ func (m *manifestImpl) GetDownloadURLAndHash(
 	version string) (result string, hash string, err error) {
 	fileName := m.info.GenerateCompressedFileName(packageName)
 	var region string
-	region, err = m.context.Identity().Region()
-
-	if err != nil {
-		return
+	if m.region == "" {
+		region, err = m.context.Identity().Region()
+		if err != nil {
+			return
+		}
+	} else {
+		region = m.region
 	}
 
 	for _, p := range m.manifest.Packages {

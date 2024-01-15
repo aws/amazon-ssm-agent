@@ -130,34 +130,55 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 		}
 	}
 
+	var noPackageManagerFound bool = true
+
 	if checkCommandExists(dpkgCmd) {
+		noPackageManagerFound = false
 		cmd = dpkgCmd
 		args = []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
-	} else if checkCommandExists(rpmCmd) {
+		var dpkgAppData []model.ApplicationData
+		log.Infof("Using '%s' to gather application information", cmd)
+		if dpkgAppData, err = getApplicationData(context, cmd, args); err != nil {
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Found %v dpkg packages", len(dpkgAppData))
+			appData = append(appData, dpkgAppData...)
+		}
+	}
+
+	if checkCommandExists(rpmCmd) {
+		noPackageManagerFound = false
 		cmd = rpmCmd
 		args = []string{rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs}
-	} else {
-		log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
-		return
+		var rpmAppData []model.ApplicationData
+		log.Infof("Using '%s' to gather application information", cmd)
+		if rpmAppData, err = getApplicationData(context, cmd, args); err != nil {
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Found %v rpm packages", len(rpmAppData))
+			appData = append(appData, rpmAppData...)
+		}
 	}
 
-	log.Infof("Using '%s' to gather application information", cmd)
-	if appData, err = getApplicationData(context, cmd, args); err != nil {
-		log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
-		return
-	}
-
-	// Due to ubuntu 18 use snap, so add getApplicationData here
+	// Ubuntu 18 also uses snap, so add getApplicationData for it here
 	if snapIsInstalled(appData) {
 		cmd = snapCmd
 		args = []string{snapArgsToGetAllInstalledSnaps}
 		var snapAppData []model.ApplicationData
 		if snapAppData, err = getApplicationData(context, cmd, args); err != nil {
-			log.Errorf("Getting applications information using snap failed. Skipping.")
-			return
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Appending application information found using snap to application data.")
+			log.Infof("Found %v snap packages", len(snapAppData))
+			appData = append(appData, snapAppData...)
 		}
-		log.Infof("Appending application information found using snap to application data.")
-		appData = append(appData, snapAppData...)
+	}
+
+	log.Infof("Found %v packages in total", len(appData))
+
+	if noPackageManagerFound {
+		log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
+		return
 	}
 	return
 }
@@ -185,15 +206,20 @@ func parseSnapOutput(context context.T, cmdOutput string) (snapOutput string) {
 			log.Errorf("Unable get the snap list result.")
 			return
 		}
+
+		const nameIndex = 0
+		const versionIndex = 1
+		const publisherIndex = 4
+
 		var str = fmt.Sprintf(snapQueryFormat,
-			mark(arr[0]),  // Name
-			mark(arr[4]),  // Publisher
-			mark(arr[1]),  // Version
-			mark("admin"), // ApplicationType
-			mark(""),      // Architecture
-			mark(""),      // Url
-			mark(""),      // Summary
-			mark(""))      // PackageId
+			mark(arr[nameIndex]),      // Name
+			mark(arr[publisherIndex]), // Publisher
+			mark(arr[versionIndex]),   // Version
+			mark("admin"),             // ApplicationType
+			mark(""),                  // Architecture
+			mark(""),                  // Url
+			mark(""),                  // Summary
+			mark(fmt.Sprintf("pkg:snap/%s/%s@%s", arr[publisherIndex], arr[nameIndex], arr[versionIndex]))) // PackageId
 		snapOutput = snapOutput + str
 		snapOutput = snapOutput + ","
 	}

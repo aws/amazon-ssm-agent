@@ -39,6 +39,7 @@ type T interface {
 type manifestImpl struct {
 	context  context.T
 	info     updateinfo.T
+	region   string
 	manifest *jsonManifest
 }
 

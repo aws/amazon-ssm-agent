@@ -13,6 +13,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logpkg "github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	"github.com/aws/amazon-ssm-agent/common/identity"
@@ -94,6 +95,7 @@ func (e *OutOfProcExecuter) Run(
 
 	if err != nil {
 		log.Errorf("failed to prepare outofproc executer, falling back to InProc Executer")
+		log.WriteEvent(logpkg.AgentTelemetryMessage, "", logpkg.AmazonAgentInProcExecuterStartEvent)
 		return e.BasicExecuter.Run(cancelFlag, docStore)
 	} else {
 		//create reply channel

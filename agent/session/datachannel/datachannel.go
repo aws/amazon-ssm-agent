@@ -120,6 +120,7 @@ type DataChannel struct {
 	// Indicates whether encryption was enabled
 	encryptionEnabled     bool
 	separateOutputPayload bool
+	readyMessageChan      chan bool
 }
 
 type ListMessageBuffer struct {
@@ -268,6 +269,7 @@ func (dataChannel *DataChannel) Initialize(context context.T,
 		handshakeEndTime:        time.Now(),
 		handshakeStartTime:      time.Now(),
 	}
+	dataChannel.readyMessageChan = make(chan bool)
 }
 
 // SetWebSocket populates webchannel object.
@@ -342,18 +344,30 @@ func (dataChannel *DataChannel) Open(log log.T) error {
 	uid := uuid.NewV4().String()
 
 	openDataChannelInput := service.OpenDataChannelInput{
-		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
-		RequestId:            aws.String(uid),
-		TokenValue:           aws.String(dataChannel.wsChannel.GetChannelToken()),
-		ClientInstanceId:     aws.String(dataChannel.InstanceId),
-		ClientId:             aws.String(dataChannel.ClientId),
+		MessageSchemaVersion:   aws.String(mgsConfig.MessageSchemaVersion),
+		RequestId:              aws.String(uid),
+		TokenValue:             aws.String(dataChannel.wsChannel.GetChannelToken()),
+		ClientInstanceId:       aws.String(dataChannel.InstanceId),
+		ClientId:               aws.String(dataChannel.ClientId),
+		RequireAcknowledgement: aws.Bool(true),
 	}
 	jsonValue, err := json.Marshal(openDataChannelInput)
 	if err != nil {
 		return fmt.Errorf("error serializing openDataChannelInput: %s", err)
 	}
 
-	return dataChannel.SendMessage(log, jsonValue, websocket.TextMessage)
+	if err = dataChannel.SendMessage(log, jsonValue, websocket.TextMessage); err != nil {
+		return err
+	}
+
+	select {
+	case ready := <-dataChannel.readyMessageChan:
+		log.Infof("Data channel ready message received: %v", ready)
+		return nil
+	case <-time.After(mgsConfig.DataChannelReadyTimeout):
+		log.Errorf("Did not receive data channel ready notification before the timeout")
+		return fmt.Errorf("data channel readiness check timed out")
+	}
 }
 
 // SendMessage sends a message to the service through datachannel.
@@ -650,6 +664,9 @@ func (dataChannel *DataChannel) dataChannelIncomingMessageHandler(log log.T, raw
 	case mgsContracts.StartPublicationMessage:
 		dataChannel.handleStartPublicationMessage(log, *streamDataMessage)
 		return nil
+	case mgsContracts.DataChannelReady:
+		dataChannel.handleDataChannelAcknowledgementMessage(log, *streamDataMessage)
+		return nil
 	default:
 		log.Warnf("Invalid message type received: %s", streamDataMessage.MessageType)
 	}
@@ -777,6 +794,19 @@ func (dataChannel *DataChannel) handlePausePublicationMessage(log log.T, streamD
 func (dataChannel *DataChannel) handleStartPublicationMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) {
 	dataChannel.Pause = false
 	log.Debugf("Processed %s message. Datachannel pause status set to %s", streamDataMessage.MessageType, dataChannel.Pause)
+}
+
+// handleDataChannelAcknowledgementMessage deserializes data_channel_ready message content and sends to readyMessageChan channel.
+func (dataChannel *DataChannel) handleDataChannelAcknowledgementMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) (err error) {
+	log.Infof("received message through data channel %v, message type: %s", streamDataMessage.MessageId, streamDataMessage.MessageType)
+
+	select {
+	case dataChannel.readyMessageChan <- true:
+		log.Tracef("Send true to readyMessageChan")
+	case <-time.After(mgsConfig.DataChannelReadyTimeout):
+		log.Warnf("The data_channel_ready message is not processed before the timeout. Break from select statement.")
+	}
+	return nil
 }
 
 // processIncomingMessageBufferItems checks if new expected sequence stream data is present in IncomingMessageBuffer.

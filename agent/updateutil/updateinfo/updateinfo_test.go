@@ -126,6 +126,37 @@ func TestFileNameConstruction(t *testing.T) {
 	}
 }
 
+func TestFolderNameConstruction(t *testing.T) {
+	contextMock := &context.Mock{}
+
+	testCases := []struct {
+		info   updateInfoImpl
+		result string
+	}{
+		{updateInfoImpl{contextMock, "linux", "2015.9", "linux", "amd64", "tar.gz", "installer", "uninstaller"}, "linux_amd64"},
+		{updateInfoImpl{contextMock, "linux", "2015.9", "linux", "386", "tar.gz", "installer", "uninstaller"}, "linux_386"},
+		{updateInfoImpl{contextMock, "linux", "2015.9", "linux", "arm64", "tar.gz", "installer", "uninstaller"}, "linux_arm64"},
+		{updateInfoImpl{contextMock, "ubuntu", "12", "", "amd64", "tar.gz", "installer", "uninstaller"}, "debian_amd64"},
+		{updateInfoImpl{contextMock, "ubuntu", "12", "", "386", "tar.gz", "installer", "uninstaller"}, "debian_386"},
+		{updateInfoImpl{contextMock, "ubuntu", "12", "", "arm64", "tar.gz", "installer", "uninstaller"}, "debian_arm64"},
+		{updateInfoImpl{contextMock, "ubuntu", "12", "", "arm", "tar.gz", "installer", "uninstaller"}, "debian_arm"},
+		{updateInfoImpl{contextMock, "debian", "12", "ubuntu", "amd64", "tar.gz", "installer", "uninstaller"}, "debian_amd64"},
+		{updateInfoImpl{contextMock, "debian", "12", "ubuntu", "386", "tar.gz", "installer", "uninstaller"}, "debian_386"},
+		{updateInfoImpl{contextMock, "debian", "12", "ubuntu", "arm64", "tar.gz", "installer", "uninstaller"}, "debian_arm64"},
+		{updateInfoImpl{contextMock, "debian", "12", "ubuntu", "arm", "tar.gz", "installer", "uninstaller"}, "debian_arm"},
+		{updateInfoImpl{contextMock, "windows", "7", "", "amd64", "zip", "installer", "uninstaller"}, "windows_amd64"},
+		{updateInfoImpl{contextMock, "windows", "7", "", "386", "zip", "installer", "uninstaller"}, "windows_386"},
+		{updateInfoImpl{contextMock, "windows-nano", "7", "", "386", "zip", "installer", "uninstaller"}, "windows_nano"},
+		{updateInfoImpl{contextMock, "mac os x", "10.14.2", "darwin", "amd64", "tar.gz", "installer", "uninstaller"}, "darwin_amd64"},
+		{updateInfoImpl{contextMock, "mac os x", "10.14.2", "darwin", "arm64", "tar.gz", "installer", "uninstaller"}, "darwin_arm64"},
+	}
+
+	for _, test := range testCases {
+		fileNameResult := test.info.GeneratePlatformBasedFolderName()
+		assert.Equal(t, fileNameResult, test.result)
+	}
+}
+
 func TestIsPlatformUsingSystemD(t *testing.T) {
 	contextMock := &context.Mock{}
 

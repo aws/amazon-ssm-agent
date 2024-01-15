@@ -1,5 +1,31 @@
 Latest
 ===============
+- Added Agent config to configure session logs destination
+- Added data channel acknowledgement functionalities
+- Added redirect handler and timeout for HTTP client
+- Added steps to verify aws-cli installation for domainJoin plugin
+- Added support for Ubuntu 23.04, Debian 11.7 & 12, and SUSE 15.5
+- Adjusted random number generator logic used to get filename in downloadContent plugin
+- Fixed Agent to gather application inventory from both rpm and dpkg package managers if present in Unix instances
+- Bump golang.org/x/crypto/ssh from 0.14.0 to 0.17.0
+
+3.2.2016.0
+===============
+- Added telemetry for agent core in-proc executor usage
+- Added retries for Agent installation with snap on Greengrass 
+- Added code to update Agent config to use only Onprem Identity in Greengrass
+- Added support for macOS 14 (Sonoma)
+- Added Onprem registration support using ssm-setup-cli
+- Fixed docker installation issues in aws:configureDocker plugin
+- Fix for document worker and session worker not logging when custom seelog configuration missing parameters
+- Updated allowed regex pattern in S3 URI
+- Update Agent IoT Greengrass component minor version
+- Updated SUSE version in Seamless Domain Join script
+- Updated Greengrass component workflow to get installed Agent version and update Agent only when the installed Agent version doesn't match with Greengrass component Agent version
+- Upgraded GoLang version that builds agent binaries with to 1.20.11
+
+3.2.1798.0
+===============
 - Bump golang.org/x/net from 0.15.0 to 0.17.0
 - Upgraded GoLang to version 1.20.10
 - Fixing race condition in session datachannel unit test

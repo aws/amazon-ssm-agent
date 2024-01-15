@@ -24,6 +24,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestCloudWatchLogsReceiver_FailsToInitialize_NoError(t *testing.T) {
+	xmlCustomAttrs := make(map[string]string)
+	initArgs := seelog.CustomReceiverInitArgs{
+		XmlCustomAttrs: xmlCustomAttrs,
+	}
+
+	cwLogReceiver := CloudWatchCustomReceiver{}
+
+	err := cwLogReceiver.AfterParse(initArgs)
+	assert.NoError(t, err, "CloudWatch Log Receiver should not return error to seelog parse function."+
+		" Seelog logger initialization will fail")
+}
+
 func TestCloudWatchLogsReceiver(t *testing.T) {
 	xmlCustomAttrs := make(map[string]string)
 	xmlCustomAttrs["log-group"] = "LogGroup"

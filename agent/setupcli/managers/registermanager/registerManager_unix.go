@@ -1,4 +1,4 @@
-// Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -14,9 +14,12 @@
 //go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
+// Package registermanager contains functions related to register
 package registermanager
 
+import "github.com/aws/amazon-ssm-agent/agent/appconfig"
+
 var possibleAgentPaths = []string{
-	"/usr/bin/amazon-ssm-agent",
+	appconfig.DefaultSSMAgentBinaryPath,
 	"/snap/amazon-ssm-agent/current/amazon-ssm-agent",
 }

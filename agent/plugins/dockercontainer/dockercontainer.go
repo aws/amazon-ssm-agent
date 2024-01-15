@@ -308,11 +308,11 @@ func (p *Plugin) runCommands(pluginID string, pluginInput DockerContainerPluginI
 func validateInputs(pluginInput DockerContainerPluginInput) (err error) {
 	validContainerName := regexp.MustCompile(`^[a-zA-Z0-9_\-\\\/]*$`)
 	if !validContainerName.MatchString(pluginInput.Container) {
-		return errors.New("Invalid container name, only [a-zA-Z0-9_-] are allowed")
+		return errors.New("Invalid container name, only [a-zA-Z0-9_-\\/] are allowed")
 	}
-	validImageValue := regexp.MustCompile(`^[a-zA-Z0-9_\-\\\/]*$`)
+	validImageValue := regexp.MustCompile(`^[a-zA-Z0-9.:_\-\\\/]*$`)
 	if !validImageValue.MatchString(pluginInput.Image) {
-		return errors.New("Invalid image value, only [a-zA-Z0-9_-] are allowed")
+		return errors.New("Invalid image value, only [a-zA-Z0-9.:_-\\/] are allowed")
 	}
 	validUserValue := regexp.MustCompile(`^[a-zA-Z0-9_-]*$`)
 	if !validUserValue.MatchString(pluginInput.User) {

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// Package servicemanagers contains functions related to service manager
 package servicemanagers
 
 import (
@@ -29,6 +30,8 @@ const (
 	Snap
 	SystemCtl
 	Upstart
+	LaunchCtl
+	Windows
 )
 
 var serviceManagers = map[ServiceManager]IServiceManager{}
@@ -87,7 +90,7 @@ func StartAgent(manager IServiceManager, log log.T) error {
 			return nil
 		}
 
-		log.Infof("attempt %v/%v: agent status was %v when expected status was %v", status, common.Running)
+		log.Infof("attempt %v/%v: agent status was %v when expected status was %v", i, numRetries, status, common.Running)
 	}
 
 	return fmt.Errorf("retries exhausted")

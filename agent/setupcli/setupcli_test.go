@@ -11,38 +11,52 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
+// +build freebsd linux netbsd openbsd
+
 package main
 
 import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	rMock "github.com/aws/amazon-ssm-agent/agent/managedInstances/registration/mocks"
-	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager"
 	cmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/configurationmanager/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/downloadmanager"
+	dmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/downloadmanager/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers"
 	pmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/packagemanagers/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/registermanager"
 	rmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/registermanager/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers"
 	smMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/servicemanagers/mocks"
+	vmMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/verificationmanagers/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/setupcli/utility"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	agentVersioning "github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/core/executor"
+	"github.com/aws/amazon-ssm-agent/core/executor/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-const breakOutWithPanicMessage = "BREAKOUT_WITH_PANIC"
+const breakOutWithPanicMessageOnprem = "BREAKOUT_WITH_PANIC"
 
-func storeMockedFunctions() func() {
+func storeMockedFunctionsOnprem() func() {
 	getPackageManagerStorage := getPackageManager
 	getConfigurationManagerStorage := getConfigurationManager
 	getServiceManagerStorage := getServiceManager
 	getRegisterManagerStorage := getRegisterManager
 	getRegistrationInfoStorage := getRegistrationInfo
-
+	hasElevatedPermissions = func() error {
+		return nil
+	}
 	return func() {
 		getPackageManager = getPackageManagerStorage
 		getConfigurationManager = getConfigurationManagerStorage
@@ -52,30 +66,24 @@ func storeMockedFunctions() func() {
 	}
 }
 
-func setArgsAndRestore(args ...string) func() {
+func setArgsAndRestoreOnprem(args ...string) func() {
 	var oldArgs = make([]string, len(os.Args))
 	copy(oldArgs, os.Args)
-
 	os.Args = args
+
+	hasElevatedPermissions = func() error {
+		return nil
+	}
 	return func() {
 		os.Args = oldArgs
 	}
-}
-
-func initializeArgs() {
-	os.Setenv("SSM_ARTIFACTS_PATH", "SomeArtifacts")
-	os.Setenv("AWS_REGION", "SomeRegion")
-	os.Setenv("SSM_REGISTRATION_ROLE", "SomeRole")
-	os.Setenv("SSM_RESOURCE_TAGS", "SomeTags")
-	os.Setenv("SSM_OVERRIDE_EXISTING_REGISTRATION", "false")
-	os.Setenv("", "")
 }
 
 func TestMain_ErrorGetPackageManager(t *testing.T) {
 	initializeArgs()
 	defer storeMockedFunctions()()
 
-	defer setArgsAndRestore("/some/path/setupcli", "-shutdown")()
+	defer setArgsAndRestore("/some/path/setupcli", "-shutdown", "-env", "greengrass")()
 
 	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
 		return nil, fmt.Errorf("SomeError")
@@ -97,708 +105,205 @@ func TestMain_ErrorGetPackageManager(t *testing.T) {
 	assert.True(t, false, "Should never reach here because of exit")
 }
 
-func TestMain_ErrorGetServiceManager(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-shutdown")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		return &pmMock.IPackageManager{}, nil
+func TestMain_OnPrem_GetExecutingDirectoryPath_Failed(t *testing.T) {
+	evalSymLinks = func(path string) (string, error) {
+		return "", nil
 	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		return nil, fmt.Errorf("SomeError")
+	osExecutable = func() (string, error) {
+		return "", fmt.Errorf("os executable")
 	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to determine service manager")
-
-		panic(breakOutWithPanicMessage)
+	filePathDir = func(path string) string {
+		return "sample"
 	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
+	pkgManagerMock := &pmMock.IPackageManager{}
+	svcManagerMock := &smMock.IServiceManager{}
+	verificationManager := &vmMock.IVerificationManager{}
+	logMock := logmocks.NewMockLog()
+	err := performOnpremSteps(logMock, pkgManagerMock, verificationManager, svcManagerMock)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "could not get the ssm-setup-cli executable path")
 }
 
-func TestMain_FailedShutdown(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-shutdown")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		return &pmMock.IPackageManager{}, nil
+func TestMain_OnPrem_GetExecutingDirectoryPath_Success(t *testing.T) {
+	evalSymLinks = func(path string) (string, error) {
+		return "test", nil
 	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("StopAgent", mock.Anything, mock.Anything).Return(fmt.Errorf("SomeError"))
-		return managerMock, nil
+	osExecutable = func() (string, error) {
+		return "", fmt.Errorf("err1")
 	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to shut down agent")
-
-		panic(breakOutWithPanicMessage)
+	filePathDir = func(path string) string {
+		return "sample"
 	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
+	pkgManagerMock := &pmMock.IPackageManager{}
+	svcManagerMock := &smMock.IServiceManager{}
+	verificationManager := &vmMock.IVerificationManager{}
+	logMock := logmocks.NewMockLog()
+	err := performOnpremSteps(logMock, pkgManagerMock, verificationManager, svcManagerMock)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "could not get the ssm-setup-cli executable path")
 }
 
-func TestMain_SuccessShutdown(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
+func TestMain_OnPrem_Register_Success(t *testing.T) {
+	evalSymLinks = func(path string) (string, error) {
+		return "test", nil
+	}
+	osExecutable = func() (string, error) {
+		return "", nil
+	}
+	filePathDir = func(path string) string {
+		return "sample"
+	}
+	signatureFile := "sign1"
+	pkgManagerMock := &pmMock.IPackageManager{}
+	pkgManagerMock.On("IsAgentInstalled").Return(false, nil).Once()
+	pkgManagerMock.On("IsAgentInstalled").Return(true, nil).Once()
+	pkgManagerMock.On("GetFileExtension").Return("rpm")
+	pkgManagerMock.On("GetInstalledAgentVersion").Return("", nil)
+	svcManagerMock := &smMock.IServiceManager{}
+	verificationManager := &vmMock.IVerificationManager{}
+	verificationManager.On("VerifySignature", mock.Anything, signatureFile, mock.Anything, mock.Anything).Return(nil).Once()
+	logMock := logmocks.NewMockLog()
 
-	defer setArgsAndRestore("/some/path/setupcli", "-shutdown")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		return &pmMock.IPackageManager{}, nil
+	tempDir := "temp1"
+	fileUtilCreateTemp = func(dir, prefix string) (name string, err error) {
+		return tempDir, nil
+	}
+	fileUtilMakeDirs = func(destinationDir string) (err error) {
+		return nil
+	}
+	isPlatformNano = func(log log.T) (bool, error) {
+		return false, nil
 	}
 
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Stopped, nil)
-		managerMock.On("StopAgent", mock.Anything, mock.Anything).Return(nil)
-		return managerMock, nil
+	getDownloadManager = func(log log.T, region string, manifestUrl string, updateInfo updateinfo.T, setupCLIArtifactsPath string, isNano bool) downloadmanager.IDownloadManager {
+		managerMock := &dmMock.IDownloadManager{}
+		managerMock.On("DownloadLatestSSMSetupCLI", mock.Anything, mock.Anything).Return(nil).Once()
+		managerMock.On("GetLatestVersion").Return(agentVersioning.Version, nil).Once()
+		managerMock.On("DownloadArtifacts", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+		managerMock.On("DownloadSignatureFile", mock.Anything, mock.Anything, mock.Anything).Return(signatureFile, nil).Once()
+		return managerMock
 	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Fail(t, "Should not get panic")
-		}
-	}()
-
-	main()
-	assert.True(t, true, "Should never reach here because of exit")
-}
-
-func TestMain_Install_FailedCheckAgentInstalled(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-install")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(false, fmt.Errorf("SomeError"))
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		return managerMock, nil
-	}
-
 	getConfigurationManager = func() configurationmanager.IConfigurationManager {
 		managerMock := &cmMock.IConfigurationManager{}
-		managerMock.On("IsAgentAlreadyConfigured").Return(true)
+		managerMock.On("CreateUpdateAgentConfigWithOnPremIdentity").Return(nil)
 		return managerMock
 	}
 
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to determine if agent is installed")
-
-		panic(breakOutWithPanicMessage)
+	utilityCheckSum = func(filePath string) (hash string, err error) {
+		return "", nil
+	}
+	version = utility.LatestVersionString
+	helperInstallAgent = func(log log.T, pManager packagemanagers.IPackageManager, sManager servicemanagers.IServiceManager, folderPath string) error {
+		return nil
 	}
 
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Install_AgentIsInstalled_UninstallAgentFailed(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-install")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		managerMock.On("UninstallAgent").Return(fmt.Errorf("SomeUninstallError"))
-		return managerMock, nil
+	newProcessExecutor = func(log log.T) executor.IExecutor {
+		executorMock := &mocks.IExecutor{}
+		executorMock.On("Processes").Return([]executor.OsProcess{executor.OsProcess{
+			Executable: utility.AgentBinary,
+		}}, nil)
+		return executorMock
 	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		return managerMock, nil
+	timeSleep = func(d time.Duration) {
+		return
 	}
-
-	getConfigurationManager = func() configurationmanager.IConfigurationManager {
-		managerMock := &cmMock.IConfigurationManager{}
-		managerMock.On("IsAgentAlreadyConfigured").Return(true)
-		return managerMock
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to uninstall the agent")
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallFailed(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-install")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		managerMock.On("UninstallAgent").Return(nil)
-
-		managerMock.On("GetFilesReqForInstall").Return([]string{})
-		managerMock.On("InstallAgent", mock.Anything).Return(fmt.Errorf("FailedInstallAgent"))
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		return managerMock, nil
-	}
-
-	getConfigurationManager = func() configurationmanager.IConfigurationManager {
-		managerMock := &cmMock.IConfigurationManager{}
-		managerMock.On("IsAgentAlreadyConfigured").Return(true)
-		return managerMock
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to install agent")
-		assert.Equal(t, "FailedInstallAgent", args[0].(error).Error())
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Install_AgentIsInstalled_UninstallSuccess_InstallSuccess_ReloadServiceFailed(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-install")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		managerMock.On("UninstallAgent").Return(nil)
-
-		managerMock.On("GetFilesReqForInstall").Return([]string{})
-		managerMock.On("InstallAgent", mock.Anything).Return(nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		managerMock.On("ReloadManager").Return(fmt.Errorf("FailedReloadManager"))
-		return managerMock, nil
-	}
-
-	getConfigurationManager = func() configurationmanager.IConfigurationManager {
-		managerMock := &cmMock.IConfigurationManager{}
-		managerMock.On("IsAgentAlreadyConfigured").Return(true)
-		return managerMock
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to install agent")
-		assert.Equal(t, "FailedReloadManager", args[0].(error).Error())
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Install_AgentNotInstalled_InstallSuccess(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-install")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(false, nil)
-
-		managerMock.On("GetFilesReqForInstall").Return([]string{})
-		managerMock.On("InstallAgent", mock.Anything).Return(nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		managerMock.On("ReloadManager").Return(nil)
-		return managerMock, nil
-	}
-
-	getConfigurationManager = func() configurationmanager.IConfigurationManager {
-		managerMock := &cmMock.IConfigurationManager{}
-		managerMock.On("IsAgentAlreadyConfigured").Return(true)
-		return managerMock
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Fail(t, "Should not get panic")
-		}
-	}()
-
-	main()
-	assert.True(t, true, "Should never reach here because of exit")
-}
-
-func TestMain_Register_ErrorCheckingAgentInstalled(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(false, fmt.Errorf("SomeError"))
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		return managerMock, nil
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to determine if agent is installed")
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Register_AgentNotInstalled(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(false, nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-		return managerMock, nil
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Agent must be installed before attempting to register")
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Register_AgentNotInstalled_OverrideNotSet_StartAgentFailed(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Stopped, nil)
-		managerMock.On("StartAgent").Return(fmt.Errorf("SomeError"))
-		return managerMock, nil
-	}
-
 	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
 		registrationMock := &rMock.IOnpremRegistrationInfo{}
-
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
-		return registrationMock
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to start agent")
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideNotSet_StartAgentSuccess(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Running, nil)
-		managerMock.On("StartAgent").Return(nil)
-		return managerMock, nil
-	}
-
-	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
-		registrationMock := &rMock.IOnpremRegistrationInfo{}
-
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
-		return registrationMock
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Fail(t, "Should not get panic")
-		}
-	}()
-
-	main()
-	assert.True(t, true, "Should never reach here because of exit")
-}
-
-func TestMain_Register_AgentNotInstalled_AgentNotRegistered_OverrideNotSet_FailedStopAgent(t *testing.T) {
-	initializeArgs()
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Running, nil)
-		managerMock.On("StopAgent").Return(fmt.Errorf("SomeError"))
-		return managerMock, nil
-	}
-
-	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
-		registrationMock := &rMock.IOnpremRegistrationInfo{}
-
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("")
-		return registrationMock
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to stop agent")
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_FailedRegisterAgent(t *testing.T) {
-	initializeArgs()
-	os.Setenv("SSM_OVERRIDE_EXISTING_REGISTRATION", "true")
-
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Stopped, nil)
-		managerMock.On("StopAgent").Return(nil)
-		return managerMock, nil
-	}
-
-	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
-		registrationMock := &rMock.IOnpremRegistrationInfo{}
-
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
-		return registrationMock
-	}
-
-	getRegisterManager = func() registermanager.IRegisterManager {
-		managerMock := &rmMock.IRegisterManager{}
-
-		managerMock.On("RegisterAgent", mock.Anything, mock.Anything, mock.Anything).Return(fmt.Errorf("SomeError"))
-		return managerMock
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to register agent")
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_FailedToStartAgent(t *testing.T) {
-	initializeArgs()
-	os.Setenv("SSM_OVERRIDE_EXISTING_REGISTRATION", "true")
-
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Stopped, nil).Times(1)
-		managerMock.On("StopAgent").Return(nil)
-		managerMock.On("StartAgent").Return(fmt.Errorf("SomeError"))
-		return managerMock, nil
-	}
-
-	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
-		registrationMock := &rMock.IOnpremRegistrationInfo{}
-
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId")
-		return registrationMock
-	}
-
-	getRegisterManager = func() registermanager.IRegisterManager {
-		managerMock := &rmMock.IRegisterManager{}
-
-		managerMock.On("RegisterAgent", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-		return managerMock
-	}
-
-	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
-		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to start agent")
-
-		panic(breakOutWithPanicMessage)
-	}
-
-	defer func() {
-		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
-		}
-	}()
-
-	main()
-	assert.True(t, false, "Should never reach here because of exit")
-}
-
-func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_FailedToGetNewInstanceId(t *testing.T) {
-	initializeArgs()
-	os.Setenv("SSM_OVERRIDE_EXISTING_REGISTRATION", "true")
-
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		return managerMock, nil
-	}
-
-	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
-		managerMock := &smMock.IServiceManager{}
-
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Stopped, nil).Times(1)
-		managerMock.On("StopAgent").Return(nil)
-		managerMock.On("StartAgent").Return(nil)
-		managerMock.On("GetAgentStatus").Return(common.Running, nil).Times(1)
-		return managerMock, nil
-	}
-
-	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
-		registrationMock := &rMock.IOnpremRegistrationInfo{}
-
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId").Once()
-		registrationMock.On("ReloadInstanceInfo", mock.Anything, "", mock.Anything).Return()
 		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("").Once()
+		registrationMock.On("ReloadInstanceInfo", mock.Anything, "", mock.Anything).Return("")
+		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("i-temp")
 		return registrationMock
 	}
-
 	getRegisterManager = func() registermanager.IRegisterManager {
 		managerMock := &rmMock.IRegisterManager{}
-
-		managerMock.On("RegisterAgent", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+		managerMock.On("RegisterAgent", mock.Anything).Return(nil)
 		return managerMock
+	}
+	svcMgrStopAgent = func(manager servicemanagers.IServiceManager, log log.T) error {
+		return nil
+	}
+	startAgent = func(manager servicemanagers.IServiceManager, log log.T) error {
+		return nil
+	}
+	err := performOnpremSteps(logMock, pkgManagerMock, verificationManager, svcManagerMock)
+	assert.Nil(t, err)
+}
+
+func TestMain_Register_InvalidActivationId_Failed(t *testing.T) {
+	defer storeMockedFunctionsOnprem()()
+	defer setArgsAndRestoreOnprem("/some/path/setupcli", "-env", "onprem", "-register", "-activation-id", "", "-activation-code", "test")()
+	hasElevatedPermissions = func() error {
+		return nil
+	}
+	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
+		managerMock := &smMock.IServiceManager{}
+		return managerMock, nil
 	}
 
 	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
 		assert.Equal(t, 1, exitCode)
-		assert.Contains(t, message, "Failed to get new instance id")
-		panic(breakOutWithPanicMessage)
+		message = fmt.Sprintf(message, args)
+		assert.Contains(t, message, "Activation id required for on-prem registration.")
+		panic(breakOutWithPanicMessageOnprem)
 	}
 
 	defer func() {
 		if errInterface := recover(); errInterface != nil {
-			assert.Equal(t, breakOutWithPanicMessage, errInterface)
+			fmt.Println(errInterface)
+			assert.Equal(t, breakOutWithPanicMessageOnprem, errInterface)
 		}
 	}()
-
 	main()
 	assert.True(t, false, "Should never reach here because of exit")
 }
 
-func TestMain_Register_AgentNotInstalled_AgentRegistered_OverrideSet_Success(t *testing.T) {
-	initializeArgs()
-	os.Setenv("SSM_OVERRIDE_EXISTING_REGISTRATION", "true")
-
-	defer storeMockedFunctions()()
-
-	defer setArgsAndRestore("/some/path/setupcli", "-register")()
-
-	getPackageManager = func(log.T) (packagemanagers.IPackageManager, error) {
-		managerMock := &pmMock.IPackageManager{}
-		managerMock.On("IsAgentInstalled").Return(true, nil)
-		return managerMock, nil
+func TestMain_Register_InvalidActivationCode_Failed(t *testing.T) {
+	defer storeMockedFunctionsOnprem()()
+	defer setArgsAndRestoreOnprem("/some/path/setupcli", "-env", "onprem", "-register", "-activation-id", "test", "-activation-code", "")()
+	hasElevatedPermissions = func() error {
+		return nil
 	}
-
 	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
 		managerMock := &smMock.IServiceManager{}
-
-		managerMock.On("GetName").Return("ServiceManagerName")
-		managerMock.On("GetAgentStatus").Return(common.Stopped, nil).Times(1)
-		managerMock.On("StopAgent").Return(nil)
-		managerMock.On("StartAgent").Return(nil)
-		managerMock.On("GetAgentStatus").Return(common.Running, nil).Times(1)
 		return managerMock, nil
 	}
 
-	getRegistrationInfo = func() registration.IOnpremRegistrationInfo {
-		registrationMock := &rMock.IOnpremRegistrationInfo{}
-
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("SomeInstanceId").Once()
-		registrationMock.On("ReloadInstanceInfo", mock.Anything, "", mock.Anything).Return()
-		registrationMock.On("InstanceID", mock.Anything, "", mock.Anything).Return("NewInstanceId").Once()
-		return registrationMock
-	}
-
-	getRegisterManager = func() registermanager.IRegisterManager {
-		managerMock := &rmMock.IRegisterManager{}
-
-		managerMock.On("RegisterAgent", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-		return managerMock
+	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
+		assert.Equal(t, 1, exitCode)
+		message = fmt.Sprintf(message, args)
+		assert.Contains(t, message, "Activation code required for on-prem registration.")
+		panic(breakOutWithPanicMessageOnprem)
 	}
 
 	defer func() {
 		if errInterface := recover(); errInterface != nil {
-			assert.Fail(t, "Should not get panic")
+			assert.Equal(t, breakOutWithPanicMessageOnprem, errInterface)
 		}
 	}()
-
 	main()
-	assert.True(t, true, "Should never reach here because of exit")
+	assert.True(t, false, "Should never reach here because of exit")
+}
+
+func TestMain_Register_InvalidEnvironment_Failed(t *testing.T) {
+	defer storeMockedFunctionsOnprem()()
+	defer setArgsAndRestoreOnprem("/some/path/setupcli", "-env", "dummyEnv", "-register")()
+
+	hasElevatedPermissions = func() error {
+		return nil
+	}
+
+	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
+		assert.Equal(t, 1, exitCode)
+		message = fmt.Sprintf(message, args)
+		assert.Contains(t, message, "Invalid environment.")
+		panic(breakOutWithPanicMessageOnprem)
+	}
+
+	defer func() {
+		if errInterface := recover(); errInterface != nil {
+			assert.Equal(t, breakOutWithPanicMessageOnprem, errInterface)
+		}
+	}()
+	main()
+	assert.True(t, false, "Should never reach here because of exit")
 }
