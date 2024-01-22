@@ -264,6 +264,8 @@ func (mds *MDSInteractor) mdsSwitcher() {
 		if r := recover(); r != nil {
 			log.Errorf("MdsSwitcher panicked: \n%v", r)
 			log.Errorf("stacktrace:\n%s", debug.Stack())
+			time.Sleep(1 * time.Minute)
+			go mds.mdsSwitcher()
 		}
 	}()
 	isWindows2012OrEarlier, isPlatformWindowsServer2012OrEarlierErr := isPlatformWindowsServer2012OrEarlier(log)
@@ -298,7 +300,11 @@ func (mds *MDSInteractor) startMDSPollingJob() {
 		return
 	}
 
-	// Wait until the stop job is done
+	if mds.mdsState == MDSStartCompleted {
+		log.Info("MDS is already in started status.")
+		return
+	}
+
 	mds.stopPollingJobGrp.Wait()
 
 	mds.mdsState = MDSStartInProgress
@@ -315,16 +321,22 @@ func (mds *MDSInteractor) startMDSPollingJob() {
 
 // stopMDSPollingJob stops MDS long polling job
 func (mds *MDSInteractor) stopMDSPollingJob() {
-
+	mds.mdsStateMutex.Lock()
+	defer mds.mdsStateMutex.Unlock()
 	mds.context.Log().Info("MDS Polling stop job started.")
 	// If MDS is in shutdown status, do not switch OFF MDS again
-	if mds.getMDSState() == MDSShutDown {
+	if mds.mdsState == MDSShutDown {
 		mds.context.Log().Info("MDS will not be stopped again as it is already in shutdown status.")
 		return
 	}
 
+	if mds.mdsState == MDSStopCompleted {
+		mds.context.Log().Info("MDS stop is already done.")
+		return
+	}
+
 	mds.stopPollingJobGrp.Add(1)
-	mds.setMDSState(MDSStopInProgress)
+	mds.mdsState = MDSStopInProgress
 
 	// stop only when start completed
 	go func() {
@@ -333,8 +345,8 @@ func (mds *MDSInteractor) stopMDSPollingJob() {
 				mds.context.Log().Errorf("StopMDSPollingJob panic: %v", r)
 				mds.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 			}
-			mds.setMDSState(MDSStopCompleted)
 			mds.stopPollingJobGrp.Done()
+			mds.setMDSState(MDSStopCompleted)
 		}()
 
 		// We have this 1 min interval to make sure that we give an opportunity for agent to pull from MDS before shutting down MDS.
@@ -359,6 +371,10 @@ func (mds *MDSInteractor) stopMDSPollingJob() {
 func (mds *MDSInteractor) setMDSState(state MDSState) {
 	mds.mdsStateMutex.Lock()
 	defer mds.mdsStateMutex.Unlock()
+	// do not allow setting state when in shut down status already
+	if mds.mdsState == MDSShutDown {
+		return
+	}
 	mds.mdsState = state
 }
 
@@ -387,15 +403,11 @@ func (mds *MDSInteractor) preDocumentProcessorClose() {
 	// Stop polling job takes 1 min to complete. This signal preempts this job to stop the agent quickly
 	mds.sendStopSignalTsoStopJob()
 
-	// get current MDS state
-	currentState := mds.getMDSState()
+	// wait for stop polling job to be completed
+	mds.stopPollingJobGrp.Wait()
 
-	// If stop already triggered, do not initiate stop again
-	if currentState == MDSStopInProgress || currentState == MDSStopCompleted {
-		mds.stopPollingJobGrp.Wait()
-	} else {
-		// stop MDS long polling job
-		mds.stopMDSPollingJob()
+	if mds.messagePollJob != nil {
+		mds.messagePollJob.Quit <- true
 	}
 
 	if mds.sendReplyJob != nil {

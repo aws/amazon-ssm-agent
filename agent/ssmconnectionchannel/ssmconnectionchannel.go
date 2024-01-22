@@ -36,7 +36,7 @@ const (
 )
 
 var (
-	connectionChannel      = contracts.ConnectionChannel{SSMConnectionChannel: contracts.MDS}
+	connectionChannel      = contracts.ConnectionChannel{}
 	connectionChannelMutex = sync.RWMutex{}
 
 	// mdsSwitchChannel is used by MDSInteractor to switch ON/OFF MDS
@@ -77,12 +77,21 @@ func SetConnectionChannel(context context.T, state MGSState) {
 	if state == MGSFailedDueToAccessDenied {
 		// If SSMConnectionChannel status is MDS, it means that the MDS is still running.
 		// Hence, when we receive MGS Access Denied error, we return from this function without trying to launch MDS as it is already running
-		if connectionChannel.SSMConnectionChannel == contracts.MDS {
+		if connectionChannel.SSMConnectionChannel == contracts.MDS || connectionChannel.SSMConnectionChannel == "" {
+			// MDS will be set when the initial value is blank
+			connectionChannel.SSMConnectionChannel = contracts.MDS
 			return
 		}
 		// Turn ON MDS when MGS connection fails with AccessDenied
 		connectionChannel.SSMConnectionChannel = contracts.MDS
 		mdsSwitchChannel <- true
+		return
+	}
+
+	// reset to MDS when ssm connection channel is blank
+	// In this case, MDS is already started but MGS is failing
+	if connectionChannel.SSMConnectionChannel == "" {
+		connectionChannel.SSMConnectionChannel = contracts.MDS
 	}
 
 	// No operation for all other MGS states

@@ -46,19 +46,27 @@ const (
 	WindowsServer2016Version = 10
 )
 
+var (
+	getPlatformVersionRef = getPlatformVersion
+)
+
 // isPlatformWindowsServer2012OrEarlier returns true if platform is Windows Server 2012 or earlier
 func isPlatformWindowsServer2012OrEarlier(log log.T) (bool, error) {
 	var platformVersion string
 	var platformVersionInt int
 	var err error
 
-	if platformVersion, err = getPlatformVersion(log); err != nil {
+	if platformVersion, err = getPlatformVersionRef(log); err != nil {
 		return false, err
 	}
-	if platformVersionInt, err = strconv.Atoi(platformVersion); err != nil {
-		return false, err
+	versionParts := strings.Split(platformVersion, ".")
+	if len(versionParts) == 0 {
+		return false, fmt.Errorf("could not get the version from versionstring: %v", versionParts)
 	}
 
+	if platformVersionInt, err = strconv.Atoi(versionParts[0]); err != nil {
+		return false, err
+	}
 	return platformVersionInt < WindowsServer2016Version, nil
 }
 
