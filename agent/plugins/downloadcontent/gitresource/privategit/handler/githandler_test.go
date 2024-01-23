@@ -503,7 +503,7 @@ func TestGitHandler_getAuthMethodPublicKey(t *testing.T) {
 				ssmParameterResolverBridge: bridge,
 			},
 			nil,
-			errors.New("Cannot authenticate: invalid PEM data"),
+			errors.New("Cannot authenticate: ssh: no key found"),
 		},
 		{
 			gitHandler{
