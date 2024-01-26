@@ -47,6 +47,7 @@ import (
 
 var (
 	ec2ConfigVersionPattern = regexp.MustCompile("[.0-9]+")
+	sourcePattern           = regexp.MustCompile(`^https?:[\/][\/][\w.-]+:?[\/\w.-]+$`)
 )
 
 // Plugin is the type for the RunCommand plugin.
@@ -192,6 +193,14 @@ func runUpdateAgent(
 	}
 	//Calculate manifest location base on current instance's region
 	pluginInput.Source = strings.Replace(pluginInput.Source, updateconstants.RegionHolder, region, -1)
+
+	//Check the format of the source input and revert to default if not
+	if err = validateSource(pluginInput); err != nil {
+		log.Warnf("Invalid url provided at %v (url must be https/http link) falling back to default manifest location", pluginInput.Source)
+		pluginInput.Source = p.ManifestLocation
+		pluginInput.Source = strings.Replace(pluginInput.Source, updateconstants.RegionHolder, region, -1)
+	}
+
 	//Calculate updater package name base on agent name
 	pluginInput.UpdaterName = pluginInput.AgentName + updateconstants.UpdaterPackageNamePrefix
 	//Generate update output
@@ -583,4 +592,13 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	return UpdatePluginConfig{
 		ManifestLocation: manifestURL,
 	}
+}
+
+func validateSource(pluginInput UpdatePluginInput) (err error) {
+	//This pattern allows for http/https links to local hosts and s3 buckets
+	validSourceValue := sourcePattern
+	if !validSourceValue.MatchString(pluginInput.Source) {
+		return errors.New("Invalid source")
+	}
+	return err
 }

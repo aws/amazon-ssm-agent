@@ -18,6 +18,7 @@
 package updateec2config
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
@@ -155,6 +156,31 @@ func createStubPluginInput() *UpdatePluginInput {
 	input.AgentName = EC2ConfigAgentName
 	input.AllowDowngrade = "false"
 	return input
+}
+
+func TestValidateSourceInput(t *testing.T) {
+	pluginInput := new(UpdatePluginInput)
+	errorMessage := errors.New("Invalid source")
+
+	pluginInput.Source = "http://127.0.0.1:8080/asdasd"
+	err := validateSource(*pluginInput)
+	assert.Equal(t, nil, err)
+
+	pluginInput.Source = "https://127.0.0.1:8080/asdasd"
+	err2 := validateSource(*pluginInput)
+	assert.Equal(t, nil, err2)
+
+	pluginInput.Source = "https://s3.us-east-2.amazonaws.com/aws-ssm-us-east-2/manifest.json"
+	err3 := validateSource(*pluginInput)
+	assert.Equal(t, nil, err3)
+
+	pluginInput.Source = "C:/test/test123"
+	err4 := validateSource(*pluginInput)
+	assert.Equal(t, errorMessage, err4)
+
+	pluginInput.Source = "htt://127.0.0.1:8080/asdasd/"
+	err5 := validateSource(*pluginInput)
+	assert.Equal(t, errorMessage, err5)
 }
 
 // createStubManifest is a helper function to create a stub manifest for testing
