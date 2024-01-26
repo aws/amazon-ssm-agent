@@ -35,6 +35,10 @@ import (
 )
 
 var plainCloneMethod = gogit.PlainClone
+var geteuid = os.Geteuid
+var getUserHomeDir = os.UserHomeDir
+var setEnv = os.Setenv
+var unsetEnv = os.Unsetenv
 
 // GitAuthConfig defines the attributes used to perform authentication over SSH or HTTP
 type GitAuthConfig struct {
@@ -98,6 +102,17 @@ func (handler *gitHandler) CloneRepository(log log.T, authMethod transport.AuthM
 		URL:      handler.repositoryURL.Val(),
 		Progress: os.Stdout,
 		Auth:     authMethod,
+	}
+
+	// go-git from 5.5.0 throws error when it can't find the $HOME environment variable as it tries to resolve ~/.ssh/know_hosts
+	// $HOME environment variable is not set for root user on default agent installation
+	if _, err = getUserHomeDir(); err != nil && geteuid() == 0 {
+		log.Warnf("Failed to get $HOME environment variable. Setting to \"/root\", Err: %v", err)
+		setEnv("HOME", "/root")
+		defer func() {
+			log.Debugf("Unsetting $HOME environment variable")
+			unsetEnv("HOME")
+		}()
 	}
 
 	repository, err = plainCloneMethod(destPath, false, &cloneOptions)
