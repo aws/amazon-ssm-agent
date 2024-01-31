@@ -1,5 +1,11 @@
 Latest
 ===============
+- Fix issue to execute aws:updateSSMAgent plugin through aws:rundocument plugin
+- Update Messaging module to switch off ec2messages when ssmmessages connected successfully
+- Update SSM Agent Minor version from 3.2 to 3.3
+
+3.2.2222.0
+===============
 - Upgrade minimum go version in go.mod file to go 1.19
 - Upgrade go-git package to v5.11.0
 - Fix for bad default manifest url when updating EC2Config
