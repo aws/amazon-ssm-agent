@@ -19,6 +19,7 @@ package servicemanagers
 
 import (
 	"fmt"
+	"os/exec"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
@@ -39,6 +40,13 @@ type windowsManager struct {
 func (m *windowsManager) StartAgent() error {
 	output, err := m.managerHelper.RunCommand(netExecPath, "start", serviceName)
 	if err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			ec := exitError.ExitCode()
+			// NET HELPMSG 2182 : The requested service has already been started.
+			if ec == 2182 {
+				return nil
+			}
+		}
 		output = strings.ToLower(output)
 		if strings.Contains(output, "service has already been started") {
 			// service already running
@@ -53,6 +61,13 @@ func (m *windowsManager) StartAgent() error {
 func (m *windowsManager) StopAgent() error {
 	output, err := m.managerHelper.RunCommand(netExecPath, "stop", serviceName)
 	if err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			ec := exitError.ExitCode()
+			//NET HELPMSG 3521 : The *** service is not started.
+			if ec == 3521 {
+				return nil
+			}
+		}
 		output = strings.ToLower(output)
 		if strings.Contains(output, "service is not started") {
 			// Service is already stopped
