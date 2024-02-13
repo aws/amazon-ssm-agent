@@ -21,18 +21,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
-	"github.com/aws/aws-sdk-go/service/ssm"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 // EC2RoleProvider provides credentials for the agent when on an EC2 instance
@@ -112,6 +111,9 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 		p.Log.Error(err)
 		return iprEmptyCredential, err
 	}
+
+	// set expiration to 30 minutes
+	p.InnerProviders.IPRProvider.SetExpiration(timeNowFunc().Add(30*time.Minute), 0)
 	p.credentialSource = CredentialSourceEC2
 
 	return iprCredentials, nil

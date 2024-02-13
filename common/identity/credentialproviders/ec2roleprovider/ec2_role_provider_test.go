@@ -22,12 +22,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
@@ -37,6 +31,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 const (
@@ -253,9 +252,16 @@ func TestEC2RoleProvider_Retrieve_ReturnsIPRCredentials(t *testing.T) {
 	ec2RoleProvider.RuntimeConfigClient = runtimeConfigClient
 
 	// Act
+	flag := false
+	timeNowFunc = func() time.Time {
+		flag = true
+		return time.Now()
+	}
 	creds, err := ec2RoleProvider.Retrieve()
-
+	expiryMins := time.Now().Sub(ec2RoleProvider.ExpiresAt()).Minutes()
 	//Assert
+	assert.True(t, flag)
+	assert.True(t, 28 >= expiryMins && expiryMins <= 30)
 	assert.NoError(t, err)
 	assert.Equal(t, iprProvider.ProviderName, creds.ProviderName)
 	assert.Equal(t, CredentialSourceEC2, ec2RoleProvider.credentialSource)
@@ -404,7 +410,6 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			assert.Equal(t, CredentialSourceNone, ec2RoleProvider.credentialSource)
 		})
 	}
-
 }
 
 func arrangeRetrieveEmptyTest(j testCase) *EC2RoleProvider {
