@@ -4,7 +4,7 @@ echo "Creating zip file for Windows 386"
 echo "****************************************"
 
 BIN_FOLDER=${GO_SPACE}/bin
-BUILD_FOLDER=${BIN_FOLDER}/windows_386
+BUILD_FOLDER=${BIN_FOLDER}/windows_386${DEBUG_FLAG}
 PACKAGE_FOLDER=${BUILD_FOLDER}/windows
 TOOLS_FOLDER=${GO_SPACE}/Tools/src
 

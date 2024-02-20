@@ -4,12 +4,12 @@ set -e
 ARCH=$1
 
 echo "****************************************"
-echo "Creating tar file for Mac OS X $ARCH    "
+echo "Creating tar file for Mac OS X $ARCH${DEBUG_FLAG}    "
 echo "****************************************"
 
-ROOTFS=${GO_SPACE}/bin/darwin_$ARCH/darwin
+ROOTFS=${GO_SPACE}/bin/darwin_${ARCH}${DEBUG_FLAG}/darwin
 TAR_NAME=amazon-ssm-agent.tar.gz
-DESTINATION=${GO_SPACE}/bin/amazon-ssm-agent-darwin-$ARCH-`cat ${GO_SPACE}/VERSION`.tar.gz
+DESTINATION=${GO_SPACE}/bin/amazon-ssm-agent-darwin-${ARCH}${DEBUG_FLAG}-`cat ${GO_SPACE}/VERSION`.tar.gz
 rm -rf ${ROOTFS}
 
 echo "Creating darwin folders"
@@ -23,12 +23,12 @@ mkdir -p ${PROGRAM_FOLDER}/bin
 
 echo "Copying application files"
 
-cp ${GO_SPACE}/bin/darwin_$ARCH/amazon-ssm-agent ${PROGRAM_FOLDER}/bin/
-cp ${GO_SPACE}/bin/darwin_$ARCH/ssm-agent-worker ${PROGRAM_FOLDER}/bin/
-cp ${GO_SPACE}/bin/darwin_$ARCH/ssm-document-worker ${PROGRAM_FOLDER}/bin/
-cp ${GO_SPACE}/bin/darwin_$ARCH/ssm-cli ${PROGRAM_FOLDER}/bin/
-cp ${GO_SPACE}/bin/darwin_$ARCH/ssm-session-logger ${PROGRAM_FOLDER}/bin/
-cp ${GO_SPACE}/bin/darwin_$ARCH/ssm-session-worker ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_${ARCH}${DEBUG_FLAG}/amazon-ssm-agent ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_${ARCH}${DEBUG_FLAG}/ssm-agent-worker ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_${ARCH}${DEBUG_FLAG}/ssm-document-worker ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_${ARCH}${DEBUG_FLAG}/ssm-cli ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_${ARCH}${DEBUG_FLAG}/ssm-session-logger ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_${ARCH}${DEBUG_FLAG}/ssm-session-worker ${PROGRAM_FOLDER}/bin/
 
 cp ${GO_SPACE}/seelog_unix.xml ${PROGRAM_FOLDER}/seelog.xml.template
 cp ${GO_SPACE}/amazon-ssm-agent.json.template ${PROGRAM_FOLDER}/
