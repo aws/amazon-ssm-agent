@@ -89,9 +89,6 @@ const (
 	UnsupportedPowerShellVersionForStreamingErrorMsg = "The PowerShell version installed on the instance doesn’t support streaming logs to CloudWatch. Updated PowerShell to version 5.1 or later to stream session data to CloudWatch."
 	PowerShellTranscriptLoggingEnabledErrorMsg       = "The PowerShell Transcription policy setting is configured on the instance. Update PowerShell Transcription policy setting to 'Not Configured' to stream session data to CloudWatch."
 	S3EncryptionErrorMsg                             = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
-
-	// ControlChannelReadyTimeout indicates the time for control channel to wait on control_channel_ready message from service.
-	ControlChannelReadyTimeout = 2 * time.Second
 )
 
 var GetMgsEndpoint = func(context context.T, region string) string {
