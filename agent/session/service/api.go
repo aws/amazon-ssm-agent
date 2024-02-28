@@ -99,7 +99,4 @@ type OpenDataChannelInput struct {
 
 	// ClientId is a required field
 	ClientId *string `json:"ClientId" min:"1" type:"string" required:"true"`
-
-	// RequireAcknowledgement is a required field
-	RequireAcknowledgement *bool `json:"RequireAcknowledgement" type:"boolean" required:"true"`
 }

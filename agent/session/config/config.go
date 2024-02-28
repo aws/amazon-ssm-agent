@@ -92,8 +92,6 @@ const (
 
 	// ControlChannelReadyTimeout indicates the time for control channel to wait on control_channel_ready message from service.
 	ControlChannelReadyTimeout = 2 * time.Second
-	// DataChannelReadyTimeout indicates the time for data channel to wait on data_channel_ready message from service.
-	DataChannelReadyTimeout = 2 * time.Second
 )
 
 var GetMgsEndpoint = func(context context.T, region string) string {
