@@ -100,7 +100,6 @@ func TestInitialize(t *testing.T) {
 	assert.NotNil(t, dataChannel.wsChannel)
 	assert.NotNil(t, dataChannel.OutgoingMessageBuffer)
 	assert.NotNil(t, dataChannel.IncomingMessageBuffer)
-	assert.NotNil(t, dataChannel.readyMessageChan)
 	assert.Equal(t, float64(mgsConfig.DefaultRoundTripTime), dataChannel.RoundTripTime)
 	assert.Equal(t, float64(mgsConfig.DefaultRoundTripTimeVariation), dataChannel.RoundTripTimeVariation)
 	assert.Equal(t, mgsConfig.DefaultTransmissionTimeout, dataChannel.RetransmissionTimeout)
@@ -138,29 +137,12 @@ func TestOpen(t *testing.T) {
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
-	go func() {
-		dataChannel.readyMessageChan <- true
-	}()
-
 	// test open (includes SendMessage)
 	err := dataChannel.Open(mockLog)
 
 	assert.Nil(t, err)
 	assert.Equal(t, token, dataChannel.wsChannel.GetChannelToken())
 	mockWsChannel.AssertExpectations(t)
-}
-
-func TestOpenReturnsErrWhenNotReceiveDataChannelAcknowledgement(t *testing.T) {
-	dataChannel := getDataChannel()
-
-	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
-	mockWsChannel.On("GetChannelToken").Return(token)
-	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-
-	// test open (includes SendMessage)
-	err := dataChannel.Open(mockLog)
-
-	assert.NotNil(t, err)
 }
 
 func TestReconnect(t *testing.T) {
@@ -170,10 +152,6 @@ func TestReconnect(t *testing.T) {
 	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-
-	go func() {
-		dataChannel.readyMessageChan <- true
-	}()
 
 	// test reconnect
 	err := dataChannel.Reconnect(mockLog)
@@ -638,17 +616,6 @@ func TestDataChannelIncomingMessageHandlerForStartPublicationMessage(t *testing.
 
 	assert.Nil(t, err)
 	assert.Equal(t, false, dataChannel.Pause)
-}
-
-func TestDataChannelIncomingMessageHandlerForDataChannelAcknowledgementMessage(t *testing.T) {
-	dataChannel := getDataChannel()
-
-	agentMessage := getAgentMessage(0, mgsContracts.DataChannelReady, uint32(0), payload)
-	serializedAgentMessage, _ := agentMessage.Serialize(mockLog)
-
-	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessage)
-
-	assert.Nil(t, err)
 }
 
 func TestDataChannelHandshakeResponse(t *testing.T) {
