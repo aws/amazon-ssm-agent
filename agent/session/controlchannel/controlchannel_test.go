@@ -45,8 +45,8 @@ var (
 	mockWsChannel                       = &communicatorMocks.IWebSocketChannel{}
 	mockEventLog                        = eventlogMock.IAuditLogTelemetry{}
 	messageId                           = "dd01e56b-ff48-483e-a508-b5f073f31b16"
+	mockTaskAckChan                     = make(chan mgsContracts.AcknowledgeTaskContent)
 	mockAgentMessageIncomingMessageChan = make(chan mgsContracts.AgentMessage, 10)
-	mockReadyMessageChan                = make(chan bool)
 	schemaVersion                       = uint32(1)
 	createdDate                         = uint64(1503434274948)
 	topic                               = "test"
@@ -102,10 +102,6 @@ func TestOpen(t *testing.T) {
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockEventLog.On("SendAuditMessage")
 
-	go func() {
-		mockReadyMessageChan <- true
-	}()
-
 	// test open (includes SendMessage)
 	var ableToOpenMGSConnection uint32
 	err := controlChannel.Open(mockLog, &ableToOpenMGSConnection)
@@ -115,21 +111,6 @@ func TestOpen(t *testing.T) {
 	mockWsChannel.AssertExpectations(t)
 }
 
-func TestOpenReturnsErrWhenNotReceiveControlChannelAcknowledgement(t *testing.T) {
-	controlChannel := getControlChannel()
-
-	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
-	mockWsChannel.On("GetChannelToken").Return(token)
-	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockEventLog.On("SendAuditMessage")
-
-	// test open (includes SendMessage)
-	var ableToOpenMGSConnection uint32
-	err := controlChannel.Open(mockLog, &ableToOpenMGSConnection)
-
-	assert.NotNil(t, err)
-}
-
 func TestOpenHandlesNilAbleToOpenMGSConnection(t *testing.T) {
 	controlChannel := getControlChannel()
 
@@ -137,10 +118,6 @@ func TestOpenHandlesNilAbleToOpenMGSConnection(t *testing.T) {
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	mockEventLog.On("SendAuditMessage")
-
-	go func() {
-		mockReadyMessageChan <- true
-	}()
 
 	var ableToOpenMGSConnection *uint32 = nil
 	err := controlChannel.Open(mockLog, ableToOpenMGSConnection)
@@ -193,10 +170,6 @@ func TestReconnect(t *testing.T) {
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
-	go func() {
-		mockReadyMessageChan <- true
-	}()
-
 	// test reconnect
 	var ableToOpenMGSConnection uint32
 	err := controlChannel.Reconnect(mockLog, &ableToOpenMGSConnection)
@@ -213,10 +186,6 @@ func TestReconnectReportsHealthyMGSConnectionIfSuccessful(t *testing.T) {
 	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-
-	go func() {
-		mockReadyMessageChan <- true
-	}()
 
 	// test reconnect
 	var ableToOpenMGSConnection uint32
@@ -237,10 +206,6 @@ func TestReconnectUpdatesSSMConnectionChannelIfSuccessful(t *testing.T) {
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
-	go func() {
-		mockReadyMessageChan <- true
-	}()
-
 	var ableToOpenMGSConnection uint32
 	atomic.StoreUint32(&ableToOpenMGSConnection, 0)
 	ssmconnectionchannel.SetConnectionChannel(&ableToOpenMGSConnection)
@@ -260,10 +225,6 @@ func TestReconnectHandlesNilAbleToOpenMGSConnection(t *testing.T) {
 	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-
-	go func() {
-		mockReadyMessageChan <- true
-	}()
 
 	// test reconnect
 	var ableToOpenMGSConnection *uint32 = nil
@@ -320,7 +281,7 @@ func TestControlChannelIncomingMessageHandlerForStartSessionMessage(t *testing.T
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
 
-	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 
 	assert.Nil(t, err)
 }
@@ -348,7 +309,7 @@ func TestControlChannelIncomingMessageHandlerForAgentJobSendCommandMessage(t *te
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
 
-	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 
 	assert.Nil(t, err)
 }
@@ -376,7 +337,7 @@ func TestControlChannelIncomingMessageHandlerForAgentJobCancelCommandMessage(t *
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
 
-	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 
 	assert.Nil(t, err)
 }
@@ -398,7 +359,7 @@ func TestControlChannelIncomingMessageHandlerForTerminateSessionMessage(t *testi
 		Payload:        []byte(agentJson),
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
-	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 
 	assert.Nil(t, err)
 }
@@ -422,68 +383,18 @@ func TestControlChannelIncomingMessageHandlerForTaskAcknowledgeMessage(t *testin
 		Payload:        payload,
 	}
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
-	timeout := 20 * time.Millisecond
-	tooLong := 10 * time.Millisecond
-
-	readDone := make(chan struct{})
-
-	writeDone := make(chan struct{})
-
-	go func() {
-		defer close(readDone)
-		defer func() { readDone <- struct{}{} }()
-		startTime := time.Now()
-		consumedTaskAcknowledgeMessage := false
-		var timeToConsumeMessage time.Duration
-
-		select {
-		case <-mockAgentMessageIncomingMessageChan:
-			timeToConsumeMessage = time.Since(startTime)
-			consumedTaskAcknowledgeMessage = true
-			break
-		case <-time.After(timeout):
-			break
-		}
-
-		assert.Truef(t, consumedTaskAcknowledgeMessage, "Channel did not receive message. Waited %vs", timeout.Seconds())
-		assert.LessOrEqual(t, timeToConsumeMessage, tooLong, "Channel took too long to receive message. Waited %vs", timeToConsumeMessage.Seconds())
-	}()
-
-	go func() {
-		defer close(writeDone)
-		defer func() { writeDone <- struct{}{} }()
-		err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
-		assert.Nil(t, err)
-	}()
-
-	<-writeDone
-	<-readDone
-}
-
-func TestControlChannelIncomingMessageHandlerForControlChannelReadyMessage(t *testing.T) {
-	u, _ := uuid.Parse(messageId)
-
-	agentMessage := &mgsContracts.AgentMessage{
-		MessageType:    mgsContracts.ControlChannelReady,
-		SchemaVersion:  schemaVersion,
-		CreatedDate:    createdDate,
-		SequenceNumber: 1,
-		Flags:          2,
-		MessageId:      u,
-		Payload:        []byte("control_channel_ready"),
-	}
-	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
 
 	go func() {
 		select {
-		case <-mockReadyMessageChan:
+		case <-mockTaskAckChan:
 			break
-		case <-time.After(mgsConfig.ControlChannelReadyTimeout):
+		case <-time.After(10 * time.Millisecond):
 			assert.Fail(t, "Channel should have the message")
 		}
+		close(mockTaskAckChan)
 	}()
 
-	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan, mockReadyMessageChan)
+	err := controlChannelIncomingMessageHandler(mockContext, serializedBytes, mockAgentMessageIncomingMessageChan)
 	assert.Nil(t, err)
 }
 
@@ -507,6 +418,5 @@ func getControlChannel() *ControlChannel {
 		channelType:                     mgsConfig.RoleSubscribe,
 		agentMessageIncomingMessageChan: mockAgentMessageIncomingMessageChan,
 		context:                         mockContext,
-		readyMessageChan:                mockReadyMessageChan,
 	}
 }

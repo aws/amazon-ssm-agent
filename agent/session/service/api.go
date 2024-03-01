@@ -54,9 +54,6 @@ type OpenControlChannelInput struct {
 
 	// PlatformType is a required field
 	PlatformType *string `json:"PlatformType" min:"1" type:"string" required:"true"`
-
-	// RequireAcknowledgement is a required field
-	RequireAcknowledgement *bool `json:"RequireAcknowledgement" type:"boolean" required:"true"`
 }
 
 type CreateDataChannelInput struct {
