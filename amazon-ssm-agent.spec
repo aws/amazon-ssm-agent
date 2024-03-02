@@ -1,3 +1,5 @@
+%global debug_package %{nil}
+
 Name         : amazon-ssm-agent
 Version      : %rpmversion
 Release      : 1%{?dist}
@@ -63,9 +65,6 @@ cp seelog_unix.xml %{buildroot}%{_sysconfdir}/amazon/ssm/seelog.xml.template
 %defattr(-,root,root,-)
 %{_sysconfdir}/amazon/ssm/amazon-ssm-agent.json.template
 %{_sysconfdir}/amazon/ssm/seelog.xml.template
-%{_sysconfdir}/amazon/ssm/README.md
-%{_sysconfdir}/amazon/ssm/RELEASENOTES.md
-%{_sysconfdir}/amazon/ssm/NOTICE.md
 %if 0%{?amzn} >= 2
 %{_unitdir}/amazon-ssm-agent.service
 %else
