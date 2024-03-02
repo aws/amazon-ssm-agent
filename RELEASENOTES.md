@@ -1,5 +1,11 @@
 Latest
 ===============
+- Add integration tests for control channel module
+- Revert data channel and control channel acknowledgement functionality in MGS Interactor
+- Update Greengrass component minor version to 1.2.4
+
+3.2.2222.0
+===============
 - Upgrade minimum go version in go.mod file to go 1.19
 - Upgrade go-git package to v5.11.0
 - Fix for bad default manifest url when updating EC2Config
