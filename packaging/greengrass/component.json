@@ -1,7 +1,7 @@
 {
     "RecipeFormatVersion": "2020-01-25",
     "ComponentName": "aws.greengrass.SystemsManagerAgent",
-    "ComponentVersion": "1.2.3",
+    "ComponentVersion": "1.2.4",
     "ComponentType": "aws.greengrass.generic",
     "ComponentDescription": "Systems Manager Agent component to enable Systems Manager capabilities on your Greengrass devices",
     "ComponentPublisher": "Amazon",
