@@ -72,6 +72,7 @@ func TestInitialize(t *testing.T) {
 func TestSetWebSocket(t *testing.T) {
 	controlChannel := getControlChannel()
 	createControlChannelOutput := service.CreateControlChannelOutput{TokenValue: &token}
+	mockService = &serviceMock.Service{}
 	mockService.On("CreateControlChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(&createControlChannelOutput, nil)
 	mockService.On("GetRegion").Return(region)
 	mockService.On("GetV4Signer").Return(signer)
