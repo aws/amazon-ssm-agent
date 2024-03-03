@@ -1,5 +1,10 @@
 Latest
 ===============
+- Add integration tests for control channel and data channel module
+- Remove data channel and control channel acknowledgement functionality in MGS Interactor
+
+3.3.40.0
+===============
 - Fix issue to execute aws:updateSSMAgent plugin through aws:rundocument plugin
 - Update Messaging module to switch off ec2messages when ssmmessages connected successfully
 - Update SSM Agent Minor version from 3.2 to 3.3
