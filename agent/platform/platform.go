@@ -17,10 +17,13 @@ package platform
 import (
 	"fmt"
 	"net"
+	"os"
 	"sort"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 )
 
 const (
@@ -149,8 +152,15 @@ func isIpv4(ip net.IP) bool {
 
 // filterInterface removes interface that's not up or is a loopback/p2p
 func filterInterface(interfaces []net.Interface) (i []net.Interface) {
+	excludeInterfacesStr := os.Getenv("EXCLUDE_INTERFACES")
+
+	excludeInterfaces := []string{}
+	if excludeInterfacesStr != "" {
+		excludeInterfaces = strings.Split(excludeInterfacesStr, ",")
+	}
+
 	for _, v := range interfaces {
-		if (v.Flags&net.FlagUp != 0) && (v.Flags&net.FlagLoopback == 0) && (v.Flags&net.FlagPointToPoint == 0) {
+		if (v.Flags&net.FlagUp != 0) && (v.Flags&net.FlagLoopback == 0) && (v.Flags&net.FlagPointToPoint == 0 && !util.Contains(excludeInterfaces, v.Name)) {
 			i = append(i, v)
 		}
 	}

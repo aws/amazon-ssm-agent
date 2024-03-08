@@ -68,3 +68,13 @@ func disableHTTPDowngrade(req *http.Request, via []*http.Request) error {
 	}
 	return nil
 }
+
+func Contains(slice []string, str string) bool {
+	// contains checks if a string is present in a slice
+	for _, s := range slice {
+		if s == str {
+			return true
+		}
+	}
+	return false
+}
