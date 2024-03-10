@@ -118,6 +118,12 @@ func StartCommandExecutor(
 			if strings.TrimSpace(config.RunAsUser) == "" {
 				return errors.New("please set the RunAs default user")
 			}
+			
+			if strings.TrimSpace(config.RunAsUser) == "ssm-user" {
+				// Start as ssm-user
+				// Create ssm-user before starting a session.
+				u.CreateLocalAdminUser(log)
+			}
 
 			if os.Geteuid() != 0 {
 				return errors.New("the agent must run as root to use RunAs")
