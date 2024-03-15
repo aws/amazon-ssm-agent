@@ -282,8 +282,6 @@ func s3Download(context context.T, amazonS3URL s3util.AmazonS3URL, destFile stri
 	if err != nil {
 		if req.HTTPResponse == nil || req.HTTPResponse.StatusCode != http.StatusNotModified {
 			log.Debug("failed to download from s3, ", err)
-			fileutil.DeleteFile(destFile)
-			fileutil.DeleteFile(eTagFile)
 			return
 		}
 
