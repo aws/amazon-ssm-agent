@@ -1,5 +1,16 @@
 Latest
 ===============
+- Add alternative outputs for agent package generation scripts
+- Add support for Oracle 8.8 & 8.9, Rocky 8.8 & 8.9, AlmaLinux 8.8 & 8.9, and RHEL 8.9 & 9.3
+- Fix flaky integration test
+- Fix setup-cli Darwin build issue
+- Fix setup-cli error code for non English systems
+- Set IPR creds expiry to 30 mins for ssm agent worker
+- Switch installer package manager from rpm to yum on OSes that support yum
+- Upgrade GoLang to version 1.21.8
+
+3.3.131.0
+===============
 - Add integration tests for control channel and data channel module
 - Remove data channel and control channel acknowledgement functionality in MGS Interactor
 
