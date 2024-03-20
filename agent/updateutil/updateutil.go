@@ -49,6 +49,7 @@ import (
 type T interface {
 	CreateUpdateDownloadFolder() (folder string, err error)
 	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error)
+	ExeCommandWithSlice(log log.T, cmd []string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error)
 	ExecCommandWithOutput(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string) (pId int, updExitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error)
 	IsServiceRunning(log log.T, i updateinfo.T) (result bool, err error)
 	IsWorkerRunning(log log.T) (result bool, err error)
@@ -194,11 +195,24 @@ func (util *Utility) ExeCommand(
 	isAsync bool) (int, updateconstants.UpdateScriptExitCode, error) { // pid, exitCode, error
 
 	parts := strings.Fields(cmd)
+	return util.ExeCommandWithSlice(log, parts, workingDir, outputRoot, stdOut, stdErr, isAsync)
+}
+
+// ExeCommand executes shell command
+func (util *Utility) ExeCommandWithSlice(
+	log log.T,
+	cmd []string,
+	workingDir string,
+	outputRoot string,
+	stdOut string,
+	stdErr string,
+	isAsync bool) (int, updateconstants.UpdateScriptExitCode, error) { // pid, exitCode, error
+
 	pid := -1
 	var updateExitCode updateconstants.UpdateScriptExitCode = -1
 
 	if isAsync {
-		command := execCommand(parts[0], parts[1:]...)
+		command := execCommand(cmd[0], cmd[1:]...)
 		command.Dir = workingDir
 		util.setCommandEnvironmentVariables(command)
 		prepareProcess(command)
@@ -209,7 +223,7 @@ func (util *Utility) ExeCommand(
 		}
 		pid = GetCommandPid(command)
 	} else {
-		tempCmd := setPlatformSpecificCommand(parts)
+		tempCmd := setPlatformSpecificCommand(cmd)
 		command := execCommand(tempCmd[0], tempCmd[1:]...)
 		command.Dir = workingDir
 		stdoutWriter, stderrWriter, err := setExeOutErr(outputRoot, stdOut, stdErr)

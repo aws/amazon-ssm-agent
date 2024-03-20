@@ -119,8 +119,7 @@ func runUpdateAgent(
 	output.AppendInfof("Successfully downloaded updater version %s\n", updaterVersion)
 
 	//Generate update command base on the update detail
-	cmd := ""
-	if cmd, err = generateUpdateCmd(
+	cmd, err := generateUpdateCmd(
 		&pluginInput,
 		updaterVersion,
 		config.MessageId,
@@ -128,7 +127,9 @@ func runUpdateAgent(
 		pluginConfig.StdoutFileName,
 		pluginConfig.StderrFileName,
 		fileutil.BuildS3Path(output.GetIOConfig().OutputS3KeyPrefix, config.PluginID),
-		output.GetIOConfig().OutputS3BucketName); err != nil {
+		output.GetIOConfig().OutputS3BucketName)
+
+	if err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
@@ -163,7 +164,7 @@ func runUpdateAgent(
 		appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 
 	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
-		pid, _, err = util.ExeCommand(
+		pid, _, err = util.ExeCommandWithSlice(
 			log,
 			cmd,
 			workDir,
@@ -310,35 +311,38 @@ func generateUpdateCmd(
 	stdout string,
 	stderr string,
 	keyPrefix string,
-	bucketName string) (cmd string, err error) {
-	updaterPath := updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
-	cmd = updaterPath + " -update"
+	bucketName string) (cmd []string, err error) {
 
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceVersionCmd, currentAgentVersion)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetVersionCmd, pluginInput.TargetVersion)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.PackageNameCmd, pluginInput.AgentName)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.MessageIDCmd, messageID)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.StdoutFileName, stdout)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.StderrFileName, stderr)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.OutputKeyPrefixCmd, keyPrefix)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.OutputBucketNameCmd, bucketName)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.ManifestFileUrlCmd, pluginInput.Source)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.UpstreamServiceName, string(upstreamServiceName))
-
+	// quick return
 	allowDowngrade, err := strconv.ParseBool(pluginInput.AllowDowngrade)
 	if err != nil {
-		return "", err
+		return cmd, err
 	}
+
+	updaterPath := updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
+	cmd = append(cmd, updaterPath)
+	cmd = append(cmd, "-update")
 
 	// Tell the updater if downgrade is not allowed
 	if !allowDowngrade {
-		cmd += " -" + updateconstants.DisableDowngradeCmd
+		cmd = append(cmd, "-"+updateconstants.DisableDowngradeCmd)
 	}
+
+	cmd = append(cmd, "-"+updateconstants.SourceVersionCmd, currentAgentVersion)
+	cmd = append(cmd, "-"+updateconstants.TargetVersionCmd, pluginInput.TargetVersion)
+
+	cmd = append(cmd, "-"+updateconstants.PackageNameCmd, pluginInput.AgentName)
+	cmd = append(cmd, "-"+updateconstants.MessageIDCmd, messageID)
+
+	cmd = append(cmd, "-"+updateconstants.StdoutFileName, stdout)
+	cmd = append(cmd, "-"+updateconstants.StderrFileName, stderr)
+
+	cmd = append(cmd, "-"+updateconstants.OutputKeyPrefixCmd, keyPrefix)
+	cmd = append(cmd, "-"+updateconstants.OutputBucketNameCmd, bucketName)
+
+	cmd = append(cmd, "-"+updateconstants.ManifestFileUrlCmd, pluginInput.Source)
+
+	cmd = append(cmd, "-"+updateconstants.UpstreamServiceName, string(upstreamServiceName))
 
 	return
 }

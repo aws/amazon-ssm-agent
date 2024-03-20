@@ -47,18 +47,18 @@ func TestGenerateUpdateCmd(t *testing.T) {
 	pluginInput := createStubPluginInput()
 
 	result, err := generateUpdateCmd(pluginInput,
-		"3.0.0.0", "messageID", contracts.MessageGatewayService, "stdout", "stderr", "prefix", "bucket")
+		"3.0.0.0", "messageID with space", contracts.MessageGatewayService, "stdout", "stderr", "prefix", "bucket")
 
 	assert.NoError(t, err)
-	assert.Contains(t, result, "3.0.0.0")
-	assert.Contains(t, result, "messageID")
-	assert.Contains(t, result, "MessageGatewayService")
-	assert.Contains(t, result, "stdout")
-	assert.Contains(t, result, "stderr")
-	assert.Contains(t, result, "prefix")
-	assert.Contains(t, result, "bucket")
-	assert.Contains(t, result, "manifest")
-	assert.NotContains(t, result, "-"+updateconstants.DisableDowngradeCmd)
+	assert.EqualValues(t, 22, len(result))
+	assert.Contains(t, result[0], "3.0.0.0")
+	assert.EqualValues(t, "messageID with space", result[9])
+	assert.EqualValues(t, "stdout", result[11])
+	assert.EqualValues(t, "stderr", result[13])
+	assert.EqualValues(t, "prefix", result[15])
+	assert.EqualValues(t, "bucket", result[17])
+	assert.EqualValues(t, "testSource", result[19])
+	assert.EqualValues(t, "MessageGatewayService", result[21])
 }
 
 func TestGenerateUpdateCmdNoDowngrade(t *testing.T) {
@@ -66,18 +66,18 @@ func TestGenerateUpdateCmdNoDowngrade(t *testing.T) {
 	pluginInput.AllowDowngrade = "false"
 
 	result, err := generateUpdateCmd(pluginInput,
-		"3.0.0.0", "messageID", contracts.MessageGatewayService, "stdout", "stderr", "prefix", "bucket")
-
+		"3.0.0.0", "messageID with space", contracts.MessageGatewayService, "stdout", "stderr", "prefix", "bucket")
 	assert.NoError(t, err)
-	assert.Contains(t, result, "3.0.0.0")
-	assert.Contains(t, result, "messageID")
-	assert.Contains(t, result, "MessageGatewayService")
-	assert.Contains(t, result, "stdout")
-	assert.Contains(t, result, "stderr")
-	assert.Contains(t, result, "prefix")
-	assert.Contains(t, result, "bucket")
-	assert.Contains(t, result, "manifest")
-	assert.Contains(t, result, "-"+updateconstants.DisableDowngradeCmd)
+	assert.EqualValues(t, 23, len(result))
+	assert.Contains(t, result[0], "3.0.0.0")
+	assert.EqualValues(t, "messageID with space", result[10])
+	assert.EqualValues(t, "stdout", result[12])
+	assert.EqualValues(t, "stderr", result[14])
+	assert.EqualValues(t, "prefix", result[16])
+	assert.EqualValues(t, "bucket", result[18])
+	assert.EqualValues(t, "testSource", result[20])
+	assert.EqualValues(t, "MessageGatewayService", result[22])
+	assert.EqualValues(t, result[2], "-"+updateconstants.DisableDowngradeCmd)
 }
 
 func TestGenerateUpdateCmdInvalidDowngrade(t *testing.T) {
@@ -620,6 +620,18 @@ func (u *fakeUtility) CreateUpdateDownloadFolder() (folder string, err error) {
 func (u *fakeUtility) ExeCommand(
 	log log.T,
 	cmd string,
+	updateRoot string,
+	workingDir string,
+	stdOut string,
+	stdErr string,
+	isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error) {
+	u.retryCounter++
+	return u.pid, exitCode, u.execCommandError
+}
+
+func (u *fakeUtility) ExeCommandWithSlice(
+	log log.T,
+	cmd []string,
 	updateRoot string,
 	workingDir string,
 	stdOut string,
