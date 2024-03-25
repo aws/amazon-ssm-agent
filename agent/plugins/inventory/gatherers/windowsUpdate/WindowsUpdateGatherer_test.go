@@ -14,6 +14,8 @@ package windowsUpdate
 
 import (
 	"encoding/json"
+	"errors"
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
@@ -37,12 +39,18 @@ var testUpdate = []model.WindowsUpdateData{
 }
 
 func testExecuteCommand(command string, args ...string) ([]byte, error) {
+	if strings.Contains(args[0], "Get-Service") {
+		return []byte(TrustedInstallerRunningStatus), nil
+	}
 
 	output, _ := json.Marshal(testUpdate)
 	return output, nil
 }
 
 func testExecuteCommandEmpty(command string, args ...string) ([]byte, error) {
+	if strings.Contains(args[0], "Get-Service") {
+		return []byte(TrustedInstallerRunningStatus), nil
+	}
 
 	return make([]byte, 0), nil
 }
@@ -52,11 +60,44 @@ func TestGatherer(t *testing.T) {
 	gatherer := Gatherer(contextMock)
 	cmdExecutor = testExecuteCommand
 	item, err := gatherer.Run(contextMock, model.Config{})
-	assert.Nil(t, err)
 	assert.Equal(t, 1, len(item))
 	assert.Equal(t, GathererName, item[0].Name)
 	assert.Equal(t, schemaVersionOfWindowsUpdate, item[0].SchemaVersion)
 	assert.Equal(t, testUpdate, item[0].Content)
+	assert.Nil(t, err)
+
+}
+
+func TestGathererEmptyWhenTrustedInstallerStopped(t *testing.T) {
+	contextMock := context.NewMockDefault()
+	gatherer := Gatherer(contextMock)
+	cmdExecutor = func(command string, args ...string) ([]byte, error) {
+		if strings.Contains(args[0], "Get-Service") {
+			return []byte("Stopped"), nil
+		}
+		output, _ := json.Marshal(testUpdate)
+		return output, nil
+	}
+
+	items, err := gatherer.Run(contextMock, model.Config{})
+	assert.Equal(t, 0, len(items))
+	assert.Nil(t, err)
+}
+
+func TestGathererEmptyWhenErrorCheckingTrustedInstallerStatus(t *testing.T) {
+	contextMock := context.NewMockDefault()
+	gatherer := Gatherer(contextMock)
+	cmdExecutor = func(command string, args ...string) ([]byte, error) {
+		if strings.Contains(args[0], "Get-Service") {
+			return []byte(TrustedInstallerRunningStatus), errors.New("Error checking status of Trusted installer")
+		}
+
+		output, _ := json.Marshal(testUpdate)
+		return output, nil
+	}
+	items, err := gatherer.Run(contextMock, model.Config{})
+	assert.Equal(t, 0, len(items))
+	assert.Nil(t, err)
 }
 
 func TestGathererEmpty(t *testing.T) {
@@ -65,9 +106,9 @@ func TestGathererEmpty(t *testing.T) {
 	cmdExecutor = testExecuteCommandEmpty
 	var expectContent []model.WindowsUpdateData
 	item, err := gatherer.Run(contextMock, model.Config{})
-	assert.Nil(t, err)
 	assert.Equal(t, 1, len(item))
 	assert.Equal(t, GathererName, item[0].Name)
 	assert.Equal(t, schemaVersionOfWindowsUpdate, item[0].SchemaVersion)
 	assert.Equal(t, expectContent, item[0].Content)
+	assert.Nil(t, err)
 }

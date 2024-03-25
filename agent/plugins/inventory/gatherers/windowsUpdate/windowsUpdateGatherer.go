@@ -16,6 +16,7 @@ package windowsUpdate
 import (
 	"encoding/json"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -28,12 +29,24 @@ const (
 	GathererName = "AWS:WindowsUpdate"
 
 	schemaVersionOfWindowsUpdate = "1.0"
-	windowsUpdateQueryCmd        = `
+
+	// Represents the status of TrustedInstaller when running
+	TrustedInstallerRunningStatus = "Running"
+	windowsUpdateQueryCmd         = `
   [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
   Get-WmiObject -Class win32_quickfixengineering | Select-Object HotFixId,Description,@{l="InstalledTime";e={[DateTime]::Parse($_.psbase.properties["installedon"].value,$([System.Globalization.CultureInfo]::GetCultureInfo("en-US"))).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}},InstalledBy | sort InstalledTime -desc | ConvertTo-Json`
+
+	trustedInstallerStatusQueryCmd = `
+  $TrustedInstallerStatus = Get-Service -Name TrustedInstaller | Select-Object Status
+  $TrustedInstallerStatus.Status`
 )
 
-var cmd = appconfig.PowerShellPluginCommandName
+var (
+	cmd = appconfig.PowerShellPluginCommandName
+
+	// decouple for unit test
+	cmdExecutor = executeCommand
+)
 
 // T represents windows update gatherer
 type T struct{}
@@ -48,9 +61,6 @@ func (t *T) Name() string {
 	return GathererName
 }
 
-// decouple exec.Command for unit test
-var cmdExecutor = executeCommand
-
 // Run executes windows update gatherer and returns list of inventory.Item
 func (t *T) Run(context context.T, configuration model.Config) (items []model.Item, err error) {
 	var result model.Item
@@ -58,6 +68,14 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 	var data []model.WindowsUpdateData
 	out, err := cmdExecutor(cmd, windowsUpdateQueryCmd)
 	if err == nil {
+		// It has been observed that the Get-WmiObject -Class win32_quickfixengineering command can return empty
+		// or partial results without an error, depending on the state of TrustedInstaller.exe. This method checks
+		// the status of TrustedInstaller. If the TrustedInstaller is not running Windows update data will be Skipped.
+		if isTrustedInstallerStopped(context) {
+			log.Warnf("Skipping windows update - TrustedInstaller is not running")
+			return
+		}
+
 		//If there is no windows update in instance, will return empty result instead of throwing error
 		if len(out) != 0 {
 			err = json.Unmarshal(out, &data)
@@ -88,4 +106,20 @@ func (t *T) RequestStop() error {
 
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
+}
+
+func isTrustedInstallerStopped(context context.T) bool {
+	out, err := cmdExecutor(cmd, trustedInstallerStatusQueryCmd)
+	if err == nil {
+		cmdOutput := string(out)
+		cmdOutput = strings.TrimSpace(cmdOutput)
+		context.Log().Infof("TrustedInstallerStatus : %v", cmdOutput)
+		if cmdOutput != TrustedInstallerRunningStatus {
+			return true
+		}
+	} else {
+		context.Log().Errorf("Error checking TrustedInstallerStatus : %v", err)
+		return true
+	}
+	return false
 }
