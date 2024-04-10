@@ -31,7 +31,7 @@ const (
 		"s3[.-]" + // S3 service name
 		"(([-a-z0-9]+)\\.)?" + // region name, optional for us-east-1
 		"vpce\\." +
-		"(amazonaws\\.com|c2s\\.ic\\.gov|sc2s\\.sgov\\.gov)"
+		"(amazonaws\\.com|amazonaws\\.com\\.cn|c2s\\.ic\\.gov|sc2s\\.sgov\\.gov|cloud\\.adc-e\\.uk|csp\\.hci\\.ic\\.gov)"
 	vpceUrlPatternBucketIdx = 2
 	vpceUrlPatternRegionIdx = 5
 
@@ -39,7 +39,7 @@ const (
 	nonVpceUrlPattern = "^((.+)\\.)?" + // maybe a bucket name
 		"s3[.-](website[-.])?(accelerate\\.)?(dualstack[-.])?" + // S3 service name with optional features
 		"(([-a-z0-9]+)\\.)?" + // region name, optional for us-east-1
-		"(amazonaws\\.com|c2s\\.ic\\.gov|sc2s\\.sgov\\.gov)"
+		"(amazonaws\\.com|amazonaws\\.com\\.cn|c2s\\.ic\\.gov|sc2s\\.sgov\\.gov|cloud\\.adc-e\\.uk|csp\\.hci\\.ic\\.gov)"
 	nonVpceUrlPatternBucketIdx = 2
 	nonVpceUrlPatternRegionIdx = 7
 
